@@ -44,7 +44,6 @@ public class DeepSearchConfig extends GBaseObject implements IGObjectWithSecurit
 	protected Double secondHopSimilarityThreashold = null;
 	protected Integer graphRagTopN = null;
 	protected Integer tokensLimit = null;
-	protected int documentsParallelism = 2;
 	protected Boolean manualThreasholdsConfiguration = null;
 	protected Boolean defaultConfig = null;
 	// List of group IDs or names that have access to this project.
@@ -57,8 +56,8 @@ public class DeepSearchConfig extends GBaseObject implements IGObjectWithSecurit
 	private Boolean perDataSourceConfigured=null;
 	public DeepSearchConfig(DeepSearchConfig c) {
 		this(c.searchType, c.ragQueryOptions, c.firstHopSimilarityThreashold, c.secondHopSimilarityThreashold,
-				c.graphRagTopN, c.tokensLimit, c.documentsParallelism, c.manualThreasholdsConfiguration,
-				c.defaultConfig, c.accessibleGroups, c.accessibleUsers, c.accessibleToAll, c.dataSourcesAccesses,c.perDataSourceConfigured);
+				c.graphRagTopN, c.tokensLimit, c.manualThreasholdsConfiguration, c.defaultConfig, c.accessibleGroups,
+				c.accessibleUsers, c.accessibleToAll, c.dataSourcesAccesses, c.perDataSourceConfigured);
 		this.setCode(c.getCode());
 		this.setDescription(c.getDescription());
 	}

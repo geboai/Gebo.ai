@@ -348,6 +348,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		} else if (suppliers.size() == 1) {
 			Flux<Document> documentFlux = suppliers.get(0).get().map(countingMapper);
 			if (containsIKB) {
+				// NOTE: blocking call. Safe only because this method body runs on a boundedElastic
+				// worker (DeepSearchServiceImpl wraps it in Flux.defer(..).subscribeOn(boundedElastic)).
+				// Never subscribe to this worker directly from a non-blocking/event-loop thread.
 				List<Document> documents = documentFlux.buffer().blockFirst();
 				if (documents == null || documents.isEmpty()) {
 					resultFlux = backupNotFoundDocuments;
@@ -399,13 +402,18 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		} else
 
 		{
-			Flux<List<List<String>>> resultsBuffer = Flux.fromIterable(suppliers).concatMap(x -> {
+			// Analyze data sources concurrently, capped so total concurrent LLM calls stay bounded
+			// (maxConcurrentSources * analysisParallelism). flatMap is safe here because the downstream
+			// buffer() collects all per-source analyses and the final consolidation is order-insensitive.
+			final int maxConcurrentSources = Math.max(1,
+					Math.min(this.defaultDeepsearchConfig.getMaxConcurrentSources(), suppliers.size()));
+			Flux<List<List<String>>> resultsBuffer = Flux.fromIterable(suppliers).flatMap(x -> {
 				Flux<Document> documentFlux = x.get().map(countingMapper);
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
 						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
 						commonParams, irrelevantFragments);
 				return flux.buffer();
-			}, suppliers.size()).subscribeOn(Schedulers.boundedElastic(), true).buffer();
+			}, maxConcurrentSources).subscribeOn(Schedulers.boundedElastic(), true).buffer();
 			resultFlux = resultsBuffer.map(lists -> {
 
 				List<String> preAnalisys = new ArrayList<>();
@@ -581,22 +589,22 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));
 			});
 		});
-		Flux<GeboChatMessageEnvelope> finalFlux = Flux.concat(intermediateStreamingFlux, finalMessages);
-		finalFlux.publishOn(threadManager.getScheduler()).doOnComplete(() -> {
-			runAs.doAs(() -> {
-				try {
-					this.chunkingService.disposeChunkingSession(chunkSessionId);
-				} catch (Throwable th) {
-					LOGGER.error("Error disposing chunking session " + chunkSessionId, th);
-				}
+		Flux<GeboChatMessageEnvelope> finalFlux = Flux.concat(intermediateStreamingFlux, finalMessages)
+				.publishOn(threadManager.getScheduler()).doOnComplete(() -> {
+					runAs.doAs(() -> {
+						try {
+							this.chunkingService.disposeChunkingSession(chunkSessionId);
+						} catch (Throwable th) {
+							LOGGER.error("Error disposing chunking session " + chunkSessionId, th);
+						}
 
-				try {
-					sessionLifecycleService.chatRequestCompleted(request, chatModel);
-				} catch (Throwable e) {
-					LOGGER.error("Error completing request", e);
-				}
-			});
-		});
+						try {
+							sessionLifecycleService.chatRequestCompleted(request, chatModel);
+						} catch (Throwable e) {
+							LOGGER.error("Error completing request", e);
+						}
+					});
+				});
 		return finalFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
 
@@ -606,7 +614,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 		for (int index = 0; index < inputString.length(); index += 4) {
 			if (index < inputString.length()) {
-				int stopChar = Math.min(index + 4, inputString.length() - 1);
+				int stopChar = Math.min(index + 4, inputString.length());
 				separateTokens.add(inputString.substring(index, stopChar));
 			}
 		}
@@ -621,6 +629,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Vector<String> discardedFragmentIds) {
 		final int subanalisysThreashold = defaultDeepsearchConfig
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
+		final int analysisParallelism = Math.max(1, this.defaultDeepsearchConfig.getAnalysisParallelism());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
 		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 		final Map<String, Object> sharedParams = new HashMap<>(commonParams);
@@ -691,7 +700,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
 				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
 				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction, stringStreamer,
-				tokensBudget, runAs, 4, unprocessedCumulator);
+				tokensBudget, runAs, analysisParallelism, unprocessedCumulator);
 		return resultFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
 
