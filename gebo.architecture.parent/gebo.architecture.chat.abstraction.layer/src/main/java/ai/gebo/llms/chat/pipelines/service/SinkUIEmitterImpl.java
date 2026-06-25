@@ -16,20 +16,20 @@ public class SinkUIEmitterImpl implements ISinkUIEmitter {
 	private final Sinks.Many<GeboChatMessageEnvelope> sink;
 
 	@Override
-	public void next(GeboChatMessageEnvelope event) {
+	public synchronized void next(GeboChatMessageEnvelope event) {
 		sink.emitNext(event, Sinks.EmitFailureHandler.FAIL_FAST);
 
 	}
 
 	@Override
-	public void error(Throwable error) {
+	public synchronized void error(Throwable error) {
 		LOGGER.error("Emitting error to the chat UI sink", error);
 		sink.emitError(error, Sinks.EmitFailureHandler.FAIL_FAST);
 
 	}
 
 	@Override
-	public void complete() {
+	public synchronized void complete() {
 		sink.emitComplete(Sinks.EmitFailureHandler.FAIL_FAST);
 
 	}

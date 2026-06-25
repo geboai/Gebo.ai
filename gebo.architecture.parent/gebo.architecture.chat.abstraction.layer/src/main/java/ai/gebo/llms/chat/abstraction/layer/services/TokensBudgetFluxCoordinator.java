@@ -163,7 +163,9 @@ public class TokensBudgetFluxCoordinator {
 							if (input != null) {
 								input.forEach(unprocessedCumulator);
 							}
-							return null;
+							// Reactor's map() forbids null: return the out-of-band value, which is
+							// dropped downstream by the isOutOfBandValue filter (see .filter below).
+							return outOfBandValue;
 						}
 						try {
 							try {
