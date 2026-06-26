@@ -111,6 +111,10 @@ public class ReportWriterReactiveAgentServiceImpl extends
 			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
 			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
 			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createResponse(...) report writer agent id:" + getId() + " persona:"
+					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null));
+		}
 		final GeboChatResponse response = new GeboChatResponse();
 		final int tokenBudget = (agentModel.getContextLength() - agentPrompt.getTokensSize()) * 2 / 3;
 		// The routed query (the coordinator's writing command) is the agent input that
@@ -123,8 +127,15 @@ public class ReportWriterReactiveAgentServiceImpl extends
 				contextAgentPersona, session, mySessionContext, request, null, 0, tokenBudget, true);
 		Flux<String> textStream = null;
 		if (params.size() == 1) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Report writer using single-window reactive LLM call (tokenBudget:" + tokenBudget + ")");
+			}
 			textStream = callLLMReactive(agentModel, agentPrompt, chatRequestContext, params.get(0));
 		} else {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Report writer using token-budget coordinator over " + params.size()
+						+ " shared-context window(s)");
+			}
 			textStream = streamWithTokenBudgetCoordinator(agentModel, agentPrompt, chatRequestContext, params, runAs,
 					notificationSink);
 		}
@@ -141,6 +152,11 @@ public class ReportWriterReactiveAgentServiceImpl extends
 			response.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));
 			GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 			envelope.setLastMessage(lastMessage);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End createResponse(...) report writer agent id:" + getId() + " final response length:"
+						+ queryResponse.length() + " calledFunctions:"
+						+ (response.getCalledFunctions() != null ? response.getCalledFunctions().size() : 0));
+			}
 			return Flux.just(IGPartialOperation.of(envelope, lastMessage));
 		});
 		return Flux.concat(bodyStream, lastItem);

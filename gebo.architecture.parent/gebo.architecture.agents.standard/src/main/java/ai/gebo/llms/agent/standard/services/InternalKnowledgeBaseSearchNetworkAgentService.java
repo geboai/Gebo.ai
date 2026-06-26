@@ -113,6 +113,12 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
 			INotificationSink notificationSink) throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin retrieveDocuments(...) internal-KB agent command:"
+					+ (command != null ? command.getCommand() : null) + " topK:"
+					+ (command != null ? command.getTopK() : null) + " executeRanking:"
+					+ (command != null ? command.getExecuteRanking() : null));
+		}
 		try {
 			// LLM planner: rewrite the command into semantic and full-text search queries.
 			// `prompt` is the runtime-patched planner prompt (agent network placeholders
@@ -122,6 +128,10 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					chatRequestContext, params, List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Search planner produced " + semanticQueries.size() + " semantic and "
+						+ fullTextQueries.size() + " full-text quer(ies)");
+			}
 
 			final List<String> kbCodes = visibleKnowledgeBaseCodes();
 			SemanticSearchMetaDataFilter semanticFilter = new SemanticSearchMetaDataFilter();
@@ -138,9 +148,17 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 
 			final int topK = retrievalTopK(command);
 			final int tokensBudget = (int) (agentModel.getContextLength() * 0.75);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Searching internal knowledge base over " + kbCodes.size() + " knowledge base(s) topK:"
+						+ topK + " tokensBudget:" + tokensBudget);
+			}
 			AIDocumentsSet set = documentsSearchService.search(command.getCommand(), semanticQueries, semanticFilter,
 					fullTextQueries, fullTextFilter, command.getCommand(), topK, tokensBudget);
 			List<Document> documents = set != null ? set.aiDocumentsList() : new ArrayList<>();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End retrieveDocuments(...) internal-KB agent retrieved " + documents.size()
+						+ " document(s) before ranking");
+			}
 			return maybeRank(documents, command);
 		} catch (LLMConfigException | FullTextException e) {
 			throw new AgentException("Error executing internal knowledge base search agent", e);

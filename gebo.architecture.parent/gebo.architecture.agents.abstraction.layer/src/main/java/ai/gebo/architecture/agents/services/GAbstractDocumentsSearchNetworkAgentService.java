@@ -68,6 +68,11 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin onMessage(...) documents search agent id:" + getId() + " persona:"
+					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
+					+ " contributionNr:" + actualContributionNr);
+		}
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
 		GAgentRole agentRole = agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -78,6 +83,10 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		List<Document> documents = retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
 				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End onMessage(...) documents search agent id:" + getId() + " retrieved "
+					+ (documents != null ? documents.size() : 0) + " document(s)");
+		}
 		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,
 				MessageSemantic.RESPONSE);
 		return List.of(outMsg);

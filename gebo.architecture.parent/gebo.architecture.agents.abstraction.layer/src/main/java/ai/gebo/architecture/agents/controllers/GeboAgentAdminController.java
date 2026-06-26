@@ -2,6 +2,8 @@ package ai.gebo.architecture.agents.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "api/admin/GeboAgentAdminController")
 @AllArgsConstructor
 public class GeboAgentAdminController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboAgentAdminController.class);
 	private final IAgentConfigDao agentsConfigDao;
 	private final IGPromptConfigDao promptsDao;
 	private final IGRuntimeBinder runtimeBinder;
@@ -57,16 +60,25 @@ public class GeboAgentAdminController {
 
 	@PostMapping(value = "updateAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentConfig updateAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST updateAgent code:" + (config != null ? config.getCode() : null));
+		}
 		return this.agentsConfigDao.update(config);
 	}
 
 	@PostMapping(value = "insertAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentConfig insertAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST insertAgent code:" + (config != null ? config.getCode() : null));
+		}
 		return this.agentsConfigDao.insert(config);
 	}
 
 	@DeleteMapping(value = "deleteAgent", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST deleteAgent code:" + (config != null ? config.getCode() : null));
+		}
 		this.agentsConfigDao.delete(config);
 	}
 

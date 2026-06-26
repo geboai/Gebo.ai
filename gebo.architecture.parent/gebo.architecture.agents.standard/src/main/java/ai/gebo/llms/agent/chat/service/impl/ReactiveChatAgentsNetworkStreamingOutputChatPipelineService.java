@@ -62,6 +62,9 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException, LLMConfigException, GeboChatException,
 			IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin execute(...) reactive chat agents network streaming pipeline step:" + getStepId());
+		}
 		try {
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			INotificationSink notificationSink = new INotificationSink() {
@@ -73,10 +76,17 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			if (ds.isEmpty())
 				throw new ChatPipelineException("No agentic chat network set");
 			GAgentsNetwork network = ds.get(0);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
+			}
 			IGReactiveChatAgentsNetworkService runtimeNetwork = factory.create(network, notificationSink,
 					ChatPipelineExecutionRuntimeData.class, GeboChatMessageEnvelope.class, runAs);
 			Flux<GeboChatMessageEnvelope> flux = runtimeNetwork.getFlux();
 			flux = flux.doOnSubscribe((subscription) -> {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Subscription received, launching executeNetwork(...) for network code:"
+							+ network.getCode());
+				}
 				runAs.doAs(() -> {
 					try {
 						runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(),
@@ -86,8 +96,15 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					}
 				});
 			}).doOnCancel(() -> {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Reactive chat agents network flux cancelled, disposing runtime network");
+				}
 				runtimeNetwork.dispose();
 			}).doFinally(signalType -> {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Reactive chat agents network flux terminated with signal:" + signalType
+							+ ", disposing runtime network");
+				}
 				runtimeNetwork.dispose();
 			});
 			;

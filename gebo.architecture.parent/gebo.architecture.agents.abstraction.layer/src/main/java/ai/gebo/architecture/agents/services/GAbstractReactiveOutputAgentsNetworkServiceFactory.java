@@ -3,6 +3,9 @@ package ai.gebo.architecture.agents.services;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -15,6 +18,8 @@ import lombok.Getter;
 public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputType, OutputType, ServiceType extends IGReactiveOutputAgentsNetworkService<InputType, OutputType>>
 		extends GAbstractAgentsNetworkServiceFactory<InputType, OutputType, ServiceType>
 		implements IGAgentsNetworkServiceFactory<InputType, OutputType, ServiceType> {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GAbstractReactiveOutputAgentsNetworkServiceFactory.class);
 	private static final String WRONG_REACTIVE_OUTPUTS_NR_EXCEPTION_TEXT = "The GAbstractReactiveOutputAgentsNetworkServiceFactory is thought to work with agents network with a single output node being reactive";
 	protected final IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo;
 
@@ -48,6 +53,10 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 		GAgentConfig config = agentConfigDao.findByCode(agent.getAgentConfigCode());
 		IGGenericAgentService service = agentServiceRuntimeDao.findByCode(config.getAgentServiceId());
 		if (service instanceof IGReactiveAgentService reactiveService) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Wrapping reactive service id:" + reactiveService.getId() + " into a network adapter for"
+						+ " participant:" + agent.getNetworkAgentName());
+			}
 			if (!agent.isOutputNode())
 				throw new NetworkOfAgentsException("A reactive service can be used only on an outputNode");
 			IGReactiveToNetworkAgentAdapterFactory factory = reactiveAgentAdapterFactoryRepo

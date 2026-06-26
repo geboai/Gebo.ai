@@ -242,6 +242,10 @@ public class StandardAgentsInitialization {
 		outParticipant.setCommunicationList(List.of(controller.getCode()));
 		participants.add(outParticipant);
 		network.setAgents(participants);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Assembled default agents network code:" + network.getCode() + " with " + participants.size()
+					+ " participant(s); coordinated searchers:" + coordinatedAgentCodes);
+		}
 		return network;
 	}
 
@@ -278,9 +282,16 @@ public class StandardAgentsInitialization {
 						agentConfig.setEnabledFunctions(List.of());
 						agentConfig.setUseDefaultChatModel(true);
 						agentConfigs.add(agentConfig);
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Registered external search agent config code:" + serviceId);
+						}
 					} catch (SearchServiceException e) {
 						LOGGER.error("Error initializing search agent config", e);
 					}
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("externalSourcesAgentConfigDataSource produced " + agentConfigs.size()
+							+ " agent config(s)");
 				}
 				return agentConfigs;
 			}
@@ -356,15 +367,24 @@ public class StandardAgentsInitialization {
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService, nativeSearch);
 							outServices.add(nativeWrapper);
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("Registered native search agent service id:" + nativeWrapper.getId());
+							}
 						} else {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
 									runtimeBinder, rendererFactory, chunkingService, rankerService, search);
 							outServices.add(wrapper);
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("Registered search agent service id:" + wrapper.getId());
+							}
 						}
 					} catch (SearchServiceException e) {
 						LOGGER.error("Error initializing search agent", e);
 					}
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("externalSourcesAgentServicesSupplier produced " + outServices.size() + " service(s)");
 				}
 				return outServices;
 			}

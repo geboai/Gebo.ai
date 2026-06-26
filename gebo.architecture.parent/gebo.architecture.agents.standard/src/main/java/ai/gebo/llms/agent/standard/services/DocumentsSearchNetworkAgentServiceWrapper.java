@@ -86,6 +86,10 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 			INotificationSink notificationSink) throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		final int topK = retrievalTopK(command);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin retrieveDocuments(...) search agent id:" + getId() + " command:"
+					+ (command != null ? command.getCommand() : null) + " topK:" + topK);
+		}
 		final List<SearchResult> results = new ArrayList<>();
 		final List<String> keywords = new ArrayList<>();
 		try {
@@ -95,12 +99,20 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 			DeepSearchDataSourceExtractedSearchQueries extracted = callLLMStructuredReturn(agentModel, prompt,
 					chatRequestContext, params, DeepSearchDataSourceExtractedSearchQueries.class);
 			if (extracted != null && extracted.getSearchQuery() != null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Query extraction produced " + extracted.getSearchQuery().size() + " quer(ies)");
+				}
 				for (SearchQuery query : extracted.getSearchQuery()) {
 					if (query.getRelevantKeywords() != null) {
 						keywords.addAll(query.getRelevantKeywords());
 					}
 					for (SearchableSystemMetaData system : wrappedSearchService.getSearchableSystems()) {
-						results.addAll(wrappedSearchService.search(query, system, topK));
+						List<SearchResult> systemResults = wrappedSearchService.search(query, system, topK);
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Search on system:" + system.getCode() + " returned "
+									+ (systemResults != null ? systemResults.size() : 0) + " result(s)");
+						}
+						results.addAll(systemResults);
 					}
 				}
 			}
@@ -109,6 +121,10 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 		}
 		// Prefer the LLM-generated relevant keywords; fall back to the command text.
 		final List<String> matchingKeywords = keywords.isEmpty() ? keywordsFromCommand(command) : keywords;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End retrieveDocuments(...) search agent id:" + getId() + " collected " + results.size()
+					+ " raw result(s)");
+		}
 		return maybeRank(chunkToDocuments(results, agentModel, command, matchingKeywords), command);
 	}
 

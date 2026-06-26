@@ -90,12 +90,20 @@ public class ChatRuntimeDataQueryAdapterAgentService
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, String> mySessionContext,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin onMessage(...) chat runtime data query adapter persona:"
+					+ contextAgentPersona.getNetworkAgentName() + " contributionNr:" + actualContributionNr);
+		}
 		final List<String> targets = contextAgentPersona.getCommunicationList();
 		if (targets == null || targets.isEmpty()) {
 			throw new AgentException("Input adapter '" + contextAgentPersona.getNetworkAgentName()
 					+ "' has no target agent to forward the query to");
 		}
 		final String query = extractQuery(msg.getPayload());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Extracted user query (length:" + query.length() + ") forwarding to " + targets.size()
+					+ " target(s): " + targets);
+		}
 		final GAgentRole agentRole = config.getAgentRoleCode() != null
 				? agentRoleDao.findByCode(config.getAgentRoleCode())
 				: null;
@@ -103,6 +111,9 @@ public class ChatRuntimeDataQueryAdapterAgentService
 		for (String target : targets) {
 			out.add(new AgentsExchangeMessage<String>(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT,
 					contextAgentPersona.getNetworkAgentName(), agentRole, target, query, 1));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End onMessage(...) chat runtime data query adapter emitting " + out.size() + " message(s)");
 		}
 		return out;
 	}

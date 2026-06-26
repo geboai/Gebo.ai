@@ -1,5 +1,8 @@
 package ai.gebo.architecture.agents.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -12,6 +15,8 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 		extends GAbstractAgentsNetworkService<InputType, OutputType>
 		implements IGReactiveOutputAgentsNetworkService<InputType, OutputType> {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GAbstractReactiveOutputAgentsNetworkService.class);
 	private final AdapterWithFlux<?, OutputType> adapterWithFlux;
 
 	public GAbstractReactiveOutputAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository,
@@ -31,6 +36,9 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 		try {
 			return super.executeNetwork(chatRequestContext, input);
 		} finally {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Completing reactive output sink after executeNetwork(...)");
+			}
 			this.adapterWithFlux.getSink().tryEmitComplete();
 		}
 	}

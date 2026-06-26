@@ -44,7 +44,9 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 			throws AgentException, LLMConfigException {
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin execute(...)");
+			LOGGER.debug("Begin execute(...) agent service id:" + getId() + " agentConfig code:"
+					+ (agentConfig != null ? agentConfig.getCode() : null) + " agentRoleCode:"
+					+ (agentConfig != null ? agentConfig.getAgentRoleCode() : null));
 		}
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
@@ -56,10 +58,16 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
 		final List<AggregatedResponses> aggregatedResponses = new ArrayList<AggregatedResponses>();
 		final IGConfigurableChatModel agentModel = getAgentModel(agentConfig, callBacksListener, runAs);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Starting agentic loop with maxLoopIterations:" + maxLoop);
+		}
 		ResponseType out = null;
 		for (int i = 0; i < maxLoop; i++) {
 			if (!iterationFinished.get()) {
-
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Begin agentic iteration " + (i + 1) + "/" + maxLoop + " with "
+							+ aggregatedResponses.size() + " aggregated past response(s)");
+				}
 				out = createResponse(request, aggregatedResponses, agentModel, agentConfig, agentRole, i, maxLoop,
 						agentPrompt, runAs, callBacksListener);
 				BiFunction<ResponseType, List<AggregatedResponses>, AggregatedResponses> aggregator = createAggregator(
@@ -69,12 +77,14 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 					aggregatedResponses.add(historyStep);
 
 				}
-
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End agentic iteration " + (i + 1) + "/" + maxLoop);
+				}
 			}
 		}
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End execute(...)");
+			LOGGER.debug("End execute(...) agent service id:" + getId());
 		}
 		return out;
 	}

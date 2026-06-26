@@ -2,6 +2,9 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
@@ -21,6 +24,7 @@ import reactor.core.publisher.Sinks;
 @AllArgsConstructor
 public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType, NotificationObject>
 		implements IGNetworkAgentService<RequestType, ResponseType> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactiveAgentServiceNetworkAdapter.class);
 	private final IGReactiveAgentService<RequestType, ResponseType, NotificationObject> service;
 	private final Class<RequestType> inputType;
 	private final Class<ResponseType> outputType;
@@ -69,6 +73,10 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
 			throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin onMessage(...) reactive agent network adapter id:" + getId() + " fromAgent:"
+					+ msg.getFromAgent());
+		}
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, msg.getPayload(),
 				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs);
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
@@ -76,9 +84,16 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			return x;
 		});
 		List<IGPartialOperation<ResponseType>> buffered = duplicatedFlux.collectList().block();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reactive agent adapter id:" + getId() + " buffered "
+					+ (buffered != null ? buffered.size() : 0) + " partial operation(s)");
+		}
 		ResponseType response = extractResponse(buffered);
 		AgentsExchangeMessage<ResponseType> outMessage = AgentsExchangeMessage.of(session, msg.getFromAgent(), response,
 				MessageSemantic.RESPONSE);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End onMessage(...) reactive agent network adapter id:" + getId());
+		}
 		return List.of(outMessage);
 	}
 

@@ -54,7 +54,9 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 			throws AgentException, LLMConfigException {
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin execute(...)");
+			LOGGER.debug("Begin execute(...) reactive agent service id:" + getId() + " agentConfig code:"
+					+ (agentConfig != null ? agentConfig.getCode() : null) + " useDefaultChatModel:"
+					+ (agentConfig != null ? agentConfig.getUseDefaultChatModel() : null));
 		}
 		IGConfigurableChatModel copiedModel = null;
 		if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
@@ -76,6 +78,11 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 				allFunctions = toolsList.stream().map(x -> x.getToolDefinition().name()).toList();
 			}
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reactive agent id:" + getId() + " resolved " + (allFunctions != null ? allFunctions.size() : 0)
+					+ " enabled function(s); cloning model with temperature:" + agentConfig.getTemperature() + " topP:"
+					+ agentConfig.getTopP() + " thinking:" + agentConfig.getThinking());
+		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
 				createToolCallingManager(callBacksListener, allFunctions, runAs));
@@ -84,11 +91,17 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End execute(...) building reactive response flux for agent id:" + getId() + " agentRole:"
+					+ (agentRole != null ? agentRole.getCode() : null));
+		}
 		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(chatRequestContext, agentConfig, request,
 				network, contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole,
 				agentPrompt, runAs, callBacksListener);
 		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))
-				.doOnComplete(() -> LOGGER.debug("End agentic iteration {} ", getId()));
+				.doOnSubscribe(s -> LOGGER.debug("Begin reactive agentic iteration subscription {} ", getId()))
+				.doOnComplete(() -> LOGGER.debug("End agentic iteration {} ", getId()))
+				.doOnError(th -> LOGGER.error("Error in reactive agentic iteration " + getId(), th));
 	}
 
 	protected abstract Flux<IGPartialOperation<ResponseType>> createResponse(IChatRequestContext chatRequestContext,

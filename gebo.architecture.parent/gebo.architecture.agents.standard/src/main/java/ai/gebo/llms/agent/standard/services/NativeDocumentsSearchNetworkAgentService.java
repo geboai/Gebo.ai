@@ -90,6 +90,10 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			INotificationSink notificationSink) throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		final int topK = retrievalTopK(command);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin retrieveDocuments(...) native search agent id:" + getId() + " command:"
+					+ (command != null ? command.getCommand() : null) + " topK:" + topK);
+		}
 		final List<SearchResult> results = new ArrayList<>();
 		try {
 			// The native query template (runtime-patched with the agent network placeholders
@@ -103,7 +107,12 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 						catalogues != null ? catalogues : List.of()));
 				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, prompt,
 						chatRequestContext, callParams, queryType);
-				results.addAll(nativeSearchWrapper.nativeSearch(queryObject, system, topK));
+				List<SearchResult> systemResults = nativeSearchWrapper.nativeSearch(queryObject, system, topK);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Native search on system:" + system.getCode() + " returned "
+							+ (systemResults != null ? systemResults.size() : 0) + " result(s)");
+				}
+				results.addAll(systemResults);
 			}
 		} catch (LLMConfigException | IOException | SearchServiceException e) {
 			throw new AgentException("Error executing native search agent " + getId(), e);
@@ -111,6 +120,10 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		// The native query object is provider-specific, so derive relevance keywords from
 		// the command text.
 		final List<String> keywords = keywordsFromCommand(command);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End retrieveDocuments(...) native search agent id:" + getId() + " collected " + results.size()
+					+ " raw result(s)");
+		}
 		return maybeRank(chunkToDocuments(results, agentModel, command, keywords), command);
 	}
 

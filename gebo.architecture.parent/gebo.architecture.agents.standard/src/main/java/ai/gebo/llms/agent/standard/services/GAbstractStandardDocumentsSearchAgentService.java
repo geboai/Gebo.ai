@@ -75,11 +75,19 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 		if (results == null || results.isEmpty()) {
 			return new ArrayList<>();
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin chunkToDocuments(...) agent id:" + getId() + " searchResults:" + results.size()
+					+ " keywords:" + (keywords != null ? keywords.size() : 0));
+		}
 		final ChunkingParams params = buildSearchChunkingParams(agentModel, command, keywords);
 		final String chunkingSession = chunkingService.createChunkingSession("agent-search:" + UUID.randomUUID());
 		try {
 			List<IDocumentChunkWithRef> chunks = chunkingService
 					.streamChunks(results, params, chunkingSession, 4).sequential().collectList().block();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("chunkToDocuments(...) produced " + (chunks != null ? chunks.size() : 0)
+						+ " raw chunk(s) in session:" + chunkingSession);
+			}
 			List<Document> documents = new ArrayList<>();
 			if (chunks != null) {
 				for (IDocumentChunkWithRef chunkWithRef : chunks) {
@@ -92,6 +100,10 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 					}
 					documents.add(new Document(chunk.getChunkData(), chunk.getMetaData()));
 				}
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End chunkToDocuments(...) agent id:" + getId() + " kept " + documents.size()
+						+ " content document(s)");
 			}
 			return documents;
 		} finally {
@@ -108,11 +120,24 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 			return documents;
 		}
 		if (rankingRequested(command) && rankerService.isRankerConfigured()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Ranking " + documents.size() + " document(s) for agent id:" + getId() + " topK:"
+						+ command.getTopK());
+			}
 			try {
-				return rankerService.call(documents, command.getCommand(), command.getTopK());
+				List<Document> ranked = rankerService.call(documents, command.getCommand(), command.getTopK());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Ranking produced " + (ranked != null ? ranked.size() : 0)
+							+ " document(s) for agent id:" + getId());
+				}
+				return ranked;
 			} catch (LLMConfigException e) {
 				throw new AgentException("Error ranking search documents", e);
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Ranking skipped for agent id:" + getId() + " (rankingRequested:" + rankingRequested(command)
+					+ ")");
 		}
 		return documents;
 	}

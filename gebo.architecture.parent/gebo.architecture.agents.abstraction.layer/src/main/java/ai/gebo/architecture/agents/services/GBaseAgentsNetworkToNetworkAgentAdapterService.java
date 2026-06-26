@@ -60,6 +60,11 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin onMessage(...) network adapter id:" + getId() + " agentNetworkServiceCode:"
+					+ config.getAgentNetworkServiceCode() + " adaptedAgentNetworkCode:"
+					+ config.getAdaptedAgentNetworkCode());
+		}
 		if (config.getAgentNetworkServiceCode() == null || config.getAgentNetworkServiceCode().trim().length() == 0)
 			throw new AgentException(EMPTY_NETWORK_SERVICE_CODE_MSG);
 		if (config.getAdaptedAgentNetworkCode() == null || config.getAdaptedAgentNetworkCode().trim().length() == 0)
@@ -74,6 +79,10 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 					outputType, runAs);
 			if (agentsNetworkService.getInputType().isAssignableFrom(inputType)
 					&& outputType.isAssignableFrom(agentsNetworkService.getOutputType())) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Delegating to adapted agents network '" + config.getAdaptedAgentNetworkCode()
+							+ "' executeNetwork(...)");
+				}
 				OutputType output = (OutputType) agentsNetworkService.executeNetwork(chatRequestContext,
 						msg.getPayload());
 				List<AgentsExchangeMessage<OutputType>> outputMessages = new ArrayList<AgentsExchangeMessage<OutputType>>();
@@ -82,6 +91,10 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 					AgentsExchangeMessage<OutputType> newMsg = AgentsExchangeMessage.of(session, target, output,
 							MessageSemantic.RESPONSE);
 					outputMessages.add(newMsg);
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End onMessage(...) network adapter id:" + getId() + " forwarding result to "
+							+ outputMessages.size() + " target agent(s)");
 				}
 				return outputMessages;
 			} else

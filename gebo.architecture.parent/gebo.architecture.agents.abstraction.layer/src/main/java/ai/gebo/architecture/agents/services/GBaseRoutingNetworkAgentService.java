@@ -99,6 +99,11 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin onMessage(...) routing agent id:" + getId() + " persona:"
+					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
+					+ " contributionNr:" + actualContributionNr + " fromAgent:" + msg.getFromAgent());
+		}
 		final ToolCallsListener callsListener = new ToolCallsListener();
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -108,6 +113,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		if (toCoordinate == null || toCoordinate.isEmpty()) {
 			throw new AgentException("The routing agent: " + contextAgentPersona.getAgentContextualName()
 					+ " has no agents to communicate with");
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing agent can coordinate " + toCoordinate.size() + " peer(s): " + toCoordinate);
 		}
 		List<RuntimeAgentInfos> peers = new ArrayList<>();
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
@@ -136,6 +144,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		}
 		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing LLM produced " + (populated != null ? populated.size() : 0)
+					+ " target agent entr(ies): " + (populated != null ? populated.keySet() : null));
+		}
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> messagesInOrder = new TreeMap<>();
 		List<TargetAgentEnvelope<?>> toBeScheduled = new ArrayList<>();
 		if (populated != null && !populated.isEmpty()) {
@@ -164,6 +176,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 							.isAssignableFrom(agentEnvelope.getCommandData().getClass())) {
 						agentEnvelope.setAgentId(targetAgent);
 						toBeScheduled.add(agentEnvelope);
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Scheduling command for agent:" + targetAgent + " deliveryOrder:"
+									+ agentEnvelope.getDeliveryOrder());
+						}
 					} else {
 						LOGGER.error("For agent:" + targetAgent + " the wrong type has been generated");
 					}
@@ -174,6 +190,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		List<AgentsExchangeMessage<?>> out = new ArrayList<>();
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> scheduled = ScheduleTargetAgentEnvelope
 				.normalizeDeliveryPlan(toBeScheduled);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Normalized delivery plan into " + scheduled.size() + " delivery level(s) from "
+					+ toBeScheduled.size() + " scheduled envelope(s)");
+		}
 		for (List<TargetAgentEnvelope<?>> row : scheduled.values()) {
 			for (TargetAgentEnvelope<?> d : row) {
 				AgentsExchangeMessage<?> _msg = new AgentsExchangeMessage(session.getId(),
@@ -181,6 +201,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 						agentRole, d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
 				out.add(_msg);
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End onMessage(...) routing agent id:" + getId() + " emitting " + out.size()
+					+ " outbound message(s)");
 		}
 		return new ArrayList(out);
 	}

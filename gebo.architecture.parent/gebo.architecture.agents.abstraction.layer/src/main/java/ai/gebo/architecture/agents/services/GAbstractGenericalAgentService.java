@@ -84,8 +84,16 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 */
 	@Override
 	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Building base agent capabilities for service id:" + getId() + " agentConfig code:"
+					+ (agentConfig != null ? agentConfig.getCode() : null));
+		}
 		AgentCapabilities capabilities = new AgentCapabilities(getDescription());
 		appendConfiguredTools(capabilities, agentConfig);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Base agent capabilities for service id:" + getId() + " advertise "
+					+ capabilities.getTools().size() + " tool(s)");
+		}
 		return capabilities;
 	}
 
@@ -122,6 +130,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 	protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
 			ReactiveIdentityUtil runAs) throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getAgentModel(...) for agent service id:" + getId() + " agentConfig code:"
+					+ (agentConfig != null ? agentConfig.getCode() : null) + " useDefaultChatModel:"
+					+ (agentConfig != null ? agentConfig.getUseDefaultChatModel() : null) + " chatModelReference:"
+					+ (agentConfig != null ? agentConfig.getChatModelReference() : null));
+		}
 		IGConfigurableChatModel copiedModel = null;
 		if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
 			copiedModel = chatModelsDao.defaultHandler();
@@ -141,11 +155,23 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			if (toolsList != null) {
 				allFunctions = toolsList.stream().map(x -> x.getToolDefinition().name()).toList();
 			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent subscribes ALL tools, resolved " + (allFunctions != null ? allFunctions.size() : 0)
+						+ " functions");
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Cloning chat model with temperature:" + agentConfig.getTemperature() + " topP:"
+					+ agentConfig.getTopP() + " thinking:" + agentConfig.getThinking() + " enabledFunctions:"
+					+ (allFunctions != null ? allFunctions.size() : 0));
 		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
 				createToolCallingManager(callBacksListener, allFunctions, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getAgentModel(...) for agent service id:" + getId());
+		}
 		return agentModel;
 	}
 
@@ -264,6 +290,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			throws AgentException {
 		GPromptTemplateConfig resolved = prompt != null ? prompt
 				: useCode != null ? promptsDao.findByPromptUse(useCode) : null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("resolvePrompt(...) inlinePromptProvided:" + (prompt != null) + " useCode:" + useCode
+					+ " nullable:" + nullable + " resolved:" + (resolved != null));
+		}
 		if (resolved == null && !nullable)
 			throw new AgentException("Mandatory prompt not present");
 		return resolved;
@@ -353,6 +383,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, Object input,
 			IGAgentsNetworkRuntimeDao agentsDao, int actualContributionNr, int tokenBudget, boolean splitByBudget) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createAgentTemplateParams(...) agentRole:"
+					+ (agentRole != null ? agentRole.getCode() : null) + " contributionNr:" + actualContributionNr
+					+ " tokenBudget:" + tokenBudget + " splitByBudget:" + splitByBudget);
+		}
 		Map<String, Object> constantParams = new HashMap<>();
 		List<Map<String, Object>> vectorized = new ArrayList<Map<String, Object>>();
 		final Map<String, Boolean> placeholders = prompt != null ? prompt.getPlaceholders() : Map.of();
@@ -409,6 +444,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			} while (iterationValue != null && (splitByBudget && !iterationValue.isFinishedContributions()));
 		} else {
 			vectorized.add(constantParams);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createAgentTemplateParams(...) produced " + vectorized.size()
+					+ " parameter window(s), remainingBudget:" + remainingBudget);
 		}
 		return vectorized;
 	}

@@ -57,6 +57,11 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin onMessage(...) task performer agent id:" + getId() + " persona:"
+					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
+					+ " contributionNr:" + actualContributionNr + " outputType:" + getOutputType().getName());
+		}
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener, null);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -68,13 +73,24 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Requesting textResponse from agent model id:" + getId());
+			}
 			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
 				params.put(AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM, converter.getFormat());
 			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Requesting structuredResponse from agent model id:" + getId() + " targetType:"
+						+ outputType.getName());
+			}
 			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End onMessage(...) task performer agent id:" + getId() + " produced output:"
+					+ (output != null));
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
 				MessageSemantic.RESPONSE,
