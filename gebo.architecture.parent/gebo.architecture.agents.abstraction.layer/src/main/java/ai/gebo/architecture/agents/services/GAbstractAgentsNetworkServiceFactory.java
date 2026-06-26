@@ -9,6 +9,7 @@ import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,9 +25,8 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 	protected final String id;
 	protected final String description;
 	protected final Class<ServiceType> serviceType;
-	protected final IAgentRoleDao agentRoleDao;
-	protected final IGAgentServiceRuntimeDao agentServiceRuntimeDao;
-	protected final IAgentConfigDao agentConfigDao;
+	protected final IGRuntimeBinder runtimeBinder;
+	
 
 	@Override
 	public boolean canHandle(Class<IGAgentsNetworkService> agentNetworkService) {
@@ -73,6 +73,9 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 
 	protected RuntimeAgentInfos createRuntimeAgentInfos(GAgentsNetwork network, AgentNetworkParticipant agent)
 			throws NetworkOfAgentsException {
+		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
+				.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		GAgentConfig config = agentConfigDao.findByCode(agent.getAgentConfigCode());
 		if (config == null)
 			throw new NetworkOfAgentsException(

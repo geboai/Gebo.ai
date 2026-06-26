@@ -36,14 +36,12 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 	protected final String id;
 	protected final String description;
 	protected final IGAgentsNetworkServiceFactoryRepositoryPattern factoryRepository;
-	protected final IAgentsNetworkDao agentsNetworkDao;
 
 	public GBaseAgentsNetworkToNetworkAgentAdapterService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, Class<InputType> inputType, Class<OutputType> outputType,
-			String id, String description, IGAgentsNetworkServiceFactoryRepositoryPattern factoryRepository,
-			IAgentsNetworkDao agentsNetworkDao) {
+			String id, String description, IGAgentsNetworkServiceFactoryRepositoryPattern factoryRepository) {
 
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				rendererFactory);
@@ -52,7 +50,6 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 		this.id = id;
 		this.description = description;
 		this.factoryRepository = factoryRepository;
-		this.agentsNetworkDao = agentsNetworkDao;
 
 	}
 
@@ -67,6 +64,9 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 			throw new AgentException(EMPTY_NETWORK_SERVICE_CODE_MSG);
 		if (config.getAdaptedAgentNetworkCode() == null || config.getAdaptedAgentNetworkCode().trim().length() == 0)
 			throw new AgentException(EMPTY_ADAPTED_AGENT_NETWORK_CODE_MSG);
+		final IGAgentsNetworkServiceFactoryRepositoryPattern factoryRepository = runtimeBinder
+				.getImplementationOf(IGAgentsNetworkServiceFactoryRepositoryPattern.class);
+		final IAgentsNetworkDao agentsNetworkDao = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class);
 		IGAgentsNetworkServiceFactory factory = this.factoryRepository.findByCode(config.getAgentNetworkServiceCode());
 		GAgentsNetwork adaptedNetwork = agentsNetworkDao.findByCode(config.getAdaptedAgentNetworkCode());
 		try {

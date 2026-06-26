@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.services.GBaseAgentsNetworkToNetworkAgentAdapterService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactoryRepositoryPattern;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -20,14 +19,14 @@ public class GStringToStringAgentsNetworkToNetworkAgentAdapterServiceImpl
 	private static final String SERVICE_DESCRIPTION = "NetworkAgent adapting a NetworkOfAgents that gets a string and returns a string";
 	private static final String SERVICE_ID = "stringToStringAgentsNetworkToNetworkAgentAdapterService";
 
-	public GStringToStringAgentsNetworkToNetworkAgentAdapterServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
+	public GStringToStringAgentsNetworkToNetworkAgentAdapterServiceImpl(
+			IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory,
-			IGAgentsNetworkServiceFactoryRepositoryPattern factoryRepository, IAgentsNetworkDao agentsNetworkDao) {
+			IGAgentsNetworkServiceFactoryRepositoryPattern factoryRepository) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
-				rendererFactory, String.class, String.class, SERVICE_ID, SERVICE_DESCRIPTION, factoryRepository,
-				agentsNetworkDao);
+				rendererFactory, String.class, String.class, SERVICE_ID, SERVICE_DESCRIPTION, factoryRepository);
 
 	}
 

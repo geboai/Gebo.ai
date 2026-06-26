@@ -8,6 +8,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Getter;
 
@@ -15,13 +16,13 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 		extends GAbstractAgentsNetworkServiceFactory<InputType, OutputType, ServiceType>
 		implements IGAgentsNetworkServiceFactory<InputType, OutputType, ServiceType> {
 	private static final String WRONG_REACTIVE_OUTPUTS_NR_EXCEPTION_TEXT = "The GAbstractReactiveOutputAgentsNetworkServiceFactory is thought to work with agents network with a single output node being reactive";
-	private final IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo;
+	protected final IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo;
 
 	public GAbstractReactiveOutputAgentsNetworkServiceFactory(String id, String description,
-			Class<ServiceType> serviceType, IAgentRoleDao agentRoleDao, IGAgentServiceRuntimeDao agentServiceRuntimeDao,
-			IAgentConfigDao agentConfigDao,
-			IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo) {
-		super(id, description, serviceType, agentRoleDao, agentServiceRuntimeDao, agentConfigDao);
+			Class<ServiceType> serviceType,
+			IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo,
+			IGRuntimeBinder runtimeBinder) {
+		super(id, description, serviceType, runtimeBinder);
 		this.reactiveAgentAdapterFactoryRepo = reactiveAgentAdapterFactoryRepo;
 	}
 
@@ -41,8 +42,11 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 	@Override
 	protected RuntimeAgentInfos createRuntimeAgentInfos(GAgentsNetwork network, AgentNetworkParticipant agent)
 			throws NetworkOfAgentsException {
+		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
+				.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		GAgentConfig config = agentConfigDao.findByCode(agent.getAgentConfigCode());
-		IGGenericAgentService service = this.agentServiceRuntimeDao.findByCode(config.getAgentServiceId());
+		IGGenericAgentService service = agentServiceRuntimeDao.findByCode(config.getAgentServiceId());
 		if (service instanceof IGReactiveAgentService reactiveService) {
 			if (!agent.isOutputNode())
 				throw new NetworkOfAgentsException("A reactive service can be used only on an outputNode");
@@ -67,8 +71,7 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 				.filter(x -> x instanceof AdapterRuntimeAgentInfos)
 				.map(x -> ((AdapterRuntimeAgentInfos) x).getAdapterWithFlux()).toList();
 		if (adapters.isEmpty() || adapters.size() > 1)
-			throw new NetworkOfAgentsException(
-					WRONG_REACTIVE_OUTPUTS_NR_EXCEPTION_TEXT);
+			throw new NetworkOfAgentsException(WRONG_REACTIVE_OUTPUTS_NR_EXCEPTION_TEXT);
 		return createAgentsNetworkService(network, notificationSink, inputType, outputType, runAs, agentsCache,
 				adapters.get(0));
 	}

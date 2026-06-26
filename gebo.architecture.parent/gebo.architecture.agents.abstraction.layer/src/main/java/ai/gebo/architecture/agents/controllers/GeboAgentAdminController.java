@@ -17,6 +17,7 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ import lombok.AllArgsConstructor;
 public class GeboAgentAdminController {
 	private final IAgentConfigDao agentsConfigDao;
 	private final IGPromptConfigDao promptsDao;
-	private final IGAgentServiceRuntimeDao agentsRepositoryPattern;
+	private final IGRuntimeBinder runtimeBinder;
 
 	@GetMapping(value = "getPromptTemplateByAgentId", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GPromptTemplateConfig> getPromptTemplatesByAgentId(@RequestParam("agentId") String agentId) {
@@ -40,7 +41,8 @@ public class GeboAgentAdminController {
 
 	@GetMapping(value = "getAgentsChoices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getAgentsChoices() {
-		return agentsRepositoryPattern.getConfigurations().stream().map(x -> {
+		IGAgentServiceRuntimeDao dao=runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		return dao.getConfigurations().stream().map(x -> {
 			GBaseObject object = new GBaseObject();
 			object.setCode(x.getId());
 			object.setDescription(x.getDescription());
