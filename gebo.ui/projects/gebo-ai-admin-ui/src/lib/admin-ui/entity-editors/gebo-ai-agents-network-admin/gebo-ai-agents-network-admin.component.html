@@ -1,0 +1,203 @@
+<p-blockUI id="BlockUi" gebo-ai-label [target]="networkUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #networkUI header="Editing Agents Network configuration" [formGroup]="formGroup">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+    <div class="grid geboDialogContent standardTabDialogueHeight">
+        <div class="col-12 standardTabDialogueHeight">
+            <p-tabView id="TabView" gebo-ai-label>
+                <p-tabPanel id="GeneralInfosTab" gebo-ai-label header="General infos">
+                    <div class="grid standardTabDialogueHeight">
+                        <div class="col-6">
+                            <gebo-ai-field id="description" label="Description" help="Enter Agents Network description."
+                                [required]="true">
+                                <input pInputText id="description" formControlName="description" maxlength="120"
+                                    [required]="true" gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="code" label="Unique Code"
+                                help="Automatically generated unique code of the Network.">
+                                <input pInputText id="code" formControlName="code" readonly="true"
+                                    gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-12">
+                            <gebo-ai-field id="scenarioDescription" label="Scenario Description"
+                                help="Provide a detailed scenario description." [required]="true">
+                                <textarea pInputTextarea id="scenarioDescription" formControlName="scenarioDescription"
+                                    rows="4" style="width: 100%" [required]="true" gebo-ai-field-element></textarea>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="maxLoopIteration" label="Max Loop Iterations"
+                                help="Set the maximum loop iterations of the network.">
+                                <p-inputNumber formControlName="maxLoopIteration" gebo-ai-field-element
+                                    [maxFractionDigits]="0" [min]="1" [max]="50"></p-inputNumber>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="defaultUserInteractionNetwork" label="Default User Interaction Network"
+                                help="Check this to set this network as default for user interactions.">
+                                <p-checkbox formControlName="defaultUserInteractionNetwork" [binary]="true"
+                                    gebo-ai-field-element></p-checkbox>
+                            </gebo-ai-field>
+                        </div>
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel id="NetworkGraphTab" gebo-ai-label header="Agents Network Graph">
+                    <div class="flex justify-content-between align-items-center mb-4 p-2">
+                        <div>
+                            <h3 class="m-0 font-semibold text-xl">Agent Nodes & Communications</h3>
+                            <p class="text-sm text-muted-color m-0">Visualize and structure agent interactions within this network.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button pButton label="Add Participant" icon="pi pi-plus" class="p-button-outlined" (click)="openAddParticipant()"></button>
+                            <button pButton label="Clear All" icon="pi pi-trash" class="p-button-outlined p-button-danger" [disabled]="agentsList.length === 0" (click)="clearNetwork()"></button>
+                        </div>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div class="flex flex-column align-items-center justify-content-center p-6 border-round border-1 surface-border bg-card shadow-1 m-4" *ngIf="agentsList.length === 0" style="min-height: 250px;">
+                        <i class="pi pi-share-alt text-4xl text-primary mb-3"></i>
+                        <span class="font-semibold text-xl mb-2">No agents in the network yet</span>
+                        <span class="text-sm text-muted-color mb-4">Start by adding the first agent node which can act as your starting input node.</span>
+                        <button pButton label="Add First Agent" icon="pi pi-plus" (click)="openAddParticipant()"></button>
+                    </div>
+
+                    <!-- Organization chart visualizer -->
+                    <div class="w-full overflow-auto p-4 border-round border-1 surface-border bg-card shadow-1" *ngIf="agentsList.length > 0" style="min-height: 400px; display: flex; justify-content: center; align-items: flex-start;">
+                        <p-organizationChart [value]="chartData" styleClass="w-full">
+                            <ng-template let-node pTemplate="default">
+                                <div class="node-card p-3 border-round shadow-2 bg-paper flex flex-column gap-2 text-left" style="min-width: 220px; border-top: 4px solid var(--primary-color);">
+                                    <div class="flex justify-content-between align-items-center">
+                                        <span class="font-bold text-lg text-primary">{{node.label}}</span>
+                                        <div class="flex gap-1">
+                                            <span *ngIf="node.data.inputNode" class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold flex align-items-center gap-1" title="Input Node">
+                                                <i class="pi pi-sign-in"></i> IN
+                                            </span>
+                                            <span *ngIf="node.data.outputNode" class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold flex align-items-center gap-1" title="Output Node">
+                                                <i class="pi pi-sign-out"></i> OUT
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-sm">
+                                        <span class="text-muted-color font-semibold">Config: </span>
+                                        <span>{{getAgentDescription(node.data.agentConfigCode)}}</span>
+                                    </div>
+                                    
+                                    <div class="text-xs text-muted-color" *ngIf="node.data.agentContextualName">
+                                        <span class="font-semibold">Context: </span>
+                                        <span>{{node.data.agentContextualName}}</span>
+                                    </div>
+                                    
+                                    <div class="text-xs text-muted-color" *ngIf="node.data.communicationPolicy">
+                                        <span class="font-semibold">Policy: </span>
+                                        <span>{{node.data.communicationPolicy}}</span>
+                                    </div>
+
+                                    <div class="flex justify-content-end gap-1 mt-2 border-top-1 surface-border pt-2">
+                                        <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-success p-button-sm" title="Add Child / Communicates With" (click)="openAddChild(node.data)"></button>
+                                        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary p-button-sm" title="Edit Participant" (click)="openEditParticipant(node.data)"></button>
+                                        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm" title="Delete Participant" (click)="deleteParticipant(node.data)"></button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-organizationChart>
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel id="SecurityAccessSettingsTab" gebo-ai-label header="Security access settings">
+                    <div class="standardTabDialogueHeight">
+                        <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+
+    <div class="geboButtonsBar" style="vertical-align: bottom" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false"
+                    styleClass="w-full"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" />
+            </div>
+        </div>
+    </div>
+</p-panel>
+
+<!-- Participant Modal Dialog -->
+<p-dialog [(visible)]="showParticipantDialog" [header]="dialogHeader" [modal]="true" [style]="{width: '520px'}" styleClass="p-fluid" [dismissableMask]="true">
+    <div class="grid gap-3 p-3" [formGroup]="participantFormGroup">
+        <div class="col-12">
+            <label for="networkAgentName" class="font-semibold mb-1 block text-sm">Network Agent Name *</label>
+            <input pInputText id="networkAgentName" formControlName="networkAgentName" placeholder="Unique name in network (e.g. worker)" />
+        </div>
+        
+        <div class="col-12">
+            <label for="agentConfigCode" class="font-semibold mb-1 block text-sm">Agent Configuration *</label>
+            <p-dropdown id="agentConfigCode" formControlName="agentConfigCode" [options]="availableAgents" optionValue="code" optionLabel="description" placeholder="Select Agent Configuration"></p-dropdown>
+        </div>
+
+        <div class="col-12">
+            <label for="agentContextualName" class="font-semibold mb-1 block text-sm">Contextual Name</label>
+            <input pInputText id="agentContextualName" formControlName="agentContextualName" placeholder="Optional contextual description" />
+        </div>
+
+        <div class="col-12 grid">
+            <div class="col-6 flex align-items-center gap-2">
+                <p-checkbox formControlName="inputNode" [binary]="true" id="inputNode" label="Starting Input Node"></p-checkbox>
+            </div>
+            <div class="col-6 flex align-items-center gap-2">
+                <p-checkbox formControlName="outputNode" [binary]="true" id="outputNode" label="Final Output Node"></p-checkbox>
+            </div>
+        </div>
+
+        <div class="col-12 border-top-1 surface-border pt-3">
+            <label for="communicationPolicy" class="font-semibold mb-1 block text-sm">Communication Policy *</label>
+            <p-dropdown id="communicationPolicy" formControlName="communicationPolicy" [options]="policyOptions" optionValue="value" optionLabel="label"></p-dropdown>
+        </div>
+
+        <div class="col-12">
+            <label for="communicationList" class="font-semibold mb-1 block text-sm">Communicates With</label>
+            <p-multiSelect id="communicationList" formControlName="communicationList" [options]="getPotentialTargets(participantFormGroup.get('networkAgentName')?.value || undefined)" placeholder="Select target agents"></p-multiSelect>
+        </div>
+
+        <div class="col-12 grid border-top-1 surface-border pt-3">
+            <div class="col-6">
+                <label for="maxInvocations" class="font-semibold mb-1 block text-sm">Max Invocations</label>
+                <p-inputNumber id="maxInvocations" formControlName="maxInvocations" [min]="1" placeholder="Unlimited"></p-inputNumber>
+            </div>
+            <div class="col-6">
+                <label for="maxConsecutiveInvocations" class="font-semibold mb-1 block text-sm">Max Consecutive Invocations</label>
+                <p-inputNumber id="maxConsecutiveInvocations" formControlName="maxConsecutiveInvocations" [min]="1" placeholder="Unlimited"></p-inputNumber>
+            </div>
+        </div>
+
+        <div class="col-12 grid">
+            <div class="col-6 flex align-items-center gap-2">
+                <p-checkbox formControlName="canCallTools" [binary]="true" id="canCallTools" label="Can Call Tools"></p-checkbox>
+            </div>
+            <div class="col-6 flex align-items-center gap-2">
+                <p-checkbox formControlName="canCallOtherAgents" [binary]="true" id="canCallOtherAgents" label="Can Call Other Agents"></p-checkbox>
+            </div>
+        </div>
+    </div>
+    
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancel" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="showParticipantDialog = false"></button>
+        <button pButton label="Save" icon="pi pi-check" class="p-button-primary" [disabled]="participantFormGroup.invalid" (click)="saveParticipant()"></button>
+    </ng-template>
+</p-dialog>

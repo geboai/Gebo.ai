@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AncestorPanelComponent } from "@Gebo.ai/gebo-ai-admin-ui";
+import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { GBaseObject, GeboAgentsNetworkAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
