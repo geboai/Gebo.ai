@@ -10,10 +10,12 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    disabled?: boolean;
-    sourname?: string;
-    username?: string;
+export interface AgentServiceDescriptor { 
+    serviceId?: string;
+    description?: string;
+    inputType?: string;
+    outputType?: string;
+    networkAgent?: boolean;
+    routingAgent?: boolean;
+    networkAdapter?: boolean;
 }

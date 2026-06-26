@@ -19,6 +19,9 @@ export interface GAgentConfig {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
+    agentType?: GAgentConfig.AgentTypeEnum;
+    adaptedAgentNetworkCode?: string;
+    agentNetworkServiceCode?: string;
     agentServiceId: string;
     mainLoopPromptUseCode?: string;
     customLoopPrompt?: GPromptTemplateConfig;
@@ -39,6 +42,11 @@ export interface GAgentConfig {
     enabledFunctions?: Array<string>;
 }
 export namespace GAgentConfig {
+    export type AgentTypeEnum = 'AGENT' | 'AGENTS_NETWORK';
+    export const AgentTypeEnum = {
+        AGENT: 'AGENT' as AgentTypeEnum,
+        AGENTSNETWORK: 'AGENTS_NETWORK' as AgentTypeEnum
+    };
     export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
     export const ThinkingEnum = {
         NOTHINKING: 'NO_THINKING' as ThinkingEnum,

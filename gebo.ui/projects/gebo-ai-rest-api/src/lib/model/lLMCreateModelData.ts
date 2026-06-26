@@ -21,6 +21,8 @@ export interface LLMCreateModelData {
     baseUrl?: string;
     contextWindow?: number;
     uses?: Array<LLMCreateModelData.UsesEnum>;
+    maxGeneratedTokens?: number;
+    thinking?: LLMCreateModelData.ThinkingEnum;
 }
 export namespace LLMCreateModelData {
     export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
@@ -36,5 +38,13 @@ export namespace LLMCreateModelData {
     export const UsesEnum = {
         CHAT: 'CHAT' as UsesEnum,
         INTERNALSERVICES: 'INTERNAL_SERVICES' as UsesEnum
+    };
+    export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const ThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as ThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as ThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
+        AUTO: 'AUTO' as ThinkingEnum
     };
 }

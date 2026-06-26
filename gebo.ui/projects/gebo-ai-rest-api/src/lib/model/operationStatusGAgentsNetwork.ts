@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GAgentsNetwork } from './gAgentsNetwork';
+import { GUserMessage } from './gUserMessage';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    disabled?: boolean;
-    sourname?: string;
-    username?: string;
+export interface OperationStatusGAgentsNetwork { 
+    result?: GAgentsNetwork;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

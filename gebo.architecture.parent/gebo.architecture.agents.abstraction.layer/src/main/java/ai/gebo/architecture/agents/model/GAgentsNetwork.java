@@ -49,6 +49,9 @@ public class GAgentsNetwork extends GBaseObject implements IJsonClonable<GAgents
 
 			return agentConfigCode + (agentContextualName != null ? "-" + agentContextualName : "");
 		}
+		public void setNetworkAgentName(String s) {
+			
+		}
 	}
 
 	@NotNull

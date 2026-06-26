@@ -74,7 +74,6 @@ public class StandardAgentsInitialization {
 	private static final String DEFAULT_NETWORK_SCENARIO_DESCRIPTION = "The network of agent is meant to try to delivery the best answer and interaction to user's questions with a leader controller node controlling if the quality of the network output is ok.\r\n The controller agent is comunicating with one or more searching agents to supply evidences on an evidence analyzer node that responds.\r\n";
 	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Default agents network for chat purposes";
 	private static final String DEFAULT_AGENTS_NETWORK = "DEFAULT_AGENTS_NETWORK";
-	private static final String DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER = "DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER";
 	private final static Logger LOGGER = LoggerFactory.getLogger(StandardAgentsInitialization.class);
 	private final ISearchServiceRepositoryPattern searchServicesRepositoryPattern;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
@@ -110,7 +109,7 @@ public class StandardAgentsInitialization {
 	@Bean
 	@Qualifier(IStreamingOutputChatPipelineService.DEFAULT_PIPELINE_SERVICE)
 	public IStreamingOutputChatPipelineService defaultStreamingOutputPipelineService(
-			@Autowired @Qualifier(DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource networkDataSource,
+			@Autowired @Qualifier(IDynamicAgentsNetworkDataSource.DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource networkDataSource,
 			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory) {
 		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
@@ -119,7 +118,7 @@ public class StandardAgentsInitialization {
 	}
 
 	@Bean
-	@Qualifier(DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER)
+	@Qualifier(IDynamicAgentsNetworkDataSource.DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER)
 	public IDynamicAgentsNetworkDataSource defaultAgentsNetworkDataSource(
 			@Autowired(required = false) @Qualifier(INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER) IGDynamicAgentConfigDataSource internalKnowledgebaseAgentConfigDataSource) {
 		return new IDynamicAgentsNetworkDataSource() {
@@ -146,8 +145,8 @@ public class StandardAgentsInitialization {
 		// The internal-KB searcher reuses the standard RAG search-planner prompt,
 		// runtime-patched with the agent network placeholders (same pattern as the
 		// external searchers).
-		internalKnowledgeBaseAgentConfig.setCustomLoopPrompt(SearchAgentPromptPatcher.withAgentPlaceholders(
-				promptsDao.findByPromptUse(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE)));
+		internalKnowledgeBaseAgentConfig.setCustomLoopPrompt(SearchAgentPromptPatcher.withAgentPlaceholders(promptsDao
+				.findByPromptUse(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE)));
 		internalKnowledgeBaseAgentConfig.setUseDefaultChatModel(true);
 		internalKnowledgeBaseAgentConfig.setEnabledFunctions(List.of());
 		internalKnowledgeBaseAgentConfig.setSubscribeAllTools(false);
@@ -201,7 +200,8 @@ public class StandardAgentsInitialization {
 			}
 		}
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
-		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String and
+		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String
+		// and
 		// forwards it to the String-input controller.
 		GAgentConfig inputAdapter = defaultInputAdapterConfigDataSource().getConfigurations().get(0);
 		AgentNetworkParticipant inputAdapterParticipant = new AgentNetworkParticipant();
@@ -217,10 +217,13 @@ public class StandardAgentsInitialization {
 		controllerParticipant.setOutputNode(false);
 		controllerParticipant.setCommunicationList(coordinatedAgentCodes);
 		participants.add(controllerParticipant);
-		// Searcher participants: the internal knowledge base searcher (when present) plus
-		// every external search-service searcher. Each is reachable from the controller and
+		// Searcher participants: the internal knowledge base searcher (when present)
+		// plus
+		// every external search-service searcher. Each is reachable from the controller
+		// and
 		// shares its results with the report writer. The internal-KB searcher must be a
-		// participant too; otherwise the controller's communication list references an agent
+		// participant too; otherwise the controller's communication list references an
+		// agent
 		// with no runtime allocation and routing fails.
 		List<GAgentConfig> searcherConfigs = new ArrayList<>();
 		if (internalKnowledgeBaseConfig != null) {
