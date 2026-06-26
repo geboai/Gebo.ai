@@ -47,7 +47,7 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 			Map<String, RuntimeAgentInfos> agentsCache, AdapterWithFlux adapter) {
 
 		return new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao, threadManager, network,
-				notificationSink, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
+				notificationSink, inputType, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
 
 	}
 

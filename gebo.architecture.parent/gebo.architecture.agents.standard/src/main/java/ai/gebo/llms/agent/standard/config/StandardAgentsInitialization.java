@@ -27,7 +27,6 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactoryReposit
 import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
 import ai.gebo.architecture.agents.services.IGDynamicAgentServiceSupplier;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
-import ai.gebo.architecture.agents.services.IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService;
 import ai.gebo.architecture.agents.services.impl.TextProcessingTaskPerformerAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -49,6 +48,7 @@ import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOu
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.DocumentsSearchNetworkAgentServiceWrapper;
+import ai.gebo.llms.agent.standard.services.IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;

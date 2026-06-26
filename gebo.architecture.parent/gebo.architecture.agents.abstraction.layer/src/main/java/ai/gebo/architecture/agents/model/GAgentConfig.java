@@ -15,7 +15,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource,IJsonClonable<GAgentConfig> {
+public class GAgentConfig extends GBaseObject
+		implements IGObjectWithSecurity, IAclGrantedResource, IJsonClonable<GAgentConfig> {
+	public static enum AgentType {
+		AGENT, AGENTS_NETWORK
+	}
+
+	private AgentType agentType = AgentType.AGENT;
+	@GObjectReference(referencedType = GAgentsNetwork.class)
+	private String adaptedAgentNetworkCode;
+	private String agentNetworkServiceCode;
 	@NotNull
 	private String agentServiceId = null;
 	private String mainLoopPromptUseCode = null;

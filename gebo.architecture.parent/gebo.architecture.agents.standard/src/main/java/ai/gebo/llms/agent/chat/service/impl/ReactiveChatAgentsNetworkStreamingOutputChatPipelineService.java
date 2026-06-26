@@ -31,6 +31,7 @@ import reactor.core.scheduler.Schedulers;
 @AllArgsConstructor
 public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
+	private static final String SERVICE_ID = "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
 	private static final String EXCEPTION_CREATING_NETWORK_OF_AGENTS = "Exception creating network of agents";
 	private static final String EXCEPTION_RUNNING_NETWORK_OF_AGENTS = "Exception running network of agents";
 	private final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
@@ -47,7 +48,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	@Override
 	public String getStepId() {
 
-		return "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
+		return SERVICE_ID;
 	}
 
 	@Override

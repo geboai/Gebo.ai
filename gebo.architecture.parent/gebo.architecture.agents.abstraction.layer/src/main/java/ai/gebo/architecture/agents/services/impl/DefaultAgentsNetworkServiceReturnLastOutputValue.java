@@ -14,10 +14,10 @@ public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputT
 
 	public DefaultAgentsNetworkServiceReturnLastOutputValue(IGAgentServiceRuntimeDao agentsServicesRepository,
 			IAgentRoleDao rolesDao, IGeboThreadManager threadManager, GAgentsNetwork network,
-			INotificationSink notificationSink, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) {
-		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, outputType, runAs,
-				agentsDao);
+			INotificationSink notificationSink, Class<InputType> inputType, Class<OutputType> outputType,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) {
+		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,
+				runAs, agentsDao);
 
 	}
 
@@ -41,8 +41,7 @@ public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputT
 
 	@Override
 	public void dispose() {
-		
-		
+
 	}
 
 }

@@ -16,10 +16,11 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 
 	public GAbstractReactiveOutputAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository,
 			IAgentRoleDao rolesDao, IGeboThreadManager threadManager, GAgentsNetwork network,
-			INotificationSink notificationSink, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, AdapterWithFlux<?, OutputType> adapterWithFlux) {
-		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, outputType, runAs,
-				agentsDao);
+			INotificationSink notificationSink, Class<InputType> inputType, Class<OutputType> outputType,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao,
+			AdapterWithFlux<?, OutputType> adapterWithFlux) {
+		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,
+				runAs, agentsDao);
 		this.adapterWithFlux = adapterWithFlux;
 
 	}

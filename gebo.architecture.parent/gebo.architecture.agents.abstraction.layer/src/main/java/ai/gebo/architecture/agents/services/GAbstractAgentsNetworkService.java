@@ -37,7 +37,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private final IGeboThreadManager threadManager;
 	private final GAgentsNetwork network;
 	private final INotificationSink notificationSink;
-	private final Class<OutputType> outputType;
+	private final Class<InputType> inputType;
+	private final Class<OutputType> outputType;	
 	private final ReactiveIdentityUtil runAs;
 	private final IGAgentsNetworkRuntimeDao agentsDao;
 
@@ -176,8 +177,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		if (executionGroup.size() == 1) {
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
 			RuntimeAgentInfos agentRuntime = agentsDao.findAgentByCode(msg.getToAgent());
-			out = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agentRuntime,
-					msg, outputType, runAs);
+			out = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agentRuntime, msg,
+					outputType, runAs);
 		} else {
 			List<CompletableFuture<CallsResult<OutputType>>> completables = new ArrayList<>();
 			for (AgentsExchangeMessage<?> msg : executionGroup) {
@@ -186,12 +187,12 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					try {
 						if (runAs != null)
 							return runAs.doRunAsWithReturnAndException(() -> {
-								return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao,
-										session, agent, msg, outputType, runAs);
+								return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
+										agent, msg, outputType, runAs);
 							});
 						else
-							return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao,
-									session, agent, msg, outputType, runAs);
+							return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agent,
+									msg, outputType, runAs);
 					} catch (Throwable e) {
 
 						return null;
@@ -233,5 +234,13 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	}
 
 	protected abstract <OutputType> OutputType compose(OutputType actualOutput, OutputType incremental);
+
+	public Class<OutputType> getOutputType() {
+		return outputType;
+	}
+
+	public Class<InputType> getInputType() {
+		return inputType;
+	}
 
 }
