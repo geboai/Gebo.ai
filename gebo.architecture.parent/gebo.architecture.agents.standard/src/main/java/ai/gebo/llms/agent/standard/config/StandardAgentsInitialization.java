@@ -88,12 +88,14 @@ public class StandardAgentsInitialization {
 	private final IGRankerService rankerService;
 	private final IGDocumentContentRendererProvider rendererFactory;
 	private final IGExternalSearchSecurityService  externalSearchSecurityService;
+	private final StandardAgentsConfig standardAgentsConfig;
 
 	public StandardAgentsInitialization(ISearchServiceRepositoryPattern searchServicesRepositoryPattern,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
 			IDocumentsChunkService chunkingService, IGRankerService rankerService, IGPromptConfigDao promptsDao,
 			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
-			IGDocumentContentRendererProvider rendererFactory, IGExternalSearchSecurityService externalSearchSecurityService) {
+			IGDocumentContentRendererProvider rendererFactory, IGExternalSearchSecurityService externalSearchSecurityService,
+			StandardAgentsConfig standardAgentsConfig) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
 		this.chatModelsDao = chatModelsDao;
 		this.toolsRepositoryPattern = toolsRepositoryPattern;
@@ -105,6 +107,7 @@ public class StandardAgentsInitialization {
 		this.rankerService = rankerService;
 		this.rendererFactory = rendererFactory;
 		this.externalSearchSecurityService = externalSearchSecurityService;
+		this.standardAgentsConfig = standardAgentsConfig;
 		LOGGER.info(START_ROW);
 		LOGGER.info(INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT);
 		LOGGER.info(START_ROW);
@@ -172,7 +175,7 @@ public class StandardAgentsInitialization {
 			IGDocumentsSearchService documentsSearchService,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService) {
 		return new InternalKnowledgeBaseSearchNetworkAgentService(chatModelsDao, toolsRepositoryPattern, promptsDao,
-				securityService, agentRoleDao, runtimeBinder, rendererFactory, chunkingService, rankerService,
+				securityService, agentRoleDao, runtimeBinder, rendererFactory, rankerService,
 				documentsSearchService, knowledgeBaseVisibilityService);
 
 	}
@@ -382,7 +385,8 @@ public class StandardAgentsInitialization {
 						if (search instanceof INativeSearchService nativeSearch) {
 							NativeDocumentsSearchNetworkAgentService nativeWrapper = new NativeDocumentsSearchNetworkAgentService(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
-									runtimeBinder, rendererFactory, chunkingService, rankerService, nativeSearch);
+									runtimeBinder, rendererFactory, chunkingService, rankerService,
+									standardAgentsConfig.getMaxChunksPerDocument(), nativeSearch);
 							outServices.add(nativeWrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered native search agent service id:" + nativeWrapper.getId());
@@ -390,7 +394,8 @@ public class StandardAgentsInitialization {
 						} else {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
-									runtimeBinder, rendererFactory, chunkingService, rankerService, search);
+									runtimeBinder, rendererFactory, chunkingService, rankerService,
+									standardAgentsConfig.getMaxChunksPerDocument(), search);
 							outServices.add(wrapper);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Registered search agent service id:" + wrapper.getId());

@@ -42,7 +42,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.security.services.IGSecurityService;
 
 public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType, NativeSearchDataStructure extends INativeQueryObject>
-		extends GAbstractStandardDocumentsSearchAgentService {
+		extends GAbstractExternalDocumentsSearchAgentService {
 
 	public static final String NATIVE_SEARCH_AGENT_FOR = "Native search Agent for ";
 	public static final String NATIVE_SEARCHER_AGENT = "NativeSearcherAgent";
@@ -52,10 +52,10 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService,
+			IGRankerService rankerService, int maxChunksPerDocument,
 			INativeSearchService<CustomSearchResultExtractionDataType, NativeSearchDataStructure> nativeSearchWrapper) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
-				rendererFactory, chunkingService, rankerService);
+				rendererFactory, chunkingService, rankerService, maxChunksPerDocument);
 		this.nativeSearchWrapper = nativeSearchWrapper;
 	}
 

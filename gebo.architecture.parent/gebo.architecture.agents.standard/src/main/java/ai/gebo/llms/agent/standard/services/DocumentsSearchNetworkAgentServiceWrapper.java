@@ -39,7 +39,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.security.services.IGSecurityService;
 
-public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandardDocumentsSearchAgentService {
+public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternalDocumentsSearchAgentService {
 
 	private static final String SEARCH_AGENT_DESCRIPTION = " search agent";
 	public static final String SEARCH_AGENT = "SearchAgent";
@@ -49,9 +49,9 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory, IDocumentsChunkService chunkingService,
-			IGRankerService rankerService, ISearchService<?> wrappedSearchService) {
+			IGRankerService rankerService, int maxChunksPerDocument, ISearchService<?> wrappedSearchService) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
-				rendererFactory, chunkingService, rankerService);
+				rendererFactory, chunkingService, rankerService, maxChunksPerDocument);
 		this.wrappedSearchService = wrappedSearchService;
 	}
 
