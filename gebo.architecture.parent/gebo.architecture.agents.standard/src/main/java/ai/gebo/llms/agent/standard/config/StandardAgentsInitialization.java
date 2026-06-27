@@ -55,6 +55,7 @@ import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.security.services.IGSecurityService;
 
 @ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true")
@@ -63,7 +64,7 @@ public class StandardAgentsInitialization {
 	private static final String INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT = "*             Initializing standard agents network for reactive chat                 *";
 	private static final String START_ROW = "**************************************************************************************";
 	private static final String SEARCH_AGENT_INTERNALKB_SERVICE_DESCRIPTION = "Search agent service specialized in Internal Knowledge Base Searches";
-	public static final String INTERNAL_KNOWLEDGEBASE_AGENT_CODE = "INTERNAL_KNOWLEDGEBASE_AGENT";
+	public static final String INTERNAL_KNOWLEDGEBASE_AGENT_CODE = "internalKnowledgeBaseSearchAgent";
 	public static final String INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER = "internalKnowledgeBaseSearch";
 	private static final String REPORTER_AGENT_DESCRIPTION = "Reporter agent that evaluates controller's initiatives, eventually present evidences/documents and user question to create the fittest answer";
 	private static final String CONTROLLER_AND_COORDINATOR_DESCRIPTION = "Agent's network controller and coordinator";
@@ -85,12 +86,13 @@ public class StandardAgentsInitialization {
 	private final IDocumentsChunkService chunkingService;
 	private final IGRankerService rankerService;
 	private final IGDocumentContentRendererProvider rendererFactory;
+	private final IGExternalSearchSecurityService  externalSearchSecurityService;
 
 	public StandardAgentsInitialization(ISearchServiceRepositoryPattern searchServicesRepositoryPattern,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
 			IDocumentsChunkService chunkingService, IGRankerService rankerService, IGPromptConfigDao promptsDao,
 			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
-			IGDocumentContentRendererProvider rendererFactory) {
+			IGDocumentContentRendererProvider rendererFactory, IGExternalSearchSecurityService externalSearchSecurityService) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
 		this.chatModelsDao = chatModelsDao;
 		this.toolsRepositoryPattern = toolsRepositoryPattern;
@@ -101,6 +103,7 @@ public class StandardAgentsInitialization {
 		this.chunkingService = chunkingService;
 		this.rankerService = rankerService;
 		this.rendererFactory = rendererFactory;
+		this.externalSearchSecurityService = externalSearchSecurityService;
 		LOGGER.info(START_ROW);
 		LOGGER.info(INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT);
 		LOGGER.info(START_ROW);
@@ -266,6 +269,9 @@ public class StandardAgentsInitialization {
 					try {
 						if (!search.isEnabled())
 							continue;
+						if (!externalSearchSecurityService.isEnabledForCurrentUser(search)) {
+							continue;
+						}
 						String serviceId = search.getProductId() + (search instanceof INativeSearchService
 								? NativeDocumentsSearchNetworkAgentService.NATIVE_SEARCHER_AGENT
 								: DocumentsSearchNetworkAgentServiceWrapper.SEARCH_AGENT);

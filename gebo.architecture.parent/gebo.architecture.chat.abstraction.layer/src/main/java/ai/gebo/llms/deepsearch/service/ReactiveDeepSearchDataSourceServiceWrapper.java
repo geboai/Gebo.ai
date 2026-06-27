@@ -50,6 +50,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	protected final IGSecurityService securityService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveDeepSearchDataSourceServiceWrapper.class);
 	protected final GeboComponentInfo serviceOriginComponent;
+	protected final IGExternalSearchSecurityService externalSearchSecurityService;
 
 	public ReactiveDeepSearchDataSourceServiceWrapper(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
@@ -58,7 +59,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
 			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService,
 			IGeboThreadManager threadManager, IGPromptConfigDao promptsDao,
-			IDataSourcesCatalogsService dataSourcesCatalogsService, IGSecurityService securityService) {
+			IDataSourcesCatalogsService dataSourcesCatalogsService, IGSecurityService securityService,
+			IGExternalSearchSecurityService externalSearchSecurityService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType,
 				threadManager, deepSearchDefaultConfig, promptsDao);
 		this.searchService = searchService;
@@ -69,6 +71,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 				searchService.getMessagingSystemId());
 		this.dataSourcesCatalogsService = dataSourcesCatalogsService;
 		this.securityService = securityService;
+		this.externalSearchSecurityService = externalSearchSecurityService;
 	}
 
 	@Override
@@ -100,34 +103,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	@Override
-	public boolean isEnabled(DeepSearchConfig deepSearchConfig) throws SearchServiceException {
-		// When no admin has persisted a deep search configuration, the effective config is the built-in
-		// DeepSearchDefaultConfig fallback (DeepSearchConfigProviderImpl.get()). In that unconfigured state
-		// regular users are limited to the internal knowledge base, so external data sources (handled by this
-		// wrapper) are disabled for them. Admins keep full access so they can run and configure sources.
-		boolean adminConfigured = !(deepSearchConfig instanceof DeepSearchDefaultConfig);
-		if (!adminConfigured && !securityService.isCurrentUserAdmin()) {
-			return false;
-		}
-		boolean userCanAccess = securityService.isCanAccess(deepSearchConfig, true);
-		if (userCanAccess) {
-			List<DeepSearchDataSourceAccess> accesses = deepSearchConfig.getDataSourcesAccesses();
-			boolean perDataSourceConfigured = deepSearchConfig.getPerDataSourceConfigured() != null
-					&& deepSearchConfig.getPerDataSourceConfigured();
-			if (accesses != null && !accesses.isEmpty() && !securityService.isCurrentUserAdmin()
-					&& perDataSourceConfigured) {
-				String thisSystemId = getHandlerId();
-				DeepSearchDataSourceAccess gridCell = accesses.stream()
-						.filter(x -> x.getDataSourceId() != null && x.getDataSourceId().equals(thisSystemId))
-						.findFirst().orElse(null);
-				userCanAccess = gridCell != null && securityService.isCanAccess(gridCell, true);
-			}
-		}
-		if (searchService.isEnabled() && userCanAccess) {
-			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
-			return systems != null && !systems.isEmpty();
-		}
-		return false;
+	public boolean isEnabled() throws SearchServiceException {
+		return externalSearchSecurityService.isEnabledForCurrentUser(searchService);
 	}
 
 	@Override

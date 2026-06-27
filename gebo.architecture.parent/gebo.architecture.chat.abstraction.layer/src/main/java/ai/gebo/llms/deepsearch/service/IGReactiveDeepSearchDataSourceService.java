@@ -35,7 +35,7 @@ public interface IGReactiveDeepSearchDataSourceService {
 	 * @return
 	 * @throws SearchServiceException
 	 */
-	public boolean isEnabled(DeepSearchConfig deepSearchConfig) throws SearchServiceException;
+	public boolean isEnabled() throws SearchServiceException;
 
 	/******************************************************************
 	 * Returns a description of the data source
