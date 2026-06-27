@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.Ignore;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.git.content.handler.GGitContentManagementSystem;
@@ -46,12 +46,12 @@ public class GitContentSystemIntegrationTests extends AbstractBaseTestLLmsIntegr
      * @throws GeboPersistenceException      if persistence fails.
      * @throws GeboJobServiceException       if job service fails.
      * @throws InterruptedException          if the test is interrupted.
-     * @throws JsonProcessingException       if JSON processing fails.
+     * @throws JacksonException       if JSON processing fails.
      */
 	// @Ignore
 	@Test
 	public void runPublicGitEndpointTest() throws InstantiationException, IllegalAccessException,
-			GeboPersistenceException, GeboJobServiceException, InterruptedException, JsonProcessingException {
+			GeboPersistenceException, GeboJobServiceException, InterruptedException, JacksonException {
 		// Log starting of public git endpoint test
 		LOGGER.info("Start public git endpoint test");
 		

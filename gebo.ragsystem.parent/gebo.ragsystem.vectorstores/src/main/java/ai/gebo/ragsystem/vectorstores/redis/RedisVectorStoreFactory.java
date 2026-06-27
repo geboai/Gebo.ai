@@ -29,7 +29,7 @@ import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactory;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.ragsystem.vectorstores.redis.model.RedisConfig;
-import redis.clients.jedis.JedisPooled;
+import redis.clients.jedis.RedisClient;
 import redis.clients.jedis.search.Schema.FieldType;
 
 /**
@@ -78,10 +78,10 @@ public class RedisVectorStoreFactory implements IGVectorStoreFactory<RedisConfig
 		final String password = redisConfig.getPassword();
 		
 		// Initialize Redis connection pool
-		JedisPooled jedisPooled = new JedisPooled(host, port, user, password);
+		RedisClient jedisClient = RedisClient.create(host, port, user, password);
 		
 		// Configure the Redis vector store with appropriate settings
-		Builder builder = RedisVectorStore.builder(jedisPooled, embeddingModel);
+		Builder builder = RedisVectorStore.builder(jedisClient, embeddingModel);
 		
 		builder=builder.prefix(embeddingConfiguration.getCode());
 		builder=builder.contentFieldName("gebocontent");

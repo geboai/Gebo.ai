@@ -88,16 +88,7 @@ public class TestKnowledgeExtractionChatClientRequestSpecWrapper implements Chat
 		return this;
 	}
 
-	@Override
-	public <T extends ChatOptions> ChatClientRequestSpec options(T options) {
-
-		return wrapped.options(options);
-	}
-
-	@Override
-	public ChatClientRequestSpec toolNames(String... toolNames) {
-		return this;
-	}
+	
 
 	@Override
 	public ChatClientRequestSpec tools(Object... toolObjects) {
@@ -185,6 +176,13 @@ public class TestKnowledgeExtractionChatClientRequestSpecWrapper implements Chat
 	@Override
 	public StreamResponseSpec stream() {
 		return wrapped.stream();
+	}
+
+	@Override
+	public <B extends org.springframework.ai.chat.prompt.ChatOptions.Builder<?>> ChatClientRequestSpec options(
+			B customizer) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

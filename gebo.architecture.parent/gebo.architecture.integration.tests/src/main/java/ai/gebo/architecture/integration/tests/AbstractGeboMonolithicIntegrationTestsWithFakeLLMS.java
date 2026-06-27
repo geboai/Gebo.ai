@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
@@ -300,12 +300,12 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * @param checkVectorDeletionNotOccurred flag to check vector deletion
 	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws JacksonException  if a JSON processing error occurs
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
 			boolean checkVectorDeletionNotOccurred)
-			throws JsonProcessingException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
+			throws JacksonException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
 		this.runAndWaitDoneCheckingResults(endpoint, howManyFilesWait, checkVectorDeletionNotOccurred, 20);
 	}
 
@@ -320,12 +320,12 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * @param checkVectorDeletionNotOccurred flag to check vector deletion
 	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws JacksonException  if a JSON processing error occurs
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
 			boolean checkVectorDeletionNotOccurred, int NMAXCYCLES)
-			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
+			throws GeboJobServiceException, GeboPersistenceException, JacksonException, InterruptedException {
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
@@ -390,11 +390,11 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * @param endpoint the project endpoint to execute
 	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws JacksonException  if a JSON processing error occurs
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint)
-			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
+			throws GeboJobServiceException, GeboPersistenceException, JacksonException, InterruptedException {
 		runAndWaitDoneCheckingResults(endpoint, true, true, 20);
 	}
 
@@ -404,13 +404,13 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * 
 	 * @param endpoint             the project endpoint to execute
 	 * @param checkTestVectorStore flag to check test vector store
-	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws JacksonException  if a JSON processing error occurs
 	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore)
-			throws JsonProcessingException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
+			throws JacksonException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
 		runAndWaitDoneCheckingResults(endpoint, checkTestVectorStore, true, 20);
 	}
 
@@ -421,14 +421,14 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * @param endpoint               the project endpoint to execute
 	 * @param checkTestVectorStore   flag to check test vector store
 	 * @param checkNodDeletedVectors flag to check that no vectors were deleted
-	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws JacksonException  if a JSON processing error occurs
 	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore,
 			boolean checkNodDeletedVectors)
-			throws JsonProcessingException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
+			throws JacksonException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
 		runAndWaitDoneCheckingResults(endpoint, checkTestVectorStore, checkNodDeletedVectors, 20);
 	}
 
@@ -442,12 +442,12 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * @param NMAXCYCLES                     maximum number of checking cycles
 	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws JacksonException  if a JSON processing error occurs
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore,
 			boolean checkVectorDeletionNotOccurred, int NMAXCYCLES)
-			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
+			throws GeboJobServiceException, GeboPersistenceException, JacksonException, InterruptedException {
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());

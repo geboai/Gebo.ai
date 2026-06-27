@@ -9,13 +9,12 @@
 
 package ai.gebo.webconfig;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Gebo.ai comment agent Configuration class to define bean for RestTemplate.
@@ -36,10 +35,11 @@ public class RestTemplateConfig {
 	 * @return a configured RestTemplate instance
 	 */
 	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder, ObjectMapper objectMapper) {
-		MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter(objectMapper);
-
-		return builder.additionalMessageConverters(jackson).build();
+	public RestTemplate restTemplate(JsonMapper objectMapper) {
+		JacksonJsonHttpMessageConverter jackson = new JacksonJsonHttpMessageConverter(objectMapper);
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getMessageConverters().add(0, jackson);
+		return restTemplate;
 	}
 
 }

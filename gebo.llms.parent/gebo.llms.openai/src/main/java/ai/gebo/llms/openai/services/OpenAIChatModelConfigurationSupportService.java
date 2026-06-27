@@ -15,19 +15,15 @@
  */
 package ai.gebo.llms.openai.services;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatOptions.Builder;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiAudioApi.WhisperModel;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -49,6 +45,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAIChatModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
@@ -132,19 +129,7 @@ public class OpenAIChatModelConfigurationSupportService
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("OpenAI api  key configuration gone wrong ", e);
 			}
-			org.springframework.ai.openai.api.OpenAiApi.Builder apiBuilder = OpenAiApi.builder();
-			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
-			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
-			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
-					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-
-			apiBuilder.restClientBuilder(restClient);
-			apiBuilder.webClientBuilder(webClient);
-
-			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).build();
-
-			Builder builder = OpenAiChatOptions.builder();
+			Builder builder = OpenAiChatOptions.builder().apiKey(apiKey);
 
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
@@ -159,14 +144,7 @@ public class OpenAIChatModelConfigurationSupportService
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
-				List<String> names = functions.stream().map(x -> {
-					return x.getToolDefinition().name();
-				}).toList();
-				builder = builder.toolNames(new HashSet<String>(names));
-			}
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				builder.parallelToolCalls(true);
-				builder.internalToolExecutionEnabled(true);
 			}
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder.maxTokens(config.getMaxGeneratedTokens());
@@ -194,8 +172,12 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();
-			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
-					ObservationRegistry.NOOP);
+			OpenAiChatModel model = OpenAiChatModel.builder()
+					.options(options)
+					.toolCallingManager(toolCallingManager)
+					.observationRegistry(ObservationRegistry.NOOP)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))
+					.build();
 
 			return model;
 		}
@@ -275,7 +257,7 @@ public class OpenAIChatModelConfigurationSupportService
 				transcriptModel = transcriptDao.defaultHandler();
 				if (transcriptModel == null) {
 					GOpenAITranscriptModelConfig baseConfig = transcriptOpenAISupportService
-							.createBaseConfiguration(WhisperModel.WHISPER_1.value);
+							.createBaseConfiguration("whisper-1");
 					baseConfig.setApiSecretCode(this.config.getApiSecretCode());
 					transcriptModel = transcriptOpenAISupportService.create(baseConfig);
 				}

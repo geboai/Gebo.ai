@@ -29,7 +29,7 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter.Builder;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;

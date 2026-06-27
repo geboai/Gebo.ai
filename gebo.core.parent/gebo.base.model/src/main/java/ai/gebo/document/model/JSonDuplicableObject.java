@@ -1,6 +1,6 @@
 package ai.gebo.document.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 public interface JSonDuplicableObject<Type> {
 	static ObjectMapper mapper = new ObjectMapper();

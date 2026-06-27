@@ -16,25 +16,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import com.openai.models.audio.AudioResponseFormat;
 import org.apache.commons.io.IOUtils;
+import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
-import org.springframework.ai.openai.api.OpenAiAudioApi;
-import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
-import org.springframework.ai.openai.api.OpenAiAudioApi.WhisperModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.retry.support.RetryTemplate;
-import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
-import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils;
-import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyInfo;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelChoice;
@@ -76,6 +72,11 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	final ModelsListProviderProxyService modelsListProxyService;
 
 	/**
+	 * Factory for creating LLM service clients (timeout/retry config from application.yml)
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+
+	/**
 	 * Implementation of a configurable transcript model for OpenAI services.
 	 * Extends the abstract transcript model and provides OpenAI-specific
 	 * functionality.
@@ -100,7 +101,7 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 				try (OutputStream os = Files.newOutputStream(created)) {
 					IOUtils.copy(audioResource, os);
 					Resource resource = new FileSystemResource(created);
-					return model.call(resource);
+					return model.call(new AudioTranscriptionPrompt(resource)).getResult().getOutput();
 				}
 			} catch (IOException exc) {
 				throw new IOException("Handled exception in call", exc);
@@ -132,15 +133,20 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 		protected OpenAiAudioTranscriptionModel configureModel(GenericOpenAIAPITranscriptModelConfig config,
 				GTranscriptModelType type) throws LLMConfigException {
 
-			String apiKey = null;
-			OpenAiAudioApi audioApi = OpenAiAudioApi.builder().apiKey(apiKey).build();
+			String baseUrl = GenericOpenAIAPITranscriptModelConfigurationSupportService.this.type.getBaseUrl();
 			org.springframework.ai.openai.OpenAiAudioTranscriptionOptions.Builder builder = OpenAiAudioTranscriptionOptions
 					.builder();
 
-			builder.responseFormat(TranscriptResponseFormat.TEXT).temperature(0f).model(WhisperModel.WHISPER_1.value);
+			builder.apiKey(new NoopApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model("whisper-1");
+			if (baseUrl != null) {
+				builder.baseUrl(baseUrl);
+			}
 			OpenAiAudioTranscriptionOptions options = builder.build();
-			OpenAiAudioTranscriptionModel model = new OpenAiAudioTranscriptionModel(audioApi, options,
-					RetryTemplate.defaultInstance());
+			OpenAiAudioTranscriptionModel model = OpenAiAudioTranscriptionModel.builder()
+					.options(options)
+					.httpClientBuilderCustomizer(
+							OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 
 			return model;
 		}
@@ -166,7 +172,7 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	public OperationStatus<List<GenericOpenAIAPITranscriptModelChoice>> getModelChoices(
 			GenericOpenAIAPITranscriptModelConfig config) {
 		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
-		choice.setCode(WhisperModel.WHISPER_1.value);
+		choice.setCode("whisper-1");
 		choice.setDescription("Whisper 1");
 		return OperationStatus.of(List.of(choice));
 	}

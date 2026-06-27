@@ -2,12 +2,9 @@ package ai.gebo.llms.openai_compat.services;
 
 import java.util.List;
 
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiImageApi;
-import org.springframework.retry.support.RetryTemplate;
-import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -22,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
@@ -65,24 +63,25 @@ public class GenericOpenAIAPIImageModelConfigurationSupportService implements
 					throw new LLMConfigException("Generic OpenAI api  key configuration gone wrong ", e);
 				}
 			}
-			org.springframework.ai.openai.api.OpenAiApi.Builder apiBuilder = OpenAiApi.builder();
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
-			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
-			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
-					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			apiBuilder.restClientBuilder(restClient);
-			apiBuilder.webClientBuilder(webClient);
+			String baseUrl = GenericOpenAIAPIImageModelConfigurationSupportService.this.type.getBaseUrl();
 			org.springframework.ai.openai.OpenAiImageOptions.Builder imageOptionsBuilder = OpenAiImageOptions.builder();
+			if (baseUrl != null) {
+				imageOptionsBuilder.baseUrl(baseUrl);
+			}
+			if (apiKey != null) {
+				imageOptionsBuilder.apiKey(apiKey);
+			} else {
+				imageOptionsBuilder.apiKey(new NoopApiKey());
+			}
 			if (config.getChoosedModel() != null) {
 				imageOptionsBuilder.model(config.getChoosedModel().getCode());
 			}
-			org.springframework.ai.openai.api.OpenAiImageApi.Builder builder = OpenAiImageApi.builder();
-			builder.apiKey(apiKey);
-			builder.restClientBuilder(restClient);
-			OpenAiImageApi built = builder.build();
 			OpenAiImageOptions options = imageOptionsBuilder.build();
-			OpenAiImageModel model = new OpenAiImageModel(built, options, retryTemplate);
+			OpenAiImageModel model = OpenAiImageModel.builder()
+					.options(options)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(clientsProvider))
+					.build();
 			return model;
 		}
 

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.1.0-BOOT-4X-SPRING-AI-2X</version>
 	</parent>
 	<groupId>ai.gebo.systems</groupId>
 	<artifactId>gebo.systems.parent</artifactId>

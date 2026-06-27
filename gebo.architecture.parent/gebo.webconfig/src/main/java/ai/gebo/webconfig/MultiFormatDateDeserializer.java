@@ -1,6 +1,5 @@
 package ai.gebo.webconfig;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -9,11 +8,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 final class MultiFormatDateDeserializer extends StdDeserializer<Date> {
 	private static final DateTimeFormatter LEGACY = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -25,7 +24,7 @@ final class MultiFormatDateDeserializer extends StdDeserializer<Date> {
 	}
 
 	@Override
-	public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+	public Date deserialize(JsonParser p, DeserializationContext ctxt) {
 		JsonToken t = p.currentToken();
 
 		// opzionale: se arriva un numero, trattalo come epoch millis

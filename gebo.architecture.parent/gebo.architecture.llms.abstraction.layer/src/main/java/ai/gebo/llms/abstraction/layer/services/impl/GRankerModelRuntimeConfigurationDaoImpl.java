@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -77,7 +77,7 @@ public class GRankerModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeCon
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Initializing reranker with configuration:" + mapper.writeValueAsString(config));
 				}
-			} catch (JsonProcessingException e) {
+			} catch (JacksonException e) {
 				// Log parsing exception if necessary
 			}
 			IGConfigurableRankerModel imageModel = handler.create(config);

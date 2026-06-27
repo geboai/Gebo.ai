@@ -66,10 +66,9 @@ public class OnPremiseConfluenceConnection {
                 // Concatenates username and password with a colon for authentication
                 String auth = username + ":" + password;
                 // Encodes the authentication string using Base64 encoding
-                byte[] encodedAuth = org.apache.tomcat.util.codec.binary.Base64
-                        .encodeBase64(auth.getBytes(Charset.forName("US-ASCII")), false);
                 // Prepares the 'Authorization' header
-                String authHeader = "Basic " + new String(encodedAuth);
+                String authHeader = "Basic " + java.util.Base64.getEncoder()
+                        .encodeToString(auth.getBytes(Charset.forName("US-ASCII")));
                 // Sets the 'Authorization' header
                 set("Authorization", authHeader);
             }

@@ -9,19 +9,15 @@
 
 package ai.gebo.llms.mistralai.services;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.ai.mistralai.MistralAiChatModel;
 import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
-import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
 import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -136,7 +132,7 @@ public class MistralChatModelConfigurationSupportService
 			apiBuilder.restClientBuilder(restClient);
 
 			MistralAiApi mistralApi = apiBuilder.build();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
+			org.springframework.core.retry.RetryTemplate retryTemplate = clientsProvider.getCoreRetryTemplate();
 
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
@@ -152,24 +148,18 @@ public class MistralChatModelConfigurationSupportService
 			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-
 				builder = builder.toolCallbacks(functions);
-				List<String> names = functions.stream().map(x -> {
-					return x.getToolDefinition().name();
-				}).toList();
-				builder = builder.toolNames(new HashSet<String>(names));
-				builder.internalToolExecutionEnabled(!functions.isEmpty());
 			}
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				
-				builder.internalToolExecutionEnabled(true);
-			}
-			
-			ToolExecutionEligibilityPredicate toolEligibilityPredicate = new DefaultToolExecutionEligibilityPredicate();
+
 			MistralAiChatOptions options = builder.build();
-			MistralAiChatModel model = new MistralAiChatModel(mistralApi, options,
-					toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager(),
-					retryTemplate, ObservationRegistry.NOOP, toolEligibilityPredicate);
+			MistralAiChatModel model = MistralAiChatModel.builder()
+					.mistralAiApi(mistralApi)
+					.options(options)
+					.toolCallingManager(
+							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
+					.retryTemplate(retryTemplate)
+					.observationRegistry(ObservationRegistry.NOOP)
+					.build();
 			return model;
 		}
 

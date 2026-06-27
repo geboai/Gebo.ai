@@ -1,6 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

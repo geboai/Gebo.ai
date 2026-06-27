@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -58,7 +58,7 @@ public class AtlassianJiraIntegrationTests extends AbstractGeboMonolithicIntegra
 
 	@Test
 	public void testJiraBrowsingAndPublishing() throws GeboCryptSecretException, GeboPersistenceException,
-			VirtualFilesystemBrowsingException, InstantiationException, IllegalAccessException, JsonProcessingException,
+			VirtualFilesystemBrowsingException, InstantiationException, IllegalAccessException, JacksonException,
 			GeboJobServiceException, InterruptedException {
 		String secretId = registerSecurityToken(JIRA_CLOUD_API_KEY, JIRA_CLOUD_USER, "Confluence Cloud account",
 				JiraContentManagementHandlerImpl.ATLASSIAN_JIRA);

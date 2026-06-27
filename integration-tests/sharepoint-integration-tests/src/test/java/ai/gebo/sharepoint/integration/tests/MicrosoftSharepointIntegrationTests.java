@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -60,7 +60,7 @@ public class MicrosoftSharepointIntegrationTests extends AbstractGeboMonolithicI
 	@Test
 	public void checkSharepointConnectivityTest()
 			throws InstantiationException, IllegalAccessException, GeboPersistenceException, GeboCryptSecretException,
-			VirtualFilesystemBrowsingException, JsonProcessingException, GeboJobServiceException, InterruptedException {
+			VirtualFilesystemBrowsingException, JacksonException, GeboJobServiceException, InterruptedException {
 		GSharepointProjectEndpoint endpoint = createAndPersist("Sharepoint endpoint", GSharepointProjectEndpoint.class);
 		GProject pk = getProject(endpoint);
 		GeboOauth2SecretContent oauth2Credentials = new GeboOauth2SecretContent();

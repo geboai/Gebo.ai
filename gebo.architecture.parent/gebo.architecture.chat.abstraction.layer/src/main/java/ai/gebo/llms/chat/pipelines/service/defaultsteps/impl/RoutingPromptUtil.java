@@ -1,16 +1,15 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
@@ -49,9 +48,8 @@ public final class RoutingPromptUtil {
 			}
 			StringBuilder sb = new StringBuilder();
 			sb.append("TOOL_PARAMETERS:\n");
-			Iterator<Map.Entry<String, JsonNode>> fields = properties.fields();
-			while (fields.hasNext()) {
-				Map.Entry<String, JsonNode> field = fields.next();
+			Set<Map.Entry<String, JsonNode>> fields = properties.properties();
+			for (Map.Entry<String, JsonNode> field : fields) {
 				String name = field.getKey();
 				JsonNode prop = field.getValue();
 				String type = prop.has("type") ? prop.get("type").asText() : "unknown";

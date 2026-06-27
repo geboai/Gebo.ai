@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -23,7 +24,7 @@ import org.opensearch.testcontainers.OpenSearchContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
+import org.springframework.boot.data.mongodb.test.autoconfigure.AutoConfigureDataMongo;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.FileCopyUtils;
@@ -32,9 +33,9 @@ import org.testcontainers.containers.Neo4jContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
@@ -159,20 +160,42 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 		}
 	}
 
+	/**
+	 * Number of times Testcontainers retries a full container start before giving
+	 * up. The integration suite boots three heavy containers (Mongo + Neo4j +
+	 * OpenSearch) per forked JVM, so a single transient startup race (e.g. an
+	 * OpenSearch container that exits 127 / times out before its HTTP endpoint is
+	 * ready) must not fail the whole context. Each attempt is retried from scratch.
+	 */
+	private static final int CONTAINER_STARTUP_ATTEMPTS = 3;
+
+	/** Generous startup timeout for the heavier containers under contention. */
+	private static final Duration CONTAINER_STARTUP_TIMEOUT = Duration.ofMinutes(3);
+
 	/** Container to manage a MongoDB instance for integration tests. */
 	@Container
-	protected static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
+	protected static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0").withExposedPorts(27017)
+			.withStartupAttempts(CONTAINER_STARTUP_ATTEMPTS);
 	@Container
 	private static Neo4jContainer neo4jContainer = new Neo4jContainer(DockerImageName.parse("neo4j:latest"))
 			.withoutAuthentication(); // Disable password
 	@Container
 	private static OpenSearchContainer opensearch = new OpenSearchContainer("opensearchproject/opensearch:latest");
 	static {
+		// Retry transient startup failures and allow extra time for the HTTP/bolt
+		// endpoints to come up when the host is busy starting the other containers.
+		// (Configured as statements rather than fluent chaining: the self-parameterized
+		// container types erase GenericContainer setters to a raw return when used raw.)
+		neo4jContainer.withStartupAttempts(CONTAINER_STARTUP_ATTEMPTS);
+		neo4jContainer.withStartupTimeout(CONTAINER_STARTUP_TIMEOUT);
+
 		// withEnv("OPENSEARCH_INITIAL_ADMIN_PASSWORD", "dothesearch1973-Advanced").
 		// .withSecurityEnabled()
 		opensearch.withExposedPorts(9200, 9600).withEnv("discovery.type", "single-node")
 				.withEnv("plugins.security.ssl.http.enabled", "false")
-				.withEnv("plugins.security.ssl.transport.enabled", "true");
+				.withEnv("plugins.security.ssl.transport.enabled", "true")
+				.withStartupAttempts(CONTAINER_STARTUP_ATTEMPTS)
+				.withStartupTimeout(CONTAINER_STARTUP_TIMEOUT);
 
 	}
 

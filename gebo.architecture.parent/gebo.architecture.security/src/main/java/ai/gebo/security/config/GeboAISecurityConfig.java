@@ -60,10 +60,39 @@ import ai.gebo.security.services.impl.ReactiveGOAuth2UserService;
 @EnableWebSecurity
 public class GeboAISecurityConfig {
 	private static Logger LOGGER = LoggerFactory.getLogger(GeboAISecurityConfig.class);
-	// URLs that are allowed to be accessed without authentication
-	private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
+	// URLs that are allowed to be accessed without authentication 
+	/*private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
 			"/v3/**", "/media/**", "**.js", "**.ico", "*.map", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
-			"/auth/**", "/error", "/error/**", "/ui/**", "/login/**" };
+			"/auth/**", "/error", "/error/**", "/ui/**", "/login/**" }; */
+	private static final String[] allowedUrls = new String[] {
+		    "/",
+		    "/index.html",
+		    "/assets/**",
+		    "/swagger-ui/**",
+		    "/v3/**",
+		    "/media/**",
+
+		    "/**/*.js",
+		    "/**/*.ico",
+		    "/**/*.map",
+		    "/**/*.css",
+		    "/**/*.ts",
+		    "/**/*.d.ts",
+		    "/*.js",
+		    "/*.ico",
+		    "/*.map",
+		    "/*.css",
+		    "/*.ts",
+		    "/*.d.ts",
+		    "/login",
+		    "/oauth2/**",
+		    "/public/**",
+		    "/auth/**",
+		    "/error",
+		    "/error/**",
+		    "/ui/**",
+		    "/login/**"
+		};
 
 	// URLs that forward to index.html
 	private static final String forwardToIndexHtmlUrls[] = new String[] { "/", "/ui/*", "/index.html" };
