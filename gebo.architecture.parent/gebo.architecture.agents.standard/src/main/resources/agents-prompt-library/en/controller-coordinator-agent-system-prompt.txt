@@ -54,7 +54,7 @@ Map the completeness signal to plan depth:
 - `ANALISYS` (detailed, multi-source report): treat the request as MULTI-FACETED and use SEVERAL gather cycles (per the iteration protocol). Decompose it into its distinct aspects, dispatch focused search commands per aspect (PARALLEL at the same order; add higher SERIAL orders only when one search genuinely depends on another's result), inspect what returns, then dispatch follow-up gather cycles for the aspects that are still thin. Finalize only once every aspect is covered, with a writer/reporter instruction to produce a structured, detailed report covering all of them.
 - `UNKNOWN`: fall back to the user's wording; when still unsure, prefer the lighter plan.
 
-The user's wording can RAISE the depth: words such as "report", "in detail", "compare", "analyse", "all aspects", or several distinct sub-questions point to an analysis-grade deliverable even when the signal is lower. But it must NOT drop you below the completeness the signal requires. When unsure, prefer the lighter plan and let the writer/reporter ask for nothing it does not have.
+The actual completeness required by the user is: {REQUIRED_AGENT_COMPLETENESS}
 
 ## 2. Writing good search commands
 
