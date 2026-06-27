@@ -6,8 +6,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.Vector;
+import java.util.function.Consumer;
+
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
+import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -20,6 +25,8 @@ import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -44,6 +51,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
@@ -54,11 +62,18 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 @AllArgsConstructor
 public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingService implements IGGenericAgentService {
+	public static final String NOTIFY_USER_TOOL_DESCRIPTION = "Tool to interactively notify user of your actual decisions or actions, use short notifications message";
+	public static final String NOTIFY_USER_TOOL = "notifyUser";
+	public static final String USE_NOTIFY_USER_TOOL_PROMPT_PART = "You are allowed to call the tool: "
+			+ NOTIFY_USER_TOOL
+			+ " to notify user regarding your actions and decision, be concise and do it from 1 to 4 times.";
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
@@ -100,7 +115,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	/**
 	 * Adds the tools/functions reachable with the given configuration to the
 	 * capabilities descriptor. Mirrors the tool selection performed in
-	 * {@link #getAgentModel(GAgentConfig, ToolCallsListener, ReactiveIdentityUtil)}:
+	 * {@link #getAgentModel(GAgentConfig, ToolCallsListener, INotificationSink, ReactiveIdentityUtil)}:
 	 * when {@code subscribeAllTools} is set every registered tool is advertised
 	 * (with its description), otherwise only the explicitly enabled functions are.
 	 */
@@ -129,7 +144,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
-			ReactiveIdentityUtil runAs) throws LLMConfigException {
+			INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getAgentModel(...) for agent service id:" + getId() + " agentConfig code:"
 					+ (agentConfig != null ? agentConfig.getCode() : null) + " useDefaultChatModel:"
@@ -150,24 +165,32 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		}
 
 		List<String> allFunctions = agentConfig.getEnabledFunctions();
+		allFunctions = allFunctions != null ? new ArrayList<String>(allFunctions) : new ArrayList<String>();
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
 			if (toolsList != null) {
-				allFunctions = toolsList.stream().map(x -> x.getToolDefinition().name()).toList();
+				allFunctions = new ArrayList(toolsList.stream().map(x -> x.getToolDefinition().name()).toList());
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent subscribes ALL tools, resolved " + (allFunctions != null ? allFunctions.size() : 0)
 						+ " functions");
 			}
 		}
+		List<ToolCallback> additionalFunctions = new ArrayList<ToolCallback>();
+		if (notificationSink != null) {
+			ToolCallback userMessageTool = createUserMessageTool(notificationSink);
+			additionalFunctions.add(userMessageTool);
+			allFunctions.add(userMessageTool.getToolDefinition().name());
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Cloning chat model with temperature:" + agentConfig.getTemperature() + " topP:"
 					+ agentConfig.getTopP() + " thinking:" + agentConfig.getThinking() + " enabledFunctions:"
 					+ (allFunctions != null ? allFunctions.size() : 0));
 		}
+
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, runAs));
+				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End getAgentModel(...) for agent service id:" + getId());
@@ -175,10 +198,37 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return agentModel;
 	}
 
+	@Data
+	@JsonClassDescription("Data structure that rappresents a meaningfull message to be notified to the user")
+	public static class UserMessageToolParam {
+		@NotNull
+		@JsonPropertyDescription("Message showed to the actual user, please be kind, short and user understable")
+		String message;
+		@NotNull
+		@JsonPropertyDescription("INFO for user informations, DEBUG for debug informations")
+		INotificationSink.NotificationObject.NotificationType notificationType;
+	}
+
+	protected ToolCallback createUserMessageTool(INotificationSink notificationSink) {
+		Consumer<UserMessageToolParam> activeConsumer = (param) -> {
+			NotificationObject state = new NotificationObject(UUID.randomUUID().toString(), param.getMessage(),
+					"pi pi-microchip-ai", param.getNotificationType());
+			notificationSink.next(state);
+		};
+		ToolCallback callBack = ToolCallbackDeclarationUtil.declare(activeConsumer, NOTIFY_USER_TOOL,
+				NOTIFY_USER_TOOL_DESCRIPTION, UserMessageToolParam.class);
+		return callBack;
+	}
+
 	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
-			List<String> allFunctions, ReactiveIdentityUtil runAs) {
-		final List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener,
-				allFunctions, toolsRepositoryPattern);
+			List<String> allFunctions, List<ToolCallback> additionalTools, ReactiveIdentityUtil runAs) {
+		List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener, allFunctions,
+				toolsRepositoryPattern);
+		if (additionalTools != null && !additionalTools.isEmpty()) {
+			wrapped = new ArrayList<ToolCallback>(wrapped);
+			List<ToolCallback> newWrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener,
+					additionalTools);
+		}
 		final Map<String, ToolCallback> map = new HashMap<>();
 		for (ToolCallback toolCallback : wrapped) {
 			map.put(toolCallback.getToolDefinition().name(), toolCallback);
@@ -411,7 +461,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			remainingBudget -= ITokensCountable.stringsTokensSize(comunicationCapabilities);
 		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM)) {
-			String networkAgentsCapabilities = nullToEmpty(createNetworkAgentsCapabilitiesDescription(network, agentsDao));
+			String networkAgentsCapabilities = nullToEmpty(
+					createNetworkAgentsCapabilitiesDescription(network, agentsDao));
 			constantParams.put(AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
 					networkAgentsCapabilities);
 			remainingBudget -= ITokensCountable.stringsTokensSize(networkAgentsCapabilities);
@@ -522,6 +573,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			buffer.append(CANNOT_COMMUNICATE_WITH_AGENTS);
 			buffer.append(NEWLINE);
 		}
+		if (contextAgentPersona.isAllowedToNotifyUser()) {
+			buffer.append(USE_NOTIFY_USER_TOOL_PROMPT_PART);
+			buffer.append(NEWLINE);
+		}
 		buffer.append(contextAgentPersona.isCanCallTools() ? ALLOWED_TO_CALL_TOOLS : NOT_ALLOWED_TO_CALL_TOOLS);
 		buffer.append(NEWLINE);
 		buffer.append(contextAgentPersona.isCanCallOtherAgents() ? ALLOWED_TO_DELEGATE : NOT_ALLOWED_TO_DELEGATE);
@@ -570,9 +625,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 * Renders an {@link AgentCapabilities} descriptor into the indented text shared
 	 * in the network-of-agents description.
 	 *
-	 * @param includeSummary whether to render the {@code summary} line (omitted when
-	 *                       the summary is already shown elsewhere, e.g. as the peer
-	 *                       description)
+	 * @param includeSummary whether to render the {@code summary} line (omitted
+	 *                       when the summary is already shown elsewhere, e.g. as
+	 *                       the peer description)
 	 */
 	protected String renderAgentCapabilities(AgentCapabilities capabilities, boolean includeSummary) {
 		if (capabilities == null || capabilities.isEmpty()) {
@@ -677,9 +732,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 * capabilities, catalogs, resources and tools, regardless of which agents the
 	 * current agent can reach. Each participant is resolved through the runtime DAO
 	 * (so its concrete service and configuration drive the exported capabilities)
-	 * and rendered with the same indented capability block used for reachable peers.
-	 * Returns an empty string when the roster cannot be resolved (e.g. no runtime DAO
-	 * available), keeping the descriptor best-effort.
+	 * and rendered with the same indented capability block used for reachable
+	 * peers. Returns an empty string when the roster cannot be resolved (e.g. no
+	 * runtime DAO available), keeping the descriptor best-effort.
 	 */
 	protected String createNetworkAgentsCapabilitiesDescription(GAgentsNetwork network,
 			IGAgentsNetworkRuntimeDao agentsDao) {

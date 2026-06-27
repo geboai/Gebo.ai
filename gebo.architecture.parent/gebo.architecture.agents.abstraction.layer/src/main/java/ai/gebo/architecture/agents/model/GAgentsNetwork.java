@@ -42,7 +42,7 @@ public class GAgentsNetwork extends GBaseObject
 		private String agentContextualName;
 		private boolean inputNode;
 		private boolean outputNode;
-
+		private boolean allowedToNotifyUser = true;
 		@NotNull
 		private CommunicationPolicy communicationPolicy = CommunicationPolicy.ALLOW_LIST;
 

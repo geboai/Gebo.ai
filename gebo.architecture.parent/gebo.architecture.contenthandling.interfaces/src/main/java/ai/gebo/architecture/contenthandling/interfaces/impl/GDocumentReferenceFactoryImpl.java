@@ -117,6 +117,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 				relativePath = virtualFolder.getRelativePath() + "/" + relativePath;
 			}
 			reference.setRelativePath(relativePath);
+			reference.setCustomMetaInfos(new HashMap<String, Object>());
 			return reference;
 		} catch (Throwable th) {
 			throw new GeboContentHandlerSystemException("exception in extractContent(...)", th);
@@ -171,7 +172,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			}
 			reference.setParentProjectCode(projectEndpoint.getParentProjectCode());
 			reference.setProjectEndpointReference(new GObjectRef<GProjectEndpoint>(projectEndpoint));
-
+			reference.setCustomMetaInfos(new HashMap<String, Object>());
 			return reference;
 		} catch (Throwable th) {
 			throw new GeboContentHandlerSystemException("exception in extractContent(...)", th);
@@ -234,6 +235,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			}
 			reference.setParentProjectCode(projectEndpoint.getParentProjectCode());
 			reference.setProjectEndpointReference(new GObjectRef<GProjectEndpoint>(projectEndpoint));
+			reference.setCustomMetaInfos(new HashMap<String, Object>());
 
 			return reference;
 		} catch (IOException e) {
@@ -295,7 +297,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 		}
 		reference.setParentProjectCode(projectEndpoint.getParentProjectCode());
 		reference.setProjectEndpointReference(new GObjectRef<GProjectEndpoint>(projectEndpoint));
-
+		reference.setCustomMetaInfos(new HashMap<String, Object>());
 		return reference;
 	}
 
@@ -322,7 +324,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 				reference.setDeleted(false);
 				reference.setName(file.getFileName().toString());
 				reference.setSkippedVectorizationContent(false);
-
+				reference.setCustomMetaInfos(new HashMap<String, Object>());
 				return reference;
 			} catch (Throwable th) {
 				throw new GeboContentHandlerSystemException("exception in extractContent(...)", th);
@@ -342,6 +344,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 		reference.setName(name);
 		reference.setParentVirtualFolderCode(null);
 		reference.setOriginComponent(new GeboComponentInfo(messageModuleId, messagingComponentId));
+		reference.setCustomMetaInfos(new HashMap<String, Object>());
 		return reference;
 	}
 }

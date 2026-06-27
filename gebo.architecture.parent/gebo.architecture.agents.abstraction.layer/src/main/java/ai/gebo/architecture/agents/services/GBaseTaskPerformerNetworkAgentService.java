@@ -63,7 +63,8 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 					+ " contributionNr:" + actualContributionNr + " outputType:" + getOutputType().getName());
 		}
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
-		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener, null);
+		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
@@ -89,8 +90,8 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
 		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End onMessage(...) task performer agent id:" + getId() + " produced output:"
-					+ (output != null));
+			LOGGER.debug(
+					"End onMessage(...) task performer agent id:" + getId() + " produced output:" + (output != null));
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
 				MessageSemantic.RESPONSE,

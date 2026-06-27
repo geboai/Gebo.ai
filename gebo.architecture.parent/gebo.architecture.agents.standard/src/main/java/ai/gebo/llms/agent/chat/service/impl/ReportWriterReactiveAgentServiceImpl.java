@@ -1,9 +1,11 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +43,9 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.chat.service.IReportWriterReactiveAgentService;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetCalculator;
@@ -50,13 +54,14 @@ import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetFluxCoordinator.
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 
 @Service
-public class ReportWriterReactiveAgentServiceImpl extends
-		GAbstractReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatMessageEnvelope, GeboChatResponse>
+public class ReportWriterReactiveAgentServiceImpl
+		extends GAbstractReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatResponse>
 		implements IReportWriterReactiveAgentService {
 
 	private static final String END_AGENT_LOOP = "END_AGENT-LOOP-";
@@ -106,7 +111,7 @@ public class ReportWriterReactiveAgentServiceImpl extends
 	@Override
 	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, String request, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink<GeboChatMessageEnvelope> notificationSink,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
 			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
@@ -149,6 +154,7 @@ public class ReportWriterReactiveAgentServiceImpl extends
 			String queryResponse = cumulatedContent.toString();
 			boolean lastMessage = false;
 			response.setQueryResponse(queryResponse);
+			response.setDocumentsRef(extractDocumentsList(session));
 			response.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));
 			GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 			envelope.setLastMessage(lastMessage);
@@ -162,9 +168,32 @@ public class ReportWriterReactiveAgentServiceImpl extends
 		return Flux.concat(bodyStream, lastItem);
 	}
 
+	private List<GResponseDocumentRef> extractDocumentsList(AgentsCollaborationSessionContext session) {
+		List<Document> documentRef = new ArrayList<Document>();
+		for (AgentProducedSessionContribution contrib : session.getSampledContributions()) {
+			if (contrib.getData() instanceof Document doc) {
+				documentRef.add(doc);
+			} else if (contrib.getData() instanceof Collection collection) {
+				for (Object obj : collection) {
+					if (obj != null && obj instanceof Document doc) {
+						documentRef.add(doc);
+					}
+				}
+			}
+		}
+		TreeMap<String, Document> forDocCode = new TreeMap<String, Document>();
+		for (Document document : documentRef) {
+			if (document.getMetadata() != null && document.getMetadata().containsKey(DocumentMetaInfos.CONTENT_CODE)
+					&& document.getMetadata().get(DocumentMetaInfos.CONTENT_CODE) instanceof String code) {
+				forDocCode.put(code, document);
+			}
+		}
+		return forDocCode.values().stream().map(x -> new GResponseDocumentRef(x)).toList();
+	}
+
 	protected Flux<String> streamWithTokenBudgetCoordinator(IGConfigurableChatModel agentModel,
 			GPromptTemplateConfig agentPrompt, IChatRequestContext chatRequestContext, List<Map<String, Object>> params,
-			ReactiveIdentityUtil runAs, INotificationSink<GeboChatMessageEnvelope> notificationSink) {
+			ReactiveIdentityUtil runAs, INotificationSink notificationSink) {
 		final Map<String, Object> cleanedParams = params.get(0);
 		cleanedParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
 		cleanedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
@@ -193,7 +222,7 @@ public class ReportWriterReactiveAgentServiceImpl extends
 		Function<String, String> identityCleaning = (value) -> value;
 		Consumer<Map<String, Object>> unprocessedCumulator = (document) -> {
 		};
-		ISinkUIEmitter emitter = toSinkUIEmitter(notificationSink);
+		ISinkUIEmitter emitter = notificationSink instanceof ISinkUIEmitter em ? em : toSinkUIEmitter(notificationSink);
 		return TokensBudgetFluxCoordinator.tokenBudgetCoordinateAlreadySplitted(inputFlux, emitter, isValidDocument,
 				intermediateProcess, finalWork, "", LLM_PROCESSING_ERROR, isOutOfBand, LLM_PROCESSING_ERROR,
 				isOutOfBand, noEndCondition, identityCleaning, REPORT_STRING_STREAMER, runAs, 4, unprocessedCumulator);
@@ -213,19 +242,31 @@ public class ReportWriterReactiveAgentServiceImpl extends
 		return Flux.fromIterable(chunks);
 	};
 
-	private ISinkUIEmitter toSinkUIEmitter(INotificationSink<GeboChatMessageEnvelope> notificationSink) {
+	private ISinkUIEmitter toSinkUIEmitter(INotificationSink notificationSink) {
 		return new ISinkUIEmitter() {
 			@Override
 			public void notifyUser(String code, String message, String icon, Long duration,
 					NotificationType notificationType) {
-				// The agent only carries a notification sink for streamed envelopes; UI
-				// notifications are not propagated.
+				ChatNotificationContent chatNotification = new ChatNotificationContent();
+				chatNotification.setCode(code);
+				chatNotification.setDuration(duration);
+				chatNotification.setIcon(icon);
+				chatNotification.setMessage(message);
+				chatNotification.setNotificationType(notificationType);
+				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(chatNotification);
+				next(envelope);
 			}
 
 			@Override
-			public void next(GeboChatMessageEnvelope event) {
-				if (notificationSink != null) {
-					notificationSink.next(event);
+			public synchronized void next(GeboChatMessageEnvelope event) {
+				if (event.getContent() instanceof ChatNotificationContent content) {
+
+					if (notificationSink != null) {
+						NotificationObject object = new NotificationObject(content.getCode(), content.getMessage(),
+								content.getIcon(),
+								ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
+						notificationSink.next(object);
+					}
 				}
 			}
 
@@ -236,6 +277,7 @@ public class ReportWriterReactiveAgentServiceImpl extends
 
 			@Override
 			public void complete() {
+
 			}
 		};
 	}

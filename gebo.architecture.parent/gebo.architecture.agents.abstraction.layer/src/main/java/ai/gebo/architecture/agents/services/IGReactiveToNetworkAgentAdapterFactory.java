@@ -6,7 +6,7 @@ import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
-public interface IGReactiveToNetworkAgentAdapterFactory<RequestType, ResponseType, NotificationObject> {
+public interface IGReactiveToNetworkAgentAdapterFactory<RequestType, ResponseType> {
 	@Getter
 	@AllArgsConstructor
 	public static class AdapterWithFlux<RequestType, ResponseType> {
@@ -15,9 +15,8 @@ public interface IGReactiveToNetworkAgentAdapterFactory<RequestType, ResponseTyp
 		private final Sinks.Many<IGPartialOperation<ResponseType>> sink;
 	}
 
-	public boolean canBeAdapted(IGReactiveAgentService<RequestType, ResponseType, NotificationObject> service);
+	public boolean canBeAdapted(IGReactiveAgentService<RequestType, ResponseType> service);
 
-	public AdapterWithFlux<RequestType, ResponseType> create(
-			IGReactiveAgentService<RequestType, ResponseType, NotificationObject> service)
+	public AdapterWithFlux<RequestType, ResponseType> create(IGReactiveAgentService<RequestType, ResponseType> service)
 			throws NetworkOfAgentsException;
 }

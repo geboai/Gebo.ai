@@ -105,7 +105,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					+ " contributionNr:" + actualContributionNr + " fromAgent:" + msg.getFromAgent());
 		}
 		final ToolCallsListener callsListener = new ToolCallsListener();
-		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
+		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener,
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);

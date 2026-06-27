@@ -695,4 +695,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		}
 	}
 
+	public static List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener,
+			List<ToolCallback> additionalTools) {
+		List<ToolCallback> wrapped = new ArrayList<ToolCallback>();
+		for (ToolCallback toolCallback : additionalTools) {
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs, callBacksListener));
+		}
+		return wrapped;
+	}
+
 }

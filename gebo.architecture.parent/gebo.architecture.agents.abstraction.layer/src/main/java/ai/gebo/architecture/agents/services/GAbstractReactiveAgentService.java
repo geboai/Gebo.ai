@@ -32,9 +32,9 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
+public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  AggregatedResponses>
 		extends GAbstractGenericalAgentService
-		implements IGReactiveAgentService<RequestType, ResponseType, NotificationObject> {
+		implements IGReactiveAgentService<RequestType, ResponseType> {
 
 	public GAbstractReactiveAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
@@ -48,7 +48,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 	@Override
 	public Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException {
@@ -85,7 +85,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, runAs));
+				createToolCallingManager(callBacksListener, allFunctions, null, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
@@ -106,7 +106,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 
 	protected abstract Flux<IGPartialOperation<ResponseType>> createResponse(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink  notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, IGConfigurableChatModel agentModel,
 			GAgentRole agentRole, GPromptTemplateConfig agentPrompt, ReactiveIdentityUtil runAs,

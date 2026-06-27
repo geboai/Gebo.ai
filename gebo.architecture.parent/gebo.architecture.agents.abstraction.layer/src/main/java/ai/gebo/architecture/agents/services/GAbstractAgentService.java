@@ -24,8 +24,8 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
-public abstract class GAbstractAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses> extends
-		GAbstractGenericalAgentService implements IGAgentService<RequestType, ResponseType, NotificationObject> {
+public abstract class GAbstractAgentService<RequestType, ResponseType, AggregatedResponses>
+		extends GAbstractGenericalAgentService implements IGAgentService<RequestType, ResponseType> {
 
 	public GAbstractAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
@@ -38,8 +38,8 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 
 	@Override
 	public ResponseType execute(IChatRequestContext chatRequestContext, GAgentConfig agentConfig, RequestType request,
-			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink<NotificationObject> notificationSink, AgentsCollaborationSessionContext session,
+			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException {
 
@@ -57,7 +57,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
 		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
 		final List<AggregatedResponses> aggregatedResponses = new ArrayList<AggregatedResponses>();
-		final IGConfigurableChatModel agentModel = getAgentModel(agentConfig, callBacksListener, runAs);
+		final IGConfigurableChatModel agentModel = getAgentModel(agentConfig, callBacksListener, notificationSink, runAs);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Starting agentic loop with maxLoopIterations:" + maxLoop);
 		}

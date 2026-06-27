@@ -77,7 +77,8 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				false);
 		GAgentRole agentRole = agentRoleDao.findByCode(config.getAgentRoleCode());
 		ToolCallsListener listener = new ToolCallsListener();
-		IGConfigurableChatModel agentModel = getAgentModel(config, listener, runAs);
+		IGConfigurableChatModel agentModel = getAgentModel(config, listener,
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);

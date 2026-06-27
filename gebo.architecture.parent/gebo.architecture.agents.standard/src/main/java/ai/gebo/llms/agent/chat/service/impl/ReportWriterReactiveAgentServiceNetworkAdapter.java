@@ -10,10 +10,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import reactor.core.publisher.Sinks;
 
 public class ReportWriterReactiveAgentServiceNetworkAdapter
-		extends AbstractReactiveAgentServiceNetworkAdapter<String, GeboChatMessageEnvelope, GeboChatMessageEnvelope> {
+		extends AbstractReactiveAgentServiceNetworkAdapter<String, GeboChatMessageEnvelope> {
 
 	public ReportWriterReactiveAgentServiceNetworkAdapter(
-			IGReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatMessageEnvelope> service,
+			IGReactiveAgentService<String, GeboChatMessageEnvelope> service,
 			Sinks.Many<IGPartialOperation<GeboChatMessageEnvelope>> sink) {
 		super(service, String.class, GeboChatMessageEnvelope.class, sink);
 	}

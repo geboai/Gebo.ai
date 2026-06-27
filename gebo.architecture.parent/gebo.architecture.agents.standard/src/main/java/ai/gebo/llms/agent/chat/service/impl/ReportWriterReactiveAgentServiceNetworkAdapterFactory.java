@@ -12,20 +12,20 @@ import reactor.core.publisher.Sinks;
 
 @Service
 public final class ReportWriterReactiveAgentServiceNetworkAdapterFactory
-		implements IGReactiveToNetworkAgentAdapterFactory<String, GeboChatMessageEnvelope, GeboChatMessageEnvelope> {
+		implements IGReactiveToNetworkAgentAdapterFactory<String, GeboChatMessageEnvelope> {
 
 	@Override
-	public boolean canBeAdapted(IGReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatMessageEnvelope> service) {
+	public boolean canBeAdapted(IGReactiveAgentService<String, GeboChatMessageEnvelope> service) {
 
 		return service instanceof IReportWriterReactiveAgentService;
 	}
 
 	@Override
 	public AdapterWithFlux<String, GeboChatMessageEnvelope> create(
-			IGReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatMessageEnvelope> service) {
+			IGReactiveAgentService<String, GeboChatMessageEnvelope> service) {
 		Sinks.Many<IGPartialOperation<GeboChatMessageEnvelope>> sink = Sinks.many().unicast().onBackpressureBuffer();
-		ReportWriterReactiveAgentServiceNetworkAdapter adapter = new ReportWriterReactiveAgentServiceNetworkAdapter(service,
-				sink);
+		ReportWriterReactiveAgentServiceNetworkAdapter adapter = new ReportWriterReactiveAgentServiceNetworkAdapter(
+				service, sink);
 		Flux<GeboChatMessageEnvelope> flux = sink.asFlux().map(IGPartialOperation::getData);
 		return new AdapterWithFlux<>(adapter, flux, sink);
 	}

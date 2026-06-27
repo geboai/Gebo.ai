@@ -85,6 +85,7 @@ public class DocumentsChunkServiceImpl
 		extends AbstractCacheEntryCleanupService<DocumentChunkOperation, DocumentChunkOperationRepository>
 		implements IDocumentsChunkService {
 
+	private static final String CANNOT_SERIALIZE_SEARCH_RESULT = "Cannot serialize searchResult";
 	private final DocumentChunkOperationRepository documentChunkOperationRepository;
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
 	private final static Map<String, TokenTextSplitter> splittersCache = new Hashtable<String, TokenTextSplitter>();
@@ -234,6 +235,12 @@ public class DocumentsChunkServiceImpl
 							searchResult.getCode(), is.getContentType(), is.getExtension(), null,
 							document.getOriginComponent().getMessagingModuleId(),
 							document.getOriginComponent().getMessagingComponentId());
+					try {
+						String searchResultJSON = objectMapper.writeValueAsString(searchResult);
+						fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.GEBO_EXTERNAL_SEARCH_RESULT_JSON, searchResultJSON);
+					} catch (Throwable th) {
+						LOGGER.error(CANNOT_SERIALIZE_SEARCH_RESULT, th);
+					}
 					content = ingestionHandler.handleContent(fakeDr, is);
 				} else
 					throw new RuntimeException("Unknown reference object type");

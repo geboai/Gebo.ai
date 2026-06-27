@@ -67,11 +67,8 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		}
 		try {
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-			INotificationSink notificationSink = new INotificationSink() {
-				public void next(Object state) {
-					sinkUIEmitter.next(new GeboChatMessageEnvelope(state));
-				};
-			};
+			INotificationSink notificationSink = sinkUIEmitter;
+			
 			List<GAgentsNetwork> ds = this.agentsNetworkDataSource.getConfigurations();
 			if (ds.isEmpty())
 				throw new ChatPipelineException("No agentic chat network set");
@@ -109,11 +106,14 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			});
 			;
 			return flux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
-		} catch (NetworkOfAgentsException e) {
-			LOGGER.error(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
-			throw new ChatPipelineException(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
-		}
+		}catch(
 
+	NetworkOfAgentsException e)
+	{
+		LOGGER.error(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
+		throw new ChatPipelineException(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
 	}
+
+}
 
 }

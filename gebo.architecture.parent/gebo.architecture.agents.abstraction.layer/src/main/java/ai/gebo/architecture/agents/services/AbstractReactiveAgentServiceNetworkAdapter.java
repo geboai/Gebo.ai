@@ -22,10 +22,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
 @AllArgsConstructor
-public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType, NotificationObject>
+public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType>
 		implements IGNetworkAgentService<RequestType, ResponseType> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactiveAgentServiceNetworkAdapter.class);
-	private final IGReactiveAgentService<RequestType, ResponseType, NotificationObject> service;
+	private final IGReactiveAgentService<RequestType, ResponseType> service;
 	private final Class<RequestType> inputType;
 	private final Class<ResponseType> outputType;
 
@@ -40,7 +40,7 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	@Override
 	public String getDescription() {
 
-		return service.getDescription();
+		return service.getDescription(); 
 	}
 
 	@Override
