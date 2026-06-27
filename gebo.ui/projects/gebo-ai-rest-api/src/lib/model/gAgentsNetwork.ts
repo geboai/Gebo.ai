@@ -19,6 +19,10 @@ export interface GAgentsNetwork {
     dateModified?: Date;
     dateCreated?: Date;
     maxLoopIteration?: number;
+    accessibleToAll?: boolean;
+    accessibleUsers?: Array<string>;
+    accessibleGroups?: Array<string>;
+    aclAliases?: Array<number>;
     scenarioDescription: string;
     agents: Array<AgentNetworkParticipant>;
     readOnly?: boolean;
