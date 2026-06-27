@@ -13,7 +13,7 @@
                             <gebo-ai-field id="description" label="Description" help="Enter Agents Network description."
                                 [required]="true">
                                 <input pInputText id="description" formControlName="description" maxlength="120"
-                                    [required]="true" gebo-ai-field-element />
+                                    [required]="true" gebo-ai-field-element [readonly]="readonly" />
                             </gebo-ai-field>
                         </div>
                         <div class="col-6">
@@ -27,7 +27,7 @@
                             <gebo-ai-field id="scenarioDescription" label="Scenario Description"
                                 help="Provide a detailed scenario description." [required]="true">
                                 <textarea pInputTextarea id="scenarioDescription" formControlName="scenarioDescription"
-                                    rows="4" style="width: 100%" [required]="true" gebo-ai-field-element></textarea>
+                                    rows="4" style="width: 100%" [required]="true" gebo-ai-field-element [readonly]="readonly"></textarea>
                             </gebo-ai-field>
                         </div>
                         <div class="col-6">
@@ -54,59 +54,27 @@
                             <p class="text-sm text-muted-color m-0">Visualize and structure agent interactions within this network.</p>
                         </div>
                         <div class="flex gap-2">
-                            <button pButton label="Add Participant" icon="pi pi-plus" class="p-button-outlined" (click)="openAddParticipant()"></button>
-                            <button pButton label="Clear All" icon="pi pi-trash" class="p-button-outlined p-button-danger" [disabled]="agentsList.length === 0" (click)="clearNetwork()"></button>
+                            <button pButton label="Add Participant" icon="pi pi-plus" class="p-button-outlined" [disabled]="readonly" (click)="openAddParticipant()"></button>
+                            <button pButton label="Clear All" icon="pi pi-trash" class="p-button-outlined p-button-danger" [disabled]="agentsList.length === 0 || readonly" (click)="clearNetwork()"></button>
                         </div>
                     </div>
-
+ 
                     <!-- Empty state -->
                     <div class="flex flex-column align-items-center justify-content-center p-6 border-round border-1 surface-border bg-card shadow-1 m-4" *ngIf="agentsList.length === 0" style="min-height: 250px;">
                         <i class="pi pi-share-alt text-4xl text-primary mb-3"></i>
                         <span class="font-semibold text-xl mb-2">No agents in the network yet</span>
                         <span class="text-sm text-muted-color mb-4">Start by adding the first agent node which can act as your starting input node.</span>
-                        <button pButton label="Add First Agent" icon="pi pi-plus" (click)="openAddParticipant()"></button>
+                        <button pButton label="Add First Agent" icon="pi pi-plus" [disabled]="readonly" (click)="openAddParticipant()"></button>
                     </div>
 
-                    <!-- Organization chart visualizer -->
-                    <div class="w-full overflow-auto p-4 border-round border-1 surface-border bg-card shadow-1" *ngIf="agentsList.length > 0" style="min-height: 400px; display: flex; justify-content: center; align-items: flex-start;">
-                        <p-organizationChart [value]="chartData" styleClass="w-full">
-                            <ng-template let-node pTemplate="default">
-                                <div class="node-card p-3 border-round shadow-2 bg-paper flex flex-column gap-2 text-left" style="min-width: 220px; border-top: 4px solid var(--primary-color);">
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold text-lg text-primary">{{node.label}}</span>
-                                        <div class="flex gap-1">
-                                            <span *ngIf="node.data.inputNode" class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold flex align-items-center gap-1" title="Input Node">
-                                                <i class="pi pi-sign-in"></i> IN
-                                            </span>
-                                            <span *ngIf="node.data.outputNode" class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold flex align-items-center gap-1" title="Output Node">
-                                                <i class="pi pi-sign-out"></i> OUT
-                                            </span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="text-sm">
-                                        <span class="text-muted-color font-semibold">Config: </span>
-                                        <span>{{getAgentDescription(node.data.agentConfigCode)}}</span>
-                                    </div>
-                                    
-                                    <div class="text-xs text-muted-color" *ngIf="node.data.agentContextualName">
-                                        <span class="font-semibold">Context: </span>
-                                        <span>{{node.data.agentContextualName}}</span>
-                                    </div>
-                                    
-                                    <div class="text-xs text-muted-color" *ngIf="node.data.communicationPolicy">
-                                        <span class="font-semibold">Policy: </span>
-                                        <span>{{node.data.communicationPolicy}}</span>
-                                    </div>
-
-                                    <div class="flex justify-content-end gap-1 mt-2 border-top-1 surface-border pt-2">
-                                        <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-success p-button-sm" title="Add Child / Communicates With" (click)="openAddChild(node.data)"></button>
-                                        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary p-button-sm" title="Edit Participant" (click)="openEditParticipant(node.data)"></button>
-                                        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm" title="Delete Participant" (click)="deleteParticipant(node.data)"></button>
-                                    </div>
-                                </div>
-                            </ng-template>
-                        </p-organizationChart>
+                    <!-- NgDiagram visualizer -->
+                    <div class="w-full overflow-auto p-4 border-round border-1 surface-border bg-card shadow-1" 
+                         [class.readonly-diagram]="readonly"
+                         *ngIf="agentsList.length > 0" 
+                         style="min-height: 500px; height: 600px; position: relative;">
+                        <ng-diagram [model]="diagramModel" [config]="diagramConfig" [nodeTemplateMap]="nodeTemplateMap" style="width: 100%; height: 100%; display: block;">
+                            <ng-diagram-background></ng-diagram-background>
+                        </ng-diagram>
                     </div>
                 </p-tabPanel>
 
@@ -123,7 +91,7 @@
         <div class="grid">
             <div class="col-4">
                 <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
-                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false"
+                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
                     styleClass="w-full"></p-button>
             </div>
             <div class="col-4">
@@ -132,7 +100,7 @@
             </div>
             <div class="col-4">
                 <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
-                    icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" />
+                    icon="pi pi-trash" [disabled]="readonly===true" (onClick)="doDelete()" styleClass="w-full" />
             </div>
         </div>
     </div>
@@ -148,7 +116,11 @@
         
         <div class="col-12">
             <label for="agentConfigCode" class="font-semibold mb-1 block text-sm">Agent Configuration *</label>
-            <p-dropdown id="agentConfigCode" formControlName="agentConfigCode" [options]="availableAgents" optionValue="code" optionLabel="description" placeholder="Select Agent Configuration"></p-dropdown>
+            <div class="flex gap-2">
+                <p-dropdown id="agentConfigCode" formControlName="agentConfigCode" [options]="availableAgents" optionValue="code" optionLabel="description" placeholder="Select Agent Configuration" class="flex-grow-1"></p-dropdown>
+                <button pButton icon="pi pi-pencil" class="p-button-outlined w-3rem h-3rem" [disabled]="!participantFormGroup.get('agentConfigCode')?.value || readonly" (click)="editAgentConfig(participantFormGroup.get('agentConfigCode')?.value)" title="Edit Agent Configuration"></button>
+                <button pButton icon="pi pi-plus" class="p-button-outlined w-3rem h-3rem" [disabled]="readonly" (click)="addAgentConfig()" title="Add Agent Configuration"></button>
+            </div>
         </div>
 
         <div class="col-12">
@@ -198,6 +170,6 @@
     
     <ng-template pTemplate="footer">
         <button pButton label="Cancel" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="showParticipantDialog = false"></button>
-        <button pButton label="Save" icon="pi pi-check" class="p-button-primary" [disabled]="participantFormGroup.invalid" (click)="saveParticipant()"></button>
+        <button pButton label="Save" icon="pi pi-check" class="p-button-primary" [disabled]="participantFormGroup.invalid || readonly" (click)="saveParticipant()"></button>
     </ng-template>
 </p-dialog>

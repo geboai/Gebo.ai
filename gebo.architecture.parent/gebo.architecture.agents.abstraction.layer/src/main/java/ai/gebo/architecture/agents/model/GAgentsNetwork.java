@@ -2,6 +2,8 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.List;
 
+import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IJsonClonable;
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +11,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class GAgentsNetwork extends GBaseObject implements IJsonClonable<GAgentsNetwork> {
+public class GAgentsNetwork extends GBaseObject
+		implements IJsonClonable<GAgentsNetwork>, IGObjectWithSecurity, IAclGrantedResource {
+	/*
+	 * public String owner(); public Boolean getAccessibleToAll(); public
+	 * List<String> getAccessibleUsers(); public List<String> getAccessibleGroups();
+	 */
 	public static enum MessagesTargetsDecision {
 		ALLOWED, NOT_ALLOWED
 	}
@@ -23,6 +30,10 @@ public class GAgentsNetwork extends GBaseObject implements IJsonClonable<GAgents
 	}
 
 	int maxLoopIteration = 5;
+	Boolean accessibleToAll = null;
+	List<String> accessibleUsers = null;
+	List<String> accessibleGroups = null;
+	List<Integer> aclAliases = null;
 
 	@Data
 	public static class AgentNetworkParticipant {
@@ -31,7 +42,7 @@ public class GAgentsNetwork extends GBaseObject implements IJsonClonable<GAgents
 		private String agentContextualName;
 		private boolean inputNode;
 		private boolean outputNode;
-		
+
 		@NotNull
 		private CommunicationPolicy communicationPolicy = CommunicationPolicy.ALLOW_LIST;
 
@@ -49,8 +60,9 @@ public class GAgentsNetwork extends GBaseObject implements IJsonClonable<GAgents
 
 			return agentConfigCode + (agentContextualName != null ? "-" + agentContextualName : "");
 		}
+
 		public void setNetworkAgentName(String s) {
-			
+
 		}
 	}
 

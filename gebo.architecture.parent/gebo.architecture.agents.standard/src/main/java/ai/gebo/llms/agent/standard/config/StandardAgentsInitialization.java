@@ -245,6 +245,7 @@ public class StandardAgentsInitialization {
 		outParticipant.setCommunicationList(List.of(controller.getCode()));
 		participants.add(outParticipant);
 		network.setAgents(participants);
+		network.setAccessibleToAll(true);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Assembled default agents network code:" + network.getCode() + " with " + participants.size()
 					+ " participant(s); coordinated searchers:" + coordinatedAgentCodes);

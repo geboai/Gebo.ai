@@ -38,6 +38,7 @@
     "marked": "^15.0.7",
     "mermaid": "^11.6.0",
     "monaco-editor": "^0.52.2",
+    "ng-diagram": "^1.2.4",
     "ngx-cookie-service": "^19.1.2",
     "ngx-extended-pdf-viewer": "^22.3.9",
     "ngx-markdown": "^19.1.1",
