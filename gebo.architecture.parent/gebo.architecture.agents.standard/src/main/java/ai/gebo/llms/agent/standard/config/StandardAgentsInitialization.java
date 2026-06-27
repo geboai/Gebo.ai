@@ -184,7 +184,10 @@ public class StandardAgentsInitialization {
 		network.setDescription(DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES);
 		network.setReadOnly(true);
 		network.setDefaultUserInteractionNetwork(true);
-		network.setMaxLoopIteration(5);
+		// Global safety backstop on TOTAL agent invocations (the controller's own cycle
+		// budget below is the real terminator); sized so a legitimate multi-cycle
+		// gather/finalize run with a wide searcher fan-out is never truncated.
+		network.setMaxLoopIteration(60);
 		network.setScenarioDescription(DEFAULT_NETWORK_SCENARIO_DESCRIPTION);
 		GAgentConfig controller = defaultControllerAgentConfigDataSource().getConfigurations().get(0);
 		List<GAgentConfig> dataSources = externalSourcesAgentConfigDataSource().getConfigurations();
@@ -217,6 +220,9 @@ public class StandardAgentsInitialization {
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
 		controllerParticipant.setAgentConfigCode(controller.getCode());
 		controllerParticipant.setInputNode(false);
+		// maxInvocations is the controller's cycle budget: the maximum number of
+		// gather/finalize cycles it may run before it must deliver the final answer.
+		controllerParticipant.setMaxInvocations(5);
 		controllerParticipant.setMaxConsecutiveInvocations(5);
 		controllerParticipant.setOutputNode(false);
 		controllerParticipant.setCommunicationList(coordinatedAgentCodes);
