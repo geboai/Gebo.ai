@@ -9,6 +9,7 @@
 
 package ai.gebo.ai.app.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,9 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -30,7 +36,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
@@ -47,13 +56,16 @@ import reactor.core.publisher.Flux;
  * agent's rendered prompt:
  * <ul>
  * <li>the coordinator-controller prompt -&gt; a structured routing plan that
- * activates only the report writer (so the search path, which needs
- * security/visibility/vector-store, is not exercised here);</li>
+ * activates only the report writer (so the search path, which needs ingested
+ * content, is not exercised here);</li>
  * <li>the writer/reporter prompt -&gt; the final answer text.</li>
  * </ul>
- * This exercises the core network mechanics end to end: input adapter -&gt;
- * controller routing (structured-output binding of {@code TargetAgentEnvelope})
- * -&gt; report writer streaming output.
+ * Unlike a bare unit invocation, the network is driven under a coherent runtime:
+ * an authenticated Spring security context for the default all-roles user and a
+ * real {@link GUserChatSession} created through the chat session lifecycle
+ * service, with the request bound to that session's context code. This is what
+ * the pipeline relies on to resolve the session-available knowledge bases and to
+ * propagate the caller identity into the reactive network execution.
  */
 @TestPropertySource(properties = "ai.gebo.agents.standard.enabled=true")
 public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTests {
@@ -64,6 +76,10 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 
 	@Autowired
 	private List<IStreamingOutputChatPipelineService> pipelineServices;
+	@Autowired
+	private IGChatSessionLifeCycleService lifeCycleService;
+	@Autowired
+	private GUserChatSessionRepository sessionsRepo;
 
 	@Override
 	protected void beforeEachCallback() throws Exception {
@@ -97,6 +113,7 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 	@Override
 	protected void afterEachCallback() throws Exception {
 		TestChatModel.clearGlobalResponseLogic();
+		SecurityContextHolder.clearContext();
 	}
 
 	@Test
@@ -108,10 +125,26 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 				.orElseThrow(() -> new IllegalStateException(
 						"Agents-network pipeline service not present; is ai.gebo.agents.standard.enabled=true?"));
 
-		// Minimal runtime data carrying the user query (consumed by the input adapter).
+		// Coherent runtime identity: the default all-roles user is created in
+		// prepareEnvironment(); authenticate as that user so the synchronous session /
+		// knowledge-base resolution and the reactive network execution (which samples
+		// the identity through ReactiveIdentityUtil) both run authenticated.
+		authenticateAsDefaultUser();
+
+		// Initialize a real chat session for the current user and bind the request to
+		// it: the agents pipeline resolves the session-available knowledge bases from
+		// this context code. Leaving the code null lets the lifecycle service create
+		// and assign a valid session.
 		GeboChatRequest request = new GeboChatRequest();
 		request.setQuery(USER_QUESTION);
-		request.setUserChatContextCode("test-agents-network-session");
+		lifeCycleService.createChatSession(request);
+		final String sessionCode = request.getUserChatContextCode();
+		assertNotNull(sessionCode, "A valid chat session context code must be assigned by the lifecycle service");
+		Optional<GUserChatSession> persistedSession = sessionsRepo.findById(sessionCode);
+		assertTrue(persistedSession.isPresent(),
+				"The chat session must be persisted and resolvable by its context code: " + sessionCode);
+		assertEquals(DEFAULT_ALL_ROLES_USER, persistedSession.get().getUsername(),
+				"The chat session must belong to the authenticated user");
 
 		MinimalChatContext minimalChatContext = new MinimalChatContext();
 		minimalChatContext.setCurrentRequest(request);
@@ -173,5 +206,12 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 
 		assertTrue(foundInResponse || accumulatedText.toString().contains(ANSWER_MARKER),
 				"The report writer's answer (" + ANSWER_MARKER + ") must appear in the streamed network output");
+	}
+
+	private void authenticateAsDefaultUser() {
+		List<SimpleGrantedAuthority> authorities = ALL_ROLES.stream().map(SimpleGrantedAuthority::new).toList();
+		Authentication authentication = new UsernamePasswordAuthenticationToken(DEFAULT_ALL_ROLES_USER, "NOPASSWORD",
+				authorities);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 }
