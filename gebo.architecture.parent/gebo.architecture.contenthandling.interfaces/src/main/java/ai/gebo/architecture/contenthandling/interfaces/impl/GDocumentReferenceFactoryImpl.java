@@ -297,7 +297,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 		}
 		reference.setParentProjectCode(projectEndpoint.getParentProjectCode());
 		reference.setProjectEndpointReference(new GObjectRef<GProjectEndpoint>(projectEndpoint));
-		reference.setCustomMetaInfos(new HashMap<String, Object>());
+		
 		return reference;
 	}
 
