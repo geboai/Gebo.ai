@@ -7,7 +7,8 @@
     "primeng": "^19.1.4",
     "primeicons": "^7.0.0",
     "primeflex": "^4.0.0",
-    "@primeng/themes": "^19.1.4"
+    "@primeng/themes": "^19.1.4",
+    "ng-diagram": "^1.2.4"
   },
   "dependencies": {
     "tslib": "^2.3.0"
