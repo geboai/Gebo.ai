@@ -4,6 +4,7 @@ import java.util.List;
 
 import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.model.IGObjectWithSecurity;
@@ -34,6 +35,7 @@ public class GAgentConfig extends GBaseObject
 	private String agentRoleCode = null;
 
 	private Boolean useDefaultChatModel = null;
+	private ChatModelsUses useChatModelWithUse = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
 	@NotNull

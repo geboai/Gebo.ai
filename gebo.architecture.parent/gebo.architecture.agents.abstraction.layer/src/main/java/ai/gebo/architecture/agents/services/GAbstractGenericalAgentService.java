@@ -152,10 +152,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 					+ (agentConfig != null ? agentConfig.getChatModelReference() : null));
 		}
 		IGConfigurableChatModel copiedModel = null;
-		if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
-			copiedModel = chatModelsDao.defaultHandler();
-		} else {
+		if (agentConfig.getChatModelReference() != null) {
 			copiedModel = chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
+		} else if (agentConfig.getUseChatModelWithUse() != null) {
+			copiedModel = chatModelsDao.findByUsesOrGetDefault(agentConfig.getUseChatModelWithUse());
+		} else if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
+			copiedModel = chatModelsDao.defaultHandler();
 		}
 		if (copiedModel == null) {
 			LOGGER.warn("Setting backup default chat model for actual Agent");

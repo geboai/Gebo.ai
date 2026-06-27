@@ -39,6 +39,7 @@ import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -87,15 +88,15 @@ public class StandardAgentsInitialization {
 	private final IDocumentsChunkService chunkingService;
 	private final IGRankerService rankerService;
 	private final IGDocumentContentRendererProvider rendererFactory;
-	private final IGExternalSearchSecurityService  externalSearchSecurityService;
+	private final IGExternalSearchSecurityService externalSearchSecurityService;
 	private final StandardAgentsConfig standardAgentsConfig;
 
 	public StandardAgentsInitialization(ISearchServiceRepositoryPattern searchServicesRepositoryPattern,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
 			IDocumentsChunkService chunkingService, IGRankerService rankerService, IGPromptConfigDao promptsDao,
 			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
-			IGDocumentContentRendererProvider rendererFactory, IGExternalSearchSecurityService externalSearchSecurityService,
-			StandardAgentsConfig standardAgentsConfig) {
+			IGDocumentContentRendererProvider rendererFactory,
+			IGExternalSearchSecurityService externalSearchSecurityService, StandardAgentsConfig standardAgentsConfig) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
 		this.chatModelsDao = chatModelsDao;
 		this.toolsRepositoryPattern = toolsRepositoryPattern;
@@ -117,11 +118,13 @@ public class StandardAgentsInitialization {
 	@Qualifier(IStreamingOutputChatPipelineService.DEFAULT_PIPELINE_SERVICE)
 	public IStreamingOutputChatPipelineService defaultStreamingOutputPipelineService(
 			@Autowired @Qualifier(IDynamicAgentsNetworkDataSource.DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource networkDataSource,
-			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory, IGChatSessionLifeCycleService lifeCycleService) {
+			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
+			IGChatSessionLifeCycleService lifeCycleService) {
 		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 
-		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource, lifeCycleService);
+		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource,
+				lifeCycleService);
 	}
 
 	@Bean
@@ -154,7 +157,7 @@ public class StandardAgentsInitialization {
 		// external searchers).
 		internalKnowledgeBaseAgentConfig.setCustomLoopPrompt(SearchAgentPromptPatcher.withAgentPlaceholders(promptsDao
 				.findByPromptUse(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE)));
-		internalKnowledgeBaseAgentConfig.setUseDefaultChatModel(true);
+		internalKnowledgeBaseAgentConfig.setUseChatModelWithUse(ChatModelsUses.INTERNAL_SERVICES);
 		internalKnowledgeBaseAgentConfig.setEnabledFunctions(List.of());
 		internalKnowledgeBaseAgentConfig.setSubscribeAllTools(false);
 		return new IGDynamicAgentConfigDataSource() {
@@ -175,8 +178,8 @@ public class StandardAgentsInitialization {
 			IGDocumentsSearchService documentsSearchService,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService) {
 		return new InternalKnowledgeBaseSearchNetworkAgentService(chatModelsDao, toolsRepositoryPattern, promptsDao,
-				securityService, agentRoleDao, runtimeBinder, rendererFactory, rankerService,
-				documentsSearchService, knowledgeBaseVisibilityService);
+				securityService, agentRoleDao, runtimeBinder, rendererFactory, rankerService, documentsSearchService,
+				knowledgeBaseVisibilityService);
 
 	}
 
@@ -300,7 +303,7 @@ public class StandardAgentsInitialization {
 						agentConfig.setAgentServiceId(serviceId);
 						agentConfig.setSubscribeAllTools(false);
 						agentConfig.setEnabledFunctions(List.of());
-						agentConfig.setUseDefaultChatModel(true);
+						agentConfig.setUseChatModelWithUse(ChatModelsUses.INTERNAL_SERVICES);
 						agentConfigs.add(agentConfig);
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Registered external search agent config code:" + serviceId);
@@ -344,6 +347,7 @@ public class StandardAgentsInitialization {
 			controllerConfig.setAgentServiceId(DefaultControllerNetworkAgentService.CONTROLLER_AGENT);
 			controllerConfig.setMainLoopPromptUseCode(StandardAgentsPromptsLibraryConfig.COORDINATOR_AGENT_PROMPT);
 			controllerConfig.setDescription(CONTROLLER_AND_COORDINATOR_DESCRIPTION);
+			controllerConfig.setAccessibleToAll(true);
 			controllerConfig.setUseDefaultChatModel(true);
 			controllerConfig.setAgentRoleCode(SUPERVISOR_AGENT);
 		}
@@ -360,6 +364,8 @@ public class StandardAgentsInitialization {
 					.setMainLoopPromptUseCode(StandardAgentsPromptsLibraryConfig.REPORT_AND_ANSWER_WRITER_AGENT_PROMPT);
 			reporterConfig.setDescription(REPORTER_AGENT_DESCRIPTION);
 			reporterConfig.setAgentRoleCode(REPORT_WRITER_AGENT);
+			reporterConfig.setAccessibleToAll(true);
+			reporterConfig.setUseDefaultChatModel(true);
 		}
 		return IGDynamicAgentConfigDataSource.of(reporterConfig);
 	}
