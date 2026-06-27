@@ -34,7 +34,7 @@ import ai.gebo.security.services.IGSecurityService;
 @Service
 public class DefaultControllerNetworkAgentService extends GBaseRoutingNetworkAgentService<String, Void> {
 
-	public static final String REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM = "REQUIRED_AGENT_COMPLETENESS";
+	private static final String REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM = "REQUIRED_AGENT_COMPLETENESS";
 	private static final String CONTROLLER_AND_COORDINATOR_AGENT = "Controller and coordinator agent";
 	public static final String CONTROLLER_AGENT = "controllerAgent";
 

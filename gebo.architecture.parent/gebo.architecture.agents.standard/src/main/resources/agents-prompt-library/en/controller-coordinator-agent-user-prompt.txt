@@ -52,3 +52,5 @@ This is the current command, user request, or instruction that you must satisfy.
 The user's request has been classified with the following required deliverable completeness, expressed as `INTENT: description`. Treat it as an AUTHORITATIVE signal of how complete and how deep the final deliverable must be, and size your routing plan accordingly:
 
 {REQUIRED_AGENT_COMPLETENESS}
+
+## (E) Current user actual question: {question}

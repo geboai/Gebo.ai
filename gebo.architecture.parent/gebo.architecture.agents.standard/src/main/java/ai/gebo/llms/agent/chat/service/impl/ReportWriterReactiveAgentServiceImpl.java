@@ -27,6 +27,7 @@ import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.GAbstractReactiveAgentService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -43,7 +44,9 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.chat.service.IReportWriterReactiveAgentService;
+import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -63,7 +66,7 @@ import reactor.core.publisher.Flux;
 public class ReportWriterReactiveAgentServiceImpl
 		extends GAbstractReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatResponse>
 		implements IReportWriterReactiveAgentService {
-
+	private static final String REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM = "REQUIRED_AGENT_COMPLETENESS";
 	private static final String END_AGENT_LOOP = "END_AGENT-LOOP-";
 	private static final String TOOL_CALLED = "TOOL-CALLED-";
 	private static final String RESPONSE = "RESPONSE: ";
@@ -87,7 +90,26 @@ public class ReportWriterReactiveAgentServiceImpl
 				rendererFactory);
 
 	}
-
+	@Override
+	protected <I, O> List<Map<String, Object>> createAgentTemplateParams(GPromptTemplateConfig prompt,
+			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<I, O> mySessionContext, Object input,
+			IGAgentsNetworkRuntimeDao agentsDao, int actualContributionNr, int tokenBudget, boolean splitByBudget) {
+		// Base adds the routing-cycle signals; here we add the required deliverable
+		// completeness derived from the shared USER_INTENT.
+		List<Map<String, Object>> output = super.createAgentTemplateParams(prompt, network, agentRole,
+				contextAgentPersona, session, mySessionContext, input, agentsDao, actualContributionNr, tokenBudget,
+				splitByBudget);
+		DeliverableIntent actualUserIntent = (DeliverableIntent) session.getEnvironment()
+				.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT);
+		if (actualUserIntent == null)
+			actualUserIntent = DeliverableIntent.SUMMARY;
+		final String completeness = actualUserIntent.name() + ": " + actualUserIntent.getAgentDeliverableCompleteness();
+		for (Map<String, Object> window : output) {
+			window.put(REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM, completeness);
+		}
+		return output;
+	}
 	@Override
 	public String getId() {
 
