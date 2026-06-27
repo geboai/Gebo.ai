@@ -41,6 +41,7 @@ import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
@@ -113,11 +114,11 @@ public class StandardAgentsInitialization {
 	@Qualifier(IStreamingOutputChatPipelineService.DEFAULT_PIPELINE_SERVICE)
 	public IStreamingOutputChatPipelineService defaultStreamingOutputPipelineService(
 			@Autowired @Qualifier(IDynamicAgentsNetworkDataSource.DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource networkDataSource,
-			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory) {
+			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory, IGChatSessionLifeCycleService lifeCycleService) {
 		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 
-		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource);
+		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource, lifeCycleService);
 	}
 
 	@Bean

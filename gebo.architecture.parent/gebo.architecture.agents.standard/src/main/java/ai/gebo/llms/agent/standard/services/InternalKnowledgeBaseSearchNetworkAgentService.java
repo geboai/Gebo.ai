@@ -133,7 +133,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 						+ fullTextQueries.size() + " full-text quer(ies)");
 			}
 
-			final List<String> kbCodes = visibleKnowledgeBaseCodes();
+			final List<String> kbCodes = sessionKnowledgeBaseCodes(session);
 			SemanticSearchMetaDataFilter semanticFilter = new SemanticSearchMetaDataFilter();
 			semanticFilter.setKnowledgeBasesCodes(kbCodes);
 			FullTextSearchMetaDataFilter fullTextFilter = new FullTextSearchMetaDataFilter();
@@ -163,6 +163,31 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 		} catch (LLMConfigException | FullTextException e) {
 			throw new AgentException("Error executing internal knowledge base search agent", e);
 		}
+	}
+
+	/**
+	 * Resolve the knowledge base codes this search must be scoped to. The
+	 * authoritative source is the {@code KNOWLEDGE_BASES_CODE} entry shared in the
+	 * network session environment (populated by the chat pipeline for the current
+	 * session). It is used whenever it is present and non-empty; otherwise the agent
+	 * falls back to the visibility service.
+	 */
+	@SuppressWarnings("unchecked")
+	private List<String> sessionKnowledgeBaseCodes(AgentsCollaborationSessionContext session) {
+		Object environmentCodes = session != null && session.getEnvironment() != null
+				? session.getEnvironment().get(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE)
+				: null;
+		if (environmentCodes instanceof List<?> codes && !codes.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Scoping internal-KB search to " + codes.size()
+						+ " knowledge base code(s) from the session environment");
+			}
+			return (List<String>) codes;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("No knowledge base codes in the session environment, falling back to the visibility service");
+		}
+		return visibleKnowledgeBaseCodes();
 	}
 
 	private List<String> visibleKnowledgeBaseCodes() {

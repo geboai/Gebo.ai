@@ -1,7 +1,9 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +14,18 @@ import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.agents.services.NetworkOfAgentsException;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
+import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
@@ -37,6 +44,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	private static final String EXCEPTION_RUNNING_NETWORK_OF_AGENTS = "Exception running network of agents";
 	private final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
 	private final IDynamicAgentsNetworkDataSource agentsNetworkDataSource;
+	private final IGChatSessionLifeCycleService lifeCycleService;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
 
@@ -70,9 +78,17 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			INotificationSink notificationSink = sinkUIEmitter;
 			final GeboChatResponse responseReference = runtimeData.getChatResponse();
+			final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 			List<GAgentsNetwork> ds = this.agentsNetworkDataSource.getConfigurations();
 			if (ds.isEmpty())
 				throw new ChatPipelineException("No agentic chat network set");
+			final Map<String, Object> environment = new HashMap<String, Object>();
+			List<GKnowledgeBase> knowledgeBases = lifeCycleService
+					.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
+			List<String> knowledgeBaseCodes = knowledgeBases.stream().map(x -> x.getCode()).toList();
+			environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
+			environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
+					request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
 			GAgentsNetwork network = ds.get(0);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
@@ -93,8 +109,9 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				}
 				runAs.doAs(() -> {
 					try {
+
 						runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(),
-								runtimeData);
+								runtimeData, environment);
 					} catch (AgentException | LLMConfigException e) {
 						LOGGER.error(EXCEPTION_RUNNING_NETWORK_OF_AGENTS, e);
 					}

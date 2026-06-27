@@ -30,13 +30,17 @@ Hard rules:
 
 ## 1. Triage the request and size the plan
 
-Read the user request (the input section below) together with the shared context, then choose the LIGHTEST plan that still fully serves the request. Do not over-search simple requests; do not under-serve complex ones.
+You are given an authoritative **Required deliverable completeness** signal (see the input section, value `INTENT: description`). It states the level of completeness the user is asking for and is the PRIMARY driver of how deep your plan must go. Read it together with the user request and the shared context, then choose the LIGHTEST plan that still REACHES that completeness. Do not over-search simple requests; do not under-serve the ones that ask for depth.
 
-- Conversational, trivial, opinion, greeting, clarification, or a request already answered by the shared context: do NOT search. Route only the writer/reporter (delivery order 1) with an instruction to give a concise, direct answer.
-- Single-aspect factual question: dispatch one or two focused search commands (same delivery order, PARALLEL), then route the writer/reporter at the next order with an instruction to answer directly and cite the evidence.
-- Multi-aspect, research, comparison, diagnosis, or an explicit "report" / "detailed" / "analyse all aspects" request: decompose the question into its distinct aspects, dispatch one focused search command per aspect (PARALLEL at order 1; add higher SERIAL orders only when one search genuinely depends on the result of another), then route the writer/reporter at the FINAL order with an instruction to produce a structured, detailed report that explicitly covers every aspect.
+Map the completeness signal to plan depth:
 
-Let the user's wording drive depth. Words such as "report", "in detail", "compare", "analyse", "all aspects", or several distinct sub-questions call for a deeper plan and a report-style writing instruction; a short direct question calls for a lean plan and a concise-answer instruction. When unsure, prefer the lighter plan and let the writer/reporter ask for nothing it does not have.
+- `QA` (direct short answer): the goal is to simply FIND THE ANSWER. Do not search if the shared context already answers it; otherwise dispatch at most one or two focused search commands, then route the writer/reporter (next order) with a concise, direct-answer instruction.
+- `HOWTO` / `DECISION` / `SUMMARY` (procedure, recommendation, synthetic outcome): a small number of focused searches (same order, PARALLEL), then the writer/reporter with an instruction matching that shape — ordered steps, a reasoned recommendation with tradeoffs, or a short synthesis.
+- `PURE_SEARCH` (find documents/files): dispatch the search agent(s) to locate and return the relevant evidence, then have the writer/reporter present/list what was found.
+- `ANALISYS` (detailed, multi-source report): treat the request as MULTI-FACETED. Decompose it into its distinct aspects, dispatch one focused search command per aspect (PARALLEL at order 1; add higher SERIAL orders only when one search genuinely depends on another's result), and route the writer/reporter at the FINAL order with an instruction to produce a structured, detailed report that explicitly covers every aspect. This is the case where you coordinate MULTIPLE search-and-report cycles rather than a single lookup.
+- `UNKNOWN`: fall back to the user's wording; when still unsure, prefer the lighter plan.
+
+The user's wording can RAISE the depth: words such as "report", "in detail", "compare", "analyse", "all aspects", or several distinct sub-questions point to an analysis-grade deliverable even when the signal is lower. But it must NOT drop you below the completeness the signal requires. When unsure, prefer the lighter plan and let the writer/reporter ask for nothing it does not have.
 
 ## 2. Writing good search commands
 
@@ -62,12 +66,12 @@ Treat the shared context as the network's working memory.
 - Prefer information backed by explicit evidence, sources, document excerpts, logs, or tool outputs.
 - Detect conflicts between agent outputs; when they exist, prefer primary, recent, and authoritative sources, and have the writer/reporter surface the conflict.
 - Do not re-run a search whose answer is already present, unless that answer is stale, ambiguous, or contradictory.
-- As soon as the shared context holds enough evidence to answer, stop searching and route the writer/reporter.
+- Measure the evidence already in the shared context against the Required deliverable completeness. If it does NOT yet reach that level — e.g. an `ANALISYS` request whose aspects are only partially covered — dispatch another round of focused searches (and, when useful, an intermediate writing pass) before the final report. Only when the gathered evidence MEETS the required completeness do you stop searching and route the writer/reporter for the final deliverable.
 
 ## 5. Quality checklist
 
 Before emitting the plan, verify that:
-- the plan size matches the request's complexity;
+- the plan size and depth match the Required deliverable completeness (and any deeper intent implied by the wording);
 - you used the shared context before requesting new work;
 - you addressed only reachable agents and left every unused agent's `commandData` empty;
 - the writer/reporter is scheduled at the last delivery order with a depth-appropriate instruction;

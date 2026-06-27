@@ -1,7 +1,9 @@
 package ai.gebo.architecture.agents.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
@@ -15,6 +17,8 @@ public final class AgentsCollaborationSessionContext {
 
 	private int contributionCounter = 0;
 	private final TreeMap<Integer, List<AgentProducedSessionContribution>> contributions = new TreeMap<Integer, List<AgentProducedSessionContribution>>();
+	@Getter
+	private final Map<String, Object> environment = new HashMap<String, Object>();
 
 	public synchronized void addContribution(AgentsExchangeMessage<?> msg, int contributionNr) {
 		AgentProducedSessionContribution contribution = new AgentProducedSessionContribution(contributionNr,
@@ -31,7 +35,7 @@ public final class AgentsCollaborationSessionContext {
 		return List.copyOf(listified);
 	}
 
-	public  List<AgentProducedSessionContribution> getSampledContributionsAfter(int index) {
+	public List<AgentProducedSessionContribution> getSampledContributionsAfter(int index) {
 		return getSampledContributions().stream().filter(x -> x.getContributionUniqueNr() >= index).toList();
 	}
 

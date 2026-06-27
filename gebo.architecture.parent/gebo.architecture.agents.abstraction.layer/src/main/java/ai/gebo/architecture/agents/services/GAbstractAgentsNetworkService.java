@@ -48,8 +48,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private final IGAgentsNetworkRuntimeDao agentsDao;
 
 	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input)
-			throws AgentException, LLMConfigException {
+	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
+			Map<String, Object> environment) throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) network code:" + (network != null ? network.getCode() : null)
 					+ " inputType:" + (input != null ? input.getClass().getName() : null) + " maxLoopIteration:"
@@ -68,6 +68,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					+ " network participant(s)");
 		}
 		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
+		if (environment != null)
+			session.getEnvironment().putAll(environment);
 		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 		final RuntimeAgentInfos inputRuntime = agentsDao.findAgentByCode(inputNodeName);

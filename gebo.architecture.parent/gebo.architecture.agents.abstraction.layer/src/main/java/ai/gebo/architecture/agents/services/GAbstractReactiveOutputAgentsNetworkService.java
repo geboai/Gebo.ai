@@ -1,5 +1,7 @@
 package ai.gebo.architecture.agents.services;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,10 +33,10 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 	}
 
 	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input)
+	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input, Map<String, Object> environment)
 			throws AgentException, LLMConfigException {
 		try {
-			return super.executeNetwork(chatRequestContext, input);
+			return super.executeNetwork(chatRequestContext, input, environment);
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Completing reactive output sink after executeNetwork(...)");

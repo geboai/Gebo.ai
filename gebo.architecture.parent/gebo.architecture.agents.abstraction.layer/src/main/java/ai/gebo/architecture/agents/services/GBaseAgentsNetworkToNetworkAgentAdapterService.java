@@ -84,7 +84,7 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 							+ "' executeNetwork(...)");
 				}
 				OutputType output = (OutputType) agentsNetworkService.executeNetwork(chatRequestContext,
-						msg.getPayload());
+						msg.getPayload(), session.getEnvironment());
 				List<AgentsExchangeMessage<OutputType>> outputMessages = new ArrayList<AgentsExchangeMessage<OutputType>>();
 				List<String> targetAgents = contextAgentPersona.getCommunicationList();
 				for (String target : targetAgents) {
