@@ -14,6 +14,7 @@ import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
+import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -40,7 +41,7 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	@Override
 	public String getDescription() {
 
-		return service.getDescription(); 
+		return service.getDescription();
 	}
 
 	@Override
@@ -69,14 +70,15 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	@Override
 	public List<AgentsExchangeMessage<ResponseType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, int actualContributionNr,
-			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
-			throws LLMConfigException, AgentException {
+			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) reactive agent network adapter id:" + getId() + " fromAgent:"
 					+ msg.getFromAgent());
 		}
+		
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, msg.getPayload(),
 				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs);
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {

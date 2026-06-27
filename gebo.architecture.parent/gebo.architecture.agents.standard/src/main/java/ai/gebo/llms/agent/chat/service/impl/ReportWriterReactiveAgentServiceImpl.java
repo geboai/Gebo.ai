@@ -118,7 +118,7 @@ public class ReportWriterReactiveAgentServiceImpl
 			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin createResponse(...) report writer agent id:" + getId() + " persona:"
-					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null));
+					+ (contextAgentPersona != null ? contextAgentPersona.getNetworkAgentName() : null));
 		}
 		final GeboChatResponse response = new GeboChatResponse();
 		final int tokenBudget = (agentModel.getContextLength() - agentPrompt.getTokensSize()) * 2 / 3;
@@ -130,6 +130,8 @@ public class ReportWriterReactiveAgentServiceImpl
 		// available at this layer, hence null (peer descriptions are then omitted).
 		final List<Map<String, Object>> params = createAgentTemplateParams(agentPrompt, network, agentRole,
 				contextAgentPersona, session, mySessionContext, request, null, 0, tokenBudget, true);
+		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " is writing a report..",
+				ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 		Flux<String> textStream = null;
 		if (params.size() == 1) {
 			if (LOGGER.isDebugEnabled()) {
@@ -153,6 +155,8 @@ public class ReportWriterReactiveAgentServiceImpl
 		Flux<IGPartialOperation<GeboChatMessageEnvelope>> lastItem = Flux.defer(() -> {
 			String queryResponse = cumulatedContent.toString();
 			boolean lastMessage = false;
+			notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has finished",
+					ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 			response.setQueryResponse(queryResponse);
 			response.setDocumentsRef(extractDocumentsList(session));
 			response.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));

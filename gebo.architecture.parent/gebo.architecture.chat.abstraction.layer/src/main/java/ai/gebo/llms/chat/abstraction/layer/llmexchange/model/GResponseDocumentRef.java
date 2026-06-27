@@ -159,6 +159,12 @@ public class GResponseDocumentRef implements Serializable {
 										? sr.getNavigationReference().path.name
 										: null;
 					}
+					if (this.description == null) {
+						this.description = sr.getResultReference() != null ? sr.getResultReference().getName()
+								: sr.getNavigationReference() != null && sr.getNavigationReference().path != null
+										? sr.getNavigationReference().path.name
+										: null;
+					}
 				}
 			} catch (Throwable th) {
 			}

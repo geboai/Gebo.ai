@@ -14,6 +14,7 @@ import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -82,8 +83,12 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
+		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " is searching...",
+				NotificationType.INFO);
 		List<Document> documents = retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
 				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
+		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has found: "
+				+ documents.size() + " evidences", NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End onMessage(...) documents search agent id:" + getId() + " retrieved "
 					+ (documents != null ? documents.size() : 0) + " document(s)");

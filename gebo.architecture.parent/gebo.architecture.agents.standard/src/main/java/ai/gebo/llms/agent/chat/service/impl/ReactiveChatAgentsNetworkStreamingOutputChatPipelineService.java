@@ -16,6 +16,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -68,7 +69,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		try {
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			INotificationSink notificationSink = sinkUIEmitter;
-			
+			final GeboChatResponse responseReference = runtimeData.getChatResponse();
 			List<GAgentsNetwork> ds = this.agentsNetworkDataSource.getConfigurations();
 			if (ds.isEmpty())
 				throw new ChatPipelineException("No agentic chat network set");
@@ -79,6 +80,12 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			IGReactiveChatAgentsNetworkService runtimeNetwork = factory.create(network, notificationSink,
 					ChatPipelineExecutionRuntimeData.class, GeboChatMessageEnvelope.class, runAs);
 			Flux<GeboChatMessageEnvelope> flux = runtimeNetwork.getFlux();
+			Flux<GeboChatMessageEnvelope> trailingFlux = Flux.defer(() -> {
+				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(responseReference);
+				envelope.setLastMessage(true);
+				return Flux.just(envelope);
+
+			});
 			flux = flux.doOnSubscribe((subscription) -> {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Subscription received, launching executeNetwork(...) for network code:"
@@ -92,7 +99,15 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 						LOGGER.error(EXCEPTION_RUNNING_NETWORK_OF_AGENTS, e);
 					}
 				});
-			}).doOnCancel(() -> {
+			}).map(x -> {
+				if (x != null && x.getContent() instanceof GeboChatResponse response) {
+					responseReference.setQueryResponse(response.getQueryResponse());
+					responseReference.setCalledFunctions(response.getCalledFunctions());
+					responseReference.setDocumentsRef(response.getDocumentsRef());
+					return new GeboChatMessageEnvelope(responseReference);
+				}
+				return x;
+			}).concatWith(trailingFlux).doOnCancel(() -> {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Reactive chat agents network flux cancelled, disposing runtime network");
 				}
@@ -106,14 +121,11 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			});
 			;
 			return flux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
-		}catch(
+		} catch (NetworkOfAgentsException e) {
+			LOGGER.error(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
+			throw new ChatPipelineException(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
+		}
 
-	NetworkOfAgentsException e)
-	{
-		LOGGER.error(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
-		throw new ChatPipelineException(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);
 	}
-
-}
 
 }

@@ -140,6 +140,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				typesMap.put(coordAgent, dynamicType);
 			}
 		}
+		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " is coordinating...",
+				ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
 		if (formatDeclared) {
 			params.put(AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
 		}
@@ -195,14 +197,20 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			LOGGER.debug("Normalized delivery plan into " + scheduled.size() + " delivery level(s) from "
 					+ toBeScheduled.size() + " scheduled envelope(s)");
 		}
+		List<String> targetAgents = new ArrayList<String>();
 		for (List<TargetAgentEnvelope<?>> row : scheduled.values()) {
 			for (TargetAgentEnvelope<?> d : row) {
+				if (!targetAgents.contains(d.getAgentId()))
+					targetAgents.add(d.getAgentId());
 				AgentsExchangeMessage<?> _msg = new AgentsExchangeMessage(session.getId(),
 						MessageSemantic.EXECUTE_AND_SHARE_RESULT, contextAgentPersona.getAgentContextualName(),
 						agentRole, d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
 				out.add(_msg);
 			}
 		}
+		notificationSink.next(
+				"Agent: " + contextAgentPersona.getNetworkAgentName() + " has messaged " + targetAgents,
+				ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.DEBUG);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End onMessage(...) routing agent id:" + getId() + " emitting " + out.size()
 					+ " outbound message(s)");

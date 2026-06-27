@@ -19,6 +19,7 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -42,7 +43,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private final GAgentsNetwork network;
 	private final INotificationSink notificationSink;
 	private final Class<InputType> inputType;
-	private final Class<OutputType> outputType;	
+	private final Class<OutputType> outputType;
 	private final ReactiveIdentityUtil runAs;
 	private final IGAgentsNetworkRuntimeDao agentsDao;
 
@@ -151,10 +152,16 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 				LOGGER.debug("Dispatching message to agent:" + inputRuntime.getService().getId() + " contributionNr:"
 						+ contributionNr);
 			}
+			notificationSink.next(
+					"Agent: " + inputRuntime.getNetworkParticipantConfig().getNetworkAgentName() + " is working...",
+					NotificationType.DEBUG);
 			List<AgentsExchangeMessage<?>> messages = inputRuntime.getService().onMessage(chatRequestContext,
 					inputRuntime.getConfig(), inputMessage, contributionNr, network,
 					inputRuntime.getNetworkParticipantConfig(), notificationSink, session,
 					inputRuntime.getAgentContext(), runAs, agentsDao);
+			notificationSink.next(
+					"Agent: " + inputRuntime.getNetworkParticipantConfig().getNetworkAgentName() + " has finished",
+					NotificationType.DEBUG);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent:" + inputRuntime.getService().getId() + " returned "
 						+ (messages != null ? messages.size() : 0) + " message(s)");
@@ -206,8 +213,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		if (executionGroup.isEmpty())
 			return null;
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin executeNetworkLoopsGroup(...) with " + executionGroup.size()
-					+ " message(s) (parallel:" + (executionGroup.size() > 1) + ")");
+			LOGGER.debug("Begin executeNetworkLoopsGroup(...) with " + executionGroup.size() + " message(s) (parallel:"
+					+ (executionGroup.size() > 1) + ")");
 		}
 		if (executionGroup.size() == 1) {
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
