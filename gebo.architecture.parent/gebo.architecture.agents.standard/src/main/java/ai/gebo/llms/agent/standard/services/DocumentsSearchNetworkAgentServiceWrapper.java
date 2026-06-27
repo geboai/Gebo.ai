@@ -125,7 +125,7 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 			LOGGER.debug("End retrieveDocuments(...) search agent id:" + getId() + " collected " + results.size()
 					+ " raw result(s)");
 		}
-		return maybeRank(chunkToDocuments(results, agentModel, command, matchingKeywords), command);
+		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, matchingKeywords), command);
 	}
 
 }

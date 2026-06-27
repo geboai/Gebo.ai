@@ -231,16 +231,7 @@ public class DocumentsChunkServiceImpl
 					content = ingestionHandler.handleContent(dr, is);
 				} else if (document instanceof SearchResult searchResult) {
 
-					GDocumentReference fakeDr = docReferenceFactory.createReference(searchResult.getCode(),
-							searchResult.getCode(), is.getContentType(), is.getExtension(), null,
-							document.getOriginComponent().getMessagingModuleId(),
-							document.getOriginComponent().getMessagingComponentId());
-					try {
-						String searchResultJSON = objectMapper.writeValueAsString(searchResult);
-						fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.GEBO_EXTERNAL_SEARCH_RESULT_JSON, searchResultJSON);
-					} catch (Throwable th) {
-						LOGGER.error(CANNOT_SERIALIZE_SEARCH_RESULT, th);
-					}
+					GDocumentReference fakeDr = encodeDocumentReference(document, is, searchResult);
 					content = ingestionHandler.handleContent(fakeDr, is);
 				} else
 					throw new RuntimeException("Unknown reference object type");
@@ -457,6 +448,42 @@ public class DocumentsChunkServiceImpl
 		}
 		return response;
 
+	}
+
+	private GDocumentReference encodeDocumentReference(IGComponentOriginatedDocument document, TypedInputStream is,
+			SearchResult searchResult) throws GeboContentHandlerSystemException {
+		String code = searchResult.getCode();
+		String uriCandidate1 = searchResult.getResultReference() != null
+				&& searchResult.getResultReference().getUri() != null ? searchResult.getResultReference().getUri()
+						: null;
+		String nameCandidate1 = searchResult.getResultReference() != null
+				&& searchResult.getResultReference().getName() != null ? searchResult.getResultReference().getName()
+						: null;
+		String nameCandidate2 = null;
+		if (searchResult.getNavigationReference() != null) {
+			if ((searchResult.getNavigationReference().path != null
+					&& searchResult.getNavigationReference().path.name != null)) {
+				nameCandidate2 = searchResult.getNavigationReference().path.name;
+			}
+		}
+		String uri = uriCandidate1 != null ? uriCandidate1 : code;
+		String name = nameCandidate1 != null ? nameCandidate1 : nameCandidate2 != null ? nameCandidate2 : uri;
+
+		GDocumentReference fakeDr = docReferenceFactory.createReference(uri, name, is.getContentType(),
+				is.getExtension(), null, document.getOriginComponent().getMessagingModuleId(),
+				document.getOriginComponent().getMessagingComponentId());
+		fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.CONTENT_CODE, code);
+		fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.GEBO_FILE_NAME, name);
+		if (uriCandidate1 != null)
+			fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.CONTENT_ORIGINAL_URL, uriCandidate1);
+		try {
+
+			String searchResultJSON = objectMapper.writeValueAsString(searchResult);
+			fakeDr.getCustomMetaInfos().put(DocumentMetaInfos.GEBO_EXTERNAL_SEARCH_RESULT_JSON, searchResultJSON);
+		} catch (Throwable th) {
+			LOGGER.error(CANNOT_SERIALIZE_SEARCH_RESULT, th);
+		}
+		return fakeDr;
 	}
 
 	private DocumentChunksSet mergeInSingleton(List<DocumentChunksSet> chunkSets, long sampledTokens) {

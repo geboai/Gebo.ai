@@ -124,7 +124,7 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			LOGGER.debug("End retrieveDocuments(...) native search agent id:" + getId() + " collected " + results.size()
 					+ " raw result(s)");
 		}
-		return maybeRank(chunkToDocuments(results, agentModel, command, keywords), command);
+		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, keywords), command);
 	}
 
 }

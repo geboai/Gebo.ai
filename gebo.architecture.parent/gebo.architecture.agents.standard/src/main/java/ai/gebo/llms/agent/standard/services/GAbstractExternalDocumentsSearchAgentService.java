@@ -11,6 +11,7 @@ import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -75,9 +76,10 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 	 * Error chunks and chunks with blank content are skipped, and no more than
 	 * {@link #maxChunksPerDocument} chunks are kept per source document so the ranker
 	 * candidate pool stays bounded regardless of how large the source documents are.
+	 * @param notificationSink TODO
 	 */
-	protected List<Document> chunkToDocuments(List<SearchResult> results, IGConfigurableChatModel agentModel,
-			SearchAgentCommand command, List<String> keywords) {
+	protected List<Document> chunkToDocuments(List<SearchResult> results, INotificationSink notificationSink,
+			IGConfigurableChatModel agentModel, SearchAgentCommand command, List<String> keywords) {
 		if (results == null || results.isEmpty()) {
 			return new ArrayList<>();
 		}
