@@ -34,12 +34,16 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         scenarioDescription: new FormControl(),
         agents: new FormControl(),
         readOnly: new FormControl(),
-        defaultUserInteractionNetwork: new FormControl()
+        defaultUserInteractionNetwork: new FormControl(),
+        accessibleToAll: new FormControl(),
+        accessibleUsers: new FormControl(),
+        accessibleGroups: new FormControl(),
+        aclAliases: new FormControl()
     });
 
     protected availableAgents: GBaseObject[] = [];
     protected agentsList: AgentNetworkParticipant[] = [];
-    
+
     public readonly: boolean = false;
     protected diagramModel: any;
     protected nodeTemplateMap = new NgDiagramNodeTemplateMap([
