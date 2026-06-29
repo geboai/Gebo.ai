@@ -3,6 +3,22 @@
 </p-blockUI>
 
 <p-panel id="MainPanel" gebo-ai-label #mcpClientCtrl header="Editing MCP Client Configuration" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true" styleClass="w-full"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full"
+                    [disabled]="canDelete===false || readonly===true" />
+            </div>
+        </div>
+    </div>
+
     <div class="geboDialogContent">
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
@@ -224,21 +240,6 @@
     </div>
 
     <!-- Panel buttons bar -->
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true" styleClass="w-full"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full"
-                    [disabled]="canDelete===false || readonly===true" />
-            </div>
-        </div>
-    </div>
 </p-panel>
 
 <!-- Permissions Modal Dialog -->

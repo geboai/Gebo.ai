@@ -1,4 +1,38 @@
 <p-panel id="MainPanel" gebo-ai-label header="Insert new OAUTH2 Authentication/Integration infos" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button
+                    id="SaveBtn"
+                    gebo-ai-label
+                    [outlined]="true"
+                    label="Save"
+                    (onClick)="doSave()"
+                    icon="pi pi-save"
+                    severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
+                ></p-button>
+            </div>
+
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+            </div>
+            <div class="col-4">
+                <p-button
+                    id="DeleteBtn"
+                    gebo-ai-label
+                    [outlined]="true"
+                    label="Delete"
+                    severity="danger"
+                    icon="pi pi-trash"
+                    (onClick)="doDelete()"
+                    [disabled]="readonly===true"
+                ></p-button>
+            </div>
+
+        </div>
+    </div>
+
     <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class="grid geboDialogContent">
         <div class="col-6" *ngIf="redirectUrls?.length">
@@ -149,39 +183,6 @@
             >
             </gebo-ui-oauth2-secret-component>
             
-        </div>
-    </div>
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button
-                    id="SaveBtn"
-                    gebo-ai-label
-                    [outlined]="true"
-                    label="Save"
-                    (onClick)="doSave()"
-                    icon="pi pi-save"
-                    severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
-                ></p-button>
-            </div>
-
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
-            </div>
-            <div class="col-4">
-                <p-button
-                    id="DeleteBtn"
-                    gebo-ai-label
-                    [outlined]="true"
-                    label="Delete"
-                    severity="danger"
-                    icon="pi pi-trash"
-                    (onClick)="doDelete()"
-                    [disabled]="readonly===true"
-                ></p-button>
-            </div>
-
         </div>
     </div>
 </p-panel>

@@ -2,6 +2,24 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #networkUI header="Editing Agents Network configuration" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: bottom" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
+                    styleClass="w-full"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" [disabled]="readonly===true" (onClick)="doDelete()" styleClass="w-full" />
+            </div>
+        </div>
+    </div>
+
     <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
     <div class="grid geboDialogContent standardTabDialogueHeight">
@@ -84,24 +102,6 @@
                     </div>
                 </p-tabPanel>
             </p-tabView>
-        </div>
-    </div>
-
-    <div class="geboButtonsBar" style="vertical-align: bottom" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
-                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
-                    styleClass="w-full"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
-                    (onClick)="cancelAction.emit(true)" styleClass="w-full" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
-                    icon="pi pi-trash" [disabled]="readonly===true" (onClick)="doDelete()" styleClass="w-full" />
-            </div>
         </div>
     </div>
 </p-panel>

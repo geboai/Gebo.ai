@@ -15,6 +15,16 @@
 <p-dialog  [maximizable]="true" [visible]="mode==='EDITING'" [modal]="true" header="Content updates scheduling" [style]="{width:'60%'}"
     (visibleChange)="abandonEdit()">
     <p-panel *ngIf="mode==='EDITING'" [formGroup]="formGroup" [showHeader]="false">
+        <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
+                    <div class="grid">
+                        <div class="col-3">
+                            <p-button  id="ConfirmBtn" gebo-ai-label  label="Confirm" icon="pi pi-check" [outlined]="true" (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid"
+                                styleClass="w-full" severity="success"></p-button>
+                        </div>
+
+                    </div>
+                </div>
+
         <div class="grid" style="width:100%">
             <div class="col-4" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
                 <p-select styleClass="w-full"  [options]="unscheduledPeriods" optionLabel="description" optionValue="code"
@@ -52,15 +62,6 @@
             </div>
 
             <div class="col-12" style="min-height: 50px;">
-                <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
-                    <div class="grid">
-                        <div class="col-3">
-                            <p-button  id="ConfirmBtn" gebo-ai-label  label="Confirm" icon="pi pi-check" [outlined]="true" (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid"
-                                styleClass="w-full" severity="success"></p-button>
-                        </div>
-
-                    </div>
-                </div>
             </div>
         </div>
     </p-panel>

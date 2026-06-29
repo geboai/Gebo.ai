@@ -10,6 +10,23 @@
  -->
  
 <p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Sharing google drive contents" [formGroup]="formGroup"  >
+  <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+    <div class="grid">
+      <div class="col-3">
+        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full"></p-button>
+      </div>
+      <div class="col-3">
+        <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!" title="Saves and let these contents being available in knowledge base to LLm's" severity="success" icon="pi pi-microchip-ai" (onClick)="doPublish()" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full" />
+      </div>
+      <div class="col-3">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+      </div>
+      <div class="col-3">
+        <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
+      </div>
+    </div>
+  </div>
+
   <p-blockUI [target]="endPointUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
@@ -68,23 +85,6 @@
         <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference" title="This shared filesystem area ingestion log"></gebo-ai-log-table-component>
       </p-tabPanel>
     </p-tabView>
-  </div>
-
-  <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-    <div class="grid">
-      <div class="col-3">
-        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full"></p-button>
-      </div>
-      <div class="col-3">
-        <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!" title="Saves and let these contents being available in knowledge base to LLm's" severity="success" icon="pi pi-microchip-ai" (onClick)="doPublish()" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full" />
-      </div>
-      <div class="col-3">
-        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full" />
-      </div>
-      <div class="col-3">
-        <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
-      </div>
-    </div>
   </div>
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
