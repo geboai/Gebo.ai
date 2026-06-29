@@ -1,0 +1,6 @@
+package ai.gebo.architecture.mcpclients.model;
+
+public enum McpAuthMode {
+	NONE, API_KEY, STATIC_BEARER_TOKEN, OAUTH2_CLIENT_CREDENTIALS, OAUTH2_AUTHORIZATION_CODE_PER_USER, USER_TOKEN_RELAY,
+	TOKEN_EXCHANGE
+}
