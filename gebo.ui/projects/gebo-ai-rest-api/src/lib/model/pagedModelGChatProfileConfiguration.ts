@@ -9,12 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GHuggingfaceChatModelConfig } from './gHuggingfaceChatModelConfig';
-import { GUserMessage } from './gUserMessage';
+import { GChatProfileConfiguration } from './gChatProfileConfiguration';
+import { PageMetadata } from './pageMetadata';
 
-export interface OperationStatusGHuggingfaceChatModelConfig { 
-    result?: GHuggingfaceChatModelConfig;
-    messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
-    hasWarnMessages?: boolean;
+export interface PagedModelGChatProfileConfiguration { 
+    content?: Array<GChatProfileConfiguration>;
+    page?: PageMetadata;
 }

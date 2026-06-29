@@ -19,7 +19,7 @@
  */
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { DataPage, GJobStatusItem, GObjectRefGProjectEndpoint, JobsEntriesForJobType, LogViewControllerService, PageableObject, PageGJobStatusItem } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, GJobStatusItem, GObjectRefGProjectEndpoint, JobsEntriesForJobType, LogViewControllerService,  PagedModelGJobStatusItem } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { Observable } from "rxjs";
@@ -43,7 +43,7 @@ export class LogTableComponent implements OnChanges {
   /** Pagination information */
   public page: DataPage = { page: 0, pageSize: 20, numrecords: 0 };
   /** Raw paginated data returned from the API */
-  data?: PageGJobStatusItem;
+  data?: PagedModelGJobStatusItem;
   /** Processed job status items */
   actualData: GJobStatusItem[] = [];
   /** Form group for the component */
@@ -142,7 +142,7 @@ export class LogTableComponent implements OnChanges {
    */
   private loadData(): void {
 
-    let observable: Observable<PageGJobStatusItem> | undefined = undefined;
+    let observable: Observable<PagedModelGJobStatusItem> | undefined = undefined;
 
     if (this.endPointReference) {
       // Fetch jobs for a specific project endpoint
@@ -168,11 +168,7 @@ export class LogTableComponent implements OnChanges {
           this.data = value;
           this.actualData = this.data?.content ? this.data.content : [];
 
-          // Handle different API response formats
-          const anyVersion = value as any;
-          if (anyVersion && anyVersion?.page?.totalElements) {
-            this.data.totalElements = anyVersion?.page?.totalElements;
-          }
+          
         },
         error: (error) => { },
         complete: () => {

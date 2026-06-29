@@ -10,19 +10,9 @@
  * Do not edit the class manually.
  */
 import { GJobStatusItem } from './gJobStatusItem';
-import { PageableObject } from './pageableObject';
-import { SortObject } from './sortObject';
+import { PageMetadata } from './pageMetadata';
 
-export interface PageGJobStatusItem { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
+export interface PagedModelGJobStatusItem { 
     content?: Array<GJobStatusItem>;
-    number?: number;
-    first?: boolean;
-    last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
-    pageable?: PageableObject;
-    empty?: boolean;
+    page?: PageMetadata;
 }

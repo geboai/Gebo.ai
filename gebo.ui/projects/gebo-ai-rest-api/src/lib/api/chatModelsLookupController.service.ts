@@ -18,7 +18,6 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GLookupEntry } from '../model/gLookupEntry';
-import { GLookupEntryRef } from '../model/gLookupEntryRef';
 import { GLookupEntryRefGBaseChatModelConfig } from '../model/gLookupEntryRefGBaseChatModelConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -136,9 +135,9 @@ export class ChatModelsLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GLookupEntryRef>>;
-    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GLookupEntryRef>>>;
-    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GLookupEntryRef>>>;
+    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GLookupEntryRefGBaseChatModelConfig>>;
+    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GLookupEntryRefGBaseChatModelConfig>>>;
+    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GLookupEntryRefGBaseChatModelConfig>>>;
     public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -162,7 +161,7 @@ export class ChatModelsLookupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<GLookupEntryRef>>('get',`${this.basePath}/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup`,
+        return this.httpClient.request<Array<GLookupEntryRefGBaseChatModelConfig>>('get',`${this.basePath}/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

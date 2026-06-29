@@ -9,20 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { PageableObject } from './pageableObject';
-import { SortObject } from './sortObject';
+import { PageMetadata } from './pageMetadata';
 import { UserInfos } from './userInfos';
 
-export interface PageUserInfos { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
+export interface PagedModelUserInfos { 
     content?: Array<UserInfos>;
-    number?: number;
-    first?: boolean;
-    last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
-    pageable?: PageableObject;
-    empty?: boolean;
+    page?: PageMetadata;
 }

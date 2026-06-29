@@ -10,19 +10,9 @@
  * Do not edit the class manually.
  */
 import { DocumentReferenceView } from './documentReferenceView';
-import { PageableObject } from './pageableObject';
-import { SortObject } from './sortObject';
+import { PageMetadata } from './pageMetadata';
 
-export interface PageDocumentReferenceView { 
-    totalElements?: number;
-    totalPages?: number;
-    size?: number;
+export interface PagedModelDocumentReferenceView { 
     content?: Array<DocumentReferenceView>;
-    number?: number;
-    first?: boolean;
-    last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
-    pageable?: PageableObject;
-    empty?: boolean;
+    page?: PageMetadata;
 }

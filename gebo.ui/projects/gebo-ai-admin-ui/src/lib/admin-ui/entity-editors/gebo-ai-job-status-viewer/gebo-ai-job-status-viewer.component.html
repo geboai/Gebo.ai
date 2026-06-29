@@ -87,7 +87,7 @@
         <p-tabPanel id="PublicationLogTab" gebo-ai-label header="Publication log">
           <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
           <p-paginator id="PaginatorComponent" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0"
-            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.totalElements"
+            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.page?.totalElements"
             [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
         </p-tabPanel>
       </p-tabView>

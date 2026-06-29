@@ -9,12 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GHuggingfaceChatModelChoice } from './gHuggingfaceChatModelChoice';
-import { GUserMessage } from './gUserMessage';
+import { GBaseEmbeddingModelConfig } from './gBaseEmbeddingModelConfig';
+import { GObjectRefGBaseEmbeddingModelConfig } from './gObjectRefGBaseEmbeddingModelConfig';
 
-export interface OperationStatusListGHuggingfaceChatModelChoice { 
-    result?: Array<GHuggingfaceChatModelChoice>;
-    messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
-    hasWarnMessages?: boolean;
+export interface ConfigurationEntryGBaseEmbeddingModelConfig { 
+    configuration?: GBaseEmbeddingModelConfig;
+    objectReference?: GObjectRefGBaseEmbeddingModelConfig;
 }

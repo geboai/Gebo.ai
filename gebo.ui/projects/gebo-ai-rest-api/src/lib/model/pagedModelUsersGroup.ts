@@ -9,11 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GUserMessage } from './gUserMessage';
+import { PageMetadata } from './pageMetadata';
+import { UsersGroup } from './usersGroup';
 
-export interface OperationStatusList { 
-    result?: Array<any>;
-    messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
-    hasWarnMessages?: boolean;
+export interface PagedModelUsersGroup { 
+    content?: Array<UsersGroup>;
+    page?: PageMetadata;
 }

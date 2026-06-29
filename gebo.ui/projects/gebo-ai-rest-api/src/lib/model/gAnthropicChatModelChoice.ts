@@ -27,4 +27,5 @@ export interface GAnthropicChatModelChoice {
     nativeModelMetaInfos?: any;
     supportsStructuredOutput?: boolean;
     supportsFunctionCalls?: boolean;
+    modelDetails?: { [key: string]: any; };
 }

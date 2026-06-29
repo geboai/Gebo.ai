@@ -1,6 +1,6 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntry, GAgentConfig, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -42,10 +42,10 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         temperature: new FormControl(),
         thinking: new FormControl()
     });
-    protected chatModelsData: ConfigurationEntry[] = [];
+    protected chatModelsData: ConfigurationEntryGBaseChatModelConfig[] = [];
     protected agentTypes: GBaseObject[] = [];
     protected promptLoadingObservable: Observable<GPromptTemplateConfig[]> = of([]);
-    protected defaultChatModel?:ConfigurationEntry;
+    protected defaultChatModel?:ConfigurationEntryGBaseChatModelConfig;
     protected isChooseChatModel:boolean=false;
     protected thinkingOptions: { code: GBaseChatModelConfig.ThinkingEnum, description: string }[] = [{ code: "NO_THINKING", description: "Disabled" }, { code: "AUTO", description: "Automatic" }, { code: "LOW_THINKING", description: "Low" }, { code: "MEDIUM_THINKING", description: "Medium" }, { code: "HIGH_THINKING", description: "High" }];
     public constructor(injector: Injector,
@@ -121,7 +121,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
-        const observables: [Observable<ConfigurationEntry[]>, Observable<GBaseObject[]>] = [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices()];
+        const observables: [Observable<ConfigurationEntryGBaseChatModelConfig[]>, Observable<GBaseObject[]>] = [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices()];
         forkJoin(observables).subscribe({
             next: (values) => {
                 this.chatModelsData = values[0];

@@ -12,7 +12,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { DataPage, FunctionsLookupControllerService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptTemplateConfig, KnowledgeBaseControllerService, PageGChatProfileConfiguration, PromptTemplatesControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, FunctionsLookupControllerService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptTemplateConfig, KnowledgeBaseControllerService, PagedModelGChatProfileConfiguration, PromptTemplatesControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { forkJoin, map, Observable } from "rxjs";
@@ -67,7 +67,7 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
     /**
      * Contains the paginated chat profiles data from the backend
      */
-    public chatProfiles?: PageGChatProfileConfiguration;
+    public chatProfiles?: PagedModelGChatProfileConfiguration;
     
     /**
      * Stores the available functions that can be enabled for chat profiles

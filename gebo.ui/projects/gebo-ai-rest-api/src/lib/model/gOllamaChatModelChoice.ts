@@ -27,4 +27,5 @@ export interface GOllamaChatModelChoice {
     nativeModelMetaInfos?: any;
     supportsStructuredOutput?: boolean;
     supportsFunctionCalls?: boolean;
+    modelDetails?: { [key: string]: any; };
 }

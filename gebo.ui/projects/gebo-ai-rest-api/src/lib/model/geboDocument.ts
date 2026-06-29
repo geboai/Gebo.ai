@@ -31,6 +31,8 @@ export interface GeboDocument {
     virtualParentFolderReference?: VFilesystemReference;
     virtualFileReference?: VFilesystemReference;
     originalContentModifiedDate?: Date;
+    customMetaData?: { [key: string]: any; };
+    additionalAttributes?: { [key: string]: any; };
     texts?: Array<GeboTextDocumentFragment>;
     images?: Array<GeboImageDocumentFragment>;
     audios?: Array<GeboAudioDocumentFragment>;

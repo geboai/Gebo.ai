@@ -9,9 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserChatInfo } from './gUserChatInfo';
+import { PageMetadata } from './pageMetadata';
 
-export interface SortObject { 
-    empty?: boolean;
-    sorted?: boolean;
-    unsorted?: boolean;
+export interface PagedModelGUserChatInfo { 
+    content?: Array<GUserChatInfo>;
+    page?: PageMetadata;
 }

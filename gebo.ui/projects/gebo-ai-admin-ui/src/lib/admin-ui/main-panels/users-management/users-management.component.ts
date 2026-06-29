@@ -17,7 +17,7 @@
  */
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { DataPage, EditableUser, PageUserInfos, PageUsersGroup, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, EditableUser, PagedModelUserInfos, PagedModelUsersGroup, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -56,12 +56,12 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     groupsPage: DataPage = { page: 0, pageSize: 20 };
 
     // Container for paginated user information
-    usersPaged: PageUserInfos = {
+    usersPaged: PagedModelUserInfos = {
         content: []
     };
 
     // Container for paginated group information
-    groupsPaged: PageUsersGroup = {
+    groupsPaged: PagedModelUsersGroup = {
         content: []
     };
 

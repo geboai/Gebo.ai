@@ -71,7 +71,7 @@
             </div>
             <div class="col-4">
                 <p-paginator id="Paginator" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
-            [totalRecords]="data?.totalElements"  [rowsPerPageOptions]="[10, 20, 30]" />
+            [totalRecords]="data?.page?.totalElements"  [rowsPerPageOptions]="[10, 20, 30]" />
             </div>
             <div class="col-4">
 

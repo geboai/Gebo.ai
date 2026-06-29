@@ -11,6 +11,7 @@
  */
 
 export interface GeboTextDocumentFragment { 
+    customMetaData?: { [key: string]: any; };
     fragmentType?: GeboTextDocumentFragment.FragmentTypeEnum;
     contentType?: string;
     characterEncoding?: string;

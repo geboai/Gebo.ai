@@ -11,7 +11,7 @@
  */
 import { ModelMetaInfo } from './modelMetaInfo';
 
-export interface GAzureOpenAIEmbeddingModelChoice { 
+export interface GBaseEmbeddingModelChoice { 
     code?: string;
     description?: string;
     userModified?: string;

@@ -9,14 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GObjectRefGBaseObject } from './gObjectRefGBaseObject';
+import { GBaseEmbeddingModelChoice } from './gBaseEmbeddingModelChoice';
 
-export interface GLookupEntryRef { 
+export interface GBaseEmbeddingModelConfig { 
     code?: string;
     description?: string;
     userModified?: string;
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    reference?: GObjectRefGBaseObject;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
+    choosedModel?: GBaseEmbeddingModelChoice;
+    baseUrl?: string;
+    contextLength?: number;
+    tokenizationThreshold?: number;
 }

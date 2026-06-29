@@ -9,9 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GLookupEntry } from './gLookupEntry';
+import { PageMetadata } from './pageMetadata';
 
-export interface GObjectRefGBaseObject { 
-    className?: string;
-    code?: string;
-    description?: string;
+export interface PagedModelGLookupEntry { 
+    content?: Array<GLookupEntry>;
+    page?: PageMetadata;
 }

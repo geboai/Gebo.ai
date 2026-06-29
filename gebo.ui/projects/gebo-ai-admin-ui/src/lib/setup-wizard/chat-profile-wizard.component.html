@@ -54,7 +54,7 @@
                     </ng-template>
                 </p-table>
                 <p-paginator id="Paginator" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
-                [totalRecords]="chatProfiles?.totalElements" />
+                [totalRecords]="chatProfiles?.page?.totalElements" />
             </p-fieldset>
             
         </div>
