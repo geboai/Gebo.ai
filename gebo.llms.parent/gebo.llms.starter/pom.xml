@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.llms</groupId>
 		<artifactId>gebo.llms.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.1.0-BOOT-4X-SPRING-AI-2X</version>
 	</parent>
 	<artifactId>gebo.llms.starter</artifactId>
 	<dependencies>
@@ -51,21 +51,13 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>ai.gebo.llms</groupId>
-			<artifactId>gebo.llms.huggingface</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>ai.gebo.llms</groupId>
 			<artifactId>gebo.llms.deepseek</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.llms</groupId>
-			<artifactId>gebo.llms.openai-azure</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>ai.gebo.llms</groupId>
 			<artifactId>gebo.llms.setup</artifactId>

@@ -80,7 +80,14 @@ public class OpenSearchInitialization {
 
             return httpClientBuilder
                     .setDefaultCredentialsProvider(credentialsProvider)
-                    .setConnectionManager(connectionManager);
+                    .setConnectionManager(connectionManager)
+                    // httpclient5 5.5+ enables automatic gzip response decompression by
+                    // default. opensearch-java's transport already manages Accept-Encoding
+                    // and gzip decoding itself, so letting httpclient5 also inflate the body
+                    // double-handles it and throws "java.util.zip.ZipException: Not in GZIP
+                    // format". Disable the client-side content compression so only the
+                    // opensearch-java transport handles encoding.
+                    .disableContentCompression();
         });
 
         return builder.build();

@@ -37,8 +37,8 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -345,7 +345,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
 			reqObject = reqObject.toolCallbacks(wrapTools(runAs, chatContext.getToolCallListener()));
 		} else {
-			reqObject = reqObject.toolCallbacks(List.of()).toolNames(new String[0]);
+			reqObject = reqObject.toolCallbacks(List.of());
 		}
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
@@ -690,7 +690,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						"The actual configurable chat model is not an GAbstractConfigurableChatModel");
 
 			return handler;
-		} catch (IOException e) {
+		} catch (JacksonException e) {
 			throw new LLMConfigException("Cannot clone model correctly");
 		}
 	}

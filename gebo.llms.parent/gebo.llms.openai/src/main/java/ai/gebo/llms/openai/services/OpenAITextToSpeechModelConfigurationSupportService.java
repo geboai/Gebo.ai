@@ -15,20 +15,19 @@ import java.util.List;
 
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiAudioApi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils;
 import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyInfo;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelChoice;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -42,6 +41,8 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 		IGTextToSpeechModelConfigurationSupportService<GOpenAITextToSpeechModelChoice, GOpenAITextToSpeechModelConfig> {
 	@Autowired
 	IGModelApiAccessReadUtils apiKeyReader;
+	@Autowired
+	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 
 	/**
 	 * Static definition of the model type with code and description
@@ -88,12 +89,13 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 
 			apiKey = apiKeyReader.getApiKeyInfo(config);
 
-			OpenAiAudioApi audioApi = OpenAiAudioApi.builder().apiKey(apiKey.getApiKey()).build();
-			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().model("tts-1")
-					.voice(OpenAiAudioApi.SpeechRequest.Voice.ALLOY)
-					.responseFormat(OpenAiAudioApi.SpeechRequest.AudioResponseFormat.MP3).speed(1.0).build();
-			OpenAiAudioSpeechModel model = new OpenAiAudioSpeechModel(audioApi, speechOptions,
-					RetryTemplate.defaultInstance());
+			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().apiKey(apiKey.getApiKey()).model("tts-1")
+					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
+					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3).speed(1.0).build();
+			OpenAiAudioSpeechModel model = OpenAiAudioSpeechModel.builder()
+					.options(speechOptions)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 
 			return model;
 		}

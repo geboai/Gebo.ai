@@ -20,8 +20,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import com.google.api.client.auth.oauth2.Credential;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -113,7 +113,7 @@ public class GeboGoogleWorkspaceCredentialsService {
 			// here we ensure that this google drive system exists
 			ensureDriveSystemExists(id, credentials.getUid());
 			return secretAccess.getSecretInfoById(id);
-		} catch (JsonProcessingException | GeboCryptSecretException e) {
+		} catch (JacksonException | GeboCryptSecretException e) {
 			throw new GeboContentHandlerSystemException("Exception saving google workspace access secret", e);
 		}
 
@@ -138,7 +138,7 @@ public class GeboGoogleWorkspaceCredentialsService {
 			secretAccess.updateSecret(secretContent, "Gootle Workspace account " + credentials.getUid(),
 					GOOGLE_WORKSPACE_CONTEXT, id);
 			ensureDriveSystemExists(id, credentials.getUid());
-		} catch (JsonProcessingException | GeboCryptSecretException e) {
+		} catch (JacksonException | GeboCryptSecretException e) {
 			throw new GeboContentHandlerSystemException("Exception saving google workspace access secret", e);
 		}
 	}
@@ -192,7 +192,7 @@ public class GeboGoogleWorkspaceCredentialsService {
 					update(googleWorkspaceSecret);
 				}
 				return credential;
-			} catch (JsonProcessingException e) {
+			} catch (JacksonException e) {
 				throw new GeboContentHandlerSystemException("Wrong json unwrap", e);
 			}
 

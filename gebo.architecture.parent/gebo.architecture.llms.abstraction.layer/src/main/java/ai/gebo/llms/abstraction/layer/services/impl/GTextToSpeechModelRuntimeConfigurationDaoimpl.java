@@ -23,8 +23,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -99,7 +99,7 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
 		}
 		try {
 			LOGGER.info("Initializing embedding model with configuration:" + mapper.writeValueAsString(config));
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			// Handle JSON processing exception here
 		}
 		IGConfigurableTextToSpeechModel ttsModel = handler.create(config);

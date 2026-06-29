@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.1.0-BOOT-4X-SPRING-AI-2X</version>
 	</parent>
 	<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
 	<dependencies>
@@ -67,6 +67,12 @@
 		<dependency>
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
+			<version>${spring-retry.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.12.0</version>
 		</dependency>
 	</dependencies>
 </project>

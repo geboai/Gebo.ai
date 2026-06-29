@@ -4,10 +4,7 @@ import java.util.List;
 
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiImageApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -21,6 +18,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAIImageModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIImageModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -68,24 +66,16 @@ public class OpenAIImageModelConfigurationSupportService
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("OpenAI api  key configuration gone wrong ", e);
 			}
-			org.springframework.ai.openai.api.OpenAiApi.Builder apiBuilder = OpenAiApi.builder();
-			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
-			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
-			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
-					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			apiBuilder.restClientBuilder(restClient);
-			apiBuilder.webClientBuilder(webClient);
-			org.springframework.ai.openai.OpenAiImageOptions.Builder imageOptionsBuilder = OpenAiImageOptions.builder();
+			org.springframework.ai.openai.OpenAiImageOptions.Builder imageOptionsBuilder = OpenAiImageOptions.builder()
+					.apiKey(apiKey);
 			if (config.getChoosedModel() != null) {
 				imageOptionsBuilder.model(config.getChoosedModel().getCode());
 			}
-			org.springframework.ai.openai.api.OpenAiImageApi.Builder builder = OpenAiImageApi.builder();
-			builder.apiKey(apiKey);
-			builder.restClientBuilder(restClient);
-			OpenAiImageApi built = builder.build();
 			OpenAiImageOptions options = imageOptionsBuilder.build();
-			OpenAiImageModel model = new OpenAiImageModel(built, options, retryTemplate);
+			OpenAiImageModel model = OpenAiImageModel.builder()
+					.options(options)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))
+					.build();
 			return model;
 		}
 

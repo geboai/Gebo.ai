@@ -61,7 +61,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.crypting.config.GeboCryptingConfig;
 import ai.gebo.crypting.model.GeboCryptedKeySetRaw;

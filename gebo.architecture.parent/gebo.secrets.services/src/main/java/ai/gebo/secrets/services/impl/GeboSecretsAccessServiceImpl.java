@@ -18,9 +18,8 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.impl.GeboCryptingServiceImpl;
@@ -45,7 +44,6 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	private static final ObjectMapper mapper = new ObjectMapper();
 	static {
-		mapper.registerModule(new JavaTimeModule());
 	}
 	@Autowired
 	GeboSecretRepository repository; // Repository for accessing secrets data
@@ -115,7 +113,7 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 		try {
 			String serialized = mapper.writeValueAsString(secret);
 			crypted = cryptService.crypt(serialized);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			throw new GeboCryptSecretException("exception while running storeSecret(...)", e);
 		}
 		return crypted;
@@ -136,7 +134,7 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 
 		try {
 			return mapper.readValue(uncripted, type); // Deserialize content
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			throw new GeboCryptSecretException("Cannot read from secret json format", e);
 		}
 	}

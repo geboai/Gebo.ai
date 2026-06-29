@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
@@ -137,7 +137,7 @@ public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfi
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Initializing chatModel with configuration:" + mapper.writeValueAsString(config));
 				}
-			} catch (JsonProcessingException e) {
+			} catch (JacksonException e) {
 				// Log parsing exception if necessary
 			}
 			IGConfigurableChatModel chatModel = handler.create(config);

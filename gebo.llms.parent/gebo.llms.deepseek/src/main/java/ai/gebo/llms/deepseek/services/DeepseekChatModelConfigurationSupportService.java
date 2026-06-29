@@ -18,7 +18,6 @@ import org.springframework.ai.deepseek.api.DeepSeekApi;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -136,7 +135,7 @@ public class DeepseekChatModelConfigurationSupportService
 			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
 					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
+			org.springframework.core.retry.RetryTemplate retryTemplate = clientsProvider.getCoreRetryTemplate();
 			org.springframework.ai.deepseek.api.DeepSeekApi.Builder apiBuilder = DeepSeekApi.builder();
 			if (config.getBaseUrl() != null) {
 				apiBuilder.baseUrl(config.getBaseUrl());
@@ -166,9 +165,7 @@ public class DeepseekChatModelConfigurationSupportService
 				functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
 			}
-			builder.internalToolExecutionEnabled(
-					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
-			
+
 			DeepSeekChatOptions deepseekChatOptions = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();

@@ -40,8 +40,7 @@ import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumingService;
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
-import junit.framework.Assert;
-
+ 
 /**
  * AI generated comments
  *

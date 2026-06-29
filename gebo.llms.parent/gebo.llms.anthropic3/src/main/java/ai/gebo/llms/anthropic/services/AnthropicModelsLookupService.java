@@ -12,14 +12,13 @@
 
 package ai.gebo.llms.anthropic.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.ai.anthropic.api.AnthropicApi.ChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
@@ -40,8 +39,23 @@ public class AnthropicModelsLookupService {
 	IGModelChoiceMetaInfoEnricherService metaEnricher;
 	
 	/** Static list of all available Anthropic chat models */
-	public static List<GAnthropicChatModelChoice> models = GBaseChatModelChoice.of(GAnthropicChatModelChoice.class,
-			ChatModel.values());
+	public static List<GAnthropicChatModelChoice> models;
+	static {
+		models = new ArrayList<>();
+		for (String modelCode : new String[] {
+				"claude-opus-4-5",
+				"claude-sonnet-4-5",
+				"claude-haiku-4-5",
+				"claude-3-7-sonnet-20250219",
+				"claude-3-5-sonnet-20241022",
+				"claude-3-5-haiku-20241022",
+				"claude-3-opus-20240229" }) {
+			GAnthropicChatModelChoice choice = new GAnthropicChatModelChoice();
+			choice.setCode(modelCode);
+			choice.setDescription(modelCode);
+			models.add(choice);
+		}
+	}
 
 	/**
 	 * Default constructor for AnthropicModelsLookupService.

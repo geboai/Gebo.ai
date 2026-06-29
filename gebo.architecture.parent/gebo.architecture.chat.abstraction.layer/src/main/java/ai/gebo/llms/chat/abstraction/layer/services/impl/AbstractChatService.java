@@ -26,8 +26,8 @@ import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
@@ -126,7 +126,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 		try {
 			return queryResponse instanceof String ? (String) queryResponse : mapper.writeValueAsString(queryResponse);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			LOGGER.error("Exception stringhifying a queryResponse", e);
 			return "";
 		}

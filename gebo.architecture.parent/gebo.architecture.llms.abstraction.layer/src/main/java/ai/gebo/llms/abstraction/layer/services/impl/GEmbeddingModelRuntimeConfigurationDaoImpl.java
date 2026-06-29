@@ -24,8 +24,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
@@ -137,7 +137,7 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
         }
         try {
             LOGGER.info("Initializing embedding model with configuration:" + mapper.writeValueAsString(config));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             // Error during JSON processing, no action required here
         }
         IGConfigurableEmbeddingModel embedModel = handler.create(config);

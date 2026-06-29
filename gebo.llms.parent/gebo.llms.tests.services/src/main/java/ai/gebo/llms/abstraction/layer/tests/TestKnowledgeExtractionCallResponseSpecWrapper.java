@@ -3,9 +3,12 @@ package ai.gebo.llms.abstraction.layer.tests;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
+import org.springframework.ai.chat.client.ChatClient.EntityParamSpec;
 import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.client.ResponseEntity;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -98,6 +101,47 @@ public class TestKnowledgeExtractionCallResponseSpecWrapper implements CallRespo
 	public <T> ResponseEntity<ChatResponse, T> responseEntity(StructuredOutputConverter<T> structuredOutputConverter) {
 		throw new RuntimeException(
 				"The method responseEntity(StructuredOutputConverter<T> ) has been called but must not be called by design");
+	}
+
+	@Override
+	public <T> @Nullable T entity(ParameterizedTypeReference<T> type,
+			Consumer<EntityParamSpec> entityParamSpecConsumer) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> @Nullable T entity(StructuredOutputConverter<T> structuredOutputConverter,
+			Consumer<EntityParamSpec> entityParamSpecConsumer) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> @Nullable T entity(Class<T> type, Consumer<EntityParamSpec> entityParamSpecConsumer) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> ResponseEntity<ChatResponse, T> responseEntity(Class<T> type,
+			Consumer<EntityParamSpec> entityParamSpecConsumer) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> ResponseEntity<ChatResponse, T> responseEntity(ParameterizedTypeReference<T> type,
+			Consumer<EntityParamSpec> entityParamSpecConsumer) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> ResponseEntity<ChatResponse, T> responseEntity(StructuredOutputConverter<T> structuredOutputConverter,
+			Consumer<EntityParamSpec> entityParamSpecConsumer) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

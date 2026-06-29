@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.multilanguage.support.services.IExistingBundledTextResourcesDao;
 
@@ -28,11 +28,9 @@ public class ExistingBundledTextResourcesDaoImpl implements IExistingBundledText
 		InputStream is = getClass().getResourceAsStream(EN_FILE);
 		if (is == null)
 			throw new RuntimeException("Cannot load " + EN_FILE);
-		try {
-			return objectMapper.readValue(is, LinkedHashMap.class);
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot load " + EN_FILE, e);
-		}
+
+		return objectMapper.readValue(is, LinkedHashMap.class);
+
 	}
 
 }

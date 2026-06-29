@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -55,7 +55,7 @@ public class AtlassianCloudConfluenceIntegrationTests extends AbstractGeboMonoli
 	@Test
 	public void testCloudConfluenceIntegration()
 			throws GeboCryptSecretException, GeboPersistenceException, InstantiationException, IllegalAccessException,
-			JsonProcessingException, GeboJobServiceException, InterruptedException, VirtualFilesystemBrowsingException {
+			JacksonException, GeboJobServiceException, InterruptedException, VirtualFilesystemBrowsingException {
 		String secretId = registerSecurityToken(CONFLUENCE_CLOUD_API_KEY, CONFLUENCE_CLOUD_USER,
 				"Confluence Cloud account", ConfluenceContentManagementHandlerImpl.ATLASSIAN_CONFLUENCE);
 		GConfluenceSystem system = new GConfluenceSystem();

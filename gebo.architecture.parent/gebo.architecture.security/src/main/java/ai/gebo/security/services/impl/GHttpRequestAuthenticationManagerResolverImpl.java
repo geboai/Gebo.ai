@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.model.SecurityHeaderUtil;
@@ -21,6 +21,7 @@ import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.impl.authmanagers.JwtDecoderCache;
 import ai.gebo.security.services.impl.authmanagers.LocalJwtAuthenticationManager;
 import ai.gebo.security.services.impl.authmanagers.MultiOauth2ConfigJwtAuthenticationManager;
 import ai.gebo.security.services.impl.authmanagers.MultiOauth2ConfigOpaqueTokenAuthenticationManager;
@@ -42,6 +43,9 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 	private final UserDetailsService customUserDetailsService;
 	private final GJwtAuthenticationConverter jwtAuthenticationConverter;
 	private final GOpaqueTokenAuthenticationConverter tokenAuthenticationConverter;
+	// Shared per-issuer JwtDecoder cache. The resolver is a singleton, so this cache
+	// lives for the application lifetime and is reused across all per-request managers.
+	private final JwtDecoderCache jwtDecoderCache = new JwtDecoderCache();
 
 	public GHttpRequestAuthenticationManagerResolverImpl(UserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder, IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao,
@@ -88,7 +92,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 						.findByCode(header.getAuthProviderId());
 				if (isJwtFormatStrict(header.getToken())) {
 					manager = new SingleOauth2ConfigJwtAuthenticationManager(header, oauth2Configuration,
-							jwtAuthenticationConverter);
+							jwtAuthenticationConverter, jwtDecoderCache);
 				} else {
 					manager = new SingleOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2Configuration,
 							tokenAuthenticationConverter);
@@ -101,7 +105,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 							"Oauth2 specified in request header but no AUTHENTICATION oauth2 configuration found");
 				if (isJwtFormatStrict(header.getToken())) {
 					manager = new MultiOauth2ConfigJwtAuthenticationManager(header, oauth2AuthenticationConfigs,
-							jwtAuthenticationConverter);
+							jwtAuthenticationConverter, jwtDecoderCache);
 				} else {
 					manager = new MultiOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2AuthenticationConfigs,
 							tokenAuthenticationConverter);

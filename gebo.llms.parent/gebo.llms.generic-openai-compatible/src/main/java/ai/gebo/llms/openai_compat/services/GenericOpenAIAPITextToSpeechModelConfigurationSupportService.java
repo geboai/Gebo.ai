@@ -13,22 +13,16 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiAudioApi;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.retry.support.RetryTemplate;
-import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
-import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
-import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils;
-import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyInfo;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelChoice;
@@ -68,6 +62,11 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	final ModelsListProviderProxyService modelsListProxyService;
 
 	/**
+	 * Factory for creating LLM service clients (timeout/retry config from application.yml)
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+
+	/**
 	 * Implementation of OpenAI's text-to-speech model that extends the abstract
 	 * configurable model.
 	 */
@@ -99,16 +98,22 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 		@Override
 		protected OpenAiAudioSpeechModel configureModel(GenericOpenAIAPITextToSpeechModelConfig config,
 				GTextToSpeechModelType type) throws LLMConfigException {
-			String apiKey = null;
-			if (config.getApiSecretCode()!=null) {
-				
+			String baseUrl = GenericOpenAIAPITextToSpeechModelConfigurationSupportService.this.type.getBaseUrl();
+			OpenAiAudioSpeechOptions.Builder optionsBuilder = OpenAiAudioSpeechOptions.builder()
+					.apiKey(new NoopApiKey())
+					.model("tts-1")
+					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
+					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3)
+					.speed(1.0);
+			if (baseUrl != null) {
+				optionsBuilder.baseUrl(baseUrl);
 			}
-			OpenAiAudioApi audioApi = OpenAiAudioApi.builder().apiKey(apiKey).build();
-			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().model("tts-1")
-					.voice(OpenAiAudioApi.SpeechRequest.Voice.ALLOY)
-					.responseFormat(OpenAiAudioApi.SpeechRequest.AudioResponseFormat.MP3).speed(1.0).build();
-			OpenAiAudioSpeechModel model = new OpenAiAudioSpeechModel(audioApi, speechOptions,
-					RetryTemplate.defaultInstance());
+			OpenAiAudioSpeechOptions speechOptions = optionsBuilder.build();
+			OpenAiAudioSpeechModel model = OpenAiAudioSpeechModel.builder()
+					.options(speechOptions)
+					.httpClientBuilderCustomizer(
+							OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 
 			return model;
 		}

@@ -159,10 +159,6 @@ public class OllamaChatModelConfigurationSupportService
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
 			}
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				 
-				builder.internalToolExecutionEnabled(true);
-			}
 			
 			OllamaChatOptions options = builder.build();
 			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, toolsCallsManager != null ? toolsCallsManager

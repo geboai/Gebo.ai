@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.1.0-BOOT-4X-SPRING-AI-2X</version>
 	</parent>
 	<artifactId>gebo.architecture.integration.tests</artifactId>
 	<dependencies>
@@ -85,23 +85,25 @@
 
 		</dependency>
 		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>junit-jupiter</artifactId>
-
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-data-mongodb-test</artifactId>
 
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>mongodb</artifactId>
+			<artifactId>testcontainers-junit-jupiter</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>neo4j</artifactId>
+			<artifactId>testcontainers-mongodb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>qdrant</artifactId>
-
+			<artifactId>testcontainers-neo4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-qdrant</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.opensearch</groupId>

@@ -30,9 +30,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import ai.gebo.architecture.buildsystems.abstraction.layer.IGArtifactMetaInfosRenderer;
 import ai.gebo.architecture.buildsystems.abstraction.layer.IGBuildSystemConfigurationDao;
@@ -56,14 +58,10 @@ public class GAbstractMavenBuildSystemHandlerImpl implements IGMavenBuildSystemH
      */
     public static final GBuildSystemType defaultSystemType = new GBuildSystemType();
 
-    /** Common ObjectMapper instance with specific configurations */
-    private static ObjectMapper mapper = new ObjectMapper();
-
-    // Static block to configure the ObjectMapper
-    static {
-        mapper.setSerializationInclusion(Include.NON_NULL);
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-    }
+    private static final ObjectMapper mapper = JsonMapper.builder()
+        .changeDefaultPropertyInclusion(v -> JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL))
+        .enable(SerializationFeature.INDENT_OUTPUT)
+        .build();
 
     // Static block to initialize default build system type with code and description
     static {

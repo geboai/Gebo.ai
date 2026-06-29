@@ -15,10 +15,12 @@ package ai.gebo.architecture.buildsystems.abstraction.layer.impl;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import ai.gebo.architecture.buildsystems.abstraction.layer.IGArtifactMetaInfosRenderer;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -33,14 +35,10 @@ import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 @Service
 public class GArtifactMetaInfosRendererImpl implements IGArtifactMetaInfosRenderer {
 
-    // ObjectMapper instance for JSON serialization
-    private static ObjectMapper mapper = new ObjectMapper();
-    static {
-        // Include non-null values only in the JSON output
-        mapper.setSerializationInclusion(Include.NON_NULL);
-        // Enable pretty printing of JSON output
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-    }
+    private static final ObjectMapper mapper = JsonMapper.builder()
+        .changeDefaultPropertyInclusion(v -> JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL))
+        .enable(SerializationFeature.INDENT_OUTPUT)
+        .build();
 
     /**
      * Constructor for GArtifactMetaInfosRendererImpl.
@@ -85,7 +83,7 @@ public class GArtifactMetaInfosRendererImpl implements IGArtifactMetaInfosRender
                 // Convert the artifact metadata to a pretty-printed JSON string
                 String text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(artifactMetainfos);
                 generated.setArtificiallyGeneratedContent(text);
-            } catch (JsonProcessingException e) {
+            } catch (JacksonException e) {
                 // Handle JSON processing exceptions
                 throw new GeboContentHandlerSystemException("cant't create document in render(...)", e);
             }

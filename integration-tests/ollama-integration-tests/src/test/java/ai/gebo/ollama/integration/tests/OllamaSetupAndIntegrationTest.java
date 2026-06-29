@@ -26,11 +26,13 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.web.client.RestClientException;
 import org.testcontainers.qdrant.QdrantContainer;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -152,11 +154,11 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 	static final String[] INGESTION_FILES = new String[] { "/chat-sessions/files/The Secret Garden.pdf",
 			"/chat-sessions/files/Schatzinsel_E.pdf", "/chat-sessions/files/the-story-of-doctor-dolittle.pdf" };
-	public static final ObjectMapper MAPPER = new ObjectMapper()
+	public static final ObjectMapper MAPPER = JsonMapper.builder()
+			.changeDefaultPropertyInclusion(v -> JsonInclude.Value.construct(Include.NON_NULL, Include.NON_NULL))
+			.build();
 
-			.setSerializationInclusion(Include.NON_EMPTY).setSerializationInclusion(Include.NON_NULL);
-
-	void showShrinked(GUserChatSession s) throws JsonProcessingException {
+	void showShrinked(GUserChatSession s) throws JacksonException {
 		ShrinkedChatSessionState data = this.shrinkedSessionService.retrieveState(s);
 		LOGGER.info(MAPPER.writeValueAsString(data));
 	}
