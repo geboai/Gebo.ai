@@ -2,8 +2,9 @@ import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
+const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({
     selector: "gebo-ai-agent-admin-component",
     templateUrl: "gebo-ai-agents-admin.component.html",
@@ -30,23 +31,25 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         completeEvaluationPrompt: new FormControl(),
         subscribeAllTools: new FormControl(),
         chatModelReference: new FormControl(),
-        useDefaultChatModel:new FormControl(),
+        useDefaultChatModel: new FormControl(),
         maxLoopIterations: new FormControl(),
         topP: new FormControl(),
         accessibleGroups: new FormControl(),
         accessibleUsers: new FormControl(),
         accessibleToAll: new FormControl(),
-        enabledFunctions: new FormControl(), 
+        enabledFunctions: new FormControl(),
         aclAliases: new FormControl(),
         defaultConfiguration: new FormControl(),
         temperature: new FormControl(),
-        thinking: new FormControl()
+        thinking: new FormControl(),
+        readOnly: new FormControl()
+
     });
     protected chatModelsData: ConfigurationEntryGBaseChatModelConfig[] = [];
     protected agentTypes: GBaseObject[] = [];
     protected promptLoadingObservable: Observable<GPromptTemplateConfig[]> = of([]);
-    protected defaultChatModel?:ConfigurationEntryGBaseChatModelConfig;
-    protected isChooseChatModel:boolean=false;
+    protected defaultChatModel?: ConfigurationEntryGBaseChatModelConfig;
+    protected isChooseChatModel: boolean = false;
     protected thinkingOptions: { code: GBaseChatModelConfig.ThinkingEnum, description: string }[] = [{ code: "NO_THINKING", description: "Disabled" }, { code: "AUTO", description: "Automatic" }, { code: "LOW_THINKING", description: "Low" }, { code: "MEDIUM_THINKING", description: "Medium" }, { code: "HIGH_THINKING", description: "High" }];
     public constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
@@ -69,15 +72,21 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 this.promptLoadingObservable = this.agentsAdminService.getPromptTemplatesByAgentId(agentServiceId).pipe(map(x => { return x?.map(y => { y.code = y.promptUse; return y; }) }));
             }
         });
-         // Enable/disable chat model selection based on useDefaultChatModel value
+        // Enable/disable chat model selection based on useDefaultChatModel value
         this.formGroup.controls["useDefaultChatModel"].valueChanges.subscribe(
             x => {
-              
-                    this.isChooseChatModel = x === true;
-                    this.setControlEnabledAndRequired("chatModelReference", !this.isChooseChatModel);
-               
+
+                this.isChooseChatModel = x === true;
+                this.setControlEnabledAndRequired("chatModelReference", !this.isChooseChatModel);
+
             }
         );
+    }
+    protected override onLoadedPersistentData(actualValue: GAgentConfig): void {
+        if (actualValue?.readOnly===true) {
+            this.userMessages=[systemAgentService];
+        }
+        super.onLoadedPersistentData(actualValue);
     }
     /**
      * Adds or removes the required validator for a form control
@@ -99,12 +108,12 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
             }
         }
     }
-      /**
-     * Enables or disables a form control and sets its required status accordingly
-     * 
-     * @param ctrlName Name of the form control
-     * @param enabled Whether the control should be enabled
-     */
+    /**
+   * Enables or disables a form control and sets its required status accordingly
+   * 
+   * @param ctrlName Name of the form control
+   * @param enabled Whether the control should be enabled
+   */
     private setControlEnabledAndRequired(ctrlName: string, enabled: boolean) {
         const ctrl = this.formGroup.controls[ctrlName];
         if (ctrl.enabled !== enabled) {
@@ -126,7 +135,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
             next: (values) => {
                 this.chatModelsData = values[0];
                 if (values[0]) {
-                  this.defaultChatModel=values[0].find(x=>x.configuration?.defaultModel===true);
+                    this.defaultChatModel = values[0].find(x => x.configuration?.defaultModel === true);
                 }
                 this.agentTypes = values[1];
             },
