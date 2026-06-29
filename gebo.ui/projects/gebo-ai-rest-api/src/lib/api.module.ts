@@ -6,8 +6,6 @@ import { HttpClient } from '@angular/common/http';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
-import { AzureOpenAiChatModelsConfigurationControllerService } from './api/azureOpenAiChatModelsConfigurationController.service';
-import { AzureOpenAiEmbeddingModelsConfigurationControllerService } from './api/azureOpenAiEmbeddingModelsConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
@@ -64,7 +62,6 @@ import { GoogleVertexChatModelsConfigurationControllerService } from './api/goog
 import { GoogleVertexEmbeddingModelsConfigurationControllerService } from './api/googleVertexEmbeddingModelsConfigurationController.service';
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
 import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
-import { HuggingfaceChatModelsConfigurationControllerService } from './api/huggingfaceChatModelsConfigurationController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
 import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
@@ -106,8 +103,6 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
-    AzureOpenAiChatModelsConfigurationControllerService,
-    AzureOpenAiEmbeddingModelsConfigurationControllerService,
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
@@ -164,7 +159,6 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GoogleVertexEmbeddingModelsConfigurationControllerService,
     GoogleWorkspaceAccessHandshakeControllerService,
     GraphRagConfigurationControllerService,
-    HuggingfaceChatModelsConfigurationControllerService,
     IngestionFileTypesLibraryControllerService,
     IntegrationInputControllerService,
     IntegrationSystemsControllerService,

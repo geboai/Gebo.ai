@@ -1,6 +1,5 @@
 package ai.gebo.ollama.integration.tests;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,11 +27,6 @@ import org.testcontainers.qdrant.QdrantContainer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import tools.jackson.core.JacksonException;
-import tools.jackson.core.exc.StreamReadException;
-import tools.jackson.databind.DatabindException;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.json.JsonMapper;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -86,6 +80,11 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import lombok.Data;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegrationTests {
@@ -132,7 +131,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		actualConfiguration.getQdrantConfig().setTls(false);
 		OperationStatus<GeboMongoVectorStoreConfig> result = vectorStoreConfigurationService
 				.validateAndTestConfiguration(actualConfiguration);
-		assertFalse("Change of vector store to qdrant have to be without errors", result.isHasErrorMessages());
+		assertFalse(result.isHasErrorMessages(), "Change of vector store to qdrant have to be without errors");
 		LOGGER.info("Change to qdrant vector store: " + mapper.writeValueAsString(result));
 		vectorStoreConfigurationService.save(actualConfiguration);
 	}
@@ -178,7 +177,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		result.getMessages().forEach(x -> {
 			LOGGER.info(x.getSummary() + " - " + x.getDetail());
 		});
-		assertFalse("Login cannot be with errors", result.isHasErrorMessages());
+		assertFalse(result.isHasErrorMessages(), "Login cannot be with errors");
 		InputStream chatResource = getClass().getResourceAsStream("/chat-sessions/history-consolidation-test.json");
 		TInteractions interactions = mapper.readValue(chatResource, TInteractions.class);
 
@@ -189,7 +188,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 		ChatModelsLookupControllerApi chatmodelsLookupApi = new ChatModelsLookupControllerApi(authApiClient);
 		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
-		assertFalse("At least a default chat model must be configured", models.isEmpty());
+		assertFalse(models.isEmpty(), "At least a default chat model must be configured");
 		GLookupEntryRef defaultModel = models.get(0);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
 		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
@@ -328,7 +327,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		result.getMessages().forEach(x -> {
 			LOGGER.info(x.getSummary() + " - " + x.getDetail());
 		});
-		assertFalse("Login cannot be with errors", result.isHasErrorMessages());
+		assertFalse( result.isHasErrorMessages(),"Login cannot be with errors");
 		InputStream chatResource = getClass().getResourceAsStream("/chat-sessions/history-consolidation-test.json");
 		TInteractions interactions = mapper.readValue(chatResource, TInteractions.class);
 
@@ -338,7 +337,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 		ChatModelsLookupControllerApi chatmodelsLookupApi = new ChatModelsLookupControllerApi(authApiClient);
 		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
-		assertFalse("At least a default chat model must be configured", models.isEmpty());
+		assertFalse(models.isEmpty(), "At least a default chat model must be configured");
 		GLookupEntryRef defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);

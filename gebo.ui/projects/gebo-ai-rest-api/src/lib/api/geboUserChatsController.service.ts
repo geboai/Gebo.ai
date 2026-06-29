@@ -21,7 +21,7 @@ import { ChatInfosByQbeParam } from '../model/chatInfosByQbeParam';
 import { ChatUIOptions } from '../model/chatUIOptions';
 import { GLookupEntry } from '../model/gLookupEntry';
 import { GUserChatInfo } from '../model/gUserChatInfo';
-import { PageGUserChatInfo } from '../model/pageGUserChatInfo';
+import { PagedModelGUserChatInfo } from '../model/pagedModelGUserChatInfo';
 import { UserChatHistory } from '../model/userChatHistory';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -410,9 +410,9 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatInfosByQbe(body: ChatInfosByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PageGUserChatInfo>;
-    public getChatInfosByQbe(body: ChatInfosByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGUserChatInfo>>;
-    public getChatInfosByQbe(body: ChatInfosByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGUserChatInfo>>;
+    public getChatInfosByQbe(body: ChatInfosByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGUserChatInfo>;
+    public getChatInfosByQbe(body: ChatInfosByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGUserChatInfo>>;
+    public getChatInfosByQbe(body: ChatInfosByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGUserChatInfo>>;
     public getChatInfosByQbe(body: ChatInfosByQbeParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -439,7 +439,7 @@ export class GeboUserChatsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGUserChatInfo>('post',`${this.basePath}/api/users/GeboUserChatsController/getChatInfosByQbe`,
+        return this.httpClient.request<PagedModelGUserChatInfo>('post',`${this.basePath}/api/users/GeboUserChatsController/getChatInfosByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -494,9 +494,9 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMyChatsPaged(page: number, pageSize: number, observe?: 'body', reportProgress?: boolean): Observable<PageGUserChatInfo>;
-    public getMyChatsPaged(page: number, pageSize: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGUserChatInfo>>;
-    public getMyChatsPaged(page: number, pageSize: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGUserChatInfo>>;
+    public getMyChatsPaged(page: number, pageSize: number, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGUserChatInfo>;
+    public getMyChatsPaged(page: number, pageSize: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGUserChatInfo>>;
+    public getMyChatsPaged(page: number, pageSize: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGUserChatInfo>>;
     public getMyChatsPaged(page: number, pageSize: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (page === null || page === undefined) {
@@ -530,7 +530,7 @@ export class GeboUserChatsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<PageGUserChatInfo>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChatsPaged`,
+        return this.httpClient.request<PagedModelGUserChatInfo>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChatsPaged`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

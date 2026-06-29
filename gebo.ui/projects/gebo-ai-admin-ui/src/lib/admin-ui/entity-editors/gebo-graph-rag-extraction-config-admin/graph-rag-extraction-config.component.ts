@@ -1,6 +1,6 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ChatModelsControllerService, CompanySystemsControllerService, ConfigurationEntry, GKnowledgeBase, GObjectRef, GObjectRefGBaseModelConfig, GProject, GraphRagConfigurationControllerService, GraphRagExtractionConfig, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, CompanySystemsControllerService, ConfigurationEntryGBaseChatModelConfig, GKnowledgeBase, GObjectRef, GObjectRefGBaseModelConfig, GProject, GraphRagConfigurationControllerService, GraphRagExtractionConfig, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -133,7 +133,7 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
                 this.chatModelsData = data?.map(x => x.objectReference).filter(x => x ? true : false) as GObjectRefGBaseModelConfig[];
                 const chatModels = data;
                 if (chatModels) {
-                    let usedDefault: ConfigurationEntry;
+                    let usedDefault: ConfigurationEntryGBaseChatModelConfig;
                     chatModels.forEach(m => {
                         if (m.configuration?.defaultModel === true) {
                             usedDefault = m;

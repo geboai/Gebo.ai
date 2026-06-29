@@ -3,7 +3,9 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #chatAgentUI header="Editing Agent configuration" [formGroup]="formGroup">
     <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-
+    @if(entity?.readOnly===true) {
+    <div ><b id="warnSystemAgent" gebo-ai-text>This is a default system agent, you cannot change its configuration </b></div>
+    }
     <div class="grid geboDialogContent standardTabDialogueHeight">
         <div class="col-12 standardTabDialogueHeight">
             <p-tabView id="TabView" gebo-ai-label>
@@ -145,7 +147,7 @@
         <div class="grid">
             <div class="col-4">
                 <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
-                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false"
+                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || entity?.readOnly===true"
                     styleClass="w-full"></p-button>
             </div>
             <div class="col-4">
@@ -153,7 +155,7 @@
                     (onClick)="cancelAction.emit(true)" styleClass="w-full" />
             </div>
             <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" [disabled]="canDelete!==true || entity?.readOnly===true"
                     icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" />
             </div>
         </div>

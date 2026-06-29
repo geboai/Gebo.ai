@@ -12,7 +12,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GenericOpenAIAPIRankerModelConfig, GenericOpenAiRankerModelsConfigurationControllerService, GenericOpenAIRankerModelTypeConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GenericOpenAIAPIRankerModelConfig, GenericOpenAiRankerModelsConfigurationControllerService, GenericOpenAIRankerModelTypeConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -33,8 +33,8 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     }]
 })
 export class LlmsSystemsComponent extends AncestorPanelComponent implements OnInit {
-    chatModels: ConfigurationEntry[] = [];
-    embeddingModels: ConfigurationEntry[] = [];
+    chatModels: ConfigurationEntryGBaseChatModelConfig[] = [];
+    embeddingModels: ConfigurationEntryGBaseEmbeddingModelConfig[] = [];
     rerankerModels: GenericOpenAIAPIRankerModelConfig[] = [];
     chatModelsTypes: GChatModelType[] = [];
 
@@ -156,7 +156,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * 
      * @param model The model configuration entry to edit
      */
-    protected editModel(model: ConfigurationEntry) {
+    protected editModel(model: ConfigurationEntryGBaseChatModelConfig) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {
@@ -178,7 +178,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * 
      * @param model The model configuration entry to edit
      */
-    protected editEmbeddingModel(model: ConfigurationEntry) {
+    protected editEmbeddingModel(model: ConfigurationEntryGBaseEmbeddingModelConfig) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {

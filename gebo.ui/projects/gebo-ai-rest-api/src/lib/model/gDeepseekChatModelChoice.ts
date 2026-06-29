@@ -27,4 +27,5 @@ export interface GDeepseekChatModelChoice {
     nativeModelMetaInfos?: any;
     supportsStructuredOutput?: boolean;
     supportsFunctionCalls?: boolean;
+    modelDetails?: { [key: string]: any; };
 }

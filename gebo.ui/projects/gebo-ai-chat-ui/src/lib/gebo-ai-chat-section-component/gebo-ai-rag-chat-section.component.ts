@@ -11,7 +11,7 @@
 
 
 import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -62,7 +62,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     /** Flag indicating if a regular chat is currently open */
     protected openChat: boolean = false;
     /** Stores the current page of chat history */
-    protected chatsPage?: PageGUserChatInfo;
+    protected chatsPage?: PagedModelGUserChatInfo;
     /** Stores the currently active chat information */
     protected currentChat: GUserChatInfo = {};
 

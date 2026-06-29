@@ -15,6 +15,7 @@ export interface AgentNetworkParticipant {
     agentContextualName?: string;
     inputNode?: boolean;
     outputNode?: boolean;
+    allowedToNotifyUser?: boolean;
     communicationPolicy: AgentNetworkParticipant.CommunicationPolicyEnum;
     communicationList?: Array<string>;
     maxInvocations?: number;

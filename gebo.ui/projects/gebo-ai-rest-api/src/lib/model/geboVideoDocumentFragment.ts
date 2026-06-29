@@ -11,6 +11,7 @@
  */
 
 export interface GeboVideoDocumentFragment { 
+    customMetaData?: { [key: string]: any; };
     fragmentType?: GeboVideoDocumentFragment.FragmentTypeEnum;
     contentType?: string;
     characterEncoding?: string;

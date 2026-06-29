@@ -78,7 +78,7 @@
             </p-table>
             <p-paginator id="PaginatorUsers" gebo-ai-label (onPageChange)="onUsersPageChange($event)"
                 [first]="(usersPage.page ?? 0) * (usersPage.pageSize ?? 20)" [rows]="usersPage.pageSize"
-                *ngIf="usersPaged?.content?.length" [totalRecords]="usersPaged?.totalElements"
+                *ngIf="usersPaged?.content?.length" [totalRecords]="usersPaged?.page?.totalElements"
                 [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
 
@@ -122,7 +122,7 @@
             </p-table>
             <p-paginator id="PaginatorGroups" gebo-ai-label (onPageChange)="onGroupsPageChange($event)" [first]="0"
                 [rows]="groupsPage.pageSize" *ngIf="groupsPaged?.content?.length"
-                [totalRecords]="groupsPaged?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
+                [totalRecords]="groupsPaged?.page?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
 
     </div>

@@ -23,9 +23,6 @@
 		<module>gebo.openai.integration.client</module>
 		<module>gebo.microsoft.sharepoint.client</module>
 		<module>gebo.atlassian.jira.cloud.client</module>
-		<!-- 
-		<module>gebo.regolo_ai.client</module>
-		-->
 		<module>gebo.ranker.api</module>
 		<module>gebo.openrouter.ai.client</module>
 	</modules>

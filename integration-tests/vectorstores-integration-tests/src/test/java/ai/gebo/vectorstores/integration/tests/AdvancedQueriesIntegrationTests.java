@@ -9,8 +9,8 @@
 
 package ai.gebo.vectorstores.integration.tests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.openai.api.OpenAiApi.EmbeddingModel;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,7 +48,6 @@ import ai.gebo.monolithic.app.Main;
 import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
-import ai.gebo.security.repository.UserRepository.UserInfos;
 
 @SpringBootTest(classes = Main.class)
 public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
@@ -79,7 +77,7 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		actualConfiguration.getQdrantConfig().setTls(false);
 		OperationStatus<GeboMongoVectorStoreConfig> result = vectorStoreConfigurationService
 				.validateAndTestConfiguration(actualConfiguration);
-		assertFalse("Change of vector store to qdrant have to be without errors", result.isHasErrorMessages());
+		assertFalse(result.isHasErrorMessages(), "Change of vector store to qdrant have to be without errors");
 		LOGGER.info("Change to qdrant vector store: " + mapper.writeValueAsString(result));
 		vectorStoreConfigurationService.save(actualConfiguration);
 		IGConfigurableEmbeddingModel defaultHandler = embeddingModelRuntimeDao.defaultHandler();
@@ -95,10 +93,10 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		openaiEmbeddingModelConfig.setDescription("Openai default embedding model");
 		OperationStatus<List<GOpenAIEmbeddingModelChoice>> choices = embeddingSupportService
 				.getModelChoices(openaiEmbeddingModelConfig);
-		assertFalse("Openai models lookup must be ok", choices.isHasErrorMessages());
+		assertFalse(choices.isHasErrorMessages(), "Openai models lookup must be ok");
 		Optional<GOpenAIEmbeddingModelChoice> bestModel = choices.getResult().stream()
-				.filter(x -> x.getCode().startsWith(EmbeddingModel.TEXT_EMBEDDING_3_LARGE.value)).findFirst();
-		assertTrue("Openai model setup correctly", bestModel.isPresent());
+				.filter(x -> x.getCode().toUpperCase().startsWith("TEXT_EMBEDDING_3")).findFirst();
+		assertTrue(bestModel.isPresent(), "Openai model setup correctly"); 
 		GOpenAIEmbeddingModelChoice model = bestModel.get();
 		openaiEmbeddingModelConfig.setChoosedModel(model);
 		openaiEmbeddingModelConfig.setDefaultModel(true);
@@ -133,21 +131,21 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		VectorStore vectorStore = openaiDefaultEmbeddingModel.getVectorStore();
 		Stream<GVectorizedContent> vectorizatedStream = vectorizatedContents.findByProjectEndpoint(endpoint);
 		List<GVectorizedContent> vectorizated = vectorizatedStream.toList();
-		assertFalse("Vectorizated list cannot be empty", vectorizated.isEmpty());
+		assertFalse(vectorizated.isEmpty(), "Vectorizated list cannot be empty");
 		LOGGER.info("Vectorized infos " + mapper.writeValueAsString(vectorizated));
 		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
 		AIDocumentsSet results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, semanticSearchMetaDataFilter,
 				openaiDefaultEmbeddingModel, getDefaultUserInfos());
-		assertFalse("I risultati della ricerca di test non possono essere vuoti", results.getDocumentItems().isEmpty());
-		assertFalse("Non puo essere 0 byte la ricerca di prova ", results.getNBytes() == 0);
-		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results.getTokensSize() == 0);
+		assertFalse(results.getDocumentItems().isEmpty(), "I risultati della ricerca di test non possono essere vuoti");
+		assertFalse(results.getNBytes() == 0, "Non puo essere 0 byte la ricerca di prova ");
+		assertFalse(results.getTokensSize() == 0, "Non puo essere 0 tokens la ricerca di prova ");
 		RagQueryOptions options = new RagQueryOptions(0, CompletenessLevel.STRICT_QUERY_RELATED, 12, -1);
 		AIDocumentsSet results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, semanticSearchMetaDataFilter,
 				options, openaiDefaultEmbeddingModel, getDefaultUserInfos());
-		assertFalse("I risultati della ricerca di test non possono essere vuoti",
-				results1.getDocumentItems().isEmpty());
-		assertFalse("Non puo essere 0 byte la ricerca di prova ", results1.getNBytes() == 0);
-		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results1.getTokensSize() == 0);
+		assertFalse(results1.getDocumentItems().isEmpty(),
+				"I risultati della ricerca di test non possono essere vuoti");
+		assertFalse(results1.getNBytes() == 0, "Non puo essere 0 byte la ricerca di prova ");
+		assertFalse(results1.getTokensSize() == 0, "Non puo essere 0 tokens la ricerca di prova ");
 
 	}
 

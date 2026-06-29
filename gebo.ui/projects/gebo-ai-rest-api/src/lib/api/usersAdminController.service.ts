@@ -23,8 +23,8 @@ import { FindUserByQbeParam } from '../model/findUserByQbeParam';
 import { FindUsersGroupParam } from '../model/findUsersGroupParam';
 import { GUserMessage } from '../model/gUserMessage';
 import { InsertUserParam } from '../model/insertUserParam';
-import { PageUserInfos } from '../model/pageUserInfos';
-import { PageUsersGroup } from '../model/pageUsersGroup';
+import { PagedModelUserInfos } from '../model/pagedModelUserInfos';
+import { PagedModelUsersGroup } from '../model/pagedModelUsersGroup';
 import { UserInfos } from '../model/userInfos';
 import { UsersGroup } from '../model/usersGroup';
 
@@ -257,9 +257,9 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserByQbe(body: FindUserByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PageUserInfos>;
-    public findUserByQbe(body: FindUserByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageUserInfos>>;
-    public findUserByQbe(body: FindUserByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageUserInfos>>;
+    public findUserByQbe(body: FindUserByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PagedModelUserInfos>;
+    public findUserByQbe(body: FindUserByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelUserInfos>>;
+    public findUserByQbe(body: FindUserByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelUserInfos>>;
     public findUserByQbe(body: FindUserByQbeParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -286,7 +286,7 @@ export class UsersAdminControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageUserInfos>('post',`${this.basePath}/api/admin/UsersAdminController/findUserByQbe`,
+        return this.httpClient.request<PagedModelUserInfos>('post',`${this.basePath}/api/admin/UsersAdminController/findUserByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -351,9 +351,9 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'body', reportProgress?: boolean): Observable<PageUsersGroup>;
-    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageUsersGroup>>;
-    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageUsersGroup>>;
+    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'body', reportProgress?: boolean): Observable<PagedModelUsersGroup>;
+    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelUsersGroup>>;
+    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelUsersGroup>>;
     public findUsersGroupByQbe(body: FindUsersGroupParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -380,7 +380,7 @@ export class UsersAdminControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageUsersGroup>('post',`${this.basePath}/api/admin/UsersAdminController/findUsersGroupByQbe`,
+        return this.httpClient.request<PagedModelUsersGroup>('post',`${this.basePath}/api/admin/UsersAdminController/findUsersGroupByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

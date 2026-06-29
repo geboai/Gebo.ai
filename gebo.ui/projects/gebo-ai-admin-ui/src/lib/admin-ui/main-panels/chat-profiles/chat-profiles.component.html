@@ -38,7 +38,7 @@
         </ng-template>
     </p-table>
     <p-paginator id="Paginator1" gebo-ai-label (onPageChange)="onChatProfilePageChange($event)" [first]="0" [rows]="profilesPage.pageSize"
-        *ngIf="chatprofiles?.content?.length" [totalRecords]="chatprofiles?.totalElements"
+        *ngIf="chatprofiles?.content?.length" [totalRecords]="chatprofiles?.page?.totalElements"
         [rowsPerPageOptions]="[10, 20, 30]" />
     
 </p-panel>

@@ -1,8 +1,9 @@
 package ai.gebo.ragsystem.vectorstores.qdrant;
 
 import io.qdrant.client.QdrantClient;
+import io.qdrant.client.grpc.Common.PointId;
 import io.qdrant.client.grpc.JsonWithInt.Value;
-import io.qdrant.client.grpc.Points.PointId;
+
 import io.qdrant.client.grpc.Points.RetrievedPoint;
 import lombok.AllArgsConstructor;
 
@@ -88,7 +89,7 @@ public class QdrantMetadataService {
 		return id(UUID.fromString(idValue));
 	}
 
-	private static String fromPointId(PointId pointId) {
+	private static String fromPointId(io.qdrant.client.grpc.Common.PointId pointId) {
 		if (pointId.hasUuid()) {
 			return pointId.getUuid();
 		}

@@ -10,11 +10,13 @@
  * Do not edit the class manually.
  */
 import { GLookupEntry } from './gLookupEntry';
+import { GStatsLabelValue } from './gStatsLabelValue';
 import { GStatsLine } from './gStatsLine';
 
 export interface GStatsHolder { 
     levelKey?: string;
     dimensionValue?: GLookupEntry;
     canDrillDown?: boolean;
+    statsContainer?: { [key: string]: Array<GStatsLabelValue>; };
     statsLines?: Array<GStatsLine>;
 }

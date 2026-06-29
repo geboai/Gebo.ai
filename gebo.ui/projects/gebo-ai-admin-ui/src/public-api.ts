@@ -104,8 +104,7 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jir
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-oauth2-admin/gebo-ai-oauth2-registration.component";
-export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-azure-openai-embedmodel-admin.component";
-export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-azure-openai-chatmodel-admin.component";
+
 export * from "./lib/admin-ui/entity-editors/gebo-graph-rag-extraction-config-admin/graph-rag-extraction-config.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-job-status-viewer/graphic-visualizer.component";
 export * from "./lib/admin-ui/entity-editors/controls/graphrag-config/graphrag-config.component";

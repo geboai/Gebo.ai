@@ -1,3 +1,4 @@
+springdoc.api-docs.version: OPENAPI_3_0
 logging:
   level:
     root: INFO
