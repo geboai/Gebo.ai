@@ -64,6 +64,7 @@ import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component"
 import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./rag-autotune-wizard.component";
 import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
 import { AgentStatusService, GeboAIAgentSetupWizardComponent } from "./agent-setup-wizard.component";
+import { McpServerWizardComponent, McpServerWizardStatusService } from "./mcp-server-wizard.component";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -321,6 +322,18 @@ const agentSetupSection: SetupWizardsSection = {
 
 };
 
+const mcpServerSetupSection: SetupWizardsSection = {
+    orderEntry: 19,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: McpServerWizardStatusService,
+    label: "Configure MCP Servers",
+    description: "Configure Model Context Protocol (MCP) servers to extend the AI's tools, resources, and prompts.",
+    wizardComponent: McpServerWizardComponent,
+    wizardSectionId: "mcpServerSetupSection",
+    mandatory: false
+};
+
 /**
  * @NgModule for Gebo.ai setup wizards
  * This module bundles all the setup wizard components, services, and dependencies.
@@ -330,7 +343,7 @@ const agentSetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule, GeboAINotificationsModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -357,6 +370,7 @@ const agentSetupSection: SetupWizardsSection = {
         GoogleSearcStatusService,
         RagAutotuneStatusService,
         AgentStatusService,
+        McpServerWizardStatusService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: oauth2SetupSection, multi: true },
@@ -374,6 +388,7 @@ const agentSetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: googleSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: agentSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: mcpServerSetupSection, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 
 

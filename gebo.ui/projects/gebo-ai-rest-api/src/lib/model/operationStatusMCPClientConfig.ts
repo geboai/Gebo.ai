@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
+import { MCPClientConfig } from './mCPClientConfig';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+export interface OperationStatusMCPClientConfig { 
+    result?: MCPClientConfig;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

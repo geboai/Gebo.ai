@@ -9,11 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DataPage } from './dataPage';
+import { MCPClientConfig } from './mCPClientConfig';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+export interface FindByMCPClientConfigQbeParam { 
+    qbe: MCPClientConfig;
+    page: DataPage;
 }

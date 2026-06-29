@@ -115,7 +115,7 @@ public class DataPage implements Serializable {
 			page = 0;
 
 		return sort != null && sort.isEmpty() ? Pageable.ofSize(pageSize).withPage(page)
-				: PageRequest.of(pageSize, page, Sort.by(sort));
+				: PageRequest.of(page, pageSize, Sort.by(sort));
 
 	}
 

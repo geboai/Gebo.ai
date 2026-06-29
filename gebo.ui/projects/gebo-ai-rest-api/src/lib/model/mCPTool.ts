@@ -10,18 +10,14 @@
  * Do not edit the class manually.
  */
 
-export interface DocumentReferenceView { 
-    contentType?: string;
+export interface MCPTool { 
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
     name?: string;
-    extension?: string;
+    deletedOnMCPServer?: boolean;
+    addedOnMCPServer?: boolean;
     description?: string;
-    code?: string;
-    deleted?: boolean;
-    modificationDate?: Date;
-    messagingModuleId?: string;
-    parentProjectCode?: string;
-    parentVirtualFolderCode?: string;
-    relativePath?: string;
-    rootKnowledgebaseCode?: string;
-    creationDate?: Date;
+    inputSchema?: string;
 }

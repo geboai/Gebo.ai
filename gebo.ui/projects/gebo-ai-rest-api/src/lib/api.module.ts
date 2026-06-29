@@ -71,6 +71,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
 import { KnowledgeBaseControllerService } from './api/knowledgeBaseController.service';
 import { LanguageResourcesControllerService } from './api/languageResourcesController.service';
 import { LogViewControllerService } from './api/logViewController.service';
+import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
@@ -168,6 +169,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     KnowledgeBaseControllerService,
     LanguageResourcesControllerService,
     LogViewControllerService,
+    McpClientConfigControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
     OAuth2AdminControllerService,
