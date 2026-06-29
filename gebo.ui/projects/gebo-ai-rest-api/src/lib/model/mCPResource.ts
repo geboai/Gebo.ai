@@ -10,10 +10,13 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
+export interface MCPResource { 
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
     name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+    deletedOnMCPServer?: boolean;
+    addedOnMCPServer?: boolean;
+    uri?: string;
 }

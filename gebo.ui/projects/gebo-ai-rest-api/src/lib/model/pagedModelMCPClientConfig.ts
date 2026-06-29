@@ -9,11 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MCPClientConfig } from './mCPClientConfig';
+import { PageMetadata } from './pageMetadata';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+export interface PagedModelMCPClientConfig { 
+    content?: Array<MCPClientConfig>;
+    page?: PageMetadata;
 }

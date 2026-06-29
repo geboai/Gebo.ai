@@ -56,47 +56,47 @@ public class McpClientConfigController {
 	/**
 	 * Creates a new MCP client configuration.
 	 */
-	@PostMapping(value = "insert", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<MCPClientConfig> insert(@RequestBody @Valid @NotNull MCPClientConfig config) {
+	@PostMapping(value = "insertMCPClientConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<MCPClientConfig> insertMCPClientConfig(@RequestBody @Valid @NotNull MCPClientConfig config) {
 		return managementService.insert(config);
 	}
 
 	/**
 	 * Updates an existing MCP client configuration.
 	 */
-	@PostMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<MCPClientConfig> update(@RequestBody @Valid @NotNull MCPClientConfig config) {
+	@PostMapping(value = "updateMCPClientConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<MCPClientConfig> updateMCPClientConfig(@RequestBody @Valid @NotNull MCPClientConfig config) {
 		return managementService.update(config);
 	}
 
 	/**
 	 * Deletes the given MCP client configuration.
 	 */
-	@DeleteMapping(value = "delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> delete(@RequestBody @Valid @NotNull MCPClientConfig config) {
+	@DeleteMapping(value = "deleteMCPClientConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<Boolean> deleteMCPClientConfig(@RequestBody @Valid @NotNull MCPClientConfig config) {
 		return managementService.delete(config);
 	}
 
 	/**
 	 * Retrieves an MCP client configuration by its code.
 	 */
-	@GetMapping(value = "findByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<MCPClientConfig> findByCode(@RequestParam("code") String code) {
+	@GetMapping(value = "findMCPClientConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<MCPClientConfig> findMCPClientConfigByCode(@RequestParam("code") String code) {
 		return managementService.findByCode(code);
 	}
 
 	/**
 	 * Returns a page of MCP client configurations via the management service.
 	 */
-	@PostMapping(value = "list", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<MCPClientConfig> list(@RequestBody @Valid @NotNull DataPage page) {
+	@PostMapping(value = "listMCPClientConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<MCPClientConfig> listMCPClientConfig(@RequestBody @Valid @NotNull DataPage page) {
 		return managementService.list(page.toPageable());
 	}
 
 	/**
 	 * Parameters for a paged Query-by-Example search.
 	 */
-	public static class FindByQbeParam {
+	public static class FindByMCPClientConfigQbeParam {
 		@NotNull
 		public MCPClientConfig qbe = null;
 		@NotNull
@@ -106,8 +106,9 @@ public class McpClientConfigController {
 	/**
 	 * Paged Query-by-Example search served directly by the repository.
 	 */
-	@PostMapping(value = "findByQbe", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<MCPClientConfig> findByQbe(@RequestBody @Valid @NotNull FindByQbeParam param) {
+	@PostMapping(value = "findMCPClientConfigByQbe", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<MCPClientConfig> findMCPClientConfigByQbe(
+			@RequestBody @Valid @NotNull FindByMCPClientConfigQbeParam param) {
 		return repository.findByQbe(param.qbe, param.page.toPageable());
 	}
 }
