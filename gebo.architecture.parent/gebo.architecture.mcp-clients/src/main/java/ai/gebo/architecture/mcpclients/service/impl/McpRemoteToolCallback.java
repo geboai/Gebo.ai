@@ -15,6 +15,7 @@ import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
 
+import ai.gebo.architecture.ai.service.IGExternalToolCallback;
 import ai.gebo.architecture.mcpclients.model.MCPClientConfig;
 import io.modelcontextprotocol.json.McpJsonDefaults;
 import io.modelcontextprotocol.spec.McpSchema;
@@ -29,7 +30,7 @@ import io.modelcontextprotocol.spec.McpSchema;
  * lazily, only when the tool is actually invoked, from the {@link McpClientPool}
  * (which reuses a live, already-authenticated connection across calls).
  */
-class McpRemoteToolCallback implements ToolCallback {
+class McpRemoteToolCallback implements IGExternalToolCallback {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(McpRemoteToolCallback.class);
 

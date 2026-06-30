@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-package ai.gebo.architecture.mcpclients.controller;
+package ai.gebo.architecture.mcpclients.controllers;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
