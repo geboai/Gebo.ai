@@ -55,6 +55,9 @@ export * from "./lib/infrastructure/user-profile/user-profile.component";
 export * from "./lib/infrastructure/user-workflows/user-workflows.module";
 export * from "./lib/infrastructure/user-workflows/user-workflows-start.component";
 export * from "./lib/infrastructure/user-workflows/user-workflows-land.component";
+export * from "./lib/infrastructure/user-integrations/user-integrations.module";
+export * from "./lib/infrastructure/user-integrations/user-integrations.component";
+
 
 
 export * from "./lib/directives/translable/translable.module";

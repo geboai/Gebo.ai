@@ -23,7 +23,7 @@ import { MegaMenuModule } from 'primeng/megamenu';
 import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService, GeboUIEntityFormsLauncherService, GeboUIEntityFormsLauncherByInjectionService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
-import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
+import { GeboAIUserProfileModule, GeboAIUserIntegrationsModule } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { GeboAiAdminModule, GeboAICommonModulesInjectionsModule, GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
@@ -107,6 +107,7 @@ const GeboAIPreset = definePreset(Aura, {
     GeboUIArchitectureModule,
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
+    GeboAIUserIntegrationsModule,
     ConfirmDialogModule,
     GeboAiAdminModule.forRoot(),
     MonacoEditorModule.forRoot(),
