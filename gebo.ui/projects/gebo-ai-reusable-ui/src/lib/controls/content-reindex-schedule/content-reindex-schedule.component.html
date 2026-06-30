@@ -8,39 +8,40 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<p-dialog  [maximizable]="true" [visible]="mode==='EDITING'" [modal]="true" header="Content updates scheduling" [style]="{width:'60%'}"
-    (visibleChange)="abandonEdit()">
+
+
+
+<p-dialog [maximizable]="true" [visible]="mode==='EDITING'" [modal]="true" header="Content updates scheduling"
+    [style]="{width:'60%'}" (visibleChange)="abandonEdit()">
     <p-panel *ngIf="mode==='EDITING'" [formGroup]="formGroup" [showHeader]="false">
         <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
-                    <div class="grid">
-                        <div class="col-3">
-                            <p-button  id="ConfirmBtn" gebo-ai-label  label="Confirm" icon="pi pi-check" [outlined]="true" (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid"
-                                styleClass="w-full" severity="success"></p-button>
-                        </div>
-
-                    </div>
+            <div class="grid">
+                <div class="col-3">
+                    <p-button id="ConfirmBtn" gebo-ai-label label="Confirm" icon="pi pi-check" [outlined]="true"
+                        (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid" styleClass="w-full"
+                        severity="success"></p-button>
                 </div>
+
+            </div>
+        </div>
 
         <div class="grid" style="width:100%">
             <div class="col-4" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
-                <p-select styleClass="w-full"  [options]="unscheduledPeriods" optionLabel="description" optionValue="code"
-                    formControlName="newFrequency"  class="col-12"
+                <p-select styleClass="w-full" [options]="unscheduledPeriods" optionLabel="description"
+                    optionValue="code" formControlName="newFrequency" class="col-12"
                     [style]="{width:'100%'}"></p-select>
             </div>
             <div class="col-2" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
                 <p-button id="AddBtn" gebo-ai-label label="+Add" icon="pi pi-calendar" [outlined]="true"
-                    [disabled]="(!formGroup.controls['newFrequency'].value)"
-                    (onClick)="addScheduling()" styleClass="w-full"></p-button>
+                    [disabled]="(!formGroup.controls['newFrequency'].value)" (onClick)="addScheduling()"
+                    styleClass="w-full"></p-button>
             </div>
             <div class="col-6" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
 
             </div>
 
-            <div class="col-12 grid" >
+            <div class="col-12 grid">
                 <div class="col-12" *ngFor="let table of editedValue">
                     <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
                         class="col-12 w-full" *ngIf="table.frequency==='DAILY'"
@@ -70,7 +71,8 @@
     <p-blockUI [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <p-button  id="EditBtn" gebo-ai-label  title="Edit scheduling" (onClick)="enterEdit()" [outlined]="true" icon="pi pi-pen-to-square"></p-button>
+    <p-button id="EditBtn" gebo-ai-label title="Edit scheduling" (onClick)="enterEdit()" [outlined]="true"
+        icon="pi pi-pen-to-square"></p-button>
 
     <p-chip icon="pi pi-calendar" *ngFor="let t of displayTimes" [label]="t"></p-chip>
 </div>
