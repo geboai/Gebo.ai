@@ -16,6 +16,7 @@ import org.springframework.ai.mcp.McpToolUtils;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
@@ -38,6 +39,8 @@ public class GeboMcpToolsProvider {
 
 	private final IGToolCallbackSourceRepositoryPattern toolRepository;
 	private final GeboMcpSecurityContextSupport securitySupport;
+	
+	
 
 	/**
 	 * Resolves the enabled tools of the given configuration to MCP tool

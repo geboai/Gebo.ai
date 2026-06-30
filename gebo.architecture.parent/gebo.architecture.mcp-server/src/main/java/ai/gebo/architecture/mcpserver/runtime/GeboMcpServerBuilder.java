@@ -9,6 +9,7 @@
 
 package ai.gebo.architecture.mcpserver.runtime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.ai.mcp.server.webmvc.transport.WebMvcStreamableServerTransportProvider;
@@ -28,13 +29,16 @@ import io.modelcontextprotocol.spec.McpSchema.ServerCapabilities;
 import lombok.AllArgsConstructor;
 
 /**
- * Builds a live {@link GeboMcpServerInstance} from a {@link GeboMCPServerConfig}.
+ * Builds a live {@link GeboMcpServerInstance} from a
+ * {@link GeboMCPServerConfig}.
  * <p>
- * For each configuration this wires a {@link WebMvcStreamableServerTransportProvider}
- * bound to {@code /mcp/<exportedUniqueRelativeUrl>}, builds a synchronous MCP server
- * populated with the tools/resources/prompts produced by the capability providers, and
- * wraps the provider's {@link RouterFunction} in an access-control filter that rejects
- * callers who are not granted on the configuration (HTTP 403).
+ * For each configuration this wires a
+ * {@link WebMvcStreamableServerTransportProvider} bound to
+ * {@code /mcp/<exportedUniqueRelativeUrl>}, builds a synchronous MCP server
+ * populated with the tools/resources/prompts produced by the capability
+ * providers, and wraps the provider's {@link RouterFunction} in an
+ * access-control filter that rejects callers who are not granted on the
+ * configuration (HTTP 403).
  */
 @Service
 @AllArgsConstructor
@@ -44,6 +48,8 @@ public class GeboMcpServerBuilder {
 	private static final String ENDPOINT_PREFIX = "/mcp/";
 
 	private final GeboMcpToolsProvider toolsProvider;
+	private final GeboMCPAgentAsToolProvider agentToolsProvider;
+	private final GeboMCPAgentsNetworkAsToolsProvider agentNetworkAsToolsProvider;
 	private final GeboMcpResourcesProvider resourcesProvider;
 	private final GeboMcpPromptsProvider promptsProvider;
 	private final GeboMcpAccessChecker accessChecker;
@@ -60,19 +66,20 @@ public class GeboMcpServerBuilder {
 		String endpoint = ENDPOINT_PREFIX + config.getExportedUniqueRelativeUrl();
 
 		WebMvcStreamableServerTransportProvider provider = WebMvcStreamableServerTransportProvider.builder()
-				.jsonMapper(jsonMapper).mcpEndpoint(endpoint)
-				.contextExtractor(request -> securitySupport.capture()).build();
+				.jsonMapper(jsonMapper).mcpEndpoint(endpoint).contextExtractor(request -> securitySupport.capture())
+				.build();
 
-		List<SyncToolSpecification> tools = toolsProvider.buildTools(config);
+		List<SyncToolSpecification> tools = new ArrayList<SyncToolSpecification>(toolsProvider.buildTools(config));
+		tools.addAll(agentToolsProvider.buildTools(config));
+		tools.addAll(agentNetworkAsToolsProvider.buildTools(config));
 		List<SyncResourceSpecification> resources = resourcesProvider.buildResources(config);
 		List<SyncPromptSpecification> prompts = promptsProvider.buildPrompts(config);
 
 		ServerCapabilities capabilities = ServerCapabilities.builder().tools(true).resources(false, true).prompts(true)
 				.build();
 
-		McpSyncServer server = McpServer.sync(provider)
-				.serverInfo(serverName(config), SERVER_VERSION).capabilities(capabilities).tools(tools)
-				.resources(resources).prompts(prompts).build();
+		McpSyncServer server = McpServer.sync(provider).serverInfo(serverName(config), SERVER_VERSION)
+				.capabilities(capabilities).tools(tools).resources(resources).prompts(prompts).build();
 
 		RouterFunction<ServerResponse> routerFunction = provider.getRouterFunction()
 				.filter((request, next) -> accessChecker.canAccessServer(config) ? next.handle(request)

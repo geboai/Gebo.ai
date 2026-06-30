@@ -15,7 +15,8 @@ public class GeboMCPServerConfig extends GBaseObject implements IGObjectWithSecu
 	@NotNull
 	private String exportedUniqueRelativeUrl = null;
 
-	// Whether this MCP server is published/served. When false the endpoint is not exposed.
+	// Whether this MCP server is published/served. When false the endpoint is not
+	// exposed.
 	private Boolean enabled = null;
 
 	// List of group IDs or names that have access to this project.
@@ -33,7 +34,9 @@ public class GeboMCPServerConfig extends GBaseObject implements IGObjectWithSecu
 	private List<String> exportedKnowledgeBasesAsResources = null;
 	private List<String> exportedProjectsAsResources = null;
 	private List<GObjectRef<GProjectEndpoint>> exportedProjectEndpoints;
-	// Codes of the internal prompt templates (GPromptTemplateConfig) exported as MCP prompts.
+	// Codes of the internal prompt templates (GPromptTemplateConfig) exported as
+	// MCP prompts.
 	private List<String> exportedPrompts = null;
-
+	private List<GeboMCPAgentTool> agentAsTools = null;
+	private List<GeboMCPAgentsNetworkTool> agentNetworkAsTools = null;
 }

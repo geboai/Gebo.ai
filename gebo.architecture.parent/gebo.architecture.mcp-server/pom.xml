@@ -59,5 +59,15 @@
 			<artifactId>gebo.secrets.services</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.standard</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

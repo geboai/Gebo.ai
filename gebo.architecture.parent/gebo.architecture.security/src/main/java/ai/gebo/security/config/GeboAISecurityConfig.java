@@ -103,8 +103,12 @@ public class GeboAISecurityConfig {
 	// User-specific URLs
 	private static final String[] usersUrls = new String[] { "/api/users/**" };
 
+	// Erogated MCP server endpoints (served at /mcp/<exportedUniqueRelativeUrl>)
+	private static final String[] mcpUrls = new String[] { "/mcp/**" };
+
 	public static final String ADMIN_ROLE = "ADMIN";
 	public static final String USER_ROLE = "USER";
+	public static final String APPLICATION_ROLE = "APPLICATION";
 
 	private final LocalJwtTokenProvider tokenProvider;
 	private final Oauth2RuntimeConfigurationRepository oauth2RuntimeConfigurationRepository;
@@ -257,6 +261,7 @@ public class GeboAISecurityConfig {
 		HttpSecurity configBuilder = http.cors(c -> c.disable()).csrf(csrf -> csrf.disable())
 				.addFilterAfter(corsFilter, CsrfFilter.class)
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
+						.requestMatchers(mcpUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
 						.anyRequest().authenticated());
 		if (oauth2LoginEnabled) {
 			configBuilder = configBuilder.oauth2Login(oauth2 -> oauth2
