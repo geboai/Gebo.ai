@@ -43,6 +43,7 @@ import { GeboFastLlmsSetupControllerService } from './api/geboFastLlmsSetupContr
 import { GeboFastVectorStoreSetupControllerService } from './api/geboFastVectorStoreSetupController.service';
 import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFolderSetupController.service';
 import { GeboLlmGeneratedResourceControllerService } from './api/geboLlmGeneratedResourceController.service';
+import { GeboMcpServerAdminControllerService } from './api/geboMcpServerAdminController.service';
 import { GeboModulesConfigControllerService } from './api/geboModulesConfigController.service';
 import { GeboNeo4jModuleSetupControllerService } from './api/geboNeo4jModuleSetupController.service';
 import { GeboRagChatControllerService } from './api/geboRagChatController.service';
@@ -50,6 +51,8 @@ import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsC
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
 import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
+import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
+import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyController.service';
 import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
 import { GenericOpenAiapiChatModelsConfigurationControllerService } from './api/genericOpenAiapiChatModelsConfigurationController.service';
 import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from './api/genericOpenAiapiEmbeddingModelsConfigurationController.service';
@@ -141,6 +144,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboFastVectorStoreSetupControllerService,
     GeboFastWorkFolderSetupControllerService,
     GeboLlmGeneratedResourceControllerService,
+    GeboMcpServerAdminControllerService,
     GeboModulesConfigControllerService,
     GeboNeo4jModuleSetupControllerService,
     GeboRagChatControllerService,
@@ -148,6 +152,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
     GeboVectorStoreConfigurationControllerService,
+    GeneratedAdminApiKeyControllerService,
+    GeneratedUserApiKeyControllerService,
     GenericOpenAiRankerModelsConfigurationControllerService,
     GenericOpenAiapiChatModelsConfigurationControllerService,
     GenericOpenAiapiEmbeddingModelsConfigurationControllerService,

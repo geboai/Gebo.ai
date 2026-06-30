@@ -9,12 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
-import { GUserMessage } from './gUserMessage';
+import { GeneratedApiKeyInfo } from './generatedApiKeyInfo';
+import { PageMetadata } from './pageMetadata';
 
-export interface OperationStatusGMistralEmbeddingModelConfig { 
-    result?: GMistralEmbeddingModelConfig;
-    messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
-    hasWarnMessages?: boolean;
+export interface PagedModelGeneratedApiKeyInfo { 
+    content?: Array<GeneratedApiKeyInfo>;
+    page?: PageMetadata;
 }

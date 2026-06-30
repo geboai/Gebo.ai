@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class AgentNetworkToolCallbackAdapter {
+	private static final String EXECUTION_OF_NETWORK_OF_AGENTS = "Execution of Network of agents: ";
 	private static final Logger LOGGER = LoggerFactory.getLogger(AgentNetworkToolCallbackAdapter.class);
 	private static final INotificationSink staticLoggingSink = new INotificationSink() {
 
@@ -61,7 +62,7 @@ public class AgentNetworkToolCallbackAdapter {
 				LOGGER.error("Error in calling network of agents", e);
 			}
 			return null;
-		}, toolName, "Execution of Network of agents: " + network.getDescription(), factory.getInputType(),
+		}, toolName, EXECUTION_OF_NETWORK_OF_AGENTS + network.getDescription(), factory.getInputType(),
 				factory.getOutputType());
 	}
 
