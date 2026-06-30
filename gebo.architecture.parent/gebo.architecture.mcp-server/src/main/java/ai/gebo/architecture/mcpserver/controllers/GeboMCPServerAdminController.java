@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-package ai.gebo.architecture.mcpserver.controller;
+package ai.gebo.architecture.mcpserver.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
