@@ -13,7 +13,6 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #instModeUI header="Setup Graph Rag & knowledge extraction default configuration">
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class="grid geboLargeButtonsBar">
 
             <div class="col-6">
@@ -23,6 +22,7 @@
                     (onClick)="createConfig()"></p-button>
             </div>
         </div>
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class=" grid">
         
         <div class="col-12"><p-table id="Table" gebo-ai-label [value]="defaultConfigurations"

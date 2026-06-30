@@ -17,6 +17,30 @@
     </p-blockUI>
 
     <p-panel id="MainPanel" gebo-ai-label #userUI header="Editing user">
+        <div class="grid geboVeryLargeButtonsBar" style="vertical-align: baseline">
+
+            <div class="col-3">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success" *ngIf="mode==='EDIT'"
+                    [disabled]="this.formGroup.invalid"></p-button>
+                <p-button id="InsertBtn" gebo-ai-label [outlined]="true" label="Insert" (onClick)="doInsert()"
+                    icon="pi pi-save" severity="success" *ngIf="mode==='NEW'"
+                    [disabled]="this.formGroup.invalid || this.pwdFormGroup.invalid"></p-button>
+            </div>
+            <div class="col-3">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="changedData.emit(undefined)" />
+            </div>
+            <div class="col-3">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" (onClick)="doDelete()" />
+            </div>
+            <div class="col-3">
+                <p-button id="ChangePWDBtn" gebo-ai-label [outlined]="true" label="Pwd change" severity="warn"
+                    icon="pi pi-hash" (onClick)="doChangePassword()" [disabled]="mode!=='EDIT'"></p-button>
+            </div>
+
+        </div>
         <div class="geboDialogContent">
             <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
             <div class="grid" [formGroup]="formGroup">
@@ -68,30 +92,6 @@
                     </gebo-ai-field>
                 </div>
             </div>
-        </div>
-        <div class="grid geboVeryLargeButtonsBar" style="vertical-align: baseline">
-
-            <div class="col-3">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
-                    icon="pi pi-save" severity="success" *ngIf="mode==='EDIT'"
-                    [disabled]="this.formGroup.invalid"></p-button>
-                <p-button id="InsertBtn" gebo-ai-label [outlined]="true" label="Insert" (onClick)="doInsert()"
-                    icon="pi pi-save" severity="success" *ngIf="mode==='NEW'"
-                    [disabled]="this.formGroup.invalid || this.pwdFormGroup.invalid"></p-button>
-            </div>
-            <div class="col-3">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
-                    (onClick)="changedData.emit(undefined)" />
-            </div>
-            <div class="col-3">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
-                    icon="pi pi-trash" (onClick)="doDelete()" />
-            </div>
-            <div class="col-3">
-                <p-button id="ChangePWDBtn" gebo-ai-label [outlined]="true" label="Pwd change" severity="warn"
-                    icon="pi pi-hash" (onClick)="doChangePassword()" [disabled]="mode!=='EDIT'"></p-button>
-            </div>
-
         </div>
     </p-panel>
 </p-dialog>

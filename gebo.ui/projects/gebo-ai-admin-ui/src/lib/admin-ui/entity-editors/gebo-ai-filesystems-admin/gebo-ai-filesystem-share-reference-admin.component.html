@@ -15,6 +15,26 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Editing server shared file folder" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="InsertBtn" gebo-ai-label [outlined]="true" label="Insert" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || mode==='EDIT'"
+                    styleClass="w-full"></p-button>
+            </div>
+
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                    styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    styleClass="w-full" [disabled]="canDelete===false" />
+            </div>
+
+        </div>
+    </div>
+
     <div class="geboDialogContent">
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         
@@ -43,30 +63,6 @@
 
 
 
-
-        </div>
-    </div>
-
-
-
-
-
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="InsertBtn" gebo-ai-label [outlined]="true" label="Insert" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false || mode==='EDIT'"
-                    styleClass="w-full"></p-button>
-            </div>
-
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
-                    styleClass="w-full" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                    styleClass="w-full" [disabled]="canDelete===false" />
-            </div>
 
         </div>
     </div>

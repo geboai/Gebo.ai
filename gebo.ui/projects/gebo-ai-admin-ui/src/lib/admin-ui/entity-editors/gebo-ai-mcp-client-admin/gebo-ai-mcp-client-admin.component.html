@@ -3,264 +3,339 @@
 </p-blockUI>
 
 <p-panel id="MainPanel" gebo-ai-label #mcpClientCtrl header="Editing MCP Client Configuration" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
+                    styleClass="w-full"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full"
+                    [disabled]="canDelete===false || readonly===true" />
+            </div>
+        </div>
+    </div>
+
     <div class="geboDialogContent">
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
-        <p-tabView id="TabView" gebo-ai-label>
+        <p-tabView id="TabView">
             <!-- General Settings Tab -->
             <p-tabPanel id="GeneralSettingsTab" gebo-ai-label header="General settings">
-                <div class="grid">
-                    <div class="col-6">
-                        <gebo-ai-field id="description" label="Description" help="Enter the description of this MCP Server configuration." [required]="true">
-                            <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element [readonly]="readonly" />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the MCP Client.">
-                            <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-
-                    <div class="col-4">
-                        <gebo-ai-field id="transportType" label="Transport Type" help="Select the communication protocol with the MCP server." [required]="true">
-                            <p-dropdown id="transportType" formControlName="transportType" [options]="transportTypes" optionLabel="label" optionValue="value" gebo-ai-field-element [disabled]="readonly"></p-dropdown>
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-4">
-                        <gebo-ai-field id="authMode" label="Authentication Mode" help="Select how to authenticate calls to the MCP Server." [required]="true">
-                            <p-dropdown id="authMode" formControlName="authMode" [options]="authModes" optionLabel="label" optionValue="value" gebo-ai-field-element [disabled]="readonly"></p-dropdown>
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-4">
-                        <gebo-ai-field id="exportingPrefix" label="Exporting Prefix" help="Prefix added to exported tools/resources on this server." [required]="true">
-                            <input pInputText id="exportingPrefix" formControlName="exportingPrefix" [required]="true" gebo-ai-field-element [readonly]="readonly" />
-                        </gebo-ai-field>
-                    </div>
-
-                    <!-- Conditionally display HTTP/SSE fields -->
-                    <ng-container *ngIf="formGroup.get('transportType')?.value === 'SSE_LEGACY' || formGroup.get('transportType')?.value === 'STREAMABLE_HTTP'">
-                        <div class="col-12">
-                            <gebo-ai-field id="baseUrl" label="Base URL" help="Base internet address of the MCP Server." [required]="true">
-                                <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true" class="col-12" gebo-ai-field-element [readonly]="readonly" />
+                <ng-template pTemplate="content">
+                    <div class="grid">
+                        <div class="col-6">
+                            <gebo-ai-field id="description" label="Description"
+                                help="Enter the description of this MCP Server configuration." [required]="true">
+                                <input pInputText id="description" formControlName="description" maxlength="120"
+                                    [required]="true" gebo-ai-field-element [readonly]="readonly" />
                             </gebo-ai-field>
                         </div>
                         <div class="col-6">
-                            <gebo-ai-field id="mcpEndpoint" label="MCP Endpoint path" help="Optional API endpoint path for the MCP protocol.">
-                                <input pInputText id="mcpEndpoint" formControlName="mcpEndpoint" class="col-12" gebo-ai-field-element [readonly]="readonly" />
+                            <gebo-ai-field id="code" label="Unique Code"
+                                help="Automatically generated unique code of the MCP Client.">
+                                <input pInputText id="code" formControlName="code" readonly="true"
+                                    gebo-ai-field-element />
                             </gebo-ai-field>
                         </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="sseEndpoint" label="SSE Endpoint path" help="Optional Server Sent Events endpoint path.">
-                                <input pInputText id="sseEndpoint" formControlName="sseEndpoint" class="col-12" gebo-ai-field-element [readonly]="readonly" />
-                            </gebo-ai-field>
-                        </div>
-                    </ng-container>
 
-                    <!-- Conditionally display STDIO fields -->
-                    <ng-container *ngIf="formGroup.get('transportType')?.value === 'STDIO'">
-                        <div class="col-12">
-                            <gebo-ai-field id="stdioCommand" label="Stdio Command/Process" help="Path to executable process to start (e.g. node, python, npx)." [required]="true">
-                                <input pInputText id="stdioCommand" formControlName="stdioCommand" [required]="true" class="col-12" gebo-ai-field-element [readonly]="readonly" />
+                        <div class="col-4">
+                            <gebo-ai-field id="transportType" label="Transport Type"
+                                help="Select the communication protocol with the MCP server." [required]="true">
+                                <p-dropdown id="transportType" formControlName="transportType"
+                                    [options]="transportTypes" optionLabel="label" optionValue="value"
+                                    gebo-ai-field-element [disabled]="readonly"></p-dropdown>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="stdioArgsRaw" label="Process Arguments" help="Arguments to pass to the process, one per line.">
-                                <textarea pInputTextarea id="stdioArgsRaw" formControlName="stdioArgsRaw" rows="4" style="width: 100%" gebo-ai-field-element [readonly]="readonly"></textarea>
+                        <div class="col-4">
+                            <gebo-ai-field id="authMode" label="Authentication Mode"
+                                help="Select how to authenticate calls to the MCP Server." [required]="true">
+                                <p-dropdown id="authMode" formControlName="authMode" [options]="authModes"
+                                    optionLabel="label" optionValue="value" gebo-ai-field-element
+                                    [disabled]="readonly"></p-dropdown>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="stdioEnvironmentRaw" label="Process Environment variables" help="Environment variables as KEY=VALUE, one per line.">
-                                <textarea pInputTextarea id="stdioEnvironmentRaw" formControlName="stdioEnvironmentRaw" rows="4" style="width: 100%" gebo-ai-field-element [readonly]="readonly"></textarea>
+                        <div class="col-4">
+                            <gebo-ai-field id="exportingPrefix" label="Exporting Prefix"
+                                help="Prefix added to exported tools/resources on this server." [required]="true">
+                                <input pInputText id="exportingPrefix" formControlName="exportingPrefix"
+                                    [required]="true" gebo-ai-field-element [readonly]="readonly" />
                             </gebo-ai-field>
                         </div>
-                    </ng-container>
 
-                    <!-- Authentication details -->
-                    <ng-container *ngIf="formGroup.get('authMode')?.value !== 'NONE'">
-                        <div class="col-6">
-                            <gebo-ai-field id="secretCode" label="Identity credential (secret)" help="Select or create the secret credentials.">
-                                <geboai-editable-listbox-component formControlName="secretCode" id="secretCode" placeholder="Select an identity" [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element [disabled]="readonly"></geboai-editable-listbox-component>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="oauth2AuthenticatorCode" label="OAuth2 Authenticator code" help="Unique code of the OAuth2 registration/authenticator.">
-                                <input pInputText id="oauth2AuthenticatorCode" formControlName="oauth2AuthenticatorCode" class="col-12" gebo-ai-field-element [readonly]="readonly" />
-                            </gebo-ai-field>
-                        </div>
-                    </ng-container>
+                        <!-- Conditionally display HTTP/SSE fields -->
+                        <ng-container
+                            *ngIf="formGroup.get('transportType')?.value === 'SSE_LEGACY' || formGroup.get('transportType')?.value === 'STREAMABLE_HTTP'">
+                            <div class="col-12">
+                                <gebo-ai-field id="baseUrl" label="Base URL"
+                                    help="Base internet address of the MCP Server." [required]="true">
+                                    <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true"
+                                        class="col-12" gebo-ai-field-element [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                            <div class="col-6">
+                                <gebo-ai-field id="mcpEndpoint" label="MCP Endpoint path"
+                                    help="Optional API endpoint path for the MCP protocol.">
+                                    <input pInputText id="mcpEndpoint" formControlName="mcpEndpoint" class="col-12"
+                                        gebo-ai-field-element [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                            <div class="col-6">
+                                <gebo-ai-field id="sseEndpoint" label="SSE Endpoint path"
+                                    help="Optional Server Sent Events endpoint path.">
+                                    <input pInputText id="sseEndpoint" formControlName="sseEndpoint" class="col-12"
+                                        gebo-ai-field-element [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                        </ng-container>
 
-                    <!-- Connectivity Test Buttons -->
-                    <div class="col-12 flex justify-content-end mt-3 gap-2">
-                        <p-button *ngIf="mode === 'NEW' || !formGroup.get('code')?.value" 
-                            label="Check MCP Server connectivity" 
-                            (onClick)="testAndDiscoveryConnection()" 
-                            [disabled]="loading || formGroup.get('description')?.invalid || (formGroup.get('transportType')?.value === 'STDIO' && formGroup.get('stdioCommand')?.invalid) || ((formGroup.get('transportType')?.value === 'SSE_LEGACY' || formGroup.get('transportType')?.value === 'STREAMABLE_HTTP') && formGroup.get('baseUrl')?.invalid)" 
-                            icon="pi pi-check-circle" 
-                            [outlined]="true"></p-button>
+                        <!-- Conditionally display STDIO fields -->
+                        <ng-container *ngIf="formGroup.get('transportType')?.value === 'STDIO'">
+                            <div class="col-12">
+                                <gebo-ai-field id="stdioCommand" label="Stdio Command/Process"
+                                    help="Path to executable process to start (e.g. node, python, npx)."
+                                    [required]="true">
+                                    <input pInputText id="stdioCommand" formControlName="stdioCommand" [required]="true"
+                                        class="col-12" gebo-ai-field-element [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                            <div class="col-6">
+                                <gebo-ai-field id="stdioArgsRaw" label="Process Arguments"
+                                    help="Arguments to pass to the process, one per line.">
+                                    <textarea pInputTextarea id="stdioArgsRaw" formControlName="stdioArgsRaw" rows="4"
+                                        style="width: 100%" gebo-ai-field-element [readonly]="readonly"></textarea>
+                                </gebo-ai-field>
+                            </div>
+                            <div class="col-6">
+                                <gebo-ai-field id="stdioEnvironmentRaw" label="Process Environment variables"
+                                    help="Environment variables as KEY=VALUE, one per line.">
+                                    <textarea pInputTextarea id="stdioEnvironmentRaw"
+                                        formControlName="stdioEnvironmentRaw" rows="4" style="width: 100%"
+                                        gebo-ai-field-element [readonly]="readonly"></textarea>
+                                </gebo-ai-field>
+                            </div>
+                        </ng-container>
 
-                        <p-button *ngIf="mode === 'EDIT' && formGroup.get('code')?.value" 
-                            label="Refresh MCP Server exports" 
-                            (onClick)="testAndDiscoveryConnection()" 
-                            [disabled]="loading" 
-                            icon="pi pi-refresh" 
-                            [outlined]="true"></p-button>
+                        <!-- Authentication details -->
+                        <ng-container *ngIf="formGroup.get('authMode')?.value !== 'NONE'">
+                            <div class="col-6">
+                                <gebo-ai-field id="secretCode" label="Identity credential (secret)"
+                                    help="Select or create the secret credentials.">
+                                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode"
+                                        placeholder="Select an identity" [optionsObservable]="identitiesObservable"
+                                        [createNewRecordRequest]="newSecretAction" gebo-ai-field-element
+                                        [disabled]="readonly"></geboai-editable-listbox-component>
+                                </gebo-ai-field>
+                            </div>
+                            <div class="col-6">
+                                <gebo-ai-field id="oauth2AuthenticatorCode" label="OAuth2 Authenticator code"
+                                    help="Unique code of the OAuth2 registration/authenticator.">
+                                    <input pInputText id="oauth2AuthenticatorCode"
+                                        formControlName="oauth2AuthenticatorCode" class="col-12" gebo-ai-field-element
+                                        [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                        </ng-container>
+
+                        <!-- Connectivity Test Buttons -->
+                        <div class="col-12 flex justify-content-end mt-3 gap-2">
+                            <p-button *ngIf="mode === 'NEW' || !formGroup.get('code')?.value"
+                                label="Check MCP Server connectivity" (onClick)="testAndDiscoveryConnection()"
+                                [disabled]="loading || formGroup.get('description')?.invalid || (formGroup.get('transportType')?.value === 'STDIO' && formGroup.get('stdioCommand')?.invalid) || ((formGroup.get('transportType')?.value === 'SSE_LEGACY' || formGroup.get('transportType')?.value === 'STREAMABLE_HTTP') && formGroup.get('baseUrl')?.invalid)"
+                                icon="pi pi-check-circle" [outlined]="true"></p-button>
+
+                            <p-button *ngIf="mode === 'EDIT' && formGroup.get('code')?.value"
+                                label="Refresh MCP Server exports" (onClick)="testAndDiscoveryConnection()"
+                                [disabled]="loading" icon="pi pi-refresh" [outlined]="true"></p-button>
+                        </div>
                     </div>
-                </div>
+                </ng-template>
             </p-tabPanel>
 
             <!-- Access Control Tab -->
             <p-tabPanel id="SecurityAccessSettingsTab" gebo-ai-label header="Security access settings">
-                <div class="standardTabDialogueHeight">
-                    <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
-                </div>
+                <ng-template pTemplate="content">
+                    <div class="standardTabDialogueHeight">
+                        <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                    </div>
+                </ng-template>
             </p-tabPanel>
 
             <!-- Tools Tab -->
-            <p-tabPanel id="ToolsTab" gebo-ai-label header="Exported Tools" [disabled]="!tools.length">
-                <div class="grid">
-                    <div class="col-12">
-                        <p-table [value]="tools" [tableStyle]="{ 'min-width': '50rem' }">
-                            <ng-template #header pTemplate="header">
-                                <tr>
-                                    <th id="ToolNameHeader" gebo-ai-text>Name</th>
-                                    <th id="ToolDescriptionHeader" gebo-ai-text>Description</th>
-                                    <th id="ToolAccessibleHeader" gebo-ai-text>Everyone Uses</th>
-                                    <th id="ToolStatusHeader" gebo-ai-text>Status</th>
-                                    <th></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template #body let-item let-i="rowIndex" pTemplate="body">
-                                <tr>
-                                    <td>{{ item.name }}</td>
-                                    <td>{{ item.description }}</td>
-                                    <td>
-                                        <i class="pi" [class.pi-check]="item.accessibleToAll !== false" [class.pi-times]="item.accessibleToAll === false"></i>
-                                    </td>
-                                    <td>
-                                        <span *ngIf="item.deletedOnMCPServer" class="text-red-500 font-semibold">Deleted on Server</span>
-                                        <span *ngIf="item.addedOnMCPServer" class="text-green-500 font-semibold">Added on Server</span>
-                                        <span *ngIf="!item.deletedOnMCPServer && !item.addedOnMCPServer">Synchronized</span>
-                                    </td>
-                                    <td>
-                                        <p-button label="Edit Permissions" icon="pi pi-shield" [outlined]="true" (onClick)="editItemPermissions('tool', i, item)" [disabled]="readonly"></p-button>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
+            <p-tabPanel id="ToolsTab" [disabled]="!tools.length" gebo-ai-label header="Exported Tools"
+                title="Exported Tools">
+                <ng-template pTemplate="content">
+
+                    <div class="grid">
+                        <div class="col-12"></div>
+                        <div class="col-12">
+                            <p-table [value]="tools" [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template #header pTemplate="header">
+                                    <tr>
+                                        <th id="ToolNameHeader" gebo-ai-text>Name</th>
+                                        <th id="ToolDescriptionHeader" gebo-ai-text>Description</th>
+                                        <th id="ToolAccessibleHeader" gebo-ai-text>Everyone Uses</th>
+                                        <th id="ToolStatusHeader" gebo-ai-text>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #body let-item let-i="rowIndex" pTemplate="body">
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.description }}</td>
+                                        <td>
+                                            <i class="pi" [class.pi-check]="item.accessibleToAll !== false"
+                                                [class.pi-times]="item.accessibleToAll === false"></i>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="item.deletedOnMCPServer"
+                                                class="text-red-500 font-semibold">Deleted on Server</span>
+                                            <span *ngIf="item.addedOnMCPServer"
+                                                class="text-green-500 font-semibold">Added on Server</span>
+                                            <span
+                                                *ngIf="!item.deletedOnMCPServer && !item.addedOnMCPServer">Synchronized</span>
+                                        </td>
+                                        <td>
+                                            <p-button label="Edit Permissions" icon="pi pi-shield" [outlined]="true"
+                                                (onClick)="editItemPermissions('tool', i, item)"
+                                                [disabled]="readonly"></p-button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
                     </div>
-                </div>
+
+                </ng-template>
             </p-tabPanel>
 
             <!-- Resources Tab -->
-            <p-tabPanel id="ResourcesTab" gebo-ai-label header="Exported Resources" [disabled]="!resources.length">
-                <div class="grid">
-                    <div class="col-12">
-                        <p-table [value]="resources" [tableStyle]="{ 'min-width': '50rem' }">
-                            <ng-template #header pTemplate="header">
-                                <tr>
-                                    <th id="ResNameHeader" gebo-ai-text>Name</th>
-                                    <th id="ResUriHeader" gebo-ai-text>URI</th>
-                                    <th id="ResAccessibleHeader" gebo-ai-text>Everyone Uses</th>
-                                    <th id="ResStatusHeader" gebo-ai-text>Status</th>
-                                    <th></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template #body let-item let-i="rowIndex" pTemplate="body">
-                                <tr>
-                                    <td>{{ item.name }}</td>
-                                    <td>{{ item.uri }}</td>
-                                    <td>
-                                        <i class="pi" [class.pi-check]="item.accessibleToAll !== false" [class.pi-times]="item.accessibleToAll === false"></i>
-                                    </td>
-                                    <td>
-                                        <span *ngIf="item.deletedOnMCPServer" class="text-red-500 font-semibold">Deleted on Server</span>
-                                        <span *ngIf="item.addedOnMCPServer" class="text-green-500 font-semibold">Added on Server</span>
-                                        <span *ngIf="!item.deletedOnMCPServer && !item.addedOnMCPServer">Synchronized</span>
-                                    </td>
-                                    <td>
-                                        <p-button label="Edit Permissions" icon="pi pi-shield" [outlined]="true" (onClick)="editItemPermissions('resource', i, item)" [disabled]="readonly"></p-button>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
+            <p-tabPanel id="ResourcesTab" [disabled]="!resources.length" gebo-ai-label header="Exported Resources">
+                <ng-template pTemplate="content">
+                    <div class="grid">
+                        <div class="col-12">
+                            <p-table [value]="resources" [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template #header pTemplate="header">
+                                    <tr>
+                                        <th id="ResNameHeader" gebo-ai-text>Name</th>
+                                        <th id="ResUriHeader" gebo-ai-text>URI</th>
+                                        <th id="ResAccessibleHeader" gebo-ai-text>Everyone Uses</th>
+                                        <th id="ResStatusHeader" gebo-ai-text>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #body let-item let-i="rowIndex" pTemplate="body">
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.uri }}</td>
+                                        <td>
+                                            <i class="pi" [class.pi-check]="item.accessibleToAll !== false"
+                                                [class.pi-times]="item.accessibleToAll === false"></i>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="item.deletedOnMCPServer"
+                                                class="text-red-500 font-semibold">Deleted on Server</span>
+                                            <span *ngIf="item.addedOnMCPServer"
+                                                class="text-green-500 font-semibold">Added on Server</span>
+                                            <span
+                                                *ngIf="!item.deletedOnMCPServer && !item.addedOnMCPServer">Synchronized</span>
+                                        </td>
+                                        <td>
+                                            <p-button label="Edit Permissions" icon="pi pi-shield" [outlined]="true"
+                                                (onClick)="editItemPermissions('resource', i, item)"
+                                                [disabled]="readonly"></p-button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
                     </div>
-                </div>
+                </ng-template>
             </p-tabPanel>
 
             <!-- Prompts Tab -->
-            <p-tabPanel id="PromptsTab" gebo-ai-label header="Exported Prompts" [disabled]="!prompts.length">
-                <div class="grid">
-                    <div class="col-12">
-                        <p-table [value]="prompts" [tableStyle]="{ 'min-width': '50rem' }">
-                            <ng-template #header pTemplate="header">
-                                <tr>
-                                    <th id="PromptNameHeader" gebo-ai-text>Name</th>
-                                    <th id="PromptAccessibleHeader" gebo-ai-text>Everyone Uses</th>
-                                    <th id="PromptStatusHeader" gebo-ai-text>Status</th>
-                                    <th></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template #body let-item let-i="rowIndex" pTemplate="body">
-                                <tr>
-                                    <td>{{ item.name }}</td>
-                                    <td>
-                                        <i class="pi" [class.pi-check]="item.accessibleToAll !== false" [class.pi-times]="item.accessibleToAll === false"></i>
-                                    </td>
-                                    <td>
-                                        <span *ngIf="item.deletedOnMCPServer" class="text-red-500 font-semibold">Deleted on Server</span>
-                                        <span *ngIf="item.addedOnMCPServer" class="text-green-500 font-semibold">Added on Server</span>
-                                        <span *ngIf="!item.deletedOnMCPServer && !item.addedOnMCPServer">Synchronized</span>
-                                    </td>
-                                    <td>
-                                        <p-button label="Edit Permissions" icon="pi pi-shield" [outlined]="true" (onClick)="editItemPermissions('prompt', i, item)" [disabled]="readonly"></p-button>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
+            <p-tabPanel id="PromptsTab" [disabled]="!prompts.length" gebo-ai-label header="Exported Prompts">
+                <ng-template pTemplate="content">
+                    <div class="grid">
+                        <div class="col-12">
+                            <p-table [value]="prompts" [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template #header pTemplate="header">
+                                    <tr>
+                                        <th id="PromptNameHeader" gebo-ai-text>Name</th>
+                                        <th id="PromptAccessibleHeader" gebo-ai-text>Everyone Uses</th>
+                                        <th id="PromptStatusHeader" gebo-ai-text>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #body let-item let-i="rowIndex" pTemplate="body">
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>
+                                            <i class="pi" [class.pi-check]="item.accessibleToAll !== false"
+                                                [class.pi-times]="item.accessibleToAll === false"></i>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="item.deletedOnMCPServer"
+                                                class="text-red-500 font-semibold">Deleted on Server</span>
+                                            <span *ngIf="item.addedOnMCPServer"
+                                                class="text-green-500 font-semibold">Added on Server</span>
+                                            <span
+                                                *ngIf="!item.deletedOnMCPServer && !item.addedOnMCPServer">Synchronized</span>
+                                        </td>
+                                        <td>
+                                            <p-button label="Edit Permissions" icon="pi pi-shield" [outlined]="true"
+                                                (onClick)="editItemPermissions('prompt', i, item)"
+                                                [disabled]="readonly"></p-button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
                     </div>
-                </div>
+                </ng-template>
             </p-tabPanel>
         </p-tabView>
     </div>
 
     <!-- Panel buttons bar -->
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true" styleClass="w-full"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full"
-                    [disabled]="canDelete===false || readonly===true" />
-            </div>
-        </div>
-    </div>
 </p-panel>
 
 <!-- Permissions Modal Dialog -->
-<p-dialog [(visible)]="showPermissionsDialog" [header]="permissionsDialogHeader" [modal]="true" [style]="{width: '520px'}" styleClass="p-fluid" [dismissableMask]="true">
+<p-dialog [(visible)]="showPermissionsDialog" [header]="permissionsDialogHeader" [modal]="true"
+    [style]="{width: '520px'}" styleClass="p-fluid" [dismissableMask]="true">
     <div class="grid gap-3 p-3">
         <div class="col-12 flex align-items-center gap-2">
-            <p-checkbox [(ngModel)]="editingItemPermissions.accessibleToAll" [binary]="true" id="itemAccessibleToAll" label="Accessible to everyone"></p-checkbox>
+            <p-checkbox [(ngModel)]="editingItemPermissions.accessibleToAll" [binary]="true" id="itemAccessibleToAll"
+                label="Accessible to everyone"></p-checkbox>
         </div>
-        
+
         <div class="col-12">
             <label for="itemAccessibleGroups" class="font-semibold mb-1 block text-sm">Allowed Groups</label>
-            <p-multiSelect id="itemAccessibleGroups" [(ngModel)]="editingItemPermissions.accessibleGroups" [options]="groups" optionLabel="description" optionValue="code" [disabled]="editingItemPermissions.accessibleToAll === true" placeholder="Select groups" display="chip"></p-multiSelect>
+            <p-multiSelect id="itemAccessibleGroups" [(ngModel)]="editingItemPermissions.accessibleGroups"
+                [options]="groups" optionLabel="description" optionValue="code"
+                [disabled]="editingItemPermissions.accessibleToAll === true" placeholder="Select groups"
+                display="chip"></p-multiSelect>
         </div>
 
         <div class="col-12">
             <label for="itemAccessibleUsers" class="font-semibold mb-1 block text-sm">Allowed Users</label>
-            <p-multiSelect id="itemAccessibleUsers" [(ngModel)]="editingItemPermissions.accessibleUsers" [options]="users" optionLabel="username" optionValue="username" [disabled]="editingItemPermissions.accessibleToAll === true" placeholder="Select users" display="chip"></p-multiSelect>
+            <p-multiSelect id="itemAccessibleUsers" [(ngModel)]="editingItemPermissions.accessibleUsers"
+                [options]="users" optionLabel="username" optionValue="username"
+                [disabled]="editingItemPermissions.accessibleToAll === true" placeholder="Select users"
+                display="chip"></p-multiSelect>
         </div>
     </div>
-    
+
     <ng-template pTemplate="footer">
-        <button pButton label="Cancel" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="showPermissionsDialog = false"></button>
+        <button pButton label="Cancel" icon="pi pi-times" class="p-button-text p-button-secondary"
+            (click)="showPermissionsDialog = false"></button>
         <button pButton label="Save" icon="pi pi-check" class="p-button-primary" (click)="savePermissions()"></button>
     </ng-template>
 </p-dialog>

@@ -45,13 +45,21 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MCPToolsExporterImpl implements MCPToolsExporter {
 
+	private static final String MCP_SERVERS_TOOLS = "MCP Servers tools";
+
+	private static final String ALLOWED_MCP_TOOLS = "ALLOWED_MCP_TOOLS";
+
+	private static final String ERROR_EXPORTING_MCP_TOOLS = "Error exporting MCP tools";
+
+	private static final String ERROR_EXPORTING_TOOLS_FOR_MCP_CLIENT = "Error exporting tools for MCP client '";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MCPToolsExporterImpl.class);
 
 	private static final String MCP_TOOLS_EXPORTER_IMPL = "MCPToolsExporterImpl";
 	private static final ToolsCategory category = new ToolsCategory();
 	static {
-		category.setCode("ALLOWED_MCP_TOOLS");
-		category.setDescription("MCP Servers tools");
+		category.setCode(ALLOWED_MCP_TOOLS);
+		category.setDescription(MCP_SERVERS_TOOLS);
 		category.setKnowledgeBaseRelative(false);
 	}
 
@@ -90,11 +98,11 @@ public class MCPToolsExporterImpl implements MCPToolsExporter {
 					addVisibleToolsOf(config, callbacks);
 				} catch (Throwable t) {
 					// A single misbehaving server must not break the whole tool pipeline.
-					LOGGER.error("Error exporting tools for MCP client '" + safeCode(config) + "'", t);
+					LOGGER.error(ERROR_EXPORTING_TOOLS_FOR_MCP_CLIENT + safeCode(config) + "'", t);
 				}
 			}
 		} catch (Throwable t) {
-			LOGGER.error("Error exporting MCP tools", t);
+			LOGGER.error(ERROR_EXPORTING_MCP_TOOLS, t);
 		}
 		return callbacks;
 	}

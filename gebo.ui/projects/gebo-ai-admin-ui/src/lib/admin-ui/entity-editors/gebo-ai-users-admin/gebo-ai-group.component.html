@@ -13,6 +13,19 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #groupUI header="Editing user group" [formGroup]="formGroup">
+    <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
+        <div class="col-3">
+            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                [disabled]="this.formGroup.invalid || canSave===false"></p-button>
+        </div>
+        <div class="col-3">
+            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+        </div>
+        <div class="col-3">
+            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                [disabled]="canDelete===false" />
+        </div>
+    </div>
     <div class="geboDialogContent">
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
@@ -39,20 +52,6 @@
                     ></p-multiSelect>
                 </gebo-ai-field>
             </div>
-        </div>
-    </div>
-
-    <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
-        <div class="col-3">
-            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                [disabled]="this.formGroup.invalid || canSave===false"></p-button>
-        </div>
-        <div class="col-3">
-            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
-        </div>
-        <div class="col-3">
-            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                [disabled]="canDelete===false" />
         </div>
     </div>
 </p-panel>
