@@ -10,18 +10,18 @@
  * Do not edit the class manually.
  */
 
-export interface DocumentReferenceView { 
-    contentType?: string;
-    name?: string;
-    extension?: string;
-    description?: string;
-    parentVirtualFolderCode?: string;
-    relativePath?: string;
-    parentProjectCode?: string;
-    rootKnowledgebaseCode?: string;
-    deleted?: boolean;
-    modificationDate?: Date;
+export interface UserAccessibleMcpServerView { 
     code?: string;
-    messagingModuleId?: string;
-    creationDate?: Date;
+    name?: string;
+    description?: string;
+    enabled?: boolean;
+    exportedUniqueRelativeUrl?: string;
+    endpointPath?: string;
+    transportType?: string;
+    tools?: Array<string>;
+    resources?: Array<string>;
+    prompts?: Array<string>;
+    toolsCount?: number;
+    resourcesCount?: number;
+    promptsCount?: number;
 }

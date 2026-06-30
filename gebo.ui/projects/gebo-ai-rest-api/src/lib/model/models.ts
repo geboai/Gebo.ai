@@ -344,6 +344,7 @@ export * from './uIExistingText';
 export * from './uiTextResourcesModule';
 export * from './uploadHandShakeCodeBody';
 export * from './uploadUserspaceFolderCodeBody';
+export * from './userAccessibleMcpServerView';
 export * from './userChangePasswordWithTicket';
 export * from './userChatHistory';
 export * from './userInfo';
