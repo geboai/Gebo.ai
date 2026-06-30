@@ -23,6 +23,7 @@ import io.modelcontextprotocol.json.jackson3.JacksonMcpJsonMapperSupplier;
 import io.modelcontextprotocol.server.McpServer;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncPromptSpecification;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncResourceSpecification;
+import io.modelcontextprotocol.server.McpServerFeatures.SyncResourceTemplateSpecification;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
 import io.modelcontextprotocol.server.McpSyncServer;
 import io.modelcontextprotocol.spec.McpSchema.ServerCapabilities;
@@ -73,13 +74,15 @@ public class GeboMcpServerBuilder {
 		tools.addAll(agentToolsProvider.buildTools(config));
 		tools.addAll(agentNetworkAsToolsProvider.buildTools(config));
 		List<SyncResourceSpecification> resources = resourcesProvider.buildResources(config);
+		List<SyncResourceTemplateSpecification> resourceTemplates = resourcesProvider.buildResourceTemplates(config);
 		List<SyncPromptSpecification> prompts = promptsProvider.buildPrompts(config);
 
 		ServerCapabilities capabilities = ServerCapabilities.builder().tools(true).resources(false, true).prompts(true)
 				.build();
 
 		McpSyncServer server = McpServer.sync(provider).serverInfo(serverName(config), SERVER_VERSION)
-				.capabilities(capabilities).tools(tools).resources(resources).prompts(prompts).build();
+				.capabilities(capabilities).tools(tools).resources(resources).resourceTemplates(resourceTemplates)
+				.prompts(prompts).build();
 
 		RouterFunction<ServerResponse> routerFunction = provider.getRouterFunction()
 				.filter((request, next) -> accessChecker.canAccessServer(config) ? next.handle(request)

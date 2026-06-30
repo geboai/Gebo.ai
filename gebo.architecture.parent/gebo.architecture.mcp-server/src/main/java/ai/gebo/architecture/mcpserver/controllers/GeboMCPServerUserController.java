@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import ai.gebo.architecture.mcpserver.config.GeboMcpResourcesConfig;
 import ai.gebo.architecture.mcpserver.model.GeboMCPAgentTool;
 import ai.gebo.architecture.mcpserver.model.GeboMCPAgentsNetworkTool;
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
@@ -35,13 +36,14 @@ import lombok.AllArgsConstructor;
  * User-level REST controller that lets an authenticated user discover the
  * erogated MCP servers they are entitled to call with their own rights.
  * <p>
- * Unlike {@link GeboMCPServerAdminController} (which manages every configuration
- * and is reserved to administrators), this controller never mutates anything and
- * never exposes the underlying {@link GeboMCPServerConfig}. Each server is
- * filtered through {@link GeboMcpAccessChecker#canAccessServer(GeboMCPServerConfig)}
- * — the very same check the runtime applies on the {@code /mcp/<url>} endpoint —
- * so the caller only ever sees servers their identity (or an administrator's,
- * via {@code adminCanDoAll}) is granted on. For each visible server it returns a
+ * Unlike {@link GeboMCPServerAdminController} (which manages every
+ * configuration and is reserved to administrators), this controller never
+ * mutates anything and never exposes the underlying
+ * {@link GeboMCPServerConfig}. Each server is filtered through
+ * {@link GeboMcpAccessChecker#canAccessServer(GeboMCPServerConfig)} — the very
+ * same check the runtime applies on the {@code /mcp/<url>} endpoint — so the
+ * caller only ever sees servers their identity (or an administrator's, via
+ * {@code adminCanDoAll}) is granted on. For each visible server it returns a
  * compact {@link UserAccessibleMcpServerView}: the connectivity/endpoint
  * coordinates plus a short list of the exported tools, resources and prompts.
  */
@@ -51,10 +53,15 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GeboMCPServerUserController {
 
-	/** Endpoint prefix every erogated MCP server is published under (mirrors GeboMcpServerBuilder). */
+	/**
+	 * Endpoint prefix every erogated MCP server is published under (mirrors
+	 * GeboMcpServerBuilder).
+	 */
 	private static final String ENDPOINT_PREFIX = "/mcp/";
 
-	/** Erogated MCP servers are served over streamable HTTP by the WebMvc transport. */
+	/**
+	 * Erogated MCP servers are served over streamable HTTP by the WebMvc transport.
+	 */
 	private static final String TRANSPORT_TYPE = "STREAMABLE_HTTP";
 
 	/** Resource URI schemes (mirror GeboMcpResourcesProvider). */
@@ -64,6 +71,7 @@ public class GeboMCPServerUserController {
 
 	private final IGMCPServerConfigManagerService managerService;
 	private final GeboMcpAccessChecker accessChecker;
+	private final GeboMcpResourcesConfig mcpResourcesConfig;
 
 	/**
 	 * Lists every erogated MCP server the current user may call, as a compact view
@@ -74,6 +82,8 @@ public class GeboMCPServerUserController {
 	 */
 	@GetMapping(value = "listAccessibleMcpServers", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<UserAccessibleMcpServerView> listAccessibleMcpServers() throws GeboPersistenceException {
+		if (!mcpResourcesConfig.isUsersCanLookupMcpServers())
+			throw new IllegalStateException("Users cannot list mcp servers");
 		List<UserAccessibleMcpServerView> result = new ArrayList<>();
 		for (GeboMCPServerConfig config : managerService.findAll()) {
 			if (accessChecker.canAccessServer(config)) {
@@ -94,6 +104,8 @@ public class GeboMCPServerUserController {
 	@GetMapping(value = "findAccessibleMcpServerByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserAccessibleMcpServerView findAccessibleMcpServerByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
+		if (!mcpResourcesConfig.isUsersCanLookupMcpServers())
+			throw new IllegalStateException("Users cannot list mcp servers");
 		GeboMCPServerConfig config = managerService.findByCode(code);
 		if (config == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MCP server '" + code + "' does not exist");
@@ -103,6 +115,12 @@ public class GeboMCPServerUserController {
 					"You are not allowed to call MCP server '" + code + "'");
 		}
 		return toView(config);
+	}
+
+	@GetMapping(value = "getUsersCanAccessMcpServersList", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean getUsersCanAccessMcpServersList() {
+		return (mcpResourcesConfig.isUsersCanLookupMcpServers());
+
 	}
 
 	/**
@@ -117,9 +135,9 @@ public class GeboMCPServerUserController {
 		view.setEnabled(config.getEnabled());
 
 		view.setExportedUniqueRelativeUrl(config.getExportedUniqueRelativeUrl());
-		view.setEndpointPath(config.getExportedUniqueRelativeUrl() != null
-				? ENDPOINT_PREFIX + config.getExportedUniqueRelativeUrl()
-				: null);
+		view.setEndpointPath(
+				config.getExportedUniqueRelativeUrl() != null ? ENDPOINT_PREFIX + config.getExportedUniqueRelativeUrl()
+						: null);
 		view.setTransportType(TRANSPORT_TYPE);
 
 		List<String> tools = collectTools(config);
@@ -143,7 +161,9 @@ public class GeboMCPServerUserController {
 		return config.getExportedUniqueRelativeUrl();
 	}
 
-	/** Plain enabled tools plus the agent-as-tool and agent-network-as-tool exports. */
+	/**
+	 * Plain enabled tools plus the agent-as-tool and agent-network-as-tool exports.
+	 */
 	private static List<String> collectTools(GeboMCPServerConfig config) {
 		List<String> tools = new ArrayList<>();
 		if (config.getEnabledTools() != null) {
@@ -166,7 +186,10 @@ public class GeboMCPServerUserController {
 		return tools;
 	}
 
-	/** Exported knowledge bases, projects and project endpoints as their resource URIs. */
+	/**
+	 * Exported knowledge bases, projects and project endpoints as their resource
+	 * URIs.
+	 */
 	private static List<String> collectResources(GeboMCPServerConfig config) {
 		List<String> resources = new ArrayList<>();
 		if (config.getExportedKnowledgeBasesAsResources() != null) {

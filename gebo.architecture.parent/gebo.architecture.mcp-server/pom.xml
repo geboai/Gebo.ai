@@ -39,6 +39,18 @@
 			<artifactId>gebo.knowledgebase.repositories</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Per-user visibility navigation of the KB/project/endpoint/virtual-folder hierarchy -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.core.contents.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Streams (and locally caches) GDocumentReference content for serving over MCP -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.persistence</artifactId>
