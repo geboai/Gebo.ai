@@ -67,6 +67,8 @@ public class GAgentsNetwork extends GBaseObject
 	}
 
 	@NotNull
+	private String agentsNetworkServiceFactoryId;
+	@NotNull
 	private String scenarioDescription = null;
 	@NotNull
 	@NotEmpty

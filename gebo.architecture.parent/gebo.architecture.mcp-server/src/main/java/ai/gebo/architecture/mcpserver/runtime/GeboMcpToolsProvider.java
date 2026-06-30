@@ -17,6 +17,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
+import ai.gebo.architecture.ai.service.IGExternalToolCallback;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
@@ -30,8 +31,8 @@ import lombok.AllArgsConstructor;
  * ({@link IGToolCallbackSourceRepositoryPattern}) and bridged to MCP tool
  * specifications with {@link McpToolUtils#toSyncToolSpecification(List)}. The
  * resulting tools are the very same {@link ToolCallback}s used by the chat
- * pipeline, so they execute under the SecurityContext of the calling (impersonated)
- * user and naturally honour that user's ACLs.
+ * pipeline, so they execute under the SecurityContext of the calling
+ * (impersonated) user and naturally honour that user's ACLs.
  */
 @Service
 @AllArgsConstructor
@@ -39,8 +40,6 @@ public class GeboMcpToolsProvider {
 
 	private final IGToolCallbackSourceRepositoryPattern toolRepository;
 	private final GeboMcpSecurityContextSupport securitySupport;
-	
-	
 
 	/**
 	 * Resolves the enabled tools of the given configuration to MCP tool
@@ -59,6 +58,7 @@ public class GeboMcpToolsProvider {
 		if (callbacks == null || callbacks.isEmpty()) {
 			return new ArrayList<>();
 		}
+		callbacks = callbacks.stream().filter(x -> !IGExternalToolCallback.isExternalTool(x)).toList();
 		List<ToolCallback> secured = new ArrayList<>();
 		for (ToolCallback callback : callbacks) {
 			secured.add(new GeboMcpSecurityAwareToolCallback(callback, securitySupport));

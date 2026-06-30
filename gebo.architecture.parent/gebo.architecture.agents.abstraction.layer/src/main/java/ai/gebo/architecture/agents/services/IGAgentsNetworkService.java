@@ -12,7 +12,7 @@ public interface IGAgentsNetworkService<InputType, OutputType> {
 
 	OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input, Map<String, Object> environment)
 			throws AgentException, LLMConfigException;
-
+	
 	Class<OutputType> getOutputType();
 
 	Class<InputType> getInputType();

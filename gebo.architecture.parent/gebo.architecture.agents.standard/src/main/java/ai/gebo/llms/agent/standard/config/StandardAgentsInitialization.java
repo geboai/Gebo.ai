@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
+import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
@@ -190,6 +191,8 @@ public class StandardAgentsInitialization {
 		network.setDescription(DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES);
 		network.setReadOnly(true);
 		network.setDefaultUserInteractionNetwork(true);
+		network.setAgentsNetworkServiceFactoryId(
+				GReactiveChatAgentsNetworkServiceFactoryImpl.REACTIVE_CHAT_AGENTS_NETWORK);
 		// Global safety backstop on TOTAL agent invocations (the controller's own cycle
 		// budget below is the real terminator); sized so a legitimate multi-cycle
 		// gather/finalize run with a wide searcher fan-out is never truncated.

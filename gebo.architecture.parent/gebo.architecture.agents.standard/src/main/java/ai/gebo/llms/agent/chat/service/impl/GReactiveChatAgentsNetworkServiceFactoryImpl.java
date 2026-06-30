@@ -53,4 +53,15 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 
 	}
 
+	@Override
+	public Class<GeboChatMessageEnvelope> getOutputType() {
+		return GeboChatMessageEnvelope.class;
+	}
+
+	@Override
+	public Class<ChatPipelineExecutionRuntimeData> getInputType() {
+
+		return ChatPipelineExecutionRuntimeData.class;
+	}
+
 }
