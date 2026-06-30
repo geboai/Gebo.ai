@@ -39,6 +39,7 @@ public class GGeneratedApiKeyServiceImpl implements IGGeneratedApiKeyService {
 		GeneratedApiKey gen = new GeneratedApiKey();
 		gen.setImpersonatedUser(username);
 		gen.setApiKey(jwtTokenProvider.createToken(username, expiration));
+		gen.setExpiration(expiration);
 		gen.setDescription(description);
 
 		return this.persistentObjectManager.insert(gen);
@@ -75,6 +76,7 @@ public class GGeneratedApiKeyServiceImpl implements IGGeneratedApiKeyService {
 		GeneratedApiKey gen = new GeneratedApiKey();
 		gen.setImpersonatedUser(user.getUsername());
 		gen.setApiKey(jwtTokenProvider.createToken(user.getUsername(), expiration));
+		gen.setExpiration(expiration);
 		gen.setDescription(description);
 		return this.persistentObjectManager.insert(gen);
 	}
