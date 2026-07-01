@@ -58,57 +58,63 @@ import io.modelcontextprotocol.spec.McpSchema.TextResourceContents;
 import lombok.AllArgsConstructor;
 
 /**
- * Builds the MCP resources an erogated MCP server exposes for the knowledge bases,
- * projects and project endpoints of its {@link GeboMCPServerConfig}.
+ * Builds the MCP resources an erogated MCP server exposes for the knowledge
+ * bases, projects and project endpoints of its {@link GeboMCPServerConfig}.
  * <p>
  * The platform content model is hierarchical:
  * {@code GKnowledgeBase → GProject → GProjectEndpoint → GVirtualFolder →
  * (child GVirtualFolder | GDocumentReference)}.
  * <p>
  * <b>Listing is static, reading is impersonated.</b> The MCP SDK serves
- * {@code resources/list} from a map built once at server construction, outside any
- * request/user context, so it cannot be personalised per connected user. The list
- * holds the statically declared exports (configured knowledge bases, projects and
- * endpoints) plus a single {@code gebo-root://catalog} entry. Since the listing is
- * shared, it is produced by impersonating the configuration's creator
- * ({@code userCreated}) and keeping only the exports that owner may READ; if the owner
- * cannot be resolved (absent/unknown/disabled) it falls back to the raw configuration
- * list. All per-user behaviour happens on <em>read</em>, under the connected user's
+ * {@code resources/list} from a map built once at server construction, outside
+ * any request/user context, so it cannot be personalised per connected user.
+ * The list holds the statically declared exports (configured knowledge bases,
+ * projects and endpoints) plus a single {@code gebo-root://catalog} entry.
+ * Since the listing is shared, it is produced by impersonating the
+ * configuration's creator ({@code userCreated}) and keeping only the exports
+ * that owner may READ; if the owner cannot be resolved
+ * (absent/unknown/disabled) it falls back to the raw configuration list. All
+ * per-user behaviour happens on <em>read</em>, under the connected user's
  * identity ({@link GeboMcpSecurityContextSupport#runAs}):
  * <ul>
  * <li>reading {@code gebo-root://catalog} returns the caller's whole accessible
- * hierarchy, rendered recursively and depth-limited — every personally visible root
- * knowledge base when {@code shareAllPersonallyVisible} is set, otherwise the
- * configured exports the caller may READ;</li>
+ * hierarchy, rendered recursively and depth-limited — every personally visible
+ * root knowledge base when {@code shareAllPersonallyVisible} is set, otherwise
+ * the configured exports the caller may READ;</li>
  * <li>reading any single resource — a configured export, or any node reached by
- * descending into one — renders that node (recursively for containers: a knowledge
- * base, project or endpoint expands its subtree), access-checked.</li>
+ * descending into one — renders that node (recursively for containers: a
+ * knowledge base, project or endpoint expands its subtree),
+ * access-checked.</li>
  * </ul>
- * Nodes reached by descent that are not in the static list are addressed by resource
- * <em>templates</em> ({@code gebo-kb://}, {@code gebo-project://}, {@code gebo-endpoint://},
- * {@code gebo-vfolder://}, {@code gebo-document://}, {@code gebo-document-text://}); the
- * SDK resolves a read against the static map first and falls back to templates, so a
- * configured export and its template share one code path. Node ids are Base64URL-encoded
- * in the URI because the SDK's template matcher forbids {@code '/'} in a variable and
- * codes routinely contain it (an endpoint id additionally encodes its concrete class,
- * since an endpoint's identity is the {@code (class, code)} pair).
+ * Nodes reached by descent that are not in the static list are addressed by
+ * resource <em>templates</em> ({@code gebo-kb://}, {@code gebo-project://},
+ * {@code gebo-endpoint://}, {@code gebo-vfolder://}, {@code gebo-document://},
+ * {@code gebo-document-text://}); the SDK resolves a read against the static
+ * map first and falls back to templates, so a configured export and its
+ * template share one code path. Node ids are Base64URL-encoded in the URI
+ * because the SDK's template matcher forbids {@code '/'} in a variable and
+ * codes routinely contain it (an endpoint id additionally encodes its concrete
+ * class, since an endpoint's identity is the {@code (class, code)} pair).
  * <p>
  * Hierarchy rules honoured here (limits are configurable via
  * {@link GeboMcpResourcesConfig}):
  * <ul>
- * <li>Descending a knowledge base, project or endpoint lists the nested virtual folders
- * up to a configurable depth (default 2); documents are not expanded at these levels.</li>
- * <li>{@link GDocumentReference}-level entries are returned <b>only</b> when the client
- * reads (asks for) the parent {@link GVirtualFolder}.</li>
+ * <li>Descending a knowledge base, project or endpoint lists the nested virtual
+ * folders up to a configurable depth (default 2); documents are not expanded at
+ * these levels.</li>
+ * <li>{@link GDocumentReference}-level entries are returned <b>only</b> when
+ * the client reads (asks for) the parent {@link GVirtualFolder}.</li>
  * <li>A document's content is served on demand: each listed document carries a
- * {@code gebo-document://} URI (raw bytes: text inline, binary as a base64 blob, size
- * capped) and a {@code gebo-document-text://} URI (plain text extracted via the
- * ingestion handler, length capped), both streamed through {@link IDocumentsCacheService}.</li>
+ * {@code gebo-document://} URI (raw bytes: text inline, binary as a base64
+ * blob, size capped) and a {@code gebo-document-text://} URI (plain text
+ * extracted via the ingestion handler, length capped), both streamed through
+ * {@link IDocumentsCacheService}.</li>
  * </ul>
- * Every read re-resolves the underlying object and re-checks the caller's access
- * ({@link IGSecurityService#isCanDo}/{@code isCanDoAction} with {@code READ}), while
- * folder/document navigation goes through {@link IGKnowledgebaseVisibilityService},
- * which only ever returns objects the calling user is entitled to see.
+ * Every read re-resolves the underlying object and re-checks the caller's
+ * access ({@link IGSecurityService#isCanDo}/{@code isCanDoAction} with
+ * {@code READ}), while folder/document navigation goes through
+ * {@link IGKnowledgebaseVisibilityService}, which only ever returns objects the
+ * calling user is entitled to see.
  */
 @Service
 @AllArgsConstructor
@@ -147,33 +153,42 @@ public class GeboMcpResourcesProvider {
 
 	/**
 	 * Builds the single fixed (listable) resource: the {@code gebo-root://catalog}
-	 * entry point. The MCP SDK serves {@code resources/list} from a static map built
-	 * once outside any user context, so the catalog itself cannot be personalised
-	 * there; instead its <em>read</em> runs under the calling user's identity and
-	 * returns only the knowledge bases / projects / endpoints that user may access.
-	 * All deeper navigation happens through the (equally per-user) resource templates.
+	 * entry point. The MCP SDK serves {@code resources/list} from a static map
+	 * built once outside any user context, so the catalog itself cannot be
+	 * personalised there; instead its <em>read</em> runs under the calling user's
+	 * identity and returns only the knowledge bases / projects / endpoints that
+	 * user may access. All deeper navigation happens through the (equally per-user)
+	 * resource templates.
 	 *
 	 * @param config the MCP server configuration
 	 * @return the singleton root resource specification
 	 */
 	public List<SyncResourceSpecification> buildResources(GeboMCPServerConfig config) throws GeboPersistenceException {
 		List<SyncResourceSpecification> specs = new ArrayList<>();
-		// The catalog entry point: a per-user, impersonated, recursive view.
-		specs.add(buildRootCatalog(config));
-		// The statically declared exports of the configuration. Reads are always
-		// impersonated (and access-checked) per connected user, but the shared static
-		// listing itself is produced by impersonating the configuration's creator
-		// (userCreated) and keeping only the exports that owner may READ.
-		specs.addAll(resolveConfiguredExports(config));
+		String owner = config.getUserCreated();
+		if (owner != null && !owner.isBlank()) {
+
+			IdentityUtil identity = IdentityUtil.create(owner, List.of("USER"));
+			identity.doAsWithException(() -> {
+				// The catalog entry point: a per-user, impersonated, recursive view.
+				specs.add(buildRootCatalog(config));
+				// The statically declared exports of the configuration. Reads are always
+				// impersonated (and access-checked) per connected user, but the shared static
+				// listing itself is produced by impersonating the configuration's creator
+				// (userCreated) and keeping only the exports that owner may READ.
+				specs.addAll(resolveConfiguredExports(config));
+			});
+		} else
+			throw new IllegalStateException("No owner present");
 		return specs;
 	}
 
 	/**
-	 * Produces the static export specs. When the configuration has a resolvable creator
-	 * ({@code userCreated}), the listing is filtered under that owner's identity so it
-	 * mirrors what the owner can read; if the owner is absent, unknown or disabled — so
-	 * {@code getCurrentUser()} throws — it falls back to the raw, unfiltered
-	 * configuration list.
+	 * Produces the static export specs. When the configuration has a resolvable
+	 * creator ({@code userCreated}), the listing is filtered under that owner's
+	 * identity so it mirrors what the owner can read; if the owner is absent,
+	 * unknown or disabled — so {@code getCurrentUser()} throws — it falls back to
+	 * the raw, unfiltered configuration list.
 	 */
 	private List<SyncResourceSpecification> resolveConfiguredExports(GeboMCPServerConfig config)
 			throws GeboPersistenceException {
@@ -194,9 +209,10 @@ public class GeboMcpResourcesProvider {
 	}
 
 	/**
-	 * Collects the static export specs from the configuration. When {@code filtered} is
-	 * {@code true} each export is kept only if the (impersonated) current user may READ
-	 * it; when {@code false} every existing export is listed.
+	 * Collects the static export specs from the configuration. When
+	 * {@code filtered} is {@code true} each export is kept only if the
+	 * (impersonated) current user may READ it; when {@code false} every existing
+	 * export is listed.
 	 */
 	private List<SyncResourceSpecification> collectConfiguredExports(GeboMCPServerConfig config, boolean filtered)
 			throws GeboPersistenceException {
@@ -225,7 +241,8 @@ public class GeboMcpResourcesProvider {
 					continue;
 				}
 				GProjectEndpoint endpoint = persistenceManager.findByReference(ref, GProjectEndpoint.class);
-				if (endpoint == null || (filtered && !securityService.isCanDoAction(endpoint, true, AclGrantType.READ))) {
+				if (endpoint == null
+						|| (filtered && !securityService.isCanDoAction(endpoint, true, AclGrantType.READ))) {
 					continue;
 				}
 				specs.add(endpointSpec(ref, endpoint));
@@ -239,7 +256,8 @@ public class GeboMcpResourcesProvider {
 		return new SyncResourceSpecification(
 				Resource.builder().uri(uri).name(name(kb.getDescription(), code)).description(kb.getDescription())
 						.mimeType(MIME_TEXT).build(),
-				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> readKnowledgeBase(uri, code)));
+				(exchange, request) -> securitySupport.runAs(exchange.transportContext(),
+						() -> readKnowledgeBase(uri, code)));
 	}
 
 	private SyncResourceSpecification projectSpec(String code, GProject project) {
@@ -247,7 +265,8 @@ public class GeboMcpResourcesProvider {
 		return new SyncResourceSpecification(
 				Resource.builder().uri(uri).name(name(project.getDescription(), code))
 						.description(project.getDescription()).mimeType(MIME_TEXT).build(),
-				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> readProject(uri, code)));
+				(exchange, request) -> securitySupport.runAs(exchange.transportContext(),
+						() -> readProject(uri, code)));
 	}
 
 	private SyncResourceSpecification endpointSpec(GObjectRef<GProjectEndpoint> ref, GProjectEndpoint endpoint) {
@@ -255,7 +274,8 @@ public class GeboMcpResourcesProvider {
 		return new SyncResourceSpecification(
 				Resource.builder().uri(uri).name(name(endpoint.getDescription(), endpoint.getCode()))
 						.description(endpoint.getDescription()).mimeType(MIME_TEXT).build(),
-				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> readEndpoint(uri, ref)));
+				(exchange, request) -> securitySupport.runAs(exchange.transportContext(),
+						() -> readEndpoint(uri, ref)));
 	}
 
 	// ---- shared per-node reads (impersonated single-resource access) -----------
@@ -334,9 +354,9 @@ public class GeboMcpResourcesProvider {
 
 	/**
 	 * Whether the server exposes anything at all — either every personally visible
-	 * knowledge base ({@code shareAllPersonallyVisible}) or an explicit export list.
-	 * When it does, the whole navigable template set (knowledge base → project →
-	 * endpoint → virtual folder → document) is published.
+	 * knowledge base ({@code shareAllPersonallyVisible}) or an explicit export
+	 * list. When it does, the whole navigable template set (knowledge base →
+	 * project → endpoint → virtual folder → document) is published.
 	 */
 	private static boolean exposesAnyContent(GeboMCPServerConfig config) {
 		return Boolean.TRUE.equals(config.getShareAllPersonallyVisible()) || exposesFolderedContent(config);
@@ -359,10 +379,11 @@ public class GeboMcpResourcesProvider {
 	private static final String ROOT_URI = "gebo-root://catalog";
 
 	/**
-	 * Builds the {@code gebo-root://catalog} resource. Its read runs under the calling
-	 * user's identity and lists only the entries that user may access (either every
-	 * personally visible root knowledge base, or the configured knowledge
-	 * bases/projects/endpoints filtered by READ), each carrying its navigable URI.
+	 * Builds the {@code gebo-root://catalog} resource. Its read runs under the
+	 * calling user's identity and lists only the entries that user may access
+	 * (either every personally visible root knowledge base, or the configured
+	 * knowledge bases/projects/endpoints filtered by READ), each carrying its
+	 * navigable URI.
 	 */
 	private SyncResourceSpecification buildRootCatalog(GeboMCPServerConfig config) {
 		Resource resource = Resource.builder().uri(ROOT_URI).name("Gebo catalog")
@@ -383,9 +404,10 @@ public class GeboMcpResourcesProvider {
 	 * Renders the per-user catalog: the accessible content, recursively (with the
 	 * configured depth limitations). Must be called under the caller's security
 	 * context (i.e. inside {@code runAs}), so the visibility service and ACL checks
-	 * resolve against the connected MCP user. Under {@code shareAllPersonallyVisible}
-	 * it descends every personally visible root knowledge base; otherwise it descends
-	 * the configured knowledge bases / projects / endpoints the caller may READ.
+	 * resolve against the connected MCP user. Under
+	 * {@code shareAllPersonallyVisible} it descends every personally visible root
+	 * knowledge base; otherwise it descends the configured knowledge bases /
+	 * projects / endpoints the caller may READ.
 	 */
 	private String renderCatalog(GeboMCPServerConfig config) throws GeboPersistenceException {
 		StringBuilder sb = new StringBuilder();
@@ -438,8 +460,9 @@ public class GeboMcpResourcesProvider {
 	}
 
 	/**
-	 * Builds the {@code gebo-kb://{id}} template: reads a knowledge base (its projects,
-	 * endpoints and nested folders) under the caller's identity, re-checking READ.
+	 * Builds the {@code gebo-kb://{id}} template: reads a knowledge base (its
+	 * projects, endpoints and nested folders) under the caller's identity,
+	 * re-checking READ.
 	 */
 	private SyncResourceTemplateSpecification buildKnowledgeBaseTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(KB_SCHEME + "{id}").name("Knowledge base")
@@ -457,12 +480,14 @@ public class GeboMcpResourcesProvider {
 	}
 
 	/**
-	 * Builds the {@code gebo-project://{id}} template: reads a project (its endpoints,
-	 * sub-projects and nested folders) under the caller's identity, re-checking READ.
+	 * Builds the {@code gebo-project://{id}} template: reads a project (its
+	 * endpoints, sub-projects and nested folders) under the caller's identity,
+	 * re-checking READ.
 	 */
 	private SyncResourceTemplateSpecification buildProjectTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(PROJECT_SCHEME + "{id}").name("Project")
-				.description("A project and its endpoints, sub-projects and nested folders.").mimeType(MIME_TEXT).build();
+				.description("A project and its endpoints, sub-projects and nested folders.").mimeType(MIME_TEXT)
+				.build();
 		return new SyncResourceTemplateSpecification(template,
 				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> {
 					String uri = request.uri();
@@ -475,10 +500,10 @@ public class GeboMcpResourcesProvider {
 	}
 
 	/**
-	 * Builds the {@code gebo-endpoint://{id}} template: reads an endpoint (its nested
-	 * folders) under the caller's identity, re-checking READ. The {@code id} encodes
-	 * the endpoint's concrete class name and code, since an endpoint's identity is the
-	 * pair (class, code).
+	 * Builds the {@code gebo-endpoint://{id}} template: reads an endpoint (its
+	 * nested folders) under the caller's identity, re-checking READ. The {@code id}
+	 * encodes the endpoint's concrete class name and code, since an endpoint's
+	 * identity is the pair (class, code).
 	 */
 	private SyncResourceTemplateSpecification buildEndpointTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(ENDPOINT_SCHEME + "{id}")
@@ -495,7 +520,10 @@ public class GeboMcpResourcesProvider {
 				}));
 	}
 
-	/** Rebuilds an endpoint reference (class + code) from a {@code gebo-endpoint://} id token. */
+	/**
+	 * Rebuilds an endpoint reference (class + code) from a {@code gebo-endpoint://}
+	 * id token.
+	 */
 	private static GObjectRef<GProjectEndpoint> endpointRefFromToken(String token) {
 		String decoded = decodeId(token);
 		if (decoded == null) {
@@ -602,8 +630,8 @@ public class GeboMcpResourcesProvider {
 	}
 
 	/**
-	 * Extracts the raw (still Base64URL-encoded) id token that follows the scheme in a
-	 * templated URI, or {@code null} if the URI doesn't carry one.
+	 * Extracts the raw (still Base64URL-encoded) id token that follows the scheme
+	 * in a templated URI, or {@code null} if the URI doesn't carry one.
 	 */
 	private static String tokenFromUri(String uri, String scheme) {
 		if (uri == null || !uri.startsWith(scheme)) {
@@ -648,7 +676,9 @@ public class GeboMcpResourcesProvider {
 		return PROJECT_SCHEME + encodeId(code);
 	}
 
-	/** Endpoint identity is (concrete class, code); both are encoded into the id. */
+	/**
+	 * Endpoint identity is (concrete class, code); both are encoded into the id.
+	 */
 	private static String endpointUri(GProjectEndpoint endpoint) {
 		return ENDPOINT_SCHEME + encodeId(endpoint.getClass().getName() + ' ' + endpoint.getCode());
 	}
@@ -762,7 +792,8 @@ public class GeboMcpResourcesProvider {
 		if (subProjects != null) {
 			for (GProject sub : subProjects) {
 				sb.append(NEWLINE).append(indent).append("- project: ")
-						.append(name(sub.getDescription(), sub.getCode())).append("  ").append(projectUri(sub.getCode()));
+						.append(name(sub.getDescription(), sub.getCode())).append("  ")
+						.append(projectUri(sub.getCode()));
 				appendProjectSubtree(sub, sb, indent + "    ", depth + 1);
 			}
 		}
@@ -854,12 +885,18 @@ public class GeboMcpResourcesProvider {
 	}
 
 	/**
-	 * Resolves a document by code and confirms the calling user may see it, by
-	 * checking it is among the visible children of its parent virtual folder.
-	 * Returns {@code null} when the document does not exist, has no parent folder
-	 * (so it is not reachable through an exported endpoint), or is not visible to
-	 * the caller.
-	 * 
+	 * Resolves a document by code and confirms the calling user may read it. A
+	 * {@link GDocumentReference} carries only the ACL security model
+	 * ({@link ai.gebo.acl.IAclGrantedResource}, not
+	 * {@link ai.gebo.model.IGObjectWithSecurity}), so access is checked with
+	 * {@link IGSecurityService#isCanDoAction} for {@code READ} — the applicable
+	 * platform-standard check for this type. Under the {@code ACL_BASED} policy this
+	 * enforces the caller's grants; under {@code GROUP_BASED} it is intentionally
+	 * permissive, per platform convention (per-user containment is then applied by
+	 * {@link IGKnowledgebaseVisibilityService} during the folder navigation through
+	 * which the document's URI is discovered). Returns {@code null} when the document
+	 * does not exist, is deleted, or the caller may not read it.
+	 *
 	 * @throws GeboPersistenceException
 	 */
 	private GDocumentReference resolveVisibleDocument(String code) throws GeboPersistenceException {
