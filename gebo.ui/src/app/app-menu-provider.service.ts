@@ -9,9 +9,10 @@
 
 import { Injectable } from '@angular/core';
 import { ApplicationMenuProviderService, SetupStatus } from '@Gebo.ai/reusable-ui';
-import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
+import { UserInfo, GeboMcpServerUserControllerService, GeneratedUserApiKeyControllerService } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, forkJoin, of } from 'rxjs';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { GeboSetupWizardService } from '@Gebo.ai/gebo-ai-admin-ui';
 
 const editMyProfileMenuItemId: string = "editMyProfileMenuItem";
@@ -34,46 +35,85 @@ export class AppMenuProviderService extends ApplicationMenuProviderService {
   private blinkState: boolean = false;
   private stopBlink: boolean = true;
   private setupStatus?: SetupStatus;
+  private integrationsAllowed$: Observable<boolean> | null = null;
 
-  constructor(private geboWizardSetupService: GeboSetupWizardService) {
+  constructor(
+    private geboWizardSetupService: GeboSetupWizardService,
+    private geboMcpServerUserControllerService: GeboMcpServerUserControllerService,
+    private generatedUserApiKeyControllerService: GeneratedUserApiKeyControllerService
+  ) {
     super();
+  }
+
+  private checkIntegrationsAllowed(): Observable<boolean> {
+    if (!this.integrationsAllowed$) {
+      this.integrationsAllowed$ = forkJoin([
+        this.geboMcpServerUserControllerService.getUsersCanAccessMcpServersList().pipe(catchError(() => of(false))),
+        this.generatedUserApiKeyControllerService.isUserGeneratedApiKeyGenerationAllowed().pipe(catchError(() => of(false)))
+      ]).pipe(
+        map(([mcpAllowed, apiKeyAllowed]) => mcpAllowed && apiKeyAllowed),
+        shareReplay(1)
+      );
+    }
+    return this.integrationsAllowed$;
   }
 
   public getMenuItems(userInfo?: UserInfo): Observable<MegaMenuItem[]> {
     if (!userInfo) {
+      this.integrationsAllowed$ = null;
       this.menuItemsSubject.next([]);
       return this.menuItemsSubject.asObservable();
     }
 
-    const items: MegaMenuItem[] = [];
     const isAdmin: boolean = userInfo.roles && userInfo.roles.find(c => c === 'ADMIN') ? true : false;
-    
-    if (isAdmin === true) {
-      menuItemsProtos.forEach(entry => {
-        items.push({...entry});
-      });
-    } else {
-      menuItemsProtos.forEach(entry => {
-        if (!privilegedMenuIds.find(x => x === entry.id)) {
-          items.push({...entry});
+
+    this.checkIntegrationsAllowed().subscribe(allowed => {
+      const items: MegaMenuItem[] = [];
+      const protos = [...menuItemsProtos];
+
+      if (allowed) {
+        const profileIndex = protos.findIndex(x => x.id === editMyProfileMenuItemId);
+        const integrationsItem: MegaMenuItem = {
+          icon: "pi pi-link",
+          label: "Api Keys/MCP",
+          routerLink: 'ui/user-integrations',
+          id: "userIntegrationsMenuItem"
+        };
+        if (profileIndex !== -1) {
+          protos.splice(profileIndex, 0, integrationsItem);
+        } else {
+          protos.push(integrationsItem);
         }
-      });
-    }
+      }
 
-    this.menuItemsSubject.next(items);
+      if (isAdmin === true) {
+        protos.forEach(entry => {
+          items.push({ ...entry });
+        });
+      } else {
+        protos.forEach(entry => {
+          if (!privilegedMenuIds.find(x => x === entry.id)) {
+            items.push({ ...entry });
+          }
+        });
+      }
 
-    if (isAdmin === true) {
-      this.pollSetupState();
-    }
+      this.menuItemsSubject.next(items);
+
+      if (isAdmin === true) {
+        this.pollSetupState();
+      }
+    });
 
     return this.menuItemsSubject.asObservable();
   }
+
 
   private startBlinkSetupState(): void {
     const currentItems = this.menuItemsSubject.getValue();
     const setupItem = currentItems.find(x => x.id === setupItemId);
     if (!setupItem) return;
-    
+
     if (this.blinkState === false && this.stopBlink === false) {
       if (this.setupStatus === 'incomplete') {
         setupItem.style = { "text-color": "white", "background-color": "red" };
@@ -89,9 +129,9 @@ export class AppMenuProviderService extends ApplicationMenuProviderService {
       setupItem.state = { incomplete: true };
       this.blinkState = false;
     }
-    
+
     this.menuItemsSubject.next([...currentItems]);
-    
+
     if (!this.stopBlink) {
       setTimeout(() => {
         this.startBlinkSetupState();

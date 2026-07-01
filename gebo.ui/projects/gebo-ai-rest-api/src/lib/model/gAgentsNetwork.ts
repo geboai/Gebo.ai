@@ -23,6 +23,7 @@ export interface GAgentsNetwork {
     accessibleUsers?: Array<string>;
     accessibleGroups?: Array<string>;
     aclAliases?: Array<number>;
+    agentsNetworkServiceFactoryId: string;
     scenarioDescription: string;
     agents: Array<AgentNetworkParticipant>;
     readOnly?: boolean;

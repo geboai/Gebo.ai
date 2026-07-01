@@ -7,4 +7,5 @@ public interface IGAgentsNetworkServiceFactoryRepositoryPattern
 
 	<InputType,OutputType,NetworkService extends IGAgentsNetworkService<InputType,OutputType>> IGAgentsNetworkServiceFactory<InputType,OutputType, NetworkService> getFactory(
 			Class<NetworkService> type);
+	
 }

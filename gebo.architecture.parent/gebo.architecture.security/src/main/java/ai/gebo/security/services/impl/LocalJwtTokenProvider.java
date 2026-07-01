@@ -87,6 +87,20 @@ public class LocalJwtTokenProvider {
 				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
 	}
 
+	public String createToken(String username, Date expiration) {
+
+		Date now = new Date();
+
+		JwtBuilder builder = Jwts.builder();
+		Map<String, Object> claims = new HashMap<String, Object>();
+		claims.put(AUTH_TYPE_CLAIM, AuthProviderType.LOCAL_JWT.name());
+		claims.put(AUTH_PROVIDER_CLAIM, AuthProvider.local.name());
+		builder.addClaims(claims);
+		// Build and sign the JWT
+		return builder.setSubject(username).setIssuedAt(new Date()).setExpiration(expiration)
+				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
+	}
+
 	public String createToken(String subject, AuthProviderType providerType, AuthProvider authProvider,
 			String registrationId, long expirationTime) {
 

@@ -10,6 +10,10 @@ public interface IGAgentsNetworkServiceFactory<InputType, OutputType, ServiceTyp
 
 	public boolean canHandle(Class<IGAgentsNetworkService> agentNetworkService);
 
+	Class<OutputType> getOutputType();
+
+	Class<InputType> getInputType();
+
 	public ServiceType create(GAgentsNetwork network, INotificationSink notificationSink, Class<InputType> inputType,
 			Class<OutputType> outputType, ReactiveIdentityUtil runAs) throws NetworkOfAgentsException;
 }
