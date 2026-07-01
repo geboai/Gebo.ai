@@ -120,6 +120,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GeboMcpResourcesProvider {
 
+	private static final String DOCUMENT_PLAIN_TEXT_DESCRIPTION = "Plain-text rendition of a document under an exported  virtual drive.";
+
+	private static final String DOCUMENT_DESCRIPTION = "Content of a document under an exported virtual drive.";
+
+	private static final String VIRTUAL_FOLDER_DESCRIPTION = "Child folders and documents of a virtual folder under an exported  virtual drive.";
+
+	private static final String PROJECT_ENDPOINT_DESCRIPTION = "A virtual drive and its nested virtual folders.";
+
+	private static final String PROJECT_ENDPOINT_NAME = "Virtual drive";
+
+	private static final String PROJECT_MCP_DESCRIPTION = "A project and its virtual drives, sub-projects and nested folders.";
+
+	private static final String KNOWLEDGE_BASE_MCP_DESCRIPTION = "A knowledge base and its projects, virtual drives and nested folders.";
+
 	private static final char NEWLINE = '\n';
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeboMcpResourcesProvider.class);
@@ -466,7 +480,7 @@ public class GeboMcpResourcesProvider {
 	 */
 	private SyncResourceTemplateSpecification buildKnowledgeBaseTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(KB_SCHEME + "{id}").name("Knowledge base")
-				.description("A knowledge base and its projects, endpoints and nested folders.").mimeType(MIME_TEXT)
+				.description(KNOWLEDGE_BASE_MCP_DESCRIPTION).mimeType(MIME_TEXT)
 				.build();
 		return new SyncResourceTemplateSpecification(template,
 				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> {
@@ -486,7 +500,7 @@ public class GeboMcpResourcesProvider {
 	 */
 	private SyncResourceTemplateSpecification buildProjectTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(PROJECT_SCHEME + "{id}").name("Project")
-				.description("A project and its endpoints, sub-projects and nested folders.").mimeType(MIME_TEXT)
+				.description(PROJECT_MCP_DESCRIPTION).mimeType(MIME_TEXT)
 				.build();
 		return new SyncResourceTemplateSpecification(template,
 				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> {
@@ -507,7 +521,7 @@ public class GeboMcpResourcesProvider {
 	 */
 	private SyncResourceTemplateSpecification buildEndpointTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(ENDPOINT_SCHEME + "{id}")
-				.name("Project endpoint").description("A project endpoint and its nested virtual folders.")
+				.name(PROJECT_ENDPOINT_NAME).description(PROJECT_ENDPOINT_DESCRIPTION)
 				.mimeType(MIME_TEXT).build();
 		return new SyncResourceTemplateSpecification(template,
 				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> {
@@ -548,7 +562,7 @@ public class GeboMcpResourcesProvider {
 	private SyncResourceTemplateSpecification buildVirtualFolderTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(VFOLDER_SCHEME + "{code}")
 				.name("Virtual folder")
-				.description("Child folders and documents of a virtual folder under an exported project endpoint.")
+				.description(VIRTUAL_FOLDER_DESCRIPTION)
 				.mimeType(MIME_TEXT).build();
 		return new SyncResourceTemplateSpecification(template,
 				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> {
@@ -572,7 +586,7 @@ public class GeboMcpResourcesProvider {
 	 */
 	private SyncResourceTemplateSpecification buildDocumentTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(DOCUMENT_SCHEME + "{code}").name("Document")
-				.description("Content of a document under an exported project endpoint.").build();
+				.description(DOCUMENT_DESCRIPTION).build();
 		return new SyncResourceTemplateSpecification(template,
 				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> {
 					String uri = request.uri();
@@ -606,7 +620,7 @@ public class GeboMcpResourcesProvider {
 	private SyncResourceTemplateSpecification buildDocumentTextTemplate() {
 		ResourceTemplate template = ResourceTemplate.builder().uriTemplate(DOCUMENT_TEXT_SCHEME + "{code}")
 				.name("Document (extracted text)")
-				.description("Plain-text rendition of a document under an exported project endpoint.")
+				.description(DOCUMENT_PLAIN_TEXT_DESCRIPTION)
 				.mimeType(MIME_TEXT).build();
 		return new SyncResourceTemplateSpecification(template,
 				(exchange, request) -> securitySupport.runAs(exchange.transportContext(), () -> {
