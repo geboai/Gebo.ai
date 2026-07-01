@@ -65,6 +65,7 @@ import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./ra
 import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
 import { AgentStatusService, GeboAIAgentSetupWizardComponent } from "./agent-setup-wizard.component";
 import { McpServerWizardComponent, McpServerWizardStatusService } from "./mcp-server-wizard.component";
+import { GeboAIMCPServerWizardComponent, GeboAIMcpServerWizardStatusService } from "./gebo-ai-mcp-server-wizard.component";
 import { GeneratedAdminApiKeyWizardComponent, GeneratedAdminApiKeyEnabledService } from "./generated-admin-api-key-wizard.component";
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
@@ -337,6 +338,18 @@ const mcpServerSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+const geboMcpServerSetupSection: SetupWizardsSection = {
+    orderEntry: 19.5,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: GeboAIMcpServerWizardStatusService,
+    label: "Configure Exposed MCP Servers",
+    description: "Configure local MCP servers to expose tools, resources, and prompts from your Gebo installation.",
+    wizardComponent: GeboAIMCPServerWizardComponent,
+    wizardSectionId: "geboMcpServerSetupSection",
+    mandatory: false
+};
+
 const generatedAdminApiKeySetupSection: SetupWizardsSection = {
     orderEntry: 20,
     requredStepsIds: [],
@@ -358,7 +371,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule, GeboAINotificationsModule, DropdownModule, CalendarModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -386,6 +399,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         RagAutotuneStatusService,
         AgentStatusService,
         McpServerWizardStatusService,
+        GeboAIMcpServerWizardStatusService,
         GeneratedAdminApiKeyEnabledService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
@@ -405,6 +419,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: agentSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: mcpServerSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: geboMcpServerSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: generatedAdminApiKeySetupSection, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 
