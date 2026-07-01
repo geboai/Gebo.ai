@@ -18,6 +18,7 @@ import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import io.modelcontextprotocol.json.McpJsonMapper;
 import io.modelcontextprotocol.json.jackson3.JacksonMcpJsonMapperSupplier;
 import io.modelcontextprotocol.server.McpServer;
@@ -61,8 +62,9 @@ public class GeboMcpServerBuilder {
 	 *
 	 * @param config the MCP server configuration
 	 * @return the live server instance
+	 * @throws GeboPersistenceException 
 	 */
-	public GeboMcpServerInstance build(GeboMCPServerConfig config) {
+	public GeboMcpServerInstance build(GeboMCPServerConfig config) throws GeboPersistenceException {
 		McpJsonMapper jsonMapper = new JacksonMcpJsonMapperSupplier().get();
 		String endpoint = ENDPOINT_PREFIX + config.getExportedUniqueRelativeUrl();
 

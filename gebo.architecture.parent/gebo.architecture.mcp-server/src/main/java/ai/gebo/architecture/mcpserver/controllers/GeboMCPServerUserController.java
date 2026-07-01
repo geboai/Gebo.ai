@@ -46,9 +46,16 @@ import lombok.AllArgsConstructor;
  * {@code adminCanDoAll}) is granted on. For each visible server it returns a
  * compact {@link UserAccessibleMcpServerView}: the connectivity/endpoint
  * coordinates plus a short list of the exported tools, resources and prompts.
+ * <p>
+ * Availability of this user-level lookup is gated by
+ * {@link ai.gebo.architecture.mcpserver.config.GeboMcpResourcesConfig#isUsersCanLookupMcpServers()}
+ * (property {@code ai.gebo.mcp.server.resources.users-can-lookup-mcp-servers}, default
+ * {@code true}): when disabled, standard {@code USER}s are forbidden, while
+ * administrators — who manage servers through {@link GeboMCPServerAdminController} —
+ * keep access.
  */
 @RestController
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and @geboMcpResourcesConfig.usersCanLookupMcpServers)")
 @RequestMapping("api/user/GeboMCPServerUserController")
 @AllArgsConstructor
 public class GeboMCPServerUserController {

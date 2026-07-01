@@ -27,9 +27,8 @@ public class GeboMCPServerConfig extends GBaseObject implements IGObjectWithSecu
 
 	// Indicates whether the project is accessible to all users.
 	private Boolean accessibleToAll = null;
-
 	private List<Integer> aclAliases = null;
-
+	private Boolean shareAllPersonallyVisible = null;
 	private List<String> enabledTools = null;
 	private List<String> exportedKnowledgeBasesAsResources = null;
 	private List<String> exportedProjectsAsResources = null;
