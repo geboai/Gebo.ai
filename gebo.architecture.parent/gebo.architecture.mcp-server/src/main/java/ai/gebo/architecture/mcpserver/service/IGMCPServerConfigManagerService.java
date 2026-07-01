@@ -20,8 +20,9 @@ import ai.gebo.security.services.IGSecurityService.AclOwnerInfo;
 
 /**
  * Administrative service to manage the {@link GeboMCPServerConfig} nodes that
- * describe the erogated MCP servers. Every mutation keeps the live runtime in sync
- * so the {@code mcp/<url>} endpoints reflect the persisted state immediately.
+ * describe the erogated MCP servers. Every mutation keeps the live runtime in
+ * sync so the {@code mcp/<url>} endpoints reflect the persisted state
+ * immediately.
  */
 public interface IGMCPServerConfigManagerService {
 
@@ -30,7 +31,8 @@ public interface IGMCPServerConfigManagerService {
 	 *
 	 * @param config the configuration to create
 	 * @return the persisted configuration
-	 * @throws GeboPersistenceException if persistence fails or the relative URL is not unique/valid
+	 * @throws GeboPersistenceException if persistence fails or the relative URL is
+	 *                                  not unique/valid
 	 */
 	GeboMCPServerConfig insert(GeboMCPServerConfig config) throws GeboPersistenceException;
 
@@ -39,12 +41,14 @@ public interface IGMCPServerConfigManagerService {
 	 *
 	 * @param config the configuration to update
 	 * @return the persisted configuration
-	 * @throws GeboPersistenceException if persistence fails or the relative URL is not unique/valid
+	 * @throws GeboPersistenceException if persistence fails or the relative URL is
+	 *                                  not unique/valid
 	 */
 	GeboMCPServerConfig update(GeboMCPServerConfig config) throws GeboPersistenceException;
 
 	/**
-	 * Deletes the MCP server configuration with the given code and unpublishes its endpoint.
+	 * Deletes the MCP server configuration with the given code and unpublishes its
+	 * endpoint.
 	 *
 	 * @param code the configuration code
 	 * @throws GeboPersistenceException if deletion fails
@@ -87,4 +91,6 @@ public interface IGMCPServerConfigManagerService {
 	 * @throws GeboPersistenceException if persistence fails
 	 */
 	GeboMCPServerConfig setAccessAcls(String code, List<AclOwnerInfo> owners) throws GeboPersistenceException;
+
+	
 }

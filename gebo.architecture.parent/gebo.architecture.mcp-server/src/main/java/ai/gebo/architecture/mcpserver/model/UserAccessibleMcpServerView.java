@@ -39,6 +39,15 @@ public class UserAccessibleMcpServerView {
 	/** Whether the server is currently published/served. */
 	private Boolean enabled;
 
+	/**
+	 * Whether the server shares the caller's whole personally visible content
+	 * hierarchy instead of an explicit export list. When {@code true} the
+	 * {@link #resources} report reflects the caller's personally visible root
+	 * knowledge bases (resolved under the caller's own rights), not the static
+	 * configuration.
+	 */
+	private boolean shareAllPersonallyVisible;
+
 	// --- Connectivity / endpoint configuration -----------------------------------
 
 	/** The unique relative URL the server is published under, e.g. {@code my-server}. */

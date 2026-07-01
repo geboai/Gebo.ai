@@ -1,6 +1,10 @@
 package ai.gebo.architecture.mcpserver.repository;
 
+import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
@@ -20,4 +24,8 @@ public interface GeboMCPServerConfigRepository extends IGBaseMongoDBRepository<G
 	 * @return the matching configuration, if any
 	 */
 	Optional<GeboMCPServerConfig> findByExportedUniqueRelativeUrl(String exportedUniqueRelativeUrl);
+
+	
+
+	
 }

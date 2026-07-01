@@ -17,30 +17,37 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
 import ai.gebo.architecture.mcpserver.repository.GeboMCPServerConfigRepository;
 import ai.gebo.architecture.mcpserver.runtime.GeboMcpServerRegistry;
 import ai.gebo.architecture.mcpserver.service.IGMCPServerConfigManagerService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IGSecurityService.AclOwnerInfo;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.AllArgsConstructor;
 
 /**
  * Default implementation of {@link IGMCPServerConfigManagerService}.
  * <p>
  * Persists {@link GeboMCPServerConfig} nodes through the shared
- * {@link IGPersistentObjectManager}, enforces that each {@code exportedUniqueRelativeUrl}
- * is unique and URL-safe, applies ACL grants through {@link IGSecurityService}, and after
- * every mutation refreshes the {@link GeboMcpServerRegistry} so the live {@code mcp/<url>}
- * endpoints track the persisted state without a restart.
+ * {@link IGPersistentObjectManager}, enforces that each
+ * {@code exportedUniqueRelativeUrl} is unique and URL-safe, applies ACL grants
+ * through {@link IGSecurityService}, and after every mutation refreshes the
+ * {@link GeboMcpServerRegistry} so the live {@code mcp/<url>} endpoints track
+ * the persisted state without a restart.
  */
 @Service
 @AllArgsConstructor
 public class GMCPServerConfigManagerServiceImpl implements IGMCPServerConfigManagerService {
 
-	/** Relative URL: starts with an alphanumeric, then alphanumerics, '-', '_', '.' or '/'. */
+	/**
+	 * Relative URL: starts with an alphanumeric, then alphanumerics, '-', '_', '.'
+	 * or '/'.
+	 */
 	private static final Pattern URL_PATTERN = Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._/-]*$");
 
 	private final IGPersistentObjectManager persistentObjectManager;
@@ -50,6 +57,8 @@ public class GMCPServerConfigManagerServiceImpl implements IGMCPServerConfigMana
 
 	@Override
 	public GeboMCPServerConfig insert(GeboMCPServerConfig config) throws GeboPersistenceException {
+		if (!securityService.isCurrentUserAdmin())
+			throw new SecurityException("You cannot handle mcp server configs");
 		validate(config);
 		GeboMCPServerConfig saved = persistentObjectManager.insert(config);
 		registry.reload(saved.getCode());
@@ -58,6 +67,8 @@ public class GMCPServerConfigManagerServiceImpl implements IGMCPServerConfigMana
 
 	@Override
 	public GeboMCPServerConfig update(GeboMCPServerConfig config) throws GeboPersistenceException {
+		if (!securityService.isCurrentUserAdmin())
+			throw new SecurityException("You cannot handle mcp server configs");
 		validate(config);
 		GeboMCPServerConfig saved = persistentObjectManager.update(config);
 		registry.reload(saved.getCode());
@@ -66,6 +77,8 @@ public class GMCPServerConfigManagerServiceImpl implements IGMCPServerConfigMana
 
 	@Override
 	public void delete(String code) throws GeboPersistenceException {
+		if (!securityService.isCurrentUserAdmin())
+			throw new SecurityException("You cannot handle mcp server configs");
 		GeboMCPServerConfig existing = findByCode(code);
 		if (existing != null) {
 			persistentObjectManager.delete(existing);
@@ -75,17 +88,27 @@ public class GMCPServerConfigManagerServiceImpl implements IGMCPServerConfigMana
 
 	@Override
 	public GeboMCPServerConfig findByCode(String code) throws GeboPersistenceException {
-		return persistentObjectManager.findById(GeboMCPServerConfig.class, code);
+		GeboMCPServerConfig cfg = persistentObjectManager.findById(GeboMCPServerConfig.class, code);
+		if (securityService.isCurrentUserAdmin())
+			return cfg;
+		else if (securityService.isCanDo(cfg, true, AclGrantType.READ))
+			return cfg;
+		return null;
 	}
 
 	@Override
 	public List<GeboMCPServerConfig> findAll() throws GeboPersistenceException {
+		
 		return persistentObjectManager.findAll(GeboMCPServerConfig.class);
+
 	}
 
 	@Override
 	public Page<GeboMCPServerConfig> getPagedList(Pageable pageable) throws GeboPersistenceException {
-		return persistentObjectManager.findAll(GeboMCPServerConfig.class, pageable);
+		if (securityService.isCurrentUserAdmin())
+			return persistentObjectManager.findAll(GeboMCPServerConfig.class, pageable);
+		else
+			return repository.findByUserCreated(securityService.getCurrentUser().getUsername(), pageable);
 	}
 
 	@Override
@@ -100,8 +123,8 @@ public class GMCPServerConfigManagerServiceImpl implements IGMCPServerConfigMana
 	}
 
 	/**
-	 * Validates the relative URL: present, URL-safe, not ending with a slash, and not
-	 * already used by a different configuration.
+	 * Validates the relative URL: present, URL-safe, not ending with a slash, and
+	 * not already used by a different configuration.
 	 */
 	private void validate(GeboMCPServerConfig config) throws GeboPersistenceException {
 		String url = config.getExportedUniqueRelativeUrl();
@@ -118,4 +141,5 @@ public class GMCPServerConfigManagerServiceImpl implements IGMCPServerConfigMana
 					"exportedUniqueRelativeUrl '" + url + "' is already used by another MCP server configuration");
 		}
 	}
+
 }

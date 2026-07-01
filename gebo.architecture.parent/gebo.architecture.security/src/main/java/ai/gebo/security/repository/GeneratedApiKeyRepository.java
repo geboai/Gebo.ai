@@ -17,6 +17,6 @@ public interface GeneratedApiKeyRepository extends IGBaseMongoDBRepository<Gener
 		return GeneratedApiKey.class;
 	}
 
-	Page<GeneratedApiKeyInfo> findByUserCreated(String username, Pageable pageable);
+	Page<GeneratedApiKeyInfo> findProjectedByUserCreated(String username, Pageable pageable);
 
 }

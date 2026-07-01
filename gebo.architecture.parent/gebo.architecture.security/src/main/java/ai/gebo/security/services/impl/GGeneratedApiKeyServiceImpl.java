@@ -63,7 +63,7 @@ public class GGeneratedApiKeyServiceImpl implements IGGeneratedApiKeyService {
 		if (securityService.isCurrentUserAdmin()) {
 			return repository.findAllProjectedBy(pageable);
 		} else {
-			return repository.findByUserCreated(securityService.getCurrentUser().getUsername(), pageable);
+			return repository.findProjectedByUserCreated(securityService.getCurrentUser().getUsername(), pageable);
 		}
 
 	}

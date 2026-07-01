@@ -29,6 +29,8 @@ import ai.gebo.architecture.mcpserver.model.UserAccessibleMcpServerView;
 import ai.gebo.architecture.mcpserver.runtime.GeboMcpAccessChecker;
 import ai.gebo.architecture.mcpserver.service.IGMCPServerConfigManagerService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.model.base.GObjectRef;
 import lombok.AllArgsConstructor;
 
@@ -49,10 +51,10 @@ import lombok.AllArgsConstructor;
  * <p>
  * Availability of this user-level lookup is gated by
  * {@link ai.gebo.architecture.mcpserver.config.GeboMcpResourcesConfig#isUsersCanLookupMcpServers()}
- * (property {@code ai.gebo.mcp.server.resources.users-can-lookup-mcp-servers}, default
- * {@code true}): when disabled, standard {@code USER}s are forbidden, while
- * administrators — who manage servers through {@link GeboMCPServerAdminController} —
- * keep access.
+ * (property {@code ai.gebo.mcp.server.resources.users-can-lookup-mcp-servers},
+ * default {@code true}): when disabled, standard {@code USER}s are forbidden,
+ * while administrators — who manage servers through
+ * {@link GeboMCPServerAdminController} — keep access.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and @geboMcpResourcesConfig.usersCanLookupMcpServers)")
@@ -79,6 +81,7 @@ public class GeboMCPServerUserController {
 	private final IGMCPServerConfigManagerService managerService;
 	private final GeboMcpAccessChecker accessChecker;
 	private final GeboMcpResourcesConfig mcpResourcesConfig;
+	private final IGKnowledgebaseVisibilityService visibilityService;
 
 	/**
 	 * Lists every erogated MCP server the current user may call, as a compact view
@@ -134,12 +137,13 @@ public class GeboMCPServerUserController {
 	 * Maps a configuration to its user-facing view, deriving the short capability
 	 * report from the configured names without resolving the underlying objects.
 	 */
-	private UserAccessibleMcpServerView toView(GeboMCPServerConfig config) {
+	private UserAccessibleMcpServerView toView(GeboMCPServerConfig config) throws GeboPersistenceException {
 		UserAccessibleMcpServerView view = new UserAccessibleMcpServerView();
 		view.setCode(config.getCode());
 		view.setDescription(config.getDescription());
 		view.setName(displayName(config));
 		view.setEnabled(config.getEnabled());
+		view.setShareAllPersonallyVisible(Boolean.TRUE.equals(config.getShareAllPersonallyVisible()));
 
 		view.setExportedUniqueRelativeUrl(config.getExportedUniqueRelativeUrl());
 		view.setEndpointPath(
@@ -194,10 +198,27 @@ public class GeboMCPServerUserController {
 	}
 
 	/**
-	 * Exported knowledge bases, projects and project endpoints as their resource
-	 * URIs.
+	 * The exported resources as their URIs. When the server shares all personally
+	 * visible content ({@code shareAllPersonallyVisible}), the runtime ignores the
+	 * static export lists and exposes every root knowledge base the caller may see;
+	 * to keep this report coherent with what the server actually serves, we resolve
+	 * those roots under the caller's own rights (this endpoint already runs under
+	 * the calling user's security context). Otherwise we report the configured
+	 * knowledge bases, projects and project endpoints.
 	 */
-	private static List<String> collectResources(GeboMCPServerConfig config) {
+	private List<String> collectResources(GeboMCPServerConfig config) throws GeboPersistenceException {
+		if (Boolean.TRUE.equals(config.getShareAllPersonallyVisible())) {
+			List<String> resources = new ArrayList<>();
+			List<GKnowledgeBase> visibleRoots = visibilityService.allVisibleRootKnowledgebases();
+			if (visibleRoots != null) {
+				for (GKnowledgeBase kb : visibleRoots) {
+					if (kb != null && kb.getCode() != null) {
+						resources.add(KB_SCHEME + kb.getCode());
+					}
+				}
+			}
+			return resources;
+		}
 		List<String> resources = new ArrayList<>();
 		if (config.getExportedKnowledgeBasesAsResources() != null) {
 			for (String kbCode : config.getExportedKnowledgeBasesAsResources()) {

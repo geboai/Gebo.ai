@@ -33,8 +33,8 @@ public class GeboMcpAccessChecker {
 	/**
 	 * Whether the current (impersonated) user may use the MCP server described by
 	 * the given configuration. The {@code GeboMCPServerConfig} node is itself the
-	 * access grant: it carries the {@code accessible*} flags and the ACL aliases, so
-	 * the decision is delegated to {@link IGSecurityService#isCanDo} with the
+	 * access grant: it carries the {@code accessible*} flags and the ACL aliases,
+	 * so the decision is delegated to {@link IGSecurityService#isCanDo} with the
 	 * {@link AclGrantType#EXECUTE} grant (mirroring the MCP client exporter).
 	 * Administrators are not subject to the ACL and may always access the server
 	 * ({@code adminCanDoAll = true}).
@@ -49,15 +49,16 @@ public class GeboMcpAccessChecker {
 		if (config.getEnabled() != null && !config.getEnabled()) {
 			return false;
 		}
-		return securityService.isCanDo(config, true, AclGrantType.EXECUTE);
+		return securityService.isCanDo(config, true, AclGrantType.READ, AclGrantType.EXECUTE);
 	}
 
 	/**
 	 * Whether the current user may read a specific exported object (knowledge base,
-	 * project or project endpoint). Objects that carry the full security contract are
-	 * checked with {@link IGSecurityService#isCanDo}; ACL-only objects (e.g. project
-	 * endpoints) are checked against their ACLs when the platform runs in ACL mode and
-	 * are otherwise allowed, since access to the server has already been granted.
+	 * project or project endpoint). Objects that carry the full security contract
+	 * are checked with {@link IGSecurityService#isCanDo}; ACL-only objects (e.g.
+	 * project endpoints) are checked against their ACLs when the platform runs in
+	 * ACL mode and are otherwise allowed, since access to the server has already
+	 * been granted.
 	 *
 	 * @param resource the exported object
 	 * @return {@code true} if the object may be read
