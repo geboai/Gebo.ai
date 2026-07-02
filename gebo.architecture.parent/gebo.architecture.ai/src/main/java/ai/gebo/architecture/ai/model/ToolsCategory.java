@@ -12,10 +12,12 @@
 
 package ai.gebo.architecture.ai.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * Represents a category of tools, specifying code, description, and whether
  * it's related to a knowledge base.
- * 
+ *
  * Gebo.ai comment agent
  */
 public final class ToolsCategory {
@@ -60,6 +62,7 @@ public final class ToolsCategory {
 	 * @param description          the description of the category
 	 * @param kbr                  indicates if it's knowledge base related
 	 */
+	@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 	public ToolsCategory(String code, String description, boolean kbr) {
 		this.code = code;
 		this.description = description;
