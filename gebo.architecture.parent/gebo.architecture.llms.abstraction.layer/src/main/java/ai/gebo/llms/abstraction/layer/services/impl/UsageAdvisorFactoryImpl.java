@@ -18,6 +18,7 @@ import ai.gebo.llms.abstraction.layer.model.LLMUsageDetail;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.ILLMSUsageCrudService;
+import ai.gebo.llms.abstraction.layer.services.StackSamplingUtils;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
@@ -31,10 +32,11 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 
 		private final GBaseChatModelConfig config;
 		private final ILLMSUsageCrudService usageCrudService;
+		private String callStack = null;
 
 		@Override
 		public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
-
+			this.callStack = StackSamplingUtils.sampleCallerPackages(3);
 			long start = System.nanoTime();
 
 			ChatClientResponse response = chain.nextCall(request);
@@ -48,7 +50,7 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 		public Flux<ChatClientResponse> adviseStream(ChatClientRequest request, StreamAdvisorChain chain) {
 
 			long start = System.nanoTime();
-
+			this.callStack = StackSamplingUtils.sampleCallerPackages(3);
 			return chain.nextStream(request).doOnNext(response -> {
 				Usage usage = response.chatResponse().getMetadata().getUsage();
 
@@ -84,6 +86,7 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 			detail.setOutputToken(outputTokens != null ? outputTokens.longValue() : 0l);
 			detail.setTotalToken(totalTokens != null ? totalTokens.longValue() : 0l);
 			detail.setUsername(username);
+			detail.setCallerStack(callStack);
 			this.usageCrudService.enqueueUsage(detail);
 		}
 	}
@@ -91,7 +94,7 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 	@Override
 	public IChatModelUsageAdvisor create(GBaseChatModelConfig config) {
 
-		return new GeboChatModelUsageAdvisor(config, usageCrudService);
+		return new GeboChatModelUsageAdvisor(config, usageCrudService, null);
 	}
 
 }
