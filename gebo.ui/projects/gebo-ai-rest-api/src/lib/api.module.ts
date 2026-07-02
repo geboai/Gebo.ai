@@ -74,6 +74,8 @@ import { JiraSystemsControllerService } from './api/jiraSystemsController.servic
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { KnowledgeBaseControllerService } from './api/knowledgeBaseController.service';
 import { LanguageResourcesControllerService } from './api/languageResourcesController.service';
+import { LlmsUsageAdminLevelControllerService } from './api/llmsUsageAdminLevelController.service';
+import { LlmsUsageUserLevelControllerService } from './api/llmsUsageUserLevelController.service';
 import { LogViewControllerService } from './api/logViewController.service';
 import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
@@ -176,6 +178,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     JobLauncherControllerService,
     KnowledgeBaseControllerService,
     LanguageResourcesControllerService,
+    LlmsUsageAdminLevelControllerService,
+    LlmsUsageUserLevelControllerService,
     LogViewControllerService,
     McpClientConfigControllerService,
     MistralAiChatModelsConfigurationControllerService,

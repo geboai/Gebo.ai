@@ -17,14 +17,15 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GStatsHolder } from '../model/gStatsHolder';
+import { LLMUsageDrillDownLevel } from '../model/lLMUsageDrillDownLevel';
+import { LLMUsageDrillDownResult } from '../model/lLMUsageDrillDownResult';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class GeboCoreAnalisysControllerService {
+export class LlmsUsageAdminLevelControllerService {
 
     protected basePath = 'http://localhost:12999';
     public defaultHeaders = new HttpHeaders();
@@ -62,13 +63,13 @@ export class GeboCoreAnalisysControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public drillDown2(body: GStatsHolder, observe?: 'body', reportProgress?: boolean): Observable<Array<GStatsHolder>>;
-    public drillDown2(body: GStatsHolder, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GStatsHolder>>>;
-    public drillDown2(body: GStatsHolder, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GStatsHolder>>>;
-    public drillDown2(body: GStatsHolder, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public drillDown1(body: LLMUsageDrillDownLevel, observe?: 'body', reportProgress?: boolean): Observable<LLMUsageDrillDownResult>;
+    public drillDown1(body: LLMUsageDrillDownLevel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LLMUsageDrillDownResult>>;
+    public drillDown1(body: LLMUsageDrillDownLevel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LLMUsageDrillDownResult>>;
+    public drillDown1(body: LLMUsageDrillDownLevel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling drillDown2.');
+            throw new Error('Required parameter body was null or undefined when calling drillDown1.');
         }
 
         let headers = this.defaultHeaders;
@@ -91,45 +92,9 @@ export class GeboCoreAnalisysControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<Array<GStatsHolder>>('post',`${this.basePath}/api/admin/GeboCoreAnalisysController/drillDown`,
+        return this.httpClient.request<LLMUsageDrillDownResult>('post',`${this.basePath}/api/admin/LLMSUsageAdminLevelController/drillDown`,
             {
                 body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTopLevelKnowledgeBaseCategory(observe?: 'body', reportProgress?: boolean): Observable<GStatsHolder>;
-    public getTopLevelKnowledgeBaseCategory(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GStatsHolder>>;
-    public getTopLevelKnowledgeBaseCategory(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GStatsHolder>>;
-    public getTopLevelKnowledgeBaseCategory(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<GStatsHolder>('get',`${this.basePath}/api/admin/GeboCoreAnalisysController/getTopLevelKnowledgeBaseCategory`,
-            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
