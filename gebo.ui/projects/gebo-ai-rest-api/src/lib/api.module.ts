@@ -101,6 +101,7 @@ import { UserWorkflowsControllerService } from './api/userWorkflowsController.se
 import { UsersAdminControllerService } from './api/usersAdminController.service';
 import { UserspaceControllerService } from './api/userspaceController.service';
 import { UserspaceUploadControllerService } from './api/userspaceUploadController.service';
+import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
@@ -204,7 +205,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     UserWorkflowsControllerService,
     UsersAdminControllerService,
     UserspaceControllerService,
-    UserspaceUploadControllerService ]
+    UserspaceUploadControllerService,
+    WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

@@ -1,0 +1,50 @@
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+
+.dashboard-container {
+    background-color: var(--surface-b);
+    min-height: 100%;
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--surface-border);
+}
+
+.filter-panel {
+    border: 1px solid var(--surface-border);
+    background-color: var(--surface-card);
+    transition: box-shadow 0.3s ease;
+}
+
+.filter-panel:hover {
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+}
+
+.card {
+    border: 1px solid var(--surface-border);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+}
+
+label {
+    font-size: 0.85rem;
+    color: var(--text-color-secondary);
+}
+
+:host ::ng-deep .p-select {
+    border-radius: 6px;
+    border-color: var(--surface-border);
+}
+
+:host ::ng-deep .p-button {
+    border-radius: 6px;
+}

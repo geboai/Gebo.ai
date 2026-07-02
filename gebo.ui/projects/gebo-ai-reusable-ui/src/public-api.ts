@@ -158,3 +158,6 @@ export * from "./lib/dashboard/llms-usage-dashboard.module";
 export * from "./lib/dashboard/llms-usage-dashboard.component";
 export * from "./lib/dashboard/llms-usage-admin-dashboard.component";
 export * from "./lib/dashboard/llms-usage-user-dashboard.component";
+export * from "./lib/dashboard/workflow-stats-dashboard.module";
+export * from "./lib/dashboard/workflow-stats-dashboard.component";
+export * from "./lib/dashboard/workflow-stats-admin-dashboard.component";

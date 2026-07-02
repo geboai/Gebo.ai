@@ -87,7 +87,7 @@ export class GeboAIEmbeddingStatsPanelComponent implements OnInit, OnChanges {
     public drillDown(value: TotalHistogramBar) {
         this.drilldownShowed = true;
         this.loading = true;
-        this.geboStatsService.drillDown2(value.data).subscribe({
+        this.geboStatsService.coreDrillDown(value.data).subscribe({
             next: (drillData) => {
                 value.drillDowns = drillData.map(x => {
                     return transformData(x);

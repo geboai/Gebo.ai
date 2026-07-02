@@ -17,15 +17,15 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { LLMUsageDrillDownLevel } from '../model/lLMUsageDrillDownLevel';
-import { LLMUsageDrillDownResult } from '../model/lLMUsageDrillDownResult';
+import { WorkflowStatsDrillDownLevel } from '../model/workflowStatsDrillDownLevel';
+import { WorkflowStatsDrillDownResult } from '../model/workflowStatsDrillDownResult';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class LlmsUsageAdminLevelControllerService {
+export class WorkflowStatsAdminLevelControllerService {
 
     protected basePath = 'http://localhost:12999';
     public defaultHeaders = new HttpHeaders();
@@ -63,13 +63,13 @@ export class LlmsUsageAdminLevelControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public adminDrillDown(body: LLMUsageDrillDownLevel, observe?: 'body', reportProgress?: boolean): Observable<LLMUsageDrillDownResult>;
-    public adminDrillDown(body: LLMUsageDrillDownLevel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LLMUsageDrillDownResult>>;
-    public adminDrillDown(body: LLMUsageDrillDownLevel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LLMUsageDrillDownResult>>;
-    public adminDrillDown(body: LLMUsageDrillDownLevel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public workflowDrillDown(body: WorkflowStatsDrillDownLevel, observe?: 'body', reportProgress?: boolean): Observable<WorkflowStatsDrillDownResult>;
+    public workflowDrillDown(body: WorkflowStatsDrillDownLevel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<WorkflowStatsDrillDownResult>>;
+    public workflowDrillDown(body: WorkflowStatsDrillDownLevel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<WorkflowStatsDrillDownResult>>;
+    public workflowDrillDown(body: WorkflowStatsDrillDownLevel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling adminDrillDown.');
+            throw new Error('Required parameter body was null or undefined when calling workflowDrillDown.');
         }
 
         let headers = this.defaultHeaders;
@@ -92,7 +92,7 @@ export class LlmsUsageAdminLevelControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<LLMUsageDrillDownResult>('post',`${this.basePath}/api/admin/LLMSUsageAdminLevelController/drillDown`,
+        return this.httpClient.request<WorkflowStatsDrillDownResult>('post',`${this.basePath}/api/admin/WorkflowStatsAdminLevelController/drillDown`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

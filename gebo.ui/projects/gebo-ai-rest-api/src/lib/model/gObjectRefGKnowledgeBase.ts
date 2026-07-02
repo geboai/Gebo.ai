@@ -10,10 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    disabled?: boolean;
-    sourname?: string;
-    username?: string;
+export interface GObjectRefGKnowledgeBase { 
+    className?: string;
+    code?: string;
+    description?: string;
 }

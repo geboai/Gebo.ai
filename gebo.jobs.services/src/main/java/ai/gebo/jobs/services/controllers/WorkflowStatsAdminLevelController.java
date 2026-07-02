@@ -35,7 +35,7 @@ public class WorkflowStatsAdminLevelController {
 	private final WorkflowStatsAggregationService aggregationService;
 
 	@PostMapping(value = "drillDown", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public WorkflowStatsDrillDownResult drillDown(@RequestBody WorkflowStatsDrillDownLevel criteria) {
+	public WorkflowStatsDrillDownResult workflowDrillDown(@RequestBody WorkflowStatsDrillDownLevel criteria) {
 		return aggregationService.drillDown(criteria);
 	}
 }
