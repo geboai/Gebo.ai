@@ -78,7 +78,7 @@
                         <div class="col-12">
                             <gebo-ai-field id="enabledTools" label="Enabled Tools" help="Select the tools that this MCP Server is authorized to expose.">
                                 <gebo-ai-choose-llm-functions-component id="enabledTools"
-                                    formControlName="enabledTools" [knowledgeBaseContext]="true" dataKey="code"
+                                    formControlName="enabledTools" [knowledgeBaseContext]="false" [escludeExternalTools]="true" dataKey="code"
                                     optionLabel="description" optionValue="code" display="chip" class="col-12"
                                     gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
                             </gebo-ai-field>

@@ -428,40 +428,35 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
         }
         //cleaning child nodes and mark as selected from choosed nodes to all childs
         const vectorValue: string[] = (!actualValue ? [] : (Array.isArray(actualValue) ? Array.from(actualValue) : [actualValue]));
-        const contained = vectorValue.filter(x => this.nodesMap.has(x));
-        //if all nodes are in the map, indicating that all nodes are built and loaded than run the selection
-        //cleaning algorithm
-        if (contained && vectorValue && contained.length === vectorValue.length) {
-            this.nodesMap.forEach(n => {
-                if (n.data) {
-                    n.data.selected = false;
-                    n.data.parentSelected = false;
-                }
-            });
-            vectorValue.forEach(x => {
-                const node = this.nodesMap.get(x);
-                if (node?.data) {
-                    node.data.selected = true;
-                    console.log("Signing as selected:" + node?.data?.uniqueCode);
-                } else {
-                    console.error("NOT FOUND:" + node?.data?.uniqueCode);
-                }
-            });
-            //now from roots do a visit and put parentSelected on all nodes in the descending hierarchy of a selected Node 
-            //those who are parentSelected in the visit and also signed as selected have to be removed from the choosed component
-            const removeFromControlUniqueKeys: string[] = this.mantainSelected(this.roots);
-            if (removeFromControlUniqueKeys && removeFromControlUniqueKeys.length) {
-                const newChoosed: string[] = [];
-                vectorValue.forEach(x => {
-                    const present: boolean = removeFromControlUniqueKeys.find(y => y === x) ? true : false;
-                    if (present === false) {
-                        newChoosed.push(x);
-                    }
-                });
-                const tobeSet = this.selectionMode === "multiple" ? newChoosed : (newChoosed.length ? newChoosed[0] : undefined);
-                console.log("Ctrl new value=>" + JSON.stringify(tobeSet));
-                this.formGroup.controls["choosed"].setValue(tobeSet);
+        this.nodesMap.forEach(n => {
+            if (n.data) {
+                n.data.selected = false;
+                n.data.parentSelected = false;
             }
+        });
+        vectorValue.forEach(x => {
+            const node = this.nodesMap.get(x);
+            if (node?.data) {
+                node.data.selected = true;
+                console.log("Signing as selected:" + node?.data?.uniqueCode);
+            } else {
+                console.error("NOT FOUND:" + node?.data?.uniqueCode);
+            }
+        });
+        //now from roots do a visit and put parentSelected on all nodes in the descending hierarchy of a selected Node 
+        //those who are parentSelected in the visit and also signed as selected have to be removed from the choosed component
+        const removeFromControlUniqueKeys: string[] = this.mantainSelected(this.roots);
+        if (removeFromControlUniqueKeys && removeFromControlUniqueKeys.length) {
+            const newChoosed: string[] = [];
+            vectorValue.forEach(x => {
+                const present: boolean = removeFromControlUniqueKeys.find(y => y === x) ? true : false;
+                if (present === false) {
+                    newChoosed.push(x);
+                }
+            });
+            const tobeSet = this.selectionMode === "multiple" ? newChoosed : (newChoosed.length ? newChoosed[0] : undefined);
+            console.log("Ctrl new value=>" + JSON.stringify(tobeSet));
+            this.formGroup.controls["choosed"].setValue(tobeSet);
         }
         this.checkChanges.detectChanges();
         this.checkChanges.markForCheck();
@@ -812,6 +807,34 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * @param event - The select event
      */
     nodeSelect(event: TreeNodeSelectEvent) {
+    }
+
+    /**
+     * Toggles node selection programmatically when clicking labels
+     * @param node - The node to toggle selection for
+     */
+    toggleNodeSelection(node: TreeNode<EnrichedFilesystemReference>) {
+        if (this.readonly) return;
+        const code = node.data?.uniqueCode;
+        if (!code) return;
+
+        if (this.selectionMode === 'multiple') {
+            if (!this.showCheckbox(node)) return;
+            const actualValues: string[] = this.formGroup.controls["choosed"].value || [];
+            if (actualValues.includes(code)) {
+                this.formGroup.controls["choosed"].setValue(actualValues.filter(x => x !== code));
+            } else {
+                this.formGroup.controls["choosed"].setValue([...actualValues, code]);
+            }
+        } else {
+            if (!this.showRadio(node)) return;
+            const actualValue = this.formGroup.controls["choosed"].value;
+            if (actualValue === code) {
+                this.formGroup.controls["choosed"].setValue(undefined);
+            } else {
+                this.formGroup.controls["choosed"].setValue(code);
+            }
+        }
     }
 
     /**

@@ -15,6 +15,7 @@ export interface UserAccessibleMcpServerView {
     name?: string;
     description?: string;
     enabled?: boolean;
+    shareAllPersonallyVisible?: boolean;
     exportedUniqueRelativeUrl?: string;
     endpointPath?: string;
     transportType?: string;

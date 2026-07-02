@@ -26,6 +26,7 @@ export interface GeboMCPServerConfig {
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     aclAliases?: Array<number>;
+    shareAllPersonallyVisible?: boolean;
     enabledTools?: Array<string>;
     exportedKnowledgeBasesAsResources?: Array<string>;
     exportedProjectsAsResources?: Array<string>;

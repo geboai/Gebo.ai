@@ -19,11 +19,26 @@
         display="chip"  [loading]="loading"
         [metaKeySelection]="false"  
         selectionMode="checkbox" 
+        [propagateSelectionUp]="true"
+        [propagateSelectionDown]="true"
         placeholder="Select functions"
         [virtualScroll]="true" 
         [virtualScrollItemSize]="46" 
         [virtualScrollOptions]="{scrollHeight: '200px'}" 
-    />
+    >
+        <ng-template pTemplate="value" let-value>
+            <ng-container *ngIf="hasLeaf(value); else placeholderTpl">
+                <ng-container *ngFor="let node of value">
+                    <div class="p-treeselect-token" *ngIf="node.leaf">
+                        <span class="p-treeselect-token-label">{{ node.label }}</span>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-template #placeholderTpl>
+                <span class="p-placeholder">Select functions</span>
+            </ng-template>
+        </ng-template>
+    </p-treeSelect>
 </span>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

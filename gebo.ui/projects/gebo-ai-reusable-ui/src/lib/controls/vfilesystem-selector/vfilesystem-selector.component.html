@@ -42,16 +42,13 @@
         </p-fieldset>
         <p-fieldset  id="ChooseElementsArea" gebo-ai-label  legend="Choose elements">
             <p-tree class="md:w-20rem w-full col-12" [value]="roots" (onNodeExpand)="nodeExpand($event)"
-            (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="nodeSelect($event)"
-            (onNodeUnselect)="nodeUnselect($event)" [selectionMode]="selectionMode"
+            (onNodeCollapse)="nodeCollapse($event)"
             containerStyleClass="w-full col-12" [filter]="true">
             <ng-template let-node pTemplate="default">
-                <div [formGroup]="formGroup" [style]="onlineStyle(node)">
-                    <p-checkbox name="choosed" id="choosed" *ngIf="showCheckbox(node)" formControlName="choosed"
-                        [value]="node.data.uniqueCode"></p-checkbox>
-                    <p-radioButton name="choosed" id="choosed" *ngIf="showRadio(node)" formControlName="choosed"
-                        [value]="node.data.uniqueCode"></p-radioButton>
-                    {{node.label}}
+                <div [formGroup]="formGroup" [style]="onlineStyle(node)" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; cursor: pointer;" (click)="toggleNodeSelection(node)">
+                    <p-checkbox name="choosed" [id]="'choosed_' + node.data.uniqueCode" *ngIf="showCheckbox(node)" [binary]="true" [ngModel]="node.data.selected" [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleNodeSelection(node)" (click)="$event.stopPropagation()"></p-checkbox>
+                    <p-radioButton name="choosed" [id]="'choosed_' + node.data.uniqueCode" *ngIf="showRadio(node)" [value]="node.data.uniqueCode" [ngModel]="formGroup.controls['choosed'].value" [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleNodeSelection(node)" (click)="$event.stopPropagation()"></p-radioButton>
+                    <span>{{node.label}}</span>
                 </div>
             </ng-template>
         </p-tree>
