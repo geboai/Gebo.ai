@@ -55,6 +55,20 @@ public class ContentsBatchProcessed {
 	private Date timestamp = null;
 
 	/**
+	 * Earliest processing timestamp seen while aggregating the stats of a workflow
+	 * step (the timestamp of the first stats info received). Populated during
+	 * aggregation, not persisted per raw batch.
+	 */
+	private Date startProcessingTimestamp = null;
+
+	/**
+	 * Latest processing timestamp seen while aggregating the stats of a workflow
+	 * step (the timestamp of the last stats info received). Populated during
+	 * aggregation, not persisted per raw batch.
+	 */
+	private Date lastProcessingTimestamp = null;
+
+	/**
 	 * The number of documents processed in the batch.
 	 */
 	private long batchDocumentsInput = 0;
@@ -90,6 +104,8 @@ public class ContentsBatchProcessed {
 		this.errorTokens += x.errorTokens;
 		this.lastMessage = (this.lastMessage != null && this.lastMessage)
 				|| (x.getLastMessage() != null && x.getLastMessage());
+		this.startProcessingTimestamp = min(this.startProcessingTimestamp, x.startProcessingTimestamp);
+		this.lastProcessingTimestamp = max(this.lastProcessingTimestamp, x.lastProcessingTimestamp);
 	}
 
 	public void incrementBy(ContentsBatchProcessedSummary x) {
@@ -103,7 +119,30 @@ public class ContentsBatchProcessed {
 		this.errorChunks += x.getErrorChunks();
 		this.errorTokens += x.getErrorTokens();
 		this.lastMessage = (this.lastMessage != null && this.lastMessage) || (x.isLastMessage());
+		this.startProcessingTimestamp = min(this.startProcessingTimestamp, x.getTimestampMin());
+		this.lastProcessingTimestamp = max(this.lastProcessingTimestamp, x.getTimestampMax());
+	}
 
+	/**
+	 * Returns the earliest of the two dates, ignoring nulls.
+	 */
+	private static Date min(Date current, Date candidate) {
+		if (current == null)
+			return candidate;
+		if (candidate == null)
+			return current;
+		return candidate.before(current) ? candidate : current;
+	}
+
+	/**
+	 * Returns the latest of the two dates, ignoring nulls.
+	 */
+	private static Date max(Date current, Date candidate) {
+		if (current == null)
+			return candidate;
+		if (candidate == null)
+			return current;
+		return candidate.after(current) ? candidate : current;
 	}
 
 }

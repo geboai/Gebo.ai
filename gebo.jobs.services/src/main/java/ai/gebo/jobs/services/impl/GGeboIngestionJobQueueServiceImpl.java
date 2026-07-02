@@ -283,7 +283,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 							slot.setStartDateTime(new Date(actualDateTime));
 							slot.setEndDateTime(new Date(actualDateTime + STATS_TIME_SLOT));
 						}
-						stepSummary.getTimesamples().add(slot);
+						stepSummary.add(slot);
 					}
 					summary.getWorkflowStepsSummaries().add(stepSummary);
 				}

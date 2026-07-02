@@ -140,6 +140,8 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 			status.setBatchDiscardedInput(data.getBatchDiscardedInput());
 			status.setChunksProcessed(data.getChunksProcessed());
 			status.setTokensProcessed(data.getTokensProcessed());
+			status.setStartProcessingTimestamp(data.getStartProcessingTimestamp());
+			status.setLastProcessingTimestamp(data.getLastProcessingTimestamp());
 			status.setStartedRunning(data.getBatchDocumentsInput() > 0l);
 			if (status.getLevelId() == 0) {
 				// The root step is completed when the last message is passed

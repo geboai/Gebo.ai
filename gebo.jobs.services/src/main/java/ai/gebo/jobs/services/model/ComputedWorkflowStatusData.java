@@ -1,13 +1,18 @@
-package ai.gebo.application.messaging.workflow.model;
+package ai.gebo.jobs.services.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
 @Data
-public class ComputedWorkflowStatus {
+@Document
+public class ComputedWorkflowStatusData {
+	@Id
+	private String id = UUID.randomUUID().toString();
 	private String jobId = null;
 	private String workflowType = null;
 	private String workflowId = null;
@@ -25,7 +30,9 @@ public class ComputedWorkflowStatus {
 	private boolean startedRunning;
 	private int levelId = 0;
 	private boolean enabledStep;
-	private Date startProcessingTimestamp=null;
-	private Date lastProcessingTimestamp=null;
-	private List<ComputedWorkflowStatus> childs = new ArrayList<ComputedWorkflowStatus>();
+	private Date startProcessingTimestamp = null;
+	private Date lastProcessingTimestamp = null;
+	private int year = 0;
+	private int month = 0;
+	private int day = 0;
 }
