@@ -154,3 +154,7 @@ export * from "./lib/architecture/desktop/gebo-ai-desktop.component";
 export * from "./lib/architecture/desktop/application-menu-provider.service";
 export * from "./lib/architecture/gebo-ui-entity-forms-launcher.service";
 export * from "./lib/infrastructure/user-workflows/user-workflows.module";
+export * from "./lib/dashboard/llms-usage-dashboard.module";
+export * from "./lib/dashboard/llms-usage-dashboard.component";
+export * from "./lib/dashboard/llms-usage-admin-dashboard.component";
+export * from "./lib/dashboard/llms-usage-user-dashboard.component";
