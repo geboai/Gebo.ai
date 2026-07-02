@@ -21,6 +21,7 @@ import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -49,6 +50,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	static final GBaseChatModelChoice model = new GBaseChatModelChoice();
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 
 	/**
 	 * Inner class representing a test implementation of the configurable chat
@@ -58,8 +60,9 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 			extends GAbstractConfigurableChatModel<TestChatModelConfiguration, TestChatModel> {
 
 		public TestConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 
 		}
 
@@ -81,8 +84,8 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
-			 
-			return new TestConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+
+			return new TestConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 		}
 
 	};
@@ -145,7 +148,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	public IGConfigurableChatModel<TestChatModelConfiguration> create(TestChatModelConfiguration config)
 			throws LLMConfigException {
 		TestConfigurableChatModel out = new TestConfigurableChatModel(documentContentRenderProvider,
-				toolCallbacksRepository);
+				toolCallbacksRepository, usageAdvisorFactory);
 		out.initialize(config, type);
 		return out;
 	}

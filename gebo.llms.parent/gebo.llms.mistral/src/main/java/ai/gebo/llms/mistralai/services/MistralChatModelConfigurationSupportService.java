@@ -26,6 +26,7 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
@@ -79,6 +80,7 @@ public class MistralChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
@@ -88,8 +90,9 @@ public class MistralChatModelConfigurationSupportService
 			extends GAbstractConfigurableChatModel<GMistralChatModelConfig, MistralAiChatModel> {
 
 		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 
 		}
 
@@ -187,7 +190,7 @@ public class MistralChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 		}
 	};
 
@@ -212,7 +215,7 @@ public class MistralChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
 		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo);
+				functionsRepo, usageAdvisorFactory);
 		model.initialize(config, type);
 		return model;
 	}

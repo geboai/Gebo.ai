@@ -32,6 +32,7 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
@@ -88,6 +89,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 
 	/**
 	 * Constructor that initializes all required dependencies
@@ -106,7 +108,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			IGToolCallbackSourceRepositoryPattern functionsRepo, ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
-			IGDocumentContentRendererProvider documentContentRenderProvider) {
+			IGDocumentContentRendererProvider documentContentRenderProvider,
+			IChatModelUsageAdvisorFactory usageAdvisorFactory) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -116,6 +119,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		this.configureHandler = configureHandler;
 		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
 		this.documentContentRenderProvider = documentContentRenderProvider;
+		this.usageAdvisorFactory = usageAdvisorFactory;
 
 	}
 
@@ -127,8 +131,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
 
 		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 
 		}
 
@@ -269,7 +274,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 		}
 	};
 
@@ -294,7 +299,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	public IGConfigurableChatModel<GenericOpenAIAPIChatModelConfig> create(GenericOpenAIAPIChatModelConfig config)
 			throws LLMConfigException {
 		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo);
+				functionsRepo, usageAdvisorFactory);
 		model.initialize(config, type);
 		return model;
 	}

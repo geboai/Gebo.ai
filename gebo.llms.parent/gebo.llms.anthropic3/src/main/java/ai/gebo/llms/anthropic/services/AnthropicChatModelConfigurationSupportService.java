@@ -29,6 +29,7 @@ import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
@@ -95,6 +96,8 @@ public class AnthropicChatModelConfigurationSupportService
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+
 	/**
 	 * Inner class that implements the configurable chat model for Anthropic
 	 */
@@ -102,8 +105,8 @@ public class AnthropicChatModelConfigurationSupportService
 			extends GAbstractConfigurableChatModel<GAnthropicChatModelConfig, AnthropicChatModel> {
 
 		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository, IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 			// TODO Auto-generated constructor stub
 		}
 
@@ -174,7 +177,7 @@ public class AnthropicChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 			AnthropicConfigurableChatModel anthropicChatModel = new AnthropicConfigurableChatModel(rendererFactory,
-					toolCallbacksRepository);
+					toolCallbacksRepository, usageAdvisorFactory);
 			return anthropicChatModel;
 		}
 	}
@@ -200,7 +203,7 @@ public class AnthropicChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GAnthropicChatModelConfig> create(GAnthropicChatModelConfig config)
 			throws LLMConfigException {
 		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel(this.documentContentRenderProvider,
-				functionsRepo);
+				functionsRepo, usageAdvisorFactory);
 		model.initialize(config, type);
 		return model;
 	}

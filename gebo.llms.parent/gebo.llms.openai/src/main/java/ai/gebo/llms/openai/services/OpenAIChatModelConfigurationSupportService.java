@@ -33,6 +33,7 @@ import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
@@ -84,6 +85,7 @@ public class OpenAIChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
@@ -92,8 +94,9 @@ public class OpenAIChatModelConfigurationSupportService
 	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
 
 		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 
 		}
 
@@ -268,7 +271,7 @@ public class OpenAIChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 		}
 	};
 
@@ -293,7 +296,7 @@ public class OpenAIChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
 		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo);
+				functionsRepo, usageAdvisorFactory);
 		model.initialize(config, type);
 		return model;
 	}

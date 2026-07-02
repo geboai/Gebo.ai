@@ -21,6 +21,7 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.Builder;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -82,6 +83,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected ChatClient chatClient = null;
 	protected final IGDocumentContentRendererProvider rendererFactory;
 	protected final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
+	protected final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	protected static final ObjectMapper mapper = new ObjectMapper();
 
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
@@ -90,9 +92,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * Default constructor for GAbstractConfigurableChatModel.
 	 */
 	public GAbstractConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository, IChatModelUsageAdvisorFactory usageAdvisorFactory) {
 		this.rendererFactory = rendererFactory;
 		this.toolCallbacksRepository = toolCallbacksRepository;
+		this.usageAdvisorFactory = usageAdvisorFactory;
 	}
 
 	/**
@@ -154,7 +157,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.config = config;
 		this.type = type;
 		this.model = configureModel(config, type, null);
-		this.chatClient = ChatClient.create(configureModel(config, type, null));
+		Builder builder = ChatClient.builder(configureModel(config, type, null));
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config)).build();
 	}
 
 	@Override
@@ -342,6 +346,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		}
 
 		ChatClientRequestSpec reqObject = client.prompt();
+
 		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
 			reqObject = reqObject.toolCallbacks(wrapTools(runAs, chatContext.getToolCallListener()));
 		} else {
@@ -683,8 +688,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				configurableChatModel.type = this.type;
 				configurableChatModel.model = configurableChatModel.configureModel(modelConfigClone, type,
 						configOptions.getToolCallingManager());
-				configurableChatModel.chatClient = ChatClient.create(
-						configurableChatModel.configureModel(config, type, configOptions.getToolCallingManager()));
+				configurableChatModel.chatClient = ChatClient
+						.builder(configurableChatModel.configureModel(modelConfigClone, type,
+								configOptions.getToolCallingManager()))
+						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone)).build();
 			} else
 				throw new IllegalStateException(
 						"The actual configurable chat model is not an GAbstractConfigurableChatModel");

@@ -27,6 +27,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
@@ -93,6 +94,7 @@ public class OllamaChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
@@ -100,8 +102,9 @@ public class OllamaChatModelConfigurationSupportService
 	class OllamaConfigurableChatModel extends GAbstractConfigurableChatModel<GOllamaChatModelConfig, OllamaChatModel> {
 
 		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 
 		}
 
@@ -190,8 +193,8 @@ public class OllamaChatModelConfigurationSupportService
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
-			 
-			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+
+			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 		}
 	};
 
@@ -217,7 +220,7 @@ public class OllamaChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
 		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo);
+				functionsRepo, usageAdvisorFactory);
 		model.initialize(config, type);
 		return model;
 	}

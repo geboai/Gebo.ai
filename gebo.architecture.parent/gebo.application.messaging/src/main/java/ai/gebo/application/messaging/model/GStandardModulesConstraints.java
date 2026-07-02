@@ -24,6 +24,7 @@ public class GStandardModulesConstraints {
 			&& System.getProperty("under-development").equalsIgnoreCase("true");
 	// Constants for module names
 	public static final String CORE_MODULE = "core-module";
+	public static final String BRAIN_MODULE = "brain-module";
 	public static final String SHARED_FILESYSTEM_MODULE = "shared-filesystem-module";
 	public static final String UPLOADS_MODULE = "uploads-module";
 	public static final String USERSPACE_MODULE = "userspace-module";

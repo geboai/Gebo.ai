@@ -26,6 +26,7 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
@@ -90,7 +91,8 @@ public class DeepseekChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
-	
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+
 	/**
 	 * Implementation of configurable chat model for DeepSeek Note: The class is
 	 * incorrectly named "AnthropicConfigurableChatModel" but implements DeepSeek
@@ -99,9 +101,11 @@ public class DeepseekChatModelConfigurationSupportService
 	class DeepseekConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GDeepseekChatModelConfig, DeepSeekChatModel> {
 
-		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
-			 
+		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+
 		    }
 
 		/**
@@ -177,8 +181,8 @@ public class DeepseekChatModelConfigurationSupportService
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
-			
-			return new DeepseekConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+
+			return new DeepseekConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
 		}
 	};
 
@@ -202,7 +206,8 @@ public class DeepseekChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GDeepseekChatModelConfig> create(GDeepseekChatModelConfig config)
 			throws LLMConfigException {
-		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider, functionsRepo);
+		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo, usageAdvisorFactory);
 		model.initialize(config, type);
 		return model;
 	}
