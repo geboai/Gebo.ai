@@ -25,7 +25,7 @@ public class LLMSUsageAdminLevelController {
 	private final LLMSUsageAggregationService aggregationService;
 
 	@PostMapping(value = "drillDown", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public LLMUsageDrillDownResult drillDown(@RequestBody LLMUsageDrillDownLevel criteria) {
+	public LLMUsageDrillDownResult adminDrillDown(@RequestBody LLMUsageDrillDownLevel criteria) {
 		return aggregationService.drillDown(criteria, null);
 	}
 }

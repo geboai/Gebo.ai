@@ -28,7 +28,7 @@ public class LLMSUsageUserLevelController {
 	private final IGSecurityService securityService;
 
 	@PostMapping(value = "drillDown", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public LLMUsageDrillDownResult drillDown(@RequestBody LLMUsageDrillDownLevel criteria) {
+	public LLMUsageDrillDownResult userDrillDown(@RequestBody LLMUsageDrillDownLevel criteria) {
 		String username = securityService.getCurrentUser().getUsername();
 		return aggregationService.drillDown(criteria, username);
 	}
