@@ -68,6 +68,7 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
      * Form group for managing the entity's editable fields
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         parentProjectCode: new FormControl(),

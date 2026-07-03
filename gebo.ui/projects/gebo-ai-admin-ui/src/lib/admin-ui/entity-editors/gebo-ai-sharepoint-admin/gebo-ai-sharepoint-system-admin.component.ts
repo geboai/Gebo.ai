@@ -54,6 +54,7 @@ export class GeboAISharepointAdminComponent extends BaseEntityEditingComponent<G
      * Form group that binds to the UI form fields for the Sharepoint system
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         creationDate: new FormControl(),

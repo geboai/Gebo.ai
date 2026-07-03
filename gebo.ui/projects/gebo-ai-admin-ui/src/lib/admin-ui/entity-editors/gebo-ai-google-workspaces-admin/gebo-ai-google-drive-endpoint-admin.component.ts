@@ -50,6 +50,7 @@ export class GeboAiGoogleDriveProjectEndpointAdminComponent extends BaseEntityEd
    * Form group containing all editable fields for the Google Drive project endpoint
    */
   override formGroup: FormGroup<any> = new FormGroup({
+    aclAliases: new FormControl(),
     code: new FormControl(),
     description: new FormControl(),
     parentProjectCode: new FormControl(),

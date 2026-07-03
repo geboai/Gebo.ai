@@ -73,6 +73,7 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
      * The form group containing all controls for the SharePoint endpoint configuration
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         parentProjectCode: new FormControl(),

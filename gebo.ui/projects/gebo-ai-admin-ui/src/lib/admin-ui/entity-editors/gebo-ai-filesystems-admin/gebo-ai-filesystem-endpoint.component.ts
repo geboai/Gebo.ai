@@ -48,6 +48,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
 
     /** Form group for managing form controls */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         parentCode: new FormControl(),
         description: new FormControl(),

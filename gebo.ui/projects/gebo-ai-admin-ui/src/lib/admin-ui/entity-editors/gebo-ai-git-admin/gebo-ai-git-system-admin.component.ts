@@ -56,6 +56,7 @@ export class GeboAiGitSystemAdminComponent extends BaseEntityEditingComponent<GG
      */
     formGroup: FormGroup<any> = new FormGroup(
         {
+            aclAliases: new FormControl(),
             code: new FormControl(),
             description: new FormControl(),
             baseUri: new FormControl(),

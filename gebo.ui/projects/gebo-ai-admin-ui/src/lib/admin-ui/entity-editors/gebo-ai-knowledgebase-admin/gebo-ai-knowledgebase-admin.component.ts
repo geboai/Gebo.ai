@@ -49,6 +49,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
      */
     formGroup: FormGroup = new FormGroup(
         {
+            aclAliases: new FormControl(),
             code: new FormControl(),
             parentCode: new FormControl(),
             description: new FormControl(),

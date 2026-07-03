@@ -45,6 +45,7 @@ export class GeboAIConfluenceAdminComponent extends BaseEntityEditingComponent<G
      * Form group containing all editable fields for a Confluence system
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         creationDate: new FormControl(),

@@ -46,6 +46,7 @@ export class GeboAIJiraAdminComponent extends BaseEntityEditingComponent<GJiraSy
      * Includes fields for system identification, connection details, and associated secret
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         creationDate: new FormControl(),

@@ -54,6 +54,7 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
     projectsObservable: Observable<GProject[]> = this.projectsController.getProjects();
     /** Form group containing all editable fields for the Confluence endpoint */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         parentProjectCode: new FormControl(),

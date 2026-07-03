@@ -53,6 +53,7 @@ export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<
    * Form group to manage all the input fields for the Git endpoint
    */
   formGroup: FormGroup<any> = new FormGroup({
+    aclAliases: new FormControl(),
     code: new FormControl(),
     description: new FormControl(),
     parentProjectCode: new FormControl(),

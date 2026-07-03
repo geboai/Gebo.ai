@@ -53,6 +53,7 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponentAutoD
      * Contains fields for all editable properties of a project
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         rootKnowledgeBaseCode: new FormControl(),

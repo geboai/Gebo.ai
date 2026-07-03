@@ -43,6 +43,7 @@ export class GeboAiGoogleDriveSystemAdminComponent extends BaseEntityEditingComp
    * Includes system properties like code, description, URI, and credentials
    */
   override formGroup: FormGroup<any> = new FormGroup({
+    aclAliases: new FormControl(),
     code: new FormControl(),
     description: new FormControl(),
     creationDate: new FormControl(),

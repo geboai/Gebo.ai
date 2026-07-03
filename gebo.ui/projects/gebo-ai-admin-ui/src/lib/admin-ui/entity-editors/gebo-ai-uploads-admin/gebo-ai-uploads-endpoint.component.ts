@@ -62,6 +62,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
 
     /** Form group containing all form controls for the entity */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         parentCode: new FormControl(),
         description: new FormControl(),
