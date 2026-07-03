@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { AclSettingsAdminControllerService } from './api/aclSettingsAdminController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
@@ -108,6 +109,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   declarations: [],
   exports:      [],
   providers: [
+    AclSettingsAdminControllerService,
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,

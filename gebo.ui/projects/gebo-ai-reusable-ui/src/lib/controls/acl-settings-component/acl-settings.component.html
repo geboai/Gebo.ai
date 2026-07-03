@@ -1,0 +1,96 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+ -->
+
+<p-panel header="Access control">
+    <div class="acl-settings">
+
+        <div *ngIf="loading" class="acl-loading">
+            <i class="pi pi-spin pi-spinner"></i> Loading…
+        </div>
+
+        <div *ngIf="systemMode && !aclEnabled" class="acl-mode-banner">
+            <i class="pi pi-info-circle"></i>
+            <span>
+                ACL enforcement is currently off (policy: {{ systemMode.policy }}). These settings are
+                saved and will take effect once ACL mode is enabled.
+            </span>
+        </div>
+
+        <div class="acl-field">
+            <label class="acl-label">Who can access</label>
+            <p-selectButton
+                [options]="scopeOptions"
+                optionLabel="label"
+                optionValue="value"
+                [(ngModel)]="scope"
+                [disabled]="disabled"
+                (onChange)="onScopeChange()">
+            </p-selectButton>
+        </div>
+
+        <ng-container *ngIf="scope === 'SPECIFIC'">
+            <div class="acl-field">
+                <label class="acl-label">Groups</label>
+                <p-multiSelect
+                    styleClass="w-full"
+                    [options]="owners?.groups || []"
+                    optionLabel="label"
+                    optionValue="code"
+                    placeholder="Select groups"
+                    [(ngModel)]="selectedGroupCodes"
+                    [disabled]="disabled"
+                    (onChange)="onGroupsChange()">
+                </p-multiSelect>
+            </div>
+
+            <div class="acl-field">
+                <label class="acl-label">Users</label>
+                <p-multiSelect
+                    styleClass="w-full"
+                    [options]="userOptionsView"
+                    optionLabel="viewLabel"
+                    optionValue="code"
+                    optionDisabled="disabled"
+                    placeholder="Select users"
+                    [(ngModel)]="selectedUserCodes"
+                    [disabled]="disabled"
+                    (onChange)="onUsersChange()">
+                </p-multiSelect>
+            </div>
+        </ng-container>
+
+        <div class="acl-field" *ngIf="grantChoiceVisible && ownerRows.length > 0">
+            <label class="acl-label">Granted permissions</label>
+            <table class="acl-grants-table">
+                <tr *ngFor="let row of ownerRows">
+                    <td class="acl-grants-owner">{{ row.label }}</td>
+                    <td class="acl-grants-cell">
+                        <p-multiSelect
+                            styleClass="w-full"
+                            [options]="grantOptions"
+                            optionLabel="label"
+                            optionValue="value"
+                            placeholder="Permissions"
+                            [(ngModel)]="grantsByKey[row.key]"
+                            [disabled]="disabled"
+                            (onChange)="onGrantsChange()">
+                        </p-multiSelect>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="acl-empty" *ngIf="scope === 'SPECIFIC' && ownerRows.length === 0">
+            No groups or users selected — access is unrestricted.
+        </div>
+
+    </div>
+</p-panel>

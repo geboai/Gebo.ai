@@ -10,12 +10,18 @@
  * Do not edit the class manually.
  */
 
-export interface GUserChatInfo { 
+export interface AclOwnerRef { 
+    type?: AclOwnerRef.TypeEnum;
     code?: string;
+    label?: string;
     description?: string;
-    username?: string;
-    chatCreationDateTime?: Date;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    ragChat?: boolean;
+    memberUserIds?: Array<string>;
+}
+export namespace AclOwnerRef {
+    export type TypeEnum = 'EVERYONE' | 'GROUP' | 'USER';
+    export const TypeEnum = {
+        EVERYONE: 'EVERYONE' as TypeEnum,
+        GROUP: 'GROUP' as TypeEnum,
+        USER: 'USER' as TypeEnum
+    };
 }

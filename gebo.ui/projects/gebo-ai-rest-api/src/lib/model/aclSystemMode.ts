@@ -9,12 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
-import { GUserMessage } from './gUserMessage';
 
-export interface OperationStatusGMistralEmbeddingModelConfig { 
-    result?: GMistralEmbeddingModelConfig;
-    messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
-    hasErrorMessages?: boolean;
+export interface AclSystemMode { 
+    policy?: AclSystemMode.PolicyEnum;
+    aclEnabled?: boolean;
+}
+export namespace AclSystemMode {
+    export type PolicyEnum = 'GROUP_BASED' | 'ACL_BASED';
+    export const PolicyEnum = {
+        GROUPBASED: 'GROUP_BASED' as PolicyEnum,
+        ACLBASED: 'ACL_BASED' as PolicyEnum
+    };
 }
