@@ -101,7 +101,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	@Override
 	public List<GChatProfileConfiguration> getChatProfiles() {
 		List<GChatProfileConfiguration> configurations = chatProfilesRepository.findAll();
-		return securityService.filterAccessible(configurations, true);
+		return securityService.filterCanDoAction(configurations, true, AclGrantType.EXECUTE);
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (chatProfileData.isEmpty())
 			throw new RuntimeException("Chat profile does not exist");
 		final GChatProfileConfiguration chatProfile = chatProfileData.get();
-		boolean canAccess = securityService.isCanAccess(chatProfile, true);
+		boolean canAccess = securityService.isCanDo(chatProfile, true, AclGrantType.EXECUTE);
 		if (!canAccess)
 			throw new SecurityException("Trying to access wrong chat profile");
 		List<GKnowledgeBase> allVisibles = getVisibleKnowledgeBases();

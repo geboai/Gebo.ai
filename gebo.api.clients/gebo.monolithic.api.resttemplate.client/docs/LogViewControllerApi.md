@@ -54,7 +54,7 @@ No authorization required
 
 <a name="getJobMessagesPaged"></a>
 # **getJobMessagesPaged**
-> PageGUserMessage getJobMessagesPaged(body)
+> PagedModelGUserMessage getJobMessagesPaged(body)
 
 
 
@@ -68,7 +68,7 @@ No authorization required
 LogViewControllerApi apiInstance = new LogViewControllerApi();
 GetJobMessagesParam body = new GetJobMessagesParam(); // GetJobMessagesParam | 
 try {
-    PageGUserMessage result = apiInstance.getJobMessagesPaged(body);
+    PagedModelGUserMessage result = apiInstance.getJobMessagesPaged(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling LogViewControllerApi#getJobMessagesPaged");
@@ -84,7 +84,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGUserMessage**](PageGUserMessage.md)
+[**PagedModelGUserMessage**](PagedModelGUserMessage.md)
 
 ### Authorization
 
@@ -97,7 +97,7 @@ No authorization required
 
 <a name="getJobsEntriesForClassName"></a>
 # **getJobsEntriesForClassName**
-> PageGJobStatusItem getJobsEntriesForClassName(body)
+> PagedModelGJobStatusItem getJobsEntriesForClassName(body)
 
 
 
@@ -111,7 +111,7 @@ No authorization required
 LogViewControllerApi apiInstance = new LogViewControllerApi();
 JobsEntriesForClassNameFilter body = new JobsEntriesForClassNameFilter(); // JobsEntriesForClassNameFilter | 
 try {
-    PageGJobStatusItem result = apiInstance.getJobsEntriesForClassName(body);
+    PagedModelGJobStatusItem result = apiInstance.getJobsEntriesForClassName(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling LogViewControllerApi#getJobsEntriesForClassName");
@@ -127,7 +127,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGJobStatusItem**](PageGJobStatusItem.md)
+[**PagedModelGJobStatusItem**](PagedModelGJobStatusItem.md)
 
 ### Authorization
 
@@ -140,7 +140,7 @@ No authorization required
 
 <a name="getJobsEntriesForJobType"></a>
 # **getJobsEntriesForJobType**
-> PageGJobStatusItem getJobsEntriesForJobType(body)
+> PagedModelGJobStatusItem getJobsEntriesForJobType(body)
 
 
 
@@ -154,7 +154,7 @@ No authorization required
 LogViewControllerApi apiInstance = new LogViewControllerApi();
 JobsEntriesForJobType body = new JobsEntriesForJobType(); // JobsEntriesForJobType | 
 try {
-    PageGJobStatusItem result = apiInstance.getJobsEntriesForJobType(body);
+    PagedModelGJobStatusItem result = apiInstance.getJobsEntriesForJobType(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling LogViewControllerApi#getJobsEntriesForJobType");
@@ -170,7 +170,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGJobStatusItem**](PageGJobStatusItem.md)
+[**PagedModelGJobStatusItem**](PagedModelGJobStatusItem.md)
 
 ### Authorization
 
@@ -183,7 +183,7 @@ No authorization required
 
 <a name="getJobsEntriesForProjectEndpoint"></a>
 # **getJobsEntriesForProjectEndpoint**
-> PageGJobStatusItem getJobsEntriesForProjectEndpoint(body)
+> PagedModelGJobStatusItem getJobsEntriesForProjectEndpoint(body)
 
 
 
@@ -197,7 +197,7 @@ No authorization required
 LogViewControllerApi apiInstance = new LogViewControllerApi();
 JobsEntriesForProjectEndpointFilter body = new JobsEntriesForProjectEndpointFilter(); // JobsEntriesForProjectEndpointFilter | 
 try {
-    PageGJobStatusItem result = apiInstance.getJobsEntriesForProjectEndpoint(body);
+    PagedModelGJobStatusItem result = apiInstance.getJobsEntriesForProjectEndpoint(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling LogViewControllerApi#getJobsEntriesForProjectEndpoint");
@@ -213,7 +213,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGJobStatusItem**](PageGJobStatusItem.md)
+[**PagedModelGJobStatusItem**](PagedModelGJobStatusItem.md)
 
 ### Authorization
 

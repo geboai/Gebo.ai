@@ -268,7 +268,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 				return false;
 			for (AclGrantType grant : grantType) {
 				boolean ok = AclAccessCheck.hasAccess(aclAliasesDao, getCurrentAclGrantedAccessor(), resource, grant,
-						!securityConfig.isUseAcl());
+						securityConfig.isEmptyAclGrantsEveryone(grant));
 				if (ok)
 					return true;
 			}
@@ -315,13 +315,13 @@ public class GSecurityServiceImpl implements IGSecurityService {
 					return accesses;
 				}
 			};
+			final String currentUsername = getCurrentUser().getUsername();
 			List<T> out = objects.stream().filter(object -> {
+				if (object.owner() != null && object.owner().equals(currentUsername))
+					return true;
 				for (AclGrantType grant : grantType) {
-					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
+					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, securityConfig.isEmptyAclGrantsEveryone(grant)))
 						return true;
-					else if (grant == AclGrantType.READ && isCanAccess(object, adminCanDoAll)) {
-						return true;
-					}
 				}
 				return false;
 			}).toList();
@@ -364,7 +364,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			};
 			List<T> out = objects.stream().filter(object -> {
 				for (AclGrantType grant : grantType) {
-					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
+					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, securityConfig.isEmptyAclGrantsEveryone(grant)))
 						return true;
 				}
 				return false;

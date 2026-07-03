@@ -11,6 +11,7 @@ package ai.gebo.llms.abstraction.layer.model;
 
 import java.util.List;
 
+import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.IGObjectWithSecurity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +26,7 @@ import lombok.Getter;
  */
 @Data
 public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> extends GBaseModelConfig<ModelChoice>
-		implements IGObjectWithSecurity {
+		implements IGObjectWithSecurity, IAclGrantedResource {
 	@AllArgsConstructor
 	@Getter
 	public static enum ChatModelThinkingOption {
@@ -54,6 +55,11 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 	 * A boolean flag indicating if access is granted to all users.
 	 */
 	protected Boolean accessibleToAll = null;
+
+	/**
+	 * ACL aliases granting access to this chat model configuration.
+	 */
+	private List<Integer> aclAliases = null;
 
 	/**
 	 * A list of functions that are enabled for direct chat interaction.

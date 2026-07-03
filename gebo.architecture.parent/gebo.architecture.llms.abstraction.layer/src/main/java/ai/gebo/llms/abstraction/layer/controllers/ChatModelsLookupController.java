@@ -29,6 +29,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.model.base.GLookupEntry;
 import ai.gebo.model.base.GLookupEntryRef;
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
@@ -96,7 +97,7 @@ public class ChatModelsLookupController {
                 return (x.getConfig());
             }).toList()));
         }
-        configs = securityService.filterAccessible(configs, true);
+        configs = securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
         return configs.stream().map(GLookupEntryRef::of).toList();
     }
 

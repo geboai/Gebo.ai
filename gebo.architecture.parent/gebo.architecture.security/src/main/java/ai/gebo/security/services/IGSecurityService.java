@@ -75,6 +75,8 @@ public interface IGSecurityService {
 			boolean adminCanDoAll, AclGrantType... grantType) {
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
+			if (object != null && object.owner() != null && object.owner().equals(getCurrentUser().getUsername()))
+				return true;
 			return isCanDoAction(object, adminCanDoAll, grantType);
 		}
 		default:

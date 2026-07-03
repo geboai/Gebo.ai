@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **userCreated** | **String** |  |  [optional]
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **embeddingModelReference** | [**GObjectRefGBaseEmbeddingModelConfig**](GObjectRefGBaseEmbeddingModelConfig.md) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]

@@ -58,6 +58,7 @@ export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingCompon
      * Form group containing controls for all editable properties of an Ollama chat model configuration
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         baseUrl: new FormControl(),
         description: new FormControl(),

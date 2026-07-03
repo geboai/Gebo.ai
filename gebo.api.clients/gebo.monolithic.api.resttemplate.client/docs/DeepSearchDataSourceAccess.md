@@ -7,3 +7,4 @@ Name | Type | Description | Notes
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
 **dataSourceId** | **String** |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]

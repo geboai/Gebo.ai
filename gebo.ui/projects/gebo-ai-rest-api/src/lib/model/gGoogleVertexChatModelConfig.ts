@@ -28,6 +28,7 @@ export interface GGoogleVertexChatModelConfig {
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
     enabledFunctions?: Array<string>;
     temperature?: number;
     forUses?: Array<GGoogleVertexChatModelConfig.ForUsesEnum>;

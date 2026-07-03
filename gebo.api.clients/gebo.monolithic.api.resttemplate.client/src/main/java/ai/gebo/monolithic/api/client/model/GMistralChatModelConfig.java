@@ -26,7 +26,7 @@ import java.util.List;
  * GMistralChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class GMistralChatModelConfig {
   @JsonProperty("code")
@@ -76,6 +76,9 @@ public class GMistralChatModelConfig {
 
   @JsonProperty("accessibleToAll")
   private Boolean accessibleToAll = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("enabledFunctions")
   private List<String> enabledFunctions = null;
@@ -498,6 +501,32 @@ public class GMistralChatModelConfig {
     this.accessibleToAll = accessibleToAll;
   }
 
+  public GMistralChatModelConfig aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GMistralChatModelConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GMistralChatModelConfig enabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
     return this;
@@ -656,6 +685,7 @@ public class GMistralChatModelConfig {
         Objects.equals(this.accessibleGroups, gmistralChatModelConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gmistralChatModelConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gmistralChatModelConfig.accessibleToAll) &&
+        Objects.equals(this.aclAliases, gmistralChatModelConfig.aclAliases) &&
         Objects.equals(this.enabledFunctions, gmistralChatModelConfig.enabledFunctions) &&
         Objects.equals(this.temperature, gmistralChatModelConfig.temperature) &&
         Objects.equals(this.forUses, gmistralChatModelConfig.forUses) &&
@@ -666,7 +696,7 @@ public class GMistralChatModelConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, forUses, features, thinking, maxGeneratedTokens);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, aclAliases, enabledFunctions, temperature, forUses, features, thinking, maxGeneratedTokens);
   }
 
 
@@ -691,6 +721,7 @@ public class GMistralChatModelConfig {
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    forUses: ").append(toIndentedString(forUses)).append("\n");

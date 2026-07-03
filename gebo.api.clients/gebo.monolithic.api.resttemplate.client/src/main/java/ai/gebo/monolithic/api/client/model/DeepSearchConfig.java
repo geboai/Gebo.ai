@@ -27,7 +27,7 @@ import java.util.List;
  * DeepSearchConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class DeepSearchConfig {
   @JsonProperty("code")
@@ -97,9 +97,6 @@ public class DeepSearchConfig {
   @JsonProperty("tokensLimit")
   private Integer tokensLimit = null;
 
-  @JsonProperty("documentsParallelism")
-  private Integer documentsParallelism = null;
-
   @JsonProperty("manualThreasholdsConfiguration")
   private Boolean manualThreasholdsConfiguration = null;
 
@@ -120,6 +117,9 @@ public class DeepSearchConfig {
 
   @JsonProperty("perDataSourceConfigured")
   private Boolean perDataSourceConfigured = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   public DeepSearchConfig code(String code) {
     this.code = code;
@@ -337,24 +337,6 @@ public class DeepSearchConfig {
     this.tokensLimit = tokensLimit;
   }
 
-  public DeepSearchConfig documentsParallelism(Integer documentsParallelism) {
-    this.documentsParallelism = documentsParallelism;
-    return this;
-  }
-
-   /**
-   * Get documentsParallelism
-   * @return documentsParallelism
-  **/
-  @Schema(description = "")
-  public Integer getDocumentsParallelism() {
-    return documentsParallelism;
-  }
-
-  public void setDocumentsParallelism(Integer documentsParallelism) {
-    this.documentsParallelism = documentsParallelism;
-  }
-
   public DeepSearchConfig manualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
     return this;
@@ -505,6 +487,32 @@ public class DeepSearchConfig {
     this.perDataSourceConfigured = perDataSourceConfigured;
   }
 
+  public DeepSearchConfig aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public DeepSearchConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -527,19 +535,19 @@ public class DeepSearchConfig {
         Objects.equals(this.secondHopSimilarityThreashold, deepSearchConfig.secondHopSimilarityThreashold) &&
         Objects.equals(this.graphRagTopN, deepSearchConfig.graphRagTopN) &&
         Objects.equals(this.tokensLimit, deepSearchConfig.tokensLimit) &&
-        Objects.equals(this.documentsParallelism, deepSearchConfig.documentsParallelism) &&
         Objects.equals(this.manualThreasholdsConfiguration, deepSearchConfig.manualThreasholdsConfiguration) &&
         Objects.equals(this.defaultConfig, deepSearchConfig.defaultConfig) &&
         Objects.equals(this.accessibleGroups, deepSearchConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, deepSearchConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, deepSearchConfig.accessibleToAll) &&
         Objects.equals(this.dataSourcesAccesses, deepSearchConfig.dataSourcesAccesses) &&
-        Objects.equals(this.perDataSourceConfigured, deepSearchConfig.perDataSourceConfigured);
+        Objects.equals(this.perDataSourceConfigured, deepSearchConfig.perDataSourceConfigured) &&
+        Objects.equals(this.aclAliases, deepSearchConfig.aclAliases);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, documentsParallelism, manualThreasholdsConfiguration, defaultConfig, accessibleGroups, accessibleUsers, accessibleToAll, dataSourcesAccesses, perDataSourceConfigured);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, manualThreasholdsConfiguration, defaultConfig, accessibleGroups, accessibleUsers, accessibleToAll, dataSourcesAccesses, perDataSourceConfigured, aclAliases);
   }
 
 
@@ -560,7 +568,6 @@ public class DeepSearchConfig {
     sb.append("    secondHopSimilarityThreashold: ").append(toIndentedString(secondHopSimilarityThreashold)).append("\n");
     sb.append("    graphRagTopN: ").append(toIndentedString(graphRagTopN)).append("\n");
     sb.append("    tokensLimit: ").append(toIndentedString(tokensLimit)).append("\n");
-    sb.append("    documentsParallelism: ").append(toIndentedString(documentsParallelism)).append("\n");
     sb.append("    manualThreasholdsConfiguration: ").append(toIndentedString(manualThreasholdsConfiguration)).append("\n");
     sb.append("    defaultConfig: ").append(toIndentedString(defaultConfig)).append("\n");
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
@@ -568,6 +575,7 @@ public class DeepSearchConfig {
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    dataSourcesAccesses: ").append(toIndentedString(dataSourcesAccesses)).append("\n");
     sb.append("    perDataSourceConfigured: ").append(toIndentedString(perDataSourceConfigured)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("}");
     return sb.toString();
   }

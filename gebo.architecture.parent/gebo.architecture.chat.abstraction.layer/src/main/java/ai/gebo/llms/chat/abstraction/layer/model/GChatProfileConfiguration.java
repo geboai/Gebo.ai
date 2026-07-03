@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.model.IGObjectWithSecurity;
@@ -28,12 +29,17 @@ import lombok.Data;
  */
 @Document
 @Data
-public class GChatProfileConfiguration extends GBaseObject implements IGObjectWithSecurity {
+public class GChatProfileConfiguration extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource {
 
 	/**
 	 * Constant for the default chat profile code.
 	 */
 	public static final String DEFAULT_CHAT_PROFILE_CODE = "default-rag-chat-profile";
+
+	/**
+	 * ACL aliases granting access to this chat profile.
+	 */
+	private List<Integer> aclAliases = null;
 
 	/**
 	 * Reference to the embedding model configuration.

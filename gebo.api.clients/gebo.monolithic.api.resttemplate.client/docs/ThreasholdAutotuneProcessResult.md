@@ -17,3 +17,4 @@ Name | Type | Description | Notes
 **evaluationPoints** | **Double** |  |  [optional]
 **score** | **Double** |  |  [optional]
 **processedDateTime** | [**Date**](Date.md) |  |  [optional]
+**computedElements** | [**List&lt;Map&lt;String, Object&gt;&gt;**](Map.md) |  |  [optional]

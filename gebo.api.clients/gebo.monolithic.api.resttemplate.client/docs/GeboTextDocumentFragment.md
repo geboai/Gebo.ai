@@ -3,6 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**customMetaData** | **Map&lt;String, Object&gt;** |  |  [optional]
 **fragmentType** | [**FragmentTypeEnum**](#FragmentTypeEnum) |  |  [optional]
 **contentType** | **String** |  |  [optional]
 **characterEncoding** | **String** |  |  [optional]

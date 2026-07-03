@@ -68,6 +68,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import io.jsonwebtoken.security.SecurityException;
@@ -775,7 +776,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			Optional<GChatProfileConfiguration> profileOpt = this.chatProfilesRepository.findById(chatProfileCode);
 			if (profileOpt.isPresent()) {
 				GChatProfileConfiguration profile = profileOpt.get();
-				boolean canAccess = securityService.isCanAccess(profile, true);
+				boolean canAccess = securityService.isCanDo(profile, true, AclGrantType.EXECUTE);
 				if (!canAccess)
 					throw new SecurityException("The actual user cannot use the chat profile:" + chatProfileCode);
 				if (profile.getChatModelReference() != null) {
@@ -798,7 +799,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		if (profileOpt.isPresent()) {
 			UserInfos user = this.securityService.getCurrentUser();
 			GChatProfileConfiguration profile = profileOpt.get();
-			boolean canAccess = securityService.isCanAccess(profile, true);
+			boolean canAccess = securityService.isCanDo(profile, true, AclGrantType.EXECUTE);
 			if (!canAccess)
 				throw new SecurityException("The actual user cannot use the chat profile:" + chatProfileCode);
 			GUserChatSession userContext = new GUserChatSession();

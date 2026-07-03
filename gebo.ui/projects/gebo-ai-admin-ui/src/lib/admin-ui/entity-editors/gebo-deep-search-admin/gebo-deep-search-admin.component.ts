@@ -25,6 +25,7 @@ export class GeboAIDeepSearchConfigAdminComponent extends BaseEntityEditingCompo
     protected minThreashold: number = 0.5;
     protected maxThreashold: number = 1.0;
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         searchType: new FormControl(),

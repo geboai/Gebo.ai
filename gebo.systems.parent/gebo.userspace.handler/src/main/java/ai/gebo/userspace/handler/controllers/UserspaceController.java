@@ -31,6 +31,7 @@ import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import ai.gebo.userspace.handler.GUserspaceContentManagementSystem;
@@ -113,7 +114,7 @@ public class UserspaceController
 		final UserInfos user = securityService.getCurrentUser();
 		final String owner = user.getUsername();
 		GKnowledgeBase knowledgebase = persistentObjectManager.findById(GKnowledgeBase.class, code);
-		if (securityService.isCanAccess(knowledgebase, false)) {
+		if (securityService.isCanDo(knowledgebase, false, AclGrantType.READ)) {
 			UserspaceKnowledgebaseDto i = new UserspaceKnowledgebaseDto();
 			i.code = knowledgebase.getCode();
 			i.description = knowledgebase.getDescription();

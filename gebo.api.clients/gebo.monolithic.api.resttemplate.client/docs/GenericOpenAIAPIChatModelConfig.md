@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
 **temperature** | **Double** |  |  [optional]
 **forUses** | [**List&lt;ForUsesEnum&gt;**](#List&lt;ForUsesEnum&gt;) |  |  [optional]

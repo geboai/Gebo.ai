@@ -20,12 +20,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * ComputedWorkflowStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class ComputedWorkflowStatus {
   @JsonProperty("jobId")
@@ -78,6 +79,12 @@ public class ComputedWorkflowStatus {
 
   @JsonProperty("enabledStep")
   private Boolean enabledStep = null;
+
+  @JsonProperty("startProcessingTimestamp")
+  private Date startProcessingTimestamp = null;
+
+  @JsonProperty("lastProcessingTimestamp")
+  private Date lastProcessingTimestamp = null;
 
   @JsonProperty("childs")
   private List<ComputedWorkflowStatus> childs = null;
@@ -388,6 +395,42 @@ public class ComputedWorkflowStatus {
     this.enabledStep = enabledStep;
   }
 
+  public ComputedWorkflowStatus startProcessingTimestamp(Date startProcessingTimestamp) {
+    this.startProcessingTimestamp = startProcessingTimestamp;
+    return this;
+  }
+
+   /**
+   * Get startProcessingTimestamp
+   * @return startProcessingTimestamp
+  **/
+  @Schema(description = "")
+  public Date getStartProcessingTimestamp() {
+    return startProcessingTimestamp;
+  }
+
+  public void setStartProcessingTimestamp(Date startProcessingTimestamp) {
+    this.startProcessingTimestamp = startProcessingTimestamp;
+  }
+
+  public ComputedWorkflowStatus lastProcessingTimestamp(Date lastProcessingTimestamp) {
+    this.lastProcessingTimestamp = lastProcessingTimestamp;
+    return this;
+  }
+
+   /**
+   * Get lastProcessingTimestamp
+   * @return lastProcessingTimestamp
+  **/
+  @Schema(description = "")
+  public Date getLastProcessingTimestamp() {
+    return lastProcessingTimestamp;
+  }
+
+  public void setLastProcessingTimestamp(Date lastProcessingTimestamp) {
+    this.lastProcessingTimestamp = lastProcessingTimestamp;
+  }
+
   public ComputedWorkflowStatus childs(List<ComputedWorkflowStatus> childs) {
     this.childs = childs;
     return this;
@@ -441,12 +484,14 @@ public class ComputedWorkflowStatus {
         Objects.equals(this.startedRunning, computedWorkflowStatus.startedRunning) &&
         Objects.equals(this.levelId, computedWorkflowStatus.levelId) &&
         Objects.equals(this.enabledStep, computedWorkflowStatus.enabledStep) &&
+        Objects.equals(this.startProcessingTimestamp, computedWorkflowStatus.startProcessingTimestamp) &&
+        Objects.equals(this.lastProcessingTimestamp, computedWorkflowStatus.lastProcessingTimestamp) &&
         Objects.equals(this.childs, computedWorkflowStatus.childs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(jobId, workflowType, workflowId, workflowStepId, description, batchDocumentsInput, batchDocumentsProcessingErrors, batchDocumentsProcessed, batchSentToNextStep, batchDiscardedInput, chunksProcessed, tokensProcessed, completed, hasErrors, startedRunning, levelId, enabledStep, childs);
+    return Objects.hash(jobId, workflowType, workflowId, workflowStepId, description, batchDocumentsInput, batchDocumentsProcessingErrors, batchDocumentsProcessed, batchSentToNextStep, batchDiscardedInput, chunksProcessed, tokensProcessed, completed, hasErrors, startedRunning, levelId, enabledStep, startProcessingTimestamp, lastProcessingTimestamp, childs);
   }
 
 
@@ -472,6 +517,8 @@ public class ComputedWorkflowStatus {
     sb.append("    startedRunning: ").append(toIndentedString(startedRunning)).append("\n");
     sb.append("    levelId: ").append(toIndentedString(levelId)).append("\n");
     sb.append("    enabledStep: ").append(toIndentedString(enabledStep)).append("\n");
+    sb.append("    startProcessingTimestamp: ").append(toIndentedString(startProcessingTimestamp)).append("\n");
+    sb.append("    lastProcessingTimestamp: ").append(toIndentedString(lastProcessingTimestamp)).append("\n");
     sb.append("    childs: ").append(toIndentedString(childs)).append("\n");
     sb.append("}");
     return sb.toString();

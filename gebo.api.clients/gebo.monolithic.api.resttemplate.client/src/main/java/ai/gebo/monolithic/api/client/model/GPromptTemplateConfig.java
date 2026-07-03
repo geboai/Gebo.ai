@@ -18,11 +18,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GPromptTemplateConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class GPromptTemplateConfig {
   @JsonProperty("code")
@@ -165,6 +168,9 @@ public class GPromptTemplateConfig {
 
   @JsonProperty("agentId")
   private String agentId = null;
+
+  @JsonProperty("placeholders")
+  private Map<String, Boolean> placeholders = null;
 
   public GPromptTemplateConfig code(String code) {
     this.code = code;
@@ -454,6 +460,32 @@ public class GPromptTemplateConfig {
     this.agentId = agentId;
   }
 
+  public GPromptTemplateConfig placeholders(Map<String, Boolean> placeholders) {
+    this.placeholders = placeholders;
+    return this;
+  }
+
+  public GPromptTemplateConfig putPlaceholdersItem(String key, Boolean placeholdersItem) {
+    if (this.placeholders == null) {
+      this.placeholders = new HashMap<>();
+    }
+    this.placeholders.put(key, placeholdersItem);
+    return this;
+  }
+
+   /**
+   * Get placeholders
+   * @return placeholders
+  **/
+  @Schema(description = "")
+  public Map<String, Boolean> getPlaceholders() {
+    return placeholders;
+  }
+
+  public void setPlaceholders(Map<String, Boolean> placeholders) {
+    this.placeholders = placeholders;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -479,12 +511,13 @@ public class GPromptTemplateConfig {
         Objects.equals(this.tokensSize, gpromptTemplateConfig.tokensSize) &&
         Objects.equals(this.configDeclarated, gpromptTemplateConfig.configDeclarated) &&
         Objects.equals(this.agentPrompt, gpromptTemplateConfig.agentPrompt) &&
-        Objects.equals(this.agentId, gpromptTemplateConfig.agentId);
+        Objects.equals(this.agentId, gpromptTemplateConfig.agentId) &&
+        Objects.equals(this.placeholders, gpromptTemplateConfig.placeholders);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, systemPromptTemplate, userPromptTemplate, chatHistory, contextDocuments, toolsCalling, langCode, promptUse, modelProvider, modelCode, promptCategory, tokensSize, configDeclarated, agentPrompt, agentId);
+    return Objects.hash(code, description, systemPromptTemplate, userPromptTemplate, chatHistory, contextDocuments, toolsCalling, langCode, promptUse, modelProvider, modelCode, promptCategory, tokensSize, configDeclarated, agentPrompt, agentId, placeholders);
   }
 
 
@@ -509,6 +542,7 @@ public class GPromptTemplateConfig {
     sb.append("    configDeclarated: ").append(toIndentedString(configDeclarated)).append("\n");
     sb.append("    agentPrompt: ").append(toIndentedString(agentPrompt)).append("\n");
     sb.append("    agentId: ").append(toIndentedString(agentId)).append("\n");
+    sb.append("    placeholders: ").append(toIndentedString(placeholders)).append("\n");
     sb.append("}");
     return sb.toString();
   }

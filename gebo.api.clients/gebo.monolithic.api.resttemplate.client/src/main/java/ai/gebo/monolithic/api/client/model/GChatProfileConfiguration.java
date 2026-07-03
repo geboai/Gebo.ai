@@ -27,7 +27,7 @@ import java.util.List;
  * GChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class GChatProfileConfiguration {
   @JsonProperty("code")
@@ -47,6 +47,9 @@ public class GChatProfileConfiguration {
 
   @JsonProperty("dateCreated")
   private Date dateCreated = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("embeddingModelReference")
   private GObjectRefGBaseEmbeddingModelConfig embeddingModelReference = null;
@@ -202,6 +205,32 @@ public class GChatProfileConfiguration {
 
   public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
+  }
+
+  public GChatProfileConfiguration aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GChatProfileConfiguration addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
   }
 
   public GChatProfileConfiguration embeddingModelReference(GObjectRefGBaseEmbeddingModelConfig embeddingModelReference) {
@@ -548,6 +577,7 @@ public class GChatProfileConfiguration {
         Objects.equals(this.userCreated, gchatProfileConfiguration.userCreated) &&
         Objects.equals(this.dateModified, gchatProfileConfiguration.dateModified) &&
         Objects.equals(this.dateCreated, gchatProfileConfiguration.dateCreated) &&
+        Objects.equals(this.aclAliases, gchatProfileConfiguration.aclAliases) &&
         Objects.equals(this.embeddingModelReference, gchatProfileConfiguration.embeddingModelReference) &&
         Objects.equals(this.chatModelReference, gchatProfileConfiguration.chatModelReference) &&
         Objects.equals(this.enabledFunctions, gchatProfileConfiguration.enabledFunctions) &&
@@ -568,7 +598,7 @@ public class GChatProfileConfiguration {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration, useAlsoKeywordSearch);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, aclAliases, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration, useAlsoKeywordSearch);
   }
 
 
@@ -583,6 +613,7 @@ public class GChatProfileConfiguration {
     sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    embeddingModelReference: ").append(toIndentedString(embeddingModelReference)).append("\n");
     sb.append("    chatModelReference: ").append(toIndentedString(chatModelReference)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");

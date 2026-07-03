@@ -5,7 +5,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.ChatProfileConfigurationByQbeParam;
 import ai.gebo.monolithic.api.client.model.DataPage;
 import ai.gebo.monolithic.api.client.model.GChatProfileConfiguration;
-import ai.gebo.monolithic.api.client.model.PageGChatProfileConfiguration;
+import ai.gebo.monolithic.api.client.model.PagedModelGChatProfileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class GeboAdminChatProfilesConfigurationControllerApi {
     private ApiClient apiClient;
@@ -138,10 +138,10 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGChatProfileConfiguration
+     * @return PagedModelGChatProfileConfiguration
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGChatProfileConfiguration getAllChatProfileConfiguration(DataPage body) throws RestClientException {
+    public PagedModelGChatProfileConfiguration getAllChatProfileConfiguration(DataPage body) throws RestClientException {
         return getAllChatProfileConfigurationWithHttpInfo(body).getBody();
     }
 
@@ -150,10 +150,10 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGChatProfileConfiguration&gt;
+     * @return ResponseEntity&lt;PagedModelGChatProfileConfiguration&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGChatProfileConfiguration> getAllChatProfileConfigurationWithHttpInfo(DataPage body) throws RestClientException {
+    public ResponseEntity<PagedModelGChatProfileConfiguration> getAllChatProfileConfigurationWithHttpInfo(DataPage body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -176,7 +176,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGChatProfileConfiguration> returnType = new ParameterizedTypeReference<PageGChatProfileConfiguration>() {};
+        ParameterizedTypeReference<PagedModelGChatProfileConfiguration> returnType = new ParameterizedTypeReference<PagedModelGChatProfileConfiguration>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -184,10 +184,10 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGChatProfileConfiguration
+     * @return PagedModelGChatProfileConfiguration
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGChatProfileConfiguration getChatProfileConfigurationByQbe(ChatProfileConfigurationByQbeParam body) throws RestClientException {
+    public PagedModelGChatProfileConfiguration getChatProfileConfigurationByQbe(ChatProfileConfigurationByQbeParam body) throws RestClientException {
         return getChatProfileConfigurationByQbeWithHttpInfo(body).getBody();
     }
 
@@ -196,10 +196,10 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGChatProfileConfiguration&gt;
+     * @return ResponseEntity&lt;PagedModelGChatProfileConfiguration&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGChatProfileConfiguration> getChatProfileConfigurationByQbeWithHttpInfo(ChatProfileConfigurationByQbeParam body) throws RestClientException {
+    public ResponseEntity<PagedModelGChatProfileConfiguration> getChatProfileConfigurationByQbeWithHttpInfo(ChatProfileConfigurationByQbeParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -222,7 +222,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGChatProfileConfiguration> returnType = new ParameterizedTypeReference<PageGChatProfileConfiguration>() {};
+        ParameterizedTypeReference<PagedModelGChatProfileConfiguration> returnType = new ParameterizedTypeReference<PagedModelGChatProfileConfiguration>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

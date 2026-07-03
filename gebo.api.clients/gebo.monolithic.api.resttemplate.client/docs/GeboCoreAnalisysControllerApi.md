@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**drillDown**](GeboCoreAnalisysControllerApi.md#drillDown) | **POST** /api/admin/GeboCoreAnalisysController/drillDown | 
+[**coreDrillDown**](GeboCoreAnalisysControllerApi.md#coreDrillDown) | **POST** /api/admin/GeboCoreAnalisysController/drillDown | 
 [**getTopLevelKnowledgeBaseCategory**](GeboCoreAnalisysControllerApi.md#getTopLevelKnowledgeBaseCategory) | **GET** /api/admin/GeboCoreAnalisysController/getTopLevelKnowledgeBaseCategory | 
 
-<a name="drillDown"></a>
-# **drillDown**
-> List&lt;GStatsHolder&gt; drillDown(body)
+<a name="coreDrillDown"></a>
+# **coreDrillDown**
+> List&lt;GStatsHolder&gt; coreDrillDown(body)
 
 
 
@@ -23,10 +23,10 @@ Method | HTTP request | Description
 GeboCoreAnalisysControllerApi apiInstance = new GeboCoreAnalisysControllerApi();
 GStatsHolder body = new GStatsHolder(); // GStatsHolder | 
 try {
-    List<GStatsHolder> result = apiInstance.drillDown(body);
+    List<GStatsHolder> result = apiInstance.coreDrillDown(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboCoreAnalisysControllerApi#drillDown");
+    System.err.println("Exception when calling GeboCoreAnalisysControllerApi#coreDrillDown");
     e.printStackTrace();
 }
 ```

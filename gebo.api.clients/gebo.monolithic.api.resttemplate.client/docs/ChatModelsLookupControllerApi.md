@@ -88,7 +88,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredChatModelsLookup"></a>
 # **getRuntimeConfiguredChatModelsLookup**
-> List&lt;GLookupEntryRef&gt; getRuntimeConfiguredChatModelsLookup(modelTypeCode)
+> List&lt;GLookupEntryRefGBaseChatModelConfig&gt; getRuntimeConfiguredChatModelsLookup(modelTypeCode)
 
 
 
@@ -102,7 +102,7 @@ No authorization required
 ChatModelsLookupControllerApi apiInstance = new ChatModelsLookupControllerApi();
 String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    List<GLookupEntryRef> result = apiInstance.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
+    List<GLookupEntryRefGBaseChatModelConfig> result = apiInstance.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ChatModelsLookupControllerApi#getRuntimeConfiguredChatModelsLookup");
@@ -118,7 +118,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List&lt;GLookupEntryRef&gt;**](GLookupEntryRef.md)
+[**List&lt;GLookupEntryRefGBaseChatModelConfig&gt;**](GLookupEntryRefGBaseChatModelConfig.md)
 
 ### Authorization
 

@@ -12,6 +12,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.DeepSearchDataSourceAccess;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 
@@ -28,7 +29,7 @@ public class GExternalSearchSecurityServiceImpl implements IGExternalSearchSecur
 		if (!adminConfigured && !securityService.isCurrentUserAdmin()) {
 			return false;
 		}
-		boolean userCanAccess = securityService.isCanAccess(deepSearchConfig, true);
+		boolean userCanAccess = securityService.isCanDo(deepSearchConfig, true, AclGrantType.EXECUTE);
 		if (userCanAccess) {
 			List<DeepSearchDataSourceAccess> accesses = deepSearchConfig.getDataSourcesAccesses();
 			boolean perDataSourceConfigured = deepSearchConfig.getPerDataSourceConfigured() != null
@@ -39,7 +40,7 @@ public class GExternalSearchSecurityServiceImpl implements IGExternalSearchSecur
 				DeepSearchDataSourceAccess gridCell = accesses.stream()
 						.filter(x -> x.getDataSourceId() != null && x.getDataSourceId().equals(thisSystemId))
 						.findFirst().orElse(null);
-				userCanAccess = gridCell != null && securityService.isCanAccess(gridCell, true);
+				userCanAccess = gridCell != null && securityService.isCanDo(gridCell, true, AclGrantType.EXECUTE);
 			}
 		}
 		if (searchService.isEnabled() && userCanAccess) {

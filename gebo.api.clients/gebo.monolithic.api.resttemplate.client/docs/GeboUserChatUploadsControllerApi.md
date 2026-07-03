@@ -55,7 +55,7 @@ No authorization required
 
 <a name="deleteSessionUploads"></a>
 # **deleteSessionUploads**
-> OperationStatusListUserUploadedContent deleteSessionUploads(userSessionCode)
+> OperationStatusListUserUploadedContent deleteSessionUploads()
 
 
 
@@ -67,9 +67,8 @@ No authorization required
 
 
 GeboUserChatUploadsControllerApi apiInstance = new GeboUserChatUploadsControllerApi();
-String userSessionCode = "userSessionCode_example"; // String | 
 try {
-    OperationStatusListUserUploadedContent result = apiInstance.deleteSessionUploads(userSessionCode);
+    OperationStatusListUserUploadedContent result = apiInstance.deleteSessionUploads();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatUploadsControllerApi#deleteSessionUploads");
@@ -78,10 +77,7 @@ try {
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **userSessionCode** | **String**|  |
+This endpoint does not need any parameter.
 
 ### Return type
 

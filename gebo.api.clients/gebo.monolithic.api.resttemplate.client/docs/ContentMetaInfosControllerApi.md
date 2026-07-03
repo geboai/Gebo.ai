@@ -184,7 +184,7 @@ No authorization required
 
 <a name="searchByDocumentNamePaged"></a>
 # **searchByDocumentNamePaged**
-> PageDocumentReferenceView searchByDocumentNamePaged(body)
+> PagedModelDocumentReferenceView searchByDocumentNamePaged(body)
 
 
 
@@ -198,7 +198,7 @@ No authorization required
 ContentMetaInfosControllerApi apiInstance = new ContentMetaInfosControllerApi();
 SearchDocumentByNamePagedParam body = new SearchDocumentByNamePagedParam(); // SearchDocumentByNamePagedParam | 
 try {
-    PageDocumentReferenceView result = apiInstance.searchByDocumentNamePaged(body);
+    PagedModelDocumentReferenceView result = apiInstance.searchByDocumentNamePaged(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ContentMetaInfosControllerApi#searchByDocumentNamePaged");
@@ -214,7 +214,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageDocumentReferenceView**](PageDocumentReferenceView.md)
+[**PagedModelDocumentReferenceView**](PagedModelDocumentReferenceView.md)
 
 ### Authorization
 

@@ -20,11 +20,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GOllamaChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class GOllamaChatModelChoice {
   @JsonProperty("code")
@@ -71,6 +74,9 @@ public class GOllamaChatModelChoice {
 
   @JsonProperty("supportsFunctionCalls")
   private Boolean supportsFunctionCalls = null;
+
+  @JsonProperty("modelDetails")
+  private Map<String, Object> modelDetails = null;
 
   public GOllamaChatModelChoice code(String code) {
     this.code = code;
@@ -342,6 +348,32 @@ public class GOllamaChatModelChoice {
     this.supportsFunctionCalls = supportsFunctionCalls;
   }
 
+  public GOllamaChatModelChoice modelDetails(Map<String, Object> modelDetails) {
+    this.modelDetails = modelDetails;
+    return this;
+  }
+
+  public GOllamaChatModelChoice putModelDetailsItem(String key, Object modelDetailsItem) {
+    if (this.modelDetails == null) {
+      this.modelDetails = new HashMap<>();
+    }
+    this.modelDetails.put(key, modelDetailsItem);
+    return this;
+  }
+
+   /**
+   * Get modelDetails
+   * @return modelDetails
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getModelDetails() {
+    return modelDetails;
+  }
+
+  public void setModelDetails(Map<String, Object> modelDetails) {
+    this.modelDetails = modelDetails;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -366,12 +398,13 @@ public class GOllamaChatModelChoice {
         Objects.equals(this.contextLength, gollamaChatModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gollamaChatModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.supportsStructuredOutput, gollamaChatModelChoice.supportsStructuredOutput) &&
-        Objects.equals(this.supportsFunctionCalls, gollamaChatModelChoice.supportsFunctionCalls);
+        Objects.equals(this.supportsFunctionCalls, gollamaChatModelChoice.supportsFunctionCalls) &&
+        Objects.equals(this.modelDetails, gollamaChatModelChoice.modelDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls, modelDetails);
   }
 
 
@@ -395,6 +428,7 @@ public class GOllamaChatModelChoice {
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
+    sb.append("    modelDetails: ").append(toIndentedString(modelDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }

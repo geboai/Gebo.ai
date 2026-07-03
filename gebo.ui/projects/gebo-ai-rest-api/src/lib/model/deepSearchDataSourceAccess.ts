@@ -15,4 +15,5 @@ export interface DeepSearchDataSourceAccess {
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     dataSourceId?: string;
+    aclAliases?: Array<number>;
 }

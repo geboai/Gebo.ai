@@ -258,8 +258,13 @@ export class GeboAIAclSettingsComponent implements OnInit, ControlValueAccessor 
         this.selectedUserCodes = [];
         this.scope = "SPECIFIC";
         if (aliases.length === 0) {
+            // An empty/null ACL defaults to "everyone" with the allowed grants, and
+            // the resulting encoded value is pushed back to the bound form control.
+            this.scope = "EVERYONE";
+            this.grantsByKey[EVERYONE_KEY] = this.defaultGrants();
             this.hydrating = false;
             this.refreshDerived();
+            this.emit();
             return;
         }
         this.aclService.resolveAliases(aliases).subscribe({

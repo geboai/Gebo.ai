@@ -6,8 +6,8 @@ import ai.gebo.monolithic.api.client.model.GetJobMessagesParam;
 import ai.gebo.monolithic.api.client.model.JobsEntriesForClassNameFilter;
 import ai.gebo.monolithic.api.client.model.JobsEntriesForJobType;
 import ai.gebo.monolithic.api.client.model.JobsEntriesForProjectEndpointFilter;
-import ai.gebo.monolithic.api.client.model.PageGJobStatusItem;
-import ai.gebo.monolithic.api.client.model.PageGUserMessage;
+import ai.gebo.monolithic.api.client.model.PagedModelGJobStatusItem;
+import ai.gebo.monolithic.api.client.model.PagedModelGUserMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class LogViewControllerApi {
     private ApiClient apiClient;
@@ -95,10 +95,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGUserMessage
+     * @return PagedModelGUserMessage
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGUserMessage getJobMessagesPaged(GetJobMessagesParam body) throws RestClientException {
+    public PagedModelGUserMessage getJobMessagesPaged(GetJobMessagesParam body) throws RestClientException {
         return getJobMessagesPagedWithHttpInfo(body).getBody();
     }
 
@@ -107,10 +107,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGUserMessage&gt;
+     * @return ResponseEntity&lt;PagedModelGUserMessage&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGUserMessage> getJobMessagesPagedWithHttpInfo(GetJobMessagesParam body) throws RestClientException {
+    public ResponseEntity<PagedModelGUserMessage> getJobMessagesPagedWithHttpInfo(GetJobMessagesParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -133,7 +133,7 @@ public class LogViewControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGUserMessage> returnType = new ParameterizedTypeReference<PageGUserMessage>() {};
+        ParameterizedTypeReference<PagedModelGUserMessage> returnType = new ParameterizedTypeReference<PagedModelGUserMessage>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -141,10 +141,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGJobStatusItem
+     * @return PagedModelGJobStatusItem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGJobStatusItem getJobsEntriesForClassName(JobsEntriesForClassNameFilter body) throws RestClientException {
+    public PagedModelGJobStatusItem getJobsEntriesForClassName(JobsEntriesForClassNameFilter body) throws RestClientException {
         return getJobsEntriesForClassNameWithHttpInfo(body).getBody();
     }
 
@@ -153,10 +153,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGJobStatusItem&gt;
+     * @return ResponseEntity&lt;PagedModelGJobStatusItem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGJobStatusItem> getJobsEntriesForClassNameWithHttpInfo(JobsEntriesForClassNameFilter body) throws RestClientException {
+    public ResponseEntity<PagedModelGJobStatusItem> getJobsEntriesForClassNameWithHttpInfo(JobsEntriesForClassNameFilter body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -179,7 +179,7 @@ public class LogViewControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGJobStatusItem> returnType = new ParameterizedTypeReference<PageGJobStatusItem>() {};
+        ParameterizedTypeReference<PagedModelGJobStatusItem> returnType = new ParameterizedTypeReference<PagedModelGJobStatusItem>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -187,10 +187,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGJobStatusItem
+     * @return PagedModelGJobStatusItem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGJobStatusItem getJobsEntriesForJobType(JobsEntriesForJobType body) throws RestClientException {
+    public PagedModelGJobStatusItem getJobsEntriesForJobType(JobsEntriesForJobType body) throws RestClientException {
         return getJobsEntriesForJobTypeWithHttpInfo(body).getBody();
     }
 
@@ -199,10 +199,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGJobStatusItem&gt;
+     * @return ResponseEntity&lt;PagedModelGJobStatusItem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGJobStatusItem> getJobsEntriesForJobTypeWithHttpInfo(JobsEntriesForJobType body) throws RestClientException {
+    public ResponseEntity<PagedModelGJobStatusItem> getJobsEntriesForJobTypeWithHttpInfo(JobsEntriesForJobType body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -225,7 +225,7 @@ public class LogViewControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGJobStatusItem> returnType = new ParameterizedTypeReference<PageGJobStatusItem>() {};
+        ParameterizedTypeReference<PagedModelGJobStatusItem> returnType = new ParameterizedTypeReference<PagedModelGJobStatusItem>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -233,10 +233,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGJobStatusItem
+     * @return PagedModelGJobStatusItem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGJobStatusItem getJobsEntriesForProjectEndpoint(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
+    public PagedModelGJobStatusItem getJobsEntriesForProjectEndpoint(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
         return getJobsEntriesForProjectEndpointWithHttpInfo(body).getBody();
     }
 
@@ -245,10 +245,10 @@ public class LogViewControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGJobStatusItem&gt;
+     * @return ResponseEntity&lt;PagedModelGJobStatusItem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGJobStatusItem> getJobsEntriesForProjectEndpointWithHttpInfo(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
+    public ResponseEntity<PagedModelGJobStatusItem> getJobsEntriesForProjectEndpointWithHttpInfo(JobsEntriesForProjectEndpointFilter body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -271,7 +271,7 @@ public class LogViewControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGJobStatusItem> returnType = new ParameterizedTypeReference<PageGJobStatusItem>() {};
+        ParameterizedTypeReference<PagedModelGJobStatusItem> returnType = new ParameterizedTypeReference<PagedModelGJobStatusItem>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

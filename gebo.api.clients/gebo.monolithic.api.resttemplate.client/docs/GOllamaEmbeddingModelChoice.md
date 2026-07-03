@@ -17,3 +17,4 @@ Name | Type | Description | Notes
 **contextLength** | **Integer** |  |  [optional]
 **nativeModelMetaInfos** | **Object** |  |  [optional]
 **optimalTokenizationParam** | **Integer** |  |  [optional]
+**modelDetails** | **Map&lt;String, Object&gt;** |  |  [optional]

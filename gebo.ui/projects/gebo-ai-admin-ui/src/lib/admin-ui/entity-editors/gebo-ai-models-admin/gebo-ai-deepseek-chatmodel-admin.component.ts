@@ -54,6 +54,7 @@ export class GeboAIDeepseekChatModelAdminComponent extends BaseEntityEditingComp
      * Form group containing all configuration fields for the Deepseek chat model
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),

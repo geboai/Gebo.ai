@@ -26,7 +26,7 @@ import java.util.List;
  * GGoogleVertexChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class GGoogleVertexChatModelConfig {
   @JsonProperty("code")
@@ -76,6 +76,9 @@ public class GGoogleVertexChatModelConfig {
 
   @JsonProperty("accessibleToAll")
   private Boolean accessibleToAll = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("enabledFunctions")
   private List<String> enabledFunctions = null;
@@ -498,6 +501,32 @@ public class GGoogleVertexChatModelConfig {
     this.accessibleToAll = accessibleToAll;
   }
 
+  public GGoogleVertexChatModelConfig aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GGoogleVertexChatModelConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GGoogleVertexChatModelConfig enabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
     return this;
@@ -656,6 +685,7 @@ public class GGoogleVertexChatModelConfig {
         Objects.equals(this.accessibleGroups, ggoogleVertexChatModelConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, ggoogleVertexChatModelConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, ggoogleVertexChatModelConfig.accessibleToAll) &&
+        Objects.equals(this.aclAliases, ggoogleVertexChatModelConfig.aclAliases) &&
         Objects.equals(this.enabledFunctions, ggoogleVertexChatModelConfig.enabledFunctions) &&
         Objects.equals(this.temperature, ggoogleVertexChatModelConfig.temperature) &&
         Objects.equals(this.forUses, ggoogleVertexChatModelConfig.forUses) &&
@@ -666,7 +696,7 @@ public class GGoogleVertexChatModelConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, forUses, features, thinking, maxGeneratedTokens);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, aclAliases, enabledFunctions, temperature, forUses, features, thinking, maxGeneratedTokens);
   }
 
 
@@ -691,6 +721,7 @@ public class GGoogleVertexChatModelConfig {
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    forUses: ").append(toIndentedString(forUses)).append("\n");

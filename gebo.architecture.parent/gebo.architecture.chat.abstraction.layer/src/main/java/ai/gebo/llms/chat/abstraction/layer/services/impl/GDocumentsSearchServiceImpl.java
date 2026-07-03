@@ -124,7 +124,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 						secondHopThreashold = chatProfile.getOtherSearchSimilarityThreshold();
 					}
 				}
-				boolean canAccess = securityService.isCanAccess(chatProfile, true);
+				boolean canAccess = securityService.isCanDo(chatProfile, true, AclGrantType.EXECUTE);
 				if (!canAccess)
 					throw new RuntimeException(
 							"The actual user cannot acces the indicated chat profile " + chatProfileCode);

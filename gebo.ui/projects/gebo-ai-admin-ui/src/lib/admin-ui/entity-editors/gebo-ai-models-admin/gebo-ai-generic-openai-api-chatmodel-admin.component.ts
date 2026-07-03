@@ -55,6 +55,7 @@ export class GeboAIGenericOpenAIAPIChatModelAdminComponent extends BaseEntityEdi
      * FormGroup defining all the form controls needed for the OpenAI API model configuration
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),

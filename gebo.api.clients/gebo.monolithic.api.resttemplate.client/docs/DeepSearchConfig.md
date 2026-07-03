@@ -15,7 +15,6 @@ Name | Type | Description | Notes
 **secondHopSimilarityThreashold** | **Double** |  |  [optional]
 **graphRagTopN** | **Integer** |  |  [optional]
 **tokensLimit** | **Integer** |  |  [optional]
-**documentsParallelism** | **Integer** |  |  [optional]
 **manualThreasholdsConfiguration** | **Boolean** |  |  [optional]
 **defaultConfig** | **Boolean** |  |  [optional]
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
@@ -23,6 +22,7 @@ Name | Type | Description | Notes
 **accessibleToAll** | **Boolean** |  |  [optional]
 **dataSourcesAccesses** | [**List&lt;DeepSearchDataSourceAccess&gt;**](DeepSearchDataSourceAccess.md) |  |  [optional]
 **perDataSourceConfigured** | **Boolean** |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 
 <a name="SearchTypeEnum"></a>
 ## Enum: SearchTypeEnum

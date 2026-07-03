@@ -46,6 +46,7 @@ export class GeboAIGoogleVertexChatModelAdminComponent extends BaseEntityEditing
     protected override entityName: string = "GGoogleVertexChatModelConfig";
     allowedTypes: SecretInfo.SecretTypeEnum[] = [ SecretInfo.SecretTypeEnum.TOKEN];
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),

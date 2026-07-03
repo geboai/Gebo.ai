@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.model.GeboLoginPolicy;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,75 @@ public class GeboSecurityConfig {
 	private Boolean oauth2LoginEnabled = true;
 	private Boolean oauth2ResourceServerEnabled = true;
 	private boolean useAcl = false;
+
+	/**
+	 * Policy, per {@link AclGrantType}, deciding what an <em>empty</em> ACL means
+	 * while the platform runs in ACL mode. When {@code false} (the default) an
+	 * object with no acl aliases is only accessible by admins; when {@code true}
+	 * an empty acl is treated as "everyone can perform that grant".
+	 */
+	private final EmptyAclGrantsEveryone emptyAclGrantsEveryone = new EmptyAclGrantsEveryone();
+
+	/**
+	 * Per-grant flags telling whether an empty acl grants access to everyone.
+	 * Bound from {@code ai.gebo.security.empty-acl-grants-everyone.*}.
+	 */
+	public static class EmptyAclGrantsEveryone {
+		private boolean read = false;
+		private boolean write = false;
+		private boolean execute = false;
+
+		public boolean isRead() {
+			return read;
+		}
+
+		public void setRead(boolean read) {
+			this.read = read;
+		}
+
+		public boolean isWrite() {
+			return write;
+		}
+
+		public void setWrite(boolean write) {
+			this.write = write;
+		}
+
+		public boolean isExecute() {
+			return execute;
+		}
+
+		public void setExecute(boolean execute) {
+			this.execute = execute;
+		}
+	}
+
+	public EmptyAclGrantsEveryone getEmptyAclGrantsEveryone() {
+		return emptyAclGrantsEveryone;
+	}
+
+	/**
+	 * Tells whether an empty acl should be treated as "everyone can do it" for the
+	 * given grant, according to the configured {@link EmptyAclGrantsEveryone}
+	 * policy.
+	 *
+	 * @param grant the grant being checked
+	 * @return {@code true} if an empty acl grants the given action to everyone
+	 */
+	public boolean isEmptyAclGrantsEveryone(AclGrantType grant) {
+		if (grant == null)
+			return false;
+		switch (grant) {
+		case READ:
+			return emptyAclGrantsEveryone.isRead();
+		case WRITE:
+			return emptyAclGrantsEveryone.isWrite();
+		case EXECUTE:
+			return emptyAclGrantsEveryone.isExecute();
+		default:
+			return false;
+		}
+	}
 
 	/**
 	 * Represents configuration properties related to authentication. Includes token

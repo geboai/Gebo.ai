@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **configDeclarated** | **Boolean** |  |  [optional]
 **agentPrompt** | **Boolean** |  |  [optional]
 **agentId** | **String** |  |  [optional]
+**placeholders** | **Map&lt;String, Boolean&gt;** |  |  [optional]
 
 <a name="ChatHistoryEnum"></a>
 ## Enum: ChatHistoryEnum

@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
 
@@ -139,7 +140,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 
 		for (IGConfigurableChatModel mconfig : configurations) {
 			// Check access rights for each configuration
-			if (!securityService.isCanAccess((GBaseChatModelConfig) mconfig.getConfig(), true))
+			if (!securityService.isCanDo((GBaseChatModelConfig) mconfig.getConfig(), true, AclGrantType.EXECUTE))
 				continue;
 
 			GShortModelInfo object = new GShortModelInfo();

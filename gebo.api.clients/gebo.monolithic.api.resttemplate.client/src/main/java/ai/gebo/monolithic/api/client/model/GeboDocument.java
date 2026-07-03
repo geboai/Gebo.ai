@@ -27,12 +27,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * GeboDocument
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class GeboDocument {
   @JsonProperty("id")
@@ -73,6 +75,12 @@ public class GeboDocument {
 
   @JsonProperty("originalContentModifiedDate")
   private Date originalContentModifiedDate = null;
+
+  @JsonProperty("customMetaData")
+  private Map<String, Object> customMetaData = null;
+
+  @JsonProperty("additionalAttributes")
+  private Map<String, Object> additionalAttributes = null;
 
   @JsonProperty("texts")
   private List<GeboTextDocumentFragment> texts = null;
@@ -326,6 +334,58 @@ public class GeboDocument {
     this.originalContentModifiedDate = originalContentModifiedDate;
   }
 
+  public GeboDocument customMetaData(Map<String, Object> customMetaData) {
+    this.customMetaData = customMetaData;
+    return this;
+  }
+
+  public GeboDocument putCustomMetaDataItem(String key, Object customMetaDataItem) {
+    if (this.customMetaData == null) {
+      this.customMetaData = new HashMap<>();
+    }
+    this.customMetaData.put(key, customMetaDataItem);
+    return this;
+  }
+
+   /**
+   * Get customMetaData
+   * @return customMetaData
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getCustomMetaData() {
+    return customMetaData;
+  }
+
+  public void setCustomMetaData(Map<String, Object> customMetaData) {
+    this.customMetaData = customMetaData;
+  }
+
+  public GeboDocument additionalAttributes(Map<String, Object> additionalAttributes) {
+    this.additionalAttributes = additionalAttributes;
+    return this;
+  }
+
+  public GeboDocument putAdditionalAttributesItem(String key, Object additionalAttributesItem) {
+    if (this.additionalAttributes == null) {
+      this.additionalAttributes = new HashMap<>();
+    }
+    this.additionalAttributes.put(key, additionalAttributesItem);
+    return this;
+  }
+
+   /**
+   * Get additionalAttributes
+   * @return additionalAttributes
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getAdditionalAttributes() {
+    return additionalAttributes;
+  }
+
+  public void setAdditionalAttributes(Map<String, Object> additionalAttributes) {
+    this.additionalAttributes = additionalAttributes;
+  }
+
   public GeboDocument texts(List<GeboTextDocumentFragment> texts) {
     this.texts = texts;
     return this;
@@ -505,6 +565,8 @@ public class GeboDocument {
         Objects.equals(this.virtualParentFolderReference, geboDocument.virtualParentFolderReference) &&
         Objects.equals(this.virtualFileReference, geboDocument.virtualFileReference) &&
         Objects.equals(this.originalContentModifiedDate, geboDocument.originalContentModifiedDate) &&
+        Objects.equals(this.customMetaData, geboDocument.customMetaData) &&
+        Objects.equals(this.additionalAttributes, geboDocument.additionalAttributes) &&
         Objects.equals(this.texts, geboDocument.texts) &&
         Objects.equals(this.images, geboDocument.images) &&
         Objects.equals(this.audios, geboDocument.audios) &&
@@ -515,7 +577,7 @@ public class GeboDocument {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, parentPathId, url, name, extension, contentType, createdDate, firstProcessedDate, lastProcessedDate, size, virtualParentFolderReference, virtualFileReference, originalContentModifiedDate, texts, images, audios, videos, media, catalogingLabel);
+    return Objects.hash(id, parentPathId, url, name, extension, contentType, createdDate, firstProcessedDate, lastProcessedDate, size, virtualParentFolderReference, virtualFileReference, originalContentModifiedDate, customMetaData, additionalAttributes, texts, images, audios, videos, media, catalogingLabel);
   }
 
 
@@ -537,6 +599,8 @@ public class GeboDocument {
     sb.append("    virtualParentFolderReference: ").append(toIndentedString(virtualParentFolderReference)).append("\n");
     sb.append("    virtualFileReference: ").append(toIndentedString(virtualFileReference)).append("\n");
     sb.append("    originalContentModifiedDate: ").append(toIndentedString(originalContentModifiedDate)).append("\n");
+    sb.append("    customMetaData: ").append(toIndentedString(customMetaData)).append("\n");
+    sb.append("    additionalAttributes: ").append(toIndentedString(additionalAttributes)).append("\n");
     sb.append("    texts: ").append(toIndentedString(texts)).append("\n");
     sb.append("    images: ").append(toIndentedString(images)).append("\n");
     sb.append("    audios: ").append(toIndentedString(audios)).append("\n");

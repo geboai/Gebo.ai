@@ -98,7 +98,7 @@ No authorization required
 
 <a name="getAllChatProfileConfiguration"></a>
 # **getAllChatProfileConfiguration**
-> PageGChatProfileConfiguration getAllChatProfileConfiguration(body)
+> PagedModelGChatProfileConfiguration getAllChatProfileConfiguration(body)
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 GeboAdminChatProfilesConfigurationControllerApi apiInstance = new GeboAdminChatProfilesConfigurationControllerApi();
 DataPage body = new DataPage(); // DataPage | 
 try {
-    PageGChatProfileConfiguration result = apiInstance.getAllChatProfileConfiguration(body);
+    PagedModelGChatProfileConfiguration result = apiInstance.getAllChatProfileConfiguration(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminChatProfilesConfigurationControllerApi#getAllChatProfileConfiguration");
@@ -128,7 +128,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGChatProfileConfiguration**](PageGChatProfileConfiguration.md)
+[**PagedModelGChatProfileConfiguration**](PagedModelGChatProfileConfiguration.md)
 
 ### Authorization
 
@@ -141,7 +141,7 @@ No authorization required
 
 <a name="getChatProfileConfigurationByQbe"></a>
 # **getChatProfileConfigurationByQbe**
-> PageGChatProfileConfiguration getChatProfileConfigurationByQbe(body)
+> PagedModelGChatProfileConfiguration getChatProfileConfigurationByQbe(body)
 
 
 
@@ -155,7 +155,7 @@ No authorization required
 GeboAdminChatProfilesConfigurationControllerApi apiInstance = new GeboAdminChatProfilesConfigurationControllerApi();
 ChatProfileConfigurationByQbeParam body = new ChatProfileConfigurationByQbeParam(); // ChatProfileConfigurationByQbeParam | 
 try {
-    PageGChatProfileConfiguration result = apiInstance.getChatProfileConfigurationByQbe(body);
+    PagedModelGChatProfileConfiguration result = apiInstance.getChatProfileConfigurationByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminChatProfilesConfigurationControllerApi#getChatProfileConfigurationByQbe");
@@ -171,7 +171,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGChatProfileConfiguration**](PageGChatProfileConfiguration.md)
+[**PagedModelGChatProfileConfiguration**](PagedModelGChatProfileConfiguration.md)
 
 ### Authorization
 

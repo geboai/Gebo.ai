@@ -87,6 +87,7 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
 
     /** Form group containing all editable fields for the chat profile */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),        
         embeddingModelReference: new FormControl(),

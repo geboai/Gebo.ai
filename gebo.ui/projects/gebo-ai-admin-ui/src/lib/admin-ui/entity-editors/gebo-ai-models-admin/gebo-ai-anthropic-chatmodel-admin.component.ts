@@ -58,6 +58,7 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
      * Form group containing all the configurable fields for an Anthropic chat model
      */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),

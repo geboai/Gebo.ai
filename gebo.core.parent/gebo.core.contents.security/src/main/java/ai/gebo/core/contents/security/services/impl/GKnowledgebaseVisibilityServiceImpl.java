@@ -86,7 +86,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	public List<GKnowledgeBase> getPersonalKnowledgebases() {
 		UserInfos user = securityService.getCurrentUser();
 		List<GKnowledgeBase> kb = kbRepository.findByUsername(user.getUsername());
-		return securityService.filterAccessible(kb, false);
+		return securityService.filterCanDoAction(kb, false, AclGrantType.READ);
 	}
 
 	/**

@@ -32,6 +32,7 @@ export interface DeepSearchConfig {
     accessibleToAll?: boolean;
     dataSourcesAccesses?: Array<DeepSearchDataSourceAccess>;
     perDataSourceConfigured?: boolean;
+    aclAliases?: Array<number>;
 }
 export namespace DeepSearchConfig {
     export type SearchTypeEnum = 'SINGLE_HOP' | 'MULTI_HOP';

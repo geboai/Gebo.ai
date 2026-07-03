@@ -27,6 +27,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 
@@ -59,7 +60,7 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 		List<GChatProfileConfiguration> profiles = chatProfilesRepository.findAll();
 
 		// Filter profiles by accessibility according to security service
-		return securityService.filterAccessible(profiles, true);
+		return securityService.filterCanDoAction(profiles, true, AclGrantType.EXECUTE);
 	}
 
 	/**

@@ -55,6 +55,7 @@ import ai.gebo.knowledgebase.repositories.ProjectRepository;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
@@ -150,7 +151,7 @@ public class UserspaceService {
 		final UserInfos user = securityService.getCurrentUser();
 		final String owner = user.getUsername();
 		GKnowledgeBase knowledgebase = persistentObjectManager.findById(GKnowledgeBase.class, code);
-		if (securityService.isCanAccess(knowledgebase, false)) {
+		if (securityService.isCanDo(knowledgebase, false, AclGrantType.READ)) {
 			UserspaceKnowledgebaseDto i = new UserspaceKnowledgebaseDto();
 			i.code = knowledgebase.getCode();
 			i.description = knowledgebase.getDescription();
@@ -301,7 +302,7 @@ public class UserspaceService {
 	public List<UserspaceFolderDto> listUserspaceFolders(String userspaceKnowledgeBase)
 			throws GeboPersistenceException {
 		GKnowledgeBase knowledgeBase = persistentObjectManager.findById(GKnowledgeBase.class, userspaceKnowledgeBase);
-		if (!securityService.isCanAccess(knowledgeBase, false)) {
+		if (!securityService.isCanDo(knowledgeBase, false, AclGrantType.READ)) {
 			throw new RuntimeException("Cannot access this userspace");
 		}
 		final UserInfos user = securityService.getCurrentUser();
@@ -419,7 +420,7 @@ public class UserspaceService {
 		GProject project = persistentObjectManager.findById(GProject.class, folder.code);
 		GKnowledgeBase knowledgebase = persistentObjectManager.findById(GKnowledgeBase.class,
 				folder.parentUserspaceKnowledgebaseCode);
-		if (!securityService.isCanAccess(knowledgebase, false)) {
+		if (!securityService.isCanDo(knowledgebase, false, AclGrantType.READ)) {
 			throw new RuntimeException("Cannot modify or upload on this knowledge base");
 		}
 		GUserspaceProjectEndpoint endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
@@ -444,7 +445,7 @@ public class UserspaceService {
 		GProject project = persistentObjectManager.findById(GProject.class, folder.code);
 		GKnowledgeBase knowledgebase = persistentObjectManager.findById(GKnowledgeBase.class,
 				folder.parentUserspaceKnowledgebaseCode);
-		if (!securityService.isCanAccess(knowledgebase, false)) {
+		if (!securityService.isCanDo(knowledgebase, false, AclGrantType.READ)) {
 			throw new RuntimeException("Cannot modify or upload on this knowledge base");
 		}
 		GUserspaceProjectEndpoint endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,

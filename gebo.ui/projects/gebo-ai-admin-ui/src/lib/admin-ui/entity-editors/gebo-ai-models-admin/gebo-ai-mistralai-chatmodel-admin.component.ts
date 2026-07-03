@@ -49,6 +49,7 @@ export class GeboAIMistralAIChatModelAdminComponent extends BaseEntityEditingCom
     
     /** Form group containing controls for all editable fields of the model configuration */
     override formGroup: FormGroup<any> = new FormGroup({
+        aclAliases: new FormControl(),
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),

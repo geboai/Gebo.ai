@@ -3,7 +3,6 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
-import ai.gebo.monolithic.api.client.model.GLookupEntryRef;
 import ai.gebo.monolithic.api.client.model.GLookupEntryRefGBaseChatModelConfig;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-03T17:09:20.570734400+02:00[Europe/Rome]")
 
 public class ChatModelsLookupControllerApi {
     private ApiClient apiClient;
@@ -125,10 +124,10 @@ public class ChatModelsLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return List&lt;GLookupEntryRef&gt;
+     * @return List&lt;GLookupEntryRefGBaseChatModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<GLookupEntryRef> getRuntimeConfiguredChatModelsLookup(String modelTypeCode) throws RestClientException {
+    public List<GLookupEntryRefGBaseChatModelConfig> getRuntimeConfiguredChatModelsLookup(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredChatModelsLookupWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -137,10 +136,10 @@ public class ChatModelsLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;List&lt;GLookupEntryRef&gt;&gt;
+     * @return ResponseEntity&lt;List&lt;GLookupEntryRefGBaseChatModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<GLookupEntryRef>> getRuntimeConfiguredChatModelsLookupWithHttpInfo(String modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<GLookupEntryRefGBaseChatModelConfig>> getRuntimeConfiguredChatModelsLookupWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
         String path = UriComponentsBuilder.fromPath("/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup").build().toUriString();
         
@@ -158,7 +157,7 @@ public class ChatModelsLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<List<GLookupEntryRef>> returnType = new ParameterizedTypeReference<List<GLookupEntryRef>>() {};
+        ParameterizedTypeReference<List<GLookupEntryRefGBaseChatModelConfig>> returnType = new ParameterizedTypeReference<List<GLookupEntryRefGBaseChatModelConfig>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }
