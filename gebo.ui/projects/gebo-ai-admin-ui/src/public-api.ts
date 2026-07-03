@@ -74,7 +74,6 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-chat-profile-admin/gebo-ai-
 export * from "./lib/admin-ui/entity-editors/gebo-ai-prompt-admin/gebo-ai-prompt-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-user.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-group.component";
-export * from "./lib/admin-ui/entity-editors/controls/access-control-group/access-control-group.component";
 export * from "./lib/admin-ui/entity-editors/controls/prompt-wizard/prompt-wizard.component";
 export * from "./lib/admin-ui/entity-editors/controls/advanced-settings-chatmodel-group/advanced-settings-chatmodel-group.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-uploads-admin/gebo-ai-uploads-endpoint.component";

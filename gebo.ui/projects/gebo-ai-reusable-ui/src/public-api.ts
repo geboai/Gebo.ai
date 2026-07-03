@@ -103,6 +103,8 @@ export * from "./lib/services/base-streaming.service";
 export * from "./lib/controls/deep-search-control/deep-search.module";
 export * from "./lib/controls/api-key-component/api-key.module";
 export * from "./lib/controls/acl-settings-component/acl-settings.module";
+export * from "./lib/controls/access-control-group/access-control-group.module";
+export * from "./lib/controls/security-settings/security-settings.module";
 export * from "./lib/notifications/notifications.module";
 export * from "./lib/notifications/root-notification.service";
 export * from "./lib/notifications/notification-layer";
@@ -122,6 +124,8 @@ export * from "./lib/controls/content-selection-filter-component/content-selecti
 export * from "./lib/controls/choose-llm-functions/choose-llm-functions.component";
 export * from "./lib/controls/api-key-component/api-key.component";
 export * from "./lib/controls/acl-settings-component/acl-settings.component";
+export * from "./lib/controls/access-control-group/access-control-group.component";
+export * from "./lib/controls/security-settings/security-settings.component";
 export * from "./lib/controls/chat-model-use-component/chat-model-use.component";
 export * from "./lib/controls/field-translation-container/language-choice.component";
 export * from "./lib/architecture/gebo-ui-entity-forms-launcher.component";
