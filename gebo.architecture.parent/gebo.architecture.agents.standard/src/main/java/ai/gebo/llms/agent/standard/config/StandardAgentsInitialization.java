@@ -2,7 +2,6 @@ package ai.gebo.llms.agent.standard.config;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.ai.tool.ToolCallback;
 
+import ai.gebo.architecture.agents.config.AgentsToolsAutoMountingConfig;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -55,6 +56,9 @@ import ai.gebo.llms.agent.standard.services.IGInternalKnowledgeBaseDocumentsSear
 import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;
+import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgent;
+import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
+import jakarta.annotation.PostConstruct;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -75,6 +79,8 @@ public class StandardAgentsInitialization {
 	private static final String EVIDENCES_SEARCHER_AGENT = "EVIDENCES_SEARCHER_AGENT";
 	private static final String REPORT_WRITER_AGENT = "REPORT_WRITER_AGENT";
 	private static final String SUPERVISOR_AGENT = "SUPERVISOR_AGENT";
+	private static final String TOOL_AGENT = "TOOL_AGENT";
+	private static final String TOOL_CALLING_AGENT_DESCRIPTION = "Tool-calling agent that operates the available tools (APIs, connectors, databases, services) to fulfill the coordinator's commands and returns the tool results as evidence";
 	private static final String DEFAULT_NETWORK_SCENARIO_DESCRIPTION = "The network of agent is meant to try to delivery the best answer and interaction to user's questions with a leader controller node controlling if the quality of the network output is ok.\r\n The controller agent is comunicating with one or more searching agents to supply evidences on an evidence analyzer node that responds.\r\n";
 	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Default agents network for chat purposes";
 	private static final String DEFAULT_AGENTS_NETWORK = "DEFAULT_AGENTS_NETWORK";
@@ -91,13 +97,15 @@ public class StandardAgentsInitialization {
 	private final IGDocumentContentRendererProvider rendererFactory;
 	private final IGExternalSearchSecurityService externalSearchSecurityService;
 	private final StandardAgentsConfig standardAgentsConfig;
+	private final AgentsToolsAutoMountingConfig autoMountingConfig;
 
 	public StandardAgentsInitialization(ISearchServiceRepositoryPattern searchServicesRepositoryPattern,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
 			IDocumentsChunkService chunkingService, IGRankerService rankerService, IGPromptConfigDao promptsDao,
 			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory,
-			IGExternalSearchSecurityService externalSearchSecurityService, StandardAgentsConfig standardAgentsConfig) {
+			IGExternalSearchSecurityService externalSearchSecurityService, StandardAgentsConfig standardAgentsConfig,
+			AgentsToolsAutoMountingConfig autoMountingConfig) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
 		this.chatModelsDao = chatModelsDao;
 		this.toolsRepositoryPattern = toolsRepositoryPattern;
@@ -110,9 +118,32 @@ public class StandardAgentsInitialization {
 		this.rendererFactory = rendererFactory;
 		this.externalSearchSecurityService = externalSearchSecurityService;
 		this.standardAgentsConfig = standardAgentsConfig;
+		this.autoMountingConfig = autoMountingConfig;
 		LOGGER.info(START_ROW);
 		LOGGER.info(INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT);
 		LOGGER.info(START_ROW);
+	}
+
+	/**
+	 * Keeps the standard search tools out of the default agents network's automatic
+	 * tool mounting. Searching in the default network is the job of the dedicated
+	 * search agents, so the tools contributed by
+	 * {@link StandardSearchesToolsImpl#STANDARD_SEARCHES_TOOLS_SOURCE} must never be
+	 * auto-mounted onto an auto-mounting agent (e.g. the tool-calling agent). The
+	 * whole source is excluded as a block via {@link AgentsToolsAutoMountingConfig},
+	 * on top of any exclusions already configured in application.yml.
+	 */
+	@PostConstruct
+	public void registerDefaultAutoMountExclusions() {
+		List<String> excludedSources = new ArrayList<>(
+				autoMountingConfig.getExcludedToolSources() != null ? autoMountingConfig.getExcludedToolSources()
+						: List.of());
+		if (!excludedSources.contains(StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE)) {
+			excludedSources.add(StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE);
+			autoMountingConfig.setExcludedToolSources(excludedSources);
+			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
+					StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE);
+		}
 	}
 
 	@Bean
@@ -201,31 +232,27 @@ public class StandardAgentsInitialization {
 		GAgentConfig controller = defaultControllerAgentConfigDataSource().getConfigurations().get(0);
 		List<GAgentConfig> dataSources = externalSourcesAgentConfigDataSource().getConfigurations();
 		GAgentConfig reportWriter = defaultReportWriterConfigDataSource().getConfigurations().get(0);
-		List<String> coordinatedAgentCodes = Stream.concat(dataSources.stream(), Stream.of(reportWriter))
-				.map(x -> x.getCode()).toList();
+		// Tool-calling agent: dynamically added to the network only when at least one
+		// tool is registered; otherwise it would have nothing to operate.
+		GAgentConfig toolCallingAgentConfig = hasToolsAvailable()
+				? defaultToolCallingAgentConfigDataSource().getConfigurations().get(0)
+				: null;
 		GAgentConfig internalKnowledgeBaseConfig = null;
 		if (internalKnowledgebaseAgentConfigDataSource != null) {
 			List<GAgentConfig> internalKBSearchAgentConfigs = internalKnowledgebaseAgentConfigDataSource
 					.getConfigurations();
 			if (!internalKBSearchAgentConfigs.isEmpty()) {
 				internalKnowledgeBaseConfig = internalKBSearchAgentConfigs.get(0);
-				List<String> fullSearchersList = new ArrayList<String>();
-				fullSearchersList.add(internalKnowledgeBaseConfig.getCode());
-				fullSearchersList.addAll(coordinatedAgentCodes);
-				coordinatedAgentCodes = fullSearchersList;
 			}
 		}
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
 		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String
-		// and
-		// forwards it to the String-input controller.
+		// and forwards it to the String-input controller.
 		GAgentConfig inputAdapter = defaultInputAdapterConfigDataSource().getConfigurations().get(0);
 		AgentNetworkParticipant inputAdapterParticipant = new AgentNetworkParticipant();
 		inputAdapterParticipant.setAgentConfigCode(inputAdapter.getCode());
 		inputAdapterParticipant.setInputNode(true);
 		inputAdapterParticipant.setOutputNode(false);
-		inputAdapterParticipant.setCommunicationList(List.of(controller.getCode()));
-		participants.add(inputAdapterParticipant);
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
 		controllerParticipant.setAgentConfigCode(controller.getCode());
 		controllerParticipant.setInputNode(false);
@@ -234,40 +261,65 @@ public class StandardAgentsInitialization {
 		controllerParticipant.setMaxInvocations(5);
 		controllerParticipant.setMaxConsecutiveInvocations(5);
 		controllerParticipant.setOutputNode(false);
-		controllerParticipant.setCommunicationList(coordinatedAgentCodes);
-		participants.add(controllerParticipant);
 		// Searcher participants: the internal knowledge base searcher (when present)
-		// plus
-		// every external search-service searcher. Each is reachable from the controller
-		// and
-		// shares its results with the report writer. The internal-KB searcher must be a
-		// participant too; otherwise the controller's communication list references an
-		// agent
-		// with no runtime allocation and routing fails.
+		// plus every external search-service searcher. Each is reachable from the
+		// controller and shares its results with the report writer. The internal-KB
+		// searcher must be a participant too; otherwise the controller's communication
+		// list references an agent with no runtime allocation and routing fails.
 		List<GAgentConfig> searcherConfigs = new ArrayList<>();
 		if (internalKnowledgeBaseConfig != null) {
 			searcherConfigs.add(internalKnowledgeBaseConfig);
 		}
 		searcherConfigs.addAll(dataSources);
+		List<AgentNetworkParticipant> workerParticipants = new ArrayList<>();
 		for (GAgentConfig searcher : searcherConfigs) {
 			AgentNetworkParticipant participant = new AgentNetworkParticipant();
 			participant.setAgentConfigCode(searcher.getCode());
 			participant.setMaxConsecutiveInvocations(5);
 			participant.setMaxInvocations(10);
-			participant.setCommunicationList(List.of(reportWriter.getCode()));
-			participants.add(participant);
+			workerParticipants.add(participant);
+		}
+		// Tool-calling agent participant, present only when tools are available. Like the
+		// searchers it is reachable from the controller and shares its tool results with
+		// the writer/reporter so they become evidence for the final answer.
+		if (toolCallingAgentConfig != null) {
+			AgentNetworkParticipant toolAgentParticipant = new AgentNetworkParticipant();
+			toolAgentParticipant.setAgentConfigCode(toolCallingAgentConfig.getCode());
+			toolAgentParticipant.setMaxConsecutiveInvocations(5);
+			toolAgentParticipant.setMaxInvocations(10);
+			workerParticipants.add(toolAgentParticipant);
 		}
 		AgentNetworkParticipant outParticipant = new AgentNetworkParticipant();
 		outParticipant.setAgentConfigCode(reportWriter.getCode());
-		outParticipant.setCommunicationList(List.of());
 		outParticipant.setOutputNode(true);
-		outParticipant.setCommunicationList(List.of(controller.getCode()));
+		// Communication lists reference the target participants' NETWORK AGENT NAME
+		// (agentConfigCode plus any contextual suffix) - the key the runtime registers
+		// each participant under (see GAbstractAgentsNetworkServiceFactory) - not the raw
+		// GAgentConfig code.
+		inputAdapterParticipant.setCommunicationList(List.of(controllerParticipant.getNetworkAgentName()));
+		// Controller coordinates every worker (searchers + tool-calling agent) and the
+		// writer/reporter.
+		List<String> coordinatedAgentNames = new ArrayList<>();
+		for (AgentNetworkParticipant worker : workerParticipants) {
+			coordinatedAgentNames.add(worker.getNetworkAgentName());
+		}
+		coordinatedAgentNames.add(outParticipant.getNetworkAgentName());
+		controllerParticipant.setCommunicationList(coordinatedAgentNames);
+		// Each worker shares its output with the writer/reporter.
+		for (AgentNetworkParticipant worker : workerParticipants) {
+			worker.setCommunicationList(List.of(outParticipant.getNetworkAgentName()));
+		}
+		// The writer/reporter reports back to the controller.
+		outParticipant.setCommunicationList(List.of(controllerParticipant.getNetworkAgentName()));
+		participants.add(inputAdapterParticipant);
+		participants.add(controllerParticipant);
+		participants.addAll(workerParticipants);
 		participants.add(outParticipant);
 		network.setAgents(participants);
 		network.setAccessibleToAll(true);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Assembled default agents network code:" + network.getCode() + " with " + participants.size()
-					+ " participant(s); coordinated searchers:" + coordinatedAgentCodes);
+					+ " participant(s); coordinated agents:" + coordinatedAgentNames);
 		}
 		return network;
 	}
@@ -327,6 +379,49 @@ public class StandardAgentsInitialization {
 	GAgentConfig controllerConfig = null;
 	GAgentConfig reporterConfig = null;
 	GAgentConfig inputAdapterConfig = null;
+	GAgentConfig toolCallingConfig = null;
+
+	/**
+	 * Config data source for the standard String-to-String tool-calling agent. The
+	 * agent subscribes to ALL registered tools ({@code subscribeAllTools=true}) so
+	 * it can operate whatever tools are dynamically available at runtime, and runs
+	 * the dedicated tool-calling loop prompt. It is only wired into the default
+	 * network when at least one tool is actually registered (see
+	 * {@link #hasToolsAvailable()}).
+	 */
+	@Bean
+	public IGDynamicAgentConfigDataSource defaultToolCallingAgentConfigDataSource() {
+		if (toolCallingConfig == null) {
+			toolCallingConfig = new GAgentConfig();
+			toolCallingConfig.setCode(StringToStringToolCallingNetworkAgent.STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE);
+			toolCallingConfig
+					.setAgentServiceId(StringToStringToolCallingNetworkAgent.STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE);
+			toolCallingConfig.setMainLoopPromptUseCode(StandardAgentsPromptsLibraryConfig.TOOL_CALLING_AGENT_PROMPT);
+			toolCallingConfig.setDescription(TOOL_CALLING_AGENT_DESCRIPTION);
+			toolCallingConfig.setAgentRoleCode(TOOL_AGENT);
+			toolCallingConfig.setAccessibleToAll(true);
+			toolCallingConfig.setUseDefaultChatModel(true);
+			toolCallingConfig.setSubscribeAllTools(true);
+			toolCallingConfig.setEnabledFunctions(List.of());
+		}
+		return IGDynamicAgentConfigDataSource.of(toolCallingConfig);
+	}
+
+	/**
+	 * Tells whether at least one tool is currently registered in the tool
+	 * repository, gating the inclusion of the tool-calling agent in the default
+	 * network: with no tools available the agent would have nothing to operate.
+	 */
+	private boolean hasToolsAvailable() {
+		List<ToolCallback> tools = toolsRepositoryPattern.getTools();
+		final boolean available = tools != null && !tools.isEmpty();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("hasToolsAvailable() resolved " + (tools != null ? tools.size() : 0)
+					+ " registered tool(s); tool-calling agent " + (available ? "will" : "will NOT")
+					+ " be added to the default network");
+		}
+		return available;
+	}
 
 	@Bean
 	public IGDynamicAgentConfigDataSource defaultInputAdapterConfigDataSource() {

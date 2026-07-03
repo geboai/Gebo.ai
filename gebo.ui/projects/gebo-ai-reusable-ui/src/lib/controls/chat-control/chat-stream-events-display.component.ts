@@ -11,7 +11,7 @@ interface ChatNotificationContent {
 	message:string;
 	icon?:string;
 	duration?:number;
-	notificationType:"INFO"|"DEBUG";
+	notificationType:"INFO"|"DEBUG"|"ERROR";
 }
 @Component({
     selector: "gebo-ai-chat-stream-events-display",

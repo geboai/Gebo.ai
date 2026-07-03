@@ -2,16 +2,20 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.function.Consumer;
 
+import ai.gebo.architecture.agents.config.AgentsToolsAutoMountingConfig;
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,8 +130,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (Boolean.TRUE.equals(agentConfig.getSubscribeAllTools())) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
 			if (toolsList != null) {
+				// Auto-mounting advertises every registered tool except the ones configured to
+				// be kept out of automatic mounting (see AgentsToolsAutoMountingConfig).
+				Set<String> excludedTools = autoMountExcludedToolNames();
 				for (ToolCallback tool : toolsList) {
 					if (tool == null || tool.getToolDefinition() == null) {
+						continue;
+					}
+					if (excludedTools.contains(tool.getToolDefinition().name())) {
 						continue;
 					}
 					capabilities.addTool(AgentCapabilityResource.of(tool.getToolDefinition().name(),
@@ -141,6 +151,84 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				}
 			}
 		}
+	}
+
+	/**
+	 * Removes from an auto-mounted tool-name list every tool configured to be kept
+	 * out of automatic mounting. Used wherever an agent that enables tools auto
+	 * mounting ({@code subscribeAllTools == true}) expands its tool set to all
+	 * registered tools.
+	 */
+	protected List<String> filterAutoMountedTools(List<String> toolNames) {
+		if (toolNames == null || toolNames.isEmpty()) {
+			return toolNames;
+		}
+		Set<String> excluded = autoMountExcludedToolNames();
+		if (excluded.isEmpty()) {
+			return toolNames;
+		}
+		List<String> filtered = new ArrayList<String>(toolNames.size());
+		for (String name : toolNames) {
+			if (!excluded.contains(name)) {
+				filtered.add(name);
+			}
+		}
+		if (LOGGER.isDebugEnabled() && filtered.size() != toolNames.size()) {
+			LOGGER.debug("Auto tool mounting excluded " + (toolNames.size() - filtered.size())
+					+ " tool(s) for agent service id:" + getId());
+		}
+		return filtered;
+	}
+
+	/**
+	 * Resolves the set of tool names to keep out of automatic mounting, combining
+	 * the explicitly excluded tool names with every tool contributed by an excluded
+	 * tool source (see {@link AgentsToolsAutoMountingConfig}). Resolved lazily
+	 * through the runtime binder so subclasses do not need the config injected; a
+	 * missing config yields no exclusions.
+	 */
+	protected Set<String> autoMountExcludedToolNames() {
+		Set<String> excluded = new HashSet<>();
+		AgentsToolsAutoMountingConfig config;
+		try {
+			config = runtimeBinder.getImplementationOf(AgentsToolsAutoMountingConfig.class);
+		} catch (Throwable th) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Auto tool mounting exclusion config not available: " + th.getMessage());
+			}
+			return excluded;
+		}
+		if (config == null) {
+			return excluded;
+		}
+		if (config.getExcludedTools() != null) {
+			excluded.addAll(config.getExcludedTools());
+		}
+		List<String> excludedSources = config.getExcludedToolSources();
+		if (excludedSources != null && !excludedSources.isEmpty()) {
+			List<IGToolCallbackSource> sources = toolsRepositoryPattern.getImplementations();
+			if (sources != null) {
+				for (IGToolCallbackSource source : sources) {
+					if (source == null || source.getId() == null || !excludedSources.contains(source.getId())) {
+						continue;
+					}
+					try {
+						List<ToolCallback> callbacks = source.getToolCallbacks();
+						if (callbacks != null) {
+							for (ToolCallback callback : callbacks) {
+								if (callback != null && callback.getToolDefinition() != null) {
+									excluded.add(callback.getToolDefinition().name());
+								}
+							}
+						}
+					} catch (Throwable th) {
+						LOGGER.warn("Cannot resolve tool callbacks for excluded tool source '" + source.getId()
+								+ "' while computing auto-mount exclusions", th);
+					}
+				}
+			}
+		}
+		return excluded;
 	}
 
 	protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
@@ -171,11 +259,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
 			if (toolsList != null) {
-				allFunctions = new ArrayList(toolsList.stream().map(x -> x.getToolDefinition().name()).toList());
+				// Auto-mounting subscribes every registered tool except the ones configured to
+				// be kept out of automatic mounting (see AgentsToolsAutoMountingConfig).
+				allFunctions = new ArrayList<String>(filterAutoMountedTools(
+						toolsList.stream().map(x -> x.getToolDefinition().name()).toList()));
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent subscribes ALL tools, resolved " + (allFunctions != null ? allFunctions.size() : 0)
-						+ " functions");
+						+ " functions after auto-mount exclusions");
 			}
 		}
 		List<ToolCallback> additionalFunctions = new ArrayList<ToolCallback>();

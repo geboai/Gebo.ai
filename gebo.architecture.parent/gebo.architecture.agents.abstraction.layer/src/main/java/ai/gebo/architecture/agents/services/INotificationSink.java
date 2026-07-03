@@ -16,7 +16,7 @@ public interface INotificationSink {
 		public static final String DEFAULT_ICON = "p pi-comment";
 
 		public static enum NotificationType {
-			INFO, DEBUG
+			INFO, DEBUG, ERROR
 		}
 
 		String code = UUID.randomUUID().toString();

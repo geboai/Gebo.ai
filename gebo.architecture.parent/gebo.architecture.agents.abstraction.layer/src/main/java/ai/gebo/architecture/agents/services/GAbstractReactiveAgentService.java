@@ -75,7 +75,10 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
 			if (toolsList != null) {
-				allFunctions = toolsList.stream().map(x -> x.getToolDefinition().name()).toList();
+				// Honor the auto-mount exclusions (see AgentsToolsAutoMountingConfig) so tools
+				// kept out of automatic mounting are not subscribed by reactive agents either.
+				allFunctions = filterAutoMountedTools(
+						toolsList.stream().map(x -> x.getToolDefinition().name()).toList());
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
