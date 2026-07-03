@@ -79,9 +79,15 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			throw new AgentException(NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE + input.getClass().getName());
 
 		CallsResult<OutputType> iterationResult = null;
+		boolean dynamicExchange = false;
 		try {
 			iterationResult = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
 					inputRuntime, inputMessage, outputType, runAs);
+			// A "dynamic exchange" means the input node actually dispatched at least one
+			// message onward into the network. Captured before the delivery loop consumes
+			// iterationResult, so a network that seeds but never propagates can be flagged.
+			dynamicExchange = iterationResult != null && iterationResult.getDeliveryOrder() != null
+					&& !iterationResult.getDeliveryOrder().isEmpty();
 			int level = 0;
 			while (iterationResult != null && iterationResult.getDeliveryOrder() != null
 					&& !iterationResult.getDeliveryOrder().isEmpty()) {
@@ -103,11 +109,19 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			LOGGER.error(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
 			throw new AgentException(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
 		}
+		final OutputType producedOutput = iterationResult != null ? iterationResult.getOutput() : null;
+		// If the network stopped without any dynamic message exchange between agents and
+		// produced no output, surface it with ERROR severity: the run terminated dead
+		// (e.g. the input node emitted nothing to route), which the user must be told.
+		if (!dynamicExchange && producedOutput == null) {
+			notificationSink.next("Agents network '" + (network != null ? network.getCode() : null)
+					+ "' stopped without any dynamic message exchange between agents", NotificationType.ERROR);
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End executeNetwork(...) network code:" + (network != null ? network.getCode() : null)
-					+ " produced output:" + (iterationResult != null && iterationResult.getOutput() != null));
+					+ " produced output:" + (producedOutput != null) + " dynamicExchange:" + dynamicExchange);
 		}
-		return iterationResult != null ? iterationResult.getOutput() : null;
+		return producedOutput;
 	}
 
 	protected <OutputType> CallsResult<OutputType> join(CallsResult<OutputType> levelResult,
@@ -154,16 +168,35 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 				LOGGER.debug("Dispatching message to agent:" + inputRuntime.getService().getId() + " contributionNr:"
 						+ contributionNr);
 			}
-			notificationSink.next(
-					"Agent: " + inputRuntime.getNetworkParticipantConfig().getNetworkAgentName() + " is working...",
-					NotificationType.DEBUG);
-			List<AgentsExchangeMessage<?>> messages = inputRuntime.getService().onMessage(chatRequestContext,
-					inputRuntime.getConfig(), inputMessage, contributionNr, network,
-					inputRuntime.getNetworkParticipantConfig(), notificationSink, session,
-					inputRuntime.getAgentContext(), runAs, agentsDao);
-			notificationSink.next(
-					"Agent: " + inputRuntime.getNetworkParticipantConfig().getNetworkAgentName() + " has finished",
-					NotificationType.DEBUG);
+			final String participantName = inputRuntime.getNetworkParticipantConfig().getNetworkAgentName();
+			final boolean isInputNode = inputRuntime.getNetworkParticipantConfig().isInputNode();
+			notificationSink.next("Agent: " + participantName + " is working...", NotificationType.DEBUG);
+			List<AgentsExchangeMessage<?>> messages;
+			try {
+				messages = inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(), inputMessage,
+						contributionNr, network, inputRuntime.getNetworkParticipantConfig(), notificationSink, session,
+						inputRuntime.getAgentContext(), runAs, agentsDao);
+			} catch (Throwable failure) {
+				if (isInputNode) {
+					// The input node seeds the whole network: if it fails there is nothing
+					// downstream to run, so notify with ERROR severity and let the failure stop
+					// the network (it propagates to executeNetwork and aborts the run).
+					notificationSink.next("Input node agent: " + participantName + " failed, stopping network: "
+							+ rootCauseMessage(failure), NotificationType.ERROR);
+					LOGGER.error("Input node agent " + participantName + " failed; stopping network", failure);
+					throw new AgentException("Input node agent failed: " + participantName, failure);
+				}
+				// A downstream agent failure is isolated so the network stays resilient: notify
+				// (debug), record an empty turn so the private session context stays consistent,
+				// and let the rest of the network proceed. The failing agent's turn has already
+				// been advanced above, so loop termination still progresses.
+				notificationSink.next("Agent: " + participantName + " failed, skipped: " + rootCauseMessage(failure),
+						NotificationType.DEBUG);
+				LOGGER.error("Agent " + participantName + " failed; continuing network", failure);
+				addToEmptyReturn(inputMessage, contributionNr, inputRuntime.getAgentContext());
+				return new CallsResult<OutputType>(new TreeMap<>(), output);
+			}
+			notificationSink.next("Agent: " + participantName + " has finished", NotificationType.DEBUG);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent:" + inputRuntime.getService().getId() + " returned "
 						+ (messages != null ? messages.size() : 0) + " message(s)");
@@ -204,6 +237,19 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			AgentPrivateSessionContext agentContext) {
 		agentContext.addInteraction(inputMessage, contributionNr, "");
 
+	}
+
+	/**
+	 * Extracts a concise, human-readable message from the root cause of a failure,
+	 * for use in the {@link INotificationSink} failure notifications.
+	 */
+	private static String rootCauseMessage(Throwable failure) {
+		Throwable root = failure;
+		while (root.getCause() != null && root.getCause() != root) {
+			root = root.getCause();
+		}
+		String message = root.getMessage();
+		return message != null ? message : root.getClass().getSimpleName();
 	}
 
 	protected <OutputType> CallsResult<OutputType> executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,

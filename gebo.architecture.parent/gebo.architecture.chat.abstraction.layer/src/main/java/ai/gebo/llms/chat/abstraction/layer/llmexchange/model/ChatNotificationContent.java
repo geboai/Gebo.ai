@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatNotificationContent {
 	public static enum NotificationType {
-		INFO, DEBUG
+		INFO, DEBUG, ERROR
 	}
 
 	@NotNull

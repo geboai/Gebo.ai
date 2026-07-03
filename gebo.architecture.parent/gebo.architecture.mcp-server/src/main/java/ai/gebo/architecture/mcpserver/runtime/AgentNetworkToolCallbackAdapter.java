@@ -45,6 +45,10 @@ public class AgentNetworkToolCallbackAdapter {
 				LOGGER.info("INotificationSink=>" + state);
 			}
 				break;
+			case ERROR: {
+				LOGGER.error("INotificationSink=>" + state);
+			}
+				break;
 			}
 
 		}
