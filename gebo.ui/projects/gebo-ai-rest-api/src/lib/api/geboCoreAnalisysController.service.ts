@@ -62,13 +62,13 @@ export class GeboCoreAnalisysControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public drillDown2(body: GStatsHolder, observe?: 'body', reportProgress?: boolean): Observable<Array<GStatsHolder>>;
-    public drillDown2(body: GStatsHolder, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GStatsHolder>>>;
-    public drillDown2(body: GStatsHolder, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GStatsHolder>>>;
-    public drillDown2(body: GStatsHolder, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public coreDrillDown(body: GStatsHolder, observe?: 'body', reportProgress?: boolean): Observable<Array<GStatsHolder>>;
+    public coreDrillDown(body: GStatsHolder, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GStatsHolder>>>;
+    public coreDrillDown(body: GStatsHolder, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GStatsHolder>>>;
+    public coreDrillDown(body: GStatsHolder, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling drillDown2.');
+            throw new Error('Required parameter body was null or undefined when calling coreDrillDown.');
         }
 
         let headers = this.defaultHeaders;

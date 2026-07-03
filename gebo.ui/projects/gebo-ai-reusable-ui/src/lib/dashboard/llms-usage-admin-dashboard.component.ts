@@ -33,6 +33,6 @@ export class GeboAILLMSUsageAdminDashboardComponent extends BaseLLMSUsageDashboa
   }
 
   executeDrillDown(filter: LLMUsageDrillDownLevel): Observable<LLMUsageDrillDownResult> {
-    return this.adminService.drillDown1(filter);
+    return this.adminService.adminDrillDown(filter);
   }
 }

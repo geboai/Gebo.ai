@@ -9,26 +9,26 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GObjectRefGKnowledgeBase } from './gObjectRefGKnowledgeBase';
+import { GObjectRefGProject } from './gObjectRefGProject';
+import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
-export interface ComputedWorkflowStatus { 
-    jobId?: string;
+export interface WorkflowStatsAggregationBucket { 
+    knowledgeBaseReference?: GObjectRefGKnowledgeBase;
+    projectReference?: GObjectRefGProject;
+    projectEndpointReference?: GObjectRefGProjectEndpoint;
     workflowType?: string;
     workflowId?: string;
     workflowStepId?: string;
-    description?: string;
+    year?: number;
+    month?: number;
+    day?: number;
     batchDocumentsInput?: number;
-    batchDocumentsProcessingErrors?: number;
     batchDocumentsProcessed?: number;
+    batchDocumentsProcessingErrors?: number;
     batchSentToNextStep?: number;
     batchDiscardedInput?: number;
     chunksProcessed?: number;
     tokensProcessed?: number;
-    completed?: boolean;
-    hasErrors?: boolean;
-    startedRunning?: boolean;
-    levelId?: number;
-    enabledStep?: boolean;
-    startProcessingTimestamp?: Date;
-    lastProcessingTimestamp?: Date;
-    childs?: Array<ComputedWorkflowStatus>;
+    nrSnapshots?: number;
 }

@@ -1,0 +1,240 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+-->
+
+<p-blockUI [blocked]="loading">
+    <div class="flex justify-content-center align-items-center h-full">
+        <i class="pi pi-spin pi-spinner" style="font-size: 3rem; color: var(--primary-color)"></i>
+    </div>
+</p-blockUI>
+
+<p-panel id="workflowStatsDashboardPanel">
+    <div *ngIf="hasNoStats" class="flex flex-column align-items-center justify-content-center p-6 text-500 text-center">
+        <i class="pi pi-info-circle text-5xl mb-3" style="color: var(--text-color-secondary)"></i>
+        <span id="noWorkflowStatsLabel" gebo-ai-text class="text-xl font-medium block">no workflow activity recorded yet</span>
+    </div>
+
+    <p-tabs value="0" *ngIf="!hasNoStats">
+        <p-tablist>
+            <p-tab value="0">
+                <i class="pi pi-chart-bar mr-2"></i><span id="wdlabel" gebo-ai-text>Monthly workflow volumes</span>
+            </p-tab>
+            <p-tab value="1">
+                <i class="pi pi-calendar mr-2"></i><span id="wmlabel" gebo-ai-text>This month workflow volumes</span>
+            </p-tab>
+            
+        </p-tablist>
+
+        <p-tabpanels>
+            
+
+            <!-- Tab 2: Monthly -->
+            <p-tabpanel value="0">
+                <!-- Filters panel -->
+                <div class="filter-panel card p-4 mb-4 surface-card border-round">
+                    <div class="text-lg font-medium text-800 mb-3 flex align-items-center">
+                        <i class="pi pi-filter mr-2 text-primary"></i> Filter Drill Down
+                    </div>
+                    <div class="grid p-fluid align-items-end">
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.knowledgeBaseReference?.length">
+                            <label class="block text-700 font-semibold mb-2">Knowledge Base</label>
+                            <p-select [options]="getRefOptions(result?.monthlySubdimensions?.knowledgeBaseReference)"
+                                [(ngModel)]="filterTab2.knowledgeBaseReference" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.projectReference?.length">
+                            <label class="block text-700 font-semibold mb-2">Project</label>
+                            <p-select [options]="getRefOptions(result?.monthlySubdimensions?.projectReference)"
+                                [(ngModel)]="filterTab2.projectReference" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.projectEndpointReference?.length">
+                            <label class="block text-700 font-semibold mb-2">Project Endpoint</label>
+                            <p-select [options]="getRefOptions(result?.monthlySubdimensions?.projectEndpointReference)"
+                                [(ngModel)]="filterTab2.projectEndpointReference" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.workflowType?.length">
+                            <label class="block text-700 font-semibold mb-2">Workflow Type</label>
+                            <p-select [options]="getOptions(result?.monthlySubdimensions?.workflowType)"
+                                [(ngModel)]="filterTab2.workflowType" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.workflowId?.length">
+                            <label class="block text-700 font-semibold mb-2">Workflow Id</label>
+                            <p-select [options]="getOptions(result?.monthlySubdimensions?.workflowId)"
+                                [(ngModel)]="filterTab2.workflowId" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.workflowStepId?.length">
+                            <label class="block text-700 font-semibold mb-2">Workflow Step</label>
+                            <p-select [options]="getOptions(result?.monthlySubdimensions?.workflowStepId)"
+                                [(ngModel)]="filterTab2.workflowStepId" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.year?.length">
+                            <label class="block text-700 font-semibold mb-2">Year</label>
+                            <p-select [options]="getOptions(result?.monthlySubdimensions?.year)"
+                                [(ngModel)]="filterTab2.year" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.monthlySubdimensions?.month?.length">
+                            <label class="block text-700 font-semibold mb-2">Month</label>
+                            <p-select [options]="getOptions(result?.monthlySubdimensions?.month)"
+                                [(ngModel)]="filterTab2.month" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3 flex gap-2">
+                            <p-button label="Filter" icon="pi pi-filter" severity="primary" (onClick)="applyFilter(2)"
+                                class="flex-grow-1"></p-button>
+                            <p-button label="Reset" icon="pi pi-refresh" severity="secondary" (onClick)="resetFilter(2)"
+                                class="flex-grow-1"></p-button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Histograms grid -->
+                <div class="grid">
+                    <div class="col-12 mb-4">
+                        <div class="card p-4 surface-card border-round h-full">
+                            <div class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                                <span>Documents</span>
+                                <span class="text-xs text-500 font-normal">count</span>
+                            </div>
+                            <div *ngIf="documentsChartDataTab2?.labels?.length; else noDataMonthly">
+                                <p-chart type="bar" [data]="documentsChartDataTab2" [options]="chartOptions"
+                                    height="350px"></p-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <div class="card p-4 surface-card border-round h-full">
+                            <div class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                                <span>Chunks &amp; Tokens</span>
+                                <span class="text-xs text-500 font-normal">chunks / k tokens</span>
+                            </div>
+                            <div *ngIf="throughputChartDataTab2?.labels?.length; else noDataMonthly">
+                                <p-chart type="bar" [data]="throughputChartDataTab2" [options]="chartOptions"
+                                    height="350px"></p-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #noDataMonthly>
+                    <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
+                        <i class="pi pi-chart-bar text-4xl mb-2"></i>
+                        <span>No monthly workflow activity recorded</span>
+                    </div>
+                </ng-template>
+            </p-tabpanel>
+            <!-- Tab 1: This month - Daily -->
+            <p-tabpanel value="1">
+                <!-- Filters panel -->
+                <div class="filter-panel card p-4 mb-4 surface-card border-round">
+                    <div class="text-lg font-medium text-800 mb-3 flex align-items-center">
+                        <i class="pi pi-filter mr-2 text-primary"></i> Filter Drill Down
+                    </div>
+                    <div class="grid p-fluid align-items-end">
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.knowledgeBaseReference?.length">
+                            <label class="block text-700 font-semibold mb-2">Knowledge Base</label>
+                            <p-select [options]="getRefOptions(result?.currentMonthDailySubdimensions?.knowledgeBaseReference)"
+                                [(ngModel)]="filterTab1.knowledgeBaseReference" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.projectReference?.length">
+                            <label class="block text-700 font-semibold mb-2">Project</label>
+                            <p-select [options]="getRefOptions(result?.currentMonthDailySubdimensions?.projectReference)"
+                                [(ngModel)]="filterTab1.projectReference" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.projectEndpointReference?.length">
+                            <label class="block text-700 font-semibold mb-2">Project Endpoint</label>
+                            <p-select [options]="getRefOptions(result?.currentMonthDailySubdimensions?.projectEndpointReference)"
+                                [(ngModel)]="filterTab1.projectEndpointReference" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.workflowType?.length">
+                            <label class="block text-700 font-semibold mb-2">Workflow Type</label>
+                            <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.workflowType)"
+                                [(ngModel)]="filterTab1.workflowType" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.workflowId?.length">
+                            <label class="block text-700 font-semibold mb-2">Workflow Id</label>
+                            <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.workflowId)"
+                                [(ngModel)]="filterTab1.workflowId" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.workflowStepId?.length">
+                            <label class="block text-700 font-semibold mb-2">Workflow Step</label>
+                            <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.workflowStepId)"
+                                [(ngModel)]="filterTab1.workflowStepId" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.year?.length">
+                            <label class="block text-700 font-semibold mb-2">Year</label>
+                            <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.year)"
+                                [(ngModel)]="filterTab1.year" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-3 lg:col-2"
+                            *ngIf="result?.currentMonthDailySubdimensions?.month?.length">
+                            <label class="block text-700 font-semibold mb-2">Month</label>
+                            <p-select [options]="getOptions(result?.currentMonthDailySubdimensions?.month)"
+                                [(ngModel)]="filterTab1.month" placeholder="All" styleClass="w-full"></p-select>
+                        </div>
+                        <div class="col-12 sm:col-6 md:col-4 lg:col-3 flex gap-2">
+                            <p-button label="Filter" icon="pi pi-filter" severity="primary" (onClick)="applyFilter(1)"
+                                class="flex-grow-1"></p-button>
+                            <p-button label="Reset" icon="pi pi-refresh" severity="secondary" (onClick)="resetFilter(1)"
+                                class="flex-grow-1"></p-button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Histograms grid -->
+                <div class="grid">
+                    <div class="col-12 mb-4">
+                        <div class="card p-4 surface-card border-round h-full">
+                            <div class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                                <span>Documents</span>
+                                <span class="text-xs text-500 font-normal">count</span>
+                            </div>
+                            <div *ngIf="documentsChartDataTab1?.labels?.length; else noDataDaily">
+                                <p-chart type="bar" [data]="documentsChartDataTab1" [options]="chartOptions"
+                                    height="350px"></p-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <div class="card p-4 surface-card border-round h-full">
+                            <div class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
+                                <span>Chunks &amp; Tokens</span>
+                                <span class="text-xs text-500 font-normal">chunks / k tokens</span>
+                            </div>
+                            <div *ngIf="throughputChartDataTab1?.labels?.length; else noDataDaily">
+                                <p-chart type="bar" [data]="throughputChartDataTab1" [options]="chartOptions"
+                                    height="350px"></p-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #noDataDaily>
+                    <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
+                        <i class="pi pi-chart-bar text-4xl mb-2"></i>
+                        <span>No workflow activity recorded for this month</span>
+                    </div>
+                </ng-template>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</p-panel>

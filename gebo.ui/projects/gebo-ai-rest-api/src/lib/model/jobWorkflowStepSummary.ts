@@ -15,5 +15,16 @@ export interface JobWorkflowStepSummary {
     workflowType?: string;
     workflowId?: string;
     workflowStepId?: string;
+    startDateTime?: Date;
+    endDateTime?: Date;
+    batchDocumentsInput?: number;
+    batchDiscardedInput?: number;
+    batchSentToNextStep?: number;
+    chunksProcessed?: number;
+    tokensProcessed?: number;
+    batchDocumentsProcessingErrors?: number;
+    batchDocumentsProcessed?: number;
+    errorChunks?: number;
+    errorTokens?: number;
     timesamples?: Array<JobWorkflowStepSummaryTimeSlotStats>;
 }

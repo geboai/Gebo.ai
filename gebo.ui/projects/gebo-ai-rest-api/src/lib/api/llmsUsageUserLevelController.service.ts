@@ -63,13 +63,13 @@ export class LlmsUsageUserLevelControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public drillDown(body: LLMUsageDrillDownLevel, observe?: 'body', reportProgress?: boolean): Observable<LLMUsageDrillDownResult>;
-    public drillDown(body: LLMUsageDrillDownLevel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LLMUsageDrillDownResult>>;
-    public drillDown(body: LLMUsageDrillDownLevel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LLMUsageDrillDownResult>>;
-    public drillDown(body: LLMUsageDrillDownLevel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public userDrillDown(body: LLMUsageDrillDownLevel, observe?: 'body', reportProgress?: boolean): Observable<LLMUsageDrillDownResult>;
+    public userDrillDown(body: LLMUsageDrillDownLevel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LLMUsageDrillDownResult>>;
+    public userDrillDown(body: LLMUsageDrillDownLevel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LLMUsageDrillDownResult>>;
+    public userDrillDown(body: LLMUsageDrillDownLevel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling drillDown.');
+            throw new Error('Required parameter body was null or undefined when calling userDrillDown.');
         }
 
         let headers = this.defaultHeaders;

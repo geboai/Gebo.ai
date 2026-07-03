@@ -3,6 +3,7 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -35,15 +36,18 @@ public class LLMSUsageCrudServiceImpl implements ILLMSUsageCrudService {
 	public void consolidateTick() {
 		ZoneId zone = ZoneId.systemDefault();
 		LocalDate today = LocalDate.now(zone);
+
 		// Only completed days are consolidated: everything up to the last
 		// millisecond of yesterday.
 		long lastMillisOfYesterday = today.atStartOfDay(zone).toInstant().toEpochMilli() - 1;
-
+		long todayFirstMillisecond = lastMillisOfYesterday + 1;
+		long todayLastMillisecond = today.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1;
+		;
 		// Aggregate the raw values grouping by
 		// providerId, username, model, callerStack, modelType, year, month, day.
 		Map<ConsolidationKey, DailyAccumulator> grouped = new HashMap<>();
-		try (Stream<LLMUsageDetail> stream = usageRepo
-				.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(0L, lastMillisOfYesterday)) {
+		try (Stream<LLMUsageDetail> stream = usageRepo.findByTimestampGreaterThanEqualAndTimestampLessThanEqual(
+				todayFirstMillisecond, todayLastMillisecond)) {
 			stream.forEach(detail -> {
 				LocalDate date = Instant.ofEpochMilli(detail.getTimestamp()).atZone(zone).toLocalDate();
 				ConsolidationKey key = new ConsolidationKey(detail.getProviderId(), detail.getUsername(),
