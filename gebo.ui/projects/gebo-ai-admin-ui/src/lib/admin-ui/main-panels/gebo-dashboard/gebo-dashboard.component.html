@@ -8,10 +8,19 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
+<p-tabView  class="geboFullHeight">
+    
+    <p-tabPanel id="LLMSUsageTab" gebo-ai-label header="LLM(s) Usage stats">
+        <gebo-ai-llms-usage-admin-dashboard></gebo-ai-llms-usage-admin-dashboard>
+    </p-tabPanel>
+    <p-tabPanel id="WorkflowsTab" gebo-ai-label header="Workflows traffic stats">
+        <gebo-ai-workflow-stats-admin-dashboard></gebo-ai-workflow-stats-admin-dashboard>
+    </p-tabPanel>
+      
+</p-tabView>
 
-<gebo-ai-llms-usage-admin-dashboard></gebo-ai-llms-usage-admin-dashboard>
 
-<gebo-ai-workflow-stats-admin-dashboard></gebo-ai-workflow-stats-admin-dashboard>
+
 
 <!--
 
