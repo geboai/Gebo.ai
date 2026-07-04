@@ -15,7 +15,6 @@ Name | Type | Description | Notes
 **secondHopSimilarityThreashold** | **Double** |  |  [optional]
 **graphRagTopN** | **Integer** |  |  [optional]
 **tokensLimit** | **Integer** |  |  [optional]
-**documentsParallelism** | **Integer** |  |  [optional]
 **manualThreasholdsConfiguration** | **Boolean** |  |  [optional]
 **defaultConfig** | **Boolean** |  |  [optional]
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]

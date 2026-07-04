@@ -9,12 +9,16 @@ Name | Type | Description | Notes
 **userCreated** | **String** |  |  [optional]
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
+**agentType** | [**AgentTypeEnum**](#AgentTypeEnum) |  |  [optional]
+**adaptedAgentNetworkCode** | **String** |  |  [optional]
+**agentNetworkServiceCode** | **String** |  |  [optional]
 **agentServiceId** | **String** |  | 
 **mainLoopPromptUseCode** | **String** |  |  [optional]
 **customLoopPrompt** | [**GPromptTemplateConfig**](GPromptTemplateConfig.md) |  |  [optional]
 **subscribeAllTools** | **Boolean** |  |  [optional]
 **agentRoleCode** | **String** |  | 
 **useDefaultChatModel** | **Boolean** |  |  [optional]
+**useChatModelWithUse** | [**UseChatModelWithUseEnum**](#UseChatModelWithUseEnum) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **maxLoopIterations** | **Integer** |  | 
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
@@ -27,6 +31,20 @@ Name | Type | Description | Notes
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
+
+<a name="AgentTypeEnum"></a>
+## Enum: AgentTypeEnum
+Name | Value
+---- | -----
+AGENT | &quot;AGENT&quot;
+AGENTS_NETWORK | &quot;AGENTS_NETWORK&quot;
+
+<a name="UseChatModelWithUseEnum"></a>
+## Enum: UseChatModelWithUseEnum
+Name | Value
+---- | -----
+CHAT | &quot;CHAT&quot;
+INTERNAL_SERVICES | &quot;INTERNAL_SERVICES&quot;
 
 <a name="ThinkingEnum"></a>
 ## Enum: ThinkingEnum

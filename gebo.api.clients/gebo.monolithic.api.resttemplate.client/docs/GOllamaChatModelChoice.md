@@ -18,3 +18,4 @@ Name | Type | Description | Notes
 **nativeModelMetaInfos** | **Object** |  |  [optional]
 **supportsStructuredOutput** | **Boolean** |  |  [optional]
 **supportsFunctionCalls** | **Boolean** |  |  [optional]
+**modelDetails** | **Map&lt;String, Object&gt;** |  |  [optional]

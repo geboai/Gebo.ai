@@ -3,16 +3,16 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**messagingModuleId** | **String** |  |  [optional]
+**contentType** | **String** |  |  [optional]
 **name** | **String** |  |  [optional]
 **extension** | **String** |  |  [optional]
-**contentType** | **String** |  |  [optional]
 **description** | **String** |  |  [optional]
+**modificationDate** | [**Date**](Date.md) |  |  [optional]
 **code** | **String** |  |  [optional]
 **creationDate** | [**Date**](Date.md) |  |  [optional]
 **deleted** | **Boolean** |  |  [optional]
-**modificationDate** | [**Date**](Date.md) |  |  [optional]
-**rootKnowledgebaseCode** | **String** |  |  [optional]
-**parentVirtualFolderCode** | **String** |  |  [optional]
 **parentProjectCode** | **String** |  |  [optional]
 **relativePath** | **String** |  |  [optional]
-**messagingModuleId** | **String** |  |  [optional]
+**parentVirtualFolderCode** | **String** |  |  [optional]
+**rootKnowledgebaseCode** | **String** |  |  [optional]

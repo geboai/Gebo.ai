@@ -20,4 +20,6 @@ Name | Type | Description | Notes
 **startedRunning** | **Boolean** |  |  [optional]
 **levelId** | **Integer** |  |  [optional]
 **enabledStep** | **Boolean** |  |  [optional]
+**startProcessingTimestamp** | [**Date**](Date.md) |  |  [optional]
+**lastProcessingTimestamp** | [**Date**](Date.md) |  |  [optional]
 **childs** | [**List&lt;ComputedWorkflowStatus&gt;**](ComputedWorkflowStatus.md) |  |  [optional]

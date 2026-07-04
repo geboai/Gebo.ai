@@ -20,11 +20,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GOllamaEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GOllamaEmbeddingModelChoice {
   @JsonProperty("code")
@@ -68,6 +71,9 @@ public class GOllamaEmbeddingModelChoice {
 
   @JsonProperty("optimalTokenizationParam")
   private Integer optimalTokenizationParam = null;
+
+  @JsonProperty("modelDetails")
+  private Map<String, Object> modelDetails = null;
 
   public GOllamaEmbeddingModelChoice code(String code) {
     this.code = code;
@@ -321,6 +327,32 @@ public class GOllamaEmbeddingModelChoice {
     this.optimalTokenizationParam = optimalTokenizationParam;
   }
 
+  public GOllamaEmbeddingModelChoice modelDetails(Map<String, Object> modelDetails) {
+    this.modelDetails = modelDetails;
+    return this;
+  }
+
+  public GOllamaEmbeddingModelChoice putModelDetailsItem(String key, Object modelDetailsItem) {
+    if (this.modelDetails == null) {
+      this.modelDetails = new HashMap<>();
+    }
+    this.modelDetails.put(key, modelDetailsItem);
+    return this;
+  }
+
+   /**
+   * Get modelDetails
+   * @return modelDetails
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getModelDetails() {
+    return modelDetails;
+  }
+
+  public void setModelDetails(Map<String, Object> modelDetails) {
+    this.modelDetails = modelDetails;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -344,12 +376,13 @@ public class GOllamaEmbeddingModelChoice {
         Objects.equals(this.informativeUrl, gollamaEmbeddingModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gollamaEmbeddingModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gollamaEmbeddingModelChoice.nativeModelMetaInfos) &&
-        Objects.equals(this.optimalTokenizationParam, gollamaEmbeddingModelChoice.optimalTokenizationParam);
+        Objects.equals(this.optimalTokenizationParam, gollamaEmbeddingModelChoice.optimalTokenizationParam) &&
+        Objects.equals(this.modelDetails, gollamaEmbeddingModelChoice.modelDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam, modelDetails);
   }
 
 
@@ -372,6 +405,7 @@ public class GOllamaEmbeddingModelChoice {
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    optimalTokenizationParam: ").append(toIndentedString(optimalTokenizationParam)).append("\n");
+    sb.append("    modelDetails: ").append(toIndentedString(modelDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }

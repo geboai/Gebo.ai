@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GeboUserChatUploadsControllerApi {
     private ApiClient apiClient;
@@ -100,32 +100,23 @@ public class GeboUserChatUploadsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @param userSessionCode  (required)
      * @return OperationStatusListUserUploadedContent
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListUserUploadedContent deleteSessionUploads(String userSessionCode) throws RestClientException {
-        return deleteSessionUploadsWithHttpInfo(userSessionCode).getBody();
+    public OperationStatusListUserUploadedContent deleteSessionUploads() throws RestClientException {
+        return deleteSessionUploadsWithHttpInfo().getBody();
     }
 
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @param userSessionCode  (required)
      * @return ResponseEntity&lt;OperationStatusListUserUploadedContent&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListUserUploadedContent> deleteSessionUploadsWithHttpInfo(String userSessionCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListUserUploadedContent> deleteSessionUploadsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        // verify the required parameter 'userSessionCode' is set
-        if (userSessionCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userSessionCode' when calling deleteSessionUploads");
-        }
-        // create path and map variables
-        final Map<String, Object> uriVariables = new HashMap<String, Object>();
-        uriVariables.put("userSessionCode", userSessionCode);
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/deleteSessionUploads").buildAndExpand(uriVariables).toUriString();
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/deleteSessionUploads").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();

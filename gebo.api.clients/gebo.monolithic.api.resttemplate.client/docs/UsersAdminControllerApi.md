@@ -190,7 +190,7 @@ No authorization required
 
 <a name="findUserByQbe"></a>
 # **findUserByQbe**
-> PageUserInfos findUserByQbe(body)
+> PagedModelUserInfos findUserByQbe(body)
 
 
 
@@ -204,7 +204,7 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 FindUserByQbeParam body = new FindUserByQbeParam(); // FindUserByQbeParam | 
 try {
-    PageUserInfos result = apiInstance.findUserByQbe(body);
+    PagedModelUserInfos result = apiInstance.findUserByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UsersAdminControllerApi#findUserByQbe");
@@ -220,7 +220,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageUserInfos**](PageUserInfos.md)
+[**PagedModelUserInfos**](PagedModelUserInfos.md)
 
 ### Authorization
 
@@ -276,7 +276,7 @@ No authorization required
 
 <a name="findUsersGroupByQbe"></a>
 # **findUsersGroupByQbe**
-> PageUsersGroup findUsersGroupByQbe(body)
+> PagedModelUsersGroup findUsersGroupByQbe(body)
 
 
 
@@ -290,7 +290,7 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 FindUsersGroupParam body = new FindUsersGroupParam(); // FindUsersGroupParam | 
 try {
-    PageUsersGroup result = apiInstance.findUsersGroupByQbe(body);
+    PagedModelUsersGroup result = apiInstance.findUsersGroupByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UsersAdminControllerApi#findUsersGroupByQbe");
@@ -306,7 +306,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageUsersGroup**](PageUsersGroup.md)
+[**PagedModelUsersGroup**](PagedModelUsersGroup.md)
 
 ### Authorization
 

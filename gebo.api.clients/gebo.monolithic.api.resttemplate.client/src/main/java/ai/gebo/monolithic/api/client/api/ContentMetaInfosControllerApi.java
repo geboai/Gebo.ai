@@ -5,7 +5,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.ContentMetaInfo;
 import ai.gebo.monolithic.api.client.model.ContentObject;
 import ai.gebo.monolithic.api.client.model.DocumentReferenceView;
-import ai.gebo.monolithic.api.client.model.PageDocumentReferenceView;
+import ai.gebo.monolithic.api.client.model.PagedModelDocumentReferenceView;
 import ai.gebo.monolithic.api.client.model.SearchDocumentByNamePagedParam;
 import ai.gebo.monolithic.api.client.model.SearchDocumentByNameParam;
 
@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class ContentMetaInfosControllerApi {
     private ApiClient apiClient;
@@ -234,10 +234,10 @@ public class ContentMetaInfosControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageDocumentReferenceView
+     * @return PagedModelDocumentReferenceView
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageDocumentReferenceView searchByDocumentNamePaged(SearchDocumentByNamePagedParam body) throws RestClientException {
+    public PagedModelDocumentReferenceView searchByDocumentNamePaged(SearchDocumentByNamePagedParam body) throws RestClientException {
         return searchByDocumentNamePagedWithHttpInfo(body).getBody();
     }
 
@@ -246,10 +246,10 @@ public class ContentMetaInfosControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageDocumentReferenceView&gt;
+     * @return ResponseEntity&lt;PagedModelDocumentReferenceView&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageDocumentReferenceView> searchByDocumentNamePagedWithHttpInfo(SearchDocumentByNamePagedParam body) throws RestClientException {
+    public ResponseEntity<PagedModelDocumentReferenceView> searchByDocumentNamePagedWithHttpInfo(SearchDocumentByNamePagedParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -272,7 +272,7 @@ public class ContentMetaInfosControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageDocumentReferenceView> returnType = new ParameterizedTypeReference<PageDocumentReferenceView>() {};
+        ParameterizedTypeReference<PagedModelDocumentReferenceView> returnType = new ParameterizedTypeReference<PagedModelDocumentReferenceView>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -7,3 +7,4 @@ Name | Type | Description | Notes
 **clientId** | **String** |  | 
 **secret** | **String** |  | 
 **scopes** | **List&lt;String&gt;** |  |  [optional]
+**customAttributes** | **Map&lt;String, String&gt;** |  |  [optional]

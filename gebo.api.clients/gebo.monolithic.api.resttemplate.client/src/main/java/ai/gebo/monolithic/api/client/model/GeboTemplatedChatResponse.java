@@ -25,12 +25,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * GeboTemplatedChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GeboTemplatedChatResponse {
   @JsonProperty("id")
@@ -77,6 +79,9 @@ public class GeboTemplatedChatResponse {
 
   @JsonProperty("pipelineRouterDecisionCode")
   private String pipelineRouterDecisionCode = null;
+
+  @JsonProperty("pipelineParams")
+  private Map<String, Object> pipelineParams = null;
 
   @JsonProperty("deepSearchRequestId")
   private String deepSearchRequestId = null;
@@ -399,6 +404,32 @@ public class GeboTemplatedChatResponse {
     this.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
   }
 
+  public GeboTemplatedChatResponse pipelineParams(Map<String, Object> pipelineParams) {
+    this.pipelineParams = pipelineParams;
+    return this;
+  }
+
+  public GeboTemplatedChatResponse putPipelineParamsItem(String key, Object pipelineParamsItem) {
+    if (this.pipelineParams == null) {
+      this.pipelineParams = new HashMap<>();
+    }
+    this.pipelineParams.put(key, pipelineParamsItem);
+    return this;
+  }
+
+   /**
+   * Get pipelineParams
+   * @return pipelineParams
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getPipelineParams() {
+    return pipelineParams;
+  }
+
+  public void setPipelineParams(Map<String, Object> pipelineParams) {
+    this.pipelineParams = pipelineParams;
+  }
+
   public GeboTemplatedChatResponse deepSearchRequestId(String deepSearchRequestId) {
     this.deepSearchRequestId = deepSearchRequestId;
     return this;
@@ -442,12 +473,13 @@ public class GeboTemplatedChatResponse {
         Objects.equals(this.contextWindowStats, geboTemplatedChatResponse.contextWindowStats) &&
         Objects.equals(this.generatedResources, geboTemplatedChatResponse.generatedResources) &&
         Objects.equals(this.pipelineRouterDecisionCode, geboTemplatedChatResponse.pipelineRouterDecisionCode) &&
+        Objects.equals(this.pipelineParams, geboTemplatedChatResponse.pipelineParams) &&
         Objects.equals(this.deepSearchRequestId, geboTemplatedChatResponse.deepSearchRequestId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, deepSearchRequestId);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId);
   }
 
 
@@ -471,6 +503,7 @@ public class GeboTemplatedChatResponse {
     sb.append("    contextWindowStats: ").append(toIndentedString(contextWindowStats)).append("\n");
     sb.append("    generatedResources: ").append(toIndentedString(generatedResources)).append("\n");
     sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
+    sb.append("    pipelineParams: ").append(toIndentedString(pipelineParams)).append("\n");
     sb.append("    deepSearchRequestId: ").append(toIndentedString(deepSearchRequestId)).append("\n");
     sb.append("}");
     return sb.toString();

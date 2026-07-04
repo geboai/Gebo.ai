@@ -18,13 +18,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GeboAudioDocumentFragment
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GeboAudioDocumentFragment {
+  @JsonProperty("customMetaData")
+  private Map<String, Object> customMetaData = null;
+
   /**
    * Gets or Sets fragmentType
    */
@@ -79,6 +85,32 @@ public class GeboAudioDocumentFragment {
 
   @JsonProperty("uniqueCode")
   private String uniqueCode = null;
+
+  public GeboAudioDocumentFragment customMetaData(Map<String, Object> customMetaData) {
+    this.customMetaData = customMetaData;
+    return this;
+  }
+
+  public GeboAudioDocumentFragment putCustomMetaDataItem(String key, Object customMetaDataItem) {
+    if (this.customMetaData == null) {
+      this.customMetaData = new HashMap<>();
+    }
+    this.customMetaData.put(key, customMetaDataItem);
+    return this;
+  }
+
+   /**
+   * Get customMetaData
+   * @return customMetaData
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getCustomMetaData() {
+    return customMetaData;
+  }
+
+  public void setCustomMetaData(Map<String, Object> customMetaData) {
+    this.customMetaData = customMetaData;
+  }
 
   public GeboAudioDocumentFragment fragmentType(FragmentTypeEnum fragmentType) {
     this.fragmentType = fragmentType;
@@ -216,7 +248,8 @@ public class GeboAudioDocumentFragment {
       return false;
     }
     GeboAudioDocumentFragment geboAudioDocumentFragment = (GeboAudioDocumentFragment) o;
-    return Objects.equals(this.fragmentType, geboAudioDocumentFragment.fragmentType) &&
+    return Objects.equals(this.customMetaData, geboAudioDocumentFragment.customMetaData) &&
+        Objects.equals(this.fragmentType, geboAudioDocumentFragment.fragmentType) &&
         Objects.equals(this.contentType, geboAudioDocumentFragment.contentType) &&
         Objects.equals(this.characterEncoding, geboAudioDocumentFragment.characterEncoding) &&
         Objects.equals(this.encoding, geboAudioDocumentFragment.encoding) &&
@@ -227,7 +260,7 @@ public class GeboAudioDocumentFragment {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fragmentType, contentType, characterEncoding, encoding, content, name, uniqueCode);
+    return Objects.hash(customMetaData, fragmentType, contentType, characterEncoding, encoding, content, name, uniqueCode);
   }
 
 
@@ -236,6 +269,7 @@ public class GeboAudioDocumentFragment {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboAudioDocumentFragment {\n");
     
+    sb.append("    customMetaData: ").append(toIndentedString(customMetaData)).append("\n");
     sb.append("    fragmentType: ").append(toIndentedString(fragmentType)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("    characterEncoding: ").append(toIndentedString(characterEncoding)).append("\n");

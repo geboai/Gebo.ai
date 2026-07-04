@@ -15,18 +15,21 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
+import ai.gebo.monolithic.api.client.model.GStatsLabelValue;
 import ai.gebo.monolithic.api.client.model.GStatsLine;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * GStatsHolder
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GStatsHolder {
   @JsonProperty("levelKey")
@@ -37,6 +40,9 @@ public class GStatsHolder {
 
   @JsonProperty("canDrillDown")
   private Boolean canDrillDown = null;
+
+  @JsonProperty("statsContainer")
+  private Map<String, List<GStatsLabelValue>> statsContainer = null;
 
   @JsonProperty("statsLines")
   private List<GStatsLine> statsLines = null;
@@ -95,6 +101,32 @@ public class GStatsHolder {
     this.canDrillDown = canDrillDown;
   }
 
+  public GStatsHolder statsContainer(Map<String, List<GStatsLabelValue>> statsContainer) {
+    this.statsContainer = statsContainer;
+    return this;
+  }
+
+  public GStatsHolder putStatsContainerItem(String key, List<GStatsLabelValue> statsContainerItem) {
+    if (this.statsContainer == null) {
+      this.statsContainer = new HashMap<>();
+    }
+    this.statsContainer.put(key, statsContainerItem);
+    return this;
+  }
+
+   /**
+   * Get statsContainer
+   * @return statsContainer
+  **/
+  @Schema(description = "")
+  public Map<String, List<GStatsLabelValue>> getStatsContainer() {
+    return statsContainer;
+  }
+
+  public void setStatsContainer(Map<String, List<GStatsLabelValue>> statsContainer) {
+    this.statsContainer = statsContainer;
+  }
+
   public GStatsHolder statsLines(List<GStatsLine> statsLines) {
     this.statsLines = statsLines;
     return this;
@@ -134,12 +166,13 @@ public class GStatsHolder {
     return Objects.equals(this.levelKey, gstatsHolder.levelKey) &&
         Objects.equals(this.dimensionValue, gstatsHolder.dimensionValue) &&
         Objects.equals(this.canDrillDown, gstatsHolder.canDrillDown) &&
+        Objects.equals(this.statsContainer, gstatsHolder.statsContainer) &&
         Objects.equals(this.statsLines, gstatsHolder.statsLines);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(levelKey, dimensionValue, canDrillDown, statsLines);
+    return Objects.hash(levelKey, dimensionValue, canDrillDown, statsContainer, statsLines);
   }
 
 
@@ -151,6 +184,7 @@ public class GStatsHolder {
     sb.append("    levelKey: ").append(toIndentedString(levelKey)).append("\n");
     sb.append("    dimensionValue: ").append(toIndentedString(dimensionValue)).append("\n");
     sb.append("    canDrillDown: ").append(toIndentedString(canDrillDown)).append("\n");
+    sb.append("    statsContainer: ").append(toIndentedString(statsContainer)).append("\n");
     sb.append("    statsLines: ").append(toIndentedString(statsLines)).append("\n");
     sb.append("}");
     return sb.toString();

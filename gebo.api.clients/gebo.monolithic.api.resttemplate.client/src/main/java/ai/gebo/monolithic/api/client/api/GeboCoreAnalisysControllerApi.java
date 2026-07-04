@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GeboCoreAnalisysControllerApi {
     private ApiClient apiClient;
@@ -50,8 +50,8 @@ public class GeboCoreAnalisysControllerApi {
      * @return List&lt;GStatsHolder&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<GStatsHolder> drillDown(GStatsHolder body) throws RestClientException {
-        return drillDownWithHttpInfo(body).getBody();
+    public List<GStatsHolder> coreDrillDown(GStatsHolder body) throws RestClientException {
+        return coreDrillDownWithHttpInfo(body).getBody();
     }
 
     /**
@@ -62,11 +62,11 @@ public class GeboCoreAnalisysControllerApi {
      * @return ResponseEntity&lt;List&lt;GStatsHolder&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<GStatsHolder>> drillDownWithHttpInfo(GStatsHolder body) throws RestClientException {
+    public ResponseEntity<List<GStatsHolder>> coreDrillDownWithHttpInfo(GStatsHolder body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling drillDown");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling coreDrillDown");
         }
         String path = UriComponentsBuilder.fromPath("/api/admin/GeboCoreAnalisysController/drillDown").build().toUriString();
         

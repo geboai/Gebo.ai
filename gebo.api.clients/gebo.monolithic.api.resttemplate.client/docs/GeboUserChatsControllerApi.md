@@ -322,7 +322,7 @@ No authorization required
 
 <a name="getChatInfosByQbe"></a>
 # **getChatInfosByQbe**
-> PageGUserChatInfo getChatInfosByQbe(body)
+> PagedModelGUserChatInfo getChatInfosByQbe(body)
 
 
 
@@ -336,7 +336,7 @@ No authorization required
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 ChatInfosByQbeParam body = new ChatInfosByQbeParam(); // ChatInfosByQbeParam | 
 try {
-    PageGUserChatInfo result = apiInstance.getChatInfosByQbe(body);
+    PagedModelGUserChatInfo result = apiInstance.getChatInfosByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#getChatInfosByQbe");
@@ -352,7 +352,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGUserChatInfo**](PageGUserChatInfo.md)
+[**PagedModelGUserChatInfo**](PagedModelGUserChatInfo.md)
 
 ### Authorization
 
@@ -404,7 +404,7 @@ No authorization required
 
 <a name="getMyChatsPaged"></a>
 # **getMyChatsPaged**
-> PageGUserChatInfo getMyChatsPaged(page, pageSize)
+> PagedModelGUserChatInfo getMyChatsPaged(page, pageSize)
 
 
 
@@ -419,7 +419,7 @@ GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 Integer page = 56; // Integer | 
 Integer pageSize = 56; // Integer | 
 try {
-    PageGUserChatInfo result = apiInstance.getMyChatsPaged(page, pageSize);
+    PagedModelGUserChatInfo result = apiInstance.getMyChatsPaged(page, pageSize);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#getMyChatsPaged");
@@ -436,7 +436,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGUserChatInfo**](PageGUserChatInfo.md)
+[**PagedModelGUserChatInfo**](PagedModelGUserChatInfo.md)
 
 ### Authorization
 
