@@ -67,7 +67,7 @@ import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
-import ai.gebo.monolithic.api.client.model.GLookupEntryRef;
+import ai.gebo.monolithic.api.client.model.GLookupEntryRefGBaseChatModelConfig;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.LoginRequest;
@@ -187,9 +187,9 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		ChatModelsControllerApi chatModelsControllerApi = new ChatModelsControllerApi(authApiClient);
 
 		ChatModelsLookupControllerApi chatmodelsLookupApi = new ChatModelsLookupControllerApi(authApiClient);
-		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
+		List<GLookupEntryRefGBaseChatModelConfig> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
 		assertFalse(models.isEmpty(), "At least a default chat model must be configured");
-		GLookupEntryRef defaultModel = models.get(0);
+		GLookupEntryRefGBaseChatModelConfig defaultModel = models.get(0);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
 		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
@@ -336,9 +336,9 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		ChatModelsControllerApi chatModelsControllerApi = new ChatModelsControllerApi(authApiClient);
 
 		ChatModelsLookupControllerApi chatmodelsLookupApi = new ChatModelsLookupControllerApi(authApiClient);
-		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
+		List<GLookupEntryRefGBaseChatModelConfig> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
 		assertFalse(models.isEmpty(), "At least a default chat model must be configured");
-		GLookupEntryRef defaultModel = models.get(0);
+		GLookupEntryRefGBaseChatModelConfig defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
 		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
