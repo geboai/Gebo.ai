@@ -15,7 +15,7 @@
  * Exports constants representing different module identifiers used throughout the application.
  * These constants are used to identify various modules that can be plugged into the system.
  */
-import { ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, JiraSystemsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAIPluggableProjectEndpointModuleService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { Observable } from "rxjs";
 import { EnvironmentProviders, Injectable, ModuleWithProviders, NgModule, Provider, Type } from "@angular/core";
@@ -28,6 +28,7 @@ export const GOOGLEDRIVE_MODULE = "google-drive-module";
 export const CONFLUENCE_MODULE = "confluence-module";
 export const JIRA_MODULE = "jira-module";
 export const SHAREPOINT_MODULE = "sharepoint-module";
+export const MCP_CLIENT_MODULE = "mcp-client-module";
 
 /**
  * Injectable service responsible for managing shared filesystem project endpoints.
@@ -446,6 +447,66 @@ export class GeboAIGoogleDriveModuleProjectEndpointService implements GeboAIPlug
 }
 
 /**
+ * Injectable service responsible for managing MCP server project endpoints.
+ * Implements GeboAIPluggableProjectEndpointModuleService to expose external MCP
+ * servers as pluggable data sources: existing MCP endpoints are listed per
+ * project, and a create action opens the MCP endpoint editor.
+ */
+@Injectable({
+    providedIn: "root"
+})
+export class GeboAIMCPClientModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService {
+    constructor(private mcpClientSystemsService: McpClientSystemsControllerService) {
+
+    }
+
+    /**
+     * Retrieves all MCP endpoints associated with a specific project.
+     * @param code - The project code to search for endpoints
+     * @returns Observable containing array of MCP endpoints
+     */
+    findByProjectEndpoints(code: string): Observable<{
+        code?: string; description?: string; parentProjectCode?: string;
+    }[]> {
+        return this.mcpClientSystemsService.findMCPClientEndpointsByProject(code);
+    }
+
+    /**
+     * Creates an action request for adding a new MCP server endpoint to a project.
+     * @param project - The project to create the MCP endpoint for
+     * @param wizardStepsConfigurations - Optional wizard configuration steps
+     * @param actualWizardStepConfigrationId - Optional current wizard step ID
+     * @returns GeboUIActionRequest configured for creating a new MCP endpoint
+     */
+    byProjectCreateAction(project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): GeboUIActionRequest {
+        let nextStepsParams: any = undefined;
+        let outAction: GeboUIActionRequest;
+        if (wizardStepsConfigurations && actualWizardStepConfigrationId) {
+            nextStepsParams = {
+                wizardStepsConfigurations: wizardStepsConfigurations,
+                actualWizardStepConfigrationId: actualWizardStepConfigrationId
+            };
+        }
+
+        const target: MCPClientProjectEndpoint = {
+            parentProjectCode: project.code
+        };
+        outAction = {
+            actionType: GeboActionType.NEW,
+            context: project,
+            contextType: "GProject",
+            target: target,
+            targetType: "MCPClientProjectEndpoint",
+            targetFormInputs: nextStepsParams
+        };
+
+        return outAction;
+    }
+
+
+}
+
+/**
  * Configuration object for the shared filesystem module.
  * Defines UI elements, labels, icons and service to be used for this module.
  */
@@ -537,6 +598,20 @@ const googleDriveModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
 };
 
 /**
+ * Configuration object for the MCP client module.
+ * Defines UI elements, labels, icons and service used to expose external MCP
+ * servers as data sources.
+ */
+const mcpClientModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
+    moduleId: MCP_CLIENT_MODULE,
+    addProjectEndpointicon: "pi pi-server",
+    addProjectEndpointLabel: "+MCP server",
+    addProjectEndpointTitle: "add an external MCP server data source",
+    projecteEndpointClassName: "ai.gebo.mcpclient.content.handler.MCPClientProjectEndpoint",
+    service: GeboAIMCPClientModuleProjectEndpointService
+};
+
+/**
  * NgModule that handles the registration of all module services and configurations.
  * This module is responsible for injecting all the pluggable modules into the application
  * by providing their services and configuration blocks to the dependency injection system.
@@ -551,13 +626,15 @@ const googleDriveModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
         GeboAIConfluenceModuleProjectEndpointService,
         GeboAIJiraModuleProjectEndpointService,
         GeboAIGoogleDriveModuleProjectEndpointService,
+        GeboAIMCPClientModuleProjectEndpointService,
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharepointModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: confluenceModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: jiraModuleConfigurationBlock, multi: true },
-        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true }]
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true },
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true }]
 })
 export class GeboAICommonModulesInjectionsModule {
 
@@ -572,13 +649,15 @@ export class GeboAICommonModulesInjectionsModule {
                 GeboAIConfluenceModuleProjectEndpointService,
                 GeboAIJiraModuleProjectEndpointService,
                 GeboAIGoogleDriveModuleProjectEndpointService,
+                GeboAIMCPClientModuleProjectEndpointService,
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharepointModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: confluenceModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: jiraModuleConfigurationBlock, multi: true },
-                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true }]
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true }]
         }
         return moduleWithProv;
 

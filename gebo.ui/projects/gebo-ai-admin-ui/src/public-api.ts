@@ -118,5 +118,6 @@ export * from "./lib/setup-wizard/gebo-ai-mcp-server-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-mcp-client-admin/gebo-ai-mcp-client-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-change-user-password.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-mcp-server-admin/gebo-ai-mcp-server-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-mcpclient-admin/gebo-ai-mcpclient-endpoint.component";
 
 
