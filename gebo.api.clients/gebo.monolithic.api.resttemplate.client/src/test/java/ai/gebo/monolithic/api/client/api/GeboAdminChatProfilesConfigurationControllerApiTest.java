@@ -15,7 +15,7 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.model.ChatProfileConfigurationByQbeParam;
 import ai.gebo.monolithic.api.client.model.DataPage;
 import ai.gebo.monolithic.api.client.model.GChatProfileConfiguration;
-import ai.gebo.monolithic.api.client.model.PageGChatProfileConfiguration;
+import ai.gebo.monolithic.api.client.model.PagedModelGChatProfileConfiguration;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -73,7 +73,7 @@ public class GeboAdminChatProfilesConfigurationControllerApiTest {
     @Test
     public void getAllChatProfileConfigurationTest() {
         DataPage body = null;
-        PageGChatProfileConfiguration response = api.getAllChatProfileConfiguration(body);
+        PagedModelGChatProfileConfiguration response = api.getAllChatProfileConfiguration(body);
 
         // TODO: test validations
     }
@@ -88,7 +88,7 @@ public class GeboAdminChatProfilesConfigurationControllerApiTest {
     @Test
     public void getChatProfileConfigurationByQbeTest() {
         ChatProfileConfigurationByQbeParam body = null;
-        PageGChatProfileConfiguration response = api.getChatProfileConfigurationByQbe(body);
+        PagedModelGChatProfileConfiguration response = api.getChatProfileConfigurationByQbe(body);
 
         // TODO: test validations
     }

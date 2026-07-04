@@ -16,7 +16,7 @@ import ai.gebo.monolithic.api.client.model.ChatInfosByQbeParam;
 import ai.gebo.monolithic.api.client.model.ChatUIOptions;
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
-import ai.gebo.monolithic.api.client.model.PageGUserChatInfo;
+import ai.gebo.monolithic.api.client.model.PagedModelGUserChatInfo;
 import ai.gebo.monolithic.api.client.model.UserChatHistory;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -152,7 +152,7 @@ public class GeboUserChatsControllerApiTest {
     @Test
     public void getChatInfosByQbeTest() {
         ChatInfosByQbeParam body = null;
-        PageGUserChatInfo response = api.getChatInfosByQbe(body);
+        PagedModelGUserChatInfo response = api.getChatInfosByQbe(body);
 
         // TODO: test validations
     }
@@ -182,7 +182,7 @@ public class GeboUserChatsControllerApiTest {
     public void getMyChatsPagedTest() {
         Integer page = null;
         Integer pageSize = null;
-        PageGUserChatInfo response = api.getMyChatsPaged(page, pageSize);
+        PagedModelGUserChatInfo response = api.getMyChatsPaged(page, pageSize);
 
         // TODO: test validations
     }

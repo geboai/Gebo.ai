@@ -38,9 +38,9 @@ public class GeboCoreAnalisysControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void drillDownTest() {
+    public void coreDrillDownTest() {
         GStatsHolder body = null;
-        List<GStatsHolder> response = api.drillDown(body);
+        List<GStatsHolder> response = api.coreDrillDown(body);
 
         // TODO: test validations
     }

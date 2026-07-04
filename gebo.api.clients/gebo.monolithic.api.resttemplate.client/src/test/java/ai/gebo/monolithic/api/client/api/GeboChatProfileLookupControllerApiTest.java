@@ -15,7 +15,7 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.model.ChatProfileConfigurationLookupByQbeParam;
 import ai.gebo.monolithic.api.client.model.DataPage;
 import ai.gebo.monolithic.api.client.model.GChatProfileConfiguration;
-import ai.gebo.monolithic.api.client.model.PageGLookupEntry;
+import ai.gebo.monolithic.api.client.model.PagedModelGLookupEntry;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -58,7 +58,7 @@ public class GeboChatProfileLookupControllerApiTest {
     @Test
     public void getAllChatProfileConfigurationLoookupTest() {
         DataPage body = null;
-        PageGLookupEntry response = api.getAllChatProfileConfigurationLoookup(body);
+        PagedModelGLookupEntry response = api.getAllChatProfileConfigurationLoookup(body);
 
         // TODO: test validations
     }
@@ -73,7 +73,7 @@ public class GeboChatProfileLookupControllerApiTest {
     @Test
     public void getChatProfileConfigurationLookupByQbeTest() {
         ChatProfileConfigurationLookupByQbeParam body = null;
-        PageGLookupEntry response = api.getChatProfileConfigurationLookupByQbe(body);
+        PagedModelGLookupEntry response = api.getChatProfileConfigurationLookupByQbe(body);
 
         // TODO: test validations
     }

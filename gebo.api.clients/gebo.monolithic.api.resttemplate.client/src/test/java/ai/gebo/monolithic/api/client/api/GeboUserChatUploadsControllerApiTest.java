@@ -56,8 +56,7 @@ public class GeboUserChatUploadsControllerApiTest {
      */
     @Test
     public void deleteSessionUploadsTest() {
-        String userSessionCode = null;
-        OperationStatusListUserUploadedContent response = api.deleteSessionUploads(userSessionCode);
+        OperationStatusListUserUploadedContent response = api.deleteSessionUploads();
 
         // TODO: test validations
     }
