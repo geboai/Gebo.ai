@@ -77,7 +77,9 @@ import { LanguageResourcesControllerService } from './api/languageResourcesContr
 import { LlmsUsageAdminLevelControllerService } from './api/llmsUsageAdminLevelController.service';
 import { LlmsUsageUserLevelControllerService } from './api/llmsUsageUserLevelController.service';
 import { LogViewControllerService } from './api/logViewController.service';
+import { McpClientBrowsingControllerService } from './api/mcpClientBrowsingController.service';
 import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
+import { McpClientSystemsControllerService } from './api/mcpClientSystemsController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
@@ -182,7 +184,9 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     LlmsUsageAdminLevelControllerService,
     LlmsUsageUserLevelControllerService,
     LogViewControllerService,
+    McpClientBrowsingControllerService,
     McpClientConfigControllerService,
+    McpClientSystemsControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
     OAuth2AdminControllerService,

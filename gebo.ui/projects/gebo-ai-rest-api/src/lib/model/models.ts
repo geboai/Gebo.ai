@@ -218,6 +218,7 @@ export * from './lLMUsageDrillDownLevelSubdimensions';
 export * from './lLMUsageDrillDownResult';
 export * from './loginRequest';
 export * from './mCPClientConfig';
+export * from './mCPClientProjectEndpoint';
 export * from './mCPPrompt';
 export * from './mCPResource';
 export * from './mCPTool';
