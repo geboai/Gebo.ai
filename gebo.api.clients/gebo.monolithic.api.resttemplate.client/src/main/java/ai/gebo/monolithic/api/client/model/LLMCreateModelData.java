@@ -24,7 +24,7 @@ import java.util.List;
  * LLMCreateModelData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class LLMCreateModelData {
   /**
@@ -122,6 +122,46 @@ public class LLMCreateModelData {
 
   }  @JsonProperty("uses")
   private List<UsesEnum> uses = null;
+
+  @JsonProperty("maxGeneratedTokens")
+  private Integer maxGeneratedTokens = null;
+
+  /**
+   * Gets or Sets thinking
+   */
+  public enum ThinkingEnum {
+    NO_THINKING("NO_THINKING"),
+    LOW_THINKING("LOW_THINKING"),
+    MEDIUM_THINKING("MEDIUM_THINKING"),
+    HIGH_THINKING("HIGH_THINKING"),
+    AUTO("AUTO");
+
+    private String value;
+
+    ThinkingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ThinkingEnum fromValue(String input) {
+      for (ThinkingEnum b : ThinkingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("thinking")
+  private ThinkingEnum thinking = null;
 
   public LLMCreateModelData type(TypeEnum type) {
     this.type = type;
@@ -311,6 +351,42 @@ public class LLMCreateModelData {
     this.uses = uses;
   }
 
+  public LLMCreateModelData maxGeneratedTokens(Integer maxGeneratedTokens) {
+    this.maxGeneratedTokens = maxGeneratedTokens;
+    return this;
+  }
+
+   /**
+   * Get maxGeneratedTokens
+   * @return maxGeneratedTokens
+  **/
+  @Schema(description = "")
+  public Integer getMaxGeneratedTokens() {
+    return maxGeneratedTokens;
+  }
+
+  public void setMaxGeneratedTokens(Integer maxGeneratedTokens) {
+    this.maxGeneratedTokens = maxGeneratedTokens;
+  }
+
+  public LLMCreateModelData thinking(ThinkingEnum thinking) {
+    this.thinking = thinking;
+    return this;
+  }
+
+   /**
+   * Get thinking
+   * @return thinking
+  **/
+  @Schema(description = "")
+  public ThinkingEnum getThinking() {
+    return thinking;
+  }
+
+  public void setThinking(ThinkingEnum thinking) {
+    this.thinking = thinking;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -330,12 +406,14 @@ public class LLMCreateModelData {
         Objects.equals(this.modelCode, llMCreateModelData.modelCode) &&
         Objects.equals(this.baseUrl, llMCreateModelData.baseUrl) &&
         Objects.equals(this.contextWindow, llMCreateModelData.contextWindow) &&
-        Objects.equals(this.uses, llMCreateModelData.uses);
+        Objects.equals(this.uses, llMCreateModelData.uses) &&
+        Objects.equals(this.maxGeneratedTokens, llMCreateModelData.maxGeneratedTokens) &&
+        Objects.equals(this.thinking, llMCreateModelData.thinking);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, enableAllFunctions, secretId, modelCode, baseUrl, contextWindow, uses);
+    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, enableAllFunctions, secretId, modelCode, baseUrl, contextWindow, uses, maxGeneratedTokens, thinking);
   }
 
 
@@ -354,6 +432,8 @@ public class LLMCreateModelData {
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
     sb.append("    contextWindow: ").append(toIndentedString(contextWindow)).append("\n");
     sb.append("    uses: ").append(toIndentedString(uses)).append("\n");
+    sb.append("    maxGeneratedTokens: ").append(toIndentedString(maxGeneratedTokens)).append("\n");
+    sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
     sb.append("}");
     return sb.toString();
   }

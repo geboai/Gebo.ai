@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 <a name="createLLMByAutoconfigure"></a>
 # **createLLMByAutoconfigure**
-> OperationStatusList createLLMByAutoconfigure(body)
+> OperationStatusListGBaseModelConfig createLLMByAutoconfigure(body)
 
 
 
@@ -28,7 +28,7 @@ Method | HTTP request | Description
 GeboFastLlmsSetupControllerApi apiInstance = new GeboFastLlmsSetupControllerApi();
 LLMAutoconfigureCreationData body = new LLMAutoconfigureCreationData(); // LLMAutoconfigureCreationData | 
 try {
-    OperationStatusList result = apiInstance.createLLMByAutoconfigure(body);
+    OperationStatusListGBaseModelConfig result = apiInstance.createLLMByAutoconfigure(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboFastLlmsSetupControllerApi#createLLMByAutoconfigure");
@@ -44,7 +44,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**OperationStatusList**](OperationStatusList.md)
+[**OperationStatusListGBaseModelConfig**](OperationStatusListGBaseModelConfig.md)
 
 ### Authorization
 
@@ -100,7 +100,7 @@ No authorization required
 
 <a name="createLLMS"></a>
 # **createLLMS**
-> OperationStatusList createLLMS(body)
+> OperationStatusListGBaseModelConfig createLLMS(body)
 
 
 
@@ -114,7 +114,7 @@ No authorization required
 GeboFastLlmsSetupControllerApi apiInstance = new GeboFastLlmsSetupControllerApi();
 List<LLMCreateModelData> body = Arrays.asList(new LLMCreateModelData()); // List<LLMCreateModelData> | 
 try {
-    OperationStatusList result = apiInstance.createLLMS(body);
+    OperationStatusListGBaseModelConfig result = apiInstance.createLLMS(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboFastLlmsSetupControllerApi#createLLMS");
@@ -130,7 +130,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**OperationStatusList**](OperationStatusList.md)
+[**OperationStatusListGBaseModelConfig**](OperationStatusListGBaseModelConfig.md)
 
 ### Authorization
 

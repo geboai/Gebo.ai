@@ -19,12 +19,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * GeboOauth2SecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GeboOauth2SecretContent {
   @JsonProperty("providerName")
@@ -38,6 +40,9 @@ public class GeboOauth2SecretContent {
 
   @JsonProperty("scopes")
   private List<String> scopes = null;
+
+  @JsonProperty("customAttributes")
+  private Map<String, String> customAttributes = null;
 
   public GeboOauth2SecretContent providerName(String providerName) {
     this.providerName = providerName;
@@ -119,6 +124,32 @@ public class GeboOauth2SecretContent {
     this.scopes = scopes;
   }
 
+  public GeboOauth2SecretContent customAttributes(Map<String, String> customAttributes) {
+    this.customAttributes = customAttributes;
+    return this;
+  }
+
+  public GeboOauth2SecretContent putCustomAttributesItem(String key, String customAttributesItem) {
+    if (this.customAttributes == null) {
+      this.customAttributes = new HashMap<>();
+    }
+    this.customAttributes.put(key, customAttributesItem);
+    return this;
+  }
+
+   /**
+   * Get customAttributes
+   * @return customAttributes
+  **/
+  @Schema(description = "")
+  public Map<String, String> getCustomAttributes() {
+    return customAttributes;
+  }
+
+  public void setCustomAttributes(Map<String, String> customAttributes) {
+    this.customAttributes = customAttributes;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -132,12 +163,13 @@ public class GeboOauth2SecretContent {
     return Objects.equals(this.providerName, geboOauth2SecretContent.providerName) &&
         Objects.equals(this.clientId, geboOauth2SecretContent.clientId) &&
         Objects.equals(this.secret, geboOauth2SecretContent.secret) &&
-        Objects.equals(this.scopes, geboOauth2SecretContent.scopes);
+        Objects.equals(this.scopes, geboOauth2SecretContent.scopes) &&
+        Objects.equals(this.customAttributes, geboOauth2SecretContent.customAttributes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerName, clientId, secret, scopes);
+    return Objects.hash(providerName, clientId, secret, scopes, customAttributes);
   }
 
 
@@ -150,6 +182,7 @@ public class GeboOauth2SecretContent {
     sb.append("    clientId: ").append(toIndentedString(clientId)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
     sb.append("    scopes: ").append(toIndentedString(scopes)).append("\n");
+    sb.append("    customAttributes: ").append(toIndentedString(customAttributes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

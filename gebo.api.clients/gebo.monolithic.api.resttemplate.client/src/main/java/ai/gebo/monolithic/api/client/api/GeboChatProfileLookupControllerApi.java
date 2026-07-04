@@ -5,7 +5,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.ChatProfileConfigurationLookupByQbeParam;
 import ai.gebo.monolithic.api.client.model.DataPage;
 import ai.gebo.monolithic.api.client.model.GChatProfileConfiguration;
-import ai.gebo.monolithic.api.client.model.PageGLookupEntry;
+import ai.gebo.monolithic.api.client.model.PagedModelGLookupEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GeboChatProfileLookupControllerApi {
     private ApiClient apiClient;
@@ -95,10 +95,10 @@ public class GeboChatProfileLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGLookupEntry
+     * @return PagedModelGLookupEntry
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGLookupEntry getAllChatProfileConfigurationLoookup(DataPage body) throws RestClientException {
+    public PagedModelGLookupEntry getAllChatProfileConfigurationLoookup(DataPage body) throws RestClientException {
         return getAllChatProfileConfigurationLoookupWithHttpInfo(body).getBody();
     }
 
@@ -107,10 +107,10 @@ public class GeboChatProfileLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGLookupEntry&gt;
+     * @return ResponseEntity&lt;PagedModelGLookupEntry&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGLookupEntry> getAllChatProfileConfigurationLoookupWithHttpInfo(DataPage body) throws RestClientException {
+    public ResponseEntity<PagedModelGLookupEntry> getAllChatProfileConfigurationLoookupWithHttpInfo(DataPage body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -133,7 +133,7 @@ public class GeboChatProfileLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGLookupEntry> returnType = new ParameterizedTypeReference<PageGLookupEntry>() {};
+        ParameterizedTypeReference<PagedModelGLookupEntry> returnType = new ParameterizedTypeReference<PagedModelGLookupEntry>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -141,10 +141,10 @@ public class GeboChatProfileLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGLookupEntry
+     * @return PagedModelGLookupEntry
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGLookupEntry getChatProfileConfigurationLookupByQbe(ChatProfileConfigurationLookupByQbeParam body) throws RestClientException {
+    public PagedModelGLookupEntry getChatProfileConfigurationLookupByQbe(ChatProfileConfigurationLookupByQbeParam body) throws RestClientException {
         return getChatProfileConfigurationLookupByQbeWithHttpInfo(body).getBody();
     }
 
@@ -153,10 +153,10 @@ public class GeboChatProfileLookupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGLookupEntry&gt;
+     * @return ResponseEntity&lt;PagedModelGLookupEntry&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGLookupEntry> getChatProfileConfigurationLookupByQbeWithHttpInfo(ChatProfileConfigurationLookupByQbeParam body) throws RestClientException {
+    public ResponseEntity<PagedModelGLookupEntry> getChatProfileConfigurationLookupByQbeWithHttpInfo(ChatProfileConfigurationLookupByQbeParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -179,7 +179,7 @@ public class GeboChatProfileLookupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGLookupEntry> returnType = new ParameterizedTypeReference<PageGLookupEntry>() {};
+        ParameterizedTypeReference<PagedModelGLookupEntry> returnType = new ParameterizedTypeReference<PagedModelGLookupEntry>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

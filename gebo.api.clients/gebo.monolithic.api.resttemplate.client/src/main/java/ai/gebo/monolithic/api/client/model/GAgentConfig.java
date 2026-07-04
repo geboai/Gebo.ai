@@ -27,7 +27,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -48,6 +48,46 @@ public class GAgentConfig {
   @JsonProperty("dateCreated")
   private Date dateCreated = null;
 
+  /**
+   * Gets or Sets agentType
+   */
+  public enum AgentTypeEnum {
+    AGENT("AGENT"),
+    AGENTS_NETWORK("AGENTS_NETWORK");
+
+    private String value;
+
+    AgentTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AgentTypeEnum fromValue(String input) {
+      for (AgentTypeEnum b : AgentTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("agentType")
+  private AgentTypeEnum agentType = null;
+
+  @JsonProperty("adaptedAgentNetworkCode")
+  private String adaptedAgentNetworkCode = null;
+
+  @JsonProperty("agentNetworkServiceCode")
+  private String agentNetworkServiceCode = null;
+
   @JsonProperty("agentServiceId")
   private String agentServiceId = null;
 
@@ -65,6 +105,40 @@ public class GAgentConfig {
 
   @JsonProperty("useDefaultChatModel")
   private Boolean useDefaultChatModel = null;
+
+  /**
+   * Gets or Sets useChatModelWithUse
+   */
+  public enum UseChatModelWithUseEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
+
+    private String value;
+
+    UseChatModelWithUseEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UseChatModelWithUseEnum fromValue(String input) {
+      for (UseChatModelWithUseEnum b : UseChatModelWithUseEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("useChatModelWithUse")
+  private UseChatModelWithUseEnum useChatModelWithUse = null;
 
   @JsonProperty("chatModelReference")
   private GObjectRefGBaseChatModelConfig chatModelReference = null;
@@ -244,6 +318,60 @@ public class GAgentConfig {
     this.dateCreated = dateCreated;
   }
 
+  public GAgentConfig agentType(AgentTypeEnum agentType) {
+    this.agentType = agentType;
+    return this;
+  }
+
+   /**
+   * Get agentType
+   * @return agentType
+  **/
+  @Schema(description = "")
+  public AgentTypeEnum getAgentType() {
+    return agentType;
+  }
+
+  public void setAgentType(AgentTypeEnum agentType) {
+    this.agentType = agentType;
+  }
+
+  public GAgentConfig adaptedAgentNetworkCode(String adaptedAgentNetworkCode) {
+    this.adaptedAgentNetworkCode = adaptedAgentNetworkCode;
+    return this;
+  }
+
+   /**
+   * Get adaptedAgentNetworkCode
+   * @return adaptedAgentNetworkCode
+  **/
+  @Schema(description = "")
+  public String getAdaptedAgentNetworkCode() {
+    return adaptedAgentNetworkCode;
+  }
+
+  public void setAdaptedAgentNetworkCode(String adaptedAgentNetworkCode) {
+    this.adaptedAgentNetworkCode = adaptedAgentNetworkCode;
+  }
+
+  public GAgentConfig agentNetworkServiceCode(String agentNetworkServiceCode) {
+    this.agentNetworkServiceCode = agentNetworkServiceCode;
+    return this;
+  }
+
+   /**
+   * Get agentNetworkServiceCode
+   * @return agentNetworkServiceCode
+  **/
+  @Schema(description = "")
+  public String getAgentNetworkServiceCode() {
+    return agentNetworkServiceCode;
+  }
+
+  public void setAgentNetworkServiceCode(String agentNetworkServiceCode) {
+    this.agentNetworkServiceCode = agentNetworkServiceCode;
+  }
+
   public GAgentConfig agentServiceId(String agentServiceId) {
     this.agentServiceId = agentServiceId;
     return this;
@@ -350,6 +478,24 @@ public class GAgentConfig {
 
   public void setUseDefaultChatModel(Boolean useDefaultChatModel) {
     this.useDefaultChatModel = useDefaultChatModel;
+  }
+
+  public GAgentConfig useChatModelWithUse(UseChatModelWithUseEnum useChatModelWithUse) {
+    this.useChatModelWithUse = useChatModelWithUse;
+    return this;
+  }
+
+   /**
+   * Get useChatModelWithUse
+   * @return useChatModelWithUse
+  **/
+  @Schema(description = "")
+  public UseChatModelWithUseEnum getUseChatModelWithUse() {
+    return useChatModelWithUse;
+  }
+
+  public void setUseChatModelWithUse(UseChatModelWithUseEnum useChatModelWithUse) {
+    this.useChatModelWithUse = useChatModelWithUse;
   }
 
   public GAgentConfig chatModelReference(GObjectRefGBaseChatModelConfig chatModelReference) {
@@ -616,12 +762,16 @@ public class GAgentConfig {
         Objects.equals(this.userCreated, gagentConfig.userCreated) &&
         Objects.equals(this.dateModified, gagentConfig.dateModified) &&
         Objects.equals(this.dateCreated, gagentConfig.dateCreated) &&
+        Objects.equals(this.agentType, gagentConfig.agentType) &&
+        Objects.equals(this.adaptedAgentNetworkCode, gagentConfig.adaptedAgentNetworkCode) &&
+        Objects.equals(this.agentNetworkServiceCode, gagentConfig.agentNetworkServiceCode) &&
         Objects.equals(this.agentServiceId, gagentConfig.agentServiceId) &&
         Objects.equals(this.mainLoopPromptUseCode, gagentConfig.mainLoopPromptUseCode) &&
         Objects.equals(this.customLoopPrompt, gagentConfig.customLoopPrompt) &&
         Objects.equals(this.subscribeAllTools, gagentConfig.subscribeAllTools) &&
         Objects.equals(this.agentRoleCode, gagentConfig.agentRoleCode) &&
         Objects.equals(this.useDefaultChatModel, gagentConfig.useDefaultChatModel) &&
+        Objects.equals(this.useChatModelWithUse, gagentConfig.useChatModelWithUse) &&
         Objects.equals(this.chatModelReference, gagentConfig.chatModelReference) &&
         Objects.equals(this.maxLoopIterations, gagentConfig.maxLoopIterations) &&
         Objects.equals(this.aclAliases, gagentConfig.aclAliases) &&
@@ -638,7 +788,7 @@ public class GAgentConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, chatModelReference, maxLoopIterations, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, maxLoopIterations, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions);
   }
 
 
@@ -653,12 +803,16 @@ public class GAgentConfig {
     sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
+    sb.append("    agentType: ").append(toIndentedString(agentType)).append("\n");
+    sb.append("    adaptedAgentNetworkCode: ").append(toIndentedString(adaptedAgentNetworkCode)).append("\n");
+    sb.append("    agentNetworkServiceCode: ").append(toIndentedString(agentNetworkServiceCode)).append("\n");
     sb.append("    agentServiceId: ").append(toIndentedString(agentServiceId)).append("\n");
     sb.append("    mainLoopPromptUseCode: ").append(toIndentedString(mainLoopPromptUseCode)).append("\n");
     sb.append("    customLoopPrompt: ").append(toIndentedString(customLoopPrompt)).append("\n");
     sb.append("    subscribeAllTools: ").append(toIndentedString(subscribeAllTools)).append("\n");
     sb.append("    agentRoleCode: ").append(toIndentedString(agentRoleCode)).append("\n");
     sb.append("    useDefaultChatModel: ").append(toIndentedString(useDefaultChatModel)).append("\n");
+    sb.append("    useChatModelWithUse: ").append(toIndentedString(useChatModelWithUse)).append("\n");
     sb.append("    chatModelReference: ").append(toIndentedString(chatModelReference)).append("\n");
     sb.append("    maxLoopIterations: ").append(toIndentedString(maxLoopIterations)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");

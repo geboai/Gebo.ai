@@ -6,7 +6,7 @@ import ai.gebo.monolithic.api.client.model.ChatInfosByQbeParam;
 import ai.gebo.monolithic.api.client.model.ChatUIOptions;
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
-import ai.gebo.monolithic.api.client.model.PageGUserChatInfo;
+import ai.gebo.monolithic.api.client.model.PagedModelGUserChatInfo;
 import ai.gebo.monolithic.api.client.model.UserChatHistory;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GeboUserChatsControllerApi {
     private ApiClient apiClient;
@@ -376,10 +376,10 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGUserChatInfo
+     * @return PagedModelGUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGUserChatInfo getChatInfosByQbe(ChatInfosByQbeParam body) throws RestClientException {
+    public PagedModelGUserChatInfo getChatInfosByQbe(ChatInfosByQbeParam body) throws RestClientException {
         return getChatInfosByQbeWithHttpInfo(body).getBody();
     }
 
@@ -388,10 +388,10 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGUserChatInfo&gt;
+     * @return ResponseEntity&lt;PagedModelGUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGUserChatInfo> getChatInfosByQbeWithHttpInfo(ChatInfosByQbeParam body) throws RestClientException {
+    public ResponseEntity<PagedModelGUserChatInfo> getChatInfosByQbeWithHttpInfo(ChatInfosByQbeParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -414,7 +414,7 @@ public class GeboUserChatsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGUserChatInfo> returnType = new ParameterizedTypeReference<PageGUserChatInfo>() {};
+        ParameterizedTypeReference<PagedModelGUserChatInfo> returnType = new ParameterizedTypeReference<PagedModelGUserChatInfo>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -461,10 +461,10 @@ public class GeboUserChatsControllerApi {
      * <p><b>200</b> - OK
      * @param page  (required)
      * @param pageSize  (required)
-     * @return PageGUserChatInfo
+     * @return PagedModelGUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGUserChatInfo getMyChatsPaged(Integer page, Integer pageSize) throws RestClientException {
+    public PagedModelGUserChatInfo getMyChatsPaged(Integer page, Integer pageSize) throws RestClientException {
         return getMyChatsPagedWithHttpInfo(page, pageSize).getBody();
     }
 
@@ -474,10 +474,10 @@ public class GeboUserChatsControllerApi {
      * <p><b>200</b> - OK
      * @param page  (required)
      * @param pageSize  (required)
-     * @return ResponseEntity&lt;PageGUserChatInfo&gt;
+     * @return ResponseEntity&lt;PagedModelGUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGUserChatInfo> getMyChatsPagedWithHttpInfo(Integer page, Integer pageSize) throws RestClientException {
+    public ResponseEntity<PagedModelGUserChatInfo> getMyChatsPagedWithHttpInfo(Integer page, Integer pageSize) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'page' is set
         if (page == null) {
@@ -504,7 +504,7 @@ public class GeboUserChatsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGUserChatInfo> returnType = new ParameterizedTypeReference<PageGUserChatInfo>() {};
+        ParameterizedTypeReference<PagedModelGUserChatInfo> returnType = new ParameterizedTypeReference<PagedModelGUserChatInfo>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

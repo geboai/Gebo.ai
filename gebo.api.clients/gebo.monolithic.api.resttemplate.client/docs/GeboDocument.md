@@ -16,6 +16,8 @@ Name | Type | Description | Notes
 **virtualParentFolderReference** | [**VFilesystemReference**](VFilesystemReference.md) |  |  [optional]
 **virtualFileReference** | [**VFilesystemReference**](VFilesystemReference.md) |  |  [optional]
 **originalContentModifiedDate** | [**Date**](Date.md) |  |  [optional]
+**customMetaData** | **Map&lt;String, Object&gt;** |  |  [optional]
+**additionalAttributes** | **Map&lt;String, Object&gt;** |  |  [optional]
 **texts** | [**List&lt;GeboTextDocumentFragment&gt;**](GeboTextDocumentFragment.md) |  |  [optional]
 **images** | [**List&lt;GeboImageDocumentFragment&gt;**](GeboImageDocumentFragment.md) |  |  [optional]
 **audios** | [**List&lt;GeboAudioDocumentFragment&gt;**](GeboAudioDocumentFragment.md) |  |  [optional]

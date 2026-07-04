@@ -20,11 +20,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GDeepseekChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class GDeepseekChatModelChoice {
   @JsonProperty("code")
@@ -71,6 +74,9 @@ public class GDeepseekChatModelChoice {
 
   @JsonProperty("supportsFunctionCalls")
   private Boolean supportsFunctionCalls = null;
+
+  @JsonProperty("modelDetails")
+  private Map<String, Object> modelDetails = null;
 
   public GDeepseekChatModelChoice code(String code) {
     this.code = code;
@@ -342,6 +348,32 @@ public class GDeepseekChatModelChoice {
     this.supportsFunctionCalls = supportsFunctionCalls;
   }
 
+  public GDeepseekChatModelChoice modelDetails(Map<String, Object> modelDetails) {
+    this.modelDetails = modelDetails;
+    return this;
+  }
+
+  public GDeepseekChatModelChoice putModelDetailsItem(String key, Object modelDetailsItem) {
+    if (this.modelDetails == null) {
+      this.modelDetails = new HashMap<>();
+    }
+    this.modelDetails.put(key, modelDetailsItem);
+    return this;
+  }
+
+   /**
+   * Get modelDetails
+   * @return modelDetails
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getModelDetails() {
+    return modelDetails;
+  }
+
+  public void setModelDetails(Map<String, Object> modelDetails) {
+    this.modelDetails = modelDetails;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -366,12 +398,13 @@ public class GDeepseekChatModelChoice {
         Objects.equals(this.contextLength, gdeepseekChatModelChoice.contextLength) &&
         Objects.equals(this.nativeModelMetaInfos, gdeepseekChatModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.supportsStructuredOutput, gdeepseekChatModelChoice.supportsStructuredOutput) &&
-        Objects.equals(this.supportsFunctionCalls, gdeepseekChatModelChoice.supportsFunctionCalls);
+        Objects.equals(this.supportsFunctionCalls, gdeepseekChatModelChoice.supportsFunctionCalls) &&
+        Objects.equals(this.modelDetails, gdeepseekChatModelChoice.modelDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls, modelDetails);
   }
 
 
@@ -395,6 +428,7 @@ public class GDeepseekChatModelChoice {
     sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
+    sb.append("    modelDetails: ").append(toIndentedString(modelDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }

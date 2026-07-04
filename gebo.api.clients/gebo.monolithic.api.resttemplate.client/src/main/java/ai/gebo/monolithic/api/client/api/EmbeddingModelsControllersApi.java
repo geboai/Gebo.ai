@@ -2,7 +2,7 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
-import ai.gebo.monolithic.api.client.model.ConfigurationEntry;
+import ai.gebo.monolithic.api.client.model.ConfigurationEntryGBaseEmbeddingModelConfig;
 import ai.gebo.monolithic.api.client.model.GEmbeddingModelType;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
 
 public class EmbeddingModelsControllersApi {
     private ApiClient apiClient;
@@ -86,10 +86,10 @@ public class EmbeddingModelsControllersApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return List&lt;ConfigurationEntry&gt;
+     * @return List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<ConfigurationEntry> getRuntimeConfiguredEmbeddingModels(String modelTypeCode) throws RestClientException {
+    public List<ConfigurationEntryGBaseEmbeddingModelConfig> getRuntimeConfiguredEmbeddingModels(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredEmbeddingModelsWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -98,10 +98,10 @@ public class EmbeddingModelsControllersApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;List&lt;ConfigurationEntry&gt;&gt;
+     * @return ResponseEntity&lt;List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<ConfigurationEntry>> getRuntimeConfiguredEmbeddingModelsWithHttpInfo(String modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<ConfigurationEntryGBaseEmbeddingModelConfig>> getRuntimeConfiguredEmbeddingModelsWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
         String path = UriComponentsBuilder.fromPath("/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels").build().toUriString();
         
@@ -119,7 +119,7 @@ public class EmbeddingModelsControllersApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<List<ConfigurationEntry>> returnType = new ParameterizedTypeReference<List<ConfigurationEntry>>() {};
+        ParameterizedTypeReference<List<ConfigurationEntryGBaseEmbeddingModelConfig>> returnType = new ParameterizedTypeReference<List<ConfigurationEntryGBaseEmbeddingModelConfig>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -6,6 +6,8 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getAllFunctions**](FunctionsLookupControllerApi.md#getAllFunctions) | **GET** /api/admin/FunctionsLookupController/getAllFunctions | 
 [**getAllFunctionsTree**](FunctionsLookupControllerApi.md#getAllFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllFunctionsTree | 
+[**getAllLocalFunctions**](FunctionsLookupControllerApi.md#getAllLocalFunctions) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctions | 
+[**getAllLocalFunctionsTree**](FunctionsLookupControllerApi.md#getAllLocalFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctionsTree | 
 
 <a name="getAllFunctions"></a>
 # **getAllFunctions**
@@ -66,6 +68,88 @@ try {
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FunctionsLookupControllerApi#getAllFunctionsTree");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ragContextFunctions** | **Boolean**|  | [optional]
+
+### Return type
+
+[**List&lt;ToolCategoriesTree&gt;**](ToolCategoriesTree.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getAllLocalFunctions"></a>
+# **getAllLocalFunctions**
+> List&lt;GLookupEntry&gt; getAllLocalFunctions()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FunctionsLookupControllerApi;
+
+
+FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
+try {
+    List<GLookupEntry> result = apiInstance.getAllLocalFunctions();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FunctionsLookupControllerApi#getAllLocalFunctions");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;GLookupEntry&gt;**](GLookupEntry.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getAllLocalFunctionsTree"></a>
+# **getAllLocalFunctionsTree**
+> List&lt;ToolCategoriesTree&gt; getAllLocalFunctionsTree(ragContextFunctions)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FunctionsLookupControllerApi;
+
+
+FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
+Boolean ragContextFunctions = true; // Boolean | 
+try {
+    List<ToolCategoriesTree> result = apiInstance.getAllLocalFunctionsTree(ragContextFunctions);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FunctionsLookupControllerApi#getAllLocalFunctionsTree");
     e.printStackTrace();
 }
 ```

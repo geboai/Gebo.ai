@@ -12,7 +12,7 @@
 
 package ai.gebo.monolithic.api.client.api;
 
-import ai.gebo.monolithic.api.client.model.ConfigurationEntry;
+import ai.gebo.monolithic.api.client.model.ConfigurationEntryGBaseEmbeddingModelConfig;
 import ai.gebo.monolithic.api.client.model.GEmbeddingModelType;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -55,7 +55,7 @@ public class EmbeddingModelsControllersApiTest {
     @Test
     public void getRuntimeConfiguredEmbeddingModelsTest() {
         String modelTypeCode = null;
-        List<ConfigurationEntry> response = api.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
+        List<ConfigurationEntryGBaseEmbeddingModelConfig> response = api.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
 
         // TODO: test validations
     }
