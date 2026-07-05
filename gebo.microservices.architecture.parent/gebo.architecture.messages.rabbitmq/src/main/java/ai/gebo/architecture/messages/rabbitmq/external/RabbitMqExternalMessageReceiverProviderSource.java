@@ -12,6 +12,8 @@ package ai.gebo.architecture.messages.rabbitmq.external;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -21,16 +23,25 @@ import ai.gebo.application.messaging.external.IGExternalMessageReceiverProvider;
 import ai.gebo.application.messaging.external.IGExternalMessageReceiverProviderSource;
 import ai.gebo.architecture.messages.rabbitmq.codec.GMessageEnvelopeCodec;
 import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties;
-import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties.BridgeDefinition;
+import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties.RemoteEndpoint;
 
 /**
- * Provides the outbound (local broker -&gt; RabbitMQ) receiver bridges declared
- * in {@link GeboRabbitMqMessagingProperties#getReceivers()}.
+ * Registers, as local broker receivers, the remote endpoints declared in
+ * {@link GeboRabbitMqMessagingProperties#getRemoteReceivers()}.
+ *
+ * <p>
+ * Each entry is a component living in another microservice this one may send
+ * messages to. Registering it as an {@code IGMessageReceiver} — under its own
+ * {@code moduleId}/{@code componentId} — is what makes the local broker route a
+ * matching envelope to it; the receiver then serializes the envelope and
+ * publishes it to the queue of the microservice that hosts that module. The
+ * destination microservice is resolved once, at construction, from the
+ * {@code microservices} map by the endpoint's module id.
+ * </p>
  *
  * <p>
  * Discovered by {@code MessageBrokeringAssembler} through the
- * {@code IGExternalMessageReceiverProviderSource} SPI: each returned provider is
- * registered in the in-memory broker as an {@code IGMessageReceiver}.
+ * {@code IGExternalMessageReceiverProviderSource} SPI.
  * </p>
  *
  * Gebo.ai comment agent
@@ -38,6 +49,8 @@ import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProper
 @Component
 @ConditionalOnProperty(prefix = GeboRabbitMqMessagingProperties.PREFIX, name = "enabled", havingValue = "true")
 public class RabbitMqExternalMessageReceiverProviderSource implements IGExternalMessageReceiverProviderSource {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMqExternalMessageReceiverProviderSource.class);
 
 	private final List<IGExternalMessageReceiverProvider> receivers;
 
@@ -49,15 +62,23 @@ public class RabbitMqExternalMessageReceiverProviderSource implements IGExternal
 	public RabbitMqExternalMessageReceiverProviderSource(GeboRabbitMqMessagingProperties properties,
 			RabbitTemplate rabbitTemplate, GMessageEnvelopeCodec codec) {
 		this.receivers = new ArrayList<>();
-		for (BridgeDefinition definition : properties.getReceivers()) {
+		for (RemoteEndpoint endpoint : properties.getRemoteReceivers()) {
+			String microserviceId = properties.resolveMicroserviceIdForModule(endpoint.getModuleId());
+			if (microserviceId == null) {
+				// No mapping: fall back to the module id as routing key so the receiver is
+				// still registered, but warn because delivery depends on external topology.
+				microserviceId = endpoint.getModuleId();
+				LOGGER.warn("No microservice mapping for module '" + endpoint.getModuleId()
+						+ "'; using it as routing key for remote receiver " + endpoint.logicalName());
+			}
 			ExternalReceiverIfaceData config = new ExternalReceiverIfaceData();
-			config.setMessagingModuleId(definition.getMessagingModuleId());
-			config.setMessagingSystemId(definition.getMessagingSystemId());
-			config.setComponentType(definition.getComponentType());
-			config.setAcceptedPayloadTypes(definition.getPayloadTypes());
-			config.setAcceptEveryPayloadType(definition.isAcceptEveryPayloadType());
+			config.setMessagingModuleId(endpoint.getModuleId());
+			config.setMessagingSystemId(endpoint.getComponentId());
+			config.setComponentType(endpoint.getComponentType());
+			config.setAcceptedPayloadTypes(endpoint.getPayloadTypes());
+			config.setAcceptEveryPayloadType(endpoint.isAcceptEveryPayloadType());
 			this.receivers.add(new RabbitMqExternalMessageReceiver(config, rabbitTemplate, codec,
-					properties.getExchange(), definition.effectiveRoutingKey()));
+					properties.getExchange(), microserviceId));
 		}
 	}
 

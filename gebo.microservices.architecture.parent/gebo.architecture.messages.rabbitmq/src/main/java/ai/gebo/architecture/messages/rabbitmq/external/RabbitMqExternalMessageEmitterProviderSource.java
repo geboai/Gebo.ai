@@ -19,17 +19,27 @@ import ai.gebo.application.messaging.external.ExternalEmitterIfaceData;
 import ai.gebo.application.messaging.external.IGExternalMessageEmitterProvider;
 import ai.gebo.application.messaging.external.IGExternalMessageEmitterProviderSource;
 import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties;
-import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties.BridgeDefinition;
+import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties.RemoteEndpoint;
 
 /**
- * Provides the inbound (RabbitMQ -&gt; local broker) emitter bridges declared in
- * {@link GeboRabbitMqMessagingProperties#getEmitters()}.
+ * Registers, as local broker emitters, the remote endpoints declared in
+ * {@link GeboRabbitMqMessagingProperties#getRemoteEmitters()}.
+ *
+ * <p>
+ * Each entry is a component living in another microservice that may send
+ * messages into this one. Registering it as an {@code IGMessageEmitter} — under
+ * its own {@code moduleId}/{@code componentId} — is what allows the local broker
+ * to accept an inbound envelope whose {@code sourceModule}/{@code sourceComponent}
+ * matches it and route it, unchanged, to the local
+ * {@code targetModule}/{@code targetComponent} receiver. There is one emitter per
+ * remote endpoint, so a single remote microservice contributes as many emitters
+ * as it exposes.
+ * </p>
  *
  * <p>
  * Discovered by {@code MessageBrokeringAssembler} through the
- * {@code IGExternalMessageEmitterProviderSource} SPI: each returned provider is
- * registered in the in-memory broker as an {@code IGMessageEmitter}. The actual
- * consumption from RabbitMQ is driven by {@code RabbitMqInboundBridge}.
+ * {@code IGExternalMessageEmitterProviderSource} SPI; the actual consumption from
+ * RabbitMQ is driven by {@code RabbitMqInboundBridge}.
  * </p>
  *
  * Gebo.ai comment agent
@@ -45,12 +55,12 @@ public class RabbitMqExternalMessageEmitterProviderSource implements IGExternalM
 	 */
 	public RabbitMqExternalMessageEmitterProviderSource(GeboRabbitMqMessagingProperties properties) {
 		this.emitters = new ArrayList<>();
-		for (BridgeDefinition definition : properties.getEmitters()) {
+		for (RemoteEndpoint endpoint : properties.getRemoteEmitters()) {
 			ExternalEmitterIfaceData config = new ExternalEmitterIfaceData();
-			config.setMessagingModuleId(definition.getMessagingModuleId());
-			config.setMessagingSystemId(definition.getMessagingSystemId());
-			config.setComponentType(definition.getComponentType());
-			config.setEmittedPayloadTypes(definition.getPayloadTypes());
+			config.setMessagingModuleId(endpoint.getModuleId());
+			config.setMessagingSystemId(endpoint.getComponentId());
+			config.setComponentType(endpoint.getComponentType());
+			config.setEmittedPayloadTypes(endpoint.getPayloadTypes());
 			this.emitters.add(new RabbitMqExternalMessageEmitter(config));
 		}
 	}

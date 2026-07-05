@@ -2,28 +2,44 @@
 
 RabbitMQ implementation of the `gebo.application.messaging` external-bridge SPIs
 (`IGExternalMessageEmitterProviderSource` / `IGExternalMessageReceiverProviderSource`),
-letting the in-memory messaging system and broker exchange messages with remote
-components over a RabbitMQ broker.
+letting a microservice's in-memory messaging system and broker exchange messages
+with the other microservices of the architecture over a RabbitMQ broker.
+
+## Routing model
+
+A `GMessageEnvelope` already carries everything the broker needs to route it:
+`sourceModule`/`sourceComponent` (the emitter) and `targetModule`/`targetComponent`
+(the receiver). A single microservice hosts **many** emitters and receivers across
+several modules and components, so the bridge is **not** tied to a fixed
+module/system — it works purely off the envelope's own fields.
+
+The unit of addressing over RabbitMQ is the **microservice**, not the endpoint:
+
+- Each microservice consumes exactly **one inbound queue**, bound to the shared
+  exchange with a routing key equal to its own `localMicroserviceId`.
+- **Outbound (local broker → RabbitMQ):** every remote receiver endpoint listed in
+  `remote-receivers` is registered in the local broker as an `IGMessageReceiver`.
+  When a local emitter targets it, the envelope is serialized and published with
+  the routing key of the microservice that hosts the target module — resolved from
+  the `microservices` map by `targetModule` — landing in that microservice's queue.
+- **Inbound (RabbitMQ → local broker):** the single listener deserializes each
+  envelope and calls `broker.accept(envelope)` **unchanged**. Its
+  `sourceModule`/`sourceComponent` match a remote emitter registered from
+  `remote-emitters`, and its `targetModule`/`targetComponent` match a real local
+  receiver, so the broker routes it to the right local component.
+
+Envelope (de)serialization is handled by `GMessageEnvelopeCodec` using the shared
+Jackson 3 (`tools.jackson`) mapper; the payload is rebuilt into the concrete type
+carried by the envelope's own `payloadType` field.
 
 ## How it plugs into the memory broker
 
 The existing `MessageBrokeringAssembler` (in `gebo.application.messaging`) collects,
 on context refresh, every `IGExternalMessageEmitterProviderSource` and
 `IGExternalMessageReceiverProviderSource` bean and registers the emitters/receivers
-they provide into the in-memory `IGMessageBroker`. This module contributes two such
-sources:
-
-- **Emitter source (inbound, RabbitMQ → local broker):** each configured emitter
-  bridge is registered as an `IGMessageEmitter`. `RabbitMqInboundBridge` consumes the
-  bound queue, deserializes the `GMessageEnvelope` and calls `broker.accept(...)`,
-  which routes it to the local target receiver.
-- **Receiver source (outbound, local broker → RabbitMQ):** each configured receiver
-  bridge is registered as an `IGMessageReceiver`. When a local emitter targets it, the
-  envelope is serialized and published to the exchange with the bridge's routing key.
-
-Envelope (de)serialization is handled by `GMessageEnvelopeCodec` using the shared
-Jackson 3 (`tools.jackson`) mapper; the payload is rebuilt into the concrete type
-carried by the envelope's own `payloadType` field.
+they provide into the in-memory `IGMessageBroker`. This module contributes one
+source of each kind, expanding the configured remote endpoints into broker
+emitters (from `remote-emitters`) and receivers (from `remote-receivers`).
 
 ## Enabling
 
@@ -44,32 +60,44 @@ ai:
           username: guest
           password: guest
         exchange: gebo.messaging
-        exchange-type: topic
+        exchange-type: direct
         declare-topology: true
-        # Inbound: remote emitters exposed to the local broker
-        emitters:
-          - messaging-module-id: remote-module
-            messaging-system-id: remote-emitter-component
-            queue: gebo.inbound.remote
-            routing-key: remote.emitter
+        # Identity of THIS microservice: the routing key its inbound queue is bound
+        # with (and, unless inbound-queue overrides it, the queue name).
+        local-microservice-id: ingestion-service
+        # The architecture map: which modules live in which remote microservice.
+        # Used to address outbound envelopes by their targetModule.
+        microservices:
+          - microservice-id: core-service
+            modules:
+              - core
+              - workflow
+          - microservice-id: rag-service
+            modules:
+              - rag
+        # Remote endpoints that may send messages INTO this microservice.
+        # Registered as broker emitters so inbound envelopes are accepted.
+        remote-emitters:
+          - module-id: core
+            component-id: workflowRouter
             payload-types:
               - ai.gebo.application.messaging.model.GInternalDeletionMessagePayload
-        # Outbound: local receivers that forward to RabbitMQ
-        receivers:
-          - messaging-module-id: remote-module
-            messaging-system-id: remote-receiver-component
-            queue: gebo.outbound.remote
-            routing-key: remote.receiver
+        # Remote endpoints this microservice may send messages TO.
+        # Registered as broker receivers that publish to the owning microservice.
+        remote-receivers:
+          - module-id: rag
+            component-id: ragIndexer
             accept-every-payload-type: true
 ```
 
 Notes:
 
-- For an inbound emitter, `payload-types` must list every payload type it is allowed
-  to emit — the broker rejects envelopes whose type is not advertised by the source
-  emitter.
-- `routing-key` defaults to the `queue` name when omitted.
+- A `remote-emitters` entry must list every `payload-types` it is allowed to emit —
+  the broker rejects envelopes whose type is not advertised by the source emitter.
+- Each `remote-receivers` entry's `module-id` must appear under some microservice in
+  the `microservices` map so its destination routing key can be resolved; otherwise
+  the module id itself is used as the routing key (with a warning).
 - `declare-topology: false` skips exchange/queue/binding declaration (provision it
-  externally instead).
+  externally instead). Each microservice declares only its own inbound queue.
 - The connection settings are intentionally independent from Spring Boot's
   `spring.rabbitmq.*` so this bridge can target a dedicated broker.

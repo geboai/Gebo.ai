@@ -20,7 +20,7 @@ ai.gebo.llms.generic.config:
       providerId: openrouter.ai
       description: OpenRouter.ai chat models
       baseUrl: https://openrouter.ai/api/
-      #modelsListProvider: openrouter-ai-models-list
+      modelsListProvider: openrouter-ai-models-list
 
     - code: chatmodel-xai
       providerId: xai
@@ -54,7 +54,7 @@ ai.gebo.llms.generic.config:
       providerId: openrouter.ai
       description: OpenRouter.ai embedding models
       baseUrl: https://openrouter.ai/api/
-    #modelsListProvider: openrouter-ai-models-list
+      modelsListProvider: openrouter-ai-models-list
 
     - code: embedding-groq
       providerId: groq
@@ -87,7 +87,7 @@ ai.gebo.llms.generic.config:
       providerId: openrouter.ai
       description: OpenRouter.ai image generation models
       baseUrl: https://openrouter.ai/api/
-    #modelsListProvider: openrouter-ai-models-list
+      modelsListProvider: openrouter-ai-models-list
 
 
   textToSpeechModelProviders:
@@ -115,7 +115,7 @@ ai.gebo.llms.generic.config:
       providerId: openrouter.ai
       description: OpenRouter.ai transcript models
       baseUrl: https://openrouter.ai/api/
-    #modelsListProvider: openrouter-ai-models-list
+      modelsListProvider: openrouter-ai-models-list
 
   rankerModelProviders:
     - code: ranker-regolo.ai
@@ -128,7 +128,7 @@ ai.gebo.llms.generic.config:
       providerId: openrouter.ai
       description: OpenRouter.ai ranker models
       baseUrl: https://openrouter.ai/api/
-    #modelsListProvider: openrouter-ai-models-list
+      modelsListProvider: openrouter-ai-models-list
 
 
     - code: ranker-vllm

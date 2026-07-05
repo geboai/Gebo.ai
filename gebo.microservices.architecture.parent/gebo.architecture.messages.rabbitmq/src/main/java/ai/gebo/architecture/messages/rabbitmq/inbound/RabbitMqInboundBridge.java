@@ -9,9 +9,6 @@
 
 package ai.gebo.architecture.messages.rabbitmq.inbound;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -25,21 +22,28 @@ import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.architecture.messages.rabbitmq.codec.GMessageEnvelopeCodec;
 import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties;
-import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties.BridgeDefinition;
 import jakarta.annotation.PreDestroy;
 
 /**
- * Drives the inbound side of the RabbitMQ integration: for every configured
- * emitter bridge it starts a {@link SimpleMessageListenerContainer} that
- * consumes the bound queue, deserializes each message into a
- * {@link GMessageEnvelope} and injects it into the local {@link IGMessageBroker}
- * for routing to a local receiver.
+ * Drives the inbound side of the RabbitMQ integration.
  *
  * <p>
- * Containers are started on {@link ApplicationReadyEvent} — i.e. after
+ * A single {@link SimpleMessageListenerContainer} consumes this microservice's
+ * own inbound queue (see
+ * {@link GeboRabbitMqMessagingProperties#effectiveInboundQueue()}). Every
+ * message is deserialized into a {@link GMessageEnvelope} and injected into the
+ * local {@link IGMessageBroker} <b>exactly as it arrived</b>: the envelope
+ * already carries its {@code sourceModule}/{@code sourceComponent} (a remote
+ * emitter registered by {@code RabbitMqExternalMessageEmitterProviderSource}) and
+ * its {@code targetModule}/{@code targetComponent} (a real local receiver), which
+ * is all the broker needs to route it. The bridge never rewrites those fields.
+ * </p>
+ *
+ * <p>
+ * The container is started on {@link ApplicationReadyEvent} — after
  * {@code MessageBrokeringAssembler} has registered the external emitters in the
- * broker (which happens on {@code ContextRefreshedEvent}) — so inbound
- * envelopes always find their source emitter already registered.
+ * broker (which happens on {@code ContextRefreshedEvent}) — so inbound envelopes
+ * always find their source emitter already registered.
  * </p>
  *
  * Gebo.ai comment agent
@@ -56,7 +60,7 @@ public class RabbitMqInboundBridge {
 	private final GMessageEnvelopeCodec codec;
 	private final GeboRabbitMqTopologyDeclarer topologyDeclarer;
 
-	private final List<SimpleMessageListenerContainer> containers = new ArrayList<>();
+	private SimpleMessageListenerContainer container;
 
 	public RabbitMqInboundBridge(GeboRabbitMqMessagingProperties properties, ConnectionFactory connectionFactory,
 			IGMessageBroker broker, GMessageEnvelopeCodec codec, GeboRabbitMqTopologyDeclarer topologyDeclarer) {
@@ -68,54 +72,47 @@ public class RabbitMqInboundBridge {
 	}
 
 	/**
-	 * Declares the topology and starts one listener container per inbound bridge.
+	 * Declares the topology and starts the listener on this microservice's inbound
+	 * queue.
 	 */
 	@EventListener(ApplicationReadyEvent.class)
 	public void start() {
 		topologyDeclarer.declareIfEnabled();
-		for (BridgeDefinition definition : properties.getEmitters()) {
-			String queue = definition.getQueue();
-			if (queue == null || queue.isBlank()) {
-				LOGGER.warn("Inbound bridge for " + definition.getMessagingModuleId() + "."
-						+ definition.getMessagingSystemId() + " has no queue configured, skipping");
-				continue;
-			}
-			SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory);
-			container.setQueueNames(queue);
-			container.setMessageListener(message -> onMessage(definition, message.getBody()));
-			container.start();
-			containers.add(container);
-			LOGGER.info("Started RabbitMQ inbound listener on queue '" + queue + "' -> broker as emitter "
-					+ definition.getMessagingModuleId() + "." + definition.getMessagingSystemId());
+		String queue = properties.effectiveInboundQueue();
+		if (queue == null || queue.isBlank()) {
+			LOGGER.warn("No inbound queue configured (localMicroserviceId is unset); RabbitMQ inbound bridge disabled");
+			return;
 		}
+		container = new SimpleMessageListenerContainer(connectionFactory);
+		container.setQueueNames(queue);
+		container.setMessageListener(message -> onMessage(message.getBody()));
+		container.start();
+		LOGGER.info("Started RabbitMQ inbound listener on queue '" + queue + "'");
 	}
 
-	private void onMessage(BridgeDefinition definition, byte[] body) {
+	private void onMessage(byte[] body) {
 		try {
 			GMessageEnvelope<?> envelope = codec.deserialize(body);
-			// Ensure the source identity matches the registered emitter bridge so the
-			// broker can resolve it, regardless of what the remote side set.
-			envelope.setSourceModule(definition.getMessagingModuleId());
-			envelope.setSourceComponent(definition.getMessagingSystemId());
+			// Route as-is: the envelope's own source/target module and component drive
+			// the in-memory broker; no field is rewritten here.
 			broker.accept(envelope);
 		} catch (Throwable th) {
-			LOGGER.error("Error handling inbound RabbitMQ message for emitter "
-					+ definition.getMessagingModuleId() + "." + definition.getMessagingSystemId(), th);
+			LOGGER.error("Error handling inbound RabbitMQ message", th);
 		}
 	}
 
 	/**
-	 * Stops all the listener containers on shutdown.
+	 * Stops the listener container on shutdown.
 	 */
 	@PreDestroy
 	public void stop() {
-		for (SimpleMessageListenerContainer container : containers) {
+		if (container != null) {
 			try {
 				container.stop();
 			} catch (Throwable th) {
 				LOGGER.warn("Error stopping RabbitMQ inbound listener container", th);
 			}
+			container = null;
 		}
-		containers.clear();
 	}
 }

@@ -21,15 +21,17 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties;
-import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties.BridgeDefinition;
 
 /**
- * Declares the AMQP topology (exchange, queues, bindings) required by the
- * configured bridges, using a {@link RabbitAdmin}.
+ * Declares the AMQP topology this microservice needs: the shared exchange plus
+ * its <b>own</b> inbound queue, bound to the exchange with a routing key equal to
+ * its {@code localMicroserviceId}.
  *
  * <p>
- * Declaration is a no-op when {@code declareTopology} is {@code false},
- * assuming the topology is provisioned externally.
+ * Each microservice declares only the queue it consumes — peers declare theirs —
+ * so the whole architecture's topology emerges from every instance declaring its
+ * own inbound side. Declaration is a no-op when {@code declareTopology} is
+ * {@code false}, assuming the topology is provisioned externally.
  * </p>
  *
  * Gebo.ai comment agent
@@ -49,8 +51,7 @@ public class GeboRabbitMqTopologyDeclarer {
 	}
 
 	/**
-	 * Declares the exchange and, for every configured bridge that names a queue,
-	 * the queue and its binding to the exchange.
+	 * Declares the exchange and this microservice's inbound queue and binding.
 	 */
 	public void declareIfEnabled() {
 		if (!properties.isDeclareTopology()) {
@@ -61,35 +62,26 @@ public class GeboRabbitMqTopologyDeclarer {
 		rabbitAdmin.declareExchange(exchange);
 		LOGGER.info("Declared RabbitMQ exchange '" + exchange.getName() + "' of type '" + exchange.getType() + "'");
 
-		for (BridgeDefinition emitter : properties.getEmitters()) {
-			declareBridge(exchange.getName(), emitter);
-		}
-		for (BridgeDefinition receiver : properties.getReceivers()) {
-			declareBridge(exchange.getName(), receiver);
-		}
-	}
-
-	private void declareBridge(String exchangeName, BridgeDefinition definition) {
-		String queueName = definition.getQueue();
-		if (queueName == null || queueName.isBlank()) {
+		String microserviceId = properties.getLocalMicroserviceId();
+		String queueName = properties.effectiveInboundQueue();
+		if (queueName == null || queueName.isBlank() || microserviceId == null || microserviceId.isBlank()) {
+			LOGGER.warn("localMicroserviceId is unset; skipping inbound queue declaration");
 			return;
 		}
 		rabbitAdmin.declareQueue(new Queue(queueName));
-		rabbitAdmin.declareBinding(new Binding(queueName, DestinationType.QUEUE, exchangeName,
-				definition.effectiveRoutingKey(), null));
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("Declared queue '" + queueName + "' bound to '" + exchangeName + "' with key '"
-					+ definition.effectiveRoutingKey() + "'");
-		}
+		rabbitAdmin.declareBinding(
+				new Binding(queueName, DestinationType.QUEUE, exchange.getName(), microserviceId, null));
+		LOGGER.info("Declared inbound queue '" + queueName + "' bound to '" + exchange.getName()
+				+ "' with routing key '" + microserviceId + "'");
 	}
 
 	private Exchange buildExchange() {
 		String name = properties.getExchange();
-		String type = properties.getExchangeType() != null ? properties.getExchangeType().toLowerCase() : "topic";
+		String type = properties.getExchangeType() != null ? properties.getExchangeType().toLowerCase() : "direct";
 		return switch (type) {
-		case "direct" -> ExchangeBuilder.directExchange(name).durable(true).build();
+		case "topic" -> ExchangeBuilder.topicExchange(name).durable(true).build();
 		case "fanout" -> ExchangeBuilder.fanoutExchange(name).durable(true).build();
-		default -> ExchangeBuilder.topicExchange(name).durable(true).build();
+		default -> ExchangeBuilder.directExchange(name).durable(true).build();
 		};
 	}
 }
