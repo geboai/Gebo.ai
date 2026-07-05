@@ -17,7 +17,7 @@ RUN curl -L -o /opt/java/jdk-21_linux-x64_bin.tar.gz https://download.oracle.com
 WORKDIR /opt/java/
 RUN tar zxvfs jdk-21_linux-x64_bin.tar.gz
 RUN rm jdk-21_linux-x64_bin.tar.gz
-ENV JAVA_HOME=/opt/java/jdk-21.0.10
+ENV JAVA_HOME=/opt/java/jdk-21.0.11
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8

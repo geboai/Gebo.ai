@@ -1,4 +1,4 @@
-FROM geboai/platform:2.4
+FROM geboai/platform:2.5
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
@@ -14,7 +14,7 @@ RUN mkdir -p /opt/gebo.ai/home
 RUN mkdir -p /opt/gebo.ai/config
 RUN mkdir -p /opt/gebo.ai/work
 RUN mkdir -p /opt/gebo.ai/shares
-COPY gebo.ai.app-1.0.1.0-BETA-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-1.0.2.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 
@@ -31,4 +31,4 @@ ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 EXPOSE 12999
 WORKDIR /opt/gebo.ai
-ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-1.0.1.0-BETA-bootable.jar
+ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-1.0.2.0-SNAPSHOT-bootable.jar
