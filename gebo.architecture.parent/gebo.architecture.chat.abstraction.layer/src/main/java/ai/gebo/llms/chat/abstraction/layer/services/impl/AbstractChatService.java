@@ -46,6 +46,8 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -90,6 +92,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected LLMGeneratedResourceRepository generatedResourceRepository;
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseSecurityService;
 	final protected IGChatSessionLifeCycleService chatSessionLifecycleService;
+	final protected IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao;
+	final protected IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	/**

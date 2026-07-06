@@ -10,13 +10,11 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,16 +38,14 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService.ModelProviderCapabilities;
 import ai.gebo.model.base.GBaseObject;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
 /**
  * REST controller that exposes endpoints for chat-related functionality. AI
  * generated comments This controller provides APIs for interacting with LLM
- * models including chat responses, streaming, speech-to-text, and
- * text-to-speech conversions.
+ * models including chat responses and streaming. Speech-to-text and
+ * text-to-speech conversions have been moved to dedicated
+ * {@link GeboTextToSpeechController} and {@link GeboTranscriptController}.
  */
 @RestController
 
@@ -112,60 +108,6 @@ public class GeboChatController {
 	@GetMapping(value = "getProviderCapabilities", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ModelProviderCapabilities getProviderCapabilities(@RequestParam("modelCode") String modelCode) {
 		return chatService.getProviderCapabilities(modelCode);
-	}
-
-	/**
-	 * Simple response class for transcript text
-	 */
-	public static class TranscriptResponse {
-		public TranscriptResponse(String s) {
-			this.text = s;
-		}
-
-		public final String text;
-	}
-
-	/**
-	 * Transcribes audio input to text
-	 * 
-	 * @param request   The HTTP request containing the audio stream
-	 * @param modelCode The code identifying the model to use for transcription
-	 * @return A response containing the transcribed text
-	 * @throws LLMConfigException If there's a configuration issue with the model
-	 * @throws IOException        If there's an issue reading the input stream
-	 */
-	@PostMapping(value = "transcriptText", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public TranscriptResponse transcriptText(HttpServletRequest request, @RequestParam("modelCode") String modelCode)
-			throws LLMConfigException, IOException {
-		InputStream is = request.getInputStream();
-
-		return new TranscriptResponse(chatService.transcript(is, modelCode));
-	}
-
-	/**
-	 * Request class for text-to-speech conversion
-	 */
-	public static class SpeechRequest {
-		@NotNull
-		public String text = null;
-	}
-
-	/**
-	 * Converts text to speech audio
-	 * 
-	 * @param sr        The request containing the text to convert
-	 * @param modelCode The code identifying the model to use for speech synthesis
-	 * @return An input stream resource containing the audio data
-	 * @throws LLMConfigException If there's a configuration issue with the model
-	 * @throws IOException        If there's an issue with the input/output
-	 *                            operations
-	 */
-	@PostMapping(value = "speechText", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public InputStreamResource speechText(@RequestBody @Valid SpeechRequest sr,
-			@RequestParam("modelCode") String modelCode) throws LLMConfigException, IOException {
-		InputStream is = chatService.speech(sr.text, modelCode);
-		InputStreamResource resource = new InputStreamResource(is);
-		return resource;
 	}
 
 	/**

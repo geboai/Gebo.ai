@@ -69,44 +69,6 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		return false;
 	}
 
-	/**
-	 * Checks if the chat model supports generating transcripts.
-	 *
-	 * @return True if supports transcripts, false otherwise.
-	 */
-	public default boolean isSupportsTranscript() {
-		return false;
-	}
-
-	/**
-	 * Provides a model for generating transcripts.
-	 * 
-	 * @return An instance of IGConfigurableTranscriptModel.
-	 * @throws LLMConfigException if transcript functionalities are not implemented.
-	 */
-	public default IGConfigurableTranscriptModel getTranscriptModel() throws LLMConfigException {
-		throw new LLMConfigException("This provider does not implement transcript functionalities");
-	}
-
-	/**
-	 * Checks if the chat model supports speech output.
-	 *
-	 * @return True if supports speech, false otherwise.
-	 */
-	public default boolean isSupportsSpeech() {
-		return false;
-	}
-
-	/**
-	 * Provides a model for text-to-speech conversion.
-	 * 
-	 * @return An instance of IGConfigurableTextToSpeechModel.
-	 * @throws LLMConfigException if speech functionalities are not implemented.
-	 */
-	public default IGConfigurableTextToSpeechModel getSpeechModel() throws LLMConfigException {
-		throw new LLMConfigException("This provider does not implement speech functionalities");
-	}
-
 	/*********************************************************************************
 	 * Adaptes streaming response to specific infrastructure element calling
 	 * requirement

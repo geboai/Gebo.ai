@@ -37,6 +37,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -81,11 +83,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
 			IGChatSessionLifeCycleService chatSessionLifecycleService, IGDocumentsSearchService ragSearchService,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
-			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao) {
+			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
+			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
+			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao) {
 
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
-				knowledgeBaseSecurityService, chatSessionLifecycleService);
+				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -218,9 +222,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				IGConfigurableChatModel model = chatProfileModel.getChatModel();
 				GBaseChatModelConfig c = (GBaseChatModelConfig) model.getConfig();
 				List<String> functions = c.getEnabledFunctions();
-				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(),
-						model.isSupportsTranscript(), model.isSupportsSpeech(), model.isSupportsStructuredOutput(),
-						model.isSupportsFunctionsCall(), callbacksRepoPattern.getEnabledToolsTree(functions));
+				boolean supportsTranscript = transcriptModelsDao.defaultHandler() != null;
+				boolean supportsSpeech = ttsModelsDao.defaultHandler() != null;
+				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
+						supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
+						callbacksRepoPattern.getEnabledToolsTree(functions));
 				return cap;
 			}
 		}

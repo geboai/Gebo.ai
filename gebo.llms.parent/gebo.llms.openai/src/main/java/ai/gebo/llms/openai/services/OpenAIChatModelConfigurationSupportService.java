@@ -36,12 +36,8 @@ import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
-import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
-import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
@@ -49,8 +45,6 @@ import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAIChatModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
-import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
-import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
@@ -78,10 +72,6 @@ public class OpenAIChatModelConfigurationSupportService
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;
-	final OpenAITextToSpeechModelConfigurationSupportService ttsOpenAISupportService;
-	final OpenAITranscriptModelConfigurationSupportService transcriptOpenAISupportService;
-	final IGTextToSpeechModelRuntimeConfigurationDao ttsDao;
-	final IGTranscriptModelRuntimeConfigurationDao transcriptDao;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
@@ -100,14 +90,12 @@ public class OpenAIChatModelConfigurationSupportService
 
 		}
 
-		IGConfigurableTranscriptModel transcriptModel = null;
-		IGConfigurableTextToSpeechModel ttsModel = null;
 		String apiKey = null;
 		String user = null;
 
 		/**
 		 * Configures the OpenAI chat model based on the provided configuration.
-		 * 
+		 *
 		 * @param config The OpenAI chat model configuration
 		 * @param type   The chat model type
 		 * @return The configured OpenAI chat model
@@ -117,7 +105,6 @@ public class OpenAIChatModelConfigurationSupportService
 		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
 				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 
-			this.transcriptModel = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
 				throw new LLMConfigException("OpenAI api cannot work without needed api key configuration");
 			try {
@@ -204,68 +191,6 @@ public class OpenAIChatModelConfigurationSupportService
 		@Override
 		public boolean isSupportsFunctionsCall() {
 			return true;
-		}
-
-		/**
-		 * Indicates whether the model supports text-to-speech.
-		 * 
-		 * @return true as OpenAI models support text-to-speech
-		 */
-		@Override
-		public boolean isSupportsSpeech() {
-			return true;
-		}
-
-		/**
-		 * Indicates whether the model supports transcript generation.
-		 * 
-		 * @return true as OpenAI models support transcript generation
-		 */
-		@Override
-		public boolean isSupportsTranscript() {
-			return true;
-		}
-
-		/**
-		 * Gets the speech model for text-to-speech functionality. Creates a new one if
-		 * not available.
-		 * 
-		 * @return A configurable text-to-speech model
-		 * @throws LLMConfigException if there is an error creating the model
-		 */
-		@Override
-		public IGConfigurableTextToSpeechModel getSpeechModel() throws LLMConfigException {
-			if (this.ttsModel == null) {
-				ttsModel = ttsDao.defaultHandler();
-				if (ttsModel == null) {
-					GOpenAITextToSpeechModelConfig configuration = ttsOpenAISupportService
-							.createBaseConfiguration("tts-1");
-					configuration.setApiSecretCode(this.config.getApiSecretCode());
-					ttsModel = ttsOpenAISupportService.create(configuration);
-				}
-			}
-			return ttsModel;
-		}
-
-		/**
-		 * Gets the transcript model for speech-to-text functionality. Creates a new one
-		 * if not available.
-		 * 
-		 * @return A configurable transcript model
-		 * @throws LLMConfigException if there is an error creating the model
-		 */
-		@Override
-		public IGConfigurableTranscriptModel getTranscriptModel() throws LLMConfigException {
-			if (transcriptModel == null) {
-				transcriptModel = transcriptDao.defaultHandler();
-				if (transcriptModel == null) {
-					GOpenAITranscriptModelConfig baseConfig = transcriptOpenAISupportService
-							.createBaseConfiguration("whisper-1");
-					baseConfig.setApiSecretCode(this.config.getApiSecretCode());
-					transcriptModel = transcriptOpenAISupportService.create(baseConfig);
-				}
-			}
-			return transcriptModel;
 		}
 
 		@Override
