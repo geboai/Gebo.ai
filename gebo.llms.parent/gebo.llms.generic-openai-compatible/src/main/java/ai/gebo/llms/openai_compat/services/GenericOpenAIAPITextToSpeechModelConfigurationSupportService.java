@@ -17,6 +17,7 @@ import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
@@ -25,6 +26,7 @@ import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
@@ -65,6 +67,8 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	 * Factory for creating LLM service clients (timeout/retry config from application.yml)
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Implementation of OpenAI's text-to-speech model that extends the abstract
@@ -179,9 +183,8 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	}
 	@Override
 	public OperationStatus<GenericOpenAIAPITextToSpeechModelConfig> insertAndConfigure(
-			GenericOpenAIAPITextToSpeechModelConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+			GenericOpenAIAPITextToSpeechModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		return configureHandler.insertAndConfigure(config, type);
 	}
 
 }

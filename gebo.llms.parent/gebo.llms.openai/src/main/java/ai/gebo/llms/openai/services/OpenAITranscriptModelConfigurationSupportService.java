@@ -27,6 +27,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
@@ -35,6 +36,7 @@ import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyI
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelChoice;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
@@ -68,6 +70,8 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	IGModelApiAccessReadUtils apiKeyReader;
 	@Autowired
 	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	@Autowired
+	ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Implementation of a configurable transcript model for OpenAI services.
@@ -204,8 +208,8 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	}
 
 	@Override
-	public OperationStatus<GOpenAITranscriptModelConfig> insertAndConfigure(GOpenAITranscriptModelConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+	public OperationStatus<GOpenAITranscriptModelConfig> insertAndConfigure(GOpenAITranscriptModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }
