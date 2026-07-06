@@ -59,6 +59,7 @@ import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyC
 import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
 import { GenericOpenAiapiChatModelsConfigurationControllerService } from './api/genericOpenAiapiChatModelsConfigurationController.service';
 import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from './api/genericOpenAiapiEmbeddingModelsConfigurationController.service';
+import { GenericOpenAiapiImageModelsConfigurationControllerService } from './api/genericOpenAiapiImageModelsConfigurationController.service';
 import { GenericOpenAiapiTextToSpeechModelsConfigurationControllerService } from './api/genericOpenAiapiTextToSpeechModelsConfigurationController.service';
 import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from './api/genericOpenAiapiTranscriptModelsConfigurationController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
@@ -70,6 +71,7 @@ import { GoogleVertexChatModelsConfigurationControllerService } from './api/goog
 import { GoogleVertexEmbeddingModelsConfigurationControllerService } from './api/googleVertexEmbeddingModelsConfigurationController.service';
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
 import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
+import { ImageModelsControllerService } from './api/imageModelsController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
 import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
@@ -93,15 +95,19 @@ import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollam
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
 import { OpenAiChatModelsConfigurationControllerService } from './api/openAiChatModelsConfigurationController.service';
 import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openAiEmbeddingModelsConfigurationController.service';
+import { OpenAiImageModelsConfigurationControllerService } from './api/openAiImageModelsConfigurationController.service';
 import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/openAiTextToSpeechModelsConfigurationController.service';
 import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
+import { RankerModelsControllerService } from './api/rankerModelsController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SecretsControllerService } from './api/secretsController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
+import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
+import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
@@ -172,6 +178,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericOpenAiRankerModelsConfigurationControllerService,
     GenericOpenAiapiChatModelsConfigurationControllerService,
     GenericOpenAiapiEmbeddingModelsConfigurationControllerService,
+    GenericOpenAiapiImageModelsConfigurationControllerService,
     GenericOpenAiapiTextToSpeechModelsConfigurationControllerService,
     GenericOpenAiapiTranscriptModelsConfigurationControllerService,
     GitSystemsControllerService,
@@ -183,6 +190,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GoogleVertexEmbeddingModelsConfigurationControllerService,
     GoogleWorkspaceAccessHandshakeControllerService,
     GraphRagConfigurationControllerService,
+    ImageModelsControllerService,
     IngestionFileTypesLibraryControllerService,
     IntegrationInputControllerService,
     IntegrationSystemsControllerService,
@@ -206,15 +214,19 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     OnnxTransformersEmbeddingModelsConfigurationControllerService,
     OpenAiChatModelsConfigurationControllerService,
     OpenAiEmbeddingModelsConfigurationControllerService,
+    OpenAiImageModelsConfigurationControllerService,
     OpenAiTextToSpeechModelsConfigurationControllerService,
     OpenAiTranscriptModelsConfigurationControllerService,
     ProjectsControllerService,
     PromptTemplatesControllerService,
+    RankerModelsControllerService,
     ReindexingFrequencyOptionsControllerService,
     SecretsControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
+    TextToSpeechModelsControllerService,
     TokenRenewControllerService,
+    TranscriptModelsControllerService,
     UiTextResourcesControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,

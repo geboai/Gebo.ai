@@ -10,12 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface GUserChatInfo { 
-    description?: string;
+export interface GObjectRefGBaseRankerModelConfig { 
+    className?: string;
     code?: string;
-    chatCreationDateTime?: Date;
-    username?: string;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    ragChat?: boolean;
+    description?: string;
 }

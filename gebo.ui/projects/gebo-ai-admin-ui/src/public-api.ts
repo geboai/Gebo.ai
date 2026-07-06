@@ -51,6 +51,8 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-transcript-model-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-text-to-speech-model-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-transcript-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-image-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-image-model-admin.component";
 export * from "./lib/admin-ui/gebo-ai-standard-modules-injections.module";
 export * from "./lib/admin-ui/main-panels/build-packaging-systems/build-packaging-systems.component";
 export * from "./lib/admin-ui/main-panels/chat-profiles/chat-profiles.component";

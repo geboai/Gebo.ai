@@ -9,13 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GOpenAIImageModelConfig } from './gOpenAIImageModelConfig';
+import { GUserMessage } from './gUserMessage';
 
-export interface GUserChatInfo { 
-    description?: string;
-    code?: string;
-    chatCreationDateTime?: Date;
-    username?: string;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    ragChat?: boolean;
+export interface OperationStatusGOpenAIImageModelConfig { 
+    result?: GOpenAIImageModelConfig;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

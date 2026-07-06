@@ -9,13 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GBaseImageModelConfig } from './gBaseImageModelConfig';
+import { GObjectRefGBaseImageModelConfig } from './gObjectRefGBaseImageModelConfig';
 
-export interface GUserChatInfo { 
-    description?: string;
-    code?: string;
-    chatCreationDateTime?: Date;
-    username?: string;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    ragChat?: boolean;
+export interface ConfigurationEntryGBaseImageModelConfig { 
+    configuration?: GBaseImageModelConfig;
+    objectReference?: GObjectRefGBaseImageModelConfig;
 }

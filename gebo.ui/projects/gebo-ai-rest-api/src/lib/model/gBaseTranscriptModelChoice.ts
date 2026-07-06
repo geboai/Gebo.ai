@@ -9,19 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ModelMetaInfo } from './modelMetaInfo';
 
-export interface DocumentReferenceView { 
-    name?: string;
-    extension?: string;
-    contentType?: string;
-    parentProjectCode?: string;
-    rootKnowledgebaseCode?: string;
-    description?: string;
-    parentVirtualFolderCode?: string;
-    relativePath?: string;
-    messagingModuleId?: string;
+export interface GBaseTranscriptModelChoice { 
     code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
     creationDate?: Date;
     modificationDate?: Date;
-    deleted?: boolean;
+    version?: string;
+    metaInfos?: ModelMetaInfo;
+    informativeUrl?: string;
+    contextLength?: number;
+    nativeModelMetaInfos?: any;
 }
