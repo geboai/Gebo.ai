@@ -17,20 +17,17 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GBaseChatModelChoice } from '../model/gBaseChatModelChoice';
-import { GBaseObject } from '../model/gBaseObject';
-import { GeboChatRequest } from '../model/geboChatRequest';
-import { GeboChatResponse } from '../model/geboChatResponse';
-import { GeboChatUserInfo } from '../model/geboChatUserInfo';
-import { ModelProviderCapabilities } from '../model/modelProviderCapabilities';
-import { ServerSentEventString } from '../model/serverSentEventString';
+import { GOpenAITextToSpeechModelConfig } from '../model/gOpenAITextToSpeechModelConfig';
+import { OperationStatusBoolean } from '../model/operationStatusBoolean';
+import { OperationStatusGOpenAITextToSpeechModelConfig } from '../model/operationStatusGOpenAITextToSpeechModelConfig';
+import { OperationStatusListGOpenAITextToSpeechModelChoice } from '../model/operationStatusListGOpenAITextToSpeechModelChoice';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class GeboChatControllerService {
+export class OpenAiTextToSpeechModelsConfigurationControllerService {
 
     protected basePath = 'http://localhost:12999';
     public defaultHeaders = new HttpHeaders();
@@ -68,13 +65,13 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chat(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<GeboChatResponse>;
-    public chat(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatResponse>>;
-    public chat(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatResponse>>;
-    public chat(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
+    public deleteOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
+    public deleteOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
+    public deleteOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling chat.');
+            throw new Error('Required parameter body was null or undefined when calling deleteOpenAITextToSpeechModelConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -97,7 +94,7 @@ export class GeboChatControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GeboChatResponse>('post',`${this.basePath}/api/users/GeboDirectModelChatController/chat`,
+        return this.httpClient.request<OperationStatusBoolean>('post',`${this.basePath}/api/admin/OpenAITextToSpeechModelsConfigurationController/deleteOpenAITextToSpeechModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -111,22 +108,22 @@ export class GeboChatControllerService {
     /**
      * 
      * 
-     * @param modelCode 
+     * @param code 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelMetaInfos(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GBaseChatModelChoice>;
-    public getChatModelMetaInfos(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GBaseChatModelChoice>>;
-    public getChatModelMetaInfos(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GBaseChatModelChoice>>;
-    public getChatModelMetaInfos(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findOpenAITextToSpeechModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GOpenAITextToSpeechModelConfig>;
+    public findOpenAITextToSpeechModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GOpenAITextToSpeechModelConfig>>;
+    public findOpenAITextToSpeechModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GOpenAITextToSpeechModelConfig>>;
+    public findOpenAITextToSpeechModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (modelCode === null || modelCode === undefined) {
-            throw new Error('Required parameter modelCode was null or undefined when calling getChatModelMetaInfos.');
+        if (code === null || code === undefined) {
+            throw new Error('Required parameter code was null or undefined when calling findOpenAITextToSpeechModelConfigByCode.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (modelCode !== undefined && modelCode !== null) {
-            queryParameters = queryParameters.set('modelCode', <any>modelCode);
+        if (code !== undefined && code !== null) {
+            queryParameters = queryParameters.set('code', <any>code);
         }
 
         let headers = this.defaultHeaders;
@@ -144,139 +141,9 @@ export class GeboChatControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GBaseChatModelChoice>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getChatModelMetaInfos`,
+        return this.httpClient.request<GOpenAITextToSpeechModelConfig>('get',`${this.basePath}/api/admin/OpenAITextToSpeechModelsConfigurationController/findOpenAITextToSpeechModelConfigByCode`,
             {
                 params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param modelCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getChatModelUserInfo(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
-    public getChatModelUserInfo(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
-    public getChatModelUserInfo(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
-    public getChatModelUserInfo(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (modelCode === null || modelCode === undefined) {
-            throw new Error('Required parameter modelCode was null or undefined when calling getChatModelUserInfo.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (modelCode !== undefined && modelCode !== null) {
-            queryParameters = queryParameters.set('modelCode', <any>modelCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<GeboChatUserInfo>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getChatModelUserInfo`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param modelCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getProviderCapabilities(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
-    public getProviderCapabilities(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
-    public getProviderCapabilities(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
-    public getProviderCapabilities(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (modelCode === null || modelCode === undefined) {
-            throw new Error('Required parameter modelCode was null or undefined when calling getProviderCapabilities.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (modelCode !== undefined && modelCode !== null) {
-            queryParameters = queryParameters.set('modelCode', <any>modelCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<ModelProviderCapabilities>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getProviderCapabilities`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getVisibleKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
-    public getVisibleKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
-    public getVisibleKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
-    public getVisibleKnowledgeBases(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases`,
-            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -292,20 +159,20 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamResponse(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<ServerSentEventString>>;
-    public streamResponse(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServerSentEventString>>>;
-    public streamResponse(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServerSentEventString>>>;
-    public streamResponse(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getOpenAITextToSpeechModels(body: GOpenAITextToSpeechModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGOpenAITextToSpeechModelChoice>;
+    public getOpenAITextToSpeechModels(body: GOpenAITextToSpeechModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGOpenAITextToSpeechModelChoice>>;
+    public getOpenAITextToSpeechModels(body: GOpenAITextToSpeechModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGOpenAITextToSpeechModelChoice>>;
+    public getOpenAITextToSpeechModels(body: GOpenAITextToSpeechModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling streamResponse.');
+            throw new Error('Required parameter body was null or undefined when calling getOpenAITextToSpeechModels.');
         }
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
-            'text/event-stream'
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -321,7 +188,101 @@ export class GeboChatControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDirectModelChatController/streamResponse`,
+        return this.httpClient.request<OperationStatusListGOpenAITextToSpeechModelChoice>('post',`${this.basePath}/api/admin/OpenAITextToSpeechModelsConfigurationController/getOpenAITextToSpeechModels`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public insertOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGOpenAITextToSpeechModelConfig>;
+    public insertOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGOpenAITextToSpeechModelConfig>>;
+    public insertOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGOpenAITextToSpeechModelConfig>>;
+    public insertOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling insertOpenAITextToSpeechModelConfig.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGOpenAITextToSpeechModelConfig>('post',`${this.basePath}/api/admin/OpenAITextToSpeechModelsConfigurationController/insertOpenAITextToSpeechModelConfig`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGOpenAITextToSpeechModelConfig>;
+    public updateOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGOpenAITextToSpeechModelConfig>>;
+    public updateOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGOpenAITextToSpeechModelConfig>>;
+    public updateOpenAITextToSpeechModelConfig(body: GOpenAITextToSpeechModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateOpenAITextToSpeechModelConfig.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGOpenAITextToSpeechModelConfig>('post',`${this.basePath}/api/admin/OpenAITextToSpeechModelsConfigurationController/updateOpenAITextToSpeechModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

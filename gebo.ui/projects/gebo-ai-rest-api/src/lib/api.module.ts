@@ -48,6 +48,8 @@ import { GeboMcpServerUserControllerService } from './api/geboMcpServerUserContr
 import { GeboModulesConfigControllerService } from './api/geboModulesConfigController.service';
 import { GeboNeo4jModuleSetupControllerService } from './api/geboNeo4jModuleSetupController.service';
 import { GeboRagChatControllerService } from './api/geboRagChatController.service';
+import { GeboTextToSpeechControllerService } from './api/geboTextToSpeechController.service';
+import { GeboTranscriptControllerService } from './api/geboTranscriptController.service';
 import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsController.service';
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
@@ -57,6 +59,8 @@ import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyC
 import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
 import { GenericOpenAiapiChatModelsConfigurationControllerService } from './api/genericOpenAiapiChatModelsConfigurationController.service';
 import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from './api/genericOpenAiapiEmbeddingModelsConfigurationController.service';
+import { GenericOpenAiapiTextToSpeechModelsConfigurationControllerService } from './api/genericOpenAiapiTextToSpeechModelsConfigurationController.service';
+import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from './api/genericOpenAiapiTranscriptModelsConfigurationController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
 import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingController.service';
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
@@ -89,6 +93,8 @@ import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollam
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
 import { OpenAiChatModelsConfigurationControllerService } from './api/openAiChatModelsConfigurationController.service';
 import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openAiEmbeddingModelsConfigurationController.service';
+import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/openAiTextToSpeechModelsConfigurationController.service';
+import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
@@ -155,6 +161,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GeboModulesConfigControllerService,
     GeboNeo4jModuleSetupControllerService,
     GeboRagChatControllerService,
+    GeboTextToSpeechControllerService,
+    GeboTranscriptControllerService,
     GeboUserChatUploadsControllerService,
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
@@ -164,6 +172,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericOpenAiRankerModelsConfigurationControllerService,
     GenericOpenAiapiChatModelsConfigurationControllerService,
     GenericOpenAiapiEmbeddingModelsConfigurationControllerService,
+    GenericOpenAiapiTextToSpeechModelsConfigurationControllerService,
+    GenericOpenAiapiTranscriptModelsConfigurationControllerService,
     GitSystemsControllerService,
     GoogleDriveBrowsingControllerService,
     GoogleDriveSystemsControllerService,
@@ -196,6 +206,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     OnnxTransformersEmbeddingModelsConfigurationControllerService,
     OpenAiChatModelsConfigurationControllerService,
     OpenAiEmbeddingModelsConfigurationControllerService,
+    OpenAiTextToSpeechModelsConfigurationControllerService,
+    OpenAiTranscriptModelsConfigurationControllerService,
     ProjectsControllerService,
     PromptTemplatesControllerService,
     ReindexingFrequencyOptionsControllerService,

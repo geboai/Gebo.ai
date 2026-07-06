@@ -9,13 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GOpenAITextToSpeechModelConfig } from './gOpenAITextToSpeechModelConfig';
+import { GUserMessage } from './gUserMessage';
 
-export interface GUserChatInfo { 
-    description?: string;
-    code?: string;
-    username?: string;
-    ragChat?: boolean;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    chatCreationDateTime?: Date;
+export interface OperationStatusGOpenAITextToSpeechModelConfig { 
+    result?: GOpenAITextToSpeechModelConfig;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

@@ -10,12 +10,16 @@
  * Do not edit the class manually.
  */
 
-export interface GUserChatInfo { 
-    description?: string;
+export interface GenericOpenAITranscriptModelType { 
     code?: string;
-    username?: string;
-    ragChat?: boolean;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    chatCreationDateTime?: Date;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelConfigurationClass?: string;
+    baseUrl?: string;
+    modelsListProvider?: string;
+    providerId?: string;
+    optionalAuthentication?: boolean;
 }
