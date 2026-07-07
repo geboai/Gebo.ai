@@ -20,7 +20,7 @@ import ai.gebo.security.services.IGSecurityService;
 public class StringToStringToolCallingNetworkAgent extends GBaseToolCallingNetworkAgent<String, String> {
 
 	private static final String TOOL_CALLING_AGENT_THAT_RECEIVES_TEXT_INSTRUCTIONS_CALLS_TOOLS_AND_RESPONDS_WITH_TEXT = "Tool-calling agent that receives text instructions, invokes the enabled tools and responds back with text";
-	public static final String STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE = "stringToStringToolCallingAgentService";
+	public static final String STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE = "toolCallingAgentService";
 
 	public StringToStringToolCallingNetworkAgent(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
