@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItem;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItemParameter;
@@ -35,8 +36,12 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 	private static final String KNOWLEDGE_BASE_DEEP_SEARCH = "Knowledge base deep search";
 	private static final String KNOWLEDGE_BASE_SEARCH = "Knowledge base search";
 	private static final String INTERNAL_KNOWLEDGE_OPTION = "internalKnowledgeOption";
+	private static final String IMAGE_GENERATION_ID = "imageGeneration";
+	private static final String IMAGE_GENERATION_DESCRIPTION = "Image generation";
+	private static final String IMAGE_GENERATION_ICON = "pi pi-image";
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledDeepSearchDataSourceLookupService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
+	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
 	static final PipelineChatMenu agenticChatMenu = new PipelineChatMenu();
 	static final PipelineChatMenuItem agenticChatItem = new PipelineChatMenuItem();
 
@@ -130,6 +135,20 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			ikMenu.setMenuId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenu.setItems(List.of(ikMenuItem));
 			outMenu.add(ikMenu);
+		}
+		// Image generation shortcut is offered only when an image model is configured
+		if (DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.isImageGenerationAvailable(imageModelsDao)) {
+			PipelineChatMenuItem imageMenuItem = new PipelineChatMenuItem();
+			imageMenuItem.setOptionId(IMAGE_GENERATION_ID);
+			imageMenuItem.setDescription(IMAGE_GENERATION_DESCRIPTION);
+			imageMenuItem.setIcon(IMAGE_GENERATION_ICON);
+			imageMenuItem.setRouteOption(RespondingWith.IMAGE_GENERATION_RESPONSE.name());
+			PipelineChatMenu imageMenu = new PipelineChatMenu();
+			imageMenu.setMenuId(IMAGE_GENERATION_ID);
+			imageMenu.setDescription(IMAGE_GENERATION_DESCRIPTION);
+			imageMenu.setIcon(IMAGE_GENERATION_ICON);
+			imageMenu.setItems(new ArrayList<>(List.of(imageMenuItem)));
+			outMenu.add(imageMenu);
 		}
 		return outMenu;
 	}

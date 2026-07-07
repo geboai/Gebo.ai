@@ -20,7 +20,8 @@ public enum DeliverableIntent {
 	ANALISYS("User EXPLICITLY requested a structured/detailed report or a multi-source analysis (e.g. a report, detailed report, in-depth analysis, or comparison across many documents). Do NOT choose this for ordinary questions that can be answered directly.", "detailed analisys report", 6), // (structured,
 																														// detailed,
 																														// multi-section)
-	UNKNOWN("Fallback, cannot decide clearly the user intent", "synthetic outcome", 7);// (fallback → be
+	IMAGE_GENERATION("User EXPLICITLY asked to generate, create, draw, render, paint or design a NEW image, picture, illustration, logo, icon, diagram-as-image, artwork or photo (or some synonyms of this in all languages). Do NOT choose this when the user only asks to find/search existing images or to describe an image.", "generated image artifact", 7),
+	UNKNOWN("Fallback, cannot decide clearly the user intent", "synthetic outcome", 8);// (fallback → be
 
 	final String explanation;
 	final String agentDeliverableCompleteness;

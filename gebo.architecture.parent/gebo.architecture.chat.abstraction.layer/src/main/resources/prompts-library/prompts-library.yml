@@ -121,6 +121,13 @@ ai.gebo.prompts:
       chatHistory: REQUIRED
       contextDocuments: REQUIRED
       toolsCalling: NOT_REQUIRED
+    - promptUse: default-pipeline-image-prompt-crafting-prompt
+      langCode: en
+      systemReference: /prompts-library/en/default-pipeline-image-prompt-crafting-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-image-prompt-crafting-prompt-user-prompt.txt
+      chatHistory: NOT_REQUIRED
+      contextDocuments: NOT_REQUIRED
+      toolsCalling: NOT_REQUIRED
     - promptUse: default-pipeline-rag-search-planner
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-rag-search-planner-system-prompt.txt
