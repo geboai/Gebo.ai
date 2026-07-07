@@ -121,22 +121,6 @@ public class GeboChatControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void speechTextTest() {
-        SpeechRequest body = null;
-        String modelCode = null;
-        File response = api.speechText(body, modelCode);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
     public void streamResponseTest() {
         GeboChatRequest body = null;
         List<ServerSentEventString> response = api.streamResponse(body);
@@ -151,11 +135,4 @@ public class GeboChatControllerApiTest {
      * @throws ApiException
      *          if the Api call fails
      */
-    @Test
-    public void transcriptTextTest() {
-        String modelCode = null;
-        TranscriptResponse response = api.transcriptText(modelCode);
-
-        // TODO: test validations
-    }
 }
