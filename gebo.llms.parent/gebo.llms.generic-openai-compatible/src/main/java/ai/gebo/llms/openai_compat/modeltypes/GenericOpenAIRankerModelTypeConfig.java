@@ -1,6 +1,7 @@
 package ai.gebo.llms.openai_compat.modeltypes;
 
 import ai.gebo.llms.abstraction.layer.model.GRankerModelType;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelConfig;
 import lombok.Data;
 
 @Data
@@ -15,5 +16,9 @@ public class GenericOpenAIRankerModelTypeConfig extends GRankerModelType {
 	private boolean optionalAuthentication = false;
 
 	private String defaultModel = null;
+
+	public GenericOpenAIRankerModelTypeConfig() {
+		setModelConfigurationClass(GenericOpenAIAPIRankerModelConfig.class.getName());
+	}
 
 }

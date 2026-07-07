@@ -55,6 +55,7 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 	static {
 		type.setCode("openai-tts");
 		type.setDescription("OpenAI TTS Service");
+		type.setModelConfigurationClass(GOpenAITextToSpeechModelConfig.class.getName());
 	}
 
 	/**
