@@ -167,8 +167,8 @@ public class GBaseMessageBroker implements IGMessageBroker {
 				IGMessageReceiver receiver = receivers.get(envelope.getTargetModule())
 						.get(envelope.getTargetComponent());
 				IGMessageEmitter emitter = emitters.get(envelope.getSourceModule()).get(envelope.getSourceComponent());
-				if (emitter.getEmittedPayloadTypes() == null
-						|| !emitter.getEmittedPayloadTypes().contains(envelope.getPayloadType())) {
+				if (!emitter.isEmitEveryPayloadType() && (emitter.getEmittedPayloadTypes() == null
+						|| !emitter.getEmittedPayloadTypes().contains(envelope.getPayloadType()))) {
 					throw new IllegalStateException("The emitter " + emitter.getMessagingSystemId()
 							+ " cannot emit message of type " + envelope.getPayloadType()
 							+ " that's not in its list of EmittedPayloadTypes envelope:" + envelope.toString());
