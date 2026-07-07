@@ -1,0 +1,19 @@
+@if (objectUrl) {
+  @if (isImage) {
+    <div class="gebo-ai-reusable-chat__generated-image">
+      <img class="gebo-ai-reusable-chat__generated-image-img" [src]="objectUrl" [alt]="ref?.fileName || ref?.code" />
+      <a class="gebo-ai-reusable-chat__generated-image-download" [href]="objectUrl"
+        [download]="ref?.fileName || ref?.code">
+        <i class="pi pi-download"></i> {{ ref?.fileName || ref?.code }}
+      </a>
+    </div>
+  } @else {
+    <a class="gebo-ai-reusable-chat__generated-file" [href]="objectUrl" [download]="ref?.fileName || ref?.code">
+      <i [class]="extendedRef?.fileType?.icon || 'pi pi-file'"></i> {{ ref?.fileName || ref?.code }}
+    </a>
+  }
+} @else if (failed) {
+  <span class="gebo-ai-reusable-chat__generated-file">
+    <i class="pi pi-exclamation-triangle"></i> {{ ref?.fileName || ref?.code }}
+  </span>
+}

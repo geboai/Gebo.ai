@@ -26,7 +26,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-04T10:49:15.119457200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-07T14:58:38.267884300+02:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -78,6 +78,7 @@ public class GeboChatRequest {
     SUMMARY("SUMMARY"),
     PURE_SEARCH("PURE_SEARCH"),
     ANALISYS("ANALISYS"),
+    IMAGE_GENERATION("IMAGE_GENERATION"),
     UNKNOWN("UNKNOWN");
 
     private String value;

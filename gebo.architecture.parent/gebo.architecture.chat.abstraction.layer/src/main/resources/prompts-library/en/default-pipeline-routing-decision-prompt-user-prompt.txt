@@ -44,6 +44,10 @@ Internal KB deep-search is represented by the special source code: IKB_SYSTEM.
 
 DECISION RULES (apply in this exact priority order):
 
+IMAGE GENERATION OVERRIDE:
+If deliverable=IMAGE_GENERATION (the user asked to generate/create/draw/render/design a NEW image, picture, illustration, logo or artwork), choose IMAGE_GENERATION_RESPONSE.
+This decision takes precedence over every other rule below and is NOT affected by context sufficiency (a new image must always be generated).
+
 GLOBAL TOOL OVERRIDE:
 If the user explicitly asks to use tools or perform an action that requires a tool in (F), choose TOOLS_USE_RESPONSE.
 
@@ -127,6 +131,7 @@ PURE_LLM_RESPONSE
 RAG_LLM_RESPONSE
 DEEP_SEARCH_RESPONSE
 TOOLS_USE_RESPONSE
+IMAGE_GENERATION_RESPONSE
 
 
 deepSearchedSystems rules:
