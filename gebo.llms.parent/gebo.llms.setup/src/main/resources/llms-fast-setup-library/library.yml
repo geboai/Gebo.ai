@@ -50,6 +50,20 @@ ai.gebo.llms.vendors.setup.config:
             - code: Qwen3-Reranker-4B
               description: Qwen3 Reranker 4B
               defaultChoice: true
+        - type: IMAGESGEN
+          serviceHandler: images-regolo.ai
+          doModelsLookup: false
+          choices:
+            - code: Qwen-Image
+              description: Qwen Image (text to image generation)
+              defaultChoice: true
+        - type: TRANSCRIPT
+          serviceHandler: transcript-regolo.ai
+          doModelsLookup: false
+          choices:
+            - code: faster-whisper-large-v3
+              description: Faster Whisper Large v3 (speech to text)
+              defaultChoice: true
 
     - vendorInfo:
         vendorId: openai
@@ -91,6 +105,39 @@ ai.gebo.llms.vendors.setup.config:
             - code: text-embedding-3-large
               description: text embedding 3 large
               defaultChoice: true
+        - type: IMAGESGEN
+          serviceHandler: image-generation-OpenAI
+          doModelsLookup: false
+          choices:
+            - code: gpt-image-1
+              description: GPT Image 1 (high quality image generation)
+              defaultChoice: true
+            - code: dall-e-3
+              description: DALL-E 3
+            - code: dall-e-2
+              description: DALL-E 2
+        - type: TTS
+          serviceHandler: openai-tts
+          doModelsLookup: false
+          choices:
+            - code: gpt-4o-mini-tts
+              description: GPT-4o mini text to speech
+              defaultChoice: true
+            - code: tts-1
+              description: TTS 1 (low latency)
+            - code: tts-1-hd
+              description: TTS 1 HD (higher quality)
+        - type: TRANSCRIPT
+          serviceHandler: openai-transcript
+          doModelsLookup: false
+          choices:
+            - code: gpt-4o-transcribe
+              description: GPT-4o Transcribe (speech to text)
+              defaultChoice: true
+            - code: gpt-4o-mini-transcribe
+              description: GPT-4o mini Transcribe
+            - code: whisper-1
+              description: Whisper 1
     - vendorInfo:
         vendorId: anthropic
         name: Anthropic
@@ -319,6 +366,13 @@ ai.gebo.llms.vendors.setup.config:
             - code: cohere/rerank-4-pro
               description: Chohere Rerank 4 pro
               defaultChoice: true
+        - type: TRANSCRIPT
+          serviceHandler: transcript-openrouter.ai
+          doModelsLookup: false
+          choices:
+            - code: openai/whisper-1
+              description: OpenAI Whisper 1 (speech to text)
+              defaultChoice: true
 
     - vendorInfo:
         vendorId: ollama
@@ -376,5 +430,5 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: embedding-generic-openai
           doModelsLookup: true
         - type: RANKING
-          serviceHandler: reranker-generic-openai
+          serviceHandler: ranker-generic-openai
           doModelsLookup: true

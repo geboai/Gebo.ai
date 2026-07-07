@@ -89,8 +89,10 @@ public class OpenAIImageModelConfigurationSupportService
 
 	@Override
 	public OperationStatus<List<GOpenAIImageModelChoice>> getModelChoices(GOpenAIImageModelConfig config) {
-
-		return null;
+		// OpenAI does not expose a listing endpoint for image models; presets in the
+		// setup library drive the available choices. Return an empty (non-null) list so
+		// callers doing a live lookup do not fail.
+		return OperationStatus.of(new java.util.ArrayList<GOpenAIImageModelChoice>());
 	}
 
 	@Override

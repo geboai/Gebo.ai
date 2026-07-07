@@ -31,11 +31,11 @@
         </div>
     </p-fieldset>
     <p-fieldset id="ModelsChoices" legend="Models choices" gebo-ai-label
-        *ngIf="chatPresets.length>0 || embeddingPresets.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0">
+        *ngIf="chatPresets.length>0 || embeddingPresets.length>0 || rankingPresets.length>0 || imagePresets.length>0 || transcriptPresets.length>0 || ttsPresets.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0">
         <p-tabView>
 
             <p-tabPanel id="PresetsAccordionPanel" gebo-ai-label header="Suggested models selection"
-                *ngIf="chatPresets.length>0 || embeddingPresets.length>0">
+                *ngIf="chatPresets.length>0 || embeddingPresets.length>0 || rankingPresets.length>0 || imagePresets.length>0 || transcriptPresets.length>0 || ttsPresets.length>0">
                 <div class="grid">
                     <div class="col-12">
                         <p id="PresetAccordionDesc" gebo-ai-text>
@@ -78,7 +78,67 @@
                         </gebo-ai-field>
                     </div>
                     <div class="col-3" *ngIf="embeddingPresets.length>0"></div>
-                    
+                    <div class="col-6" *ngIf="rankingPresets.length>0" [formGroup]="rankerModelPresetsFormGroup">
+                        <gebo-ai-field id="rankerPresetChoice" label="Ranker model"
+                            help="Select one of the predefined reranking models">
+                            <geboai-editable-listbox-component formControlName="choosedModel" [data]="rankingPresets"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="rankingPresets.length>0" [formGroup]="rankerModelPresetsFormGroup">
+                        <gebo-ai-field id="rankerPresetSetAsDefault" label="set as default ranker model"
+                            help="Set this model as the default reranking model used when no other ranker is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="rankingPresets.length>0"></div>
+                    <div class="col-6" *ngIf="imagePresets.length>0" [formGroup]="imagesModelPresetsFormGroup">
+                        <gebo-ai-field id="imagesPresetChoice" label="Image generation model"
+                            help="Select one of the predefined image generation models">
+                            <geboai-editable-listbox-component formControlName="choosedModel" [data]="imagePresets"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="imagePresets.length>0" [formGroup]="imagesModelPresetsFormGroup">
+                        <gebo-ai-field id="imagesPresetSetAsDefault" label="set as default image generation model"
+                            help="Set this model as the default image generation model used when no other one is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="imagePresets.length>0"></div>
+                    <div class="col-6" *ngIf="transcriptPresets.length>0" [formGroup]="transcriptModelPresetsFormGroup">
+                        <gebo-ai-field id="transcriptPresetChoice" label="Transcript model"
+                            help="Select one of the predefined speech to text (transcript) models">
+                            <geboai-editable-listbox-component formControlName="choosedModel" [data]="transcriptPresets"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="transcriptPresets.length>0" [formGroup]="transcriptModelPresetsFormGroup">
+                        <gebo-ai-field id="transcriptPresetSetAsDefault" label="set as default transcript model"
+                            help="Set this model as the default transcript model used when no other one is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="transcriptPresets.length>0"></div>
+                    <div class="col-6" *ngIf="ttsPresets.length>0" [formGroup]="ttsModelPresetsFormGroup">
+                        <gebo-ai-field id="ttsPresetChoice" label="Text to speech model"
+                            help="Select one of the predefined text to speech models">
+                            <geboai-editable-listbox-component formControlName="choosedModel" [data]="ttsPresets"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="ttsPresets.length>0" [formGroup]="ttsModelPresetsFormGroup">
+                        <gebo-ai-field id="ttsPresetSetAsDefault" label="set as default text to speech model"
+                            help="Set this model as the default text to speech model used when no other one is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="ttsPresets.length>0"></div>
+
                     <div class="col-3">
                         <p-button id="CreatePresetBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                             (onClick)="createPresetLLMS()" [disabled]="!presetCreateBtnEnabled" icon="pi pi-save"
@@ -88,7 +148,7 @@
                 </div>
             </p-tabPanel>
             <p-tabPanel id="AdvancedAccordionPanel" gebo-ai-label header="Advanced models selection"
-                *ngIf="lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0">
+                *ngIf="lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0">
                 <div class="grid">
                     <div class="col-12">
                         <p id="AdvancedAccordionDesc" gebo-ai-text>
@@ -135,6 +195,69 @@
                         </gebo-ai-field>
                     </div>
                     <div class="col-3" *ngIf="lookedUpEmbeddingModels.length>0"></div>
+                    <div class="col-6" *ngIf="lookedUpRankingModels.length>0" [formGroup]="rankerModelAdvancedFormGroup">
+                        <gebo-ai-field id="rankerAdvancedChoice" label="Ranker model"
+                            help="Select one of the supplier published reranking models">
+                            <geboai-editable-listbox-component formControlName="choosedModel"
+                                [data]="lookedUpRankingModels" gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpRankingModels.length>0" [formGroup]="rankerModelAdvancedFormGroup">
+                        <gebo-ai-field id="rankerAdvancedSetAsDefault" label="set as default ranker model"
+                            help="Set this model as the default reranking model used when no other ranker is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpRankingModels.length>0"></div>
+                    <div class="col-6" *ngIf="lookedUpImagesModels.length>0" [formGroup]="imagesModelAdvancedFormGroup">
+                        <gebo-ai-field id="imagesAdvancedChoice" label="Image generation model"
+                            help="Select one of the supplier published image generation models">
+                            <geboai-editable-listbox-component formControlName="choosedModel"
+                                [data]="lookedUpImagesModels" gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpImagesModels.length>0" [formGroup]="imagesModelAdvancedFormGroup">
+                        <gebo-ai-field id="imagesAdvancedSetAsDefault" label="set as default image generation model"
+                            help="Set this model as the default image generation model used when no other one is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpImagesModels.length>0"></div>
+                    <div class="col-6" *ngIf="lookedUpTranscriptModels.length>0"
+                        [formGroup]="transcriptModelAdvancedFormGroup">
+                        <gebo-ai-field id="transcriptAdvancedChoice" label="Transcript model"
+                            help="Select one of the supplier published speech to text (transcript) models">
+                            <geboai-editable-listbox-component formControlName="choosedModel"
+                                [data]="lookedUpTranscriptModels"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpTranscriptModels.length>0"
+                        [formGroup]="transcriptModelAdvancedFormGroup">
+                        <gebo-ai-field id="transcriptAdvancedSetAsDefault" label="set as default transcript model"
+                            help="Set this model as the default transcript model used when no other one is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpTranscriptModels.length>0"></div>
+                    <div class="col-6" *ngIf="lookedUpTtsModels.length>0" [formGroup]="ttsModelAdvancedFormGroup">
+                        <gebo-ai-field id="ttsAdvancedChoice" label="Text to speech model"
+                            help="Select one of the supplier published text to speech models">
+                            <geboai-editable-listbox-component formControlName="choosedModel" [data]="lookedUpTtsModels"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpTtsModels.length>0" [formGroup]="ttsModelAdvancedFormGroup">
+                        <gebo-ai-field id="ttsAdvancedSetAsDefault" label="set as default text to speech model"
+                            help="Set this model as the default text to speech model used when no other one is configured">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-3" *ngIf="lookedUpTtsModels.length>0"></div>
                     <div class="col-3">
                         <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                             (onClick)="createAdvancedLLMS()" [disabled]="!advancedCreateBtnEnabled" icon="pi pi-save"

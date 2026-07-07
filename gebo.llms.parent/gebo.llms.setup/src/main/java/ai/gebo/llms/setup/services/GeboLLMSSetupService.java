@@ -379,6 +379,9 @@ public class GeboLLMSSetupService {
 		ComponentLLMSStatus status = new ComponentLLMSStatus();
 		status.chatModelSetup = !chatModelsConfigDao.getConfigurations().isEmpty();
 		status.embeddedModelSetup = !embeddingModelsConfigDao.getConfigurations().isEmpty();
+		status.rankingModelSetup = !rankerModelsRuntimeDao.getConfigurations().isEmpty();
+		status.ttsModelSetup = !ttsModelsRuntimeDao.getConfigurations().isEmpty();
+		status.transcriptModelSetup = !transcriptModelsRuntimeDao.getConfigurations().isEmpty();
 		status.isSetup = status.chatModelSetup && status.embeddedModelSetup;
 		return status;
 	}
