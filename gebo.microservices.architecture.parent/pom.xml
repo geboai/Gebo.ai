@@ -11,6 +11,7 @@
 	<artifactId>gebo.microservices.architecture.parent</artifactId>
 	<packaging>pom</packaging>
 	<modules>
+		<module>gebo.microservices.topology</module>
 		<module>gebo.architecture.messages.rabbitmq</module>
 	</modules>
 </project>

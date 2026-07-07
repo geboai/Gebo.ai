@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.topology</artifactId>
+
+	<!--
+	  Shared topology of the Gebo.ai microservices deployment.
+
+	  Single source of truth mapping every microservice (identified by its Spring
+	  application name = the Spring Cloud LoadBalancer service-id used by the
+	  gateway as "lb://<name>") to the list of messaging module ids
+	  (GStandardModulesConstraints) it hosts.
+
+	  Contribution model (Spring Cloud standard): a built-in default map is
+	  shipped, and any deployment - including a third-party maker's service - adds
+	  or overrides entries under 'gebo.microservices.topology.*' in application.yml,
+	  bound via @ConfigurationProperties (see GeboMicroservicesTopologyProperties /
+	  GeboMicroservicesTopologyAutoConfiguration).
+
+	  The plain core (GeboMicroservice / GeboMicroservicesTopology) has no Spring
+	  requirement and stays usable statically via GeboMicroservicesTopology.defaults();
+	  the Spring layer only merges application.yml on top of those defaults.
+	-->
+	<dependencies>
+		<!-- Reused ONLY for the GStandardModulesConstraints module-id constants,
+		     keeping a single source of truth for messaging module ids. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.application.messaging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Spring Boot auto-configuration + @ConfigurationProperties binding of
+		     the deployment/third-party topology overrides. Every Gebo deployable
+		     is a Spring Boot app, so this is on the classpath anyway. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>
