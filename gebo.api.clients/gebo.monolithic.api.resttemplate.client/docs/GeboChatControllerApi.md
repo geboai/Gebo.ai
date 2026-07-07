@@ -9,9 +9,7 @@ Method | HTTP request | Description
 [**getChatModelUserInfo**](GeboChatControllerApi.md#getChatModelUserInfo) | **GET** /api/users/GeboDirectModelChatController/getChatModelUserInfo | 
 [**getProviderCapabilities**](GeboChatControllerApi.md#getProviderCapabilities) | **GET** /api/users/GeboDirectModelChatController/getProviderCapabilities | 
 [**getVisibleKnowledgeBases**](GeboChatControllerApi.md#getVisibleKnowledgeBases) | **GET** /api/users/GeboDirectModelChatController/getVisibleKnowledgeBases | 
-[**speechText**](GeboChatControllerApi.md#speechText) | **POST** /api/users/GeboDirectModelChatController/speechText | 
 [**streamResponse**](GeboChatControllerApi.md#streamResponse) | **POST** /api/users/GeboDirectModelChatController/streamResponse | 
-[**transcriptText**](GeboChatControllerApi.md#transcriptText) | **POST** /api/users/GeboDirectModelChatController/transcriptText | 
 
 <a name="chat"></a>
 # **chat**
@@ -224,51 +222,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="speechText"></a>
-# **speechText**
-> File speechText(body, modelCode)
-
-
-
-### Example
-```java
-// Import classes:
-//import ai.gebo.monolithic.api.client.invoker.ApiException;
-//import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
-
-
-GeboChatControllerApi apiInstance = new GeboChatControllerApi();
-SpeechRequest body = new SpeechRequest(); // SpeechRequest | 
-String modelCode = "modelCode_example"; // String | 
-try {
-    File result = apiInstance.speechText(body, modelCode);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling GeboChatControllerApi#speechText");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **body** | [**SpeechRequest**](SpeechRequest.md)|  |
- **modelCode** | **String**|  |
-
-### Return type
-
-[**File**](File.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/octet-stream
-
 <a name="streamResponse"></a>
 # **streamResponse**
 > List&lt;ServerSentEventString&gt; streamResponse(body)
@@ -311,47 +264,4 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: text/event-stream
-
-<a name="transcriptText"></a>
-# **transcriptText**
-> TranscriptResponse transcriptText(modelCode)
-
-
-
-### Example
-```java
-// Import classes:
-//import ai.gebo.monolithic.api.client.invoker.ApiException;
-//import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
-
-
-GeboChatControllerApi apiInstance = new GeboChatControllerApi();
-String modelCode = "modelCode_example"; // String | 
-try {
-    TranscriptResponse result = apiInstance.transcriptText(modelCode);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling GeboChatControllerApi#transcriptText");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **modelCode** | **String**|  |
-
-### Return type
-
-[**TranscriptResponse**](TranscriptResponse.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
 
