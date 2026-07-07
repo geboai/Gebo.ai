@@ -52,6 +52,10 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
         imagesModel: new FormControl()
     });
     protected loading: boolean = false;
+    // When false (default) the per-model choice combos are hidden and the setup
+    // runs with the preselected preset defaults; when true the user can review
+    // and change each model choice.
+    protected showLlmsDetail: boolean = false;
     protected vendorId?: string;
     protected secretContext?: string;
     protected secretDescription?: string;
