@@ -25,6 +25,7 @@ import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
@@ -33,6 +34,7 @@ import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
@@ -75,6 +77,8 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	 * Factory for creating LLM service clients (timeout/retry config from application.yml)
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Implementation of a configurable transcript model for OpenAI services.
@@ -212,8 +216,7 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	}
 	@Override
 	public OperationStatus<GenericOpenAIAPITranscriptModelConfig> insertAndConfigure(
-			GenericOpenAIAPITranscriptModelConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+			GenericOpenAIAPITranscriptModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

@@ -10,7 +10,6 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -63,10 +64,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
 			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
-			IGChatSessionLifeCycleService chatSessionLifecycleService) {
+			IGChatSessionLifeCycleService chatSessionLifecycleService,
+			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
+			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
-				knowledgeBaseSecurityService, chatSessionLifecycleService);
+				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao);
 
 	}
 
@@ -178,47 +181,14 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		if (model != null) {
 			GBaseChatModelConfig c = (GBaseChatModelConfig) model.getConfig();
 			List<String> functions = c.getEnabledFunctions();
-			ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), model.isSupportsTranscript(),
-					model.isSupportsSpeech(), model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
+			boolean supportsTranscript = transcriptModelsDao.defaultHandler() != null;
+			boolean supportsSpeech = ttsModelsDao.defaultHandler() != null;
+			ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
+					supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
 					callbacksRepoPattern.getEnabledToolsTree(functions));
 			return cap;
 		}
 		return null;
-	}
-
-	/**
-	 * Transcribes the input stream using the specified model code.
-	 *
-	 * @param is        the input stream
-	 * @param modelCode the code of the model to use for transcription
-	 * @return the transcribed text
-	 * @throws LLMConfigException if there is a problem with the model configuration
-	 * @throws IOException
-	 */
-	@Override
-	public String transcript(InputStream is, String modelCode) throws LLMConfigException, IOException {
-		IGConfigurableChatModel model = chatModelConfigurations.findByCode(modelCode);
-		if (model != null) {
-			return model.getTranscriptModel().call(is);
-		}
-		throw new LLMConfigException("Chat model:" + modelCode + " does not exist");
-	}
-
-	/**
-	 * Converts text to speech using the specified model code.
-	 *
-	 * @param text      the text to convert
-	 * @param modelCode the code of the model to use for conversion
-	 * @return an input stream with the speech data
-	 * @throws LLMConfigException if there is a problem with the model configuration
-	 */
-	@Override
-	public InputStream speech(String text, String modelCode) throws LLMConfigException {
-		IGConfigurableChatModel model = chatModelConfigurations.findByCode(modelCode);
-		if (model != null) {
-			return model.getSpeechModel().call(text);
-		}
-		throw new LLMConfigException("Chat model:" + modelCode + " does not exist");
 	}
 
 	/**

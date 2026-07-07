@@ -18,6 +18,7 @@ import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTextToSpeechModel;
@@ -27,6 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils;
 import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyInfo;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelChoice;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
@@ -43,6 +45,8 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 	IGModelApiAccessReadUtils apiKeyReader;
 	@Autowired
 	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	@Autowired
+	ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Static definition of the model type with code and description
@@ -164,9 +168,9 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 	}
 
 	@Override
-	public OperationStatus<GOpenAITextToSpeechModelConfig> insertAndConfigure(GOpenAITextToSpeechModelConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+	public OperationStatus<GOpenAITextToSpeechModelConfig> insertAndConfigure(GOpenAITextToSpeechModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+		return configureHandler.insertAndConfigure(config, type);
 	}
 
 }

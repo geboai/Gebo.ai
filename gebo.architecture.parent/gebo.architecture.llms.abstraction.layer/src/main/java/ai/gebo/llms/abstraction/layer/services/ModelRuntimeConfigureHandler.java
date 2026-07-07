@@ -12,8 +12,11 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.model.OperationStatus;
 import lombok.AllArgsConstructor;
@@ -45,6 +48,24 @@ public class ModelRuntimeConfigureHandler {
 			IGRankerModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGRankerModelRuntimeConfigurationDao.class);
 			dao.addRuntimeByConfig(rankerConfig);
+		}
+		if (model instanceof GBaseTextToSpeachModelConfig ttsConfig) {
+			IGTextToSpeechModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGTextToSpeechModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfig(ttsConfig);
+			handleDefaultModel(GBaseTextToSpeachModelConfig.class, ttsConfig, dao);
+		}
+		if (model instanceof GBaseTranscriptModelConfig transcriptConfig) {
+			IGTranscriptModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGTranscriptModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfig(transcriptConfig);
+			handleDefaultModel(GBaseTranscriptModelConfig.class, transcriptConfig, dao);
+		}
+		if (model instanceof GBaseImageModelConfig imageConfig) {
+			IGImageModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGImageModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfig(imageConfig);
+			handleDefaultModel(GBaseImageModelConfig.class, imageConfig, dao);
 		}
 		return OperationStatus.of(model);
 	}

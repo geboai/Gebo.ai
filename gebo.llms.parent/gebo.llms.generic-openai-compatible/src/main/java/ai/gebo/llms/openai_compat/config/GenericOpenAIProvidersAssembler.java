@@ -148,14 +148,16 @@ public class GenericOpenAIProvidersAssembler {
 		if (config.getTextToSpeechModelProviders() != null) {
 			for (GenericOpenAITextToSpeechModelType pc : config.getTextToSpeechModelProviders()) {
 				GenericOpenAIAPITextToSpeechModelConfigurationSupportService service = new GenericOpenAIAPITextToSpeechModelConfigurationSupportService(
-						pc, secretService, openaiApiUtil, modelsListProxyService, serviceClientsProviderFactory);
+						pc, secretService, openaiApiUtil, modelsListProxyService, serviceClientsProviderFactory,
+						configureHandler);
 				textToSpeechProvidersRepo.addImplementation(service);
 			}
 		}
 		if (config.getTranscriptModelProviders() != null) {
 			for (GenericOpenAITranscriptModelType pc : config.getTranscriptModelProviders()) {
-				GenericOpenAIAPITranscriptModelConfigurationSupportService service = new GenericOpenAIAPITranscriptModelConfigurationSupportService(
-						pc, secretService, openaiApiUtil, modelsListProxyService, serviceClientsProviderFactory);
+			GenericOpenAIAPITranscriptModelConfigurationSupportService service = new GenericOpenAIAPITranscriptModelConfigurationSupportService(
+					pc, secretService, openaiApiUtil, modelsListProxyService, serviceClientsProviderFactory,
+					configureHandler);
 				this.transcriptsProvidersRepo.addImplementation(service);
 			}
 		}
