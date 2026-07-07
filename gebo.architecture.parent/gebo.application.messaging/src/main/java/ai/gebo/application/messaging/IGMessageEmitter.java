@@ -28,4 +28,18 @@ public interface IGMessageEmitter extends IGMessagingSystem {
      * @return A list of strings representing the types of payloads that can be emitted.
      */
     public List<String> getEmittedPayloadTypes();
+
+    /**
+     * Indicates whether this emitter may emit <b>every</b> payload type,
+     * bypassing the {@link #getEmittedPayloadTypes()} allow-list. This mirrors
+     * {@code IGMessageReceiver.isAcceptEveryPayloadType()} on the emitter side and
+     * is used by external bridge emitters that stand in for remote sources whose
+     * concrete payload types are not known locally.
+     *
+     * @return {@code true} to emit any payload type; defaults to {@code false},
+     *         preserving the strict allow-list behaviour for all existing emitters.
+     */
+    public default boolean isEmitEveryPayloadType() {
+        return false;
+    }
 }

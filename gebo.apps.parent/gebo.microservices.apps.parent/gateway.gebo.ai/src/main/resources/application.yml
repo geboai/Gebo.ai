@@ -15,3 +15,134 @@ spring:
 
 server:
   port: 8080
+
+# ---------------------------------------------------------------------------
+# Shared microservices topology (3 levels):
+#   microserviceId  ->  messagingModuleId  ->  [ messagingSystemId ]
+#
+# microserviceId is the microservice name in its dot-free, underscore form
+# (e.g. brain_gebo_ai). It is derived from the application name by the rule
+# '.' -> '_', and is also the Spring Cloud LoadBalancer service-id the gateway
+# targets as lb://<id>. A running service discovers itself by applying the same
+# rule to its spring.application.name. So this one map drives both the messaging
+# routing table (each service's <id>.inputq) and the gateway/LoadBalancer set.
+#
+# This is the COMPLETE, code-deduced topology, materialised here so it can be
+# edited without recompiling. It is bound by GeboMicroservicesTopologyProperties
+# into a GeboMicroservicesTopology bean.
+#
+#   include-defaults: false  -> this block is the whole truth for the gateway
+#                               (add/remove/modify a service here and it takes
+#                               effect). Set true to instead ADD to / OVERRIDE
+#                               the built-in defaults shipped in the topology jar.
+#
+# Keys are plain (underscore) - no dots - so no Spring bracket syntax is needed.
+# systemIds are list values and may contain dots freely.
+#
+# Notes on systemIds:
+#   * Processing modules expose stable, code-declared systems.
+#   * Content-handler modules host the shared content-infrastructure systems
+#     (module-ioc-dispatcher-component, resources-dispose-component,
+#     system-settings-controller-component) plus a Content.Handler.<code> system
+#     that most handlers register DYNAMICALLY per configured endpoint - add those
+#     here as needed.
+# ---------------------------------------------------------------------------
+gebo:
+  microservices:
+    topology:
+      include-defaults: false
+      services:
+        # --- Core / orchestration services ---
+        brain_gebo_ai:
+          core-module:
+            - user-messages-concentrator-component
+            - mongo-dispose-documents-component
+            - session-shrinker
+            - sessionLifeCycleService
+          brain-module: []
+        # heimdall_gebo_ai is a microservice (AuthN/AuthZ edge) but hosts NO
+        # messaging module, so it has no entry in this messaging topology map.
+        # Expose it as an lb:// gateway route (spring.cloud.gateway ... routes).
+        chunker_gebo_ai:
+          tokenizer-module:
+            - tokenizer-component
+            - dispose-chunking-session-for-jobs
+        vectorizator_gebo_ai:
+          vectorizator-module:
+            - vectorization-component
+            - vectorization-emitter-component
+            - vectorization-dispose-component
+          rag-threashold-autotune-module:
+            - rag-threashold-autotune-component
+        textsearch_gebo_ai:
+          fulltext-module:
+            - fulltext-indexing-component
+        graphsearch_gebo_ai:
+          knowledge-graph-module:
+            - knowledge-graph-component
+        scheduler_gebo_ai:
+          scheduler-module:
+            - scheduler-component
+        jobs_gebo_ai:
+          async-publishing-job-module:
+            - async-publishing-job-component
+            - job-status-notifier
+
+        # --- Content services (one per gebo.systems.parent handler) ---
+        # Each hosts the shared content-infrastructure systems; some also a
+        # static default Content.Handler.<code>. Additional Content.Handler.<code>
+        # systems are registered dynamically per configured endpoint - add here.
+        git_gebo_ai:
+          git-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+            - Content.Handler.DEFAULT.GIT.CONTENT.HANDLER
+        filesystem_gebo_ai:
+          shared-filesystem-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+            - Content.Handler.DEFAULT.FILESYSTEM.CONTENT.HANDLER
+        uploads_gebo_ai:
+          uploads-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+            - Content.Handler.DEFAULT.UPLOADS.CONTENT.HANDLER
+        userspace_gebo_ai:
+          userspace-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+            - Content.Handler.USERSPACE-CONTENTSYSTEM
+        sharepoint_gebo_ai:
+          sharepoint-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        confluence_gebo_ai:
+          confluence-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        jira_gebo_ai:
+          jira-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        googledrive_gebo_ai:
+          google-drive-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        mcpclient_gebo_ai:
+          mcp-client-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        integration_gebo_ai:
+          integration-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component

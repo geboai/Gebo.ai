@@ -70,7 +70,13 @@ public abstract class GAbstractExternalMessageEmitter implements IGExternalMessa
             // Retrieves the list of emitted payload types from the config
             return config != null ? config.getEmittedPayloadTypes() : null;
         }
-        
+
+        @Override
+        public boolean isEmitEveryPayloadType() {
+            // Mirrors the receiver's accept-every on the emitter side
+            return config != null && config.isEmitEveryPayloadType();
+        }
+
         @Override
         public boolean isLocalSystem() {
             // Always returns false indicating the system is not local
