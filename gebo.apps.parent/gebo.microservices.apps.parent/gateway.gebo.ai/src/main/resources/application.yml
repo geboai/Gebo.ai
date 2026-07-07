@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: gateway.gebo.ai
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # Enable service discovery based routing via Spring Cloud LoadBalancer.
+          # Routes can target load-balanced backends with the lb:// scheme,
+          # e.g. uri: lb://some-backend-service
+          discovery:
+            locator:
+              enabled: false
+          routes: []
+
+server:
+  port: 8080
