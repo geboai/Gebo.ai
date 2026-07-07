@@ -32,7 +32,7 @@
         </div>
         <div class="col-12" *ngIf="presetsSummary.length>0">
             <p-toggleButton id="ToggleLlmsDetail" gebo-ai-label [(ngModel)]="showLlmsDetail"
-                [ngModelOptions]="{standalone:true}" onLabel="View llms detail" offLabel="Hide llms detail"
+                [ngModelOptions]="{standalone:true}" onLabel="Choose llms" offLabel="Suggested settings"
                 onIcon="pi pi-eye" offIcon="pi pi-eye-slash"></p-toggleButton>
         </div>
         <ng-container *ngIf="showLlmsDetail">
