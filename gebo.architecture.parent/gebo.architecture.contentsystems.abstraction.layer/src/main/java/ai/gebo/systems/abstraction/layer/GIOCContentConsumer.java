@@ -32,6 +32,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReferenceSnapshot;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
+import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
@@ -133,7 +134,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						snapshot.setFileSize(docref.getFileSize());
 						GDocumentReferencePayload payload = new GDocumentReferencePayload();
 						payload.setDocumentReference(docref);
-						payload.setEndPoint(endpoint);
+						payload.setEndPoint(GCentralizedProjectEndpoint.of(endpoint));
 						payload.setFragmentType(MessageFragmentType.SINGLE_FRAGMENT);
 						payload.setRequiresEmbeddingHandshake(true);
 						payload.setJobId(jobStatus.getCode());

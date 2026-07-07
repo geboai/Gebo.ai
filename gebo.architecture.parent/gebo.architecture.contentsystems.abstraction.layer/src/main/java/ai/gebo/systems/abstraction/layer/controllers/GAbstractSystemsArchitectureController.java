@@ -28,6 +28,7 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.core.messages.GDeletedProjectEndpointPayload;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
+import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.security.services.IGSecurityService;
@@ -108,26 +109,62 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
         if (!securityService.isCurrentUserAdmin())
             throw new GeboPersistenceException("User without ADMIN role cannot delete contents and endpoints");
         String userid = securityService.getCurrentUser().getUsername();
+
+        // Flatten the concrete endpoint into a shareable centralized view BEFORE deletion so the
+        // dispatched messages can be deserialized in every module. The originating content management
+        // system code is resolved while the concrete endpoint is still available, since it can no
+        // longer be reconstructed once the object is removed from persistence.
+        GCentralizedProjectEndpoint centralized = GCentralizedProjectEndpoint.of(endpoint);
+        String contentManagementSystemCode = resolveContentManagementSystemCode(endpoint);
+
         persistentObjectManager.delete(endpoint);
 
         // Create and send messages to indicate deletion
         GMessageEnvelope<GDeletedProjectEndpointPayload> message = GMessageEnvelope.newMessageFrom(controllerEmitter,
-                new GDeletedProjectEndpointPayload(endpoint), userid);
+                newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid);
         message.setTargetModule(controllerEmitter.getMessagingModuleId());
         message.setTargetComponent(GStandardModulesConstraints.RESOURCES_DISPOSE_COMPONENT);
         messageBroker.accept(message);
-        
-        message = GMessageEnvelope.newMessageFrom(controllerEmitter, new GDeletedProjectEndpointPayload(endpoint),
-                userid);
+
+        message = GMessageEnvelope.newMessageFrom(controllerEmitter,
+                newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid);
         message.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
         message.setTargetComponent(GStandardModulesConstraints.MONGO_DISPOSE_DOCUMENTS_COMPONENT);
         messageBroker.accept(message);
-        
-        message = GMessageEnvelope.newMessageFrom(controllerEmitter, new GDeletedProjectEndpointPayload(endpoint),
-                userid);
+
+        message = GMessageEnvelope.newMessageFrom(controllerEmitter,
+                newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid);
         message.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
         message.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT);
         messageBroker.accept(message);
+    }
+
+    /**
+     * Builds a deletion payload carrying the shareable centralized endpoint and the originating
+     * content management system code.
+     *
+     * @param centralized                 the centralized endpoint view.
+     * @param contentManagementSystemCode the originating content management system code (may be null).
+     * @return a new deletion payload.
+     */
+    private GDeletedProjectEndpointPayload newDeletedEndpointPayload(GCentralizedProjectEndpoint centralized,
+            String contentManagementSystemCode) {
+        GDeletedProjectEndpointPayload payload = new GDeletedProjectEndpointPayload(centralized);
+        payload.setContentManagementSystemCode(contentManagementSystemCode);
+        return payload;
+    }
+
+    /**
+     * Resolves the content management system code for the given concrete endpoint. The base
+     * implementation returns {@code null}; concrete controllers whose endpoints reference a specific
+     * content management system (e.g. Git) should override this so disposal can resolve the system
+     * without the concrete endpoint being available.
+     *
+     * @param endpoint the concrete endpoint being deleted.
+     * @return the content management system code, or {@code null} when not applicable.
+     */
+    protected String resolveContentManagementSystemCode(EndpointType endpoint) {
+        return null;
     }
 
     /**

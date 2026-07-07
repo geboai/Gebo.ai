@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.sharepoint.handler.GSharepointProjectEndpoint;
 import ai.gebo.sharepoint.handler.repositories.SharepointProjectEndpointRepository;
@@ -67,7 +68,7 @@ public class GSharepointResourcesDisposerFactoryImpl
 	 * @return Always returns true, indicating all SharePoint resources can be disposed
 	 */
 	@Override
-	protected boolean isCanBeDisposedResources(GSharepointProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
 
 		return true;
 	}
@@ -79,8 +80,8 @@ public class GSharepointResourcesDisposerFactoryImpl
 	 * @param endpoint The SharePoint project endpoint whose resources need to be disposed
 	 */
 	@Override
-	protected void disposeResources(GSharepointProjectEndpoint endpoint) {
-		super.disposeFileSystem(endpoint);
+	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+		super.disposeFileSystem(endpoint, contentManagementSystemCode);
 
 	}
 

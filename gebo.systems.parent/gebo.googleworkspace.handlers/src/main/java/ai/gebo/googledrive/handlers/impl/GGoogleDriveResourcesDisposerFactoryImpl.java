@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
 import ai.gebo.googledrive.handlers.repositories.GoogleDriveProjectEndpointRepository;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -68,7 +69,7 @@ public class GGoogleDriveResourcesDisposerFactoryImpl
 	 * @return false, indicating resources cannot be disposed
 	 */
 	@Override
-	protected boolean isCanBeDisposedResources(GGoogleDriveProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
 
 		return false;
 	}
@@ -80,8 +81,8 @@ public class GGoogleDriveResourcesDisposerFactoryImpl
 	 * @param endpoint The Google Drive project endpoint whose resources should be disposed
 	 */
 	@Override
-	protected void disposeResources(GGoogleDriveProjectEndpoint endpoint) {
-		
+	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+
 
 	}
 

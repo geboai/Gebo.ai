@@ -15,8 +15,8 @@ package ai.gebo.core.messages;
 import ai.gebo.application.messaging.model.GBaseMessagePayload;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProject;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -53,7 +53,7 @@ public abstract class GAbstractContentMessageFragmentPayload extends GBaseMessag
 
     private GKnowledgeBase knowledgeBase = null;
 
-    private GProjectEndpoint endPoint = null;
+    private GCentralizedProjectEndpoint endPoint = null;
 
     private int estimatedTokens = 0;
 
@@ -245,20 +245,23 @@ public abstract class GAbstractContentMessageFragmentPayload extends GBaseMessag
     }
 
     /**
-     * Gets the project endpoint associated with the fragment.
-     * 
-     * @return the project endpoint.
+     * Gets the shareable centralized project endpoint associated with the fragment.
+     * The concrete {@code GProjectEndpoint} extension can be reconstructed in the
+     * receiving microservice via
+     * {@code IGPersistentObjectManager.findByReference(endPoint.getRemoteProjectReference(), GProjectEndpoint.class)}.
+     *
+     * @return the centralized project endpoint.
      */
-    public GProjectEndpoint getEndPoint() {
+    public GCentralizedProjectEndpoint getEndPoint() {
         return endPoint;
     }
 
     /**
-     * Sets the project endpoint for the fragment.
-     * 
-     * @param endPoint the project endpoint to set.
+     * Sets the shareable centralized project endpoint for the fragment.
+     *
+     * @param endPoint the centralized project endpoint to set.
      */
-    public void setEndPoint(GProjectEndpoint endPoint) {
+    public void setEndPoint(GCentralizedProjectEndpoint endPoint) {
         this.endPoint = endPoint;
     }
 

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
 import ai.gebo.filesystem.content.handler.repositories.FilesystemProjectEndpointRepository;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -66,7 +67,7 @@ public class GFilesystemResourcesDisposerFactoryImpl
 	 * @return Always false, indicating resources cannot be disposed
 	 */
 	@Override
-	protected boolean isCanBeDisposedResources(GFilesystemProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
 
 		return false;
 	}
@@ -78,8 +79,8 @@ public class GFilesystemResourcesDisposerFactoryImpl
 	 * @param endpoint The filesystem project endpoint whose resources should be disposed
 	 */
 	@Override
-	protected void disposeResources(GFilesystemProjectEndpoint endpoint) {
-		
+	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+
 
 	}
 

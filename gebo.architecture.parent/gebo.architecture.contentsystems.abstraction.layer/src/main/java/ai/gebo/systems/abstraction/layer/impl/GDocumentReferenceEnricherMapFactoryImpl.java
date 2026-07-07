@@ -24,6 +24,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
@@ -94,20 +95,20 @@ public class GDocumentReferenceEnricherMapFactoryImpl implements IGDocumentRefer
     public static class EnrichPayloadsMapper implements Function<GAbstractContentMessageFragmentPayload, GAbstractContentMessageFragmentPayload> {
         GProject project = null;
         GKnowledgeBase knowledgeBase = null;
-        GProjectEndpoint endpoint = null;
-        GObjectRef<GProjectEndpoint> eref = null;
+        GCentralizedProjectEndpoint centralizedEndpoint = null;
 
         /**
          * Constructs an instance of EnrichPayloadsMapper.
          * @param project The project associated with the payload.
          * @param knowledgeBase The knowledge base associated with the payload.
-         * @param endpoint The endpoint associated with the payload.
+         * @param endpoint The concrete endpoint associated with the payload; it is flattened into a
+         *                 shareable {@link GCentralizedProjectEndpoint} carrying a reference back to the
+         *                 original persisted endpoint.
          */
         EnrichPayloadsMapper(GProject project, GKnowledgeBase knowledgeBase, GProjectEndpoint endpoint) {
             this.project = project;
             this.knowledgeBase = knowledgeBase;
-            this.endpoint = endpoint.clone();
-            this.eref = GObjectRef.of(endpoint);
+            this.centralizedEndpoint = GCentralizedProjectEndpoint.of(endpoint);
         }
 
         /**
@@ -119,7 +120,7 @@ public class GDocumentReferenceEnricherMapFactoryImpl implements IGDocumentRefer
         public GAbstractContentMessageFragmentPayload apply(GAbstractContentMessageFragmentPayload t) {
             t.setProject(project);
             t.setKnowledgeBase(knowledgeBase);
-            t.setEndPoint(endpoint);
+            t.setEndPoint(centralizedEndpoint);
             return t;
         }
     }

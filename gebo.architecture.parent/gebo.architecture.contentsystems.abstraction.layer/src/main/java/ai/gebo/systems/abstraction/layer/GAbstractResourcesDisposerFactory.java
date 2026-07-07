@@ -26,6 +26,7 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.core.messages.GDeletedProjectEndpointPayload;
 import ai.gebo.core.messages.GDeletedProjectPayload;
+import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.IGBaseMongoDBProjectEndpointRepository;
@@ -106,28 +107,51 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 
 	/**
 	 * Checks if resources associated with the given endpoint can be disposed.
+	 * <p>
+	 * The endpoint is received as a base {@link GProjectEndpoint}: for a deleted endpoint it is the
+	 * shareable {@link GCentralizedProjectEndpoint} carried in the message (the concrete object no
+	 * longer exists), while for a deleted project it is the concrete endpoint loaded from the
+	 * repository.
 	 *
 	 * @param endpoint The endpoint to check.
 	 * @return True if resources can be disposed, false otherwise.
 	 */
-	protected abstract boolean isCanBeDisposedResources(EndpointType endpoint);
+	protected abstract boolean isCanBeDisposedResources(GProjectEndpoint endpoint);
 
 	/**
 	 * Disposes the resources associated with the given endpoint.
 	 *
-	 * @param endpoint The endpoint whose resources are to be disposed.
+	 * @param endpoint                    The endpoint whose resources are to be disposed (centralized
+	 *                                    view for a deleted endpoint, concrete instance otherwise).
+	 * @param contentManagementSystemCode The originating content management system code, used to
+	 *                                    resolve the system when the concrete endpoint is unavailable;
+	 *                                    may be {@code null}.
 	 */
-	protected abstract void disposeResources(EndpointType endpoint);
+	protected abstract void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode);
 
 	/**
-	 * Deletes the file system associated with the given endpoint.
+	 * Deletes the file system associated with the given endpoint. The on-disk folder is resolved from
+	 * the endpoint identity (real class name and code) so it matches the folder created for the
+	 * concrete endpoint during ingestion, even when only the centralized view is available.
 	 *
-	 * @param endpoint The endpoint whose file system is to be deleted.
+	 * @param endpoint                    The endpoint whose file system is to be deleted.
+	 * @param contentManagementSystemCode The originating content management system code (may be null).
 	 */
-	protected final void disposeFileSystem(EndpointType endpoint) {
+	protected final void disposeFileSystem(GProjectEndpoint endpoint, String contentManagementSystemCode) {
 		try {
-			GContentManagementSystem system = moduleHandler.getSystem(endpoint);
-			String filesystem2Delete = this.persistenceFolderDiscoverer.getLocalPersistentFolder(system, endpoint);
+			String endpointClassName;
+			String endpointCode;
+			if (endpoint instanceof GCentralizedProjectEndpoint) {
+				GObjectRef<GProjectEndpoint> ref = ((GCentralizedProjectEndpoint) endpoint).getRemoteProjectReference();
+				endpointClassName = ref != null ? ref.getClassName() : endpoint.getClass().getName();
+				endpointCode = ref != null ? ref.getCode() : endpoint.getCode();
+			} else {
+				endpointClassName = endpoint.getClass().getName();
+				endpointCode = endpoint.getCode();
+			}
+			GContentManagementSystem system = resolveSystem(endpoint, contentManagementSystemCode);
+			String filesystem2Delete = this.persistenceFolderDiscoverer.getLocalPersistentFolder(system,
+					endpointClassName, endpointCode);
 			LOGGER.info("Deleting filesystem folder:" + filesystem2Delete);
 			File file = new File(filesystem2Delete);
 			if (file.exists() && file.isDirectory()) {
@@ -135,6 +159,40 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 			}
 		} catch (Throwable e) {
 			LOGGER.error("Problem in disposing filesystem", e);
+		}
+	}
+
+	/**
+	 * Resolves the content management system for the endpoint being disposed. For a concrete endpoint
+	 * the module handler resolves it directly; for a centralized (deleted) endpoint the system is
+	 * looked up amongst the module configurations by the carried content management system code,
+	 * falling back to the single configured system when no code is provided.
+	 *
+	 * @param endpoint                    The endpoint being disposed.
+	 * @param contentManagementSystemCode The originating content management system code (may be null).
+	 * @return The resolved content management system, or {@code null} if it cannot be determined.
+	 */
+	@SuppressWarnings("unchecked")
+	private GContentManagementSystem resolveSystem(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+		try {
+			if (!(endpoint instanceof GCentralizedProjectEndpoint)) {
+				return moduleHandler.getSystem(endpoint);
+			}
+			List<GContentManagementSystem> configurations = moduleHandler.getConfigurations();
+			if (configurations == null || configurations.isEmpty()) {
+				return null;
+			}
+			if (contentManagementSystemCode != null) {
+				for (GContentManagementSystem system : configurations) {
+					if (contentManagementSystemCode.equals(system.getCode())) {
+						return system;
+					}
+				}
+			}
+			return configurations.get(0);
+		} catch (Throwable t) {
+			LOGGER.warn("Unable to resolve content management system for disposal", t);
+			return null;
 		}
 	}
 
@@ -158,16 +216,19 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 				LOGGER.info("Begin accept(...) message:" + msg.toString());
 				if (msg.getPayload() instanceof GDeletedProjectEndpointPayload) {
 					GDeletedProjectEndpointPayload payload = (GDeletedProjectEndpointPayload) msg.getPayload();
-					EndpointType endpoint = (EndpointType) payload.getEndpoint();
-					GObjectRef<GProjectEndpoint> ref = GObjectRef.of(endpoint);
+					// The concrete endpoint was already removed from persistence before this message was
+					// sent, so we work from the shareable centralized view: its remote reference carries the
+					// original (concrete) class name and code needed to purge jobs and on-disk resources.
+					GCentralizedProjectEndpoint endpoint = payload.getEndpoint();
+					GObjectRef<GProjectEndpoint> ref = endpoint.getRemoteProjectReference();
 					jobStatusRepo.deleteByProjectEndpointReference(ref);
 					if (isCanBeDisposedResources(endpoint)) {
 						LOGGER.info("Disposing resources for:" + msg.toString());
-						disposeResources(endpoint);
+						disposeResources(endpoint, payload.getContentManagementSystemCode());
 					}
 					msg.setDelivered(true);
 					msg.setProcessed(true);
-					
+
 				} else if (msg.getPayload() instanceof GDeletedProjectPayload) {
 					GDeletedProjectPayload payload = (GDeletedProjectPayload) msg.getPayload();
 					List<EndpointType> endpoints = endpointRepository
@@ -177,7 +238,7 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 						jobStatusRepo.deleteByProjectEndpointReference(ref);
 						if (isCanBeDisposedResources(endpoint)) {
 							LOGGER.info("Disposing resources for:" + msg.toString());
-							disposeResources(endpoint);
+							disposeResources(endpoint, null);
 						}
 					}
 					endpointRepository.deleteByParentProjectCode(payload.getProject().getCode());

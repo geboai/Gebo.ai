@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -68,7 +69,7 @@ public class GUploadsResourcesDisposerFactoryImpl
      * @return Always true, indicating that upload resources can be disposed
      */
 	@Override
-	protected boolean isCanBeDisposedResources(GUploadsProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
 
 		return true;
 	}
@@ -80,8 +81,8 @@ public class GUploadsResourcesDisposerFactoryImpl
      * @param endpoint The upload project endpoint whose resources need to be disposed
      */
 	@Override
-	protected void disposeResources(GUploadsProjectEndpoint endpoint) {
-		super.disposeFileSystem(endpoint);
+	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+		super.disposeFileSystem(endpoint, contentManagementSystemCode);
 
 	}
 

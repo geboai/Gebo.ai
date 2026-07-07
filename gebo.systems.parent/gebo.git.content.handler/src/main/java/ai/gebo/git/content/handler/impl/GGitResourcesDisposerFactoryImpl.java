@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.git.content.handler.GGitProjectEndpoint;
 import ai.gebo.git.content.handler.repositories.GitEndpointRepository;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -66,7 +67,7 @@ public class GGitResourcesDisposerFactoryImpl extends GAbstractResourcesDisposer
 	 * @return Always returns true, indicating all endpoints can be disposed
 	 */
 	@Override
-	protected boolean isCanBeDisposedResources(GGitProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
 
 		return true;
 	}
@@ -78,8 +79,8 @@ public class GGitResourcesDisposerFactoryImpl extends GAbstractResourcesDisposer
 	 * @param endpoint The Git project endpoint whose resources need to be disposed
 	 */
 	@Override
-	protected void disposeResources(GGitProjectEndpoint endpoint) {
-		super.disposeFileSystem(endpoint);
+	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+		super.disposeFileSystem(endpoint, contentManagementSystemCode);
 
 	}
 
