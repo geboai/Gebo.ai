@@ -30,7 +30,12 @@
                 [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials"
                 [backendValidationOnChange]="true"></gebo-ai-api-key-component>
         </div>
-        <div class="col-12"></div>
+        <div class="col-12" *ngIf="presetsSummary.length>0">
+            <p-toggleButton id="ToggleLlmsDetail" gebo-ai-label [(ngModel)]="showLlmsDetail"
+                [ngModelOptions]="{standalone:true}" onLabel="View llms detail" offLabel="Hide llms detail"
+                onIcon="pi pi-eye" offIcon="pi pi-eye-slash"></p-toggleButton>
+        </div>
+        <ng-container *ngIf="showLlmsDetail">
         <div class="col-4 col-xs-12 col-sm-6" *ngFor="let preset of presetsSummary">
             <gebo-ai-field *ngIf="preset.type==='CHAT' && preset.mainUse==='CHAT'" id="ChatModel"
                 label="Default chat model"
@@ -70,6 +75,7 @@
                     gebo-ai-field-element></geboai-editable-listbox-component>
             </gebo-ai-field>
         </div>
+        </ng-container>
         <div class="col-12"></div>
         <div class="col-3">
             <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"

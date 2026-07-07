@@ -380,13 +380,27 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         }
     }
     protected get presetCreateBtnEnabled(): boolean {
-        const modelChoices: { choosedModel?: string }[] = [this.chatModelPresetsFormGroup.value, this.embeddingModelPresetsFormGroup.value];
+        const modelChoices: { choosedModel?: string }[] = [
+            this.chatModelPresetsFormGroup.value,
+            this.embeddingModelPresetsFormGroup.value,
+            this.rankerModelPresetsFormGroup.value,
+            this.imagesModelPresetsFormGroup.value,
+            this.transcriptModelPresetsFormGroup.value,
+            this.ttsModelPresetsFormGroup.value
+        ];
 
         return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
 
     }
     protected get advancedCreateBtnEnabled(): boolean {
-        const modelChoices: { choosedModel?: string }[] = [this.chatModelAdvancedFormGroup.value, this.embeddingModelAdvancedFormGroup.value];
+        const modelChoices: { choosedModel?: string }[] = [
+            this.chatModelAdvancedFormGroup.value,
+            this.embeddingModelAdvancedFormGroup.value,
+            this.rankerModelAdvancedFormGroup.value,
+            this.imagesModelAdvancedFormGroup.value,
+            this.transcriptModelAdvancedFormGroup.value,
+            this.ttsModelAdvancedFormGroup.value
+        ];
 
         return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
 

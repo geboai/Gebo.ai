@@ -102,8 +102,10 @@ public class GenericOpenAIAPIImageModelConfigurationSupportService implements
 	@Override
 	public OperationStatus<List<GenericOpenAIAPIImageModelChoice>> getModelChoices(
 			GenericOpenAIAPIImageModelConfig config) {
-
-		return null;
+		// Image providers do not expose a listing endpoint here; presets in the setup
+		// library drive the available choices. Return an empty (non-null) list so
+		// callers doing a live lookup do not fail.
+		return OperationStatus.of(new java.util.ArrayList<GenericOpenAIAPIImageModelChoice>());
 	}
 
 	@Override
