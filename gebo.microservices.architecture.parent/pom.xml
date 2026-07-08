@@ -13,5 +13,6 @@
 	<modules>
 		<module>gebo.microservices.topology</module>
 		<module>gebo.architecture.messages.rabbitmq</module>
+		<module>gebo.architecture.environment.microservices</module>
 	</modules>
 </project>

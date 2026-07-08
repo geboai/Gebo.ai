@@ -52,5 +52,6 @@
   	<module>gebo.architecture.redis</module>
   	<module>gebo.architecture.agents.abstraction.layer</module>
   	<module>gebo.architecture.agents.standard</module>
+  	<module>gebo.architecture.environment.monolithic</module>
   </modules>
 </project>

@@ -60,6 +60,11 @@
 			<artifactId>gebo.architecture.angular.persistence.support</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.environment.monolithic</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
