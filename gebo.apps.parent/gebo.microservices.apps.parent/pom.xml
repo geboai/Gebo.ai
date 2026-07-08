@@ -17,6 +17,9 @@
 
 	<modules>
 		<module>gateway.gebo.ai</module>
+		<module>brain.gebo.ai</module>
+		<module>vectorizator.gebo.ai</module>
+		<module>graphicator.gebo.ai</module>
 	</modules>
 
 	<dependencyManagement>

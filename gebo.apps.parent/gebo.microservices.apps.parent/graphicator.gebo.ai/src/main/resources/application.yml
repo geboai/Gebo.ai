@@ -1,0 +1,6 @@
+spring:
+  application:
+    # Microservice id: normalized (graphicator_gebo_ai) it matches the shared
+    # topology entry (the renamed graphsearch service) and the models-replication
+    # participant set, so this service joins the LLM models-replication cache.
+    name: graphicator.gebo.ai

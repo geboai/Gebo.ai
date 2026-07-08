@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.llms.starter</artifactId>
+
+	<!--
+	  Aggregator starter for an LLMs-hosting microservice. Pulling this single
+	  dependency gives a service the full stack to run the LLM abstraction layer
+	  in the microservices architecture with cross-node models replication:
+
+	    - gebo.architecture.llms.abstraction.layer : the LLM runtime model DAOs /
+	      controllers + the models-replication cluster synchronizer.
+	    - gebo.architecture.environment.microservices : declares the MICROSERVICES
+	      GeboApplicationArchitecture bean.
+	    - gebo.architecture.messages.rabbitmq : the external RabbitMQ messaging
+	      bridge (inbound/outbound) wired from the shared topology.
+	    - gebo.microservices.models.replication.cluster : auto-registers the
+	      IGModelsReplicationClusterTopologyProvider (from the shared participant
+	      set) so participating services start the Hazelcast models cache.
+	    - gebo.microservices.topology : the shared microservices topology.
+	    - gebo.ragsystem.vectorstores : the RAG vector-store integrations.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.environment.microservices</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.messages.rabbitmq</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.models.replication.cluster</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.vectorstores</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,6 @@
+spring:
+  application:
+    # Microservice id: normalized (vectorizator_gebo_ai) it matches the shared
+    # topology entry and the models-replication participant set, so this service
+    # joins the LLM models-replication cache.
+    name: vectorizator.gebo.ai

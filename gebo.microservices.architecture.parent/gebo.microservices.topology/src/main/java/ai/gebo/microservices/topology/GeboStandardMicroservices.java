@@ -70,7 +70,8 @@ public final class GeboStandardMicroservices {
 					.module("fulltext-module", "fulltext-indexing-component")
 					.build(),
 
-			GeboMicroservice.named("graphsearch_gebo_ai")
+			// graphicator is the renamed graphsearch microservice (knowledge-graph host).
+			GeboMicroservice.named("graphicator_gebo_ai")
 					.module("knowledge-graph-module", "knowledge-graph-component")
 					.build(),
 
@@ -143,7 +144,7 @@ public final class GeboStandardMicroservices {
 	 * {@code application.yml}. Ids are the dot-free underscore form.
 	 */
 	public static final List<String> DEFAULT_MODELS_REPLICATION_PARTICIPANTS = List.of("brain_gebo_ai",
-			"vectorizator_gebo_ai", "graphsearch_gebo_ai");
+			"vectorizator_gebo_ai", "graphicator_gebo_ai");
 
 	private GeboStandardMicroservices() {
 		// constants holder

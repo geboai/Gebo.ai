@@ -11,7 +11,7 @@ whose presence starts the cache.
 
 - **Built-in default** (shipped in the `gebo.microservices.topology` jar):
   `GeboStandardMicroservices.DEFAULT_MODELS_REPLICATION_PARTICIPANTS` =
-  `brain_gebo_ai`, `vectorizator_gebo_ai`, `graphsearch_gebo_ai`.
+  `brain_gebo_ai`, `vectorizator_gebo_ai`, `graphicator_gebo_ai`.
 - **Override for the whole deployment** via the same shared topology config used
   for the messaging topology (e.g. in the gateway's `application.yml`, which
   ships the editable topology):
@@ -22,11 +22,11 @@ gebo:
     topology:
       # ... existing services map ...
       # Override who participates in the LLM models-replication cache.
-      # Omit this key to use the built-in default (brain/vectorizator/graphsearch).
+      # Omit this key to use the built-in default (brain/vectorizator/graphicator).
       models-replication-participants:
         - brain.gebo.ai
         - vectorizator.gebo.ai
-        - graphsearch.gebo.ai
+        - graphicator.gebo.ai
 ```
 
 The module resolves each participant id against the shared
@@ -50,7 +50,7 @@ gebo:
       port-auto-increment: false # default false (deterministic ports)
       cluster-name: gebo-models-cluster
       host-overrides:            # only if a participant's reachable host differs
-        graphsearch_gebo_ai: graphsearch.internal.svc
+        graphicator_gebo_ai: graphicator.internal.svc
 ```
 
 > A non-participating service (absent from the set), or a deployable without a

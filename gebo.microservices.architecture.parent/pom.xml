@@ -15,5 +15,6 @@
 		<module>gebo.architecture.messages.rabbitmq</module>
 		<module>gebo.architecture.environment.microservices</module>
 		<module>gebo.microservices.models.replication.cluster</module>
+		<module>gebo.microservices.llms.starter</module>
 	</modules>
 </project>

@@ -77,7 +77,8 @@ gebo:
         textsearch_gebo_ai:
           fulltext-module:
             - fulltext-indexing-component
-        graphsearch_gebo_ai:
+        # graphicator is the renamed graphsearch microservice (knowledge-graph host).
+        graphicator_gebo_ai:
           knowledge-graph-module:
             - knowledge-graph-component
         scheduler_gebo_ai:
