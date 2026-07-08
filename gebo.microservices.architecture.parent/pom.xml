@@ -16,5 +16,8 @@
 		<module>gebo.architecture.environment.microservices</module>
 		<module>gebo.microservices.models.replication.cluster</module>
 		<module>gebo.microservices.llms.starter</module>
+		<module>
+			gebo.architecture.documents.cache.microservice.controller
+		</module>
 	</modules>
 </project>
