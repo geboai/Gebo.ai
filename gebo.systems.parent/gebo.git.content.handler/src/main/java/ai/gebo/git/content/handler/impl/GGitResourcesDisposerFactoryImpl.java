@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.git.content.handler.GGitProjectEndpoint;
 import ai.gebo.git.content.handler.repositories.GitEndpointRepository;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -41,10 +41,11 @@ public class GGitResourcesDisposerFactoryImpl extends GAbstractResourcesDisposer
 	 * @param moduleHandler Handler for Git content management system
 	 * @param endpointRepository Repository for Git endpoints
 	 * @param jobStatusRepo Repository for tracking job statuses
+	 * @param persistentObjectManager 
 	 */
 	public GGitResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
-			GDefaultGitContentManagementSystemHandler moduleHandler, GitEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo) {
-		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo);
+			GDefaultGitContentManagementSystemHandler moduleHandler, GitEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo, IGPersistentObjectManager persistentObjectManager) {
+		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
 
 	}
 
@@ -67,7 +68,7 @@ public class GGitResourcesDisposerFactoryImpl extends GAbstractResourcesDisposer
 	 * @return Always returns true, indicating all endpoints can be disposed
 	 */
 	@Override
-	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GGitProjectEndpoint endpoint) {
 
 		return true;
 	}
@@ -79,7 +80,7 @@ public class GGitResourcesDisposerFactoryImpl extends GAbstractResourcesDisposer
 	 * @param endpoint The Git project endpoint whose resources need to be disposed
 	 */
 	@Override
-	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+	protected void disposeResources(GGitProjectEndpoint endpoint, String contentManagementSystemCode) {
 		super.disposeFileSystem(endpoint, contentManagementSystemCode);
 
 	}

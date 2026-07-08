@@ -117,7 +117,7 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
         GCentralizedProjectEndpoint centralized = GCentralizedProjectEndpoint.of(endpoint);
         String contentManagementSystemCode = resolveContentManagementSystemCode(endpoint);
 
-        persistentObjectManager.delete(endpoint);
+        //persistentObjectManager.delete(endpoint);
 
         // Create and send messages to indicate deletion
         GMessageEnvelope<GDeletedProjectEndpointPayload> message = GMessageEnvelope.newMessageFrom(controllerEmitter,

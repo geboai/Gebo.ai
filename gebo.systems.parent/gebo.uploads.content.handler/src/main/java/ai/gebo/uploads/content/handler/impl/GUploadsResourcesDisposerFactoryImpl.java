@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -42,11 +42,12 @@ public class GUploadsResourcesDisposerFactoryImpl
      * @param moduleHandler The content management system handler for uploads
      * @param endpointRepository Repository to access upload project endpoints
      * @param jobStatusRepo Repository to track job statuses
+     * @param persistentObjectManager 
      */
 	public GUploadsResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
 			GUploadsContentManagementSystemHandlerImpl moduleHandler,
-			UploadsProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo) {
-		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo);
+			UploadsProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo, IGPersistentObjectManager persistentObjectManager) {
+		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
 
 	}
 
@@ -69,7 +70,7 @@ public class GUploadsResourcesDisposerFactoryImpl
      * @return Always true, indicating that upload resources can be disposed
      */
 	@Override
-	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GUploadsProjectEndpoint endpoint) {
 
 		return true;
 	}
@@ -81,7 +82,7 @@ public class GUploadsResourcesDisposerFactoryImpl
      * @param endpoint The upload project endpoint whose resources need to be disposed
      */
 	@Override
-	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
+	protected void disposeResources(GUploadsProjectEndpoint endpoint, String contentManagementSystemCode) {
 		super.disposeFileSystem(endpoint, contentManagementSystemCode);
 
 	}

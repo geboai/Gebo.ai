@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.filesystem.content.handler.impl;
 
@@ -16,35 +13,40 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
 import ai.gebo.filesystem.content.handler.repositories.FilesystemProjectEndpointRepository;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 
 /**
- * AI generated comments
- * Implementation of a resources disposer factory for filesystem project endpoints.
- * This singleton component is responsible for managing the disposal of filesystem resources.
+ * AI generated comments Implementation of a resources disposer factory for
+ * filesystem project endpoints. This singleton component is responsible for
+ * managing the disposal of filesystem resources.
  */
 @Component
 @Scope("singleton")
 public class GFilesystemResourcesDisposerFactoryImpl
 		extends GAbstractResourcesDisposerFactory<GFilesystemProjectEndpoint> {
 
-    /**
-     * Constructor for the filesystem resources disposer factory.
-     *
-     * @param persistenceFolderDiscoverer Service for discovering local persistent folders
-     * @param moduleHandler The content management system handler for filesystem operations
-     * @param endpointRepository Repository for filesystem project endpoints
-     * @param jobStatusRepo Repository for tracking job statuses
-     */
+	/**
+	 * Constructor for the filesystem resources disposer factory.
+	 *
+	 * @param persistenceFolderDiscoverer Service for discovering local persistent
+	 *                                    folders
+	 * @param moduleHandler               The content management system handler for
+	 *                                    filesystem operations
+	 * @param endpointRepository          Repository for filesystem project
+	 *                                    endpoints
+	 * @param jobStatusRepo               Repository for tracking job statuses
+	 * @param persistentObjectManager
+	 */
 	public GFilesystemResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
 			GFilesystemContentManagementSystemHandlerImpl moduleHandler,
-			FilesystemProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo) {
-		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo);
+			FilesystemProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo,
+			IGPersistentObjectManager persistentObjectManager) {
+		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
 
 	}
 
@@ -67,23 +69,21 @@ public class GFilesystemResourcesDisposerFactoryImpl
 	 * @return Always false, indicating resources cannot be disposed
 	 */
 	@Override
-	protected boolean isCanBeDisposedResources(GProjectEndpoint endpoint) {
+	protected boolean isCanBeDisposedResources(GFilesystemProjectEndpoint endpoint) {
 
 		return false;
 	}
 
 	/**
-	 * Disposes resources associated with the specified endpoint.
-	 * Currently this method is empty and does not perform any disposal operations.
+	 * Disposes resources associated with the specified endpoint. Currently this
+	 * method is empty and does not perform any disposal operations.
 	 *
-	 * @param endpoint The filesystem project endpoint whose resources should be disposed
+	 * @param endpoint The filesystem project endpoint whose resources should be
+	 *                 disposed
 	 */
 	@Override
-	protected void disposeResources(GProjectEndpoint endpoint, String contentManagementSystemCode) {
-
+	protected void disposeResources(GFilesystemProjectEndpoint endpoint, String contentManagementSystemCode) {
 
 	}
-
-	
 
 }
