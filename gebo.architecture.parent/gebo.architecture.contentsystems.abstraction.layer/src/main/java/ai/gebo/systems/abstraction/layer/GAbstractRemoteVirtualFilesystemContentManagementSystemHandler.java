@@ -21,6 +21,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
@@ -32,7 +33,6 @@ import ai.gebo.knlowledgebase.model.systems.GBuildSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * Abstract class providing a framework for implementing remote virtual

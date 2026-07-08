@@ -2,31 +2,24 @@ package ai.gebo.architecture.documents.cache.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Flow.Publisher;
 
-import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
-import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
-import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.ParallelFlux;
 
 public interface IDocumentsChunkService {
-	DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document,
-			ChunkingParams chunkingSpecs, String chunkingSessionId)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException,
-			SearchServiceException;
+	DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document, ChunkingParams chunkingSpecs,
+			String chunkingSessionId) throws DocumentCacheAccessException, IOException, SearchServiceException;
 
 	DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document, String chunkSessionId)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
+			throws DocumentCacheAccessException, IOException;
 
-	DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document,
-			ChunkingParams chunkingSpecs, String chunkSessionId) throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
-			GeboIngestionException, SearchServiceException;
+	DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document, ChunkingParams chunkingSpecs,
+			String chunkSessionId) throws DocumentCacheAccessException, IOException, SearchServiceException;
 
 	DocumentChunkingResponse getNextChunkSet(IGComponentOriginatedDocument document, String chunkRequestId,
 			String nextChunkId, String chunkSessionId) throws DocumentCacheAccessException, IOException;
@@ -41,7 +34,7 @@ public interface IDocumentsChunkService {
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
 			ChunkingParams chunkingSpecs, String chunkSessionId);
 
-	public String createChunkingSession(String reference) ;
+	public String createChunkingSession(String reference);
 
 	public String retrieveChunkingSession(String reference);
 

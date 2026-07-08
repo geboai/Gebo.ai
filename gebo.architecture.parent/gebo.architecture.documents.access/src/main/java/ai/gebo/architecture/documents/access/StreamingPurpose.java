@@ -1,4 +1,4 @@
-package ai.gebo.systems.abstraction.layer.model;
+package ai.gebo.architecture.documents.access;
 
 public enum StreamingPurpose {
 	SERVING, INGESTING

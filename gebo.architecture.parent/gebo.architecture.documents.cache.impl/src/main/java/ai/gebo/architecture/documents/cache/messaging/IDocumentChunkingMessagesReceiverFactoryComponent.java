@@ -1,4 +1,4 @@
-package ai.gebo.architecture.documents.cache.service;
+package ai.gebo.architecture.documents.cache.messaging;
 
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGTimedOutMessageReceiverFactory;

@@ -18,10 +18,31 @@
 			<artifactId>gebo.microservices.llms.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.standard</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.client.rest</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
-		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier bootable+swagger). -->
+		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier
+		bootable+swagger). -->
 		<profile>
 			<id>swagger-on</id>
 			<activation>
@@ -35,7 +56,8 @@
 						<configuration>
 							<jvmArguments>
 								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
-							<mainClass>ai.gebo.microservices.brain.BrainApplication</mainClass>
+							<mainClass>
+								ai.gebo.microservices.brain.BrainApplication</mainClass>
 							<excludeDevtools>false</excludeDevtools>
 							<layout>JAR</layout>
 							<classifier>bootable+swagger</classifier>
@@ -63,7 +85,8 @@
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
 						<configuration>
-							<mainClass>ai.gebo.microservices.brain.BrainApplication</mainClass>
+							<mainClass>
+								ai.gebo.microservices.brain.BrainApplication</mainClass>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -72,7 +95,8 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>ai.gebo.microservices.brain.BrainApplication</mainClass>
+									<mainClass>
+										ai.gebo.microservices.brain.BrainApplication</mainClass>
 								</manifest>
 							</archive>
 						</configuration>
@@ -83,7 +107,8 @@
 						<configuration>
 							<jvmArguments>
 								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
-							<mainClass>ai.gebo.microservices.brain.BrainApplication</mainClass>
+							<mainClass>
+								ai.gebo.microservices.brain.BrainApplication</mainClass>
 							<excludeDevtools>false</excludeDevtools>
 							<layout>JAR</layout>
 							<classifier>bootable</classifier>

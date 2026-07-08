@@ -34,6 +34,7 @@ import tools.jackson.databind.ObjectMapper;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.documents.cache.config.GeboDocumentsCacheConfig;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
 import ai.gebo.architecture.documents.cache.model.ChunkingPolicy;
@@ -71,7 +72,6 @@ import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.el.MethodNotFoundException;
 import reactor.core.Exceptions;
 import reactor.core.publisher.Flux;
@@ -85,6 +85,7 @@ public class DocumentsChunkServiceImpl
 		extends AbstractCacheEntryCleanupService<DocumentChunkOperation, DocumentChunkOperationRepository>
 		implements IDocumentsChunkService {
 
+	private static final String ERROR_ACCESSING_DOCUMENT = "Error accessing document";
 	private static final String CANNOT_SERIALIZE_SEARCH_RESULT = "Cannot serialize searchResult";
 	private final DocumentChunkOperationRepository documentChunkOperationRepository;
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
@@ -132,8 +133,7 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document, ChunkingParams params,
-			String chunkSessionId) throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
-			GeboIngestionException, SearchServiceException {
+			String chunkSessionId) throws DocumentCacheAccessException, IOException {
 		checkExistence(chunkSessionId);
 		if (params.getChunkingPolicy() != null
 				&& params.getChunkingPolicy() == ChunkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD
@@ -435,6 +435,9 @@ public class DocumentsChunkServiceImpl
 
 				}
 			}
+		} catch (GeboContentHandlerSystemException | GeboIngestionException e) {
+			LOGGER.error(ERROR_ACCESSING_DOCUMENT, e);
+			throw new DocumentCacheAccessException(ERROR_ACCESSING_DOCUMENT, e);
 		} finally {
 			try {
 				is.getInputStream().close();
@@ -618,23 +621,26 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document, ChunkingParams chunkingSpecs,
-			String chunkingSessionId) throws DocumentCacheAccessException, IOException,
-			GeboContentHandlerSystemException, GeboIngestionException, SearchServiceException {
+			String chunkingSessionId) throws DocumentCacheAccessException, IOException {
 		checkExistence(chunkingSessionId);
+
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin prepareChunks(" + document.getCode() + "..)");
 		}
-		DocumentChunkingResponse firstChunk = getChunkSet(document, chunkingSpecs, chunkingSessionId);
+		DocumentChunkingResponse firstChunk;
+
+		firstChunk = getChunkSet(document, chunkingSpecs, chunkingSessionId);
+
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareChunks(" + document.getCode() + "..)");
 		}
 		return firstChunk;
+
 	}
 
 	@Override
 	public DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document, String chunkSessionId)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
-			GeboIngestionException {
+			throws DocumentCacheAccessException, IOException {
 		checkExistence(chunkSessionId);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");

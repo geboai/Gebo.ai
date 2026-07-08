@@ -20,6 +20,7 @@
 		<module>brain.gebo.ai</module>
 		<module>vectorizator.gebo.ai</module>
 		<module>graphicator.gebo.ai</module>
+		<module>chunker.gebo.ai</module>
 	</modules>
 
 	<dependencyManagement>

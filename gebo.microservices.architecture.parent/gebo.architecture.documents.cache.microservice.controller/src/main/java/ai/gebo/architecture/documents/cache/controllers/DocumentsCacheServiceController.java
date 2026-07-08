@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.impl.DocumentsCacheServiceImpl;
@@ -34,7 +35,6 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.model.base.TypedInputStream;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * REST controller that exposes exactly the {@link IDocumentsCacheService}

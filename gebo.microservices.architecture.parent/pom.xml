@@ -19,5 +19,9 @@
 		<module>
 			gebo.architecture.documents.cache.microservice.controller
 		</module>
+		<module>gebo.microservices.starter</module>
+		<module>
+			gebo.architecture.microservices.documents.access
+		</module>
 	</modules>
 </project>
