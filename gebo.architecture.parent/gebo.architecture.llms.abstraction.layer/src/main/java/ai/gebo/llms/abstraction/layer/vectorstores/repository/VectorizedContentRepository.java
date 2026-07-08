@@ -56,6 +56,18 @@ public interface VectorizedContentRepository extends MongoRepository<GVectorized
 	 */
 	public default Stream<GVectorizedContent> findByProjectEndpoint(GProjectEndpoint endpoint) {
 		GObjectRef<GProjectEndpoint> reference = GObjectRef.of(endpoint);
+		return findByProjectEndpointRef(reference);
+	}
+
+	/**
+	 * Finds a stream of GVectorizedContent by a reference to the project endpoint. This lets callers
+	 * that only hold a shareable reference (e.g. a centralized endpoint's remote reference) match the
+	 * content stored under the original concrete endpoint class name.
+	 *
+	 * @param reference The project endpoint reference.
+	 * @return A stream of matching GVectorizedContent.
+	 */
+	public default Stream<GVectorizedContent> findByProjectEndpointRef(GObjectRef<GProjectEndpoint> reference) {
 		return findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(reference.getClassName(),
 				reference.getCode());
 	}
@@ -67,6 +79,15 @@ public interface VectorizedContentRepository extends MongoRepository<GVectorized
 	 */
 	public default void deleteByProjectEndpoint(GProjectEndpoint endpoint) {
 		GObjectRef<GProjectEndpoint> reference = GObjectRef.of(endpoint);
+		deleteByProjectEndpointRef(reference);
+	}
+
+	/**
+	 * Deletes all GVectorizedContent by a reference to the project endpoint.
+	 *
+	 * @param reference The project endpoint reference.
+	 */
+	public default void deleteByProjectEndpointRef(GObjectRef<GProjectEndpoint> reference) {
 		deleteByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(reference.getClassName(),
 				reference.getCode());
 	}

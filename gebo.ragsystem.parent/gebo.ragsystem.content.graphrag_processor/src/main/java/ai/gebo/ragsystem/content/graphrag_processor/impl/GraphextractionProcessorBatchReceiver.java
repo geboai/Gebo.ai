@@ -39,7 +39,6 @@ import ai.gebo.architecture.graphrag.services.IKnowledgeGraphPersistenceService;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.model.DocumentMetaInfos;
-import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.content.graphrag_processor.IGraphRagProcessorMessagesReceiverFactoryComponent;
 import ai.gebo.ragsystem.content.graphrag_processor.config.GeboGraphRagProcessorConfig;
 import lombok.AllArgsConstructor;
@@ -179,7 +178,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 					data.setBatchDocumentsProcessed(updatesConsumer.isErrorsOccurred() ? 0 : 1);
 					data.setBatchDocumentsProcessingErrors(updatesConsumer.isErrorsOccurred() ? 1 : 0);
 					WorkflowContext workflowContext = new WorkflowContext(payload.getKnowledgeBase().getCode(),
-							payload.getProject().getCode(), GObjectRef.of(payload.getEndPoint()));
+							payload.getProject().getCode(), payload.getEndPoint().getRemoteProjectReference());
 					WorkflowMessageContext messageContext = new WorkflowMessageContext(workflowContext, payload);
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 							envelope.getWorkflowStepId(), messageContext, emitter);

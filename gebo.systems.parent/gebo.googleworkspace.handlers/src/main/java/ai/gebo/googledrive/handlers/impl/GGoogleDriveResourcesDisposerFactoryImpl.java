@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
 import ai.gebo.googledrive.handlers.repositories.GoogleDriveProjectEndpointRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
@@ -41,11 +42,12 @@ public class GGoogleDriveResourcesDisposerFactoryImpl
 	 * @param moduleHandler Handler for Google Drive system content
 	 * @param endpointRepository Repository for Google Drive project endpoints
 	 * @param jobStatusRepo Repository for job status tracking
+	 * @param persistentObjectManager 
 	 */
 	public GGoogleDriveResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
 			GGoogleDriveSystemContentHandlerImpl moduleHandler,
-			GoogleDriveProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo) {
-		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo);
+			GoogleDriveProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo, IGPersistentObjectManager persistentObjectManager) {
+		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
 
 	}
 
@@ -80,8 +82,8 @@ public class GGoogleDriveResourcesDisposerFactoryImpl
 	 * @param endpoint The Google Drive project endpoint whose resources should be disposed
 	 */
 	@Override
-	protected void disposeResources(GGoogleDriveProjectEndpoint endpoint) {
-		
+	protected void disposeResources(GGoogleDriveProjectEndpoint endpoint, String contentManagementSystemCode) {
+
 
 	}
 

@@ -260,4 +260,16 @@ public class GITSystemsController
 	public void deleteGitEndpoint(@RequestBody GGitProjectEndpoint endpoint) throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
 	}
+
+	/**
+	 * Resolves the content management system code from the Git endpoint so disposal can locate the
+	 * originating system after the concrete endpoint has been removed from persistence.
+	 *
+	 * @param endpoint the Git endpoint being deleted.
+	 * @return the referenced content management system code.
+	 */
+	@Override
+	protected String resolveContentManagementSystemCode(GGitProjectEndpoint endpoint) {
+		return endpoint != null ? endpoint.getContentManagementSystem() : null;
+	}
 }

@@ -30,6 +30,24 @@ public interface IGLocalPersistentFolderDiscoveryService {
      * @return The path to the local persistent folder as a String.
      * @throws GeboContentHandlerSystemException If an error occurs while retrieving the folder path.
      */
-    public String getLocalPersistentFolder(GContentManagementSystem contentSystem, GProjectEndpoint projectEndpoint)
-            throws GeboContentHandlerSystemException;
+    public default String getLocalPersistentFolder(GContentManagementSystem contentSystem, GProjectEndpoint projectEndpoint)
+            throws GeboContentHandlerSystemException {
+        return getLocalPersistentFolder(contentSystem, projectEndpoint.getClass().getName(), projectEndpoint.getCode());
+    }
+
+    /**
+     * Retrieves the local persistent folder path using the endpoint identity (class name and code)
+     * rather than a live endpoint instance. This lets callers that only hold a shareable reference
+     * (for instance a {@code GCentralizedProjectEndpoint}'s remote reference) resolve the same folder
+     * that was created for the concrete endpoint during ingestion.
+     *
+     * @param contentSystem      The content management system; only required to create a new mirror,
+     *                           it may be {@code null} when an existing mirror is being resolved.
+     * @param endpointClassName  The fully qualified class name of the concrete project endpoint.
+     * @param endpointCode       The code of the project endpoint.
+     * @return The path to the local persistent folder as a String.
+     * @throws GeboContentHandlerSystemException If an error occurs while retrieving the folder path.
+     */
+    public String getLocalPersistentFolder(GContentManagementSystem contentSystem, String endpointClassName,
+            String endpointCode) throws GeboContentHandlerSystemException;
 }

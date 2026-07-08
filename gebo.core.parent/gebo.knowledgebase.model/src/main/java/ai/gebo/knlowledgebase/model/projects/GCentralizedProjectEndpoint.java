@@ -13,32 +13,18 @@
 package ai.gebo.knlowledgebase.model.projects;
 
 import ai.gebo.model.base.GObjectRef;
+import lombok.Data;
 
 /**
  * AI generated comments
  * Represents a centralized project endpoint that extends the capabilities of a general project endpoint.
  */
+@Data
 public class GCentralizedProjectEndpoint extends GProjectEndpoint {
     // Reference to a remote project endpoint
     private GObjectRef<GProjectEndpoint> remoteProjectReference = null;
 
-    /**
-     * Retrieves the remote project reference.
-     *
-     * @return a reference to the remote project endpoint
-     */
-    public GObjectRef<GProjectEndpoint> getRemoteProjectReference() {
-        return remoteProjectReference;
-    }
-
-    /**
-     * Sets the remote project reference.
-     *
-     * @param remoteProjectReference the reference to set for the remote project endpoint
-     */
-    public void setRemoteProjectReference(GObjectRef<GProjectEndpoint> remoteProjectReference) {
-        this.remoteProjectReference = remoteProjectReference;
-    }
+    
 
     /**
      * Creates a new instance of GCentralizedProjectEndpoint from an existing GProjectEndpoint.

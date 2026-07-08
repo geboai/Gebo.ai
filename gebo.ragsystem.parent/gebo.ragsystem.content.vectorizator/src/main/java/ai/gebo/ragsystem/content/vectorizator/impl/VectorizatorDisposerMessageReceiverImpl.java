@@ -35,10 +35,12 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.core.messages.GDeletedKnowledgeBasePayload;
 import ai.gebo.core.messages.GDeletedProjectEndpointPayload;
 import ai.gebo.core.messages.GDeletedProjectPayload;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
+import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.content.vectorizator.config.GeboVectorizatorConfig;
 
 /**
@@ -170,13 +172,16 @@ public class VectorizatorDisposerMessageReceiverImpl extends GAbstractMessageRec
 			if (t.getPayload() instanceof GDeletedProjectEndpointPayload) {
 				// Handle project endpoint deletion
 				GDeletedProjectEndpointPayload payload = (GDeletedProjectEndpointPayload) t.getPayload();
-				LOGGER.info("Deleting vectors for endpoint=>" + payload.getEndpoint().getCode());
+				// The message carries the shareable centralized endpoint; match the stored content by the
+				// original concrete endpoint reference (real class name + code) it points back to.
+				GObjectRef<GProjectEndpoint> endpointRef = payload.getEndpoint().getRemoteProjectReference();
+				LOGGER.info("Deleting vectors for endpoint=>" + endpointRef.getCode());
 				Stream<GVectorizedContent> vectorized = vectorizedContentRepository
-						.findByProjectEndpoint(payload.getEndpoint());
+						.findByProjectEndpointRef(endpointRef);
 
 				vectorized.forEach(deletingConsumer);
 				try {
-					vectorizedContentRepository.deleteByProjectEndpoint(payload.getEndpoint());
+					vectorizedContentRepository.deleteByProjectEndpointRef(endpointRef);
 				} catch (Throwable th) {
 					LOGGER.error("Error in dispose endpoint vectorized content infos", th);
 				}
