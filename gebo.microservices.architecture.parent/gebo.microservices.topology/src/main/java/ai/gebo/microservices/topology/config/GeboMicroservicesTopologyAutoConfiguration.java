@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import ai.gebo.microservices.topology.GeboCurrentMicroservice;
 import ai.gebo.microservices.topology.GeboMicroservice;
 import ai.gebo.microservices.topology.GeboMicroservicesTopology;
+import ai.gebo.microservices.topology.GeboModelsReplicationParticipants;
 import ai.gebo.microservices.topology.GeboStandardMicroservices;
 
 /**
@@ -83,5 +84,25 @@ public class GeboMicroservicesTopologyAutoConfiguration {
 	public GeboCurrentMicroservice geboCurrentMicroservice(
 			@Value("${spring.application.name:}") String applicationName, GeboMicroservicesTopology topology) {
 		return new GeboCurrentMicroservice(applicationName, topology);
+	}
+
+	/**
+	 * The shared set of microservices participating in the LLM models-replication
+	 * cache: the {@code gebo.microservices.topology.models-replication-participants}
+	 * override when set, otherwise the built-in
+	 * {@link GeboStandardMicroservices#DEFAULT_MODELS_REPLICATION_PARTICIPANTS}. A
+	 * single source of truth every service reads.
+	 *
+	 * @param properties the bound topology configuration
+	 * @return the effective participant set
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public GeboModelsReplicationParticipants geboModelsReplicationParticipants(
+			GeboMicroservicesTopologyProperties properties) {
+		List<String> configured = properties.getModelsReplicationParticipants();
+		List<String> effective = configured != null ? configured
+				: GeboStandardMicroservices.DEFAULT_MODELS_REPLICATION_PARTICIPANTS;
+		return new GeboModelsReplicationParticipants(effective);
 	}
 }

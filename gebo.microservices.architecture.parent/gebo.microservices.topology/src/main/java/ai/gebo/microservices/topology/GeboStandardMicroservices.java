@@ -134,6 +134,17 @@ public final class GeboStandardMicroservices {
 							"system-settings-controller-component")
 					.build());
 
+	/**
+	 * Built-in set of microservices that participate in the LLM
+	 * models-replication cache (the services that instantiate memory-resident live
+	 * LLM clients via {@code IGRuntimeModelConfigurationDao} and must stay in sync).
+	 * Shipped as the shared default; overridable via
+	 * {@code gebo.microservices.topology.models-replication-participants} in
+	 * {@code application.yml}. Ids are the dot-free underscore form.
+	 */
+	public static final List<String> DEFAULT_MODELS_REPLICATION_PARTICIPANTS = List.of("brain_gebo_ai",
+			"vectorizator_gebo_ai", "graphsearch_gebo_ai");
+
 	private GeboStandardMicroservices() {
 		// constants holder
 	}

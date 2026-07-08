@@ -23,8 +23,11 @@ import com.hazelcast.topic.ITopic;
  * Each logical channel maps to a distributed topic; payloads are wrapped in a
  * {@link GClusterEnvelope} carrying the local member id so subscribers can tell
  * their own echoed publications from genuine remote events.
+ * <p>
+ * The bus owns the {@link HazelcastInstance} it was built with and shuts it down
+ * on {@link #close()} (invoked by Spring as the inferred bean destroy method).
  */
-public class GHazelcastClusterMessageBus implements IGClusterMessageBus {
+public class GHazelcastClusterMessageBus implements IGClusterMessageBus, AutoCloseable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GHazelcastClusterMessageBus.class);
 
@@ -68,5 +71,14 @@ public class GHazelcastClusterMessageBus implements IGClusterMessageBus {
 			}
 		});
 		return () -> topic.removeMessageListener(registrationId);
+	}
+
+	@Override
+	public void close() {
+		try {
+			hazelcast.shutdown();
+		} catch (Throwable t) {
+			LOGGER.warn("Error shutting down Hazelcast instance", t);
+		}
 	}
 }

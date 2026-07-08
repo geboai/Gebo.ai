@@ -11,11 +11,10 @@ package ai.gebo.architecture.hazelcast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.JoinConfig;
@@ -24,86 +23,89 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 /**
- * Generic wiring of the embedded Hazelcast member and of the
- * {@link IGClusterMessageBus} abstraction.
+ * Wires the {@link IGClusterMessageBus} used to keep the models-replication
+ * cache in sync across instances.
  * <p>
+ * <strong>Bean-driven, not YAML-driven.</strong> The embedded Hazelcast member
+ * is started only when an {@link IGModelsReplicationClusterTopologyProvider} bean
+ * is present: its {@link GModelsReplicationClusterTopology} supplies the
+ * participants and ports. A participating microservice contributes that bean; a
+ * service that does not participate omits it.
  * <ul>
- * <li>When {@code gebo.hazelcast.enabled=true} a {@link HazelcastInstance} is
- * created from {@link GeboHazelcastProperties} and a Hazelcast-backed
- * {@link GHazelcastClusterMessageBus} is exposed.</li>
- * <li>Otherwise (default) no Hazelcast member is started and a
- * {@link GNoOpClusterMessageBus} is exposed so cluster-aware code keeps working
- * on a single instance.</li>
+ * <li>Provider present &rarr; a {@link HazelcastInstance} is built from the
+ * topology and a Hazelcast-backed {@link GHazelcastClusterMessageBus} is
+ * exposed.</li>
+ * <li>Provider absent &rarr; no Hazelcast member is started and a
+ * {@link GNoOpClusterMessageBus} is exposed, so cluster-aware code keeps working
+ * on a single, standalone instance.</li>
  * </ul>
- * This class is picked up by the application-wide component scan of the
- * {@code ai.gebo} base package; there is no dependency on the specific feature
- * (LLMs, etc.) using the bus.
+ * Picked up by the application-wide component scan of the {@code ai.gebo} base
+ * package.
  */
 @Configuration
-@EnableConfigurationProperties(GeboHazelcastProperties.class)
 public class GeboHazelcastConfiguration {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeboHazelcastConfiguration.class);
 
+	private static final String DEFAULT_CLUSTER_NAME = "gebo-models-cluster";
+	private static final String DEFAULT_INSTANCE_NAME = "gebo-models-hazelcast";
+
 	/**
-	 * Builds the embedded Hazelcast member only when clustering is enabled.
+	 * Exposes the cluster message bus. When a topology provider bean is present the
+	 * bus is Hazelcast-backed (and owns the member it starts); otherwise it is the
+	 * standalone no-op bus.
+	 * <p>
+	 * The inferred destroy method ({@code close()} on
+	 * {@link GHazelcastClusterMessageBus}) shuts the Hazelcast member down with the
+	 * application context.
 	 */
-	@Bean(destroyMethod = "shutdown")
-	@ConditionalOnProperty(prefix = "gebo.hazelcast", name = "enabled", havingValue = "true")
-	public HazelcastInstance geboHazelcastInstance(GeboHazelcastProperties properties) {
+	@Bean
+	public IGClusterMessageBus modelsReplicationClusterMessageBus(
+			ObjectProvider<IGModelsReplicationClusterTopologyProvider> topologyProviders) {
+		IGModelsReplicationClusterTopologyProvider provider = topologyProviders.getIfAvailable();
+		if (provider == null) {
+			LOGGER.info("No IGModelsReplicationClusterTopologyProvider bean present: "
+					+ "models replication cache disabled (standalone no-op bus)");
+			return new GNoOpClusterMessageBus();
+		}
+
+		GModelsReplicationClusterTopology topology = provider.getModelsReplicationClusterTopology();
+		if (topology == null) {
+			LOGGER.warn("IGModelsReplicationClusterTopologyProvider {} returned a null topology: "
+					+ "models replication cache disabled (standalone no-op bus)", provider.getClass().getName());
+			return new GNoOpClusterMessageBus();
+		}
+
+		HazelcastInstance hazelcast = createHazelcastInstance(topology);
+		LOGGER.info("Models replication cache started (cluster message bus backed by Hazelcast)");
+		return new GHazelcastClusterMessageBus(hazelcast);
+	}
+
+	private HazelcastInstance createHazelcastInstance(GModelsReplicationClusterTopology topology) {
 		Config config = new Config();
-		config.setClusterName(properties.getClusterName());
-		config.setInstanceName(properties.getInstanceName());
+		config.setClusterName(StringUtils.hasText(topology.getClusterName()) ? topology.getClusterName()
+				: DEFAULT_CLUSTER_NAME);
+		config.setInstanceName(StringUtils.hasText(topology.getInstanceName()) ? topology.getInstanceName()
+				: DEFAULT_INSTANCE_NAME);
 
 		NetworkConfig network = config.getNetworkConfig();
-		network.setPort(properties.getPort());
-		network.setPortAutoIncrement(properties.isPortAutoIncrement());
+		network.setPort(topology.getPort());
+		network.setPortAutoIncrement(topology.isPortAutoIncrement());
 
 		JoinConfig join = network.getJoin();
-		if (properties.getMembers() != null && !properties.getMembers().isEmpty()) {
-			// Explicit TCP/IP discovery: deterministic, multicast off.
-			join.getMulticastConfig().setEnabled(false);
+		// Multicast is never used: participation is explicit via the provided topology.
+		join.getMulticastConfig().setEnabled(false);
+		if (topology.getMembers() != null && !topology.getMembers().isEmpty()) {
 			join.getTcpIpConfig().setEnabled(true);
-			properties.getMembers().forEach(join.getTcpIpConfig()::addMember);
-			LOGGER.info("Starting Hazelcast member '{}' on cluster '{}' with TCP/IP members {}",
-					properties.getInstanceName(), properties.getClusterName(), properties.getMembers());
-		} else if (properties.isMulticastEnabled()) {
-			join.getTcpIpConfig().setEnabled(false);
-			join.getMulticastConfig().setEnabled(true);
-			join.getMulticastConfig().setMulticastGroup(properties.getMulticastGroup());
-			join.getMulticastConfig().setMulticastPort(properties.getMulticastPort());
-			LOGGER.info("Starting Hazelcast member '{}' on cluster '{}' with multicast discovery {}:{}",
-					properties.getInstanceName(), properties.getClusterName(), properties.getMulticastGroup(),
-					properties.getMulticastPort());
+			topology.getMembers().forEach(join.getTcpIpConfig()::addMember);
+			LOGGER.info("Models replication Hazelcast member '{}' on cluster '{}' with TCP/IP members {}",
+					config.getInstanceName(), config.getClusterName(), topology.getMembers());
 		} else {
-			// No discovery configured: single-member cluster (still a valid, usable bus).
-			join.getMulticastConfig().setEnabled(false);
 			join.getTcpIpConfig().setEnabled(false);
-			LOGGER.warn("Hazelcast enabled but no members/multicast configured for cluster '{}': "
-					+ "the member will run isolated (single-member cluster)", properties.getClusterName());
+			LOGGER.warn("Models replication topology declared no members for cluster '{}': "
+					+ "the member will run isolated (single-member cache)", config.getClusterName());
 		}
 
 		return Hazelcast.getOrCreateHazelcastInstance(config);
-	}
-
-	/**
-	 * Hazelcast-backed cluster message bus (only when a {@link HazelcastInstance}
-	 * exists).
-	 */
-	@Bean
-	@ConditionalOnProperty(prefix = "gebo.hazelcast", name = "enabled", havingValue = "true")
-	public IGClusterMessageBus hazelcastClusterMessageBus(HazelcastInstance hazelcastInstance) {
-		LOGGER.info("Cluster message bus backed by Hazelcast is active");
-		return new GHazelcastClusterMessageBus(hazelcastInstance);
-	}
-
-	/**
-	 * Standalone fallback used whenever no Hazelcast-backed bus was created.
-	 */
-	@Bean
-	@ConditionalOnMissingBean(IGClusterMessageBus.class)
-	public IGClusterMessageBus noOpClusterMessageBus() {
-		LOGGER.info("Cluster message bus disabled: using standalone (no-op) local bus");
-		return new GNoOpClusterMessageBus();
 	}
 }

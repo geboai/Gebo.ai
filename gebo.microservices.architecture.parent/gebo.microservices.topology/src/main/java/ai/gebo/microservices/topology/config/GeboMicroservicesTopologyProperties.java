@@ -61,6 +61,17 @@ public class GeboMicroservicesTopologyProperties {
 	 */
 	private Map<String, Map<String, List<String>>> services = new LinkedHashMap<>();
 
+	/**
+	 * Microservice ids that participate in the LLM models-replication cache. This
+	 * is part of the <b>shared</b> topology configuration: when {@code null} (the
+	 * default) the built-in
+	 * {@link ai.gebo.microservices.topology.GeboStandardMicroservices#DEFAULT_MODELS_REPLICATION_PARTICIPANTS}
+	 * set is used; set it here to override the participant set for the whole
+	 * deployment. An explicit empty list disables the cache everywhere. Ids may be
+	 * dotted or underscore form.
+	 */
+	private List<String> modelsReplicationParticipants = null;
+
 	public boolean isIncludeDefaults() {
 		return includeDefaults;
 	}
@@ -75,5 +86,13 @@ public class GeboMicroservicesTopologyProperties {
 
 	public void setServices(Map<String, Map<String, List<String>>> services) {
 		this.services = services;
+	}
+
+	public List<String> getModelsReplicationParticipants() {
+		return modelsReplicationParticipants;
+	}
+
+	public void setModelsReplicationParticipants(List<String> modelsReplicationParticipants) {
+		this.modelsReplicationParticipants = modelsReplicationParticipants;
 	}
 }
