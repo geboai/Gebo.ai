@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -26,7 +27,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import lombok.AllArgsConstructor;
-
 @Service
 @AllArgsConstructor
 public class GMonolithicDocumentContentStreamerImpl implements IGDocumentContentStreamer {
