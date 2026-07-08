@@ -26,9 +26,10 @@ import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
@@ -45,9 +46,14 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Component
 @Scope("singleton")
 public class GTranscriptModelRuntimeConfigurationDaoimpl
-		extends GAbstractRuntimeConfigurationDao<IGConfigurableTranscriptModel>
+		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableTranscriptModel, GBaseTranscriptModelConfig>
 		implements IGTranscriptModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
-	
+
+	@Override
+	protected GLlmModelClusterCategory getClusterCategory() {
+		return GLlmModelClusterCategory.TRANSCRIPT;
+	}
+
 	// Logger for logging runtime information and errors
 	static Logger LOGGER = LoggerFactory.getLogger(GEmbeddingModelRuntimeConfigurationDaoImpl.class);
 	

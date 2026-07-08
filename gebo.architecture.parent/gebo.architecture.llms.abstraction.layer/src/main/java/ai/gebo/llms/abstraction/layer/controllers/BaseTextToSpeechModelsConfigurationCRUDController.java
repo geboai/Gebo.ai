@@ -71,7 +71,7 @@ public class BaseTextToSpeechModelsConfigurationCRUDController<TextToSpeechModel
 			return OperationStatus.<TextToSpeechModelConfigType>of(e);
 		}
 		try {
-			this.modelRuntimeConfigurationDao.addRuntimeByConfig(config);
+			this.modelRuntimeConfigurationDao.addRuntimeByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while configuring new text to speech model ", e);
 			try {
@@ -116,8 +116,7 @@ public class BaseTextToSpeechModelsConfigurationCRUDController<TextToSpeechModel
 	 */
 	protected OperationStatus<TextToSpeechModelConfigType> update(TextToSpeechModelConfigType config) {
 		try {
-			IGConfigurableTextToSpeechModel handler = this.modelRuntimeConfigurationDao.findByCode(config.getCode());
-			handler.reconfigure(config);
+			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception reconfiguring model", e);
 			return OperationStatus.<TextToSpeechModelConfigType>of(e);
@@ -142,7 +141,7 @@ public class BaseTextToSpeechModelsConfigurationCRUDController<TextToSpeechModel
 	 */
 	protected OperationStatus<Boolean> delete(TextToSpeechModelConfigType type) {
 		try {
-			this.modelRuntimeConfigurationDao.deleteByCode(type.getCode());
+			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);
 		} catch (Throwable e) {
 			LOGGER.error("Exception deleting model", e);

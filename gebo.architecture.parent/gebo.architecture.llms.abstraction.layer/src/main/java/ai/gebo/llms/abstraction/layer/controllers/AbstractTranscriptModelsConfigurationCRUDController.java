@@ -57,7 +57,7 @@ public abstract class AbstractTranscriptModelsConfigurationCRUDController<Transc
 			return OperationStatus.<TranscriptModelConfigType>of(e);
 		}
 		try {
-			this.modelRuntimeConfigurationDao.addRuntimeByConfig(config);
+			this.modelRuntimeConfigurationDao.addRuntimeByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while configuring new transcript model ", e);
 			try {
@@ -90,9 +90,7 @@ public abstract class AbstractTranscriptModelsConfigurationCRUDController<Transc
 
 	protected OperationStatus<TranscriptModelConfigType> update(TranscriptModelConfigType config) {
 		try {
-			IGConfigurableTranscriptModel handler = this.modelRuntimeConfigurationDao
-					.findByCode(config.getCode());
-			handler.reconfigure(config);
+			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception reconfiguring model", e);
 			return OperationStatus.<TranscriptModelConfigType>of(e);
@@ -111,7 +109,7 @@ public abstract class AbstractTranscriptModelsConfigurationCRUDController<Transc
 
 	protected OperationStatus<Boolean> delete(TranscriptModelConfigType type) {
 		try {
-			this.modelRuntimeConfigurationDao.deleteByCode(type.getCode());
+			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);
 		} catch (Throwable e) {
 			LOGGER.error("Exception deleting model", e);

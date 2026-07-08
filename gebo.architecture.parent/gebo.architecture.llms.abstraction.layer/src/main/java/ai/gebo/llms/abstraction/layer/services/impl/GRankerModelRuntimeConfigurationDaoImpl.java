@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
@@ -22,8 +23,15 @@ import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupport
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Service
-public class GRankerModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigurationDao<IGConfigurableRankerModel>
+public class GRankerModelRuntimeConfigurationDaoImpl
+		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableRankerModel, GBaseRankerModelConfig>
 		implements IGRankerModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+
+	@Override
+	protected GLlmModelClusterCategory getClusterCategory() {
+		return GLlmModelClusterCategory.RANKER;
+	}
+
 	// AI generated comments
 	// Logger for this class
 	static final Logger LOGGER = LoggerFactory.getLogger(GRankerModelRuntimeConfigurationDaoImpl.class);

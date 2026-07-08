@@ -69,7 +69,7 @@ public abstract class AbstractRankerModelsConfigurationCRUDController<RankerMode
 			return OperationStatus.<RankerModelType>of(e);
 		}
 		try {
-			this.modelRuntimeConfigurationDao.addRuntimeByConfig(config);
+			this.modelRuntimeConfigurationDao.addRuntimeByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while configuring new chat model ", e);
 			try {
@@ -115,8 +115,7 @@ public abstract class AbstractRankerModelsConfigurationCRUDController<RankerMode
 	 */
 	protected OperationStatus<RankerModelType> update(RankerModelType config) {
 		try {
-			IGConfigurableRankerModel handler = this.modelRuntimeConfigurationDao.findByCode(config.getCode());
-			handler.reconfigure(config);
+			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception reconfiguring model", e);
 			return OperationStatus.<RankerModelType>of(e);
@@ -141,7 +140,7 @@ public abstract class AbstractRankerModelsConfigurationCRUDController<RankerMode
 	 */
 	protected OperationStatus<Boolean> delete(RankerModelType type) {
 		try {
-			this.modelRuntimeConfigurationDao.deleteByCode(type.getCode());
+			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);
 		} catch (Throwable e) {
 			LOGGER.error("Exception deleting model", e);

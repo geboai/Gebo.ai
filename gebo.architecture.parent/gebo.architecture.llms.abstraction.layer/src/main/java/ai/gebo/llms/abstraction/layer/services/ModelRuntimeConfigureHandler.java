@@ -35,36 +35,36 @@ public class ModelRuntimeConfigureHandler {
 		if (model instanceof GBaseChatModelConfig chatModel) {
 			IGChatModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGChatModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(chatModel);
+			dao.addRuntimeByConfigClustered(chatModel);
 			handleDefaultModel(GBaseChatModelConfig.class, chatModel, dao);
 		}
 		if (model instanceof GBaseEmbeddingModelConfig embeddingModel) {
 			IGEmbeddingModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGEmbeddingModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(embeddingModel);
+			dao.addRuntimeByConfigClustered(embeddingModel);
 			handleDefaultModel(GBaseEmbeddingModelConfig.class, embeddingModel, dao);
 		}
 		if (model instanceof GBaseRankerModelConfig rankerConfig) {
 			IGRankerModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGRankerModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(rankerConfig);
+			dao.addRuntimeByConfigClustered(rankerConfig);
 		}
 		if (model instanceof GBaseTextToSpeachModelConfig ttsConfig) {
 			IGTextToSpeechModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGTextToSpeechModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(ttsConfig);
+			dao.addRuntimeByConfigClustered(ttsConfig);
 			handleDefaultModel(GBaseTextToSpeachModelConfig.class, ttsConfig, dao);
 		}
 		if (model instanceof GBaseTranscriptModelConfig transcriptConfig) {
 			IGTranscriptModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGTranscriptModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(transcriptConfig);
+			dao.addRuntimeByConfigClustered(transcriptConfig);
 			handleDefaultModel(GBaseTranscriptModelConfig.class, transcriptConfig, dao);
 		}
 		if (model instanceof GBaseImageModelConfig imageConfig) {
 			IGImageModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGImageModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(imageConfig);
+			dao.addRuntimeByConfigClustered(imageConfig);
 			handleDefaultModel(GBaseImageModelConfig.class, imageConfig, dao);
 		}
 		return OperationStatus.of(model);
