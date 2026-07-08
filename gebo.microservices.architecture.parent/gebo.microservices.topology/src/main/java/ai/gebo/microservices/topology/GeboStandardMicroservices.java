@@ -41,6 +41,16 @@ import java.util.List;
  */
 public final class GeboStandardMicroservices {
 
+	/**
+	 * The API gateway's microservice id (its {@code spring.application.name}
+	 * {@code gateway.gebo.ai} in the canonical, dot-free underscore form). The
+	 * gateway is the routing edge, not a routable backend, so it is intentionally
+	 * absent from {@link #DEFAULTS}; it is exposed here as the default target for
+	 * {@link ai.gebo.microservices.topology.GeboMicroserviceUrlResolver.Strategy#GATEWAY}
+	 * url resolution.
+	 */
+	public static final String GATEWAY_MICROSERVICE_ID = "gateway_gebo_ai";
+
 	/** Immutable built-in topology, in declaration order. */
 	public static final List<GeboMicroservice> DEFAULTS = List.of(
 

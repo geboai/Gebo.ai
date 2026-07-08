@@ -16,12 +16,29 @@
 	</properties>
 
 	<modules>
+		<module>eureka.gebo.ai</module>
 		<module>gateway.gebo.ai</module>
 		<module>brain.gebo.ai</module>
 		<module>vectorizator.gebo.ai</module>
 		<module>graphicator.gebo.ai</module>
 		<module>chunker.gebo.ai</module>
 	</modules>
+
+	<!--
+	  Every Gebo microservice app (gateway + backends) is a Spring Cloud discovery
+	  client: it registers with the Eureka server (eureka.gebo.ai) under its
+	  application name - the canonical underscore microservice id (e.g. brain_gebo_ai)
+	  - so client-side load balancing (@LoadBalanced RestTemplate/WebClient, Feign)
+	  and the gateway's lb:// routes resolve to live instances. The eureka.gebo.ai
+	  server module brings the Eureka server starter (which supersedes this client)
+	  and runs standalone.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>

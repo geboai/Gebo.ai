@@ -1,13 +1,11 @@
 spring:
   application:
     # Canonical microservice id (underscore form): matches the shared topology
-    # entry, the models-replication participant set (so this service joins the LLM
-    # models-replication cache) and the Eureka service-id that @LoadBalanced /
-    # lb:// lookups resolve.
-    name: brain_gebo_ai
+    # entry and the Eureka service-id that @LoadBalanced / lb:// lookups resolve.
+    name: chunker_gebo_ai
 
 # Eureka discovery client: registers this service under its application name
-# (brain_gebo_ai) so client-side load balancing resolves it to a live instance.
+# (chunker_gebo_ai) so client-side load balancing resolves it to a live instance.
 # Points at the eureka.gebo.ai registry; override
 # EUREKA_CLIENT_SERVICEURL_DEFAULTZONE for a distributed deployment.
 eureka:

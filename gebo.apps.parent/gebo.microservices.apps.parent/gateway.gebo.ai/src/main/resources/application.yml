@@ -1,6 +1,7 @@
 spring:
   application:
-    name: gateway.gebo.ai
+    # Canonical microservice id (underscore form), also the Eureka service-id.
+    name: gateway_gebo_ai
   cloud:
     gateway:
       server:
@@ -15,6 +16,18 @@ spring:
 
 server:
   port: 8080
+
+# Eureka discovery client. This is what gives the gateway a populated
+# DiscoveryClient, so lb://<microserviceId> routes and Spring Cloud LoadBalancer
+# actually resolve backend instances (previously there was no discovery source, so
+# lb:// had no servers). Points at the eureka.gebo.ai registry; override
+# EUREKA_CLIENT_SERVICEURL_DEFAULTZONE for a distributed deployment.
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
 
 # ---------------------------------------------------------------------------
 # Shared microservices topology (3 levels):
