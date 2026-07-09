@@ -35,6 +35,7 @@
 		<module>gebo.llms.starter</module>
 		<module>gebo.llms.tests.services</module>
 		<module>gebo.llms.deepseek</module>
+		<module>gebo.llms.aws-bedrock</module>
 		<module>gebo.llms.setup</module>
 	</modules>
 </project>

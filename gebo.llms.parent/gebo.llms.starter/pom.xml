@@ -57,7 +57,13 @@
 			<artifactId>gebo.llms.deepseek</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.aws-bedrock</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>ai.gebo.llms</groupId>
 			<artifactId>gebo.llms.setup</artifactId>

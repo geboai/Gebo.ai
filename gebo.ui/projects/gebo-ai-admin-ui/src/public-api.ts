@@ -73,6 +73,12 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-job-status-viewer/log-table
 export * from "./lib/admin-ui/entity-editors/gebo-ai-filesystems-admin/gebo-ai-filesystem-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-embedmodel-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-chatmodel-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-embedmodel-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-image-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-text-to-speech-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-transcript-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-ranker-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-test-chat.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-ollama-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-ollama-embedmodel-admin.component";

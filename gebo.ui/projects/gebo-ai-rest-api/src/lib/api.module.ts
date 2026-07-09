@@ -6,6 +6,12 @@ import { HttpClient } from '@angular/common/http';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
+import { BedrockChatModelsConfigurationControllerService } from './api/bedrockChatModelsConfigurationController.service';
+import { BedrockEmbeddingModelsConfigurationControllerService } from './api/bedrockEmbeddingModelsConfigurationController.service';
+import { BedrockImageModelsConfigurationControllerService } from './api/bedrockImageModelsConfigurationController.service';
+import { BedrockRankerModelsConfigurationControllerService } from './api/bedrockRankerModelsConfigurationController.service';
+import { BedrockTextToSpeechModelsConfigurationControllerService } from './api/bedrockTextToSpeechModelsConfigurationController.service';
+import { BedrockTranscriptModelsConfigurationControllerService } from './api/bedrockTranscriptModelsConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
@@ -15,6 +21,7 @@ import { ConfluenceSystemsControllerService } from './api/confluenceSystemsContr
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DeepseekChatModelsConfigurationControllerService } from './api/deepseekChatModelsConfigurationController.service';
+import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
 import { FileSystemSharesSettingControllerService } from './api/fileSystemSharesSettingController.service';
 import { FileSystemsBrowsingControllerService } from './api/fileSystemsBrowsingController.service';
@@ -125,6 +132,12 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
+    BedrockChatModelsConfigurationControllerService,
+    BedrockEmbeddingModelsConfigurationControllerService,
+    BedrockImageModelsConfigurationControllerService,
+    BedrockRankerModelsConfigurationControllerService,
+    BedrockTextToSpeechModelsConfigurationControllerService,
+    BedrockTranscriptModelsConfigurationControllerService,
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
@@ -134,6 +147,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
     DeepseekChatModelsConfigurationControllerService,
+    DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,
     FileSystemSharesSettingControllerService,
     FileSystemsBrowsingControllerService,

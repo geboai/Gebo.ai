@@ -15,6 +15,6 @@ import { GenericOpenAIAPITranscriptModelChoice } from './genericOpenAIAPITranscr
 export interface OperationStatusListGenericOpenAIAPITranscriptModelChoice { 
     result?: Array<GenericOpenAIAPITranscriptModelChoice>;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }
