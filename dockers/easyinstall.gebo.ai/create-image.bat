@@ -1,4 +1,7 @@
-xcopy ..\..\gebo.apps.parent\gebo.ai.app\target\gebo.ai.app-1.0.1.0-BETA-bootable.jar .
-xcopy ..\..\gebo.apps.parent\gebo.ai.app\target\classes\META-INF\sbom\application.cdx.json
+@echo off
+REM Copy the freshly built bootable jar and the SBOM into the build context
+xcopy /Y /F "..\..\gebo.apps.parent\gebo.ai.app\target\gebo.ai.app-1.0.2.0-SNAPSHOT-bootable.jar" "."
+xcopy /Y /F "..\..\gebo.apps.parent\gebo.ai.app\target\classes\META-INF\sbom\application.cdx.json" "."
+
 docker image rm geboai/easyinstall.gebo.ai --force
-docker build --build-arg JAVA_EXTRA_SECURITY_DIR=/opt/gebo.ai -t geboai/easyinstall.gebo.ai -t geboai/easyinstall.gebo.ai:1.0.1.0-BETA .
+docker build --build-arg JAVA_EXTRA_SECURITY_DIR=/opt/gebo.ai -t geboai/easyinstall.gebo.ai -t geboai/easyinstall.gebo.ai:1.0.2.0-SNAPSHOT .

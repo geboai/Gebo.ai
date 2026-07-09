@@ -24,12 +24,13 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.MInfoType;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.ModuleType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
@@ -46,8 +47,14 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
  */
 @Component
 @Scope("singleton")
-public class GImageModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigurationDao<IGConfigurableImageModel>
+public class GImageModelRuntimeConfigurationDaoImpl
+		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableImageModel, GBaseImageModelConfig>
 		implements IGImageModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+
+	@Override
+	protected GLlmModelClusterCategory getClusterCategory() {
+		return GLlmModelClusterCategory.IMAGE;
+	}
 
 	// Logger instance for this class
 	static Logger LOGGER = LoggerFactory.getLogger(GImageModelRuntimeConfigurationDaoImpl.class);

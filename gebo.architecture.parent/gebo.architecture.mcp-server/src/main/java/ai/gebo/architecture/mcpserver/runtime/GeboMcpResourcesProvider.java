@@ -23,6 +23,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.mcpserver.config.GeboMcpResourcesConfig;
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
@@ -47,7 +48,6 @@ import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IdentityUtil;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncResourceSpecification;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncResourceTemplateSpecification;
 import io.modelcontextprotocol.spec.McpSchema.BlobResourceContents;

@@ -41,6 +41,16 @@ import java.util.List;
  */
 public final class GeboStandardMicroservices {
 
+	/**
+	 * The API gateway's microservice id (its {@code spring.application.name}
+	 * {@code gateway.gebo.ai} in the canonical, dot-free underscore form). The
+	 * gateway is the routing edge, not a routable backend, so it is intentionally
+	 * absent from {@link #DEFAULTS}; it is exposed here as the default target for
+	 * {@link ai.gebo.microservices.topology.GeboMicroserviceUrlResolver.Strategy#GATEWAY}
+	 * url resolution.
+	 */
+	public static final String GATEWAY_MICROSERVICE_ID = "gateway_gebo_ai";
+
 	/** Immutable built-in topology, in declaration order. */
 	public static final List<GeboMicroservice> DEFAULTS = List.of(
 
@@ -66,11 +76,13 @@ public final class GeboStandardMicroservices {
 					.module("rag-threashold-autotune-module", "rag-threashold-autotune-component")
 					.build(),
 
-			GeboMicroservice.named("textsearch_gebo_ai")
+			// fulltextor is the renamed textsearch microservice (full-text host).
+			GeboMicroservice.named("fulltextor_gebo_ai")
 					.module("fulltext-module", "fulltext-indexing-component")
 					.build(),
 
-			GeboMicroservice.named("graphsearch_gebo_ai")
+			// graphicator is the renamed graphsearch microservice (knowledge-graph host).
+			GeboMicroservice.named("graphicator_gebo_ai")
 					.module("knowledge-graph-module", "knowledge-graph-component")
 					.build(),
 
@@ -133,6 +145,17 @@ public final class GeboStandardMicroservices {
 					.module("integration-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component")
 					.build());
+
+	/**
+	 * Built-in set of microservices that participate in the LLM
+	 * models-replication cache (the services that instantiate memory-resident live
+	 * LLM clients via {@code IGRuntimeModelConfigurationDao} and must stay in sync).
+	 * Shipped as the shared default; overridable via
+	 * {@code gebo.microservices.topology.models-replication-participants} in
+	 * {@code application.yml}. Ids are the dot-free underscore form.
+	 */
+	public static final List<String> DEFAULT_MODELS_REPLICATION_PARTICIPANTS = List.of("brain_gebo_ai",
+			"vectorizator_gebo_ai", "graphicator_gebo_ai");
 
 	private GeboStandardMicroservices() {
 		// constants holder

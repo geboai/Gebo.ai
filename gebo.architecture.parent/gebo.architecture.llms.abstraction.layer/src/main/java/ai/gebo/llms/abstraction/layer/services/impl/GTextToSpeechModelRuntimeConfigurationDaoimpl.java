@@ -26,9 +26,10 @@ import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
@@ -39,9 +40,14 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Component
 @Scope("singleton")
 public class GTextToSpeechModelRuntimeConfigurationDaoimpl
-		extends GAbstractRuntimeConfigurationDao<IGConfigurableTextToSpeechModel>
+		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableTextToSpeechModel, GBaseTextToSpeachModelConfig>
 		implements IGTextToSpeechModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
-	
+
+	@Override
+	protected GLlmModelClusterCategory getClusterCategory() {
+		return GLlmModelClusterCategory.TEXT_TO_SPEECH;
+	}
+
 	/** 
      * Logger for this class
      * AI generated comments

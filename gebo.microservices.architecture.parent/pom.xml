@@ -14,5 +14,14 @@
 		<module>gebo.microservices.topology</module>
 		<module>gebo.architecture.messages.rabbitmq</module>
 		<module>gebo.architecture.environment.microservices</module>
+		<module>gebo.microservices.models.replication.cluster</module>
+		<module>gebo.microservices.llms.starter</module>
+		<module>
+			gebo.architecture.documents.cache.microservice.controller
+		</module>
+		<module>gebo.microservices.starter</module>
+		<module>
+			gebo.architecture.microservices.documents.access
+		</module>
 	</modules>
 </project>

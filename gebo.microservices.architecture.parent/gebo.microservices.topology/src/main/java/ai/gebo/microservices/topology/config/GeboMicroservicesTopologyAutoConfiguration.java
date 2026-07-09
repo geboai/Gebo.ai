@@ -21,7 +21,9 @@ import org.springframework.context.annotation.Bean;
 
 import ai.gebo.microservices.topology.GeboCurrentMicroservice;
 import ai.gebo.microservices.topology.GeboMicroservice;
+import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.microservices.topology.GeboMicroservicesTopology;
+import ai.gebo.microservices.topology.GeboModelsReplicationParticipants;
 import ai.gebo.microservices.topology.GeboStandardMicroservices;
 
 /**
@@ -83,5 +85,45 @@ public class GeboMicroservicesTopologyAutoConfiguration {
 	public GeboCurrentMicroservice geboCurrentMicroservice(
 			@Value("${spring.application.name:}") String applicationName, GeboMicroservicesTopology topology) {
 		return new GeboCurrentMicroservice(applicationName, topology);
+	}
+
+	/**
+	 * The shared set of microservices participating in the LLM models-replication
+	 * cache: the {@code gebo.microservices.topology.models-replication-participants}
+	 * override when set, otherwise the built-in
+	 * {@link GeboStandardMicroservices#DEFAULT_MODELS_REPLICATION_PARTICIPANTS}. A
+	 * single source of truth every service reads.
+	 *
+	 * @param properties the bound topology configuration
+	 * @return the effective participant set
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public GeboModelsReplicationParticipants geboModelsReplicationParticipants(
+			GeboMicroservicesTopologyProperties properties) {
+		List<String> configured = properties.getModelsReplicationParticipants();
+		List<String> effective = configured != null ? configured
+				: GeboStandardMicroservices.DEFAULT_MODELS_REPLICATION_PARTICIPANTS;
+		return new GeboModelsReplicationParticipants(effective);
+	}
+
+	/**
+	 * Publishes the {@link GeboMicroserviceUrlResolver} that turns a microserviceId
+	 * / messagingModuleId / messagingSystemId into the complete HTTP base url used
+	 * to contact the owning microservice over RestTemplate/WebClient/Feign,
+	 * according to {@code gebo.microservices.topology.url.*} (defaulting to the
+	 * client-side LoadBalancer strategy).
+	 *
+	 * @param topology the resolved topology
+	 * @param properties the bound topology configuration (its {@code url} section)
+	 * @return the url resolver
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public GeboMicroserviceUrlResolver geboMicroserviceUrlResolver(GeboMicroservicesTopology topology,
+			GeboMicroservicesTopologyProperties properties) {
+		GeboMicroservicesTopologyProperties.Url url = properties.getUrl();
+		return new GeboMicroserviceUrlResolver(topology, url.getStrategy(), url.getScheme(), url.getGatewayBaseUrl(),
+				url.getGatewayPathTemplate(), url.getDirect());
 	}
 }

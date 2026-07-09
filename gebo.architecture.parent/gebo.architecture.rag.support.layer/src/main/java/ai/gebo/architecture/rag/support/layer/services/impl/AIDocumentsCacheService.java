@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentCacheItem;
@@ -41,7 +42,6 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import lombok.AllArgsConstructor;
 
 /**

@@ -64,7 +64,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.systems</groupId>
-			<artifactId>gebo.mcl-client.content.handler</artifactId>
+			<artifactId>gebo.mcp-client.content.handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

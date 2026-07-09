@@ -40,6 +40,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.hazelcast</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.base.model</artifactId>
 			<version>${project.version}</version>

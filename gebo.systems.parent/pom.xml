@@ -33,6 +33,6 @@
 		<module>gebo.atlassian.jira.handler</module>
 		<module>gebo.integration.content.handler</module>
 		<module>gebo.bingsearch.handler</module>
-		<module>gebo.mcl-client.content.handler</module>
+		<module>gebo.mcp-client.content.handler</module>
 	</modules>
 </project>

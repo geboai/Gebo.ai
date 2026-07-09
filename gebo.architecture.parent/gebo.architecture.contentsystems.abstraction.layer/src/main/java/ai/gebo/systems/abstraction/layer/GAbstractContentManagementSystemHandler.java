@@ -41,6 +41,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.patterns.IGRuntimeModuleComponent;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.MInfoType;
@@ -68,7 +69,6 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAccessedObjectType;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.el.MethodNotFoundException;
 
 public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint, ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>

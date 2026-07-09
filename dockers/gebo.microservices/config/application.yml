@@ -1,0 +1,104 @@
+# ---------------------------------------------------------------------------
+# Shared runtime configuration for the Gebo.ai MICROSERVICES deployment.
+#
+# Mounted read-only at /opt/gebo.ai/config in every backend service and loaded
+# via SPRING_CONFIG_ADDITIONAL_LOCATION on top of each service's own baked
+# application.yml (which only sets spring.application.name + the eureka client).
+#
+# Hostnames (mongo, rabbit, qdrant, opensearch, neo4j) are docker-compose service
+# names on the gebo-net network. Values here are DEV defaults reused from the
+# monolith image config - change every secret/password/api-key for production.
+# ---------------------------------------------------------------------------
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+  # RabbitMQ broker used by the microservices messaging bridge (gebo.microservices.starter).
+  rabbitmq:
+    host: rabbit
+    port: 5672
+    username: guest
+    password: guest
+  neo4j:
+    uri: bolt://neo4j:7687
+    authentication:
+      username: neo4j
+      password: neo4jmaster
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      INDENT_OUTPUT: true
+
+security.provider.1: org.bouncycastle.jce.provider.BouncyCastleProvider
+
+ai.gebo.security:
+  auth:
+    tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+    tokenExpirationMsec: 120000
+  cors:
+    allowedOrigins: http://localhost:8080,http://localhost:4200
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+
+ai.gebo.config:
+  setupConfiguresWorkdir: false
+  security: true
+  setup: true
+  customKeyStore: false
+  enableCommunityModules: true
+
+# MongoDB (shared metadata store).
+ai.gebo.mongodb:
+  enabled: true
+  databaseName: gebo-ai
+  connectionString: mongodb://mongoroot:mongopwd@mongo:27017/gebo-ai?authSource=admin
+
+# Qdrant vector store (used by the RAG / vectorizator / brain services).
+ai.gebo.vectorstore:
+  use: QDRANT
+  qdrant:
+    host: qdrant
+    port: 6334
+    tls: false
+    apiKey: ce7c85bc-f037-4c64-91d8-70335638329d
+
+# OpenSearch (used by the fulltextor / full-text service).
+ai.gebo.opensearch:
+  enabled: true
+  protocol: https
+  host: opensearch
+  port: 9200
+  username: admin
+  password: dothesearch1973-Advanced
+
+# LLM providers - supply real API keys via the shared config or per-service env.
+ai.gebo.llms.config:
+  openAIEnabled: true
+  anthropicEnabled: true
+  ollamaEnabled: true
+spring.ai:
+  openai:
+    api-key: DUMMYKEY
+    embedding:
+      enabled: true
+      options:
+        model: text-embedding-3-large
+    chat:
+      api-key: DUMMYKEY
+      options:
+        model: gpt-3.5-turbo-16k
+
+reactor.schedulers.defaultPoolSize: 16

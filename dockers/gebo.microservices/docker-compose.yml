@@ -1,0 +1,167 @@
+# ===========================================================================
+# Gebo.ai MICROSERVICES deployment.
+#
+# Infra (mongo, rabbit, qdrant, neo4j, opensearch) + the eureka registry + the
+# api gateway + every backend microservice.
+#
+# 1. Build the images first (from gebo.apps.parent/gebo.microservices.apps.parent):
+#        mvn -P docker package -DskipTests
+#    -> produces geboai/<artifactId>:<version> in the local Docker daemon.
+# 2. Then:  docker compose up -d
+#
+# App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id,
+# so only the gateway (8080) and the eureka dashboard (8761) publish host ports.
+# Override the image tag with GEBO_VERSION in .env.
+# ===========================================================================
+name: gebo-microservices
+
+# Common definition shared by every backend microservice.
+x-microservice: &microservice
+  restart: unless-stopped
+  depends_on: [eureka, rabbit, mongo]
+  environment:
+    EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    SPRING_CONFIG_ADDITIONAL_LOCATION: file:/opt/gebo.ai/config/
+    JAVA_TOOL_OPTIONS: "-Xms256m -Xmx1g"
+  volumes:
+    - ./config:/opt/gebo.ai/config:ro
+    - /opt/gebo.ai/home          # per-container anonymous volume
+    - /opt/gebo.ai/work
+  networks: [gebo-net]
+
+services:
+  # ---------------- Infrastructure ----------------
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoroot
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+    command: ["mongod", "--wiredTigerCacheSizeGB=1"]
+    volumes: [mongo-data:/data/db]
+    networks: [gebo-net]
+
+  rabbit:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "127.0.0.1:15672:15672"   # management UI (loopback only)
+    networks: [gebo-net]
+
+  qdrant:
+    image: qdrant/qdrant
+    restart: always
+    environment:
+      QDRANT__SERVICE__API_KEY: ce7c85bc-f037-4c64-91d8-70335638329d
+      QDRANT__STORAGE__OPTIMIZE_INDEXING: "true"
+    volumes: [qdrant-data:/qdrant/storage]
+    networks: [gebo-net]
+
+  neo4j:
+    image: neo4j:5
+    restart: always
+    environment:
+      NEO4J_AUTH: "neo4j/neo4jmaster"
+      NEO4JLABS_PLUGINS: '["apoc"]'
+    volumes: [neo4j-data:/data]
+    networks: [gebo-net]
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
+      - plugins.security.ssl.http.enabled=true
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+      nofile: { soft: 65536, hard: 65536 }
+    volumes: [opensearch-data:/usr/share/opensearch/data]
+    networks: [gebo-net]
+
+  # ---------------- Service registry ----------------
+  eureka:
+    image: geboai/eureka.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    restart: unless-stopped
+    ports:
+      - "8761:8761"               # Eureka dashboard / registry
+    networks: [gebo-net]
+
+  # ---------------- API gateway (only published edge) ----------------
+  gateway:
+    image: geboai/gateway.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    restart: unless-stopped
+    depends_on: [eureka]
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    ports:
+      - "8080:8080"
+    networks: [gebo-net]
+
+  # ---------------- LLM / RAG backends ----------------
+  brain:
+    <<: *microservice
+    image: geboai/brain.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, qdrant]
+
+  vectorizator:
+    <<: *microservice
+    image: geboai/vectorizator.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, qdrant]
+
+  graphicator:
+    <<: *microservice
+    image: geboai/graphicator.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, neo4j]
+
+  chunker:
+    <<: *microservice
+    image: geboai/chunker.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+
+  fulltextor:
+    <<: *microservice
+    image: geboai/fulltextor.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, opensearch]
+
+  # ---------------- Content-handler microservices ----------------
+  git:
+    <<: *microservice
+    image: geboai/git.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  filesystem:
+    <<: *microservice
+    image: geboai/filesystem.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  uploads:
+    <<: *microservice
+    image: geboai/uploads.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  userspace:
+    <<: *microservice
+    image: geboai/userspace.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  sharepoint:
+    <<: *microservice
+    image: geboai/sharepoint.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  confluence:
+    <<: *microservice
+    image: geboai/confluence.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  jira:
+    <<: *microservice
+    image: geboai/jira.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  googledrive:
+    <<: *microservice
+    image: geboai/googledrive.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  mcpclient:
+    <<: *microservice
+    image: geboai/mcpclient.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  integration:
+    <<: *microservice
+    image: geboai/integration.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+
+volumes:
+  mongo-data:
+  qdrant-data:
+  neo4j-data:
+  opensearch-data:
+
+networks:
+  gebo-net:
+    driver: bridge

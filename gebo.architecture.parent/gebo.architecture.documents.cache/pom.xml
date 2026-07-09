@@ -15,8 +15,19 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.core.messages</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<artifactId>gebo.architecture.documents.access</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -28,6 +39,10 @@
 			<groupId>ai.gebo</groupId>
 			<artifactId>gebo.config</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 	</dependencies>
 </project>

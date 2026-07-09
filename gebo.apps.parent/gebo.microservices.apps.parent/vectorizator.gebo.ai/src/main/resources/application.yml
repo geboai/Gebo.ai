@@ -1,0 +1,18 @@
+spring:
+  application:
+    # Canonical microservice id (underscore form): matches the shared topology
+    # entry, the models-replication participant set (so this service joins the LLM
+    # models-replication cache) and the Eureka service-id that @LoadBalanced /
+    # lb:// lookups resolve.
+    name: vectorizator_gebo_ai
+
+# Eureka discovery client: registers this service under its application name
+# (vectorizator_gebo_ai) so client-side load balancing resolves it to a live
+# instance. Points at the eureka.gebo.ai registry; override
+# EUREKA_CLIENT_SERVICEURL_DEFAULTZONE for a distributed deployment.
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true

@@ -71,7 +71,7 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 			return OperationStatus.<ImageModelConfigType>of(e);
 		}
 		try {
-			this.modelRuntimeConfigurationDao.addRuntimeByConfig(config);
+			this.modelRuntimeConfigurationDao.addRuntimeByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while configuring new image model ", e);
 			try {
@@ -116,8 +116,7 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 	 */
 	protected OperationStatus<ImageModelConfigType> update(ImageModelConfigType config) {
 		try {
-			IGConfigurableImageModel handler = this.modelRuntimeConfigurationDao.findByCode(config.getCode());
-			handler.reconfigure(config);
+			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception reconfiguring model", e);
 			return OperationStatus.<ImageModelConfigType>of(e);
@@ -142,7 +141,7 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 	 */
 	protected OperationStatus<Boolean> delete(ImageModelConfigType type) {
 		try {
-			this.modelRuntimeConfigurationDao.deleteByCode(type.getCode());
+			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);
 		} catch (Throwable e) {
 			LOGGER.error("Exception deleting model", e);

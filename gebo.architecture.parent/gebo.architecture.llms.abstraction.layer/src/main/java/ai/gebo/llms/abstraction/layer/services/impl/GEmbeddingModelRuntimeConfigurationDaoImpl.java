@@ -28,13 +28,14 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.model.GModuleTrafficInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.MInfoType;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.ModuleType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -47,8 +48,13 @@ import ai.gebo.llms.abstraction.layer.vectorstores.model.EmbeddingTrafficInfo;
 @Component
 @Scope("singleton")
 public class GEmbeddingModelRuntimeConfigurationDaoImpl
-        extends GAbstractRuntimeConfigurationDao<IGConfigurableEmbeddingModel>
+        extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableEmbeddingModel, GBaseEmbeddingModelConfig>
         implements IGEmbeddingModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+
+    @Override
+    protected GLlmModelClusterCategory getClusterCategory() {
+        return GLlmModelClusterCategory.EMBEDDING;
+    }
 
     // AI generated comments
     // Logger for this class

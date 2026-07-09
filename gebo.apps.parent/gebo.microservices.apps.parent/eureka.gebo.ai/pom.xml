@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.apps.microservices</groupId>
+		<artifactId>gebo.microservices.apps.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>eureka.gebo.ai</artifactId>
+
+	<!--
+	  Service registry for the Gebo.ai microservices deployment. Every microservice
+	  app registers here under its canonical (underscore) application name, so
+	  client-side load balancing and the gateway's lb:// routes can resolve live
+	  instances. Runs standalone (does not register with / fetch from itself).
+	-->
+	<dependencies>
+		<!-- Netflix Eureka server (this artifact already includes the eureka client
+		     inherited from the parent, which is why the server runs standalone via
+		     register-with-eureka=false / fetch-registry=false in application.yml). -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- Bootable fat jar (classifier bootable). -->
+		<profile>
+			<id>bootables</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>ai.gebo.microservices.eureka.EurekaServerApplication</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.microservices.eureka.EurekaServerApplication</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.eureka.EurekaServerApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
