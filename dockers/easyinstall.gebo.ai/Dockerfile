@@ -73,7 +73,7 @@ COPY qdrant-config.yaml ${QDRANT_CONFIG}
 ENV NEO4J_HOME=/var/lib/neo4j \
     NEO4J_CONF=/etc/neo4j \
     NEO4J_LOGS=/var/log/neo4j \
-    NEO4J_PASSWORD=neo4j
+    NEO4J_PASSWORD=neo4jmaster
 RUN curl -fsSL https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg && \
 	    echo "deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable 5" > /etc/apt/sources.list.d/neo4j.list && \
 	    apt-get update && apt-get install -y neo4j && \
@@ -85,13 +85,10 @@ RUN mkdir -p ${NEO4J_CONF} ${NEO4J_HOME} ${NEO4J_LOGS} \
 COPY neo4j.conf /etc/neo4j/neo4j.conf
 COPY neo4j-entry.sh /bin/neo4j-entry.sh
 # The Debian package pre-creates the Neo4j auth store with the default password
-# ("neo4j") that requires a change on first login. Remove it and set the
-# password with --require-password-change=false so the app can connect without
-# being forced to change credentials. Done at build time (before the VOLUME
-# declaration) so it is baked into the image and copied into fresh volumes.
+# ("neo4j") that requires a change on first login. Remove it at build time so it
+# is NOT copied into fresh volumes; neo4j-entry.sh then sets the custom password
+# at runtime with --require-password-change=false.
 RUN rm -rf ${NEO4J_HOME}/data/dbms \
-    && mkdir -p ${NEO4J_HOME}/data \
-    && neo4j-admin dbms set-initial-password --require-password-change=false ${NEO4J_PASSWORD} 2>&1 || true \
     && chown -R neo4j:neo4j ${NEO4J_HOME}/data
 
 # ======= OpenSearch =======
@@ -131,7 +128,7 @@ RUN mkdir -p /var/log/gebo.ai
 COPY gebo.ai.app-1.0.2.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
-ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8  -Dai.gebo.neo4j.enabled=false  -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
+ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 COPY gebo.ai.sh /bin/gebo.ai.sh
