@@ -13,6 +13,12 @@
 
 	<properties>
 		<spring-cloud.version>2025.1.2</spring-cloud.version>
+		<jib.version>3.4.4</jib.version>
+		<!-- Base image for the per-microservice Jib images (docker profile). The
+		     docker:// prefix makes Jib read it from the LOCAL Docker daemon (that is
+		     where dockers/gebo.ai.platform/create-image builds it); drop the prefix
+		     once geboai/platform is published to a registry. -->
+		<gebo.docker.from>docker://geboai/platform:2.5</gebo.docker.from>
 	</properties>
 
 	<modules>
@@ -33,6 +39,7 @@
 		<module>googledrive.gebo.ai</module>
 		<module>mcpclient.gebo.ai</module>
 		<module>integration.gebo.ai</module>
+		<module>fulltextor.gebo.ai</module>
 	</modules>
 
 	<!--
@@ -62,4 +69,81 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<profiles>
+		<!--
+		  Docker image build (DISABLED by default). Activate with `-P docker` to
+		  containerise every microservice app with Jib during the `package` phase:
+
+		      mvn -P docker package            (build all images to the local daemon)
+		      mvn -P docker -pl <app> package  (build a single service image)
+
+		  Each app produces geboai/<artifactId>:<version> (e.g. geboai/git.gebo.ai)
+		  layered on the shared geboai/platform base, with GEBO_HOME/GEBO_WORK_DIRECTORY
+		  and the standard JVM flags preset. Jib auto-detects the single Spring Boot
+		  main class and auto-skips pom-packaging modules (this aggregator), so no
+		  per-app configuration is needed. Runtime config (Mongo/RabbitMQ/Eureka/
+		  OpenSearch/security) is expected to be mounted at /opt/gebo.ai/config, not
+		  baked into the images.
+		-->
+		<profile>
+			<id>docker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<version>${jib.version}</version>
+						<configuration>
+							<from>
+								<image>${gebo.docker.from}</image>
+							</from>
+							<to>
+								<image>geboai/${project.artifactId}:${project.version}</image>
+								<tags>
+									<tag>latest</tag>
+								</tags>
+							</to>
+							<container>
+								<appRoot>/opt/gebo.ai</appRoot>
+								<workingDirectory>/opt/gebo.ai</workingDirectory>
+								<ports>
+									<port>8080</port>
+								</ports>
+								<environment>
+									<GEBO_HOME>/opt/gebo.ai/home</GEBO_HOME>
+									<GEBO_WORK_DIRECTORY>/opt/gebo.ai/work</GEBO_WORK_DIRECTORY>
+								</environment>
+								<jvmFlags>
+									<jvmFlag>-Dsun.jnu.encoding=UTF-8</jvmFlag>
+									<jvmFlag>-Dfile.encoding=UTF-8</jvmFlag>
+									<jvmFlag>-Djava.net.preferIPv4Stack=true</jvmFlag>
+									<jvmFlag>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmFlag>
+									<jvmFlag>--enable-native-access=ALL-UNNAMED</jvmFlag>
+								</jvmFlags>
+								<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+								<labels>
+									<org.opencontainers.image.vendor>Gebo.ai</org.opencontainers.image.vendor>
+									<org.opencontainers.image.source>https://github.com/geboai/Gebo.ai</org.opencontainers.image.source>
+									<org.opencontainers.image.licenses>MPL-2.0</org.opencontainers.image.licenses>
+								</labels>
+							</container>
+						</configuration>
+						<executions>
+							<execution>
+								<id>build-microservice-image</id>
+								<phase>package</phase>
+								<goals>
+									<goal>dockerBuild</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

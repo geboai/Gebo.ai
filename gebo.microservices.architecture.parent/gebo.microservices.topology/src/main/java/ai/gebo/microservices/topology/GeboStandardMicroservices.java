@@ -76,7 +76,8 @@ public final class GeboStandardMicroservices {
 					.module("rag-threashold-autotune-module", "rag-threashold-autotune-component")
 					.build(),
 
-			GeboMicroservice.named("textsearch_gebo_ai")
+			// fulltextor is the renamed textsearch microservice (full-text host).
+			GeboMicroservice.named("fulltextor_gebo_ai")
 					.module("fulltext-module", "fulltext-indexing-component")
 					.build(),
 

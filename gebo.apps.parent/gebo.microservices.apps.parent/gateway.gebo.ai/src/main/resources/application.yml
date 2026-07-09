@@ -87,7 +87,8 @@ gebo:
             - vectorization-dispose-component
           rag-threashold-autotune-module:
             - rag-threashold-autotune-component
-        textsearch_gebo_ai:
+        # fulltextor is the renamed textsearch microservice (full-text host).
+        fulltextor_gebo_ai:
           fulltext-module:
             - fulltext-indexing-component
         # graphicator is the renamed graphsearch microservice (knowledge-graph host).
