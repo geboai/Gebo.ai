@@ -201,6 +201,15 @@ ai.gebo.mongodb:
   enabled: true
   databaseName: gebo-ai
   connectionString: mongodb://mongoroot:mongopwd@localhost:27017/gebo-ai?authSource=admin
+# OpenSearch is shipped inside this all-in-one image (see opensearch.yml, bound
+# to 127.0.0.1:9200 with the security plugin disabled, no auth).
+ai.gebo.opensearch:
+  enabled: true
+  protocol: http
+  host: localhost
+  port: 9200
+  username: admin
+  password: admin
 ai.gebo.filesystem:
   allowFilesystemSharesUI: false
   shares:

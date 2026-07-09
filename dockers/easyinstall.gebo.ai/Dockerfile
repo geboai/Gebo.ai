@@ -12,7 +12,7 @@ RUN update-locale LANG=en_US.UTF-8
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="1.0.1.0-BETA"
+LABEL org.opencontainers.image.version="1.0.2.0-SNAPSHOT"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -37,10 +37,13 @@ ENV  GEBO_HOME="/opt/gebo.ai/home"
 ENV DEBIAN_FRONTEND=noninteractive \
     MONGO_DATA=/data/db \
     QDRANT_DIR=/var/lib/qdrant \
-    QDRANT_CONFIG=/etc/qdrant/config.yaml
+    QDRANT_CONFIG=/etc/qdrant/config.yaml \
+    OPENSEARCH_HOME=/opt/opensearch \
+    OPENSEARCH_DATA=/opt/opensearch/data
 
 ARG MONGO_MAJOR=8.0
 ARG QDRANT_VERSION=1.15.3
+ARG OPENSEARCH_VERSION=2.18.0
 
 RUN apt-get update && apt-get install -y  \
       ca-certificates curl gnupg lsb-release supervisor tini \
@@ -70,25 +73,50 @@ COPY qdrant-config.yaml ${QDRANT_CONFIG}
 ENV NEO4J_HOME=/var/lib/neo4j \
     NEO4J_CONF=/etc/neo4j \
     NEO4J_LOGS=/var/log/neo4j \
-    NEO4J_PASSWORD=neo4jmaster
+    NEO4J_PASSWORD=neo4j
 RUN curl -fsSL https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg && \
 	    echo "deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable 5" > /etc/apt/sources.list.d/neo4j.list && \
 	    apt-get update && apt-get install -y neo4j && \
 	    rm -rf /var/lib/apt/lists/*
 
 	# Configurazione minima Neo4j (bind su 0.0.0.0)
-RUN mkdir -p ${NEO4J_CONF} ${NEO4J_HOME} ${NEO4J_LOGS} 
+RUN mkdir -p ${NEO4J_CONF} ${NEO4J_HOME} ${NEO4J_LOGS} \
+    && chown -R neo4j:neo4j ${NEO4J_HOME} ${NEO4J_LOGS}
 COPY neo4j.conf /etc/neo4j/neo4j.conf
 COPY neo4j-entry.sh /bin/neo4j-entry.sh
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# The Debian package pre-creates the Neo4j auth store with the default password
+# ("neo4j") that requires a change on first login. Remove it and set the
+# password with --require-password-change=false so the app can connect without
+# being forced to change credentials. Done at build time (before the VOLUME
+# declaration) so it is baked into the image and copied into fresh volumes.
+RUN rm -rf ${NEO4J_HOME}/data/dbms \
+    && mkdir -p ${NEO4J_HOME}/data \
+    && neo4j-admin dbms set-initial-password --require-password-change=false ${NEO4J_PASSWORD} 2>&1 || true \
+    && chown -R neo4j:neo4j ${NEO4J_HOME}/data
+
+# ======= OpenSearch =======
+# OpenSearch cannot run as root: create a dedicated user.
+RUN useradd --system --shell /usr/sbin/nologin --home-dir ${OPENSEARCH_HOME} opensearch
+RUN mkdir -p /var/log/opensearch
+RUN curl -L -o /tmp/opensearch.tar.gz \
+        https://artifacts.opensearch.org/releases/bundle/opensearch/${OPENSEARCH_VERSION}/opensearch-${OPENSEARCH_VERSION}-linux-x64.tar.gz \
+    && tar -xzf /tmp/opensearch.tar.gz -C /opt \
+    && rm /tmp/opensearch.tar.gz \
+    && ln -sfn /opt/opensearch-${OPENSEARCH_VERSION} ${OPENSEARCH_HOME} \
+    && mkdir -p ${OPENSEARCH_HOME}/data ${OPENSEARCH_HOME}/logs \
+    && chown -R opensearch:opensearch /opt/opensearch-${OPENSEARCH_VERSION} /var/log/opensearch
+COPY opensearch.yml /opt/opensearch-${OPENSEARCH_VERSION}/config/opensearch.yml
+
+COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 RUN mkdir -p /opt/
 RUN mkdir -p /opt/java/
 WORKDIR /opt/java/
-RUN curl -L -o jdk-21_linux-x64_bin.tar.gz https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz
-RUN tar zxvfs jdk-21_linux-x64_bin.tar.gz
-RUN rm jdk-21_linux-x64_bin.tar.gz
-ENV JAVA_HOME=/opt/java/jdk-21.0.9
+RUN curl -L -o jdk-21_linux-x64_bin.tar.gz https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz \
+    && tar -xzf jdk-21_linux-x64_bin.tar.gz \
+    && rm jdk-21_linux-x64_bin.tar.gz \
+    && ln -sfn "$(ls -d jdk-21.* | head -n1)" jdk-21
+ENV JAVA_HOME=/opt/java/jdk-21
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8
@@ -100,7 +128,7 @@ RUN mkdir -p /opt/gebo.ai/config
 RUN mkdir -p /opt/gebo.ai/work
 RUN mkdir -p /opt/gebo.ai/shares
 RUN mkdir -p /var/log/gebo.ai
-COPY gebo.ai.app-1.0.1.0-BETA-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-1.0.2.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8  -Dai.gebo.neo4j.enabled=false  -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
@@ -114,8 +142,8 @@ RUN set -eux; \
 RUN chmod a+x /bin/mongo-init.sh /bin/container-start.sh  /bin/neo4j-entry.sh /bin/gebo.ai.sh
 
 
-VOLUME ["/data/db", "/var/lib/qdrant", "/var/lib/neo4j", "/var/log/neo4j","/var/log/gebo.ai", "/opt/gebo.ai/shares"]
-EXPOSE 27017 6333 7474 7687  12999
+VOLUME ["/data/db", "/var/lib/qdrant", "/var/lib/neo4j", "/var/log/neo4j","/var/log/gebo.ai", "/opt/gebo.ai/shares", "/opt/opensearch/data"]
+EXPOSE 27017 6333 7474 7687 9200 9600 12999
 
 
 ENTRYPOINT ["/usr/bin/tini","--"]  
