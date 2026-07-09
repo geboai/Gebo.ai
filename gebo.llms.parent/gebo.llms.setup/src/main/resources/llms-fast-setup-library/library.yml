@@ -165,6 +165,89 @@ ai.gebo.llms.vendors.setup.config:
               uses: CHAT
 
     - vendorInfo:
+        vendorId: aws-bedrock
+        name: AWS Bedrock
+        description: Amazon Bedrock (Claude, Amazon Nova, Meta Llama, Mistral, Cohere ...) plus Amazon Polly / Transcribe
+        acquireKeyUrl: https://console.aws.amazon.com/iam/home#/security_credentials
+        requiresApiKey: true
+        secretType: USERNAME_PASSWORD
+        requiresCustomUrl: false
+        webSite: https://aws.amazon.com/bedrock/
+        apiKeySecretContext: aws-bedrock
+        minContextWindow: 200000
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chat-aws-bedrock
+          doModelsLookup: true
+          choices:
+            - code: us.anthropic.claude-3-5-sonnet-20241022-v2:0
+              description: Anthropic Claude 3.5 Sonnet v2
+              uses: CHAT
+              defaultChoice: true
+            - code: us.amazon.nova-pro-v1:0
+              description: Amazon Nova Pro
+              uses: CHAT
+            - code: us.meta.llama3-3-70b-instruct-v1:0
+              description: Meta Llama 3.3 70b Instruct
+              uses: CHAT
+            - code: us.anthropic.claude-3-5-haiku-20241022-v1:0
+              description: Anthropic Claude 3.5 Haiku
+              uses: INTERNAL_SERVICES
+            - code: us.amazon.nova-lite-v1:0
+              description: Amazon Nova Lite
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-aws-bedrock
+          doModelsLookup: true
+          choices:
+            - code: amazon.titan-embed-text-v2:0
+              description: Amazon Titan Text Embeddings V2
+              defaultChoice: true
+            - code: cohere.embed-multilingual-v3
+              description: Cohere Embed Multilingual v3
+            - code: cohere.embed-english-v3
+              description: Cohere Embed English v3
+        - type: RANKING
+          serviceHandler: ranker-aws-bedrock
+          doModelsLookup: true
+          choices:
+            - code: amazon.rerank-v1:0
+              description: Amazon Rerank v1
+              defaultChoice: true
+            - code: cohere.rerank-v3-5:0
+              description: Cohere Rerank v3.5
+        - type: IMAGESGEN
+          serviceHandler: image-generation-aws-bedrock
+          doModelsLookup: true
+          choices:
+            - code: amazon.nova-canvas-v1:0
+              description: Amazon Nova Canvas (text to image generation)
+              defaultChoice: true
+            - code: amazon.titan-image-generator-v2:0
+              description: Amazon Titan Image Generator v2
+            - code: stability.stable-image-ultra-v1:1
+              description: Stability AI Stable Image Ultra
+        - type: TTS
+          serviceHandler: aws-polly-tts
+          doModelsLookup: false
+          choices:
+            - code: Joanna
+              description: Amazon Polly - Joanna (en-US, neural)
+              defaultChoice: true
+            - code: Matthew
+              description: Amazon Polly - Matthew (en-US, neural)
+            - code: Danielle
+              description: Amazon Polly - Danielle (en-US, generative)
+        - type: TRANSCRIPT
+          serviceHandler: aws-transcribe
+          doModelsLookup: false
+          choices:
+            - code: amazon-transcribe-streaming
+              description: Amazon Transcribe streaming (speech to text)
+              defaultChoice: true
+
+    - vendorInfo:
         vendorId: deepseek
         name: Deepseek
         description: Deepseek
