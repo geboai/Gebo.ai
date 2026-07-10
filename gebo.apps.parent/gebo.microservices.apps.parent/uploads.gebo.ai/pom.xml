@@ -18,7 +18,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
-			<artifactId>gebo.microservices.starter</artifactId>
+			<artifactId>gebo.microservices.content-handler.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
