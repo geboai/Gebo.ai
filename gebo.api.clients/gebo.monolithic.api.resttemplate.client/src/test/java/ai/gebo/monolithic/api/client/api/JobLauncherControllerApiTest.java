@@ -12,10 +12,8 @@
 
 package ai.gebo.monolithic.api.client.api;
 
-import ai.gebo.monolithic.api.client.model.GJobStatus;
 import ai.gebo.monolithic.api.client.model.GObjectRefGProjectEndpoint;
 import ai.gebo.monolithic.api.client.model.HasRunningJobs;
-import ai.gebo.monolithic.api.client.model.JobSummary;
 import ai.gebo.monolithic.api.client.model.OperationStatusGJobStatus;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -75,36 +73,6 @@ public class JobLauncherControllerApiTest {
     public void getHasRunningJobsTest() {
         GObjectRefGProjectEndpoint body = null;
         HasRunningJobs response = api.getHasRunningJobs(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getJobStatusTest() {
-        String jobCode = null;
-        GJobStatus response = api.getJobStatus(jobCode);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getJobSummaryTest() {
-        String jobCode = null;
-        JobSummary response = api.getJobSummary(jobCode);
 
         // TODO: test validations
     }
