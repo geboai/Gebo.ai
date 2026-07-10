@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.secrets.model.GeboAwsConnectionCredentials;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
 import ai.gebo.secrets.model.GeboGoogleJsonSecretContent;
 import ai.gebo.secrets.model.GeboGoogleOauth2SecretContent;
@@ -154,6 +155,12 @@ public class SecretsController {
 	public SecretInfo createGoogleOauth2Secret(
 			@RequestBody @Valid @NotNull SecretWrapper<GeboGoogleOauth2SecretContent> content)
 			throws GeboCryptSecretException {
+		String id = this.secretsService.storeSecret(content.getSecretContent(), content.getDescription(),
+				content.getContextCode());
+		return secretsService.getSecretInfoById(id);
+	}
+	@PostMapping(value = "createAWSConnectionSecret", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public SecretInfo createAWSConnectionSecret(@RequestBody @Valid @NotNull SecretWrapper<GeboAwsConnectionCredentials> content) throws GeboCryptSecretException {
 		String id = this.secretsService.storeSecret(content.getSecretContent(), content.getDescription(),
 				content.getContextCode());
 		return secretsService.getSecretInfoById(id);
