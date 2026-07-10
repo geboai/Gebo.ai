@@ -23,5 +23,6 @@
 		<module>
 			gebo.architecture.microservices.documents.access
 		</module>
+		<module>gebo.microservices.content-handler.starter</module>
 	</modules>
 </project>
