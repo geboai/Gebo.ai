@@ -10,9 +10,6 @@
 package ai.gebo.jobs.services;
 
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactory;
-import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
-import lombok.Data;
 
 /**
  * AI generated comments

@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +26,6 @@ import ai.gebo.jobs.services.IGGeboIngestionJobService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
-import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.model.base.GObjectRef;
 import lombok.AllArgsConstructor;

@@ -23,7 +23,6 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
-import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService.GConsumers;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;

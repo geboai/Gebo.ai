@@ -15,9 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
-import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
-import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
-import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
 import lombok.Data;
 
 /**

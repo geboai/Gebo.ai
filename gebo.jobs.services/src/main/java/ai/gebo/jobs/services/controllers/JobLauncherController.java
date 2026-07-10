@@ -11,7 +11,6 @@ package ai.gebo.jobs.services.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
-import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;

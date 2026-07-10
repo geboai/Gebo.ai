@@ -9,41 +9,19 @@
 
 package ai.gebo.jobs.services.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.data.domain.Example;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.application.messaging.workflow.GWorkflowType;
-import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
-import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
-import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
-import ai.gebo.architecture.multithreading.IGRunnable;
-import ai.gebo.architecture.multithreading.IGRunnableFactory;
-import ai.gebo.architecture.patterns.IGRuntimeBinder;
-import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
-import ai.gebo.config.GeboConfig;
-import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGGeboScheduledSyncronizationService;
-import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
-import ai.gebo.knlowledgebase.model.jobs.GJobStatusItem;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
-import ai.gebo.knowledgebase.repositories.JobStatusRepository;
-import ai.gebo.knowledgebase.repositories.UserMessageRepository;
-import ai.gebo.model.annotations.SchedulableObject;
 import ai.gebo.model.base.GObjectRef;
 import lombok.AllArgsConstructor;
 

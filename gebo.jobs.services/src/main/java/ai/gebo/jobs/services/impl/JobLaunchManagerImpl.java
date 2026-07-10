@@ -10,11 +10,6 @@
 package ai.gebo.jobs.services.impl;
 
 import java.util.List;
-import ai.gebo.jobs.services.controllers.JobLauncherController;
-import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
-import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
-import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +27,10 @@ import ai.gebo.core.messages.PublishProjectEndpointMessagePayload;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGJobLaunchManager;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 
 /**
  * AI generated comments Implementation of the Job Launch Manager that handles
