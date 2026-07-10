@@ -24,7 +24,6 @@ export interface GBedrockImageModelConfig {
     choosedModel?: GBedrockImageModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    region?: string;
     height?: number;
     width?: number;
     cfgScale?: number;

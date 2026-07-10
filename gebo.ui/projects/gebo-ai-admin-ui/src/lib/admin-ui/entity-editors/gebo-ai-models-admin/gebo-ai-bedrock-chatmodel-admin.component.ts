@@ -29,14 +29,13 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 export class GeboAIBedrockChatModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GBedrockChatModelConfig> {
     protected override entityName: string = "GBedrockChatModelConfig";
 
-    /** AWS credentials are stored as an access-key/secret-key username/password pair. */
-    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.USERNAMEPASSWORD];
+    /** AWS credentials and region are both carried by the AWS_CONNECTION secret. */
+    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.AWSCONNECTION];
 
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),
-        region: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
         apiSecretCode: new FormControl(),
@@ -72,9 +71,9 @@ export class GeboAIBedrockChatModelAdminComponent extends BaseEntityEditingCompo
         outputForwardingService?: GeboUIOutputForwardingService) {
         super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.valueChanges.subscribe(newValue => {
-            if (!newValue.region && !newValue.apiSecretCode) {
+            if (!newValue.apiSecretCode) {
                 this.modelChoicesData = [];
-            } else if (newValue.region !== this.oldValue.region || newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
+            } else if (newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
                 this.loadModels(newValue);
             }
             this.oldValue = newValue;

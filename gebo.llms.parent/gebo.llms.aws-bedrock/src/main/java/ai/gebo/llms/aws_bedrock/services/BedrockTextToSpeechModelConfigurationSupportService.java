@@ -100,7 +100,7 @@ public class BedrockTextToSpeechModelConfigurationSupportService implements
 		public void reconfigure(GBedrockTextToSpeechModelConfig config) throws LLMConfigException {
 			this.config = config;
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
-			Region region = credentialsResolver.resolveRegion(config.getRegion());
+			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			this.pollyClient = PollyClient.builder().region(region).credentialsProvider(credentials).build();
 			String voice = config.getVoice();
 			if ((voice == null || voice.trim().length() == 0) && config.getChoosedModel() != null) {
@@ -158,7 +158,7 @@ public class BedrockTextToSpeechModelConfigurationSupportService implements
 			GBedrockTextToSpeechModelConfig config) {
 		try {
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
-			Region region = credentialsResolver.resolveRegion(config.getRegion());
+			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			try (PollyClient polly = PollyClient.builder().region(region).credentialsProvider(credentials).build()) {
 				DescribeVoicesResponse response = polly.describeVoices();
 				List<GBedrockTextToSpeechModelChoice> choices = new ArrayList<>();

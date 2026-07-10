@@ -54,12 +54,6 @@
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <gebo-ai-field id="region" label="AWS region" help="AWS region hosting the Bedrock endpoint (e.g. us-east-1)" [required]="true">
-                            <input pInputText id="region" formControlName="region" maxlength="40" placeholder="us-east-1"
-                                [required]="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
                         <gebo-ai-field id="choosedModel" label="AWS Bedrock chat model choice" help="Choose the AWS Bedrock chat model to work with." [required]="true">
                             <p-select id="SelectModel" gebo-ai-label styleClass="w-full" formControlName="choosedModel" placeholder="Select a model"
                                 [required]="true" [options]="modelChoicesData" optionLabel="description"

@@ -34,7 +34,6 @@ export interface GBedrockChatModelConfig {
     features?: Array<GBedrockChatModelConfig.FeaturesEnum>;
     thinking?: GBedrockChatModelConfig.ThinkingEnum;
     maxGeneratedTokens?: number;
-    region?: string;
 }
 export namespace GBedrockChatModelConfig {
     export type ForUsesEnum = 'CHAT' | 'INTERNAL_SERVICES';

@@ -30,13 +30,12 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 export class GeboAIBedrockImageModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GBedrockImageModelConfig> {
     protected override entityName: string = "GBedrockImageModelConfig";
 
-    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.USERNAMEPASSWORD];
+    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.AWSCONNECTION];
 
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),
-        region: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
         apiSecretCode: new FormControl(),
@@ -59,9 +58,9 @@ export class GeboAIBedrockImageModelAdminComponent extends BaseEntityEditingComp
         outputForwardingService?: GeboUIOutputForwardingService) {
         super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.valueChanges.subscribe(newValue => {
-            if (!newValue.region && !newValue.apiSecretCode) {
+            if (!newValue.apiSecretCode) {
                 this.modelChoicesData = [];
-            } else if (newValue.region !== this.oldValue.region || newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
+            } else if (newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
                 this.loadModels(newValue);
             }
             this.oldValue = newValue;

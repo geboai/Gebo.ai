@@ -14,24 +14,11 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 /**
  * Configuration for AWS Bedrock chat models, served through the unified Bedrock
  * Converse API (Anthropic Claude, Amazon Nova, Meta Llama, Mistral, Cohere
- * Command, AI21 ...). Adds the AWS region the model is invoked in on top of the
- * standard chat model configuration.
+ * Command, AI21 ...). The AWS region and credentials are both carried by the
+ * referenced {@code AWS_CONNECTION} secret, so no region is stored here.
  */
-public class GBedrockChatModelConfig extends GBaseChatModelConfig<GBedrockChatModelChoice>
-		implements IBedrockRegionAware {
-
-	/** AWS region hosting the Bedrock endpoint (e.g. {@code us-east-1}). */
-	private String region = null;
+public class GBedrockChatModelConfig extends GBaseChatModelConfig<GBedrockChatModelChoice> {
 
 	public GBedrockChatModelConfig() {
-	}
-
-	@Override
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
 	}
 }

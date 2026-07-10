@@ -15,11 +15,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
  * Configuration for the AWS (Amazon Transcribe streaming) speech-to-text
  * provider.
  */
-public class GBedrockTranscriptModelConfig extends GBaseTranscriptModelConfig<GBedrockTranscriptModelChoice>
-		implements IBedrockRegionAware {
+public class GBedrockTranscriptModelConfig extends GBaseTranscriptModelConfig<GBedrockTranscriptModelChoice> {
 
-	/** AWS region hosting the Transcribe endpoint (e.g. {@code us-east-1}). */
-	private String region = null;
 	/** BCP-47 language code for the audio (e.g. {@code en-US}). */
 	private String languageCode = null;
 	/** Sample rate (Hz) of the audio stream. Defaults to 16000 when null. */
@@ -28,15 +25,6 @@ public class GBedrockTranscriptModelConfig extends GBaseTranscriptModelConfig<GB
 	private String mediaEncoding = null;
 
 	public GBedrockTranscriptModelConfig() {
-	}
-
-	@Override
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
 	}
 
 	public String getLanguageCode() {

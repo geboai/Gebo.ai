@@ -25,5 +25,4 @@ export interface GBedrockEmbeddingModelConfig {
     baseUrl?: string;
     contextLength?: number;
     tokenizationThreshold?: number;
-    region?: string;
 }

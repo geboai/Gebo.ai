@@ -1,14 +1,14 @@
 package ai.gebo.secrets.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class GeboAwsConnectionCredentials extends AbstractGeboSecretContent {
 	@AllArgsConstructor
-	@Getter
 	public static enum AwsRegion {
 
 		ME_CENTRAL_1("me-central-1"), AWS_CN_GLOBAL("aws-cn-global"), US_ISOF_SOUTH_1("us-isof-south-1"),
@@ -30,6 +30,20 @@ public class GeboAwsConnectionCredentials extends AbstractGeboSecretContent {
 		US_ISOF_EAST_1("us-isof-east-1");
 
 		private final String code;
+
+		/**
+		 * The AWS region id (e.g. {@code us-east-1}). Annotated with
+		 * {@link JsonValue} so the region is serialized/deserialized by its AWS
+		 * region code on the wire (and in the encrypted secret vault) instead of the
+		 * Java enum constant name, keeping the REST contract aligned with the AWS
+		 * region identifiers.
+		 *
+		 * @return the AWS region code
+		 */
+		@JsonValue
+		public String getCode() {
+			return code;
+		}
 
 		@Override
 		public String toString() {

@@ -29,7 +29,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 export class GeboAIBedrockTextToSpeechModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GBedrockTextToSpeechModelConfig> {
     protected override entityName: string = "GBedrockTextToSpeechModelConfig";
 
-    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.USERNAMEPASSWORD];
+    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.AWSCONNECTION];
 
     engineOptions = [
         { label: "Neural", value: "neural" },
@@ -42,7 +42,6 @@ export class GeboAIBedrockTextToSpeechModelAdminComponent extends BaseEntityEdit
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),
-        region: new FormControl(),
         engine: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
@@ -62,9 +61,9 @@ export class GeboAIBedrockTextToSpeechModelAdminComponent extends BaseEntityEdit
         outputForwardingService?: GeboUIOutputForwardingService) {
         super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.valueChanges.subscribe(newValue => {
-            if (!newValue.region && !newValue.apiSecretCode) {
+            if (!newValue.apiSecretCode) {
                 this.modelChoicesData = [];
-            } else if (newValue.region !== this.oldValue.region || newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
+            } else if (newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
                 this.loadModels(newValue);
             }
             this.oldValue = newValue;

@@ -78,7 +78,7 @@ public class BedrockChatModelConfigurationSupportService
 				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
-			Region region = credentialsResolver.resolveRegion(config.getRegion());
+			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 
 			BedrockChatOptions.Builder builder = BedrockChatOptions.builder();
 			if (config.getChoosedModel() != null) {
@@ -138,7 +138,7 @@ public class BedrockChatModelConfigurationSupportService
 
 	@Override
 	public OperationStatus<List<GBedrockChatModelChoice>> getModelChoices(GBedrockChatModelConfig config) {
-		return modelsLookupService.listModels(config.getApiSecretCode(), config.getRegion(), ModelModality.TEXT,
+		return modelsLookupService.listModels(config.getApiSecretCode(), ModelModality.TEXT,
 				GBedrockChatModelChoice::new);
 	}
 

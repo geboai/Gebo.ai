@@ -106,7 +106,7 @@ public class BedrockTranscriptModelConfigurationSupportService implements
 		public void reconfigure(GBedrockTranscriptModelConfig config) throws LLMConfigException {
 			this.config = config;
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
-			Region region = credentialsResolver.resolveRegion(config.getRegion());
+			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			this.client = TranscribeStreamingAsyncClient.builder().region(region).credentialsProvider(credentials)
 					.build();
 			this.languageCode = config.getLanguageCode() != null ? config.getLanguageCode() : "en-US";

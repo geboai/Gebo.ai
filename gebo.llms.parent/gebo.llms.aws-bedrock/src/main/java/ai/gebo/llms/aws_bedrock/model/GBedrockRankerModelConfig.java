@@ -16,21 +16,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
  * Rerank). The native platform ranker abstraction is backed here by the Bedrock
  * Agent Runtime {@code Rerank} operation via the AWS SDK.
  */
-public class GBedrockRankerModelConfig extends GBaseRankerModelConfig<GBedrockRankerModelChoice>
-		implements IBedrockRegionAware {
-
-	/** AWS region hosting the Bedrock endpoint (e.g. {@code us-east-1}). */
-	private String region = null;
+public class GBedrockRankerModelConfig extends GBaseRankerModelConfig<GBedrockRankerModelChoice> {
 
 	public GBedrockRankerModelConfig() {
-	}
-
-	@Override
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
 	}
 }

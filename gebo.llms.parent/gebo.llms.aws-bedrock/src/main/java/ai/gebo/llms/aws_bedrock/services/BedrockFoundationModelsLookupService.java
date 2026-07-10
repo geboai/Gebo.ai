@@ -49,20 +49,20 @@ public class BedrockFoundationModelsLookupService {
 	 * Lists the foundation models whose output modality matches
 	 * {@code requiredOutputModality}, mapping each to a platform model choice.
 	 *
-	 * @param apiSecretCode          secret code holding the AWS credentials (may be
-	 *                               {@code null} to use the default provider chain)
-	 * @param region                 AWS region id (may be {@code null})
+	 * @param apiSecretCode          secret code holding the AWS credentials and
+	 *                               region (may be {@code null} to use the default
+	 *                               provider chain and region)
 	 * @param requiredOutputModality output modality to filter on
 	 * @param choiceFactory          creates a fresh, empty choice instance
 	 * @param <C>                    the concrete model choice type
 	 * @return an {@link OperationStatus} carrying the choices, or an error message
 	 *         if the AWS call fails
 	 */
-	public <C extends GBaseModelChoice> OperationStatus<List<C>> listModels(String apiSecretCode, String region,
+	public <C extends GBaseModelChoice> OperationStatus<List<C>> listModels(String apiSecretCode,
 			ModelModality requiredOutputModality, Supplier<C> choiceFactory) {
 		try {
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(apiSecretCode);
-			Region awsRegion = credentialsResolver.resolveRegion(region);
+			Region awsRegion = credentialsResolver.resolveRegion(apiSecretCode);
 			try (BedrockClient client = BedrockClient.builder().region(awsRegion).credentialsProvider(credentials)
 					.build()) {
 				ListFoundationModelsRequest request = ListFoundationModelsRequest.builder()

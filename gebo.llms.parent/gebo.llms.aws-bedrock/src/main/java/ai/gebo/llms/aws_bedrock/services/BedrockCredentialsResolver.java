@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboAwsConnectionCredentials;
 import ai.gebo.secrets.model.GeboSecretType;
-import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
@@ -31,10 +31,12 @@ import software.amazon.awssdk.regions.Region;
  *
  * <p>
  * Credentials are stored in the platform secret vault as a
- * {@link GeboSecretType#USERNAME_PASSWORD} entry, where the username holds the
- * AWS access key id and the password holds the AWS secret access key. When no
- * secret code is configured, the AWS default credentials provider chain is used
- * (environment, system properties, EC2/ECS instance role ...), which allows the
+ * {@link GeboSecretType#AWS_CONNECTION} entry, which carries the AWS access key
+ * id, the AWS secret access key and the AWS region as a single unit. The region
+ * is therefore resolved from the very same secret, unifying credentials and
+ * region management. When no secret code is configured, the AWS default
+ * credentials provider chain is used (environment, system properties, EC2/ECS
+ * instance role ...) together with the {@link #DEFAULT_REGION}, which allows the
  * platform to rely on an attached IAM role when it runs inside AWS.
  * </p>
  */
@@ -49,8 +51,9 @@ public class BedrockCredentialsResolver {
 	private IGeboSecretsAccessService secretService;
 
 	/**
-	 * Builds an {@link AwsCredentialsProvider} from the configured secret, falling
-	 * back to the AWS default provider chain when no secret is set.
+	 * Builds an {@link AwsCredentialsProvider} from the configured
+	 * {@link GeboSecretType#AWS_CONNECTION} secret, falling back to the AWS default
+	 * provider chain when no secret is set.
 	 *
 	 * @param apiSecretCode the secret code, may be {@code null}
 	 * @return a usable credentials provider
@@ -58,33 +61,58 @@ public class BedrockCredentialsResolver {
 	 *                            the wrong type
 	 */
 	public AwsCredentialsProvider resolveCredentials(String apiSecretCode) throws LLMConfigException {
-		if (apiSecretCode == null || apiSecretCode.trim().length() == 0) {
+		GeboAwsConnectionCredentials connection = loadConnection(apiSecretCode);
+		if (connection == null) {
 			return DefaultCredentialsProvider.create();
 		}
-		try {
-			AbstractGeboSecretContent secret = secretService.getSecretContentById(apiSecretCode);
-			if (secret.type() == GeboSecretType.USERNAME_PASSWORD) {
-				GeboUsernamePasswordContent creds = (GeboUsernamePasswordContent) secret;
-				AwsBasicCredentials basic = AwsBasicCredentials.create(creds.getUsername(), creds.getPassword());
-				return StaticCredentialsProvider.create(basic);
-			}
-			throw new LLMConfigException(
-					"AWS Bedrock credentials must be stored as a USERNAME_PASSWORD secret (username=access key id, password=secret access key)");
-		} catch (GeboCryptSecretException e) {
-			throw new LLMConfigException("AWS Bedrock credentials configuration gone wrong", e);
-		}
+		AwsBasicCredentials basic = AwsBasicCredentials.create(connection.getAccessKeyId(),
+				connection.getSecretAccessKey());
+		return StaticCredentialsProvider.create(basic);
 	}
 
 	/**
-	 * Resolves the AWS {@link Region} to use, falling back to {@link #DEFAULT_REGION}.
+	 * Resolves the AWS {@link Region} to use from the same
+	 * {@link GeboSecretType#AWS_CONNECTION} secret that holds the credentials,
+	 * falling back to {@link #DEFAULT_REGION} when no secret (or no region) is
+	 * configured.
 	 *
-	 * @param region a region id such as {@code us-east-1}, may be {@code null}
+	 * @param apiSecretCode the secret code holding the AWS connection, may be
+	 *                      {@code null}
 	 * @return the resolved region
+	 * @throws LLMConfigException when the referenced secret cannot be read or is of
+	 *                            the wrong type
 	 */
-	public Region resolveRegion(String region) {
-		if (region == null || region.trim().length() == 0) {
+	public Region resolveRegion(String apiSecretCode) throws LLMConfigException {
+		GeboAwsConnectionCredentials connection = loadConnection(apiSecretCode);
+		if (connection == null || connection.getRegion() == null) {
 			return Region.of(DEFAULT_REGION);
 		}
-		return Region.of(region.trim());
+		return Region.of(connection.getRegion().getCode());
+	}
+
+	/**
+	 * Loads and validates the {@link GeboAwsConnectionCredentials} referenced by the
+	 * given secret code.
+	 *
+	 * @param apiSecretCode the secret code, may be {@code null} or blank
+	 * @return the AWS connection secret, or {@code null} when no secret code is set
+	 *         (default provider chain / default region is to be used)
+	 * @throws LLMConfigException when the referenced secret cannot be read or is not
+	 *                            an {@link GeboSecretType#AWS_CONNECTION} secret
+	 */
+	private GeboAwsConnectionCredentials loadConnection(String apiSecretCode) throws LLMConfigException {
+		if (apiSecretCode == null || apiSecretCode.trim().length() == 0) {
+			return null;
+		}
+		try {
+			AbstractGeboSecretContent secret = secretService.getSecretContentById(apiSecretCode);
+			if (secret.type() == GeboSecretType.AWS_CONNECTION) {
+				return (GeboAwsConnectionCredentials) secret;
+			}
+			throw new LLMConfigException(
+					"AWS Bedrock credentials must be stored as an AWS_CONNECTION secret (access key id, secret access key and region)");
+		} catch (GeboCryptSecretException e) {
+			throw new LLMConfigException("AWS Bedrock credentials configuration gone wrong", e);
+		}
 	}
 }

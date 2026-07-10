@@ -63,7 +63,7 @@ public class BedrockImageModelConfigurationSupportService
 				throw new LLMConfigException("AWS Bedrock image model requires a chosen model id");
 			}
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
-			Region region = credentialsResolver.resolveRegion(config.getRegion());
+			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			BedrockRuntimeClient client = BedrockRuntimeClient.builder().region(region)
 					.credentialsProvider(credentials).build();
 			return new BedrockImageModel(client, config.getChoosedModel().getCode(), config.getHeight(),
@@ -85,7 +85,7 @@ public class BedrockImageModelConfigurationSupportService
 
 	@Override
 	public OperationStatus<List<GBedrockImageModelChoice>> getModelChoices(GBedrockImageModelConfig config) {
-		return modelsLookupService.listModels(config.getApiSecretCode(), config.getRegion(), ModelModality.IMAGE,
+		return modelsLookupService.listModels(config.getApiSecretCode(), ModelModality.IMAGE,
 				GBedrockImageModelChoice::new);
 	}
 

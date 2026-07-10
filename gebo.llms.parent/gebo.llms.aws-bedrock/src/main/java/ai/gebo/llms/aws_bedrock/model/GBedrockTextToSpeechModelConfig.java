@@ -16,26 +16,14 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
  * model code maps to a Polly voice id; the engine selects the standard / neural
  * / long-form / generative synthesis engine.
  */
-public class GBedrockTextToSpeechModelConfig extends GBaseTextToSpeachModelConfig<GBedrockTextToSpeechModelChoice>
-		implements IBedrockRegionAware {
+public class GBedrockTextToSpeechModelConfig extends GBaseTextToSpeachModelConfig<GBedrockTextToSpeechModelChoice> {
 
-	/** AWS region hosting the Polly endpoint (e.g. {@code us-east-1}). */
-	private String region = null;
 	/** Polly voice id (e.g. {@code Joanna}). When null the chosen model code is used. */
 	private String voice = null;
 	/** Polly engine: {@code standard}, {@code neural}, {@code long-form} or {@code generative}. */
 	private String engine = null;
 
 	public GBedrockTextToSpeechModelConfig() {
-	}
-
-	@Override
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
 	}
 
 	public String getVoice() {

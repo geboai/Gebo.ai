@@ -29,7 +29,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 export class GeboAIBedrockTranscriptModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GBedrockTranscriptModelConfig> {
     protected override entityName: string = "GBedrockTranscriptModelConfig";
 
-    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.USERNAMEPASSWORD];
+    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.AWSCONNECTION];
 
     mediaEncodingOptions = [
         { label: "PCM", value: "pcm" },
@@ -41,7 +41,6 @@ export class GeboAIBedrockTranscriptModelAdminComponent extends BaseEntityEditin
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),
-        region: new FormControl(),
         languageCode: new FormControl(),
         sampleRateHertz: new FormControl(),
         mediaEncoding: new FormControl(),

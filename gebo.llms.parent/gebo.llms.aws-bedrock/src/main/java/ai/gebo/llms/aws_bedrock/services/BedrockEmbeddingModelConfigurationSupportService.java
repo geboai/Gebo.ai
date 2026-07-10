@@ -80,7 +80,7 @@ public class BedrockEmbeddingModelConfigurationSupportService implements
 			}
 			String modelId = config.getChoosedModel().getCode();
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
-			Region region = credentialsResolver.resolveRegion(config.getRegion());
+			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			JsonMapper jsonMapper = JacksonUtils.getDefaultJsonMapper();
 
 			if (modelId.startsWith("cohere.")) {
@@ -110,7 +110,7 @@ public class BedrockEmbeddingModelConfigurationSupportService implements
 
 	@Override
 	public OperationStatus<List<GBedrockEmbeddingModelChoice>> getModelChoices(GBedrockEmbeddingModelConfig config) {
-		return modelsLookupService.listModels(config.getApiSecretCode(), config.getRegion(), ModelModality.EMBEDDING,
+		return modelsLookupService.listModels(config.getApiSecretCode(), ModelModality.EMBEDDING,
 				GBedrockEmbeddingModelChoice::new);
 	}
 

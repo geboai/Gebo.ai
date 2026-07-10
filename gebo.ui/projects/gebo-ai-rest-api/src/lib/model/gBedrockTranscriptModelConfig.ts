@@ -24,7 +24,6 @@ export interface GBedrockTranscriptModelConfig {
     choosedModel?: GBedrockTranscriptModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    region?: string;
     languageCode?: string;
     sampleRateHertz?: number;
     mediaEncoding?: string;

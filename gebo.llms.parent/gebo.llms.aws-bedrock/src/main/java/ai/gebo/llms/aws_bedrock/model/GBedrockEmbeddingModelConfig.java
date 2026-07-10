@@ -14,21 +14,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 /**
  * Configuration for AWS Bedrock embedding models (Amazon Titan / Cohere).
  */
-public class GBedrockEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GBedrockEmbeddingModelChoice>
-		implements IBedrockRegionAware {
-
-	/** AWS region hosting the Bedrock endpoint (e.g. {@code us-east-1}). */
-	private String region = null;
+public class GBedrockEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GBedrockEmbeddingModelChoice> {
 
 	public GBedrockEmbeddingModelConfig() {
-	}
-
-	@Override
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
 	}
 }

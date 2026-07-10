@@ -89,7 +89,7 @@ public class BedrockRankerModelConfigurationSupportService
 			}
 			this.config = config;
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
-			Region region = credentialsResolver.resolveRegion(config.getRegion());
+			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
 			this.client = BedrockAgentRuntimeClient.builder().region(region).credentialsProvider(credentials).build();
 			String modelArn = toModelArn(region.id(), config.getChoosedModel().getCode());
 			this.rankerModel = new BedrockRankerModel(client, modelArn);

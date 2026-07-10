@@ -170,7 +170,7 @@ ai.gebo.llms.vendors.setup.config:
         description: Amazon Bedrock (Claude, Amazon Nova, Meta Llama, Mistral, Cohere ...) plus Amazon Polly / Transcribe
         acquireKeyUrl: https://console.aws.amazon.com/iam/home#/security_credentials
         requiresApiKey: true
-        secretType: USERNAME_PASSWORD
+        secretType: AWS_CONNECTION
         requiresCustomUrl: false
         webSite: https://aws.amazon.com/bedrock/
         apiKeySecretContext: aws-bedrock

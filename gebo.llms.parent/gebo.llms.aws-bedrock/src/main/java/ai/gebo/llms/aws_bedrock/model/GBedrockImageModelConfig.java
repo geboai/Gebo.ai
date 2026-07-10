@@ -17,11 +17,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
  * has no dedicated Bedrock image model), so the height/width/quality/seed knobs
  * live here.
  */
-public class GBedrockImageModelConfig extends GBaseImageModelConfig<GBedrockImageModelChoice>
-		implements IBedrockRegionAware {
+public class GBedrockImageModelConfig extends GBaseImageModelConfig<GBedrockImageModelChoice> {
 
-	/** AWS region hosting the Bedrock endpoint (e.g. {@code us-east-1}). */
-	private String region = null;
 	/** Generated image height in pixels. */
 	private Integer height = null;
 	/** Generated image width in pixels. */
@@ -32,15 +29,6 @@ public class GBedrockImageModelConfig extends GBaseImageModelConfig<GBedrockImag
 	private Long seed = null;
 
 	public GBedrockImageModelConfig() {
-	}
-
-	@Override
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
 	}
 
 	public Integer getHeight() {

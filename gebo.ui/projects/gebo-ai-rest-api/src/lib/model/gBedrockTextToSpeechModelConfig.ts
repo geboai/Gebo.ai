@@ -24,7 +24,6 @@ export interface GBedrockTextToSpeechModelConfig {
     choosedModel?: GBedrockTextToSpeechModelChoice;
     baseUrl?: string;
     contextLength?: number;
-    region?: string;
     voice?: string;
     engine?: string;
 }

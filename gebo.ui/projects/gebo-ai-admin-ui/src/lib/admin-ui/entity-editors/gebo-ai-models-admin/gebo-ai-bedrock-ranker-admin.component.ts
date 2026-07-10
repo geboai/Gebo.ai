@@ -30,13 +30,12 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 export class GeboAIBedrockRankerAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GBedrockRankerModelConfig> {
     protected override entityName: string = "GBedrockRankerModelConfig";
 
-    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.USERNAMEPASSWORD];
+    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.AWSCONNECTION];
 
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),
-        region: new FormControl(),
         defaultModel: new FormControl(),
         choosedModel: new FormControl(),
         apiSecretCode: new FormControl(),

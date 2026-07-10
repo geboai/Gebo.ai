@@ -29,5 +29,4 @@ export interface GBedrockRankerModelConfig {
     responseReserveTokens?: number;
     fullServiceUrl?: string;
     relativeServiceUrl?: string;
-    region?: string;
 }
