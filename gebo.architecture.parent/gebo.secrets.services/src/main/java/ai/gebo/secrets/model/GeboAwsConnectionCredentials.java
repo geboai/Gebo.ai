@@ -1,5 +1,6 @@
 package ai.gebo.secrets.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -35,10 +36,12 @@ public class GeboAwsConnectionCredentials extends AbstractGeboSecretContent {
 			return code;
 		}
 	}
-
+	@NotNull
 	private String accessKeyId;// The AWS access key, used to identify the user interacting with AWS.
+	@NotNull
 	private String secretAccessKey;// The AWS secret access key, used to authenticate the user interacting with
 									// AWS.
+	@NotNull
 	private AwsRegion region;
 
 	@Override
