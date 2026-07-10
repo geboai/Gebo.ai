@@ -9,11 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeboAwsConnectionCredentials } from './geboAwsConnectionCredentials';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    disabled?: boolean;
-    sourname?: string;
-    username?: string;
+export interface FastAwsS3SystemInsertRequest { 
+    description: string;
+    awsEndpoint?: string;
+    awsConnectionCredentials: GeboAwsConnectionCredentials;
 }

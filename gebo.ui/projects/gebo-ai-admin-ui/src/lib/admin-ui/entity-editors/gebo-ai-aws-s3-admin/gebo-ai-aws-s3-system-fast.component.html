@@ -1,0 +1,80 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+ -->
+
+<p-blockUI id="BlockUI" gebo-ai-label [target]="awsS3SystemCtrl" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #awsS3SystemCtrl header="Create AWS S3 system configuration" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"
+                    styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                    styleClass="w-full" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="geboDialogContent">
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+        <div class="grid">
+
+            <div class="col-6">
+                <gebo-ai-field id="description" label="Description" help="Enter the description of the AWS S3 system.">
+                    <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
+                </gebo-ai-field>
+            </div>
+            <div class="col-6">
+                <gebo-ai-field id="awsEndpoint" label="Custom S3 endpoint" help="Optional custom S3-compatible endpoint URL. Leave empty to use the standard AWS S3 endpoint for the selected region.">
+                    <input type="text" id="awsEndpoint" pInputText formControlName="awsEndpoint" class="col-12" gebo-ai-field-element />
+                </gebo-ai-field>
+            </div>
+
+            <div class="col-12" [formGroup]="awsConnectionCredentials">
+                <p-fieldset id="AwsConnectionFieldset" gebo-ai-label legend="AWS connection credentials for Gebo.ai">
+                    <p>Please provide the AWS access key id, secret access key and region of an IAM identity
+                        authorized to read the AWS S3 buckets you want to share with Gebo.ai.</p>
+                    <div class="grid">
+                        <div class="col-6">
+                            <gebo-ai-field id="accessKeyId" label="AWS access key id" [required]="true" help="The AWS access key id used to identify the account (e.g. AKIA...).">
+                                <input pInputText id="accessKeyId" formControlName="accessKeyId" maxlength="128" [required]="true" gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="region" label="AWS region" [required]="true" help="Select the AWS region hosting the S3 buckets.">
+                                <p-select id="region" gebo-ai-label styleClass="w-full" formControlName="region"
+                                    placeholder="Select an AWS region" [options]="awsRegionOptions" optionLabel="label"
+                                    optionValue="value" [filter]="true" filterBy="label" [required]="true"
+                                    gebo-ai-field-element></p-select>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-12">
+                            <gebo-ai-field id="secretAccessKey" label="AWS secret access key" [required]="true" help="The AWS secret access key that authenticates the account.">
+                                <p-password id="secretAccessKey" formControlName="secretAccessKey" [feedback]="false" [toggleMask]="true" maxlength="128" [required]="true" gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+                    </div>
+                </p-fieldset>
+            </div>
+
+
+        </div>
+
+
+    </div>
+</p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

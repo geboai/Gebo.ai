@@ -9,6 +9,7 @@
 
 package ai.gebo.awss3.content.handler.controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.MediaType;
@@ -31,7 +32,11 @@ import ai.gebo.awss3.content.handler.IGAwsS3SystemContentHandler;
 import ai.gebo.awss3.content.handler.impl.AwsS3TestService;
 import ai.gebo.awss3.content.handler.repositories.AwsS3ProjectEndpointRepository;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
+import ai.gebo.knlowledgebase.model.systems.GSystemRole;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.secrets.model.GeboAwsConnectionCredentials;
+import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import jakarta.validation.Valid;
@@ -43,21 +48,25 @@ import jakarta.validation.constraints.NotNull;
 public class AwsS3SystemsController
 		extends GAbstractSystemsArchitectureController<GAwsS3System, GAwsS3ProjectEndpoint> {
 
+	private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(AwsS3SystemsController.class);
+
 	final IGAwsS3SystemContentHandler awsS3Handler;
 	final AwsS3ProjectEndpointRepository endpointRepository;
 	final AwsS3TestService testService;
+	final IGeboSecretsAccessService secretAccessService;
 
 	public AwsS3SystemsController(IGPersistentObjectManager persistentObjectManager,
 			IGMessageBroker messageBroker, AwsS3SystemsNestedEmitter controllerEmitter,
 			IGSecurityService securityService, IGAwsS3SystemContentHandler awsS3Handler,
 			AwsS3ProjectEndpointRepository endpointRepository, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			AwsS3TestService testService) {
+			AwsS3TestService testService, IGeboSecretsAccessService secretAccessService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
 				entityProcessingRunnableFactory);
 		this.awsS3Handler = awsS3Handler;
 		this.endpointRepository = endpointRepository;
 		this.testService = testService;
+		this.secretAccessService = secretAccessService;
 	}
 
 	@GetMapping(value = "getAwsS3SystemType", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -135,5 +144,56 @@ public class AwsS3SystemsController
 	public void deleteAwsS3ProjectEndpoint(@RequestBody GAwsS3ProjectEndpoint endpoint)
 			throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Data transfer object for quickly setting up an AWS S3 content system with the
+	 * minimal required information: a description, an optional custom S3-compatible
+	 * endpoint and the AWS connection credentials (access key id, secret access key
+	 * and region) that will be stored as an {@code AWS_CONNECTION} secret.
+	 */
+	public static class FastAwsS3SystemInsertRequest {
+		@NotNull
+		public String description = null;
+		public String awsEndpoint = null;
+		@NotNull
+		public GeboAwsConnectionCredentials awsConnectionCredentials = null;
+	}
+
+	/**
+	 * Provides a simplified way to configure an AWS S3 content system in one shot:
+	 * it stores the supplied AWS connection credentials as an {@code AWS_CONNECTION}
+	 * secret, builds the system referencing that secret, tests the connection and,
+	 * when successful, persists it.
+	 *
+	 * @param data request containing the essential AWS S3 configuration
+	 * @return operation status with the created system or error messages
+	 */
+	@PostMapping(value = "fastAwsS3Config", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAwsS3System> fastAwsS3Config(@Valid @RequestBody FastAwsS3SystemInsertRequest data) {
+		try {
+			String secretDescription = "AWS S3 " + data.description + " connection secret";
+			String secretId = secretAccessService.storeSecret(data.awsConnectionCredentials, secretDescription,
+					getAwsS3SystemType().getCode());
+			GAwsS3System system = new GAwsS3System();
+			system.setDescription(data.description);
+			system.setAwsEndpoint(data.awsEndpoint);
+			system.setS3SecretCode(secretId);
+			system.setUsedCapabilities(List.of(GSystemRole.DOCUMENTS_MANAGEMENT));
+			system.setCreationDate(new Date());
+			system.setModificationDate(new Date());
+			system.setContentManagementSystemType(getAwsS3SystemType().getCode());
+			OperationStatus<GAwsS3System> status = testService.test(system);
+			if (status.isHasErrorMessages()) {
+				return status;
+			}
+			status.setResult(insertSystem(system));
+			return status;
+		} catch (Throwable th) {
+			LOG.error("Error trying inserting AWS S3 system configuration", th);
+			OperationStatus<GAwsS3System> os = new OperationStatus<GAwsS3System>();
+			os.getMessages().add(GUserMessage.errorMessage("Cannot access AWS S3", ""));
+			return os;
+		}
 	}
 }
