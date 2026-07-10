@@ -6,25 +6,26 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.secrets.model;
 
 /**
- * GeboSecretType enumerates the various types of secrets 
- * that can be managed within the system.
+ * GeboSecretType enumerates the various types of secrets that can be managed
+ * within the system.
  * 
- * <p>The supported secret types include:</p>
+ * <p>
+ * The supported secret types include:
+ * </p>
  * <ul>
- *   <li>{@link #USERNAME_PASSWORD} - Represents a classic username/password pair.</li>
- *   <li>{@link #TOKEN} - Represents an authentication token.</li>
- *   <li>{@link #SSH_KEY} - Represents an SSH key for secure access.</li>
- *   <li>{@link #CUSTOM_SECRET} - Represents a user-defined custom secret.</li>
- *   <li>{@link #OAUTH2_STANDARD} - Represents a standard OAuth2 token.</li>
- *   <li>{@link #OAUTH2_GOOGLE} - Represents a Google OAuth2 token.</li>
- *   <li>{@link #GOOGLE_CLOUD_JSON_CREDENTIALS} - Represents JSON credentials for Google Cloud access.</li>
+ * <li>{@link #USERNAME_PASSWORD} - Represents a classic username/password
+ * pair.</li>
+ * <li>{@link #TOKEN} - Represents an authentication token.</li>
+ * <li>{@link #SSH_KEY} - Represents an SSH key for secure access.</li>
+ * <li>{@link #CUSTOM_SECRET} - Represents a user-defined custom secret.</li>
+ * <li>{@link #OAUTH2_STANDARD} - Represents a standard OAuth2 token.</li>
+ * <li>{@link #OAUTH2_GOOGLE} - Represents a Google OAuth2 token.</li>
+ * <li>{@link #GOOGLE_CLOUD_JSON_CREDENTIALS} - Represents JSON credentials for
+ * Google Cloud access.</li>
  * </ul>
  * 
  * Gebo.ai comment agent
@@ -37,5 +38,5 @@ public enum GeboSecretType {
 	OAUTH2_STANDARD, // OAuth2 standard token type
 	OAUTH2_GOOGLE, // OAuth2 token specifically for Google services
 	GOOGLE_CLOUD_JSON_CREDENTIALS, // JSON credentials for Google Cloud
-	OAUTH2_AUTHORIZED_CLIENT
+	OAUTH2_AUTHORIZED_CLIENT, AWS_CONNECTION
 }
