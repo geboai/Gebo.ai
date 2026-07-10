@@ -49,6 +49,7 @@ import { PaginatorModule } from "primeng/paginator";
 import { UsersWizardComponent } from "./users-wizard.component";
 import { ConfluenceInstalledModuleService, ConfluenceWizardComponent, ConfuenceStatusService } from "./confluence-wizard.component";
 import { SharepointInstalledModuleService, SharepointStatusService, SharepointWizardComponent } from "./sharepoint-wizard.component";
+import { AwsS3InstalledModuleService, AwsS3StatusService, AwsS3WizardComponent } from "./aws-s3-wizard.component";
 import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, GoogleWorkspacesWizardComponent } from "./google-workspace-wizard.component";
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
 import { Oauth2SetupEnabledService, Oauth2SetupWizardService, Oauth2WizardComponent } from "./oauth2-wizard.component";
@@ -228,6 +229,23 @@ const microsoftSharepointSystemSetupSection: SetupWizardsSection = {
 };
 
 /**
+ * Setup section for AWS S3 integration.
+ * This optional section configures Gebo.ai's connection to AWS S3 (or S3-compatible)
+ * buckets to access their contents.
+ */
+const awsS3SystemSetupSection: SetupWizardsSection = {
+    orderEntry: 11.5,
+    label: "AWS S3 integration",
+    description: "Configure Gebo.ai to access your AWS S3 (or S3-compatible) buckets contents",
+    installedModule: AwsS3InstalledModuleService,
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: AwsS3StatusService,
+    wizardComponent: AwsS3WizardComponent,
+    wizardSectionId: "awsS3SystemSetupSection",
+    mandatory: false
+};
+
+/**
  * Setup section for Google Drive/Workspaces integration.
  * This optional section configures Gebo.ai's connection to Google cloud Drive/Workspaces
  * to access team data.
@@ -371,7 +389,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule, GeboAINotificationsModule, DropdownModule, CalendarModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -387,9 +405,11 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         GeboSetupWizardService,
         ChatProfileStatusService,
         SharepointStatusService,
+        AwsS3StatusService,
         GoogleWorkspacesStatusService,
         ConfluenceInstalledModuleService,
         SharepointInstalledModuleService,
+        AwsS3InstalledModuleService,
         GoogleWorkspacesInstalledModuleService,
         JiraInstalledModuleService,
         JiraStatusService,
@@ -411,6 +431,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: atlassianConfluenceSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: jiraConfluenceSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: microsoftSharepointSystemSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: awsS3SystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: googleDriveWorkspacesSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },

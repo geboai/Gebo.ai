@@ -15,7 +15,7 @@
  * Exports constants representing different module identifiers used throughout the application.
  * These constants are used to identify various modules that can be plugged into the system.
  */
-import { ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AwsS3SystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAIPluggableProjectEndpointModuleService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { Observable } from "rxjs";
 import { EnvironmentProviders, Injectable, ModuleWithProviders, NgModule, Provider, Type } from "@angular/core";
@@ -29,6 +29,7 @@ export const CONFLUENCE_MODULE = "confluence-module";
 export const JIRA_MODULE = "jira-module";
 export const SHAREPOINT_MODULE = "sharepoint-module";
 export const MCP_CLIENT_MODULE = "mcp-client-module";
+export const AWS_S3_MODULE = "aws-s3-module";
 
 /**
  * Injectable service responsible for managing shared filesystem project endpoints.
@@ -507,6 +508,65 @@ export class GeboAIMCPClientModuleProjectEndpointService implements GeboAIPlugga
 }
 
 /**
+ * Injectable service responsible for managing AWS S3 project endpoints.
+ * Implements GeboAIPluggableProjectEndpointModuleService to provide functionality
+ * for connecting to AWS S3 (or S3-compatible) bucket data sources.
+ */
+@Injectable({
+    providedIn: "root"
+})
+export class GeboAIAwsS3ModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService {
+    constructor(private awsS3Service: AwsS3SystemsControllerService) {
+
+    }
+
+    /**
+     * Retrieves all AWS S3 endpoints associated with a specific project.
+     * @param code - The project code to search for endpoints
+     * @returns Observable containing array of AWS S3 endpoints
+     */
+    findByProjectEndpoints(code: string): Observable<{
+        code?: string; description?: string; parentProjectCode?: string;
+    }[]> {
+        return this.awsS3Service.findAwsS3EndpointsByProject(code);
+    }
+
+    /**
+     * Creates an action request for adding a new AWS S3 endpoint to a project.
+     * @param project - The project to create the AWS S3 endpoint for
+     * @param wizardStepsConfigurations - Optional wizard configuration steps
+     * @param actualWizardStepConfigrationId - Optional current wizard step ID
+     * @returns GeboUIActionRequest configured for creating a new AWS S3 endpoint
+     */
+    byProjectCreateAction(project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): GeboUIActionRequest {
+        let nextStepsParams: any = undefined;
+        let outAction: GeboUIActionRequest;
+        if (wizardStepsConfigurations && actualWizardStepConfigrationId) {
+            nextStepsParams = {
+                wizardStepsConfigurations: wizardStepsConfigurations,
+                actualWizardStepConfigrationId: actualWizardStepConfigrationId
+            };
+        }
+
+        const target: GAwsS3ProjectEndpoint = {
+            parentProjectCode: project.code
+        };
+        outAction = {
+            actionType: GeboActionType.NEW,
+            context: project,
+            contextType: "GProject",
+            target: target,
+            targetType: "GAwsS3ProjectEndpoint",
+            targetFormInputs: nextStepsParams
+        };
+
+        return outAction;
+    }
+
+
+}
+
+/**
  * Configuration object for the shared filesystem module.
  * Defines UI elements, labels, icons and service to be used for this module.
  */
@@ -612,6 +672,19 @@ const mcpClientModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = 
 };
 
 /**
+ * Configuration object for the AWS S3 module.
+ * Defines UI elements, labels, icons and service to be used for AWS S3 (or S3-compatible) connections.
+ */
+const awsS3ModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
+    moduleId: AWS_S3_MODULE,
+    addProjectEndpointicon: "pi pi-amazon",
+    addProjectEndpointLabel: "+AWS S3",
+    addProjectEndpointTitle: "add an AWS S3 (or S3-compatible) bucket data source",
+    projecteEndpointClassName: "ai.gebo.awss3.content.handler.GAwsS3ProjectEndpoint",
+    service: GeboAIAwsS3ModuleProjectEndpointService
+};
+
+/**
  * NgModule that handles the registration of all module services and configurations.
  * This module is responsible for injecting all the pluggable modules into the application
  * by providing their services and configuration blocks to the dependency injection system.
@@ -627,6 +700,7 @@ const mcpClientModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = 
         GeboAIJiraModuleProjectEndpointService,
         GeboAIGoogleDriveModuleProjectEndpointService,
         GeboAIMCPClientModuleProjectEndpointService,
+        GeboAIAwsS3ModuleProjectEndpointService,
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
@@ -634,7 +708,8 @@ const mcpClientModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = 
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: confluenceModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: jiraModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true },
-        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true }]
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true },
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true }]
 })
 export class GeboAICommonModulesInjectionsModule {
 
@@ -650,6 +725,7 @@ export class GeboAICommonModulesInjectionsModule {
                 GeboAIJiraModuleProjectEndpointService,
                 GeboAIGoogleDriveModuleProjectEndpointService,
                 GeboAIMCPClientModuleProjectEndpointService,
+                GeboAIAwsS3ModuleProjectEndpointService,
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
@@ -657,7 +733,8 @@ export class GeboAICommonModulesInjectionsModule {
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: confluenceModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: jiraModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true },
-                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true }]
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true }]
         }
         return moduleWithProv;
 
