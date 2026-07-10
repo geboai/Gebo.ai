@@ -62,6 +62,7 @@ ai.gebo.llms.config:
   huggingfaceEnabled: false
   deepseekEnabled: true
   azureOpenAIEnabled: true
+  awsBedrockEnabled: false
 
 ai.gebo.vectorstore:
   use: QDRANT

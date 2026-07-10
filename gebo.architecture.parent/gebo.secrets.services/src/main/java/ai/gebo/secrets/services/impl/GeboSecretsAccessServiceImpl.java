@@ -24,6 +24,7 @@ import tools.jackson.databind.ObjectMapper;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.impl.GeboCryptingServiceImpl;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboAwsConnectionCredentials;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
 import ai.gebo.secrets.model.GeboGoogleJsonSecretContent;
 import ai.gebo.secrets.model.GeboGoogleOauth2SecretContent;
@@ -92,6 +93,9 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 		}
 		case GOOGLE_CLOUD_JSON_CREDENTIALS: {
 			return uncryptContent(secret, GeboGoogleJsonSecretContent.class);
+		}
+		case AWS_CONNECTION: {
+			return uncryptContent(secret, GeboAwsConnectionCredentials.class);
 		}
 		default:
 			throw new GeboCryptSecretException("Unkown value of SecretType ");

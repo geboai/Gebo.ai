@@ -16,7 +16,7 @@ export interface SecretInfo {
     secretType?: SecretInfo.SecretTypeEnum;
 }
 export namespace SecretInfo {
-    export type SecretTypeEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT';
+    export type SecretTypeEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT' | 'AWS_CONNECTION';
     export const SecretTypeEnum = {
         USERNAMEPASSWORD: 'USERNAME_PASSWORD' as SecretTypeEnum,
         TOKEN: 'TOKEN' as SecretTypeEnum,
@@ -25,6 +25,7 @@ export namespace SecretInfo {
         OAUTH2STANDARD: 'OAUTH2_STANDARD' as SecretTypeEnum,
         OAUTH2GOOGLE: 'OAUTH2_GOOGLE' as SecretTypeEnum,
         GOOGLECLOUDJSONCREDENTIALS: 'GOOGLE_CLOUD_JSON_CREDENTIALS' as SecretTypeEnum,
-        OAUTH2AUTHORIZEDCLIENT: 'OAUTH2_AUTHORIZED_CLIENT' as SecretTypeEnum
+        OAUTH2AUTHORIZEDCLIENT: 'OAUTH2_AUTHORIZED_CLIENT' as SecretTypeEnum,
+        AWSCONNECTION: 'AWS_CONNECTION' as SecretTypeEnum
     };
 }
