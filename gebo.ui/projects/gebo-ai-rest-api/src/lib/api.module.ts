@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
+import { AwsS3BrowsingControllerService } from './api/awsS3BrowsingController.service';
+import { AwsS3SystemsControllerService } from './api/awsS3SystemsController.service';
 import { BedrockChatModelsConfigurationControllerService } from './api/bedrockChatModelsConfigurationController.service';
 import { BedrockEmbeddingModelsConfigurationControllerService } from './api/bedrockEmbeddingModelsConfigurationController.service';
 import { BedrockImageModelsConfigurationControllerService } from './api/bedrockImageModelsConfigurationController.service';
@@ -132,6 +134,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
+    AwsS3BrowsingControllerService,
+    AwsS3SystemsControllerService,
     BedrockChatModelsConfigurationControllerService,
     BedrockEmbeddingModelsConfigurationControllerService,
     BedrockImageModelsConfigurationControllerService,

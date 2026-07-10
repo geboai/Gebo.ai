@@ -112,6 +112,9 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-mistra
 export * from "./lib/admin-ui/entity-editors/controls/standard-chat-model-settings/standard-chat-model-settings.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-system-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-endpoint.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-system-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-system-fast.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";
