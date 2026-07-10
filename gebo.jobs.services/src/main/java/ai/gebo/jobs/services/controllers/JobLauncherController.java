@@ -29,12 +29,12 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
-import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.GObjectRef;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -46,28 +46,19 @@ import ai.gebo.model.base.GObjectRef;
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/JobLauncherController")
+@AllArgsConstructor
 public class JobLauncherController {
 	/** Logger for the JobLauncherController class */
 	static Logger LOGGER = LoggerFactory.getLogger(JobLauncherController.class);
 	/** Service for managing ingestion job queues */
-	@Autowired
-	IGGeboIngestionJobQueueService jobQueueService;
+ 
+	private final IGGeboIngestionJobQueueService jobQueueService;
 	/** Manager for persistent objects */
-	@Autowired
-	IGPersistentObjectManager persistentObjectManager;
+	
+	private final IGPersistentObjectManager persistentObjectManager;
 	/** Service for scheduling operations */
-	@Autowired
-	IGSchedulingTimeService schedulingService;
-	/** Factory for creating runnable tasks for entity processing */
-	@Autowired
-	IGEntityProcessingRunnableFactoryRepositoryPattern runnableFactory;
-
-	/**
-	 * Default constructor for JobLauncherController
-	 */
-	public JobLauncherController() {
-
-	}
+	private final IGSchedulingTimeService schedulingService;
+	
 
 	/**
 	 * Creates a new job for a project endpoint. If the endpoint is not published,
@@ -103,18 +94,7 @@ public class JobLauncherController {
 					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name()));
 	}
 
-	/**
-	 * Retrieves the status of a job by its job code.
-	 * 
-	 * @param jobCode The unique identifier of the job
-	 * @return The current status of the requested job
-	 * @throws GeboJobServiceException If there's an error retrieving the job status
-	 */
-	@GetMapping(value = "getJobStatus", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GJobStatus getJobStatus(@RequestParam("jobCode") String jobCode) throws GeboJobServiceException {
-		GJobStatus retValue = jobQueueService.getStatus(jobCode);
-		return retValue;
-	}
+	
 
 	/**
 	 * Aborts a running job.
@@ -150,22 +130,5 @@ public class JobLauncherController {
 		rj.endpoint = endpoint;
 		rj.hasRunningJobs = jobQueueService.isRunningSyncJob(endpoint);
 		return rj;
-	}
-
-	/**
-	 * Retrieves a summary of a job including optional detailed statistics.
-	 * 
-	 * @param jobId        The unique identifier of the job
-	 * @param statsDetails Flag indicating whether to include detailed statistics
-	 * @return A summary of the job
-	 * @throws GeboJobServiceException  If there's an error retrieving the job
-	 *                                  summary
-	 * @throws GeboPersistenceException If there's an error accessing persistent
-	 *                                  data
-	 */
-	@GetMapping(value = "getJobSummary", produces = MediaType.APPLICATION_JSON_VALUE)
-	public JobSummary getJobSummary(@RequestParam("jobCode") String jobId)
-			throws GeboJobServiceException, GeboPersistenceException {
-		return jobQueueService.getJobSummary(jobId);
 	}
 }

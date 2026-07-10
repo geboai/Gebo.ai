@@ -1,4 +1,4 @@
-package ai.gebo.jobs.services.impl;
+package ai.gebo.workflows.compute.service.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.jobs.services.model.ComputedWorkflowStatusData;
-import ai.gebo.jobs.services.model.WorkflowStatsAggregationBucket;
-import ai.gebo.jobs.services.model.WorkflowStatsDrillDownLevel;
-import ai.gebo.jobs.services.model.WorkflowStatsDrillDownLevelSubdimensions;
-import ai.gebo.jobs.services.model.WorkflowStatsDrillDownResult;
+import ai.gebo.workflows.compute.model.ComputedWorkflowStatusData;
+import ai.gebo.workflows.compute.model.WorkflowStatsAggregationBucket;
+import ai.gebo.workflows.compute.model.WorkflowStatsDrillDownLevel;
+import ai.gebo.workflows.compute.model.WorkflowStatsDrillDownLevelSubdimensions;
+import ai.gebo.workflows.compute.model.WorkflowStatsDrillDownResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

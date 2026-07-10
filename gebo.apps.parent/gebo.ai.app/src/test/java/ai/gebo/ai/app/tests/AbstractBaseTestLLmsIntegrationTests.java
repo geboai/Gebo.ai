@@ -38,7 +38,6 @@ import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEnd
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
-import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
@@ -61,6 +60,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.vectorstores.test.services.TestVectorStore;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
+import ai.gebo.workflows.compute.model.JobSummary;
 
 /**
  * Abstract class for integration tests involving Language Learning Models
@@ -120,19 +120,19 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 		// Execute the ingestion synchronously and obtain job status
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
-		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
+		JobSummary summary = workflowStatsService.getJobSummary(syncJobStatus.getCode());
 
 		int NMAXCYCLES = 20;
 		int nCycles = 0;
 		do {
 			Thread.sleep(10000);
-			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
+			summary = workflowStatsService.getJobSummary(syncJobStatus.getCode());
 			nCycles++;
 			LOGGER.info("Cycle " + nCycles);
 			printSummary(summary);
 		} while ((!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished()))
 				&& nCycles < NMAXCYCLES);
-		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
+		summary = workflowStatsService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),
 				"Contents read have to be terminated in this point");

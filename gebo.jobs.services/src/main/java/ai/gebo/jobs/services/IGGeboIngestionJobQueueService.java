@@ -11,7 +11,6 @@ package ai.gebo.jobs.services;
 
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
@@ -70,15 +69,6 @@ public interface IGGeboIngestionJobQueueService {
 	public boolean isRunningSyncJob(GProjectEndpoint item);
 
 	/**
-	 * Retrieves the current status of a job.
-	 * 
-	 * @param code The unique identifier of the job
-	 * @return The current status of the job
-	 * @throws GeboJobServiceException If the status cannot be retrieved
-	 */
-	public GJobStatus getStatus(String code) throws GeboJobServiceException;
-
-	/**
 	 * Checks if a synchronous job is currently running for the project endpoint
 	 * referenced.
 	 * 
@@ -101,15 +91,4 @@ public interface IGGeboIngestionJobQueueService {
 	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> IGRunnable createPublicationRunnable(
 			GObjectRef<EndpointType> endpoint, SessionParameterType sessionParam, String workflowType,
 			String workflowId) throws GeboJobServiceException, GeboPersistenceException, ClassNotFoundException;
-
-	/**
-	 * Retrieves detailed information about a specific job. By default, includes all
-	 * detailed information.
-	 * 
-	 * @param jobId The unique identifier of the job
-	 * @return A summary of the job with detailed information
-	 * @throws GeboJobServiceException  If the job summary cannot be retrieved
-	 * @throws GeboPersistenceException If there are persistence-related issues
-	 */
-	public JobSummary getJobSummary(String jobId) throws GeboJobServiceException, GeboPersistenceException;
 }

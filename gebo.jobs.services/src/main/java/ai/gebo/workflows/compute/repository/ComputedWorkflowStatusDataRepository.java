@@ -1,10 +1,10 @@
-package ai.gebo.jobs.services.repository;
+package ai.gebo.workflows.compute.repository;
 
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import ai.gebo.jobs.services.model.ComputedWorkflowStatusData;
+import ai.gebo.workflows.compute.model.ComputedWorkflowStatusData;
 
 /**
  * Repository for the periodically computed workflow status snapshots. Acts as a

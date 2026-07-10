@@ -26,9 +26,9 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.git.content.handler.GGitContentManagementSystem;
 import ai.gebo.git.content.handler.GGitProjectEndpoint;
 import ai.gebo.jobs.services.GeboJobServiceException;
-import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.workflows.compute.model.JobSummary;
 
 /**
  * Integration test class for testing Git content management systems.

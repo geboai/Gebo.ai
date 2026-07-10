@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.jobs.services.model;
+package ai.gebo.workflows.compute.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

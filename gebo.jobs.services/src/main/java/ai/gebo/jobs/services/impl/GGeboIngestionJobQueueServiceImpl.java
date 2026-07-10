@@ -9,13 +9,8 @@
 
 package ai.gebo.jobs.services.impl;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,20 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.application.messaging.workflow.GWorkflowType;
-import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
-import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
-import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGGeboIngestionJobService;
-import ai.gebo.jobs.services.model.JobSummary;
-import ai.gebo.jobs.services.model.JobWorkflowStepSummary;
-import ai.gebo.jobs.services.model.JobWorkflowStepSummaryTimeSlotStats;
-import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
@@ -62,12 +49,9 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	private final IGGeboIngestionJobService readingService;
 	/** Repository for persisting job status information */
 	private final JobStatusRepository statusRepository;
-	/** Repository for content batch processing data */
-	private final ContentsBatchProcessedRepository contentsBatchRepo;
 	private final IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
 	private final JobStatusEmitter statusEmitter;
 
-	private final static long STATS_TIME_SLOT = 1000 * 60;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobQueueServiceImpl.class);
 
 	/**
@@ -135,25 +119,6 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	}
 
 	/**
-	 * Retrieves the status of a job by its code
-	 * 
-	 * @param code The job code to look up
-	 * @return The job status object or null if not found
-	 * @throws GeboJobServiceException If there's an issue retrieving the status
-	 */
-	@Override
-	public GJobStatus getStatus(String code) throws GeboJobServiceException {
-		GJobStatus status = statusMap.get(code);
-		if (status == null) {
-			Optional<GJobStatus> value = statusRepository.findById(code);
-			if (value.isPresent()) {
-				status = value.get();
-			}
-		}
-		return status;
-	}
-
-	/**
 	 * Checks if a synchronous job is running for the given endpoint
 	 * 
 	 * @param item The project endpoint to check
@@ -200,98 +165,6 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		}
 		return readingService.createAsyncJob(status, sessionParam);
 
-	}
-
-	private static String of(String s) {
-		return s != null ? s.trim().toLowerCase() : "";
-	}
-
-	/**
-	 * Retrieves a summary of a job with optional details
-	 * 
-	 * @param jobId   The job ID to get summary for
-	 * @param details Whether to include detailed vectorization processing data
-	 * @return A job summary object or null if job not found
-	 * @throws GeboJobServiceException  If there's an issue with the job service
-	 * @throws GeboPersistenceException If there's an issue with persistence
-	 */
-	@Override
-	public JobSummary getJobSummary(String jobId) throws GeboJobServiceException, GeboPersistenceException {
-		Optional<GJobStatus> jobOpt = statusRepository.findById(jobId);
-		if (jobOpt.isEmpty())
-			return null;
-		GJobStatus job = jobOpt.get();
-		final JobSummary summary = new JobSummary();
-		summary.setCode(job.getCode());
-		summary.setDescription(job.getDescription());
-		String workflowType = job.getWorkflowType();
-		String workflowId = job.getWorkflowId();
-		summary.setWorkflowType(workflowType);
-		summary.setWorkflowId(workflowId);
-		List<IWorkflowStatusHandler> handler = workflowHandlersRepositoryPattern
-				.findByWorkflowsTypeAndWorkflowId(GWorkflowType.valueOf(workflowType), workflowId);
-		if (!handler.isEmpty()) {
-			ComputedWorkflowResult status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
-			summary.setWorkflowStatus(status);
-			final List<ComputedWorkflowStatus> itemslist = handler.get(0).items(status.getRootStatus());
-			final TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>> stats = new TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>>();
-			Stream<ContentsBatchProcessed> stream = contentsBatchRepo.findByJobId(jobId);
-			stream.forEach(processed -> {
-				Date timestamp = processed.getTimestamp();
-				if (timestamp != null) {
-					long minutesFloorStart = (timestamp.getTime() / STATS_TIME_SLOT) * STATS_TIME_SLOT;
-					long minutesFloorEnd = minutesFloorStart + STATS_TIME_SLOT;
-					Long key = new Long(minutesFloorStart);
-					if (!stats.containsKey(key)) {
-						stats.put(key, new HashMap<String, JobWorkflowStepSummaryTimeSlotStats>());
-					}
-					String stepKey = (of(jobId) + "-" + of(processed.getWorkflowType()) + "-"
-							+ of(processed.getWorkflowId()) + "-" + processed.getWorkflowStepId()).toLowerCase();
-
-					if (!stats.get(key).containsKey(stepKey)) {
-						JobWorkflowStepSummaryTimeSlotStats statsEntry = new JobWorkflowStepSummaryTimeSlotStats();
-						statsEntry.setStartDateTime(new Date(minutesFloorStart));
-						statsEntry.setEndDateTime(new Date(minutesFloorEnd));
-						stats.get(key).put(stepKey, statsEntry);
-					}
-
-					stats.get(key).get(stepKey).incrementBy(processed);
-				} else {
-					LOGGER.error("Entry without timestamp");
-				}
-			});
-			if (!stats.isEmpty() && stats.firstKey() != null && stats.lastKey() != null) {
-				long startDateTime = stats.firstKey();
-				long endDateTime = stats.lastKey();
-				for (ComputedWorkflowStatus item : itemslist) {
-					String stepKey = (of(jobId) + "-" + of(item.getWorkflowType()) + "-" + of(item.getWorkflowId())
-							+ "-" + of(item.getWorkflowStepId())).toLowerCase();
-					JobWorkflowStepSummary stepSummary = new JobWorkflowStepSummary();
-					stepSummary.setWorkflowType(item.getWorkflowType());
-					stepSummary.setWorkflowId(item.getWorkflowId());
-					stepSummary.setWorkflowStepId(item.getWorkflowStepId());
-					for (long actualDateTime = startDateTime; actualDateTime <= endDateTime; actualDateTime += STATS_TIME_SLOT) {
-						Map<String, JobWorkflowStepSummaryTimeSlotStats> entry = stats.get(new Long(actualDateTime));
-						JobWorkflowStepSummaryTimeSlotStats slot = null;
-						if (entry != null && entry.containsKey(stepKey)) {
-							slot = entry.get(stepKey);
-							if (LOGGER.isDebugEnabled()) {
-								LOGGER.debug("date=" + new Date(actualDateTime) + "=>" + slot.toString());
-							}
-						} else {
-							slot = new JobWorkflowStepSummaryTimeSlotStats();
-							slot.setStartDateTime(new Date(actualDateTime));
-							slot.setEndDateTime(new Date(actualDateTime + STATS_TIME_SLOT));
-						}
-						stepSummary.add(slot);
-					}
-					summary.getWorkflowStepsSummaries().add(stepSummary);
-				}
-
-			}
-		}
-		// LOGGER.info("Summary=>"+summary.getWorkflowStepsSummaries());
-		return summary;
 	}
 
 }

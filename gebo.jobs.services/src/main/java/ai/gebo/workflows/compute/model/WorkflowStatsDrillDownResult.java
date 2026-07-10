@@ -1,4 +1,4 @@
-package ai.gebo.jobs.services.model;
+package ai.gebo.workflows.compute.model;
 
 import java.util.List;
 

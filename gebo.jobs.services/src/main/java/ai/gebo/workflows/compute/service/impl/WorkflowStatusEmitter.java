@@ -1,4 +1,4 @@
-package ai.gebo.jobs.services.impl;
+package ai.gebo.workflows.compute.service.impl;
 
 import java.util.List;
 
@@ -20,19 +20,18 @@ import lombok.AllArgsConstructor;
 @Component
 @Scope("singleton")
 @AllArgsConstructor
-public class JobStatusEmitter implements IGMessageEmitter {
-	private static final String JOB_STATUS_NOTIFIER = "job-status-notifier";
+public class WorkflowStatusEmitter implements IGMessageEmitter {
 	private final IGRuntimeBinder runtimeBinder;
 
 	@Override
 	public String getMessagingModuleId() {
 
-		return GStandardModulesConstraints.ASYNC_PUBLISHING_JOB_MODULE;
+		return GStandardModulesConstraints.WORKFLOW_STATUS_MODULE;
 	}
 
 	@Override
 	public String getMessagingSystemId() {
-		return JOB_STATUS_NOTIFIER;
+		return "job-status-notifier";
 	}
 
 	@Override

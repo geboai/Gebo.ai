@@ -46,7 +46,6 @@ import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
-import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
@@ -68,6 +67,8 @@ import ai.gebo.security.model.User;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
+import ai.gebo.workflows.compute.model.JobSummary;
+import ai.gebo.workflows.compute.service.IGeboWorkflowsStatsService;
 
 /**
  * AI generated comments Abstract base class to configure integration tests for
@@ -125,7 +126,8 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	// User repository to store fungible test users
 	@Autowired
 	protected UserRepository userRepository;
-
+	@Autowired
+	protected IGeboWorkflowsStatsService workflowStatsService;
 	// Static initialization block to set up temporary directories and environment
 	// properties
 	static {
@@ -185,7 +187,8 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 		// Retry transient startup failures and allow extra time for the HTTP/bolt
 		// endpoints to come up when the host is busy starting the other containers.
 		// (Configured as statements rather than fluent chaining: the self-parameterized
-		// container types erase GenericContainer setters to a raw return when used raw.)
+		// container types erase GenericContainer setters to a raw return when used
+		// raw.)
 		neo4jContainer.withStartupAttempts(CONTAINER_STARTUP_ATTEMPTS);
 		neo4jContainer.withStartupTimeout(CONTAINER_STARTUP_TIMEOUT);
 
@@ -194,8 +197,7 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 		opensearch.withExposedPorts(9200, 9600).withEnv("discovery.type", "single-node")
 				.withEnv("plugins.security.ssl.http.enabled", "false")
 				.withEnv("plugins.security.ssl.transport.enabled", "true")
-				.withStartupAttempts(CONTAINER_STARTUP_ATTEMPTS)
-				.withStartupTimeout(CONTAINER_STARTUP_TIMEOUT);
+				.withStartupAttempts(CONTAINER_STARTUP_ATTEMPTS).withStartupTimeout(CONTAINER_STARTUP_TIMEOUT);
 
 	}
 

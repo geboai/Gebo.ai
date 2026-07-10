@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.jobs.services.impl.WorkflowStatsAggregationService;
-import ai.gebo.jobs.services.model.WorkflowStatsDrillDownLevel;
-import ai.gebo.jobs.services.model.WorkflowStatsDrillDownResult;
+import ai.gebo.workflows.compute.model.WorkflowStatsDrillDownLevel;
+import ai.gebo.workflows.compute.model.WorkflowStatsDrillDownResult;
+import ai.gebo.workflows.compute.service.impl.WorkflowStatsAggregationService;
 import lombok.AllArgsConstructor;
 
 /**
