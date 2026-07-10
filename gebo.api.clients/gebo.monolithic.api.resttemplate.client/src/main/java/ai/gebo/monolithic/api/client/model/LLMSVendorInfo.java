@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMSVendorInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-07T14:58:38.267884300+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-10T21:14:52.278827200+02:00[Europe/Rome]")
 
 public class LLMSVendorInfo {
   @JsonProperty("vendorId")
@@ -48,7 +48,8 @@ public class LLMSVendorInfo {
     OAUTH2_STANDARD("OAUTH2_STANDARD"),
     OAUTH2_GOOGLE("OAUTH2_GOOGLE"),
     GOOGLE_CLOUD_JSON_CREDENTIALS("GOOGLE_CLOUD_JSON_CREDENTIALS"),
-    OAUTH2_AUTHORIZED_CLIENT("OAUTH2_AUTHORIZED_CLIENT");
+    OAUTH2_AUTHORIZED_CLIENT("OAUTH2_AUTHORIZED_CLIENT"),
+    AWS_CONNECTION("AWS_CONNECTION");
 
     private String value;
 

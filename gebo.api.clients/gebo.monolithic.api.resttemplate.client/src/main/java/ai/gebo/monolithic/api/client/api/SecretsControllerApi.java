@@ -3,6 +3,7 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.SecretInfo;
+import ai.gebo.monolithic.api.client.model.SecretWrapperGeboAwsConnectionCredentials;
 import ai.gebo.monolithic.api.client.model.SecretWrapperGeboCustomSecretContent;
 import ai.gebo.monolithic.api.client.model.SecretWrapperGeboGoogleJsonSecretContent;
 import ai.gebo.monolithic.api.client.model.SecretWrapperGeboGoogleOauth2SecretContent;
@@ -29,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-07T14:58:38.267884300+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-10T21:14:52.278827200+02:00[Europe/Rome]")
 
 public class SecretsControllerApi {
     private ApiClient apiClient;
@@ -49,6 +50,52 @@ public class SecretsControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return SecretInfo
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public SecretInfo createAWSConnectionSecret(SecretWrapperGeboAwsConnectionCredentials body) throws RestClientException {
+        return createAWSConnectionSecretWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;SecretInfo&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<SecretInfo> createAWSConnectionSecretWithHttpInfo(SecretWrapperGeboAwsConnectionCredentials body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createAWSConnectionSecret");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createAWSConnectionSecret").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 

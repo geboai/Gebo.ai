@@ -18,7 +18,7 @@
 import { Component, forwardRef, Injector, SimpleChanges } from '@angular/core';
 
 import { FormControl, FormGroup } from "@angular/forms";
-import { CompanySystemsControllerService, DataPage, GJobStatus, JobLauncherControllerService, JobSummary, LogViewControllerService, PagedModelGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
+import { CompanySystemsControllerService, DataPage, GJobStatus, JobStatusControllerService, JobSummary, LogViewControllerService, PagedModelGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
@@ -87,7 +87,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
    * Component constructor that initializes services and triggers initial data refresh
    */
   constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService,
-    private JobLauncherControllerService: JobLauncherControllerService,
+    private jobStatusControllerService: JobStatusControllerService,
     confirmService: ConfirmationService,
     private logViewControllerService: LogViewControllerService,
     geboUIActionRoutingService: GeboUIActionRoutingService,
@@ -131,10 +131,10 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
   private reloadPeriodically(): void {
     if (this.entity?.code) {
 
-      const observables: [Observable<GJobStatus>, Observable<PagedModelGUserMessage>, Observable<JobSummary>] = [this.JobLauncherControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
+      const observables: [Observable<GJobStatus>, Observable<PagedModelGUserMessage>, Observable<JobSummary>] = [this.jobStatusControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
         jobId: this.entity?.code,
         dataPage: this.actualPage
-      }), this.JobLauncherControllerService.getJobSummary(this.entity.code)];
+      }), this.jobStatusControllerService.getJobSummary(this.entity.code)];
       this.loadingRelatedBackend = true;
       forkJoin(observables).subscribe({
         next: (values) => {
@@ -222,7 +222,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
    * @returns Observable containing the job status or null
    */
   override findByCode(code: string): Observable<GJobStatus | null> {
-    return this.JobLauncherControllerService.getJobStatus(code);
+    return this.jobStatusControllerService.getJobStatus(code);
   }
 
   /**

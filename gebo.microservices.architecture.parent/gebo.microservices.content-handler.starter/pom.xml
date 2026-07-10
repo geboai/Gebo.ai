@@ -15,8 +15,8 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.jobs.services</artifactId>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.jobs</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

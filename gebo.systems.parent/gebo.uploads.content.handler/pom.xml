@@ -32,11 +32,6 @@
 			<artifactId>spring-boot-devtools</artifactId>
 
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.jobs.services</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 	</dependencies>
 </project>
