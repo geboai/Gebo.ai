@@ -1,4 +1,4 @@
-package ai.gebo.systems.abstraction.layer.impl;
+package ai.gebo.workflows.compute.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
+import ai.gebo.workflows.compute.service.AbstractWorkflowStatusHandler;
 
 @Component
 
