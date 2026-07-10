@@ -18,11 +18,14 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
-import ai.gebo.secrets.model.GeboCustomSecretContent;
+import ai.gebo.secrets.model.GeboAwsConnectionCredentials;
+import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
 import ai.gebo.awss3.content.handler.GAwsS3System;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -33,24 +36,33 @@ public class AwsS3ConnectionFactory {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AwsS3ConnectionFactory.class);
 
+	private static final String DEFAULT_REGION = "us-east-1";
+
 	@Autowired
 	private IGeboSecretsAccessService secretAccessService;
 
 	public S3Client createS3Client(GAwsS3System system, String secretCode)
 			throws VirtualFilesystemBrowsingException {
 		try {
-			AbstractGeboSecretContent secret = secretAccessService.getSecretContentById(secretCode);
-			if (!(secret instanceof GeboCustomSecretContent)) {
-				throw new VirtualFilesystemBrowsingException(
-						"Invalid secret type for S3, required GeboCustomSecretContent");
+			GeboAwsConnectionCredentials connection = loadConnection(secretCode);
+
+			AwsCredentialsProvider credentialsProvider;
+			Region region;
+
+			if (connection != null) {
+				credentialsProvider = StaticCredentialsProvider.create(
+						AwsBasicCredentials.create(connection.getAccessKeyId(), connection.getSecretAccessKey()));
+				region = connection.getRegion() != null
+						? Region.of(connection.getRegion().getCode())
+						: Region.of(DEFAULT_REGION);
+			} else {
+				credentialsProvider = DefaultCredentialsProvider.create();
+				region = Region.of(DEFAULT_REGION);
 			}
-			GeboCustomSecretContent customSecret = (GeboCustomSecretContent) secret;
-			String decryptedSecretKey = customSecret.getContent();
 
 			S3ClientBuilder builder = S3Client.builder()
-					.region(Region.of(system.getAwsRegion()))
-					.credentialsProvider(StaticCredentialsProvider.create(
-							AwsBasicCredentials.create(system.getAwsAccessKeyId(), decryptedSecretKey)));
+					.region(region)
+					.credentialsProvider(credentialsProvider);
 
 			if (system.getAwsEndpoint() != null && !system.getAwsEndpoint().isBlank()) {
 				builder.endpointOverride(URI.create(system.getAwsEndpoint()));
@@ -58,12 +70,27 @@ public class AwsS3ConnectionFactory {
 			}
 
 			return builder.build();
-		} catch (GeboCryptSecretException e) {
-			LOGGER.error("Cannot resolve S3 secret", e);
-			throw new VirtualFilesystemBrowsingException("Cannot resolve S3 secret: " + e.getMessage(), e);
+		} catch (VirtualFilesystemBrowsingException e) {
+			throw e;
 		} catch (Exception e) {
 			LOGGER.error("Cannot create S3 client", e);
 			throw new VirtualFilesystemBrowsingException("Cannot create S3 client: " + e.getMessage(), e);
+		}
+	}
+
+	private GeboAwsConnectionCredentials loadConnection(String secretCode) throws VirtualFilesystemBrowsingException {
+		if (secretCode == null || secretCode.trim().length() == 0) {
+			return null;
+		}
+		try {
+			AbstractGeboSecretContent secret = secretAccessService.getSecretContentById(secretCode);
+			if (secret.type() == GeboSecretType.AWS_CONNECTION) {
+				return (GeboAwsConnectionCredentials) secret;
+			}
+			throw new VirtualFilesystemBrowsingException(
+					"AWS S3 credentials must be stored as an AWS_CONNECTION secret");
+		} catch (GeboCryptSecretException e) {
+			throw new VirtualFilesystemBrowsingException("Cannot resolve AWS S3 credentials", e);
 		}
 	}
 }

@@ -16,26 +16,8 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 @Document
 public class GAwsS3System extends GContentManagementSystem {
 
-	private String awsAccessKeyId;
-	private String awsRegion;
 	private String awsEndpoint;
 	private String s3SecretCode;
-
-	public String getAwsAccessKeyId() {
-		return awsAccessKeyId;
-	}
-
-	public void setAwsAccessKeyId(String awsAccessKeyId) {
-		this.awsAccessKeyId = awsAccessKeyId;
-	}
-
-	public String getAwsRegion() {
-		return awsRegion;
-	}
-
-	public void setAwsRegion(String awsRegion) {
-		this.awsRegion = awsRegion;
-	}
 
 	public String getAwsEndpoint() {
 		return awsEndpoint;
