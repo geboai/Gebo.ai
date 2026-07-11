@@ -146,6 +146,11 @@ gebo:
             - module-ioc-dispatcher-component
             - resources-dispose-component
             - system-settings-controller-component
+        aws_s3_gebo_ai:
+          aws-s3-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
         googledrive_gebo_ai:
           google-drive-module:
             - module-ioc-dispatcher-component

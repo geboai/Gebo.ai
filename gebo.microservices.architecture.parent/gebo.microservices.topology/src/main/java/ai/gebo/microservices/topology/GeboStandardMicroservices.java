@@ -131,6 +131,11 @@ public final class GeboStandardMicroservices {
 							"system-settings-controller-component")
 					.build(),
 
+			GeboMicroservice.named("aws_s3_gebo_ai")
+					.module("aws-s3-module", "module-ioc-dispatcher-component", "resources-dispose-component",
+							"system-settings-controller-component")
+					.build(),
+
 			GeboMicroservice.named("googledrive_gebo_ai")
 					.module("google-drive-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component")
