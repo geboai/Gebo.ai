@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
@@ -38,11 +37,11 @@ import lombok.AllArgsConstructor;
  * scheduling of content reading and vectorization for project endpoints, and
  * maintains job statuses in the system.
  */
-@Component("gWorkflowScheduledSyncronizationServiceImpl")
+
 @Scope("singleton")
 @AllArgsConstructor
-public class GGeboScheduledSyncronizationServiceImpl {
-	static Logger LOGGER = LoggerFactory.getLogger(GGeboScheduledSyncronizationServiceImpl.class);
+public class GWorkflowStatusDeamonServiceImpl {
+	static Logger LOGGER = LoggerFactory.getLogger(GWorkflowStatusDeamonServiceImpl.class);
 	private final IGPersistentObjectManager persistenceManager;
 	private final JobStatusRepository jobStatusRepository;
 	private final WorkflowStatusEmitter statusEmitter;
