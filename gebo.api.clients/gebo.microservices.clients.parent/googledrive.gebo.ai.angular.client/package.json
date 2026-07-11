@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-googledrive-api",
-    "pack": "npm pack ./dist/gebo-googledrive-api --pack-destination ./target",
+    "pack": "npm pack ./dist/gebo-googledrive-api",
     "build-lib": "npm run build && npm run pack"
   },
   "private": true,
@@ -29,3 +29,5 @@
     "typescript": "~5.8.2"
   }
 }
+
+
