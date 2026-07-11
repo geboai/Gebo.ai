@@ -26,7 +26,6 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.core.messages.GDeletedProjectEndpointPayload;
-import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
@@ -94,13 +93,14 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	public GAbstractSystemsArchitectureController(IGPersistentObjectManager persistentObjectManager,
 			IGMessageBroker messageBroker, ControllerNestedEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory) {
+			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory, IGGeboIngestionJobQueueService jobQueueService) {
 		this.persistentObjectManager = persistentObjectManager;
 		this.messageBroker = messageBroker;
 		this.controllerEmitter = controllerEmitter;
 		this.securityService = securityService;
 		this.schedulingService = schedulingService;
 		this.entityProcessingRunnableFactory = entityProcessingRunnableFactory;
+		this.jobQueueService = jobQueueService;
 	}
 
 	/**
