@@ -21,6 +21,9 @@ import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.integration.content.handler.GIntegrationContentSystem;
 import ai.gebo.integration.content.handler.GIntegrationProjectEndpoint;
 import ai.gebo.integration.content.handler.repositories.IntegrationProjectEndpointRepository;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 
@@ -52,9 +55,10 @@ public class IntegrationSystemsController
 			IGMessageBroker messageBroker, IntegrationSystemsNestedEmitter controllerEmitter,
 			IGSecurityService securityService, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			IntegrationProjectEndpointRepository endpointRepository) {
+			IntegrationProjectEndpointRepository endpointRepository,
+			IGGeboIngestionJobQueueService jobQueueService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService);
 		this.endpointRepository = endpointRepository;
 	}
 
@@ -101,6 +105,18 @@ public class IntegrationSystemsController
 	public void deleteIntegrationProjectEndpoint(@RequestBody GIntegrationProjectEndpoint endpoint)
 			throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes a 3rd party Integration project endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint The project endpoint to publish
+	 * @return Operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishIntegrationProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishIntegrationProjectEndpoint(
+			@RequestBody GIntegrationProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
 }

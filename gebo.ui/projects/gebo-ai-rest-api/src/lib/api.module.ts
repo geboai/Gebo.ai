@@ -71,6 +71,7 @@ import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from '.
 import { GenericOpenAiapiImageModelsConfigurationControllerService } from './api/genericOpenAiapiImageModelsConfigurationController.service';
 import { GenericOpenAiapiTextToSpeechModelsConfigurationControllerService } from './api/genericOpenAiapiTextToSpeechModelsConfigurationController.service';
 import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from './api/genericOpenAiapiTranscriptModelsConfigurationController.service';
+import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
 import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingController.service';
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
@@ -200,6 +201,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericOpenAiapiImageModelsConfigurationControllerService,
     GenericOpenAiapiTextToSpeechModelsConfigurationControllerService,
     GenericOpenAiapiTranscriptModelsConfigurationControllerService,
+    GenericalPublisherControllerService,
     GitSystemsControllerService,
     GoogleDriveBrowsingControllerService,
     GoogleDriveSystemsControllerService,

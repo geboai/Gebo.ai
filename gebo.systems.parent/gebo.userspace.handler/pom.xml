@@ -18,7 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.jobs</artifactId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

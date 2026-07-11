@@ -22,7 +22,12 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.jobs</artifactId>
+			<artifactId>gebo.async.config</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.compute.workflow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**findMCPClientEndpointsByQbe**](McpClientSystemsControllerApi.md#findMCPClientEndpointsByQbe) | **POST** /api/admin/MCPClientSystemsController/findMCPClientEndpointsByQbe | 
 [**getMCPClientSystemType**](McpClientSystemsControllerApi.md#getMCPClientSystemType) | **GET** /api/admin/MCPClientSystemsController/getMCPClientSystemType | 
 [**insertMCPClientEndpoint**](McpClientSystemsControllerApi.md#insertMCPClientEndpoint) | **POST** /api/admin/MCPClientSystemsController/insertMCPClientEndpoint | 
+[**publishMCPClientEndpoint**](McpClientSystemsControllerApi.md#publishMCPClientEndpoint) | **POST** /api/admin/MCPClientSystemsController/publishMCPClientEndpoint | 
 [**updateMCPClientEndpoint**](McpClientSystemsControllerApi.md#updateMCPClientEndpoint) | **POST** /api/admin/MCPClientSystemsController/updateMCPClientEndpoint | 
 
 <a name="deleteMCPClientEndpoint"></a>
@@ -255,6 +256,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**MCPClientProjectEndpoint**](MCPClientProjectEndpoint.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishMCPClientEndpoint"></a>
+# **publishMCPClientEndpoint**
+> OperationStatusGJobStatus publishMCPClientEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.McpClientSystemsControllerApi;
+
+
+McpClientSystemsControllerApi apiInstance = new McpClientSystemsControllerApi();
+MCPClientProjectEndpoint body = new MCPClientProjectEndpoint(); // MCPClientProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishMCPClientEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling McpClientSystemsControllerApi#publishMCPClientEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**MCPClientProjectEndpoint**](MCPClientProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 
