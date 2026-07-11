@@ -18,15 +18,25 @@ an enterprise version with more feature and support is also available.
  - Configure the large language models to use like:
       - **OpenAI** chatgpt
       - **Anthropic** Claude
+      - **AWS Bedrock** (Claude, Amazon Nova, Llama, Mistral & more)
+      - **Google** Vertex AI / Gemini (experimental, disabled by default)
       - **XaI** Grok
       - **Nvidia** AI provider
       - **Groq**
       - **Deepseek**
       - **MistralAI**
       - **Regolo.ai** (Italian/European)
+      - **OpenRouter.ai** (multi-model router)
       - Almost every local large language model using **Ollama** or **vLLM**       
       - Every provider/local server compatible with **OpenAi API**
- - Configure tools & functions that each llm configuration can use      
+ - Configure tools & functions that each llm configuration can use, including **web search** (Google or Bing)      
+ - Configure additional AI model types besides chat & embedding models:
+    - **Image generation** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai & OpenAI-compatible providers)
+    - **Text to speech** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai)
+    - **Speech to text / transcription** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai)
+    - **Reranking** models to improve retrieve augmented generation relevance (AWS Bedrock, Regolo.ai, OpenRouter.ai, vLLM & OpenAI-compatible providers)
+ - Most providers support **guided fast-setup** with ready-to-use model presets and automatic models lookup
+ - Connect to **Model Context Protocol (MCP)** servers to give your chatbots extra tools & data sources, or expose Gebo.ai itself as an **MCP server**
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
     - **Microsoft Onedrive/Sharepoint**
     - **Atlassian Confluence**
@@ -34,6 +44,7 @@ an enterprise version with more feature and support is also available.
     - **Google Workspaces/Drives** 
     - **GitHub/GIT/Bitbucket** or other **git** compatible servers
     - Company shared filesystems
+    - **Amazon AWS S3** buckets
  - Configure **company single sign** on (SSO) using one of the following oauth2 providers:
  	- **Microsoft Entra**
  	- **Google auth**   
@@ -59,7 +70,8 @@ an enterprise version with more feature and support is also available.
  - Chat using chatbots with retrieve augmented generation  according to admin config.
  - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
  - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
- - Voice interface working with OpenAI provider.   
+ - Generate **images** directly in chat using configured image generation models.
+ - Voice interface (speech to text & text to speech) working with OpenAI provider.   
 
 ## How to install Gebo.ai 
 
@@ -82,6 +94,8 @@ The docker-compose file installs the required
 This software is build with latest spring boot technologies and the new spring-ai framework, with UI developed in Angular 19+PRIMENG
 Is made to accelerate professionals/companies that invested in these technologies to accelerate your own business opportunities 
 start building having this as base.
+
+The platform can run either as a single **bootable jar** (monolith) or be deployed as a set of **distributed microservices** (content-handler, brain, vectorizator & graphicator apps) with **Eureka** service discovery and **Hazelcast** clustering for horizontal scalability and high availability.
 
 ### How to build the software:
 
