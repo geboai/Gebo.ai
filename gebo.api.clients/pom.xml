@@ -10,5 +10,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>gebo.monolithic.api.resttemplate.client</module>
+  	<module>gebo.microservices.clients.parent</module>
   </modules>
 </project>

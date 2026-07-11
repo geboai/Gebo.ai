@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo</groupId>
+		<artifactId>ai.gebo.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<groupId>gebo.microservices.api.clients</groupId>
+	<artifactId>gebo.microservices.clients.parent</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<swagger.codegen.plugin.version.java>3.0.75</swagger.codegen.plugin.version.java>
+		<swagger.codegen.plugin.version.angular>3.0.59</swagger.codegen.plugin.version.angular>
+		<generated-sources-java-path>src/main/java</generated-sources-java-path>
+		<generated-sources-angular-path>src/lib</generated-sources-angular-path>
+	</properties>
+
+	<modules>
+		<!-- Java REST template clients -->
+		<module>eureka.gebo.ai.java.client</module>
+		<module>gateway.gebo.ai.java.client</module>
+		<module>brain.gebo.ai.java.client</module>
+		<module>vectorizator.gebo.ai.java.client</module>
+		<module>graphicator.gebo.ai.java.client</module>
+		<module>chunker.gebo.ai.java.client</module>
+		<module>git.gebo.ai.java.client</module>
+		<module>filesystem.gebo.ai.java.client</module>
+		<module>uploads.gebo.ai.java.client</module>
+		<module>userspace.gebo.ai.java.client</module>
+		<module>sharepoint.gebo.ai.java.client</module>
+		<module>confluence.gebo.ai.java.client</module>
+		<module>jira.gebo.ai.java.client</module>
+		<module>aws-s3.gebo.ai.java.client</module>
+		<module>googledrive.gebo.ai.java.client</module>
+		<module>mcpclient.gebo.ai.java.client</module>
+		<module>integration.gebo.ai.java.client</module>
+		<module>fulltextor.gebo.ai.java.client</module>
+		<!-- Angular / TypeScript clients -->
+		<module>eureka.gebo.ai.angular.client</module>
+		<module>gateway.gebo.ai.angular.client</module>
+		<module>brain.gebo.ai.angular.client</module>
+		<module>vectorizator.gebo.ai.angular.client</module>
+		<module>graphicator.gebo.ai.angular.client</module>
+		<module>chunker.gebo.ai.angular.client</module>
+		<module>git.gebo.ai.angular.client</module>
+		<module>filesystem.gebo.ai.angular.client</module>
+		<module>uploads.gebo.ai.angular.client</module>
+		<module>userspace.gebo.ai.angular.client</module>
+		<module>sharepoint.gebo.ai.angular.client</module>
+		<module>confluence.gebo.ai.angular.client</module>
+		<module>jira.gebo.ai.angular.client</module>
+		<module>aws-s3.gebo.ai.angular.client</module>
+		<module>googledrive.gebo.ai.angular.client</module>
+		<module>mcpclient.gebo.ai.angular.client</module>
+		<module>integration.gebo.ai.angular.client</module>
+		<module>fulltextor.gebo.ai.angular.client</module>
+	</modules>
+</project>

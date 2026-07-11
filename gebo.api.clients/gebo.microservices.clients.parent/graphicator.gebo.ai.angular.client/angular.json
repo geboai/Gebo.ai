@@ -1,0 +1,33 @@
+﻿{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "gebo-graphicator-api": {
+      "projectType": "library",
+      "root": "projects/gebo-graphicator-api",
+      "sourceRoot": "projects/gebo-graphicator-api/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/gebo-graphicator-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/gebo-graphicator-api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/gebo-graphicator-api/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

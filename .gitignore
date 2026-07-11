@@ -26,3 +26,6 @@ dockers/gebo.ai.platform/jdk-*_linux-x64_bin.tar.gz
 .claude/**
 .mcp.json
 ui-exports/
+**/node_modules/
+**/dist/
+**/.angular/

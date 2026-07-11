@@ -1,0 +1,57 @@
+﻿<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gebo.microservices.api.clients</groupId>
+		<artifactId>gebo.microservices.clients.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>googledrive.gebo.ai.angular.client</artifactId>
+	<packaging>jar</packaging>
+
+	<properties>
+		<swagger.file>http://localhost:8093/v3/api-docs</swagger.file>
+		<generated-sources-path>${project.basedir}/projects/gebo-googledrive-api/src/lib</generated-sources-path>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>generate-rest-api</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.swagger.codegen.v3</groupId>
+						<artifactId>swagger-codegen-maven-plugin</artifactId>
+						<version>${swagger.codegen.plugin.version.angular}</version>
+						<configuration>
+							<inputSpec>${swagger.file}</inputSpec>
+							<configOptions>
+								<sourceFolder>${generated-sources-angular-path}</sourceFolder>
+							</configOptions>
+							<output>${generated-sources-path}</output>
+						</configuration>
+						<executions>
+							<execution>
+								<id>generate-swagger-angular</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<language>typescript-angular</language>
+									<modelPackage>model</modelPackage>
+									<apiPackage>api</apiPackage>
+									<invokerPackage>invoker</invokerPackage>
+									<additionalProperties>
+										ngVersion=10.0.6,libraryName=gebo.microservices.api.client.googledrive</additionalProperties>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
+
