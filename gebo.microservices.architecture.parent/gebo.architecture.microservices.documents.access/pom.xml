@@ -1,9 +1,53 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>ai.gebo.microservices.architecture</groupId>
-    <artifactId>gebo.microservices.architecture.parent</artifactId>
-    <version>1.0.2.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>gebo.architecture.microservices.documents.access</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.architecture.microservices.documents.access</artifactId>
+
+	<!--
+		Microservices implementation of IGDocumentContentStreamer: streams a
+		document's content by calling the DocumentContentStreamerController on the
+		CONTENT-HANDLER microservice that owns the document. The target service is
+		resolved dynamically per document from its origin component's
+		messagingModuleId via the GeboMicroserviceUrlResolver. The api-key header
+		and any extra headers are configurable under ai.gebo.documents.access.client.*.
+	-->
+	<dependencies>
+		<!-- IGDocumentContentStreamer, StreamingPurpose, DocumentContentStreamerException
+		     + (transitively) base.model: IGComponentOriginatedDocument, GeboComponentInfo,
+		     TypedInputStream. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.access</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- GeboMicroserviceUrlResolver + its autoconfigured bean. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- GDocumentReference (streamDocumentReference request type). -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.knowledgebase.model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- SearchResult (streamSearchResult request type). -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- WebClient + @ConditionalOnMissingBean / @ConfigurationProperties support. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+	</dependencies>
 </project>
