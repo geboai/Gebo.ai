@@ -36,7 +36,10 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
@@ -112,8 +115,8 @@ public class FileUploadsController
 	 * @param entityProcessingRunnableFactory factory for creating entity processing runnables
 	 */
 	public FileUploadsController(IGPersistentObjectManager persistenceManager, IGMessageBroker messageBroker,
-			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter, IGSchedulingTimeService schedulingService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory) {
-		super(persistenceManager, messageBroker, controllerEmitter, securityService,schedulingService,entityProcessingRunnableFactory);
+			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter, IGSchedulingTimeService schedulingService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory, IGGeboIngestionJobQueueService jobQueueService) {
+		super(persistenceManager, messageBroker, controllerEmitter, securityService,schedulingService,entityProcessingRunnableFactory, jobQueueService);
 	}
 
 	/**
@@ -219,6 +222,17 @@ public class FileUploadsController
 	@PostMapping(value = "deleteUploadsEndpoint", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUploadsEndpoint(@RequestBody GUploadsProjectEndpoint endpoint) throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes an uploads endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint the endpoint to publish
+	 * @return operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishUploadsEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishUploadsEndpoint(@RequestBody GUploadsProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
 	/**

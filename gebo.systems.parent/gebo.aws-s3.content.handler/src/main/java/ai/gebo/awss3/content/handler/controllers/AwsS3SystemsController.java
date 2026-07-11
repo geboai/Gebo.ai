@@ -31,6 +31,8 @@ import ai.gebo.awss3.content.handler.GAwsS3System;
 import ai.gebo.awss3.content.handler.IGAwsS3SystemContentHandler;
 import ai.gebo.awss3.content.handler.impl.AwsS3TestService;
 import ai.gebo.awss3.content.handler.repositories.AwsS3ProjectEndpointRepository;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
 import ai.gebo.model.GUserMessage;
@@ -60,9 +62,10 @@ public class AwsS3SystemsController
 			IGSecurityService securityService, IGAwsS3SystemContentHandler awsS3Handler,
 			AwsS3ProjectEndpointRepository endpointRepository, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			AwsS3TestService testService, IGeboSecretsAccessService secretAccessService) {
+			AwsS3TestService testService, IGeboSecretsAccessService secretAccessService,
+			IGGeboIngestionJobQueueService jobQueueService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService);
 		this.awsS3Handler = awsS3Handler;
 		this.endpointRepository = endpointRepository;
 		this.testService = testService;
@@ -144,6 +147,11 @@ public class AwsS3SystemsController
 	public void deleteAwsS3ProjectEndpoint(@RequestBody GAwsS3ProjectEndpoint endpoint)
 			throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	@PostMapping(value = "publishAwsS3ProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishAwsS3ProjectEndpoint(@RequestBody GAwsS3ProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
 	/**

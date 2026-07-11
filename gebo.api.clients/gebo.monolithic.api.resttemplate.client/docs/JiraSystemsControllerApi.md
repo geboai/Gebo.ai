@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**getJiraSystems**](JiraSystemsControllerApi.md#getJiraSystems) | **GET** /api/admin/JiraSystemsController/getJiraSystems | 
 [**insertJiraEndpoint**](JiraSystemsControllerApi.md#insertJiraEndpoint) | **POST** /api/admin/JiraSystemsController/insertJiraEndpoint | 
 [**insertJiraSystem**](JiraSystemsControllerApi.md#insertJiraSystem) | **POST** /api/admin/JiraSystemsController/insertJiraSystem | 
+[**publishJiraEndpoint**](JiraSystemsControllerApi.md#publishJiraEndpoint) | **POST** /api/admin/JiraSystemsController/publishJiraEndpoint | 
 [**testJiraSystem**](JiraSystemsControllerApi.md#testJiraSystem) | **POST** /api/admin/JiraSystemsController/testJiraSystem | 
 [**updateJiraEndpoint**](JiraSystemsControllerApi.md#updateJiraEndpoint) | **POST** /api/admin/JiraSystemsController/updateJiraEndpoint | 
 [**updateJiraSystem**](JiraSystemsControllerApi.md#updateJiraSystem) | **POST** /api/admin/JiraSystemsController/updateJiraSystem | 
@@ -472,6 +473,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OperationStatusGJiraSystem**](OperationStatusGJiraSystem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishJiraEndpoint"></a>
+# **publishJiraEndpoint**
+> OperationStatusGJobStatus publishJiraEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.JiraSystemsControllerApi;
+
+
+JiraSystemsControllerApi apiInstance = new JiraSystemsControllerApi();
+GJiraProjectEndpoint body = new GJiraProjectEndpoint(); // GJiraProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishJiraEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling JiraSystemsControllerApi#publishJiraEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GJiraProjectEndpoint**](GJiraProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

@@ -27,11 +27,14 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.mcpclient.content.handler.GMCPClientSystem;
 import ai.gebo.mcpclient.content.handler.IGMCPClientContentManagementHandler;
 import ai.gebo.mcpclient.content.handler.MCPClientProjectEndpoint;
 import ai.gebo.mcpclient.content.handler.impl.GMCPClientRemoteVirtualFilesystemConsumingServiceImpl;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 
@@ -69,9 +72,10 @@ public class MCPClientSystemsController
 	public MCPClientSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			MCPClientControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGMCPClientContentManagementHandler handler, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory) {
+			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGGeboIngestionJobQueueService jobQueueService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService);
 		this.handler = handler;
 	}
 
@@ -115,5 +119,10 @@ public class MCPClientSystemsController
 	@PostMapping(value = "deleteMCPClientEndpoint", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteMCPClientEndpoint(@RequestBody MCPClientProjectEndpoint endpoint) throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	@PostMapping(value = "publishMCPClientEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishMCPClientEndpoint(@RequestBody MCPClientProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 }

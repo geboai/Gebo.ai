@@ -26,7 +26,9 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.model.OperationStatus;
@@ -59,9 +61,9 @@ public class UserspaceController
 			UserspaceControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			UserspaceService userspaceService) {
+			UserspaceService userspaceService, IGGeboIngestionJobQueueService jobQueueService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService);
 		this.userspaceService = userspaceService;
 
 	}
@@ -310,5 +312,10 @@ public class UserspaceController
 	public OperationStatus<PublishingStatus> transferUploadsToUserSpaceAndPublish(
 			@Valid @NotNull @RequestBody UserUploadToUserSpaceParam param) {
 		return userspaceService.transferUploadsToUserSpaceAndPublish(param);
+	}
+
+	@PostMapping(value = "publishUserspaceProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishUserspaceProjectEndpoint(@RequestBody GUserspaceProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 }

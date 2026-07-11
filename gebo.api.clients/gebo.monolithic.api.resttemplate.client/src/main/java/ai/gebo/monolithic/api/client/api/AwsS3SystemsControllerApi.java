@@ -7,6 +7,7 @@ import ai.gebo.monolithic.api.client.model.GAwsS3ProjectEndpoint;
 import ai.gebo.monolithic.api.client.model.GAwsS3System;
 import ai.gebo.monolithic.api.client.model.GContentManagementSystemType;
 import ai.gebo.monolithic.api.client.model.OperationStatusGAwsS3System;
+import ai.gebo.monolithic.api.client.model.OperationStatusGJobStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-10T21:14:52.278827200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class AwsS3SystemsControllerApi {
     private ApiClient apiClient;
@@ -525,6 +526,52 @@ public class AwsS3SystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGAwsS3System> returnType = new ParameterizedTypeReference<OperationStatusGAwsS3System>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusGJobStatus
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGJobStatus publishAwsS3ProjectEndpoint(GAwsS3ProjectEndpoint body) throws RestClientException {
+        return publishAwsS3ProjectEndpointWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusGJobStatus&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGJobStatus> publishAwsS3ProjectEndpointWithHttpInfo(GAwsS3ProjectEndpoint body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishAwsS3ProjectEndpoint");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/AwsS3SystemsController/publishAwsS3ProjectEndpoint").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

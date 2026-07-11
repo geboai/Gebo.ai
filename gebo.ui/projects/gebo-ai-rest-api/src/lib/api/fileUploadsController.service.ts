@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { GContentManagementSystemType } from '../model/gContentManagementSystemType';
 import { GUploadsContentManagementSystem } from '../model/gUploadsContentManagementSystem';
 import { GUploadsProjectEndpoint } from '../model/gUploadsProjectEndpoint';
+import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -350,6 +351,53 @@ export class FileUploadsControllerService {
         }
 
         return this.httpClient.request<GUploadsProjectEndpoint>('post',`${this.basePath}/api/admin/FileUploadsController/insertUploadsEndpoint`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public publishUploadsEndpoint(body: GUploadsProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGJobStatus>;
+    public publishUploadsEndpoint(body: GUploadsProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGJobStatus>>;
+    public publishUploadsEndpoint(body: GUploadsProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGJobStatus>>;
+    public publishUploadsEndpoint(body: GUploadsProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling publishUploadsEndpoint.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGJobStatus>('post',`${this.basePath}/api/admin/FileUploadsController/publishUploadsEndpoint`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**getAwsS3Systems**](AwsS3SystemsControllerApi.md#getAwsS3Systems) | **GET** /api/admin/AwsS3SystemsController/getAwsS3Systems | 
 [**insertAwsS3ProjectEndpoint**](AwsS3SystemsControllerApi.md#insertAwsS3ProjectEndpoint) | **POST** /api/admin/AwsS3SystemsController/insertAwsS3ProjectEndpoint | 
 [**insertAwsS3System**](AwsS3SystemsControllerApi.md#insertAwsS3System) | **POST** /api/admin/AwsS3SystemsController/insertAwsS3System | 
+[**publishAwsS3ProjectEndpoint**](AwsS3SystemsControllerApi.md#publishAwsS3ProjectEndpoint) | **POST** /api/admin/AwsS3SystemsController/publishAwsS3ProjectEndpoint | 
 [**updateAwsS3ProjectEndpoint**](AwsS3SystemsControllerApi.md#updateAwsS3ProjectEndpoint) | **POST** /api/admin/AwsS3SystemsController/updateAwsS3ProjectEndpoint | 
 [**updateAwsS3System**](AwsS3SystemsControllerApi.md#updateAwsS3System) | **POST** /api/admin/AwsS3SystemsController/updateAwsS3System | 
 
@@ -471,6 +472,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OperationStatusGAwsS3System**](OperationStatusGAwsS3System.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishAwsS3ProjectEndpoint"></a>
+# **publishAwsS3ProjectEndpoint**
+> OperationStatusGJobStatus publishAwsS3ProjectEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.AwsS3SystemsControllerApi;
+
+
+AwsS3SystemsControllerApi apiInstance = new AwsS3SystemsControllerApi();
+GAwsS3ProjectEndpoint body = new GAwsS3ProjectEndpoint(); // GAwsS3ProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishAwsS3ProjectEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling AwsS3SystemsControllerApi#publishAwsS3ProjectEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GAwsS3ProjectEndpoint**](GAwsS3ProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

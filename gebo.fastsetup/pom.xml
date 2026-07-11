@@ -41,11 +41,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.jobs</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.repositories</artifactId>
 			<version>${project.version}</version>

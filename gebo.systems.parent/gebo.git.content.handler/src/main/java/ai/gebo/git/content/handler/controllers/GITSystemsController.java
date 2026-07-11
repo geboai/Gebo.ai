@@ -47,6 +47,8 @@ import ai.gebo.git.content.handler.IGBaseGitContentManagementSystemHandler;
 import ai.gebo.git.content.handler.impl.GitClientService;
 import ai.gebo.git.content.handler.impl.GitSystemsRuntimeConfiguratoinDao;
 import ai.gebo.git.content.handler.repositories.GitEndpointRepository;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
@@ -103,9 +105,10 @@ public class GITSystemsController
 	public GITSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			GitControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory) {
+			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGGeboIngestionJobQueueService jobQueueService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService);
 	}
 
 	/**
@@ -259,6 +262,17 @@ public class GITSystemsController
 	@PostMapping(value = "deleteGitEndpoint", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGitEndpoint(@RequestBody GGitProjectEndpoint endpoint) throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes a Git project endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint The Git endpoint to publish
+	 * @return Operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishGitEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishGitEndpoint(@RequestBody GGitProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
 	/**

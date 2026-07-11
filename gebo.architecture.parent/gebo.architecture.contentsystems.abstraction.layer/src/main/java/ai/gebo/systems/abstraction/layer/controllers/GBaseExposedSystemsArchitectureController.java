@@ -26,8 +26,11 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -64,9 +67,10 @@ public class GBaseExposedSystemsArchitectureController<SystemType extends GConte
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			ControllerNestedEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory) {
+			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGGeboIngestionJobQueueService jobQueueService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService);
 		this.systemType = systemType;
 		this.endpointType = endpointType;
 	}
@@ -167,6 +171,17 @@ public class GBaseExposedSystemsArchitectureController<SystemType extends GConte
 	@PostMapping(value = "updateSystem", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SystemType updateSystem(@NotNull @Valid @RequestBody SystemType endpoint) throws GeboPersistenceException {
 		return super.updateSystem(endpoint);
+	}
+
+	/**
+	 * Publishes an endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint the endpoint to be published
+	 * @return operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishEndpoint", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishEndpoint(@NotNull @Valid @RequestBody EndpointType endpoint) {
+		return super.publish(endpoint);
 	}
 
 	/**

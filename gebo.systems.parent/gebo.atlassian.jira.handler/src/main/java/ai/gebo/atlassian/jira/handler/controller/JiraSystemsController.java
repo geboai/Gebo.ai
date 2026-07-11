@@ -44,6 +44,8 @@ import ai.gebo.atlassian.jira.handler.IGJiraContentManagementHandler;
 import ai.gebo.atlassian.jira.handler.impl.JiraContentManagementHandlerImpl;
 import ai.gebo.atlassian.jira.handler.impl.JiraSystemsTestService;
 import ai.gebo.atlassian.jira.handler.repository.JiraProjectEndpointRepository;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
@@ -102,9 +104,10 @@ public class JiraSystemsController extends GAbstractSystemsArchitectureControlle
 			IGJiraContentManagementHandler handler, JiraProjectEndpointRepository endpointRepository,
 			IGeboSecretsAccessService secretAccessService, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			RestTemplateWrapperService restTemplateWrapper, JiraSystemsTestService JiraTestService) {
+			RestTemplateWrapperService restTemplateWrapper, JiraSystemsTestService JiraTestService,
+			IGGeboIngestionJobQueueService jobQueueService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService);
 		this.handler = handler;
 		this.endpointRepository = endpointRepository;
 		this.secretAccessService = secretAccessService;
@@ -277,6 +280,17 @@ public class JiraSystemsController extends GAbstractSystemsArchitectureControlle
 	@PostMapping(value = "deleteJiraEndpoint", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteJiraEndpoint(@RequestBody GJiraProjectEndpoint endpoint) throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+    /**
+     * Publishes a Jira project endpoint, triggering an asynchronous ingestion job.
+     *
+     * @param endpoint The Jira project endpoint to publish
+     * @return Operation status containing the launched job status
+     */
+	@PostMapping(value = "publishJiraEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishJiraEndpoint(@RequestBody GJiraProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
     /**

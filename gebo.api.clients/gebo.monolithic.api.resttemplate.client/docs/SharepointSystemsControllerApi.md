@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**getSharepointSystems**](SharepointSystemsControllerApi.md#getSharepointSystems) | **GET** /api/admin/SharepointSystemsController/getSharepointSystems | 
 [**insertSharepointEndpoint**](SharepointSystemsControllerApi.md#insertSharepointEndpoint) | **POST** /api/admin/SharepointSystemsController/insertSharepointEndpoint | 
 [**insertSharepointSystem**](SharepointSystemsControllerApi.md#insertSharepointSystem) | **POST** /api/admin/SharepointSystemsController/insertSharepointSystem | 
+[**publishSharepointEndpoint**](SharepointSystemsControllerApi.md#publishSharepointEndpoint) | **POST** /api/admin/SharepointSystemsController/publishSharepointEndpoint | 
 [**testSharepointSystem**](SharepointSystemsControllerApi.md#testSharepointSystem) | **POST** /api/admin/SharepointSystemsController/testSharepointSystem | 
 [**updateSharepointEndpoint**](SharepointSystemsControllerApi.md#updateSharepointEndpoint) | **POST** /api/admin/SharepointSystemsController/updateSharepointEndpoint | 
 [**updateSharepointSystem**](SharepointSystemsControllerApi.md#updateSharepointSystem) | **POST** /api/admin/SharepointSystemsController/updateSharepointSystem | 
@@ -472,6 +473,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OperationStatusGSharepointContentManagementSystem**](OperationStatusGSharepointContentManagementSystem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishSharepointEndpoint"></a>
+# **publishSharepointEndpoint**
+> OperationStatusGJobStatus publishSharepointEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.SharepointSystemsControllerApi;
+
+
+SharepointSystemsControllerApi apiInstance = new SharepointSystemsControllerApi();
+GSharepointProjectEndpoint body = new GSharepointProjectEndpoint(); // GSharepointProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishSharepointEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling SharepointSystemsControllerApi#publishSharepointEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GSharepointProjectEndpoint**](GSharepointProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

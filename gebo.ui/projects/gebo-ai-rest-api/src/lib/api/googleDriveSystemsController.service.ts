@@ -22,6 +22,7 @@ import { GContentManagementSystemType } from '../model/gContentManagementSystemT
 import { GGoogleDriveProjectEndpoint } from '../model/gGoogleDriveProjectEndpoint';
 import { GGoogleDriveSystem } from '../model/gGoogleDriveSystem';
 import { OperationStatusGGoogleDriveSystem } from '../model/operationStatusGGoogleDriveSystem';
+import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -542,6 +543,53 @@ export class GoogleDriveSystemsControllerService {
         }
 
         return this.httpClient.request<OperationStatusGGoogleDriveSystem>('post',`${this.basePath}/api/admin/GoogleDriveSystemsController/insertGoogleDriveSystem`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public publishGoogleDriveProjectEndpoint(body: GGoogleDriveProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGJobStatus>;
+    public publishGoogleDriveProjectEndpoint(body: GGoogleDriveProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGJobStatus>>;
+    public publishGoogleDriveProjectEndpoint(body: GGoogleDriveProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGJobStatus>>;
+    public publishGoogleDriveProjectEndpoint(body: GGoogleDriveProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling publishGoogleDriveProjectEndpoint.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGJobStatus>('post',`${this.basePath}/api/admin/GoogleDriveSystemsController/publishGoogleDriveProjectEndpoint`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

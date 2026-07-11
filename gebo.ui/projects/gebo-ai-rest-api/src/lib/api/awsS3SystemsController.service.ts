@@ -22,6 +22,7 @@ import { GAwsS3ProjectEndpoint } from '../model/gAwsS3ProjectEndpoint';
 import { GAwsS3System } from '../model/gAwsS3System';
 import { GContentManagementSystemType } from '../model/gContentManagementSystemType';
 import { OperationStatusGAwsS3System } from '../model/operationStatusGAwsS3System';
+import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -542,6 +543,53 @@ export class AwsS3SystemsControllerService {
         }
 
         return this.httpClient.request<OperationStatusGAwsS3System>('post',`${this.basePath}/api/admin/AwsS3SystemsController/insertAwsS3System`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public publishAwsS3ProjectEndpoint(body: GAwsS3ProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGJobStatus>;
+    public publishAwsS3ProjectEndpoint(body: GAwsS3ProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGJobStatus>>;
+    public publishAwsS3ProjectEndpoint(body: GAwsS3ProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGJobStatus>>;
+    public publishAwsS3ProjectEndpoint(body: GAwsS3ProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling publishAwsS3ProjectEndpoint.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGJobStatus>('post',`${this.basePath}/api/admin/AwsS3SystemsController/publishAwsS3ProjectEndpoint`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
