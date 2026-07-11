@@ -146,6 +146,9 @@ services:
   jira:
     <<: *microservice
     image: geboai/jira.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+  aws-s3:
+    <<: *microservice
+    image: geboai/aws-s3.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
   googledrive:
     <<: *microservice
     image: geboai/googledrive.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}

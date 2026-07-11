@@ -36,6 +36,7 @@
 		<module>sharepoint.gebo.ai</module>
 		<module>confluence.gebo.ai</module>
 		<module>jira.gebo.ai</module>
+		<module>aws-s3.gebo.ai</module>
 		<module>googledrive.gebo.ai</module>
 		<module>mcpclient.gebo.ai</module>
 		<module>integration.gebo.ai</module>
