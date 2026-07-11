@@ -1,0 +1,12 @@
+﻿{
+  "name": "@Gebo.ai/graphicator",
+  "version": "1.0.2.0-SNAPSHOT",
+  "peerDependencies": {
+    "@angular/common": "^19.2.5",
+    "@angular/core": "^19.2.5"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

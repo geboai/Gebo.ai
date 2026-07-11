@@ -1,0 +1,5 @@
+# Artifacts produced by the Maven build of the angular clients
+# Packed library tarballs (npm pack output, used as local refs / nexus publish)
+*.tgz
+# Local Node/npm installed by the frontend-maven-plugin (per-module ./node folder)
+node/

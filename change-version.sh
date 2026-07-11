@@ -34,6 +34,12 @@ sed -i s/"$1"/"$2"/ ./gebo.ui/package.json
 git stage ./gebo.ui/package.json
 find ./gebo.ui/projects -name package.json | xargs sed -i s/"$1"/"$2"/ 
 find ./gebo.ui/projects -name package.json | xargs git stage
+# Microservices Angular client package.json files (workspace level)
+find ./gebo.api.clients/gebo.microservices.clients.parent -maxdepth 2 -name package.json | xargs sed -i s/"$1"/"$2"/
+find ./gebo.api.clients/gebo.microservices.clients.parent -maxdepth 2 -name package.json | xargs git stage
+# Microservices Angular client package.json files (published library level)
+find ./gebo.api.clients/gebo.microservices.clients.parent -maxdepth 4 -path "*/projects/*/package.json" | xargs sed -i s/"$1"/"$2"/
+find ./gebo.api.clients/gebo.microservices.clients.parent -maxdepth 4 -path "*/projects/*/package.json" | xargs git stage
 sed -i s/"$1"/"$2"/ run.bat
 git stage run.bat 
 git stage dockers/gebo.ai/Dockerfile dockers/gebo.ai/create-image.bat
