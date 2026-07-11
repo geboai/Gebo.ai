@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-eureka-api",
-    "pack": "npm pack ./dist/gebo-eureka-api --pack-destination ../../",
-    "build-lib": "npm run build; if ($?) { npm run pack }"
+    "pack": "npm pack ./dist/gebo-eureka-api --pack-destination ./target",
+    "build-lib": "npm run build && npm run pack"
   },
   "private": true,
   "dependencies": {

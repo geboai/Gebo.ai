@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-userspace-api",
-    "pack": "npm pack ./dist/gebo-userspace-api --pack-destination ../../",
-    "build-lib": "npm run build; if ($?) { npm run pack }"
+    "pack": "npm pack ./dist/gebo-userspace-api --pack-destination ./target",
+    "build-lib": "npm run build && npm run pack"
   },
   "private": true,
   "dependencies": {

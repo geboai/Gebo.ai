@@ -17,6 +17,52 @@
 
 	<profiles>
 		<profile>
+			<id>angular-ui</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.7.6</version>
+						<configuration>
+							<workingDirectory>./</workingDirectory>
+							<nodeVersion>v22.14.0</nodeVersion>
+							<npmVersion>10.9.2</npmVersion>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node and npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>npm install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm run build-lib</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>run build-lib</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>generate-rest-api</id>
 			<build>
 				<plugins>
@@ -54,4 +100,3 @@
 		</profile>
 	</profiles>
 </project>
-

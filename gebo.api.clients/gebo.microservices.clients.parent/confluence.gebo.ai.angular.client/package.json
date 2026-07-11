@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-confluence-api",
-    "pack": "npm pack ./dist/gebo-confluence-api --pack-destination ../../",
-    "build-lib": "npm run build; if ($?) { npm run pack }"
+    "pack": "npm pack ./dist/gebo-confluence-api --pack-destination ./target",
+    "build-lib": "npm run build && npm run pack"
   },
   "private": true,
   "dependencies": {
