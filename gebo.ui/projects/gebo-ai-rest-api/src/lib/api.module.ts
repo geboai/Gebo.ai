@@ -87,6 +87,7 @@ import { IntegrationSystemsControllerService } from './api/integrationSystemsCon
 import { JiraBrowsingControllerService } from './api/jiraBrowsingController.service';
 import { JiraSystemsControllerService } from './api/jiraSystemsController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
+import { JobStatusControllerService } from './api/jobStatusController.service';
 import { KnowledgeBaseControllerService } from './api/knowledgeBaseController.service';
 import { LanguageResourcesControllerService } from './api/languageResourcesController.service';
 import { LlmsUsageAdminLevelControllerService } from './api/llmsUsageAdminLevelController.service';
@@ -215,6 +216,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     JiraBrowsingControllerService,
     JiraSystemsControllerService,
     JobLauncherControllerService,
+    JobStatusControllerService,
     KnowledgeBaseControllerService,
     LanguageResourcesControllerService,
     LlmsUsageAdminLevelControllerService,

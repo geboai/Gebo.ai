@@ -34,7 +34,6 @@
 		<module>gebo.architecture.parent</module>
 		<module>gebo.system.ingestion</module>
 		<module>gebo.ui</module>
-		<module>gebo.jobs.services</module>
 		<module>gebo.config</module>
 		<module>gebo.config.services</module>
 		<module>gebo.fastsetup</module>

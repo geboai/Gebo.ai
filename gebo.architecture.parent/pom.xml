@@ -55,6 +55,8 @@
   	<module>gebo.architecture.environment.monolithic</module>
   	<module>gebo.architecture.documents.cache.impl</module>
   	<module>gebo.architecture.documents.access</module>
-  	
+  	<module>gebo.architecture.compute.workflow</module>
+  	<module>gebo.architecture.jobs</module>
+
   </modules>
 </project>

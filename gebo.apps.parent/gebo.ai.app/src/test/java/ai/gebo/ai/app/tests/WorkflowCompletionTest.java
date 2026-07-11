@@ -13,13 +13,13 @@ import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
-import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
+import ai.gebo.workflows.compute.model.JobSummary;
 
 public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests {
 	@Autowired
@@ -37,7 +37,7 @@ public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests
 		status.setWorkflowType(GWorkflowType.STANDARD.name());
 		status.setWorkflowId(GStandardWorkflow.INGESTION.name());
 		status = persistentObjectManager.insert(status);
-		JobSummary summary = this.ingestionJobService.getJobSummary(status.getCode());
+		JobSummary summary = this.workflowStatsService.getJobSummary(status.getCode());
 		printSummary(summary);
 		assertFalse(summary.getWorkflowStatus().isFinished(), "The status with no logged entries must be not finished");
 		ContentsBatchProcessed processed = new ContentsBatchProcessed();
@@ -52,7 +52,7 @@ public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests
 		processed.setId(UUID.randomUUID().toString());
 		processed.setLastMessage(true);
 		repo.insert(processed);
-		summary = this.ingestionJobService.getJobSummary(status.getCode());
+		summary = this.workflowStatsService.getJobSummary(status.getCode());
 		printSummary(summary);
 		assertFalse(summary.getWorkflowStatus().isFinished(), "The status with no logged entries must be not finished");
 		processed = new ContentsBatchProcessed();
@@ -66,7 +66,7 @@ public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests
 		processed.setTimestamp(new java.util.Date());
 		processed.setId(UUID.randomUUID().toString());
 		repo.insert(processed);
-		summary = this.ingestionJobService.getJobSummary(status.getCode());
+		summary = this.workflowStatsService.getJobSummary(status.getCode());
 		printSummary(summary);
 		assertFalse(summary.getWorkflowStatus().isFinished(), "The status with no logged entries must be not finished");
 		processed = new ContentsBatchProcessed();
@@ -80,7 +80,7 @@ public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests
 		processed.setTimestamp(new java.util.Date());
 		processed.setId(UUID.randomUUID().toString());
 		repo.insert(processed);
-		summary = this.ingestionJobService.getJobSummary(status.getCode());
+		summary = this.workflowStatsService.getJobSummary(status.getCode());
 		printSummary(summary);
 		//assertFalse(summary.getWorkflowStatus().isFinished(), "The status with no logged entries must be not finished");
 		//processed = new ContentsBatchProcessed();
@@ -94,7 +94,7 @@ public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests
 		//processed.setTimestamp(new java.util.Date());
 		//processed.setId(UUID.randomUUID().toString());
 		//repo.insert(processed);
-		summary = this.ingestionJobService.getJobSummary(status.getCode());
+		summary = this.workflowStatsService.getJobSummary(status.getCode());
 		printSummary(summary);
 		assertTrue(summary.getWorkflowStatus().isFinished(), "The status with correct structure must be signed as finished");
 	}

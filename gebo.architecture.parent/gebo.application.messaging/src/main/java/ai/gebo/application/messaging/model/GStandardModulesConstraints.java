@@ -45,6 +45,8 @@ public class GStandardModulesConstraints {
 	public static final String TOKENIZER_MODULE = "tokenizer-module";
 	public static final String TOKENIZER_COMPONENT = "tokenizer-component";
 
+	public static final String WORKFLOW_STATUS_MODULE = "workflow-status-module";
+
 	public static final String KNOWLEDGE_GRAPH_MODULE = "knowledge-graph-module";
 	public static final String KNOWLEDGE_GRAPH_COMPONENT = "knowledge-graph-component";
 
