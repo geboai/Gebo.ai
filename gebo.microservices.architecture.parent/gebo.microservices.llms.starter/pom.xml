@@ -50,5 +50,20 @@
 			<artifactId>gebo.ragsystem.vectorstores</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!--
+		  Remote documents-cache client: implements IDocumentsCacheService /
+		  IDocumentsChunkService (declared in gebo.architecture.documents.cache) by
+		  calling the chunker microservice's controllers. An LLM service (brain, ...)
+		  does not host the documents-cache implementation, so this supplies those
+		  beans; the beans are @ConditionalOnMissingBean, so a service that already
+		  owns the local implementation is unaffected. Configure the target with
+		  ai.gebo.documents.cache.client.base-url / api-key.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache.microservice.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
