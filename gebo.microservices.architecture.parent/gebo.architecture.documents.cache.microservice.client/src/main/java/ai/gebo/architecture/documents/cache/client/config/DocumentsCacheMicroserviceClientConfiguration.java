@@ -17,10 +17,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
+import ai.gebo.architecture.documents.cache.client.DocumentContentStreamerWithCacheRestClient;
 import ai.gebo.architecture.documents.cache.client.DocumentsCacheServiceRestClient;
 import ai.gebo.architecture.documents.cache.client.DocumentsChunkServiceRestClient;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 
 /**
  * Wires the documents-cache microservice REST client.
@@ -28,8 +31,10 @@ import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
  * <p>
  * Builds a dedicated {@link WebClient} pointed at the configured chunker base
  * URL and pre-loaded with the api-key header and any extra headers, then
- * publishes {@link IDocumentsCacheService} and {@link IDocumentsChunkService}
- * beans backed by it. Both service beans are
+ * publishes {@link IDocumentsCacheService}, {@link IDocumentsChunkService} and
+ * {@link IGDocumentContentStreamer} beans backed by it (the streamer targets the
+ * chunker resolved by the {@link GeboMicroserviceUrlResolver} rather than the
+ * configured base url). The service beans are
  * {@link ConditionalOnMissingBean @ConditionalOnMissingBean}, so a service that
  * already hosts the real implementation (e.g. the chunker microservice itself)
  * keeps its local beans while a consumer that does not (e.g. brain.gebo.ai)
@@ -74,5 +79,23 @@ public class DocumentsCacheMicroserviceClientConfiguration {
 	public IDocumentsChunkService documentsChunkServiceRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsCacheClientWebClient) {
 		return new DocumentsChunkServiceRestClient(documentsCacheClientWebClient);
+	}
+
+	/**
+	 * {@link IGDocumentContentStreamer} served by the chunker's document cache: the
+	 * content is fetched from its owning content handler once by the chunker, cached
+	 * there and streamed back from that local copy afterwards. The chunker is
+	 * addressed through the {@link GeboMicroserviceUrlResolver} (from
+	 * {@link DocumentsCacheClientProperties#getMicroserviceId()}), not through the
+	 * client's {@code base-url}, so the call honours the deployment's addressing
+	 * strategy.
+	 */
+	@Bean
+	@ConditionalOnMissingBean(IGDocumentContentStreamer.class)
+	public IGDocumentContentStreamer documentContentStreamerWithCacheRestClient(
+			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsCacheClientWebClient,
+			GeboMicroserviceUrlResolver urlResolver, DocumentsCacheClientProperties properties) {
+		return new DocumentContentStreamerWithCacheRestClient(documentsCacheClientWebClient, urlResolver,
+				properties.getMicroserviceId());
 	}
 }

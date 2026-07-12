@@ -40,6 +40,15 @@ public class DocumentsCacheClientProperties {
 	private String baseUrl = "http://localhost:8084";
 
 	/**
+	 * Id of the microservice hosting the documents-cache controllers (the chunker).
+	 * Used by {@code DocumentContentStreamerWithCacheRestClient} to resolve the
+	 * target base url through the {@code GeboMicroserviceUrlResolver} instead of
+	 * {@link #baseUrl}, so the call follows the deployment's addressing strategy
+	 * (load balancer / gateway / direct).
+	 */
+	private String microserviceId = "chunker_gebo_ai";
+
+	/**
 	 * Optional API key sent on every request under {@link #apiKeyHeader}. When
 	 * {@code null}/blank no api-key header is added.
 	 */
@@ -67,6 +76,14 @@ public class DocumentsCacheClientProperties {
 
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
+	}
+
+	public String getMicroserviceId() {
+		return microserviceId;
+	}
+
+	public void setMicroserviceId(String microserviceId) {
+		this.microserviceId = microserviceId;
 	}
 
 	public String getApiKey() {
