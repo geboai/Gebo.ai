@@ -26,12 +26,13 @@
 			<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- The full-text processor pulls the LLM abstraction layer, whose vector-store
-		     factory provider requires an IGVectorStoreConfigurationProvider; the only
-		     implementation lives here. -->
+		<!-- FullTextIndexingBatchMessageReceiver resolves IDocumentsChunkService through
+		     the runtime binder (getBean), so a missing implementation only blows up when
+		     an indexing message arrives, not at startup. This REST client implements it
+		     against the chunker microservice. -->
 		<dependency>
-			<groupId>ai.gebo.ragsystem</groupId>
-			<artifactId>gebo.ragsystem.vectorstores</artifactId>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache.microservice.client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
