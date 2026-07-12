@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
+import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 @Data

@@ -6,7 +6,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
+import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.IChatRequestFactory;
 

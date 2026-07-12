@@ -72,6 +72,10 @@ public class MultiThreadedMessagesOrchestrator implements ApplicationListener<Co
      * @return a list of initialized IGMessageReceiver instances
      */
     public synchronized List<IGMessageReceiver> getReceivers() {
+        // Spring injects null (not an empty list) into an optional collection when the
+        // context declares no IGMessageReceiverFactory bean: nothing to orchestrate.
+        if (factories == null)
+            return List.of();
         if (multiplexingReceivers.isEmpty()) {
             List<IGRunnable> allRunnables = new ArrayList<IGRunnable>();
             for (IGMessageReceiverFactory factory : factories) {

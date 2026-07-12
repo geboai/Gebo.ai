@@ -18,7 +18,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
+import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;

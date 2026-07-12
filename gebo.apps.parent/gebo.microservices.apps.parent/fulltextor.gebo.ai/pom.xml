@@ -26,6 +26,14 @@
 			<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The full-text processor pulls the LLM abstraction layer, whose vector-store
+		     factory provider requires an IGVectorStoreConfigurationProvider; the only
+		     implementation lives here. -->
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.vectorstores</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

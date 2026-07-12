@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
+package ai.gebo.knlowledgebase.model.contents;
 
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotNull;
