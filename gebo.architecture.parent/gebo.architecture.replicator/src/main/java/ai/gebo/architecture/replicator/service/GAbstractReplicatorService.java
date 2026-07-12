@@ -45,6 +45,11 @@ public abstract class GAbstractReplicatorService implements IEntityReplicationSe
 
     @Override
     public <EntityType extends GBaseObject> void replicate(EntityType entity) {
+        replicate(entity, false);
+    }
+
+    @Override
+    public <EntityType extends GBaseObject> void replicate(EntityType entity, boolean deleted) {
         if (architecture.getArchitecture() != ArchitectureType.MICROSERVICES) {
             return;
         }
@@ -57,6 +62,7 @@ public abstract class GAbstractReplicatorService implements IEntityReplicationSe
         }
 
         GAbstractEntityReplicationPayload<EntityType> payload = createPayload(entity);
+        payload.setDeleted(deleted);
 
         for (ReplicationMessageReceiver receiver : receivers) {
             GMessageEnvelope<?> envelope = GMessageEnvelope.newMessageFrom(this, payload);

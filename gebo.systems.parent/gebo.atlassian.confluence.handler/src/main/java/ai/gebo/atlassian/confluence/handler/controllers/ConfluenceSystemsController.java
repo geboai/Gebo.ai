@@ -62,6 +62,7 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -114,9 +115,10 @@ public class ConfluenceSystemsController
 			IGeboSecretsAccessService secretAccessService, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			RestTemplateWrapperService restTemplateWrapper, ConfluenceSystemsTestService confluenceTestService,
-			IGGeboIngestionJobQueueService jobQueueService) {
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 		this.endpointRepository = endpointRepository;
 		this.secretAccessService = secretAccessService;

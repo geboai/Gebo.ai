@@ -36,6 +36,7 @@ import ai.gebo.mcpclient.content.handler.MCPClientProjectEndpoint;
 import ai.gebo.mcpclient.content.handler.impl.GMCPClientRemoteVirtualFilesystemConsumingServiceImpl;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 
 /**
@@ -73,9 +74,10 @@ public class MCPClientSystemsController
 			MCPClientControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGMCPClientContentManagementHandler handler, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			IGGeboIngestionJobQueueService jobQueueService) {
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 	}
 

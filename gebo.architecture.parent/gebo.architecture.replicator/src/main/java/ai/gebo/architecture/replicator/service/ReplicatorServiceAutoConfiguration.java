@@ -21,6 +21,10 @@ public class ReplicatorServiceAutoConfiguration {
             @Override
             public <EntityType extends GBaseObject> void replicate(EntityType entity) {
             }
+
+            @Override
+            public <EntityType extends GBaseObject> void replicate(EntityType entity, boolean deleted) {
+            }
         };
     }
 

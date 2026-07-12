@@ -41,6 +41,7 @@ import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
@@ -115,8 +116,9 @@ public class FileUploadsController
 	 * @param entityProcessingRunnableFactory factory for creating entity processing runnables
 	 */
 	public FileUploadsController(IGPersistentObjectManager persistenceManager, IGMessageBroker messageBroker,
-			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter, IGSchedulingTimeService schedulingService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory, IGGeboIngestionJobQueueService jobQueueService) {
-		super(persistenceManager, messageBroker, controllerEmitter, securityService,schedulingService,entityProcessingRunnableFactory, jobQueueService);
+			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter, IGSchedulingTimeService schedulingService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory, IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
+		super(persistenceManager, messageBroker, controllerEmitter, securityService,schedulingService,entityProcessingRunnableFactory, jobQueueService, replicationService);
 	}
 
 	/**

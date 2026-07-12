@@ -111,6 +111,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.replicator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.documents.access</artifactId>
 			<version>${project.version}</version>			
 		</dependency>
