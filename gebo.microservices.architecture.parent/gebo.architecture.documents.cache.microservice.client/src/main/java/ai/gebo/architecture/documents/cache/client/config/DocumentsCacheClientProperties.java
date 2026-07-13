@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * <pre>
  * ai.gebo.documents.cache.client:
- *   base-url: http://chunker_gebo_ai:8080   # or lb://chunker_gebo_ai behind the gateway
+ *   base-url: http://chunker-gebo-ai:13004  # or lb://chunker-gebo-ai to load-balance
  *   api-key: &lt;secret&gt;
  *   api-key-header: X-API-Key
  *   headers:
@@ -35,9 +35,11 @@ public class DocumentsCacheClientProperties {
 
 	/**
 	 * Base URL of the chunker microservice that hosts the documents-cache
-	 * controllers. Defaults to the chunker's canonical local port.
+	 * controllers. Defaults to the chunker's dedicated port (13004) of the
+	 * 13000-13017 block, which every Gebo microservice fixes in its application.yml
+	 * and publishes from its container.
 	 */
-	private String baseUrl = "http://localhost:8084";
+	private String baseUrl = "http://localhost:13004";
 
 	/**
 	 * Id of the microservice hosting the documents-cache controllers (the chunker).

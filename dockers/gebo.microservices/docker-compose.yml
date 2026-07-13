@@ -9,8 +9,24 @@
 #    -> produces geboai/<artifactId>:<version> in the local Docker daemon.
 # 2. Then:  docker compose up -d
 #
-# App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id,
-# so only the gateway (8080) and the eureka dashboard (8761) publish host ports.
+# App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id, so
+# nothing here NEEDS a host port except the gateway. Every microservice publishes
+# one anyway, on its own dedicated port from the 13000-13017 block, so each service
+# can be reached (and its /v3/api-docs scraped by the generated client stubs)
+# without going through the gateway:
+#
+#   13000 gateway (edge: Angular UI + aggregated API)   13009 sharepoint
+#   13001 brain                                         13010 confluence
+#   13002 vectorizator                                  13011 jira
+#   13003 graphicator                                   13012 aws-s3
+#   13004 chunker                                       13013 googledrive
+#   13005 git                                           13014 mcpclient
+#   13006 filesystem                                    13015 integration
+#   13007 uploads                                       13016 fulltextor
+#   13008 userspace                                     13017 eureka (registry)
+#
+# Each port is fixed in that service's application.yml, so the container port and
+# the published port are the same number - no translation to keep in sync.
 # Override the image tag with GEBO_VERSION in .env.
 # ===========================================================================
 name: gebo-microservices
@@ -20,7 +36,7 @@ x-microservice: &microservice
   restart: unless-stopped
   depends_on: [eureka, rabbit, mongo]
   environment:
-    EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
     SPRING_CONFIG_ADDITIONAL_LOCATION: file:/opt/gebo.ai/config/
     JAVA_TOOL_OPTIONS: "-Xms256m -Xmx1g"
   volumes:
@@ -85,79 +101,115 @@ services:
     image: geboai/eureka.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
     restart: unless-stopped
     ports:
-      - "8761:8761"               # Eureka dashboard / registry
+      - "13017:13017"             # Eureka dashboard / registry
     networks: [gebo-net]
 
-  # ---------------- API gateway (only published edge) ----------------
+  # ---------------- API gateway (the edge: Angular UI + aggregated API) --------
   gateway:
     image: geboai/gateway.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
     restart: unless-stopped
     depends_on: [eureka]
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
     ports:
-      - "8080:8080"
+      - "13000:13000"
     networks: [gebo-net]
 
   # ---------------- LLM / RAG backends ----------------
+  # Every backend publishes its own port to the host as well, so each service's
+  # /v3/api-docs (and its Swagger UI, in a swagger-on build) is reachable directly
+  # at localhost:<port> - which is exactly what the generated client stubs under
+  # gebo.microservices.clients.parent point their <swagger.file> at.
   brain:
     <<: *microservice
     image: geboai/brain.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, qdrant]
+    ports:
+      - "13001:13001"
 
   vectorizator:
     <<: *microservice
     image: geboai/vectorizator.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, qdrant]
+    ports:
+      - "13002:13002"
 
   graphicator:
     <<: *microservice
     image: geboai/graphicator.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, neo4j]
+    ports:
+      - "13003:13003"
 
   chunker:
     <<: *microservice
     image: geboai/chunker.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13004:13004"
 
   fulltextor:
     <<: *microservice
     image: geboai/fulltextor.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, opensearch]
+    ports:
+      - "13016:13016"
 
   # ---------------- Content-handler microservices ----------------
   git:
     <<: *microservice
     image: geboai/git.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13005:13005"
   filesystem:
     <<: *microservice
     image: geboai/filesystem.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13006:13006"
   uploads:
     <<: *microservice
     image: geboai/uploads.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13007:13007"
   userspace:
     <<: *microservice
     image: geboai/userspace.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13008:13008"
   sharepoint:
     <<: *microservice
     image: geboai/sharepoint.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13009:13009"
   confluence:
     <<: *microservice
     image: geboai/confluence.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13010:13010"
   jira:
     <<: *microservice
     image: geboai/jira.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13011:13011"
   aws-s3:
     <<: *microservice
     image: geboai/aws-s3.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13012:13012"
   googledrive:
     <<: *microservice
     image: geboai/googledrive.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13013:13013"
   mcpclient:
     <<: *microservice
     image: geboai/mcpclient.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13014:13014"
   integration:
     <<: *microservice
     image: geboai/integration.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13015:13015"
 
 volumes:
   mongo-data:

@@ -57,13 +57,14 @@ import java.util.Set;
  * {@link #loadBalancerUriForMicroserviceId(String)}.</li>
  * <li>{@link Strategy#GATEWAY} - route every call through the API gateway:
  * {@code <gatewayBaseUrl><gatewayPathTemplate>} with {@code {microserviceId}}
- * expanded (e.g. {@code http://gateway-gebo-ai:8080/brain_gebo_ai} - hyphenated
+ * expanded (e.g. {@code http://gateway-gebo-ai:13000/brain_gebo_ai} - hyphenated
  * host, canonical id in the path, where underscores are legal). When no gateway
  * base url is configured it defaults to the load-balanced gateway
  * ({@code <scheme>://gateway-gebo-ai}).</li>
  * <li>{@link Strategy#DIRECT} - a fixed {@code microserviceId -> base url} map
- * (e.g. {@code http://localhost:8081}), for tests, a monolith or a pinned
- * deployment where discovery is not used.</li>
+ * (e.g. {@code http://localhost:13001} - each service owns a port of the
+ * 13000-13017 block), for tests, a monolith or a pinned deployment where
+ * discovery is not used.</li>
  * </ul>
  *
  * <p>

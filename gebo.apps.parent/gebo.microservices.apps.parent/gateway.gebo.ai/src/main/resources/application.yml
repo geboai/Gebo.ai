@@ -14,8 +14,12 @@ spring:
               enabled: false
           routes: []
 
+# Dedicated HTTP port. Every Gebo microservice owns one port of the 13000-13017
+# block (gateway 13000 ... eureka 13017), so the whole deployment can run side by
+# side on a single host and every container publishes that same port. The gateway
+# is the edge: this is where the Angular UI and the aggregated API are served.
 server:
-  port: 8080
+  port: 13000
 
 # ---------------------------------------------------------------------------
 # Swagger / OpenAPI console (aggregated).
@@ -57,7 +61,7 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:13017/eureka/}
   instance:
     # Registered under the DNS-safe id: a URI host cannot contain '_', so
     # lb://gateway_gebo_ai is unroutable ("Invalid host"). virtual-host-name is the

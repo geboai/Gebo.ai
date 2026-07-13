@@ -4,6 +4,12 @@ spring:
     # entry and the Eureka service-id that @LoadBalanced / lb:// lookups resolve.
     name: aws_s3_gebo_ai
 
+# Dedicated HTTP port, from the 13000-13017 block every Gebo microservice draws
+# from (gateway 13000 ... eureka 13017). Each service owns one, so the whole
+# deployment runs side by side on one host and each container publishes it.
+server:
+  port: 13012
+
 # Eureka discovery client: registers this content microservice under its
 # application name so client-side load balancing resolves it to a live instance.
 # Points at the eureka.gebo.ai registry; override
@@ -11,7 +17,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:13017/eureka/}
   instance:
     # Registered under the DNS-safe id: a URI host cannot contain '_', so
     # lb://aws_s3_gebo_ai is unroutable ("Invalid host"). virtual-host-name is the

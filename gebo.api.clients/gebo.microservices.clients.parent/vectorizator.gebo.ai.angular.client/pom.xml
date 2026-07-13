@@ -11,7 +11,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<swagger.file>http://localhost:8082/v3/api-docs</swagger.file>
+		<swagger.file>http://localhost:13002/v3/api-docs</swagger.file>
 		<generated-sources-path>${project.basedir}/projects/gebo-vectorizator-api/src/lib</generated-sources-path>
 	</properties>
 

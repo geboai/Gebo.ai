@@ -128,13 +128,15 @@ public class GeboMicroservicesTopologyProperties {
 	 *       url:
 	 *         strategy: load_balancer        # load_balancer (default) | gateway | direct
 	 *         scheme: http
-	 *         # gateway strategy only:
-	 *         gateway-base-url: http://gateway_gebo_ai:8080
+	 *         # gateway strategy only (hyphenated host: a URI host cannot carry '_'):
+	 *         gateway-base-url: http://gateway-gebo-ai:13000
 	 *         gateway-path-template: /{microserviceId}
-	 *         # direct strategy source and/or per-service pins in any strategy:
+	 *         # direct strategy source and/or per-service pins in any strategy.
+	 *         # Keys stay canonical; the values are each service's dedicated port
+	 *         # of the 13000-13017 block (gateway 13000 ... eureka 13017):
 	 *         direct:
-	 *           brain_gebo_ai: http://localhost:8081
-	 *           vectorizator_gebo_ai: http://localhost:8082
+	 *           brain_gebo_ai: http://localhost:13001
+	 *           vectorizator_gebo_ai: http://localhost:13002
 	 * </pre>
 	 *
 	 * Gebo.ai comment agent
