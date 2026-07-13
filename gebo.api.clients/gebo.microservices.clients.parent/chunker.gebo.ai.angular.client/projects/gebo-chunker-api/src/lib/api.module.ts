@@ -1,13 +1,24 @@
-﻿import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
+import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
+
+import { DocumentContentStreamerWithCacheControllerService } from './api/documentContentStreamerWithCacheController.service';
+import { DocumentsCacheServiceControllerService } from './api/documentsCacheServiceController.service';
+import { DocumentsChunkServiceControllerService } from './api/documentsChunkServiceController.service';
+import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { SecretsControllerService } from './api/secretsController.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
-  providers: [ ]
+  providers: [
+    DocumentContentStreamerWithCacheControllerService,
+    DocumentsCacheServiceControllerService,
+    DocumentsChunkServiceControllerService,
+    IngestionFileTypesLibraryControllerService,
+    SecretsControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
