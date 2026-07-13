@@ -67,6 +67,24 @@ public class GeboAISecurityConfig {
 	/*private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
 			"/v3/**", "/media/**", "**.js", "**.ico", "*.map", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
 			"/auth/**", "/error", "/error/**", "/ui/**", "/login/**" }; */
+	/*
+	 * Everything the Angular SPA needs in order to boot must be reachable
+	 * ANONYMOUSLY, because the browser fetches it before there is any user to
+	 * authenticate: the index.html shell, every /ui/<page> client-side route (a
+	 * deep link or an F5 on /ui/chat is a plain document request that must return
+	 * the shell), and all of the build's static output - the js bundles and lazy
+	 * chunks, the stylesheets, the images/fonts/icons, the i18n and config json,
+	 * and the source maps used when debugging. Anything left out here answers 401
+	 * to the browser and the app fails to start rather than showing its login page.
+	 *
+	 * Static assets are listed BY EXTENSION rather than by directory because the
+	 * Angular production build emits hashed bundles at the context root
+	 * (main-<hash>.js, styles-<hash>.css, chunk-<hash>.js, favicon.ico) alongside
+	 * the assets/ and media/ directories. Each extension is therefore declared
+	 * twice, in a nested form matching e.g. /assets/img/logo.png and in a root
+	 * form matching e.g. /main-KXODFWVK.js, keeping this list's existing
+	 * convention.
+	 */
 	private static final String[] allowedUrls = new String[] {
 		    "/",
 		    "/index.html",
@@ -75,24 +93,71 @@ public class GeboAISecurityConfig {
 		    "/v3/**",
 		    "/media/**",
 
+		    // Scripts, stylesheets and the sources/maps served for debugging.
 		    "/**/*.js",
-		    "/**/*.ico",
-		    "/**/*.map",
+		    "/**/*.mjs",
 		    "/**/*.css",
+		    "/**/*.map",
 		    "/**/*.ts",
 		    "/**/*.d.ts",
 		    "/*.js",
-		    "/*.ico",
-		    "/*.map",
+		    "/*.mjs",
 		    "/*.css",
+		    "/*.map",
 		    "/*.ts",
 		    "/*.d.ts",
+
+		    // Images and icons (favicon, logos, inline svg, raster assets).
+		    "/**/*.ico",
+		    "/**/*.png",
+		    "/**/*.jpg",
+		    "/**/*.jpeg",
+		    "/**/*.gif",
+		    "/**/*.svg",
+		    "/**/*.webp",
+		    "/**/*.avif",
+		    "/**/*.bmp",
+		    "/*.ico",
+		    "/*.png",
+		    "/*.jpg",
+		    "/*.jpeg",
+		    "/*.gif",
+		    "/*.svg",
+		    "/*.webp",
+		    "/*.avif",
+		    "/*.bmp",
+
+		    // Web fonts pulled in by the stylesheets.
+		    "/**/*.woff",
+		    "/**/*.woff2",
+		    "/**/*.ttf",
+		    "/**/*.otf",
+		    "/**/*.eot",
+		    "/*.woff",
+		    "/*.woff2",
+		    "/*.ttf",
+		    "/*.otf",
+		    "/*.eot",
+
+		    // Static data the shell loads: i18n bundles, runtime config, PWA manifest.
+		    "/**/*.json",
+		    "/**/*.webmanifest",
+		    "/**/*.html",
+		    "/**/*.txt",
+		    "/**/*.wasm",
+		    "/*.json",
+		    "/*.webmanifest",
+		    "/*.html",
+		    "/*.txt",
+		    "/*.wasm",
+
 		    "/login",
 		    "/oauth2/**",
 		    "/public/**",
 		    "/auth/**",
 		    "/error",
 		    "/error/**",
+		    "/ui",
 		    "/ui/**",
 		    "/login/**"
 		};

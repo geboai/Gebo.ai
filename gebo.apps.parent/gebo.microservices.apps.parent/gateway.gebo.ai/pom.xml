@@ -28,6 +28,29 @@
 			<artifactId>gebo.microservices.topology</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+		  The Angular web UI. The gateway is the edge of the microservices
+		  deployment, so it is the service that serves the UI to the browser:
+		  gebo.ui is a plain jar whose Angular production build
+		  (dist/gebo-ai-ui/browser) is packaged under static/, which Spring Boot
+		  exposes as classpath:/static/ - index.html, the js/css bundles, favicon,
+		  assets/ and media/. GeboUiRoutingConfig adds the SPA routing on top.
+
+		  Deliberately NOT wrapped in an 'angular-ui' profile the way gebo.ai.app
+		  does it: naming ANY profile on the command line deactivates Maven's
+		  activeByDefault ones, and this service is normally packaged with an
+		  explicit profile (-P bootables, -P docker for the Jib images). The UI
+		  would then be dropped from the jar/image silently. Whether the UI is
+		  actually built stays controlled where it belongs - by gebo.ui's own
+		  angular-ui profile: with -P '!angular-ui' gebo.ui still produces a jar,
+		  just without static/, and the gateway starts fine and logs that it has
+		  no UI to serve.
+		-->
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.ui</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
