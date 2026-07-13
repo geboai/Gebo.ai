@@ -40,6 +40,7 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.GeboAwsConnectionCredentials;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -63,9 +64,10 @@ public class AwsS3SystemsController
 			AwsS3ProjectEndpointRepository endpointRepository, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			AwsS3TestService testService, IGeboSecretsAccessService secretAccessService,
-			IGGeboIngestionJobQueueService jobQueueService) {
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.awsS3Handler = awsS3Handler;
 		this.endpointRepository = endpointRepository;
 		this.testService = testService;

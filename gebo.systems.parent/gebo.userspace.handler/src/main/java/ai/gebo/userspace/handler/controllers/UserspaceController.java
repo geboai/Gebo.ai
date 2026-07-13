@@ -42,6 +42,7 @@ import ai.gebo.userspace.handler.dto.UserspaceFolderDto;
 import ai.gebo.userspace.handler.dto.UserspaceKnowledgebaseDto;
 import ai.gebo.userspace.handler.model.PublishingStatus;
 import ai.gebo.userspace.handler.model.UserUploadToUserSpaceParam;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.userspace.handler.service.UserspaceService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -61,9 +62,10 @@ public class UserspaceController
 			UserspaceControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			UserspaceService userspaceService, IGGeboIngestionJobQueueService jobQueueService) {
+			UserspaceService userspaceService, IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.userspaceService = userspaceService;
 
 	}

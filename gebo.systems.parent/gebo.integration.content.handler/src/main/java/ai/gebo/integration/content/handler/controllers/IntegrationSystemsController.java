@@ -25,6 +25,7 @@ import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 
 @RestController
@@ -56,9 +57,10 @@ public class IntegrationSystemsController
 			IGSecurityService securityService, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			IntegrationProjectEndpointRepository endpointRepository,
-			IGGeboIngestionJobQueueService jobQueueService) {
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.endpointRepository = endpointRepository;
 	}
 

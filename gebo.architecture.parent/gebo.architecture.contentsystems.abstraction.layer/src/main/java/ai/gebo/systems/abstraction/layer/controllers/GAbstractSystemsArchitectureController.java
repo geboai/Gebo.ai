@@ -24,6 +24,7 @@ import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.core.messages.GDeletedProjectEndpointPayload;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
@@ -59,6 +60,7 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	// Factory for runnable processing of entities
 	protected final IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory;
 	protected final IGGeboIngestionJobQueueService jobQueueService;
+	protected final IEntityReplicationService replicationService;
 
 	/**
 	 * Nested emitter class for handling messaging from the controller.
@@ -90,10 +92,12 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	 * @param schedulingService               Service for scheduling operations.
 	 * @param entityProcessingRunnableFactory Factory for processing entities.
 	 */
-	public GAbstractSystemsArchitectureController(IGPersistentObjectManager persistentObjectManager,
+public GAbstractSystemsArchitectureController(IGPersistentObjectManager persistentObjectManager,
 			IGMessageBroker messageBroker, ControllerNestedEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory, IGGeboIngestionJobQueueService jobQueueService) {
+			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		this.persistentObjectManager = persistentObjectManager;
 		this.messageBroker = messageBroker;
 		this.controllerEmitter = controllerEmitter;
@@ -101,8 +105,8 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 		this.schedulingService = schedulingService;
 		this.entityProcessingRunnableFactory = entityProcessingRunnableFactory;
 		this.jobQueueService = jobQueueService;
+		this.replicationService = replicationService;
 	}
-
 	/**
 	 * Deletes the given endpoint after performing security checks and sends
 	 * appropriate messages.
@@ -125,6 +129,7 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 		// longer be reconstructed once the object is removed from persistence.
 		GCentralizedProjectEndpoint centralized = GCentralizedProjectEndpoint.of(endpoint);
 		String contentManagementSystemCode = resolveContentManagementSystemCode(endpoint);
+		replicationService.replicate(centralized, true);
 
 		// persistentObjectManager.delete(endpoint);
 
@@ -193,6 +198,8 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 		}
 		EndpointType outdata = persistentObjectManager.insert(endpoint);
 		processReschedule(endpoint);
+		GCentralizedProjectEndpoint centralized = GCentralizedProjectEndpoint.of(outdata);
+		replicationService.replicate(centralized);
 		return outdata;
 	}
 
@@ -219,6 +226,8 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 		}
 		EndpointType outdata = persistentObjectManager.update(endpoint);
 		processReschedule(endpoint);
+		GCentralizedProjectEndpoint centralized = GCentralizedProjectEndpoint.of(outdata);
+		replicationService.replicate(centralized);
 		return outdata;
 	}
 

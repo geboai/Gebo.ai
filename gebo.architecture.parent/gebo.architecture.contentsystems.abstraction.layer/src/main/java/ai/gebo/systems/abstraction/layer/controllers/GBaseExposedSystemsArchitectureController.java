@@ -25,6 +25,7 @@ import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
@@ -68,9 +69,10 @@ public class GBaseExposedSystemsArchitectureController<SystemType extends GConte
 			ControllerNestedEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			IGGeboIngestionJobQueueService jobQueueService) {
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.systemType = systemType;
 		this.endpointType = endpointType;
 	}

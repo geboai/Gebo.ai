@@ -42,6 +42,7 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.GeboGoogleJsonSecretContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -102,9 +103,10 @@ public class GoogleDriveSystemsController
 			GoogleDriveProjectEndpointRepository endpointRepository, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			GoogleDriveTestService testService, IGeboSecretsAccessService secretAccessService,
-			IGGeboIngestionJobQueueService jobQueueService) {
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.googleDriveHandler = googleDriveHandler;
 		this.endpointRepository = endpointRepository;
 		this.testService = testService;
