@@ -10,6 +10,11 @@
   <packaging>pom</packaging>
   <modules>
   	<module>gebo.monolithic.api.resttemplate.client</module>
-  	<module>gebo.microservices.clients.parent</module>
+  	<!-- 
+		Following module will be regenerated/compiled on specific pipelines no reason to 
+		take always part on an "cascade" build. -->
+		<!--  
+  		<module>gebo.microservices.clients.parent</module>
+  	-->
   </modules>
 </project>
