@@ -9,7 +9,11 @@
 	</parent>
 	<artifactId>gebo.ragsystem.content.vectorizator</artifactId>
 	<dependencies>
-
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.model</artifactId>

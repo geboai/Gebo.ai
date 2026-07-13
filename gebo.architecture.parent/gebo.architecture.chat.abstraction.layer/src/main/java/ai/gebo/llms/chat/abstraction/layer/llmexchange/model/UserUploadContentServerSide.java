@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 import java.util.UUID;
 
+import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;

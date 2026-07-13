@@ -26,6 +26,15 @@
 			<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- FullTextIndexingBatchMessageReceiver resolves IDocumentsChunkService through
+		     the runtime binder (getBean), so a missing implementation only blows up when
+		     an indexing message arrives, not at startup. This REST client implements it
+		     against the chunker microservice. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache.microservice.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

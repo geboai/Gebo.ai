@@ -18,6 +18,19 @@
 			<artifactId>gebo.microservices.llms.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The hosted system: content vectorization processor. -->
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.content.vectorizator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- gebo.architecture.security's ACL accessor service requires an IAclAliasesDao;
+		     the only implementation (AclAliasesDaoImpl) lives here. -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.knowledgebase.repositories</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
