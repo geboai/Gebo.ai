@@ -30,6 +30,40 @@
 
 	<profiles>
 		<!-- Bootable fat jar (classifier bootable). -->
+		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier
+		bootable+swagger). Off by default: production ships no API console. It is
+		also what lets this service publish /v3/api-docs, which is where its
+		generated client stubs (gebo.microservices.clients.parent) read the spec
+		from. -->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.filesystem.FilesystemApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
 		<profile>
 			<id>bootables</id>
 			<activation>
