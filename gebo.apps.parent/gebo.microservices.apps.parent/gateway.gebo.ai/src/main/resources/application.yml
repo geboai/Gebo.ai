@@ -6,9 +6,27 @@ spring:
     gateway:
       server:
         webflux:
-          # Enable service discovery based routing via Spring Cloud LoadBalancer.
-          # Routes can target load-balanced backends with the lb:// scheme,
-          # e.g. uri: lb://some-backend-service
+          # Spring Cloud's own discovery locator auto-routes EVERY service that
+          # registers with Eureka. Left OFF on purpose: it would publish anything
+          # that happens to register - including services never meant to sit behind
+          # the public edge - the moment it appears.
+          #
+          # GeboTopologyRouteDefinitionLocator is the allow-list version of it: it
+          # derives one route per member of the gebo.microservices.topology map
+          # below,
+          #     /<microserviceId>/**  --StripPrefix=1-->  lb://<discovery-id>
+          # (e.g. /brain_gebo_ai/api/x -> lb://brain-gebo-ai/api/x), which is the
+          # addressing GeboMicroserviceUrlResolver's GATEWAY strategy already
+          # assumes. So a service becomes routable by being DECLARED below, not by
+          # merely registering, and adding one is a config change - no rebuild.
+          #
+          # Instances stay fully dynamic either way: lb:// resolves the live
+          # instances from Eureka per call, so scaling or replacing a backend needs
+          # nothing from the gateway.
+          #
+          # Set gebo.gateway.routing.topology.enabled: false to switch those routes
+          # off. 'routes' below is for extra hand-written routes; the topology ones
+          # are added to whatever is listed here.
           discovery:
             locator:
               enabled: false
