@@ -28,9 +28,61 @@
 			<artifactId>gebo.microservices.topology</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+		  The Angular web UI. The gateway is the edge of the microservices
+		  deployment, so it is the service that serves the UI to the browser:
+		  gebo.ui is a plain jar whose Angular production build
+		  (dist/gebo-ai-ui/browser) is packaged under static/, which Spring Boot
+		  exposes as classpath:/static/ - index.html, the js/css bundles, favicon,
+		  assets/ and media/. GeboUiRoutingConfig adds the SPA routing on top.
+
+		  Deliberately NOT wrapped in an 'angular-ui' profile the way gebo.ai.app
+		  does it: naming ANY profile on the command line deactivates Maven's
+		  activeByDefault ones, and this service is normally packaged with an
+		  explicit profile (-P bootables, -P docker for the Jib images). The UI
+		  would then be dropped from the jar/image silently. Whether the UI is
+		  actually built stays controlled where it belongs - by gebo.ui's own
+		  angular-ui profile: with -P '!angular-ui' gebo.ui still produces a jar,
+		  just without static/, and the gateway starts fine and logs that it has
+		  no UI to serve.
+		-->
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.ui</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
+		<!--
+		  Swagger / OpenAPI UI. DISABLED by default, and deliberately so: a
+		  production build must not ship an API console. Activate exactly like the
+		  monolith and the backend services do, e.g.
+
+		      mvn -P bootables,swagger-on package
+
+		  Note this is the WEBFLUX springdoc starter, not the gebo.architecture.swagger
+		  module the servlet services use - that one pulls springdoc's webmvc starter,
+		  which cannot drive the reactive Spring Cloud Gateway.
+
+		  With the profile off, springdoc is absent from the classpath, so no
+		  /swagger-ui/** or /v3/api-docs is served AND GeboGatewaySwaggerRoutingConfig
+		  (guarded by @ConditionalOnClass) registers no routes - the gateway then
+		  exposes no path whatsoever to the backends' API specs.
+		-->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.springdoc</groupId>
+					<artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+					<version>${springdoc.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
 		<profile>
 			<id>bootables</id>
 			<activation>

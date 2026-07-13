@@ -1,13 +1,34 @@
-﻿import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
+import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
+
+import { ContentsResetControllerService } from './api/contentsResetController.service';
+import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
+import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
+import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { IntegrationInputControllerService } from './api/integrationInputController.service';
+import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
+import { JobLauncherControllerService } from './api/jobLauncherController.service';
+import { JobStatusControllerService } from './api/jobStatusController.service';
+import { SecretsControllerService } from './api/secretsController.service';
+import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
-  providers: [ ]
+  providers: [
+    ContentsResetControllerService,
+    DocumentContentStreamerControllerService,
+    GenericalPublisherControllerService,
+    IngestionFileTypesLibraryControllerService,
+    IntegrationInputControllerService,
+    IntegrationSystemsControllerService,
+    JobLauncherControllerService,
+    JobStatusControllerService,
+    SecretsControllerService,
+    WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

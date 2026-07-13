@@ -1,13 +1,36 @@
-﻿import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
+import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
+
+import { ContentsResetControllerService } from './api/contentsResetController.service';
+import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
+import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
+import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingController.service';
+import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
+import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
+import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { JobLauncherControllerService } from './api/jobLauncherController.service';
+import { JobStatusControllerService } from './api/jobStatusController.service';
+import { SecretsControllerService } from './api/secretsController.service';
+import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
-  providers: [ ]
+  providers: [
+    ContentsResetControllerService,
+    DocumentContentStreamerControllerService,
+    GenericalPublisherControllerService,
+    GoogleDriveBrowsingControllerService,
+    GoogleDriveSystemsControllerService,
+    GoogleWorkspaceAccessHandshakeControllerService,
+    IngestionFileTypesLibraryControllerService,
+    JobLauncherControllerService,
+    JobStatusControllerService,
+    SecretsControllerService,
+    WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

@@ -98,6 +98,16 @@
 						<version>3.0.59</version>
 						<configuration>
 							<inputSpec>${swagger.file}</inputSpec>
+							<!-- Overrides only encoder.mustache; every other file falls back to
+							     swagger-codegen's built-in template. The stock encoder targets
+							     Angular 10 (ngVersion below) and emits CustomHttpUrlEncodingCodec
+							     WITHOUT the 'override' modifiers this project's TypeScript
+							     requires, so a regeneration used to overwrite the committed
+							     encoder.ts with code that cannot compile (error TS4114) - it only
+							     ever built because the file had been hand-patched afterwards.
+							     Shared with the 18 microservice stubs under
+							     gebo.api.clients/gebo.microservices.clients.parent. -->
+							<templateDirectory>${project.basedir}/../gebo.api.clients/swagger-codegen-templates/typescript-angular</templateDirectory>
 							<configOptions>
 								<sourceFolder>${generated-sources-java-path}</sourceFolder>
 							</configOptions>

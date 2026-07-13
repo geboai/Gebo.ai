@@ -3,11 +3,20 @@
 #
 # Mounted read-only at /opt/gebo.ai/config in every backend service and loaded
 # via SPRING_CONFIG_ADDITIONAL_LOCATION on top of each service's own baked
-# application.yml (which only sets spring.application.name + the eureka client).
+# application.yml (which sets spring.application.name, the service's port and the
+# eureka client).
 #
 # Hostnames (mongo, rabbit, qdrant, opensearch, neo4j) are docker-compose service
 # names on the gebo-net network. Values here are DEV defaults reused from the
 # monolith image config - change every secret/password/api-key for production.
+#
+# NOTHING SERVICE-SPECIFIC BELONGS IN THIS FILE. It is shared by every service and
+# an additional-location OUTRANKS the application.yml baked into the jar, so any
+# key set here silently overrides all 18 services at once. That is exactly what a
+# 'server.port: 8080' here used to do: it pinned every container back to 8080
+# while compose published 13001, 13004, ... - each host port mapping to a
+# container port nobody was listening on. Each service now sets its own port (the
+# 13000-13017 block); do not reintroduce one here.
 # ---------------------------------------------------------------------------
 logging:
   level:
@@ -15,7 +24,6 @@ logging:
     org.springframework: INFO
 
 server:
-  port: 8080
   compression:
     enabled: true
 
@@ -48,7 +56,9 @@ ai.gebo.security:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
     tokenExpirationMsec: 120000
   cors:
-    allowedOrigins: http://localhost:8080,http://localhost:4200
+    # The gateway is the browser-facing origin and now listens on 13000 (it used to
+    # be 8080); 4200 is the Angular dev server for `ng serve`.
+    allowedOrigins: http://localhost:13000,http://localhost:4200
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect

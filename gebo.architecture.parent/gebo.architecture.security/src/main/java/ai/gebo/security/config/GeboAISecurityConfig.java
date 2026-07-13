@@ -31,6 +31,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.util.ClassUtils;
 
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
@@ -67,35 +68,140 @@ public class GeboAISecurityConfig {
 	/*private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
 			"/v3/**", "/media/**", "**.js", "**.ico", "*.map", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
 			"/auth/**", "/error", "/error/**", "/ui/**", "/login/**" }; */
+	/*
+	 * Everything the Angular SPA needs in order to boot must be reachable
+	 * ANONYMOUSLY, because the browser fetches it before there is any user to
+	 * authenticate: the index.html shell, every /ui/<page> client-side route (a
+	 * deep link or an F5 on /ui/chat is a plain document request that must return
+	 * the shell), and all of the build's static output - the js bundles and lazy
+	 * chunks, the stylesheets, the images/fonts/icons, the i18n and config json,
+	 * and the source maps used when debugging. Anything left out here answers 401
+	 * to the browser and the app fails to start rather than showing its login page.
+	 *
+	 * Assets are permitted BY DIRECTORY wherever the build gives us one - the
+	 * "/assets/**" and "/media/**" rules already cover the bulk of them, whatever
+	 * their type (svg, json, ftl, bcmap, fonts, even the extensionless LICENSE
+	 * files pdf.js ships). The extension rules exist for what has no directory to
+	 * key off: the hashed bundles the Angular build emits at the context ROOT
+	 * (main-<hash>.js, styles-<hash>.css, chunk-<hash>.js, favicon.ico). Each such
+	 * extension is declared twice, in a nested form matching e.g.
+	 * /assets/img/logo.png and in a root form matching e.g. /main-KXODFWVK.js,
+	 * keeping this list's existing convention.
+	 *
+	 * Prefer a directory rule over a new blanket extension rule: an extension rule
+	 * matches every path in the application that happens to end that way, API
+	 * routes included.
+	 */
 	private static final String[] allowedUrls = new String[] {
 		    "/",
 		    "/index.html",
 		    "/assets/**",
-		    "/swagger-ui/**",
-		    "/v3/**",
 		    "/media/**",
 
+		    // Scripts, stylesheets and the sources/maps served for debugging.
 		    "/**/*.js",
-		    "/**/*.ico",
-		    "/**/*.map",
+		    "/**/*.mjs",
 		    "/**/*.css",
+		    "/**/*.map",
 		    "/**/*.ts",
 		    "/**/*.d.ts",
 		    "/*.js",
-		    "/*.ico",
-		    "/*.map",
+		    "/*.mjs",
 		    "/*.css",
+		    "/*.map",
 		    "/*.ts",
 		    "/*.d.ts",
+
+		    // Images and icons (favicon, logos, inline svg, raster assets).
+		    "/**/*.ico",
+		    "/**/*.png",
+		    "/**/*.jpg",
+		    "/**/*.jpeg",
+		    "/**/*.gif",
+		    "/**/*.svg",
+		    "/**/*.webp",
+		    "/**/*.avif",
+		    "/**/*.bmp",
+		    "/*.ico",
+		    "/*.png",
+		    "/*.jpg",
+		    "/*.jpeg",
+		    "/*.gif",
+		    "/*.svg",
+		    "/*.webp",
+		    "/*.avif",
+		    "/*.bmp",
+
+		    // Web fonts pulled in by the stylesheets.
+		    "/**/*.woff",
+		    "/**/*.woff2",
+		    "/**/*.ttf",
+		    "/**/*.otf",
+		    "/**/*.eot",
+		    "/*.woff",
+		    "/*.woff2",
+		    "/*.ttf",
+		    "/*.otf",
+		    "/*.eot",
+
+		    // Static data the shell loads: PWA manifest and friends.
+		    //
+		    // Deliberately NO blanket "*.json" / "*.html" rule here. The Angular build
+		    // keeps every json (i18n bundles, pdf.js/monaco config) and every html
+		    // fragment under assets/ - already anonymous via "/assets/**" above - and the
+		    // only html at the context root is index.html, permitted explicitly. A
+		    // blanket rule would buy nothing and would silently make any future API path
+		    // that happens to end in .json or .html (say /api/report/export.json)
+		    // anonymous. Extension rules are for the hashed bundles the build emits at
+		    // the ROOT (js/css/map/ico), which have no directory to key off.
+		    "/**/*.webmanifest",
+		    "/**/*.txt",
+		    "/**/*.wasm",
+		    "/*.webmanifest",
+		    "/*.txt",
+		    "/*.wasm",
+
 		    "/login",
 		    "/oauth2/**",
 		    "/public/**",
 		    "/auth/**",
 		    "/error",
 		    "/error/**",
+		    "/ui",
 		    "/ui/**",
 		    "/login/**"
 		};
+
+	/*
+	 * The Swagger / OpenAPI console. Anonymous like the rest of the UI - the API
+	 * console is fetched by the browser before any login - but ONLY when swagger is
+	 * actually part of the build.
+	 *
+	 * Swagger is opt-in for a security reason: it is pulled in by the swagger-on
+	 * Maven profile (gebo.architecture.swagger -> springdoc), which production
+	 * builds deliberately leave off, so a production deployment ships no API
+	 * console. These paths are therefore permitted only when springdoc is on the
+	 * classpath (see SWAGGER_PRESENT); otherwise they are left to the
+	 * authenticated() catch-all rather than being permanently open. Without this
+	 * gate the spec path /v3/api-docs would stay anonymous in production, where it
+	 * has no business being reachable at all.
+	 */
+	private static final String[] swaggerUrls = new String[] {
+		    "/swagger-ui.html",
+		    "/swagger-ui/**",
+		    "/v3/api-docs",
+		    "/v3/api-docs/**",
+		    "/v3/api-docs.yaml"
+		};
+
+	/**
+	 * Whether the springdoc/Swagger machinery is on the classpath, i.e. whether
+	 * this build activated the swagger-on profile. Detected rather than configured
+	 * so the security rules cannot drift from what the build actually ships.
+	 */
+	private static final boolean SWAGGER_PRESENT = ClassUtils
+			.isPresent("org.springdoc.core.configuration.SpringDocConfiguration",
+					GeboAISecurityConfig.class.getClassLoader());
 
 	// URLs that forward to index.html
 	private static final String forwardToIndexHtmlUrls[] = new String[] { "/", "/ui/*", "/index.html" };
@@ -276,11 +382,22 @@ public class GeboAISecurityConfig {
 				&& securityConfig.getOauth2LoginEnabled();
 		boolean oauth2ResourceServerEnabled = securityConfig.getOauth2ResourceServerEnabled() != null
 				&& securityConfig.getOauth2ResourceServerEnabled();
+		if (SWAGGER_PRESENT) {
+			LOGGER.info("Swagger is on the classpath (swagger-on build): serving {} anonymously",
+					(Object) swaggerUrls);
+		} else {
+			LOGGER.info("No Swagger on the classpath: the API console and /v3/api-docs stay closed");
+		}
 		HttpSecurity configBuilder = http.cors(c -> c.disable()).csrf(csrf -> csrf.disable())
 				.addFilterAfter(corsFilter, CsrfFilter.class)
-				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
-						.requestMatchers(mcpUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
-						.anyRequest().authenticated());
+				.authorizeHttpRequests(authorizeRequests -> {
+					authorizeRequests.requestMatchers(allowedUrls).permitAll();
+					if (SWAGGER_PRESENT) {
+						authorizeRequests.requestMatchers(swaggerUrls).permitAll();
+					}
+					authorizeRequests.requestMatchers(mcpUrls)
+							.hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE).anyRequest().authenticated();
+				});
 		if (oauth2LoginEnabled) {
 			configBuilder = configBuilder.oauth2Login(oauth2 -> oauth2
 					.clientRegistrationRepository(clientRegistrationRepository)

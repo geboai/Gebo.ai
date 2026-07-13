@@ -31,4 +31,88 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+
+	<!--
+	  chunker was the only microservice with NO profiles at all: it could not be
+	  packaged as a bootable jar, and it could not publish /v3/api-docs, so its two
+	  generated client stubs had no spec to read. Both profiles below bring it in
+	  line with every other service.
+	-->
+	<profiles>
+		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier
+		bootable+swagger). Off by default: production ships no API console. It is
+		also what lets this service publish /v3/api-docs, which is where its
+		generated client stubs (gebo.microservices.clients.parent) read the spec
+		from. -->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.chunker.ChunkerApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<!-- Bootable fat jar (classifier bootable). -->
+		<profile>
+			<id>bootables</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>ai.gebo.microservices.chunker.ChunkerApplication</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.microservices.chunker.ChunkerApplication</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.chunker.ChunkerApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

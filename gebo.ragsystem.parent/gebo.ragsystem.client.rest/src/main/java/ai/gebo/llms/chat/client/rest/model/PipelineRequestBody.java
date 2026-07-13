@@ -15,11 +15,25 @@ import lombok.Data;
 @Data
 public final class PipelineRequestBody {
 	
+	/*
+	 * Described as a free-form object at the CLASS level, which is what the wire
+	 * format actually is: @JsonAnyGetter/@JsonAnySetter flatten the entries onto
+	 * this object, so a request carries {"someKey": ...}, never {"values": {...}}.
+	 *
+	 * The getter is therefore hidden from the schema. Exposing it used to publish a
+	 * phantom 'values' property that the API never sends, and springdoc gave that
+	 * property a bogus "default": "" - the only default in the entire spec. Because
+	 * the property typed as a free-form object, swagger-codegen rendered the default
+	 * into the generated Java as 'private Object values = ;', a syntax error that
+	 * broke every regeneration of the brain and monolithic REST clients.
+	 */
+	@Schema(description = "Arbitrary environment entries",
+			additionalProperties = Schema.AdditionalPropertiesValue.TRUE)
 	public static class PipelineEnvironment {
 		LinkedHashMap<String, Object> values = new LinkedHashMap<String, Object>();
 
 		@JsonAnyGetter
-		@Schema(description = "Arbitrary environment entries", additionalProperties = Schema.AdditionalPropertiesValue.TRUE)
+		@Schema(hidden = true)
 		public Map<String, Object> getValues() {
 			return values;
 		}
