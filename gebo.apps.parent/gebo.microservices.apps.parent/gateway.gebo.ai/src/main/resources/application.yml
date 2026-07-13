@@ -17,6 +17,38 @@ spring:
 server:
   port: 8080
 
+# ---------------------------------------------------------------------------
+# Swagger / OpenAPI console (aggregated).
+#
+# INERT unless the gateway is built with -P swagger-on: without that profile
+# springdoc is not on the classpath, nothing reads these keys, no /swagger-ui/**
+# is served, and GeboGatewaySwaggerRoutingConfig (@ConditionalOnClass) registers
+# no api-docs routes. Production builds therefore expose no API console at all.
+#
+# The gateway owns no controller, so its own spec is empty; what it serves is the
+# BACKENDS' specs. Each entry below is one item of the Swagger UI's "Select a
+# definition" dropdown AND, read back by GeboGatewaySwaggerRoutingConfig, one
+# proxy route:  <url>  ->  lb://<name>/v3/api-docs.
+#
+#   name = the microservice id (its Eureka service-id / lb:// target)
+#   url  = the gateway path the browser fetches that spec from
+#
+# Only services that are themselves built with THEIR swagger-on profile publish
+# a /v3/api-docs to proxy - today: brain, vectorizator, graphicator, fulltextor.
+# Adding a service to the console is one entry here.
+# ---------------------------------------------------------------------------
+springdoc:
+  swagger-ui:
+    urls:
+      - name: brain_gebo_ai
+        url: /api-docs/brain_gebo_ai
+      - name: vectorizator_gebo_ai
+        url: /api-docs/vectorizator_gebo_ai
+      - name: graphicator_gebo_ai
+        url: /api-docs/graphicator_gebo_ai
+      - name: fulltextor_gebo_ai
+        url: /api-docs/fulltextor_gebo_ai
+
 # Eureka discovery client. This is what gives the gateway a populated
 # DiscoveryClient, so lb://<microserviceId> routes and Spring Cloud LoadBalancer
 # actually resolve backend instances (previously there was no discovery source, so
@@ -27,6 +59,13 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
   instance:
+    # Registered under the DNS-safe id: a URI host cannot contain '_', so
+    # lb://gateway_gebo_ai is unroutable ("Invalid host"). virtual-host-name is the
+    # key Spring Cloud actually resolves instances BY, so appname alone is not
+    # enough. spring.application.name keeps the canonical id for topology/queues.
+    appname: gateway-gebo-ai
+    virtual-host-name: gateway-gebo-ai
+    secure-virtual-host-name: gateway-gebo-ai
     prefer-ip-address: true
 
 # ---------------------------------------------------------------------------
@@ -35,10 +74,16 @@ eureka:
 #
 # microserviceId is the microservice name in its dot-free, underscore form
 # (e.g. brain_gebo_ai). It is derived from the application name by the rule
-# '.' -> '_', and is also the Spring Cloud LoadBalancer service-id the gateway
-# targets as lb://<id>. A running service discovers itself by applying the same
-# rule to its spring.application.name. So this one map drives both the messaging
-# routing table (each service's <id>.inputq) and the gateway/LoadBalancer set.
+# '.' -> '_'. A running service discovers itself by applying the same rule to its
+# spring.application.name. So this one map drives both the messaging routing table
+# (each service's <id>.inputq) and the gateway/LoadBalancer set.
+#
+# NOTE the underscore id is NOT the LoadBalancer service-id: a URI host may not
+# contain '_', so lb://brain_gebo_ai has a null host and Spring Cloud Gateway
+# rejects it ("Invalid host"). The service-id is the id's DNS-SAFE form
+# ('_' -> '-', e.g. brain-gebo-ai), which each service registers as its Eureka
+# appname/virtual-host-name; the gateway derives it with
+# GeboMicroservice.toDiscoveryServiceId(). Keys below stay canonical.
 #
 # This is the COMPLETE, code-deduced topology, materialised here so it can be
 # edited without recompiling. It is bound by GeboMicroservicesTopologyProperties

@@ -31,21 +31,36 @@ import java.util.Set;
  *
  * <p>
  * The microservice is identified by its <b>application name</b> - which is,
- * deliberately and by convention, all three of the microservice id, the Spring
- * Boot {@code spring.application.name}, and the Spring Cloud LoadBalancer
- * service-id the gateway targets with {@code lb://<name>}. A microservice's
- * identity is its application name ({@link #equals(Object)} / {@link #hashCode()}).
+ * deliberately and by convention, both the microservice id and the Spring Boot
+ * {@code spring.application.name}. A microservice's identity is its application
+ * name ({@link #equals(Object)} / {@link #hashCode()}).
  * </p>
  *
  * <p>
  * The stored name is <b>normalised to underscores</b> ({@code '.'} &rarr;
  * {@code '_'}, see {@link #normalizeName(String)}), so ids are dot-free
  * (e.g. {@code brain_gebo_ai}). This keeps them safe as YAML map keys (no
- * Spring bracket syntax needed), as {@code lb://} service-ids, and as queue
- * names. Passing either {@code brain.gebo.ai} or {@code brain_gebo_ai} yields
- * the same id, so a running service can be discovered from its
- * {@code spring.application.name} by applying the same rule (see
+ * Spring bracket syntax needed) and as queue names. Passing either
+ * {@code brain.gebo.ai} or {@code brain_gebo_ai} yields the same id, so a
+ * running service can be discovered from its {@code spring.application.name} by
+ * applying the same rule (see
  * {@link GeboMicroservicesTopology#forApplicationName(String)}).
+ * </p>
+ *
+ * <p>
+ * <b>Discovery id.</b> The canonical id is deliberately NOT usable as a
+ * discovery / LoadBalancer service-id: {@code java.net.URI} follows the RFC and
+ * rejects {@code '_'} in a host, so {@code URI.getHost()} on
+ * {@code lb://brain_gebo_ai} returns {@code null} and Spring Cloud Gateway
+ * fails the route with "Invalid host" (the same applies to a
+ * {@code @LoadBalanced} client resolving {@code http://brain_gebo_ai}).
+ * Services therefore register under the DNS-safe <b>discovery id</b> -
+ * the canonical id with {@code '_'} &rarr; {@code '-'} (e.g.
+ * {@code brain-gebo-ai}, see {@link #getDiscoveryServiceId()}) - which each
+ * service publishes as its Eureka {@code appname} and, crucially, as its
+ * {@code virtual-host-name} (Spring Cloud resolves instances by VIP address,
+ * not by app name). The canonical underscore id keeps driving the topology map
+ * and the queue names; only the address the network resolves is hyphenated.
  * </p>
  *
  * Gebo.ai comment agent
@@ -90,13 +105,36 @@ public final class GeboMicroservice {
 	 * Normalises a microservice name to its canonical id form by replacing every
 	 * {@code '.'} with {@code '_'}. This is the single rule mapping a
 	 * (possibly dotted) {@code spring.application.name} to the dot-free id used
-	 * as the topology key, the {@code lb://} service-id and the queue base.
+	 * as the topology key and the queue base.
 	 *
 	 * @param name a microservice name (dotted or already normalised); may be null
 	 * @return the normalised id, or {@code null} if {@code name} is {@code null}
 	 */
 	public static String normalizeName(String name) {
 		return name == null ? null : name.replace('.', '_');
+	}
+
+	/**
+	 * Maps any microservice name to the DNS-safe id under which the service is
+	 * discovered: dots and underscores both become {@code '-'} (e.g.
+	 * {@code brain.gebo.ai} and {@code brain_gebo_ai} alike yield
+	 * {@code brain-gebo-ai}).
+	 *
+	 * <p>
+	 * This exists because a host may not contain {@code '_'}: {@code java.net.URI}
+	 * returns a {@code null} host for {@code lb://brain_gebo_ai}, which makes
+	 * Spring Cloud Gateway reject the route ("Invalid host") and a
+	 * {@code @LoadBalanced} client reject the target. The canonical underscore id
+	 * remains the topology key and the queue base; this is only the address form.
+	 * </p>
+	 *
+	 * @param name a microservice name (dotted, underscore or already hyphenated);
+	 *             may be null
+	 * @return the discovery service-id, or {@code null} if {@code name} is
+	 *         {@code null}
+	 */
+	public static String toDiscoveryServiceId(String name) {
+		return name == null ? null : normalizeName(name).replace('_', '-');
 	}
 
 	/**
@@ -158,14 +196,27 @@ public final class GeboMicroservice {
 	}
 
 	/**
-	 * The Spring Cloud LoadBalancer target uri for this microservice, i.e.
-	 * {@code lb://<application-name>}, ready to use as a gateway route
-	 * {@code uri}.
+	 * The id this microservice is discovered by - its canonical id in DNS-safe
+	 * form. This, not {@link #getMicroserviceId()}, is what a {@code lb://} uri or
+	 * a {@code @LoadBalanced} target must name, and what the service registers in
+	 * Eureka as its {@code appname} / {@code virtual-host-name}.
 	 *
-	 * @return the {@code lb://} uri (e.g. {@code lb://brain.gebo.ai})
+	 * @return the discovery service-id (e.g. {@code brain-gebo-ai})
+	 */
+	public String getDiscoveryServiceId() {
+		return toDiscoveryServiceId(applicationName);
+	}
+
+	/**
+	 * The Spring Cloud LoadBalancer target uri for this microservice, i.e.
+	 * {@code lb://<discovery-service-id>}, ready to use as a gateway route
+	 * {@code uri}. Built on the hyphenated discovery id, never on the canonical
+	 * underscore id, which a URI host cannot carry.
+	 *
+	 * @return the {@code lb://} uri (e.g. {@code lb://brain-gebo-ai})
 	 */
 	public String getLoadBalancerUri() {
-		return LOAD_BALANCER_SCHEME + applicationName;
+		return LOAD_BALANCER_SCHEME + getDiscoveryServiceId();
 	}
 
 	@Override

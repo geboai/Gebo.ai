@@ -54,6 +54,35 @@
 	</dependencies>
 
 	<profiles>
+		<!--
+		  Swagger / OpenAPI UI. DISABLED by default, and deliberately so: a
+		  production build must not ship an API console. Activate exactly like the
+		  monolith and the backend services do, e.g.
+
+		      mvn -P bootables,swagger-on package
+
+		  Note this is the WEBFLUX springdoc starter, not the gebo.architecture.swagger
+		  module the servlet services use - that one pulls springdoc's webmvc starter,
+		  which cannot drive the reactive Spring Cloud Gateway.
+
+		  With the profile off, springdoc is absent from the classpath, so no
+		  /swagger-ui/** or /v3/api-docs is served AND GeboGatewaySwaggerRoutingConfig
+		  (guarded by @ConditionalOnClass) registers no routes - the gateway then
+		  exposes no path whatsoever to the backends' API specs.
+		-->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.springdoc</groupId>
+					<artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+					<version>${springdoc.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
 		<profile>
 			<id>bootables</id>
 			<activation>

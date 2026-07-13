@@ -29,7 +29,8 @@ import java.util.Set;
  * here to the <b>same</b> owning microservice and therefore the same base url:
  * </p>
  * <ul>
- * <li>its <b>microserviceId</b> (= application name = LoadBalancer service-id),
+ * <li>its <b>microserviceId</b> (= application name; the LoadBalancer service-id
+ * is its DNS-safe form, see {@link GeboMicroservice#getDiscoveryServiceId()}),
  * see {@link #baseUrlForMicroserviceId(String)};</li>
  * <li>a <b>messagingModuleId</b> it hosts (unambiguous - a module belongs to
  * exactly one microservice), see {@link #baseUrlForMessagingModuleId(String)};</li>
@@ -46,16 +47,20 @@ import java.util.Set;
  * </p>
  * <ul>
  * <li>{@link Strategy#LOAD_BALANCER} (default) - client-side load balancing:
- * {@code <scheme>://<microserviceId>} (e.g. {@code http://brain_gebo_ai}). This
- * is what a {@code @LoadBalanced} {@code RestTemplate}/{@code WebClient} resolves
- * and is exactly the Feign service name; the Spring Cloud LoadBalancer picks a
- * live instance. The equivalent {@code lb://} form is
+ * {@code <scheme>://<discoveryServiceId>} (e.g. {@code http://brain-gebo-ai}).
+ * The host is the DNS-safe discovery id, NOT the canonical underscore id: a URI
+ * host may not contain {@code '_'}, so {@code http://brain_gebo_ai} resolves to a
+ * null host and is rejected. This is what a {@code @LoadBalanced}
+ * {@code RestTemplate}/{@code WebClient} resolves and is exactly the Feign
+ * service name; the Spring Cloud LoadBalancer picks a live instance. The
+ * equivalent {@code lb://} form is
  * {@link #loadBalancerUriForMicroserviceId(String)}.</li>
  * <li>{@link Strategy#GATEWAY} - route every call through the API gateway:
  * {@code <gatewayBaseUrl><gatewayPathTemplate>} with {@code {microserviceId}}
- * expanded (e.g. {@code http://gateway_gebo_ai:8080/brain_gebo_ai}). When no
- * gateway base url is configured it defaults to the load-balanced gateway
- * ({@code <scheme>://gateway_gebo_ai}).</li>
+ * expanded (e.g. {@code http://gateway-gebo-ai:8080/brain_gebo_ai} - hyphenated
+ * host, canonical id in the path, where underscores are legal). When no gateway
+ * base url is configured it defaults to the load-balanced gateway
+ * ({@code <scheme>://gateway-gebo-ai}).</li>
  * <li>{@link Strategy#DIRECT} - a fixed {@code microserviceId -> base url} map
  * (e.g. {@code http://localhost:8081}), for tests, a monolith or a pinned
  * deployment where discovery is not used.</li>
@@ -334,7 +339,9 @@ public final class GeboMicroserviceUrlResolver {
 
 	/** @return the effective gateway base url used in {@link Strategy#GATEWAY} */
 	public String getGatewayBaseUrl() {
-		return gatewayBaseUrl != null ? gatewayBaseUrl : scheme + "://" + GeboStandardMicroservices.GATEWAY_MICROSERVICE_ID;
+		// Discovery id again: the default gateway base url is a load-balanced host.
+		return gatewayBaseUrl != null ? gatewayBaseUrl
+				: scheme + "://" + GeboMicroservice.toDiscoveryServiceId(GeboStandardMicroservices.GATEWAY_MICROSERVICE_ID);
 	}
 
 	/** @return the topology this resolver addresses */
@@ -346,7 +353,11 @@ public final class GeboMicroserviceUrlResolver {
 
 	private String buildBaseUrl(String canonicalMicroserviceId) {
 		return switch (strategy) {
-			case LOAD_BALANCER -> scheme + "://" + canonicalMicroserviceId;
+			// The host must be the DNS-safe discovery id: a URI host cannot contain '_',
+			// so a @LoadBalanced client given http://brain_gebo_ai sees a null host and
+			// rejects it. The path of a GATEWAY url has no such limit and keeps the
+			// canonical id.
+			case LOAD_BALANCER -> scheme + "://" + GeboMicroservice.toDiscoveryServiceId(canonicalMicroserviceId);
 			case GATEWAY -> getGatewayBaseUrl()
 					+ normalizePath(gatewayPathTemplate.replace(MICROSERVICE_ID_PLACEHOLDER, canonicalMicroserviceId));
 			// A DIRECT-strategy member with no entry has no address: surface it rather than guess.

@@ -6,13 +6,26 @@ spring:
     # lb:// lookups resolve.
     name: brain_gebo_ai
 
-# Eureka discovery client: registers this service under its application name
-# (brain_gebo_ai) so client-side load balancing resolves it to a live instance.
-# Points at the eureka.gebo.ai registry; override
+# Eureka discovery client: registers this service so client-side load balancing
+# resolves it to a live instance. Points at the eureka.gebo.ai registry; override
 # EUREKA_CLIENT_SERVICEURL_DEFAULTZONE for a distributed deployment.
+#
+# It registers under the DNS-SAFE id (brain-gebo-ai), not the canonical underscore
+# one: a URI host may not contain '_', so java.net.URI yields a null host for
+# lb://brain_gebo_ai and Spring Cloud Gateway rejects the route with "Invalid
+# host" (a @LoadBalanced http://brain_gebo_ai fails the same way). Both keys are
+# needed - appname is what Eureka lists the app as, virtual-host-name is what
+# Spring Cloud actually resolves instances BY (getInstancesByVipAddress), so
+# setting appname alone silently leaves lb:// unresolvable.
+#
+# spring.application.name above stays the canonical id: it keeps driving the
+# topology map and the messaging queue names.
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
   instance:
+    appname: brain-gebo-ai
+    virtual-host-name: brain-gebo-ai
+    secure-virtual-host-name: brain-gebo-ai
     prefer-ip-address: true

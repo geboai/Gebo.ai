@@ -13,4 +13,11 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
   instance:
+    # Registered under the DNS-safe id: a URI host cannot contain '_', so
+    # lb://uploads_gebo_ai is unroutable ("Invalid host"). virtual-host-name is the
+    # key Spring Cloud actually resolves instances BY, so appname alone is not
+    # enough. spring.application.name keeps the canonical id for topology/queues.
+    appname: uploads-gebo-ai
+    virtual-host-name: uploads-gebo-ai
+    secure-virtual-host-name: uploads-gebo-ai
     prefer-ip-address: true
