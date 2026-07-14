@@ -68,7 +68,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.secrets.services</artifactId>
+			<artifactId>gebo.secrets.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

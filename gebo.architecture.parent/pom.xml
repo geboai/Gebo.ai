@@ -58,5 +58,6 @@
   	<module>gebo.architecture.compute.workflow</module>
   	<module>gebo.architecture.replicator</module>
 
+  	<module>gebo.secrets.impl</module>
   </modules>
 </project>
