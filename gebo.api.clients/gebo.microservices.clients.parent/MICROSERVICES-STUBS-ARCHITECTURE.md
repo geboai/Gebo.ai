@@ -35,20 +35,25 @@ the `swagger.file` URLs resolve against a plain `docker compose up` with no over
 | vectorizator | 13002 | eureka, rabbit, mongo, qdrant |
 | graphicator  | 13003 | eureka, rabbit, mongo, neo4j |
 | chunker      | 13004 | eureka, rabbit, mongo |
-| fulltextor   | 13005 | eureka, rabbit, mongo, opensearch |
-| git          | 13006 | eureka, rabbit, mongo |
-| filesystem   | 13007 | eureka, rabbit, mongo |
-| uploads      | 13008 | eureka, rabbit, mongo |
-| userspace    | 13009 | eureka, rabbit, mongo |
-| sharepoint   | 13010 | eureka, rabbit, mongo |
-| confluence   | 13011 | eureka, rabbit, mongo |
-| jira         | 13012 | eureka, rabbit, mongo |
-| aws-s3       | 13013 | eureka, rabbit, mongo |
-| googledrive  | 13014 | eureka, rabbit, mongo |
-| mcpclient    | 13015 | eureka, rabbit, mongo |
-| integration  | 13016 | eureka, rabbit, mongo |
+| git          | 13005 | eureka, rabbit, mongo |
+| filesystem   | 13006 | eureka, rabbit, mongo |
+| uploads      | 13007 | eureka, rabbit, mongo |
+| userspace    | 13008 | eureka, rabbit, mongo |
+| sharepoint   | 13009 | eureka, rabbit, mongo |
+| confluence   | 13010 | eureka, rabbit, mongo |
+| jira         | 13011 | eureka, rabbit, mongo |
+| aws-s3       | 13012 | eureka, rabbit, mongo |
+| googledrive  | 13013 | eureka, rabbit, mongo |
+| mcpclient    | 13014 | eureka, rabbit, mongo |
+| integration  | 13015 | eureka, rabbit, mongo |
+| fulltextor   | 13016 | eureka, rabbit, mongo, opensearch |
 | eureka       | 13017 | (registry itself) |
 | heimdall     | 13018 | eureka, mongo |
+
+The ports are **not contiguous by theme** — `fulltextor` is 13016, not 13005, because it
+was added after the original block was allocated. Read them from each app's
+`application.yml`, never from the ordering of this table; every client pom's
+`swagger.file` already agrees with it (verified for all 38).
 
 **gateway and eureka expose no controllers of their own** (`paths: 0`). Their stubs are
 scaffolding — an `ApiClient` and nothing to call. That is correct, not a failed
