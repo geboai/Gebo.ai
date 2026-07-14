@@ -733,6 +733,117 @@ This section is the executable mapping for Phase 2–3. Legend for target child:
 | `config/GeboAISecurityConfig`, `GeboAICorsFilter`, `WebMvcConfig`, `LdapConfiguration`, token filter chain + `IGHttpRequestAuthenticationManagerResolver` impl | **SECURE-AREA** (validation side) / IMPL (login side stays heimdall) |
 | **Provide:** SP controllers wrapping `IGUsersAdminService`/ACL for cross-service user & ACL lookups; CP impls of those interfaces | SP / CP |
 
+#### 13.1.1 Execution plan (measured from source — supersedes the outline above where they differ)
+
+**The surface is far smaller than the module.** Measured across every consumer outside
+`gebo.architecture.security*`:
+
+| Consumed by other modules | Count | What it really is |
+|---|---|---|
+| `IGSecurityService` | 88 imports | the hot path |
+| `ReactiveIdentityUtil` / `IdentityUtil` / `RunAs*` | 44 | **pure local helpers — no remote call, ever** |
+| `UserRepository.UserInfos` | 28 | a **type**, unfortunately nested inside a Mongo repository |
+| `UserRepository` / `UsersGroupRepository` **as an injected bean** | **4 files** | the only real DB coupling to break |
+| `IAclGrantedAccessorService`, `IGUsersAdminService`, `IGOauth2RuntimeConfigurationDao` | 4 | genuine service calls |
+
+**A client-proxy for `IGSecurityService` is impossible as a REST mirror.** 9 of its 16
+methods take the *caller's own domain objects* — `filterCanDoAction(Collection<T extends
+IGObjectWithSecurity & IAclGrantedResource>)`, `isCanAccess(IGObjectWithSecurity)`,
+`checkBeingCreator(GBaseObject)`, `setAclAliases(List<T>)`. Those entity graphs cannot go
+on the wire, and heimdall must not learn every domain model.
+
+**But they don't need to.** Those 9 methods run `AclAccessCheck` (a static in
+`gebo.base.model`) over local objects, and the *only* inputs they need from outside are the
+current user's **identity, roles, groups** and the **ACL aliases**. Read the two impls and
+the seam is tiny:
+
+- `AclGrantedAccessorServiceImpl` injects exactly **`IAclAliasesDao` + `UsersGroupRepository`**.
+- `GSecurityServiceImpl` touches the repositories for exactly three things: *look up a user*,
+  *look up a user's groups*, *check a password*. Everything else is local computation.
+
+**So do not duplicate the algorithm — extract the directory.** One small SPI, and the *same*
+impl classes serve both worlds:
+
+```java
+interface IGSecurityDirectory {                 // security.interface-models
+    UserInfos          findUserByUsername(String username);
+    List<UsersGroup>   findGroupsOfUser(String username);
+    List<UsersGroup>   findAllGroups();
+    boolean            checkPassword(String username, String rawPassword);
+}
+```
+
+| Implementation | Where | Backed by |
+|---|---|---|
+| `MongoSecurityDirectory` (module `gebo.security.directory.mongo`) | heimdall + monolith | `UserRepository`, `UsersGroupRepository`, `PasswordEncoder` |
+| `RestSecurityDirectory` (module `gebo.microservices.security.client`) | every other microservice | heimdall SP, **request-scoped cache** |
+
+**The two implementations live in two modules, and a service depends on exactly one.**
+No property, no profile: which directory a service uses is decided by what it
+*packages*, stated in its pom. That is the same shape as `gebo.secrets.impl` vs
+`gebo.microservices.secrets.client`, and it is what makes the choice impossible to get
+wrong at runtime. Critically, `MongoSecurityDirectory` must **not** sit in
+`gebo.architecture.security`: that module is a transitive dependency of nearly
+everything, so a directory inside it would be present everywhere, would always win the
+`@ConditionalOnMissingBean` race, and the remote one could never activate — precisely
+how `gebo.secrets.impl` used to defeat the secrets client. The server-proxy in turn
+depends on the *local* directory, so a service can only **serve** the directory if it
+**owns** it.
+
+`GSecurityServiceImpl` and `AclGrantedAccessorServiceImpl` then depend on
+`IGSecurityDirectory` instead of the repositories, and **ship unchanged to every service**.
+The ACL algorithm keeps running locally on local objects; only the directory is remote. Without
+the request-scoped cache every `filterCanDoAction` becomes a network round-trip — the cache is
+not an optimization, it is what makes this viable.
+
+**ACL aliases are replicated, not fetched.** `IAclAliasesDao` stays a *local* read-replica in
+every service (owner writes + `IGClusterMessageBus` broadcast — the same Hazelcast bus the LLM
+models replication already uses, §1.4). One consequence is load-bearing: `AclAliasesDaoImpl`
+allocates alias integers from a **Mongo sequence**, and `aliasForEveryone()` will `addAcl(...)`
+if an entry is missing. **Alias allocation must stay authoritative in the owner** — a replica
+that allocates its own integers will collide with another service's. On a non-owner the DAO is
+read-only; the everyone-aliases bootstrap is the owner's job.
+
+**Two prerequisites, before any module moves:**
+
+1. **Promote `UserInfos` out of `UserRepository`.** It is nested inside a `MongoRepository`, so
+   it cannot live in `interface-models` where it belongs, yet 17 files import it purely as a
+   type. Move it to a top-level type (keep a deprecated alias to stage the change).
+2. **Fix the 4 files that inject the repositories directly** — `UsersFunctions` (an LLM tool,
+   ships to brain), `GeboFastInstallationSetupService`, `SystemInitializationAdminService`,
+   and the integration-test base. Convert to `IGUsersAdminService` / `IGSecurityService` calls.
+   Behaviour-preserving, and it means the split never has to special-case them.
+
+**One lever makes the `secure-area` split cheap.** `GeboAISecurityConfig` *already* gates the
+two halves with `oauth2LoginEnabled` / `oauth2ResourceServerEnabled`. "Everyone is a resource
+server; only heimdall does login and the OAuth2 handshake" is therefore largely a
+**configuration** change today — the code split of the filter chain can follow the wiring, not
+lead it.
+
+**Phases** (each independently verifiable):
+
+| # | Step | Done when |
+|---|---|---|
+| P0 | ~~Promote `UserInfos`~~ **DONE** (now `ai.gebo.security.model.UserInfos`, 36 imports rewritten; it can no longer drag a Mongo repository into a module that only wanted to name a user). Still to do: de-repository the 4 files that inject `UserRepository`/`UsersGroupRepository` | monolith green, no behaviour change |
+| P1 | Extract `IGSecurityDirectory`; rewire `GSecurityServiceImpl` + `AclGrantedAccessorServiceImpl` onto it; `MongoSecurityDirectory` | monolith green — pure seam, no split yet |
+| P2 | `gebo.microservices.security.controller` (SP, heimdall) + `gebo.microservices.security.client` (CP: `RestSecurityDirectory`, request-cached) | a service with the CP resolves users/groups/ACL through heimdall |
+| P3 | ~~ACL alias replication~~ **SUPERSEDED - the ACL module split replaced it.** ACL is now the same owner/consumer pair as secrets and the directory: `gebo.acl.services` (contract: `IAclAliasesDao`, `AclAccessCheck`, `IAclGrantedResource`, models - extracted from `gebo.base.model` with the package name unchanged, so **not one import moved**), `gebo.acl.mongo` (the owner's Mongo DAO - **heimdall + monolith**), and `gebo.microservices.acl.client` (a REST client onto heimdall with a **local TTL cache** - everyone else). **No Hazelcast replication of the alias map is needed:** alias data is small, read on every decision and written almost never, so per-service caching of what is actually asked about beats every service maintaining a full replica. The Hazelcast cluster therefore stays as it is (LLM models only) and `ModelsReplicationClusterParticipationCondition` does **not** need widening. Alias *allocation* stays with the owner (`addAcl()` draws from a Mongo sequence; a second allocator would hand out colliding integers - a silent authorization bug), and the `EVERYONE` presets are bootstrapped only by the owner at startup. **Trade-off, explicitly:** a change made elsewhere - including a *revocation* - is visible to a consumer within `ai.gebo.acl.client.cache-ttl` (default 60s); a write made *through* a client invalidates its own cache at once. Shorten the TTL if that window is unacceptable. Discovery-based Hazelcast seeding (`DiscoveryClientClusterTopologyProvider`) was still worth keeping for the models cluster: it sees replicas and real addresses where the DNS-name seeding could not | a consumer sees an ACL change made on the owner within the TTL |
+| P4 | Module split proper: `security.{interface-models, impl, secure-area}`; `security.controllers` → heimdall-only | every new module in `gebo.apps.monolithic.starter`; monolith identical |
+| P5 | Per-service wiring: non-heimdall services take IM + secure-area + CP; heimdall takes impl + controllers + SP | non-heimdall service boots with no user/group Mongo access |
+
+**Module → service map** (the monolithic starter depends on **all** of them, so the monolith is
+unchanged; `.impl` present means the CP's `@ConditionalOnMissingBean` backs off, exactly as with
+secrets §2.1):
+
+| Module | heimdall | other microservices | monolith |
+|---|---|---|---|
+| `security.interface-models` | ✔ | ✔ | ✔ |
+| `security.secure-area` (filter chain, resource-server, CORS, url rules) | ✔ | ✔ | ✔ |
+| `security.impl` (repos, services/impl, login + oauth2 handshake, `LocalJwtTokenProvider`, system user) | ✔ | — | ✔ |
+| `security.controllers` (the 12 controllers) | ✔ | — | ✔ |
+| `gebo.microservices.security.controller` (SP) | ✔ | — | — |
+| `gebo.microservices.security.client` (CP) | — | ✔ | — |
+
 ### 13.2 `gebo.architecture.security.controllers` → mostly IMPL (the 12 controllers), acting as heimdall's SP
 Verified constructor injections (→ these are the SP/IMPL wiring): `OAuth2AdminController(IGOauth2ConfigurationService)`; `AuthController(IGHttpRequestAuthenticationManagerResolver, UserRepository, PasswordEncoder, LocalJwtTokenProvider, IGBackendOauth2LoginSPASupportService)`; `AuthProvidersController(IGOauth2ConfigurationService, IOauth2DynamicClientRegistrationRepository, GeboSecurityConfig)`. All 12 → **IMPL** on heimdall; they *are* the server-proxy surface.
 

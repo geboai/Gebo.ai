@@ -9,7 +9,6 @@
 
 package ai.gebo.microservices.secrets.client.config;
 
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,13 +16,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
+import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.secrets.client.GeboSecretsAccessServiceRestClient;
-import ai.gebo.microservices.secrets.client.auth.IGeboSecretsCallerTokenPropagator;
-import ai.gebo.microservices.secrets.client.auth.SecurityContextCallerTokenPropagator;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfiguration;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import ai.gebo.security.services.IGeboSystemUserService;
 import tools.jackson.databind.ObjectMapper;
 
 /**
@@ -48,7 +46,8 @@ import tools.jackson.databind.ObjectMapper;
  *
  * Gebo.ai comment agent
  */
-@AutoConfiguration(after = GeboMicroservicesTopologyAutoConfiguration.class)
+@AutoConfiguration(after = { GeboMicroservicesTopologyAutoConfiguration.class,
+		GeboClusterCommonsAutoConfiguration.class })
 @EnableConfigurationProperties(GeboSecretsClientProperties.class)
 public class GeboSecretsMicroserviceClientAutoConfiguration {
 
@@ -70,34 +69,15 @@ public class GeboSecretsMicroserviceClientAutoConfiguration {
 		return builder.build();
 	}
 
-	/**
-	 * Forwards the caller's token, falling back to a freshly minted token for the
-	 * platform's system identity when the calling thread has none (background work:
-	 * startup, model replication, MCP reconnects, schedulers).
-	 *
-	 * <p>
-	 * {@link IGeboSystemUserService} is taken through an {@link ObjectProvider} rather
-	 * than injected: a service without the security implementation on its classpath
-	 * still gets a working client for its request-thread calls, and its background
-	 * calls fail loudly (with an explanatory warning) instead of the context refusing
-	 * to start.
-	 * </p>
-	 */
-	@Bean
-	@ConditionalOnMissingBean(IGeboSecretsCallerTokenPropagator.class)
-	public IGeboSecretsCallerTokenPropagator geboSecretsCallerTokenPropagator(
-			ObjectProvider<IGeboSystemUserService> systemUserService) {
-		return new SecurityContextCallerTokenPropagator(() -> {
-			IGeboSystemUserService service = systemUserService.getIfAvailable();
-			return service == null ? null : service.createToken();
-		});
-	}
+	// The IGeboCallerTokenPropagator comes from GeboClusterCommonsAutoConfiguration:
+	// forwarding the caller's token (and minting a system one when there is none) is
+	// how EVERY cluster client authenticates, not something specific to secrets.
 
 	@Bean
 	@ConditionalOnMissingBean(IGeboSecretsAccessService.class)
 	public IGeboSecretsAccessService geboSecretsAccessServiceRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecretsClientWebClient,
-			GeboMicroserviceUrlResolver urlResolver, IGeboSecretsCallerTokenPropagator tokenPropagator,
+			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
 			ObjectMapper objectMapper, GeboSecretsClientProperties properties) {
 		return new GeboSecretsAccessServiceRestClient(geboSecretsClientWebClient, urlResolver, tokenPropagator,
 				objectMapper, properties.getMicroserviceId(), properties.getBasePath());

@@ -41,7 +41,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;

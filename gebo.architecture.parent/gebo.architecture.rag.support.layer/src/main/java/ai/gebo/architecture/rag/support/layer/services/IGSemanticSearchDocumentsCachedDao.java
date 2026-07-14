@@ -13,7 +13,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 
 /**
  * This interface defines the contract for interacting with cached RAG

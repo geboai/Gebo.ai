@@ -13,7 +13,7 @@ import java.util.List;
 
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserPrincipal;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 
 /**
  * The platform's own identity - who the software <b>is</b> when it acts on its

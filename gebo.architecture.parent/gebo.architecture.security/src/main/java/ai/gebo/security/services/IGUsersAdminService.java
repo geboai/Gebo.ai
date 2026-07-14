@@ -20,7 +20,7 @@ import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UsersGroup;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 
 /**
  * Gebo.ai comment agent

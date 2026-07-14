@@ -67,7 +67,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import io.jsonwebtoken.security.SecurityException;

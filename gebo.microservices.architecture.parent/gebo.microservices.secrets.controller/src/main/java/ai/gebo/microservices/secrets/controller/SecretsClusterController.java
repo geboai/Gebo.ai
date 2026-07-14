@@ -47,7 +47,7 @@ import tools.jackson.databind.ObjectMapper;
  * <b>content</b>, which the admin controller never does, and are therefore not
  * reachable by users at all: every request must originate from a microservice
  * currently registered in the cluster registry
- * ({@link ai.gebo.microservices.secrets.cluster.ClusterParticipantsOnlyInterceptor}),
+ * ({@link ai.gebo.microservices.cluster.ClusterParticipantsOnlyInterceptor}),
  * and the caller's own token - forwarded by the client - is still subject to the
  * hosting service's security configuration.
  * </p>

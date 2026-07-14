@@ -21,10 +21,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import ai.gebo.microservices.secrets.cluster.ClusterParticipantsOnlyInterceptor;
-import ai.gebo.microservices.secrets.cluster.GeboClusterParticipants;
+import ai.gebo.microservices.cluster.ClusterParticipantsOnlyInterceptor;
+import ai.gebo.microservices.cluster.GeboClusterParticipants;
+import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.secrets.controller.SecretsClusterController;
-import ai.gebo.microservices.topology.GeboMicroservicesTopology;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import tools.jackson.databind.ObjectMapper;
 
@@ -50,28 +50,20 @@ import tools.jackson.databind.ObjectMapper;
  *
  * Gebo.ai comment agent
  */
-@AutoConfiguration
+@AutoConfiguration(after = GeboClusterCommonsAutoConfiguration.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass(DiscoveryClient.class)
-@ConditionalOnBean(IGeboSecretsAccessService.class)
+@ConditionalOnBean({ IGeboSecretsAccessService.class, GeboClusterParticipants.class })
 @ConditionalOnProperty(prefix = "ai.gebo.secrets.cluster", name = "enabled", havingValue = "true",
 		matchIfMissing = true)
 @EnableConfigurationProperties(GeboSecretsClusterControllerProperties.class)
 public class GeboSecretsClusterControllerAutoConfiguration {
 
-	/**
-	 * The live cluster membership the guard checks against. Requires a
-	 * {@link DiscoveryClient}: membership must be <i>discovered</i>, never merely
-	 * configured.
-	 */
-	@Bean
-	@ConditionalOnMissingBean
-	public GeboClusterParticipants geboClusterParticipants(DiscoveryClient discoveryClient,
-			GeboMicroservicesTopology topology, GeboSecretsClusterControllerProperties properties) {
-		GeboSecretsClusterControllerProperties.Participants participants = properties.getParticipants();
-		return new GeboClusterParticipants(discoveryClient, topology, participants.getExtraServiceIds(),
-				participants.getAdditionalAllowedAddresses(), participants.getCacheTtl());
-	}
+	// GeboClusterParticipants (the live membership these endpoints are restricted to)
+	// comes from GeboClusterCommonsAutoConfiguration - it is shared with every other
+	// cluster-internal controller, and @ConditionalOnBean above means that if discovery
+	// is absent and no participants bean exists, these endpoints are not published at
+	// all rather than published unguarded.
 
 	@Bean
 	@ConditionalOnMissingBean

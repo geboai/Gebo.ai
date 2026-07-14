@@ -52,33 +52,13 @@
 			<groupId>io.projectreactor.netty</groupId>
 			<artifactId>reactor-netty-http</artifactId>
 		</dependency>
-		<!-- SecurityContextHolder / Authentication, and the bearer-token authentication
-		     types (JwtAuthenticationToken, BearerTokenAuthentication) whose token this
-		     client forwards to heimdall. -->
+		<!-- The caller-token propagator (IGeboCallerTokenPropagator), shared with every
+		     other cluster-internal client. Brings spring-security + the optional
+		     IGeboSystemUserService transitively. -->
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-oauth2-resource-server</artifactId>
-		</dependency>
-		<!--
-			IGeboSystemUserService: mints the LOCAL_JWT used when the calling thread has
-			no token of its own to forward (background work carries none - see
-			SecurityContextCallerTokenPropagator).
-
-			OPTIONAL on purpose. It is not dragged onto consumers - every Gebo service
-			already has this module - and the client is injected with an ObjectProvider,
-			so a service without it still works for its request-thread calls and merely
-			warns on the background ones. Making it a hard dependency would also make this
-			thin client pull the whole security stack (Mongo repos, OAuth2) behind it.
-		-->
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.security</artifactId>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
 			<version>${project.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<!-- @ConfigurationProperties / @ConditionalOnMissingBean support. -->
 		<dependency>

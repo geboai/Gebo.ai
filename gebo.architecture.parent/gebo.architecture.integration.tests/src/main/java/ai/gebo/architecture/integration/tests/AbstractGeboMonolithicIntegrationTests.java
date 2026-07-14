@@ -65,7 +65,7 @@ import ai.gebo.security.config.GeboAISecurityConfig;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.User;
 import ai.gebo.security.repository.UserRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.workflows.compute.model.JobSummary;
 import ai.gebo.workflows.compute.service.IGeboWorkflowsStatsService;

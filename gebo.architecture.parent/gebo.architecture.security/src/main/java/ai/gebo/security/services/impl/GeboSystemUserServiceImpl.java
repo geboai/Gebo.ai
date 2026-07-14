@@ -22,7 +22,7 @@ import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UserPrincipal;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGeboSystemUserService;
 
 /**
@@ -61,22 +61,57 @@ public class GeboSystemUserServiceImpl implements IGeboSystemUserService {
 
 	private final GeboSecurityConfig securityConfig;
 	private final LocalJwtTokenProvider tokenProvider;
+	private final PasswordEncoder passwordEncoder;
 
 	/**
 	 * An encoded password whose plaintext was thrown away the instant it was made.
 	 * Not a placeholder: it is what makes a password login against the system user
 	 * unwinnable rather than merely discouraged.
+	 *
+	 * <p>
+	 * Computed <b>lazily</b>, and that is not an optimisation. The platform's
+	 * {@link PasswordEncoder} is {@code GPasswordEncoder}, which is not a hash at all
+	 * but a wrapper over the crypting service - and that service is not usable while
+	 * beans are still being constructed. Encoding in the constructor therefore threw
+	 * ("Problems in the underlying crypting system"), and because the security
+	 * directory depends on this bean and half the platform depends on the directory,
+	 * it took the entire application context down with it. It is built on first use
+	 * instead: by the time anyone tries to authenticate, crypting is up.
+	 * </p>
 	 */
-	private final String unusablePassword;
+	private volatile String unusablePassword;
 
 	public GeboSystemUserServiceImpl(GeboSecurityConfig securityConfig, LocalJwtTokenProvider tokenProvider,
 			PasswordEncoder passwordEncoder) {
 		this.securityConfig = securityConfig;
 		this.tokenProvider = tokenProvider;
-		// A single UUID (122 random bits) and no more: BCrypt rejects an input longer
-		// than 72 bytes outright, so concatenating two would throw here - at bean
-		// construction, i.e. it would stop the service from starting at all.
-		this.unusablePassword = passwordEncoder.encode(UUID.randomUUID().toString());
+		this.passwordEncoder = passwordEncoder;
+		// Nothing else here on purpose: a constructor that needs another subsystem to be
+		// running is a constructor that can refuse to let the application start.
+	}
+
+	/**
+	 * The system identity's unusable password, encoded once on first demand.
+	 *
+	 * <p>
+	 * {@code GPasswordEncoder.matches(raw, encoded)} decrypts {@code encoded} and
+	 * compares it to {@code raw}. So this yields a value that decrypts to a random
+	 * UUID nobody - including this process, which discards it - ever knows. No
+	 * presented password can equal it.
+	 * </p>
+	 */
+	private String unusablePassword() {
+		String password = unusablePassword;
+		if (password == null) {
+			synchronized (this) {
+				password = unusablePassword;
+				if (password == null) {
+					password = passwordEncoder.encode(UUID.randomUUID().toString());
+					unusablePassword = password;
+				}
+			}
+		}
+		return password;
 	}
 
 	@Override
@@ -107,7 +142,10 @@ public class GeboSystemUserServiceImpl implements IGeboSystemUserService {
 		user.setEmailVerified(true);
 		// LOCAL_JWT only: the system identity is never federated.
 		user.setProvider(AuthProvider.local);
-		user.setPassword(unusablePassword);
+		// No password here. getUser()/getUserInfos() are read on paths that have no
+		// business touching the crypting service - the ACL bootstrap at startup, every
+		// user/ACL lookup - and only getUserPrincipal() (the login path) actually needs
+		// one. Encoding it here would drag the encoder into all of them.
 		return user;
 	}
 
@@ -118,7 +156,10 @@ public class GeboSystemUserServiceImpl implements IGeboSystemUserService {
 
 	@Override
 	public UserPrincipal getUserPrincipal() {
-		return UserPrincipal.create(getUser());
+		UserPrincipal principal = UserPrincipal.create(getUser());
+		// The only place the password is needed, and so the only place it is built.
+		principal.setPassword(unusablePassword());
+		return principal;
 	}
 
 	@Override

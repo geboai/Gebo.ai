@@ -19,6 +19,14 @@
 	  spring.application.name is among the configured participants.
 	-->
 	<dependencies>
+		<!-- DiscoveryClient: seeds the Hazelcast member list from the LIVE registry
+		     rather than from DNS-derived hostnames, so replicas and dynamic addresses
+		     are seen. Optional at runtime - a deployment without discovery falls back
+		     to the name-based provider. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-commons</artifactId>
+		</dependency>
 		<!-- Shared microservices topology: source of truth for the participating
 		     microservice ids (and self-identification of the running service). -->
 		<dependency>
@@ -40,4 +48,19 @@
 			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>
 	</dependencies>
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

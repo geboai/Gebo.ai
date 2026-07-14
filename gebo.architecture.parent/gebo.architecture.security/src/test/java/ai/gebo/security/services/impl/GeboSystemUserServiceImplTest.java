@@ -16,7 +16,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ai.gebo.security.config.GeboSecurityConfig;
@@ -51,7 +50,8 @@ class GeboSystemUserServiceImplTest {
 		// string, as the real deployments configure.
 		securityConfig.getAuth().setTokenSecret(TEST_SECRET);
 		securityConfig.getAuth().setTokenExpirationMsec(120000L);
-		passwordEncoder = new BCryptPasswordEncoder();
+		// Mirrors GPasswordEncoder: reversible (crypt/decrypt), NOT a hash.
+		passwordEncoder = new FakeCryptingPasswordEncoder();
 		systemUserService = new GeboSystemUserServiceImpl(securityConfig,
 				new LocalJwtTokenProvider(securityConfig), passwordEncoder);
 	}
@@ -112,9 +112,9 @@ class GeboSystemUserServiceImplTest {
 	}
 
 	/**
-	 * It cannot log in. The password is a random value whose plaintext was discarded
-	 * at construction, so no presented password can ever match it - not even an empty
-	 * or null one, and not the username, which is the obvious guess.
+	 * It cannot log in. The password encodes a random value that is discarded, so no
+	 * presented password can ever match it - not an empty one, and not the username,
+	 * which is the obvious guess.
 	 */
 	@Test
 	void cannotBeLoggedIntoWithAnyPassword() {
@@ -128,7 +128,46 @@ class GeboSystemUserServiceImplTest {
 		}
 	}
 
-	/** Two instances must not share a password, so one process's hash tells you nothing about another's. */
+	/**
+	 * The regression that took the whole monolith's context down. The platform's
+	 * PasswordEncoder ({@code GPasswordEncoder}) is not a hash - it wraps the crypting
+	 * service, which is <b>not usable while beans are still being constructed</b>.
+	 * Encoding in the constructor threw, and since the security directory depends on
+	 * this bean and much of the platform depends on the directory, the application
+	 * refused to start.
+	 *
+	 * <p>
+	 * So: constructing this bean must touch the encoder exactly zero times, and the
+	 * paths used at startup (the ACL alias bootstrap, every user/ACL lookup) must stay
+	 * clear of it too.
+	 * </p>
+	 */
+	@Test
+	void constructionMustNotTouchThePasswordEncoder() {
+		PasswordEncoder notYetReady = new PasswordEncoder() {
+			@Override
+			public String encode(CharSequence rawPassword) {
+				throw new RuntimeException("Problems in the underlying crypting system");
+			}
+
+			@Override
+			public boolean matches(CharSequence rawPassword, String encodedPassword) {
+				throw new RuntimeException("Problems in the underlying crypting system");
+			}
+		};
+
+		GeboSystemUserServiceImpl service = new GeboSystemUserServiceImpl(securityConfig,
+				new LocalJwtTokenProvider(securityConfig), notYetReady);
+
+		assertThat(service.getUsername()).isEqualTo("heimdall@bifrost.gebo.ai");
+		assertThat(service.getUserInfos().getRoles()).contains("ADMIN");
+		assertThat(service.getUser().getPassword()).isNull();
+		// And a token can still be minted with the crypting service down - it is signed,
+		// not encrypted.
+		assertThat(service.createToken()).isNotBlank();
+	}
+
+	/** Two instances must not share a password, so one process's value tells you nothing about another's. */
 	@Test
 	void mintsADistinctUnusablePasswordPerInstance() {
 		GeboSystemUserServiceImpl other = new GeboSystemUserServiceImpl(securityConfig,
@@ -163,5 +202,24 @@ class GeboSystemUserServiceImplTest {
 
 		// Our provider must not accept a system token minted outside our trust domain.
 		assertThat(new LocalJwtTokenProvider(securityConfig).validateToken(forgedToken)).isFalse();
+	}
+
+	/** Stands in for GPasswordEncoder: reversible (crypt/decrypt), and the only way to match. */
+	private static final class FakeCryptingPasswordEncoder implements PasswordEncoder {
+
+		private static final String PREFIX = "enc:";
+
+		@Override
+		public String encode(CharSequence rawPassword) {
+			return PREFIX + rawPassword;
+		}
+
+		@Override
+		public boolean matches(CharSequence rawPassword, String encodedPassword) {
+			if (encodedPassword == null || !encodedPassword.startsWith(PREFIX)) {
+				return false;
+			}
+			return encodedPassword.substring(PREFIX.length()).equals(rawPassword.toString());
+		}
 	}
 }

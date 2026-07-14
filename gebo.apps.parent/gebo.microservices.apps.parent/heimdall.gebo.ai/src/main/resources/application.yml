@@ -38,24 +38,32 @@ eureka:
 # the microservices the registry currently knows about.
 ai:
   gebo:
+    # WHO may call the cluster-internal endpoints. One rule, shared by every such
+    # controller this service hosts (secrets, security, ...) - a per-module copy is
+    # how the rules drift apart.
+    cluster:
+      participants:
+        # Service ids admitted on top of the topology members.
+        #
+        # The GATEWAY IS DELIBERATELY ABSENT. The guard identifies a caller by the
+        # address it connects from, so admitting the gateway would admit everything
+        # the gateway forwards - a browser's request included, since it reaches this
+        # service from the gateway's own registered address. That would hand the
+        # secret-content and identity endpoints to anyone who can reach the edge.
+        # Nothing needs it: the default LOAD_BALANCER strategy has services call
+        # heimdall directly. gateway.gebo.ai also refuses to route these base paths
+        # from outside, so the two protections are independent.
+        extra-service-ids: []
+        # Addresses admitted on top of whatever discovery reports. Keep this EMPTY
+        # in a real deployment: membership must come from the registry. It exists
+        # for a single-host dev run, where callers are not registered.
+        additional-allowed-addresses: []
+        cache-ttl: 30s
     secrets:
       cluster:
         enabled: true
         base-path: api/cluster/SecretsController
-        participants:
-          # Service ids admitted on top of the topology members.
-          #
-          # The GATEWAY IS DELIBERATELY ABSENT. The guard identifies a caller by the
-          # address it connects from, so admitting the gateway would admit everything
-          # the gateway forwards - a browser's request included, since it reaches this
-          # service from the gateway's own registered address. That would hand the
-          # secret-content endpoints to anyone who can reach the edge. Nothing needs
-          # it: the default LOAD_BALANCER strategy has services call heimdall directly.
-          # gateway.gebo.ai also refuses to route this base path from outside, so the
-          # two protections are independent.
-          extra-service-ids: []
-          # Addresses admitted on top of whatever discovery reports. Keep this EMPTY
-          # in a real deployment: membership must come from the registry. It exists
-          # for a single-host dev run, where callers are not registered.
-          additional-allowed-addresses: []
-          cache-ttl: 30s
+    security:
+      cluster:
+        enabled: true
+        base-path: api/cluster/SecurityController

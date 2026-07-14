@@ -23,7 +23,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
-import ai.gebo.microservices.secrets.client.auth.IGeboSecretsCallerTokenPropagator;
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
@@ -52,7 +52,7 @@ import tools.jackson.databind.ObjectMapper;
  *
  * <p>
  * <b>Authentication.</b> The caller's own token is forwarded (see
- * {@link IGeboSecretsCallerTokenPropagator}), so heimdall authorises the request
+ * {@link IGeboCallerTokenPropagator}), so heimdall authorises the request
  * against the identity that originated it. The token is read on the
  * <i>calling</i> thread and pinned into the request headers before the exchange
  * is subscribed - resolving it inside a WebClient filter would read the
@@ -68,13 +68,13 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 
 	private final WebClient webClient;
 	private final GeboMicroserviceUrlResolver urlResolver;
-	private final IGeboSecretsCallerTokenPropagator tokenPropagator;
+	private final IGeboCallerTokenPropagator tokenPropagator;
 	private final ObjectMapper mapper;
 	private final String microserviceId;
 	private final String basePath;
 
 	public GeboSecretsAccessServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			IGeboSecretsCallerTokenPropagator tokenPropagator, ObjectMapper mapper, String microserviceId,
+			IGeboCallerTokenPropagator tokenPropagator, ObjectMapper mapper, String microserviceId,
 			String basePath) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;

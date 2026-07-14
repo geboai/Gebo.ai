@@ -15,8 +15,8 @@ import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
-import ai.gebo.security.repository.UserRepository.UserInfos;
-import ai.gebo.security.repository.UsersGroupRepository;
+import ai.gebo.security.model.UserInfos;
+import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IAclGrantedAccessorService;
 import lombok.AllArgsConstructor;
 
@@ -26,7 +26,10 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 	private static final String GROUP = "group";
 	private static final String USER = "user";
 	private final IAclAliasesDao aliasesDao;
-	private final UsersGroupRepository groupsRepo;
+	// The directory, NOT the repository: on a service that does not own the user store
+	// this is the REST-backed one, and this class then works unchanged. The ACL aliases
+	// stay local (IAclAliasesDao is a per-service replica), so only the groups are remote.
+	private final IGSecurityDirectory directory;
 
 	@Override
 	public IAclGrantedAccessor fromGroup(UsersGroup group) {
@@ -62,12 +65,14 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		};
 	}
 
-	String getUniqueId(UsersGroup group) {
+	@Override
+	public String getUniqueId(UsersGroup group) {
 		String id = GROUP + ":" + group.getCode();
 		return id;
 	}
 
-	String getUniqueId(UserInfos user) {
+	@Override
+	public String getUniqueId(UserInfos user) {
 		String id = USER + ":" + user.getUsername();
 		return id;
 	}
@@ -83,7 +88,7 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		final String uniqueId = getUniqueId(user);
 		final List<Integer> aliases = aliasesDao
 				.findAliasesByAclGrantedUniqueIdIn(List.of(uniqueId, IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID));
-		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
+		List<UsersGroup> groups = directory.findGroupsOfUser(user.getUsername());
 		List<IAclGrantedAccessor> groupsAccessors = groups.stream().map(this::fromGroup).toList();
 		final List<IAclGrantedAccess> accesses = new ArrayList<>();
 		final IAclGrantedAccess thisAccess = new IAclGrantedAccess() {
@@ -167,7 +172,7 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		final String uniqueId = getUniqueId(user);
 		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(
 				List.of(uniqueId, IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID), grantType);
-		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
+		List<UsersGroup> groups = directory.findGroupsOfUser(user.getUsername());
 
 		List<IAclGrantedAccessor> groupsAccessors = groups.stream().map(x -> this.fromGroup(x, grantType)).toList();
 		final List<IAclGrantedAccess> accesses = new ArrayList<>();

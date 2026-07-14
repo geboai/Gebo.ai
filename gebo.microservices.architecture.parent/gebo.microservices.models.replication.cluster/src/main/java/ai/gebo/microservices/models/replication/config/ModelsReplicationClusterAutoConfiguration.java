@@ -11,12 +11,16 @@ package ai.gebo.microservices.models.replication.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Conditional;
 
 import ai.gebo.architecture.hazelcast.IGModelsReplicationClusterTopologyProvider;
+import ai.gebo.microservices.models.replication.DiscoveryClientClusterTopologyProvider;
 import ai.gebo.microservices.models.replication.ModelsReplicationClusterParticipationCondition;
 import ai.gebo.microservices.models.replication.ModelsReplicationClusterProperties;
 import ai.gebo.microservices.models.replication.TopologyModelsReplicationClusterTopologyProvider;
@@ -47,6 +51,28 @@ import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfig
 @Conditional(ModelsReplicationClusterParticipationCondition.class)
 public class ModelsReplicationClusterAutoConfiguration {
 
+	/**
+	 * Seeds the cluster from <b>live service discovery</b> when a
+	 * {@link DiscoveryClient} is available - which, in a real deployment, it always
+	 * is. This sees every registered replica and its real address, where the
+	 * name-based provider below can only guess one host per service from DNS.
+	 */
+	@Bean
+	@ConditionalOnClass(DiscoveryClient.class)
+	@ConditionalOnBean(DiscoveryClient.class)
+	@ConditionalOnMissingBean(IGModelsReplicationClusterTopologyProvider.class)
+	public IGModelsReplicationClusterTopologyProvider discoveryClientClusterTopologyProvider(
+			DiscoveryClient discoveryClient, GeboMicroservicesTopology topology,
+			ModelsReplicationClusterProperties properties,
+			@Value("${spring.application.name:}") String applicationName) {
+		return new DiscoveryClientClusterTopologyProvider(discoveryClient, topology, properties, applicationName);
+	}
+
+	/**
+	 * Fallback for a deployment with no service discovery (a pinned run, a test): seeds
+	 * from the configured names. Backs off whenever the discovery-backed provider above
+	 * has already been published.
+	 */
 	@Bean
 	@ConditionalOnMissingBean(IGModelsReplicationClusterTopologyProvider.class)
 	public IGModelsReplicationClusterTopologyProvider modelsReplicationClusterTopologyProvider(

@@ -32,7 +32,7 @@ import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import ai.gebo.userspace.handler.GUserspaceContentManagementSystem;

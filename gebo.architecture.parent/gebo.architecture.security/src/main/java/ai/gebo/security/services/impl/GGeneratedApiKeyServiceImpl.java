@@ -14,7 +14,7 @@ import ai.gebo.security.config.GeneratedApiKeyConfig;
 import ai.gebo.security.model.GeneratedApiKey;
 import ai.gebo.security.model.GeneratedApiKeyInfo;
 import ai.gebo.security.repository.GeneratedApiKeyRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGGeneratedApiKeyService;
 import ai.gebo.security.services.IGSecurityService;
 import io.jsonwebtoken.security.SecurityException;

@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.mcpclients.config.McpClientsConfig;
 import ai.gebo.architecture.mcpclients.model.MCPClientConfig;
 import ai.gebo.architecture.mcpclients.model.McpAuthMode;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.AllArgsConstructor;

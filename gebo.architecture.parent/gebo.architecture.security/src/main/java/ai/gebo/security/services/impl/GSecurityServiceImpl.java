@@ -12,11 +12,9 @@ package ai.gebo.security.services.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclAccessCheck;
@@ -34,13 +32,10 @@ import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.config.GeboSecurityConfig;
-import ai.gebo.security.model.User;
-import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
-import ai.gebo.security.repository.UserRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
-import ai.gebo.security.repository.UsersGroupRepository;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IAclGrantedAccessorService;
+import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGeboSystemUserService;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
@@ -55,13 +50,16 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	private static final String USER = "user:";
 	private static final String GROUP = "group:";
 	private final static Logger LOGGER = LoggerFactory.getLogger(GSecurityServiceImpl.class);
-	final UserRepository usersRepo;
-	final UsersGroupRepository groupsRepo;
+	// The directory, NOT the repositories. These three lookups - find a user, find a
+	// user's groups, check a password - are the ONLY things this service ever needed
+	// the user store for; every other method computes locally over the caller's own
+	// objects. Depending on the seam rather than on Mongo is what lets this exact class
+	// run on a service that does not own the user store (see IGSecurityDirectory).
+	final IGSecurityDirectory directory;
 	final IAclGrantedAccessorService aclGrantedAccessorService;
 	final IAclAliasesDao aclAliasesDao;
 	final GeboSecurityConfig securityConfig;
 	final IGeboCryptingService cryptService;
-	final PasswordEncoder passwordEncoder;
 	final IGPersistentObjectManager persistenceManager;
 	final IGeboSystemUserService systemUserService;
 
@@ -85,10 +83,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		// authorization needs no special-casing anywhere else.
 		if (systemUserService.isSystemUser(email))
 			return systemUserService.getUserInfos();
-		Optional<User> user = usersRepo.findById(email);
-		if (user.isEmpty())
+		UserInfos usr = directory.findUserByUsername(email);
+		if (usr == null)
 			throw new RuntimeException("No current user found");
-		UserInfos usr = new UserInfosImpl(user.get());
 		if (usr.getDisabled() != null && usr.getDisabled())
 			throw new RuntimeException("Current user " + email + " is disabled");
 		return usr;
@@ -108,8 +105,8 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		List<String> roles = user.getRoles();
 		boolean isAdmin = roles != null && roles.contains("ADMIN");
 		if (isAdmin)
-			return groupsRepo.findAll();
-		return groupsRepo.findByUserIdsIn(user.getUsername());
+			return directory.findAllGroups();
+		return directory.findGroupsOfUser(user.getUsername());
 	}
 
 	/**
@@ -150,7 +147,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return true;
 		if (object.getAccessibleUsers() != null && object.getAccessibleUsers().contains(user.getUsername()))
 			return true;
-		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
+		List<UsersGroup> groups = directory.findGroupsOfUser(user.getUsername());
 		if (object.getAccessibleGroups() != null) {
 			for (UsersGroup usersGroup : groups) {
 				if (object.getAccessibleGroups().contains(usersGroup.getCode()))
@@ -391,12 +388,10 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	@Override
 	public boolean checkActualUserPassword(String confirmpassword) throws GeboCryptSecretException {
 		UserInfos currentUser = this.getCurrentUser();
-		Optional<User> fullUsr = this.usersRepo.findById(currentUser.getUsername());
-		if (fullUsr.isPresent()) {
-			String encodedPwd = fullUsr.get().getPassword();
-			return passwordEncoder.matches(confirmpassword, encodedPwd);
-		} else
-			return false;
+		// Verified through the directory, i.e. WHERE THE HASH LIVES. The remote directory
+		// sends the presented password to be checked there; it never pulls the stored hash
+		// back to compare it here, so no password hash ever leaves the owning service.
+		return directory.checkPassword(currentUser.getUsername(), confirmpassword);
 	}
 
 	@Override

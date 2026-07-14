@@ -27,6 +27,31 @@
 	    - gebo.ragsystem.vectorstores : the RAG vector-store integrations.
 	-->
 	<dependencies>
+		<!--
+			The cluster clients every non-heimdall service needs. They live here, in the
+			starter, rather than in each app's pom: a service built on this starter is by
+			definition NOT the security service, so it always resolves secrets and the
+			security directory remotely.
+
+			Deliberately NOT in gebo.microservices.starter - heimdall is built on that one,
+			and giving heimdall these clients would put both a local and a remote
+			implementation on one classpath.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.secrets.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.security.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.acl.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.starter</artifactId>

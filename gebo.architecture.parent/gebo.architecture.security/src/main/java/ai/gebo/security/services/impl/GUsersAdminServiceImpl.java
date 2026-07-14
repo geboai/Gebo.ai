@@ -32,7 +32,7 @@ import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGeboSystemUserService;
 import ai.gebo.security.services.IGUsersAdminService;

@@ -55,6 +55,22 @@
 			<artifactId>gebo.architecture.security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- heimdall's server-proxy for the security DIRECTORY (users, groups, password
+		     checks) - what the other microservices ask it for. The authorization
+		     algorithm itself never leaves them; only the directory does. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.security.controller</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- heimdall OWNS the ACL alias store (it allocates the alias integers from the
+		     Mongo sequence - a second allocator would collide) and SERVES it to the
+		     cluster. The controller module brings gebo.acl.mongo with it. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.acl.controller</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Environment, RabbitMQ messaging bridge, topology and springdoc. -->
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>

@@ -2,7 +2,7 @@ package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.List;
 
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 
 /******************************************************************************
  * AI generated comments This interface can be implemented to restrict the
