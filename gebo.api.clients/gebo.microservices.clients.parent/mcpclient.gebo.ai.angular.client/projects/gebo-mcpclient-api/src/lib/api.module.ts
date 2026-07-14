@@ -12,7 +12,6 @@ import { JobStatusControllerService } from './api/jobStatusController.service';
 import { McpClientBrowsingControllerService } from './api/mcpClientBrowsingController.service';
 import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { McpClientSystemsControllerService } from './api/mcpClientSystemsController.service';
-import { SecretsControllerService } from './api/secretsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
@@ -29,7 +28,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     McpClientBrowsingControllerService,
     McpClientConfigControllerService,
     McpClientSystemsControllerService,
-    SecretsControllerService,
     WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {

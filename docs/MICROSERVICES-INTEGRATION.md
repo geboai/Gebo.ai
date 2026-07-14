@@ -886,15 +886,51 @@ the real work; the module carve is code motion.
    limitation — **login only ever happens on heimdall** — and it means a password hash
    cannot leave the owner even by accident.
 
-2. **`IGOauth2RuntimeConfigurationDao` — the one genuinely new pair.**
+2. **`IGOauth2RuntimeConfigurationDao` — the one genuinely new pair, and it is a RUNTIME
+   DAO, not a cached REST client.**
    `GHttpRequestAuthenticationManagerResolverImpl` needs it on *every* service to build
    the OAuth2 JWT/opaque-token managers, i.e. **to validate a user's provider token at
    all**; `GeboAISecurityConfig` reaches the same data through the Mongo repository
    directly. Consumers only ever **read** it (`findByProvider*`); `insert`/`delete` are
-   admin operations on heimdall. So: Mongo impl on the owner, **cached read-only REST
-   client** in `gebo.microservices.security.client`. Miss this and non-heimdall services
-   silently cannot authenticate OAuth2 users. (`gebo.architecture.mcp-clients` reads it
-   too, so brain needs it regardless.)
+   admin operations on heimdall. Miss this and non-heimdall services silently cannot
+   authenticate OAuth2 users. (`gebo.architecture.mcp-clients` reads it too.)
+
+   **Would this make token validation a per-request call? YES, if implemented naively —
+   and that is the trap.** `GAbstractRuntimeConfigurationDao` does **not** cache:
+   `getDynamicConfigs()` calls the source every time, and
+   `Oauth2RuntimeConfigurationSource.getConfigurations()` is `repo.findAll()`. Since
+   `GHttpRequestAuthenticationManagerResolverImpl.resolve(...)` runs **per request**, the
+   monolith today performs a full Mongo `findAll()` on **every OAuth2-authenticated
+   request** (a pre-existing inefficiency). A REST-backed DAO would amplify that into a
+   network round-trip to heimdall per request. Unacceptable.
+
+   **So the consumer's DAO must be memory-resident.** Hold the resolved configurations in
+   memory and refresh them on a **TTL of minutes** (`ai.gebo.security.client.oauth2-config-ttl`,
+   suggested 5m). Per request: zero network — the resolver reads the in-memory config, JWT
+   needs only `issuerUri` (and `JwtDecoderCache` already caches the decoder per issuer),
+   opaque reads clientId/secret from that same object. (Opaque still introspects against
+   the IdP per request; inherent to opaque tokens, unchanged from the monolith.)
+
+   **A TTL is sufficient here — no cluster event bus.** Changing an OAuth2 provider
+   registration is a rare administrative act, and a few minutes of propagation across the
+   cluster is acceptable. The window means: a newly added provider is recognised within the
+   TTL; a removed one is still trusted for up to the TTL; a rotated client secret makes
+   opaque introspection fail (fail-closed) until it refreshes. All bounded and acceptable
+   for an operation that happens rarely. This is a deliberate simplification over an
+   event-driven invalidation, which would be more machinery than the change rate justifies.
+
+   **The SP must strip the secret.** `Oauth2RuntimeConfiguration` is a `@Document` whose
+   `client` field (a `GeboOauth2SecretContent`, secret included) is persisted **inline** —
+   so naively serialising the config would ship the plaintext OAuth2 client secret to every
+   microservice. The SP sends `clientSecretId` only; the consumer resolves it through the
+   secrets client **at load time**, filling `client`. Once per refresh, never per request.
+
+   (Contrast the secrets client, which caches by id and is safe doing so: a secret's content
+   is **immutable under its id** — the admin surface creates and deletes, it never updates —
+   so rotating a key produces a NEW id, i.e. a new cache key. The one in-place mutation is
+   `GOauth2ConfigurationServiceImpl` rewriting the OAuth2 client secret under the same id on
+   heimdall; that propagates to consumers within the secrets TTL, which the same rarity
+   argument makes acceptable.)
 
 **API keys are NOT a third pair, and are already extracted (DONE).** A generated key
 *is* a `LOCAL_JWT`, so a service validating one needs **no lookup** — it verifies the

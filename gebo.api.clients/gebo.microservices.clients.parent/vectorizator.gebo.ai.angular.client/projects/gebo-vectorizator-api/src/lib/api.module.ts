@@ -17,7 +17,6 @@ import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileT
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
-import { SecretsControllerService } from './api/secretsController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
@@ -41,7 +40,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     JobLauncherControllerService,
     JobStatusControllerService,
     RankerModelsControllerService,
-    SecretsControllerService,
     TextToSpeechModelsControllerService,
     TranscriptModelsControllerService,
     WorkflowStatsAdminLevelControllerService ]

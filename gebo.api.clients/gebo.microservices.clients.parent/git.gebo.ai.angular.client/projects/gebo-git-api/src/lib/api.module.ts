@@ -10,7 +10,6 @@ import { GitSystemsControllerService } from './api/gitSystemsController.service'
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
-import { SecretsControllerService } from './api/secretsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
@@ -25,7 +24,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     IngestionFileTypesLibraryControllerService,
     JobLauncherControllerService,
     JobStatusControllerService,
-    SecretsControllerService,
     WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {

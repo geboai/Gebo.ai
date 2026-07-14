@@ -11,7 +11,6 @@ import { JiraBrowsingControllerService } from './api/jiraBrowsingController.serv
 import { JiraSystemsControllerService } from './api/jiraSystemsController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
-import { SecretsControllerService } from './api/secretsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
@@ -27,7 +26,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     JiraSystemsControllerService,
     JobLauncherControllerService,
     JobStatusControllerService,
-    SecretsControllerService,
     WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {

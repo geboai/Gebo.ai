@@ -9,7 +9,6 @@ import { GenericalPublisherControllerService } from './api/genericalPublisherCon
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
-import { SecretsControllerService } from './api/secretsController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
@@ -25,7 +24,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     IngestionFileTypesLibraryControllerService,
     JobLauncherControllerService,
     JobStatusControllerService,
-    SecretsControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
     WorkflowStatsAdminLevelControllerService ]

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ResetContentResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-13T14:54:32.470485600+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-14T23:59:08.384454600+02:00[Europe/Rome]")
 
 public class ResetContentResponse {
   @JsonProperty("resetEntries")

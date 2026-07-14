@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
+import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
@@ -61,6 +62,28 @@ import tools.jackson.databind.ObjectMapper;
  * on, which is not necessarily the caller's.
  * </p>
  *
+ * <h2>Reads are cached, and safely so</h2>
+ * <p>
+ * A secret's content is <b>immutable under its id</b>: the admin surface creates and
+ * deletes, it never updates. Rotating a key means a NEW secret with a NEW id, which is a
+ * different cache key - so a cache can never return superseded content for an id, because
+ * the id whose content changed does not exist. That is what makes caching sound here even
+ * though a resolved key then lives for hours inside an in-memory chat model (an LLM key is
+ * read once, at {@code configureModel(...)}, not per call).
+ * </p>
+ *
+ * <p>
+ * What is held is the <b>ciphertext</b> off the wire; the plaintext is never retained. A
+ * write through this client clears the cache at once.
+ * </p>
+ *
+ * <p>
+ * <b>The one exception:</b> {@code GOauth2ConfigurationServiceImpl} rewrites an OAuth2
+ * client secret <i>in place, under the same id</i>, and it does so on heimdall - so this
+ * cache never learns of it. That rotation must be propagated by the same event that
+ * reloads the OAuth2 runtime configuration, not waited out on this TTL.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessService {
@@ -78,10 +101,12 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 	private final IGeboCryptingService cryptService;
 	private final String microserviceId;
 	private final String basePath;
+	/** Caches the CIPHERTEXT as it came off the wire; plaintext is never retained. */
+	private final GeboTtlCache cache;
 
 	public GeboSecretsAccessServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, ObjectMapper mapper, IGeboCryptingService cryptService,
-			String microserviceId, String basePath) {
+			String microserviceId, String basePath, GeboTtlCache cache) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
 		this.tokenPropagator = tokenPropagator;
@@ -89,6 +114,7 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 		this.cryptService = cryptService;
 		this.microserviceId = microserviceId;
 		this.basePath = trimSlashes(basePath);
+		this.cache = cache;
 	}
 
 	@Override
@@ -142,38 +168,44 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 		GeboSecretStoreRequest request = storeRequest(secret, description, contextCode, code);
 		call("updateSecret", () -> webClient.post().uri(uri("updateSecret")).headers(this::applyCallerToken)
 				.contentType(MediaType.APPLICATION_JSON).bodyValue(request).retrieve().toBodilessEntity().block());
+		// Our own write must be visible to us at once: waiting out the TTL to see a secret
+		// we just changed would be indefensible.
+		cache.clear();
 	}
 
 	@Override
 	public void deleteSecret(String code) throws GeboCryptSecretException {
 		call("deleteSecret", () -> webClient.delete().uri(uri("deleteSecret", "code", code))
 				.headers(this::applyCallerToken).retrieve().toBodilessEntity().block());
+		cache.clear();
 	}
 
 	@Override
 	public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws GeboCryptSecretException {
-		SecretInfo[] infos = call("getSecretInfoByContextCode",
+		SecretInfo[] infos = cache.getChecked("infoByContext:" + contextCode, () -> call("getSecretInfoByContextCode",
 				() -> webClient.get().uri(uri("getSecretInfoByContextCode", "contextCode", contextCode))
 						.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
-						.bodyToMono(SecretInfo[].class).block());
+						.bodyToMono(SecretInfo[].class).block()));
 		return infos == null ? List.of() : List.of(infos);
 	}
 
 	@Override
 	public SecretInfo getSecretInfoById(String code) throws GeboCryptSecretException {
 		// Mirrors the local implementation: an unknown id yields null, it is not an error.
-		return call("getSecretInfoById", () -> webClient.get().uri(uri("getSecretInfoById", "code", code))
-				.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
-				.bodyToMono(SecretInfo.class).block());
+		return cache.getChecked("infoById:" + code, () -> call("getSecretInfoById",
+				() -> webClient.get().uri(uri("getSecretInfoById", "code", code)).headers(this::applyCallerToken)
+						.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(SecretInfo.class).block()));
 	}
 
 	// --- Internals ----------------------------------------------------------
 
 	private GeboSecretContentEnvelope fetchContent(String id) throws GeboCryptSecretException {
-		GeboSecretContentEnvelope envelope = call("getSecretContentById",
+		// The cached value is the ENCRYPTED envelope, not the secret: decryption happens
+		// per call, below, and the plaintext is never held.
+		GeboSecretContentEnvelope envelope = cache.getChecked("content:" + id, () -> call("getSecretContentById",
 				() -> webClient.get().uri(uri("getSecretContentById", "id", id)).headers(this::applyCallerToken)
 						.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(GeboSecretContentEnvelope.class)
-						.block());
+						.block()));
 		if (envelope == null || envelope.getCryptedContent() == null) {
 			throw new GeboCryptSecretException("Unkown secret with code=>" + id);
 		}
@@ -193,9 +225,11 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 	private <SecretType extends AbstractGeboSecretContent> String store(SecretType secret, String description,
 			String contextCode, String secretId) throws GeboCryptSecretException {
 		GeboSecretStoreRequest request = storeRequest(secret, description, contextCode, secretId);
-		return call("storeSecret", () -> webClient.post().uri(uri("storeSecret")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).bodyValue(request).retrieve()
-				.bodyToMono(String.class).block());
+		String stored = call("storeSecret", () -> webClient.post().uri(uri("storeSecret"))
+				.headers(this::applyCallerToken).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.TEXT_PLAIN).bodyValue(request).retrieve().bodyToMono(String.class).block());
+		cache.clear();
+		return stored;
 	}
 
 	private <SecretType extends AbstractGeboSecretContent> GeboSecretStoreRequest storeRequest(SecretType secret,

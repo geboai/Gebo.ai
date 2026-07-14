@@ -10,11 +10,8 @@
 package ai.gebo.microservices.acl.client;
 
 import java.net.URI;
-import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
@@ -30,6 +27,7 @@ import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
+import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 
 /**
@@ -82,20 +80,19 @@ public class RestAclAliasesDao implements IAclAliasesDao {
 	private final IGeboCallerTokenPropagator tokenPropagator;
 	private final String microserviceId;
 	private final String basePath;
-	private final long cacheTtlMillis;
 
-	/** key -> (value, expiry). A null value is cached too: "no such alias" is an answer. */
-	private final Map<String, CacheEntry> cache = new ConcurrentHashMap<>();
+	/** The shared cluster-client cache - one implementation across secrets, security and ACL. */
+	private final GeboTtlCache cache;
 
 	public RestAclAliasesDao(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, String microserviceId, String basePath,
-			Duration cacheTtl) {
+			GeboTtlCache cache) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
 		this.tokenPropagator = tokenPropagator;
 		this.microserviceId = microserviceId;
 		this.basePath = trimSlashes(basePath);
-		this.cacheTtlMillis = cacheTtl == null ? 0L : Math.max(0L, cacheTtl.toMillis());
+		this.cache = cache;
 	}
 
 	// --- Reads (cached) -----------------------------------------------------
@@ -131,27 +128,23 @@ public class RestAclAliasesDao implements IAclAliasesDao {
 	}
 
 	/**
-	 * Cached <b>without expiry</b>: an alias, once allocated, always denotes the same
-	 * grant. There is nothing to go stale.
+	 * Cached like the rest, though it could safely be held forever: an alias, once
+	 * allocated, always denotes the same grant, so there is nothing here to go stale. It
+	 * shares the TTL only because one cache with one policy is easier to reason about
+	 * than two, and re-reading an immutable value costs nothing but a round trip.
 	 */
 	@Override
 	public GAclEntry findAcl(int alias) {
-		String key = "acl:" + alias;
-		CacheEntry hit = cache.get(key);
-		if (hit != null) {
-			return (GAclEntry) hit.value;
-		}
-		GAclEntry entry = call("findAcl", () -> webClient.get().uri(uri("findAcl", "alias", String.valueOf(alias)))
-				.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
-				.bodyToMono(GAclEntry.class).block());
-		cache.put(key, new CacheEntry(entry, Long.MAX_VALUE));
-		return entry;
+		return cache.get("acl:" + alias,
+				() -> call("findAcl", () -> webClient.get().uri(uri("findAcl", "alias", String.valueOf(alias)))
+						.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
+						.bodyToMono(GAclEntry.class).block()));
 	}
 
 	@Override
 	public Integer findAlias(GAclEntry entry) {
 		String key = "alias:" + entry.getAclGrantedUniqueId() + ":" + entry.getGrant();
-		return cached(key, () -> call("findAlias",
+		return cache.get(key, () -> call("findAlias",
 				() -> webClient.post().uri(uri("findAlias")).headers(this::applyCallerToken)
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(entry)
 						.retrieve().bodyToMono(Integer.class).block()));
@@ -187,20 +180,8 @@ public class RestAclAliasesDao implements IAclAliasesDao {
 
 	// --- Internals ----------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
-	private <T> T cached(String key, Supplier<T> loader) {
-		long now = System.currentTimeMillis();
-		CacheEntry hit = cache.get(key);
-		if (hit != null && hit.expiresAt > now) {
-			return (T) hit.value;
-		}
-		T value = loader.get();
-		cache.put(key, new CacheEntry(value, cacheTtlMillis <= 0 ? 0 : now + cacheTtlMillis));
-		return value;
-	}
-
 	private List<Integer> cachedList(String key, Supplier<List<Integer>> loader) {
-		List<Integer> value = cached(key, loader);
+		List<Integer> value = cache.get(key, loader);
 		return value == null ? List.of() : value;
 	}
 
@@ -269,13 +250,4 @@ public class RestAclAliasesDao implements IAclAliasesDao {
 		return trimmed;
 	}
 
-	private static final class CacheEntry {
-		final Object value;
-		final long expiresAt;
-
-		CacheEntry(Object value, long expiresAt) {
-			this.value = value;
-			this.expiresAt = expiresAt;
-		}
-	}
 }

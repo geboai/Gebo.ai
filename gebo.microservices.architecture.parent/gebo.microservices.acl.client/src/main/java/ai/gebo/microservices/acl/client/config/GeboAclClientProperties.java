@@ -51,6 +51,17 @@ public class GeboAclClientProperties {
 	 */
 	private Duration cacheTtl = Duration.ofSeconds(60);
 
+	/** Hard bound on cached alias lookups; past it the cache is emptied rather than grown. */
+	private int cacheMaxEntries = 10000;
+
+	public int getCacheMaxEntries() {
+		return cacheMaxEntries;
+	}
+
+	public void setCacheMaxEntries(int cacheMaxEntries) {
+		this.cacheMaxEntries = cacheMaxEntries;
+	}
+
 	public String getMicroserviceId() {
 		return microserviceId;
 	}

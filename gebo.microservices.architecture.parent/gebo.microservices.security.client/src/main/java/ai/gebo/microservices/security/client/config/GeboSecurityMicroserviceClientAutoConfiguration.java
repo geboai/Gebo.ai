@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
+import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.security.client.RestSecurityDirectory;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
@@ -66,6 +67,7 @@ public class GeboSecurityMicroserviceClientAutoConfiguration {
 			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
 			GeboSecurityClientProperties properties) {
 		return new RestSecurityDirectory(geboSecurityClientWebClient, urlResolver, tokenPropagator,
-				properties.getMicroserviceId(), properties.getBasePath());
+				properties.getMicroserviceId(), properties.getBasePath(),
+				new GeboTtlCache(properties.getCacheTtl(), properties.getCacheMaxEntries()));
 	}
 }

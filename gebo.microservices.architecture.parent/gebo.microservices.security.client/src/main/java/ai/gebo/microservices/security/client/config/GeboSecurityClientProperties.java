@@ -9,6 +9,7 @@
 
 package ai.gebo.microservices.security.client.config;
 
+import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -49,8 +50,40 @@ public class GeboSecurityClientProperties {
 	 */
 	private String basePath = "api/cluster/SecurityController";
 
+	/**
+	 * How long an identity lookup (user, groups) is cached, keyed by the presented
+	 * credential.
+	 *
+	 * <p>
+	 * This is the staleness dial. A role or group change made on heimdall is visible
+	 * here within this window - including a <i>revocation</i>. Without it, a busy service
+	 * asks heimdall who the caller is on every single request. A password check is never
+	 * cached, at any TTL.
+	 * </p>
+	 */
+	private Duration cacheTtl = Duration.ofSeconds(60);
+
+	/** Hard bound on cached identities; past it the cache is emptied rather than grown. */
+	private int cacheMaxEntries = 10000;
+
 	/** Arbitrary extra headers added to every request (tenant, correlation, ...). */
 	private Map<String, String> headers = new LinkedHashMap<>();
+
+	public Duration getCacheTtl() {
+		return cacheTtl;
+	}
+
+	public void setCacheTtl(Duration cacheTtl) {
+		this.cacheTtl = cacheTtl;
+	}
+
+	public int getCacheMaxEntries() {
+		return cacheMaxEntries;
+	}
+
+	public void setCacheMaxEntries(int cacheMaxEntries) {
+		this.cacheMaxEntries = cacheMaxEntries;
+	}
 
 	public String getMicroserviceId() {
 		return microserviceId;

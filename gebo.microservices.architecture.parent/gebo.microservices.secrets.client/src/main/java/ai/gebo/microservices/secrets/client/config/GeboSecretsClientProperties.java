@@ -9,6 +9,7 @@
 
 package ai.gebo.microservices.secrets.client.config;
 
+import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -57,8 +58,61 @@ public class GeboSecretsClientProperties {
 	 * (IGeboSystemUserService), configured under ai.gebo.security.system-user.
 	 */
 
+	/**
+	 * How long a secret read is cached, keyed by secret id.
+	 *
+	 * <h2>Why this is safe: a secret's content is immutable under its id</h2>
+	 * <p>
+	 * The admin surface offers {@code create} and {@code delete} - <b>there is no update
+	 * endpoint</b>. Rotating an LLM key means creating a NEW secret, with a new id, and
+	 * pointing the model configuration at it. That is a different cache key, so a
+	 * different lookup: a cache can never hand back the old content for an id whose
+	 * content changed, because no such id exists. This is what makes caching by id sound
+	 * even though a resolved key then lives for hours inside an in-memory chat model.
+	 * </p>
+	 *
+	 * <h2>The one exception, and it is real</h2>
+	 * <p>
+	 * {@code updateSecret} - rewriting an EXISTING id in place - has exactly two callers.
+	 * {@code GeboGoogleWorkspaceCredentialsService} runs on the consumer itself, so its
+	 * own write clears its own cache. But
+	 * {@code GOauth2ConfigurationServiceImpl.updateOauth2Configuration} rewrites the
+	 * <b>OAuth2 client secret under the same id</b>, and it runs on <b>heimdall</b> - so a
+	 * consumer's cache never learns of it and would serve the superseded secret until this
+	 * TTL expires.
+	 * </p>
+	 *
+	 * <p>
+	 * That path must therefore be invalidated by an <b>event</b>, not waited out: the same
+	 * admin action already has to broadcast a reload of the OAuth2 runtime configuration
+	 * (see MICROSERVICES-INTEGRATION.md P4.3), and that broadcast must clear this cache
+	 * too. One event, two invalidations. Until it exists, an OAuth2 client-secret rotation
+	 * is honoured within this window rather than immediately.
+	 * </p>
+	 */
+	private Duration cacheTtl = Duration.ofSeconds(60);
+
+	/** Hard bound on cached secrets; past it the cache is emptied rather than grown. */
+	private int cacheMaxEntries = 2000;
+
 	/** Arbitrary extra headers added to every request (tenant, correlation, ...). */
 	private Map<String, String> headers = new LinkedHashMap<>();
+
+	public Duration getCacheTtl() {
+		return cacheTtl;
+	}
+
+	public void setCacheTtl(Duration cacheTtl) {
+		this.cacheTtl = cacheTtl;
+	}
+
+	public int getCacheMaxEntries() {
+		return cacheMaxEntries;
+	}
+
+	public void setCacheMaxEntries(int cacheMaxEntries) {
+		this.cacheMaxEntries = cacheMaxEntries;
+	}
 
 	/**
 	 * Maximum in-memory buffer (bytes) for a single response body. Secret contents

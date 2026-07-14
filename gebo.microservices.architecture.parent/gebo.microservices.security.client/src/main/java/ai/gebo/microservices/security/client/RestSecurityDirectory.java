@@ -28,6 +28,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
+import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
@@ -47,16 +48,36 @@ import ai.gebo.security.services.IGSecurityDirectory;
  * decide who may read what, not two.
  * </p>
  *
- * <h2>The cache is not an optimisation</h2>
+ * <h2>Two cache layers, and neither is an optimisation</h2>
  * <p>
- * {@code filterCanDoAction(...)} calls {@code getCurrentUser()} once per object in
- * the collection, and {@code isCanAccess(...)} looks the user's groups up every
- * time. Without caching, filtering a page of 50 documents would issue ~100 HTTP
- * calls to heimdall. The lookups are therefore memoised for the duration of the
- * <b>current request</b> (or, off a request thread, for the duration of a single
- * call chain via a thread-local): one request resolves the identity once. A
- * request-scoped lifetime is also what keeps it correct - a user's groups changing
- * takes effect on their next request, and nothing is cached across users.
+ * <b>L1, request-scoped.</b> {@code filterCanDoAction(...)} calls
+ * {@code getCurrentUser()} once per object in the collection, and
+ * {@code isCanAccess(...)} looks the user's groups up every time. Without memoising,
+ * filtering a page of 50 documents would issue ~100 lookups. L1 also guarantees a
+ * request sees ONE consistent identity - no torn read half-way through a filter.
+ * </p>
+ *
+ * <p>
+ * <b>L2, TTL, across requests.</b> L1 alone still means one call to heimdall per
+ * request - and once the token-to-principal step goes through the directory too, that
+ * is a call on <i>every authenticated request the service serves</i>. L2 makes the
+ * same identity cost one lookup per TTL instead of one per request.
+ * </p>
+ *
+ * <p>
+ * L2 is keyed on a hash of the <b>presented token</b>, not on the username. That binds
+ * the cached roles to the credential that produced them: a different token - reissued,
+ * or a different user's - is a different key and forces a fresh lookup. It keys
+ * uniformly across LOCAL_JWT, OAuth2 JWT and opaque tokens, because by the time the
+ * directory is asked each has already been validated down to a principal.
+ * </p>
+ *
+ * <p>
+ * The price: a role or group change made on heimdall is visible here within the TTL,
+ * not instantly (default 60s, {@code ai.gebo.security.client.cache-ttl}). Shorten it if
+ * a deployment cannot tolerate a stale revocation for that long. {@code checkPassword}
+ * is never cached in either layer - it is an authentication decision about a value the
+ * caller just supplied, not a fact about the user.
  * </p>
  *
  * Gebo.ai comment agent
@@ -76,38 +97,47 @@ public class RestSecurityDirectory implements IGSecurityDirectory {
 	private final IGeboCallerTokenPropagator tokenPropagator;
 	private final String microserviceId;
 	private final String basePath;
+	/** L2: survives across requests, keyed by the presented credential. */
+	private final GeboTtlCache cache;
 
 	public RestSecurityDirectory(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			IGeboCallerTokenPropagator tokenPropagator, String microserviceId, String basePath) {
+			IGeboCallerTokenPropagator tokenPropagator, String microserviceId, String basePath,
+			GeboTtlCache cache) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
 		this.tokenPropagator = tokenPropagator;
 		this.microserviceId = microserviceId;
 		this.basePath = trimSlashes(basePath);
+		this.cache = cache;
 	}
 
 	@Override
 	public UserInfos findUserByUsername(String username) {
-		return cached("user:" + username, () -> call("findUserByUsername",
-				() -> webClient.get().uri(uri("findUserByUsername", "username", username))
-						.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
-						.bodyToMono(UserInfosImpl.class).block()));
+		// L1 (this request) -> L2 (this credential, for the TTL) -> heimdall.
+		return cached("user:" + username,
+				() -> cache.get(credentialKey("user:" + username), () -> call("findUserByUsername",
+						() -> webClient.get().uri(uri("findUserByUsername", "username", username))
+								.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
+								.bodyToMono(UserInfosImpl.class).block())));
 	}
 
 	@Override
 	public List<UsersGroup> findGroupsOfUser(String username) {
 		UsersGroup[] groups = cached("groupsOf:" + username,
-				() -> call("findGroupsOfUser", () -> webClient.get()
-						.uri(uri("findGroupsOfUser", "username", username)).headers(this::applyCallerToken)
-						.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(UsersGroup[].class).block()));
+				() -> cache.get(credentialKey("groupsOf:" + username), () -> call("findGroupsOfUser",
+						() -> webClient.get().uri(uri("findGroupsOfUser", "username", username))
+								.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
+								.bodyToMono(UsersGroup[].class).block())));
 		return groups == null ? List.of() : List.of(groups);
 	}
 
 	@Override
 	public List<UsersGroup> findAllGroups() {
-		UsersGroup[] groups = cached("allGroups", () -> call("findAllGroups",
-				() -> webClient.get().uri(uri("findAllGroups")).headers(this::applyCallerToken)
-						.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(UsersGroup[].class).block()));
+		UsersGroup[] groups = cached("allGroups",
+				() -> cache.get(credentialKey("allGroups"), () -> call("findAllGroups",
+						() -> webClient.get().uri(uri("findAllGroups")).headers(this::applyCallerToken)
+								.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(UsersGroup[].class)
+								.block())));
 		return groups == null ? List.of() : List.of(groups);
 	}
 
@@ -182,6 +212,18 @@ public class RestSecurityDirectory implements IGSecurityDirectory {
 				OFF_REQUEST_CACHE.remove();
 			}
 		}
+	}
+
+	/**
+	 * The L2 key: the lookup, scoped to the credential it was made with.
+	 *
+	 * <p>
+	 * Two callers presenting different tokens never share an entry, even for the same
+	 * username - so a cached identity can never outlive the credential that earned it.
+	 * </p>
+	 */
+	private String credentialKey(String lookup) {
+		return GeboTtlCache.tokenKey(tokenPropagator.currentToken()) + "|" + lookup;
 	}
 
 	/** Adds the caller's bearer token, read on this - the calling - thread. */

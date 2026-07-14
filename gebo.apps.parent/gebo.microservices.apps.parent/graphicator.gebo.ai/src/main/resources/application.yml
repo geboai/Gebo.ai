@@ -29,3 +29,14 @@ eureka:
     virtual-host-name: graphicator-gebo-ai
     secure-virtual-host-name: graphicator-gebo-ai
     prefer-ip-address: true
+
+# ---------------------------------------------------------------------------
+# MongoDB database. The SERVER (host, credentials) comes from the shared config;
+# the DATABASE is chosen here, per service.
+# brain, vectorizator and graphicator are ONE workflow group over ONE store: the
+# vectorizator writes embeddings and the graphicator writes graph data against the
+# knowledge base brain owns. Splitting them apart would put a document and the
+# vectors derived from it in different databases.
+# ---------------------------------------------------------------------------
+ai.gebo.mongodb:
+  databaseName: brain-gebo

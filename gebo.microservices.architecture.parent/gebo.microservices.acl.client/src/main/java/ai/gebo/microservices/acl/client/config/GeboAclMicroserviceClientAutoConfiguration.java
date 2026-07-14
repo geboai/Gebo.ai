@@ -19,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.microservices.acl.client.RestAclAliasesDao;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
+import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfiguration;
@@ -54,6 +55,7 @@ public class GeboAclMicroserviceClientAutoConfiguration {
 			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
 			GeboAclClientProperties properties) {
 		return new RestAclAliasesDao(geboAclClientWebClient, urlResolver, tokenPropagator,
-				properties.getMicroserviceId(), properties.getBasePath(), properties.getCacheTtl());
+				properties.getMicroserviceId(), properties.getBasePath(),
+				new GeboTtlCache(properties.getCacheTtl(), properties.getCacheMaxEntries()));
 	}
 }

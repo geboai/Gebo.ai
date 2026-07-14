@@ -74,11 +74,25 @@ ai.gebo.config:
   customKeyStore: false
   enableCommunityModules: true
 
-# MongoDB (shared metadata store).
+# MongoDB - the SERVER, shared; the DATABASE, not.
+#
+# databaseName is deliberately ABSENT here. This file is an additional-location, so it
+# OUTRANKS every service's baked application.yml: a databaseName set here would silently
+# force all 17 services back onto one database, which is exactly what we are moving away
+# from. Each service names its own database in its own application.yml:
+#
+#   brain / vectorizator / graphicator  ->  brain-gebo   (one workflow group, one store:
+#                                                         the vectorizator and graphicator
+#                                                         write embeddings and graph data
+#                                                         against brain's knowledge base)
+#   every other service                 ->  <service>-gebo
+#
+# The connection string's trailing /db is ignored - Spring selects the database from
+# getDatabaseName(), not from the URI - but it is left generic so nothing reads as if it
+# pinned a database.
 ai.gebo.mongodb:
   enabled: true
-  databaseName: gebo-ai
-  connectionString: mongodb://mongoroot:mongopwd@mongo:27017/gebo-ai?authSource=admin
+  connectionString: mongodb://mongoroot:mongopwd@mongo:27017/?authSource=admin
 
 # Qdrant vector store (used by the RAG / vectorizator / brain services).
 ai.gebo.vectorstore:
@@ -163,5 +177,39 @@ ai.gebo.security.system-user:
 #  microservice-id: heimdall_gebo_ai
 #  base-path: api/cluster/SecretsController
 # ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Cluster-client caches. These are the DEFAULTS, spelled out because they are the
+# staleness dials of the whole split - not because they must be set.
+#
+# Each is the window in which a change made on heimdall becomes visible here. They
+# exist because these reads are on the hot path: getCurrentUser() runs on every
+# authenticated request (and once per OBJECT inside filterCanDoAction), and every
+# authorization decision reads ACL aliases. Without them a busy service calls heimdall
+# per request.
+#
+# What each window costs you:
+#   security  a role change or a disable takes up to the TTL to be honoured
+#   acl       a grant or a REVOCATION takes up to the TTL to be honoured
+#   secrets   almost nothing: a secret's content is immutable under its id (the admin
+#             surface creates and deletes, it never updates), so rotating a key yields a
+#             NEW id - a different cache key. The one exception is the OAuth2 client
+#             secret, which GOauth2ConfigurationServiceImpl rewrites in place on heimdall.
+#
+# A write made THROUGH a client clears that client's own cache at once, so a service
+# always sees its own changes immediately. Only another service's changes wait.
+#
+# Shorten these if a deployment cannot tolerate a stale revocation for that long; the
+# cost is more traffic to heimdall on data that is read constantly.
+# ---------------------------------------------------------------------------
+ai.gebo.security.client:
+  cache-ttl: 60s
+  cache-max-entries: 10000
+ai.gebo.acl.client:
+  cache-ttl: 60s
+  cache-max-entries: 10000
+ai.gebo.secrets.client:
+  cache-ttl: 60s
+  cache-max-entries: 2000
 
 reactor.schedulers.defaultPoolSize: 16
