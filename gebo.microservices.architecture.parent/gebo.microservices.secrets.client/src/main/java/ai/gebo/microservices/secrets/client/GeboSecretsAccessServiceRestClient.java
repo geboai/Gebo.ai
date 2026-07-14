@@ -23,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
@@ -70,16 +71,22 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 	private final GeboMicroserviceUrlResolver urlResolver;
 	private final IGeboCallerTokenPropagator tokenPropagator;
 	private final ObjectMapper mapper;
+	/**
+	 * Decryption and encryption happen HERE, not on the secrets service. The wire only
+	 * ever carries ciphertext; this is what turns it back into a secret.
+	 */
+	private final IGeboCryptingService cryptService;
 	private final String microserviceId;
 	private final String basePath;
 
 	public GeboSecretsAccessServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			IGeboCallerTokenPropagator tokenPropagator, ObjectMapper mapper, String microserviceId,
-			String basePath) {
+			IGeboCallerTokenPropagator tokenPropagator, ObjectMapper mapper, IGeboCryptingService cryptService,
+			String microserviceId, String basePath) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
 		this.tokenPropagator = tokenPropagator;
 		this.mapper = mapper;
+		this.cryptService = cryptService;
 		this.microserviceId = microserviceId;
 		this.basePath = trimSlashes(basePath);
 	}
@@ -100,8 +107,11 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 	 *
 	 * <p>
 	 * The concrete {@link GeboCustomSecretContent} subclass is a <i>caller-side</i>
-	 * type - the secrets microservice has never heard of it - so the content comes
-	 * back as the verbatim stored JSON and is deserialised into {@code type} here.
+	 * type - the secrets service has never heard of it. Because the ciphertext arrives
+	 * untouched, decrypting it yields the stored JSON <b>verbatim</b>, so deserialising
+	 * into {@code type} recovers every subclass field. A service that decrypted on the
+	 * caller's behalf would have had to pick a class to hand back, and any choice but
+	 * this one silently drops those fields.
 	 * </p>
 	 */
 	@Override
@@ -164,15 +174,17 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 				() -> webClient.get().uri(uri("getSecretContentById", "id", id)).headers(this::applyCallerToken)
 						.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(GeboSecretContentEnvelope.class)
 						.block());
-		if (envelope == null || envelope.getContentJson() == null) {
+		if (envelope == null || envelope.getCryptedContent() == null) {
 			throw new GeboCryptSecretException("Unkown secret with code=>" + id);
 		}
 		return envelope;
 	}
 
+	/** Decrypts the transported ciphertext, then reads the JSON it yields into {@code type}. */
 	private <T> T readContent(GeboSecretContentEnvelope envelope, Class<T> type) throws GeboCryptSecretException {
+		String json = cryptService.decrypt(envelope.getCryptedContent());
 		try {
-			return mapper.readValue(envelope.getContentJson(), type);
+			return mapper.readValue(json, type);
 		} catch (JacksonException e) {
 			throw new GeboCryptSecretException("Cannot read from secret json format", e);
 		}
@@ -197,7 +209,9 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 		request.setSecretId(secretId);
 		request.setSecretType(secret.type());
 		try {
-			request.setContentJson(mapper.writeValueAsString(secret));
+			// Sealed here, before it leaves: the owner stores what we send and never sees
+			// the plaintext.
+			request.setCryptedContent(cryptService.crypt(mapper.writeValueAsString(secret)));
 		} catch (JacksonException e) {
 			throw new GeboCryptSecretException("exception while running storeSecret(...)", e);
 		}

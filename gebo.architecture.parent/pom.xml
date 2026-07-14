@@ -60,5 +60,6 @@
 
   	<module>gebo.secrets.impl</module>
   	<module>gebo.security.directory.mongo</module>
+  	<module>gebo.architecture.security.apikey</module>
   </modules>
 </project>

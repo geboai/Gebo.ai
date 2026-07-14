@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.secrets.client.GeboSecretsAccessServiceRestClient;
@@ -78,8 +79,8 @@ public class GeboSecretsMicroserviceClientAutoConfiguration {
 	public IGeboSecretsAccessService geboSecretsAccessServiceRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecretsClientWebClient,
 			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
-			ObjectMapper objectMapper, GeboSecretsClientProperties properties) {
+			ObjectMapper objectMapper, IGeboCryptingService cryptService, GeboSecretsClientProperties properties) {
 		return new GeboSecretsAccessServiceRestClient(geboSecretsClientWebClient, urlResolver, tokenPropagator,
-				objectMapper, properties.getMicroserviceId(), properties.getBasePath());
+				objectMapper, cryptService, properties.getMicroserviceId(), properties.getBasePath());
 	}
 }

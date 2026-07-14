@@ -120,11 +120,13 @@ services:
     networks: [gebo-net]
 
   # ---------------- Security service ----------------
-  # heimdall keeps the secrets: it is the only service that holds the crypting keys
-  # and the only one that ever decrypts secret material. Everyone else reaches it
-  # through gebo.microservices.secrets.client, which speaks to
-  # api/cluster/SecretsController - a surface heimdall serves ONLY to callers whose
-  # address is that of an instance currently registered in Eureka.
+  # heimdall keeps the secrets - but note it is NOT the only holder of the crypting
+  # keys, and it never decrypts on a caller's behalf. The keystore is shared (bundled,
+  # or pointed at by configuration), so the cluster surface hands back the STORED
+  # CIPHERTEXT and the caller decrypts locally. No secret is ever in the clear on the
+  # network. Everyone else reaches it through gebo.microservices.secrets.client, which
+  # speaks to api/cluster/SecretsController - a surface heimdall serves ONLY to callers
+  # whose address is that of an instance currently registered in Eureka.
   #
   # So the eureka dependency it already inherits from *microservice is load-bearing
   # here in a way it is not elsewhere: with the registry unreachable heimdall knows of

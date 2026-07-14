@@ -52,6 +52,16 @@
 			<artifactId>gebo.secrets.services</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- GeboSecretRepository. The cluster surface moves the STORED ciphertext, so it
+		     reads and writes the repository directly: IGeboSecretsAccessService's contract
+		     is to hand back DECRYPTED content, which is exactly what must never happen
+		     here. Depending on the owner's impl is also what enforces "you may only serve
+		     the secrets if you own them" - the same rule as the ACL and directory SPs. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- GeboMicroservicesTopology: the set of microservice ids whose registered
 		     instances are allowed to call these endpoints. -->
 		<dependency>

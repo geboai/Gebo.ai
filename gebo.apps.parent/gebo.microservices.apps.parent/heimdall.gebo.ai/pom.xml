@@ -10,10 +10,12 @@
 	<artifactId>heimdall.gebo.ai</artifactId>
 
 	<!--
-	  The security microservice. It owns the secrets: it is the only service that
-	  holds the crypting keys and the only one that ever decrypts secret material.
-	  Every other service reaches it through gebo.microservices.secrets.client,
-	  which implements the same IGeboSecretsAccessService interface over REST.
+	  The security microservice. It owns the secret STORE - though not, note, a
+	  monopoly on the crypting keys: the keystore is shared, so the cluster surface
+	  moves the stored ciphertext and each caller decrypts locally. heimdall never
+	  decrypts on anyone's behalf, and no secret is ever in the clear on the network.
+	  Every other service reaches it through gebo.microservices.secrets.client, which
+	  implements the same IGeboSecretsAccessService interface over REST.
 
 	  Today it hosts the secrets responsibility; the AuthN/AuthZ + OAuth2 stack
 	  (gebo.architecture.security) is what it grows into next - hence the topology
@@ -69,6 +71,26 @@
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.acl.controller</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The 10 auth controllers: JWT login (AuthController), token renewal, the
+		     OAuth2 admin/handshake surface, users and user workflows. THIS is what makes
+		     heimdall the security service rather than merely its keeper: without them it
+		     holds the user store but cannot issue or refresh a human token.
+
+		     Owner-only, like the store they front - a microservice has no login endpoint
+		     and must not grow one. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Generated API keys (model + repository + service + the two controllers).
+		     Owner-only: a key IS a LOCAL_JWT, so nothing on the request path needs the
+		     key store - only minting, listing and revoking do, and those are admin acts. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security.apikey</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Environment, RabbitMQ messaging bridge, topology and springdoc. -->

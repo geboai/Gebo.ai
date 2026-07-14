@@ -25,8 +25,8 @@ import ai.gebo.microservices.cluster.ClusterParticipantsOnlyInterceptor;
 import ai.gebo.microservices.cluster.GeboClusterParticipants;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.secrets.controller.SecretsClusterController;
+import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import tools.jackson.databind.ObjectMapper;
 
 /**
  * Publishes the cluster-only secrets endpoints on the service that <b>hosts</b>
@@ -67,9 +67,12 @@ public class GeboSecretsClusterControllerAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public SecretsClusterController secretsClusterController(IGeboSecretsAccessService secretsService,
-			ObjectMapper objectMapper) {
-		return new SecretsClusterController(secretsService, objectMapper);
+	public SecretsClusterController secretsClusterController(GeboSecretRepository repository,
+			IGeboSecretsAccessService secretsService) {
+		// The repository, not just the service: the cluster surface must move the STORED
+		// ciphertext, and IGeboSecretsAccessService's contract is to hand back decrypted
+		// content - exactly what must not happen here.
+		return new SecretsClusterController(repository, secretsService);
 	}
 
 	/**

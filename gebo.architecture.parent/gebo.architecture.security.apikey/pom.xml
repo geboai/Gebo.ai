@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.architecture.security.apikey</artifactId>
+
+	<!--
+		Generated API keys, whole: model + repository + service + the two controllers.
+		A vertical slice, and an OWNER-ONLY one - it ships to the monolith and to
+		heimdall, and to nothing else.
+
+		It can be owner-only because nothing on the request path needs it. A generated
+		key IS a LOCAL_JWT, so a service validating one needs no lookup at all - it
+		verifies the signature like any other token. The key store is therefore only
+		read when a key is minted, listed or revoked, which are administrative acts.
+		(Contrast IGOauth2RuntimeConfigurationDao, which the auth-manager resolver needs
+		on EVERY service to validate a provider's token, and which consequently cannot
+		be owner-only.)
+
+		Extracting it from gebo.architecture.security also takes one of the eight
+		repository-touching classes out of the module that is about to be split, and
+		with it a Mongo collection that every service was otherwise carrying.
+
+		The packages stay ai.gebo.security.* , so this move rewrote no import anywhere.
+	-->
+	<dependencies>
+		<!-- LocalJwtTokenProvider (a key is a LOCAL_JWT), IGSecurityService (the current
+		     user a key is minted for), and the security model. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- DataPage, used by the controllers' paged listings. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- IGPersistentObjectManager. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+	</dependencies>
+</project>

@@ -63,9 +63,13 @@ public class GeboSecretStoreRequest implements Serializable {
 	@NotNull
 	private GeboSecretType secretType = null;
 
-	/** The secret content to store, serialised as JSON. */
+	/**
+	 * The secret content to store, <b>already encrypted</b> by the caller with its own
+	 * {@code IGeboCryptingService}. The owner stores it as given: a write never puts a
+	 * secret in the clear on the network, and the owner never sees the plaintext.
+	 */
 	@NotNull
-	private String contentJson = null;
+	private String cryptedContent = null;
 
 	public GeboSecretStoreRequest() {
 	}
@@ -102,11 +106,11 @@ public class GeboSecretStoreRequest implements Serializable {
 		this.secretType = secretType;
 	}
 
-	public String getContentJson() {
-		return contentJson;
+	public String getCryptedContent() {
+		return cryptedContent;
 	}
 
-	public void setContentJson(String contentJson) {
-		this.contentJson = contentJson;
+	public void setCryptedContent(String cryptedContent) {
+		this.cryptedContent = cryptedContent;
 	}
 }
