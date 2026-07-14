@@ -99,6 +99,28 @@
 			<artifactId>gebo.microservices.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+			Context tests. heimdall is the ONE app that packages the cluster server-proxies,
+			so it is the only place they can be executed at all: the monolith carries none
+			of them, and a compile-only reactor happily stays green while an SP's
+			auto-configuration never fires or its controller's constructor no longer
+			matches. That blind spot has already shipped two defects.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-mongodb</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<profiles>

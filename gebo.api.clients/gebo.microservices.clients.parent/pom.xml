@@ -23,6 +23,7 @@
 		<!-- Java REST template clients -->
 		<module>eureka.gebo.ai.java.client</module>
 		<module>gateway.gebo.ai.java.client</module>
+		<module>heimdall.gebo.ai.java.client</module>
 		<module>brain.gebo.ai.java.client</module>
 		<module>vectorizator.gebo.ai.java.client</module>
 		<module>graphicator.gebo.ai.java.client</module>
@@ -42,6 +43,7 @@
 		<!-- Angular / TypeScript clients -->
 		<module>eureka.gebo.ai.angular.client</module>
 		<module>gateway.gebo.ai.angular.client</module>
+		<module>heimdall.gebo.ai.angular.client</module>
 		<module>brain.gebo.ai.angular.client</module>
 		<module>vectorizator.gebo.ai.angular.client</module>
 		<module>graphicator.gebo.ai.angular.client</module>
