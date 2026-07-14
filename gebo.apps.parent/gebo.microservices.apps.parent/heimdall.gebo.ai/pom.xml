@@ -1,0 +1,143 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.apps.microservices</groupId>
+		<artifactId>gebo.microservices.apps.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>heimdall.gebo.ai</artifactId>
+
+	<!--
+	  The security microservice. It owns the secrets: it is the only service that
+	  holds the crypting keys and the only one that ever decrypts secret material.
+	  Every other service reaches it through gebo.microservices.secrets.client,
+	  which implements the same IGeboSecretsAccessService interface over REST.
+
+	  Today it hosts the secrets responsibility; the AuthN/AuthZ + OAuth2 stack
+	  (gebo.architecture.security) is what it grows into next - hence the topology
+	  entry "heimdall_gebo_ai: AuthN/AuthZ, OAuth2 integration. Owns no messaging
+	  module (REST-only edge)".
+	-->
+	<dependencies>
+		<!-- The real IGeboSecretsAccessService (GeboSecretsAccessServiceImpl) + the
+		     existing ADMIN/UI api/admin/SecretsController. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The service-to-service facade over that implementation: exposes the whole
+		     interface (secret content included) to the microservices of the cluster,
+		     restricted to callers currently registered in the discovery registry.
+		     This module belongs HERE and nowhere else - a consumer takes
+		     gebo.microservices.secrets.client instead. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.secrets.controller</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+			The security stack. Without it this service has NO SecurityFilterChain of its
+			own (the only one in the codebase is GeboAISecurityConfig, here), so Spring
+			Boot's default auto-configuration would secure every endpoint with a
+			generated-password basic auth, nothing would understand a Bearer token, and
+			@PreAuthorize("hasRole('ADMIN')") on the admin controller would be silently
+			INERT - @EnableMethodSecurity lives in GeboAISecurityConfig too.
+
+			It also brings IGeboSystemUserService, which mints the LOCAL_JWT that callers
+			present when they have no user token of their own, and which this service
+			validates on the ordinary authentication path.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Environment, RabbitMQ messaging bridge, topology and springdoc. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier
+		     bootable+swagger). Off by default: production ships no API console. It is
+		     also what lets this service publish /v3/api-docs, which is where its
+		     generated client stubs (gebo.microservices.clients.parent) read the spec
+		     from. -->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.heimdall.HeimdallApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<!-- Bootable fat jar (classifier bootable). -->
+		<profile>
+			<id>bootables</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>ai.gebo.microservices.heimdall.HeimdallApplication</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.microservices.heimdall.HeimdallApplication</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.heimdall.HeimdallApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

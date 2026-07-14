@@ -12,11 +12,15 @@
 #
 # NOTHING SERVICE-SPECIFIC BELONGS IN THIS FILE. It is shared by every service and
 # an additional-location OUTRANKS the application.yml baked into the jar, so any
-# key set here silently overrides all 18 services at once. That is exactly what a
+# key set here silently overrides all 19 services at once. That is exactly what a
 # 'server.port: 8080' here used to do: it pinned every container back to 8080
 # while compose published 13001, 13004, ... - each host port mapping to a
 # container port nobody was listening on. Each service now sets its own port (the
-# 13000-13017 block); do not reintroduce one here.
+# 13000-13018 block); do not reintroduce one here.
+#
+# The same rule is why heimdall's ai.gebo.secrets.cluster.* settings live in ITS
+# application.yml and not here: setting them here would apply the secrets-cluster
+# configuration to all 19 services.
 # ---------------------------------------------------------------------------
 logging:
   level:
@@ -110,5 +114,54 @@ spring.ai:
       api-key: DUMMYKEY
       options:
         model: gpt-3.5-turbo-16k
+
+# ---------------------------------------------------------------------------
+# The Gebo.ai SYSTEM IDENTITY: who the platform is when it acts on its own behalf.
+#
+# Needed because a great deal of work runs on NO user's thread - LLM clients are
+# built at startup and on model replication, MCP connectors reconnect in the
+# background, schedulers run jobs. Those threads hold no token to forward (under
+# IdentityUtil.doAs they hold an authentication synthesized locally, with null
+# credentials), so a call they make to another service would arrive anonymous and be
+# refused. Instead the platform mints a short-lived LOCAL_JWT for THIS identity and
+# presents that - an ordinary token, validated on the ordinary path.
+#
+# The defaults below are what ships; they are spelled out here because they are
+# security-relevant, not because they must be set.
+#
+# This user is VIRTUAL: it has no Mongo document, cannot log in (its password is a
+# random value nobody - not even this process - retains), cannot be created by an
+# admin, and cannot be auto-provisioned by an OAuth2 login. ADMIN is in its role set
+# on purpose: with GrantedAuthorityDefaults("") an ADMIN authority is exactly what
+# the ~90 @PreAuthorize("hasRole('ADMIN')") endpoints test for.
+#
+# Its tokens are signed with ai.gebo.security.auth.tokenSecret above - the same key
+# every service already shares - so changing that key rotates them too.
+# ---------------------------------------------------------------------------
+ai.gebo.security.system-user:
+  username: heimdall@bifrost.gebo.ai
+  roles: [SYSTEM, ADMIN]
+  token-expiration-msec: 300000
+
+# ---------------------------------------------------------------------------
+# Secrets client (gebo.microservices.secrets.client) - INERT TODAY.
+#
+# Commented out on purpose: no service has the client module on its classpath yet,
+# so these keys would bind to nothing. Every service still carries gebo.secrets.impl
+# and reads secrets from its own Mongo. Uncomment when a service is switched over to
+# heimdall by swapping gebo.secrets.impl for gebo.microservices.secrets.client in its
+# pom - at which point this block, being shared, configures all of them at once.
+#
+# There is no base-url: the client resolves heimdall's address from the topology
+# (GeboMicroserviceUrlResolver), so it follows the deployment's addressing strategy.
+#
+# There is no service-token either. A call with no caller token to forward does NOT
+# fall back to a shared static credential - it falls back to a freshly minted token
+# for the system identity configured above.
+#
+#ai.gebo.secrets.client:
+#  microservice-id: heimdall_gebo_ai
+#  base-path: api/cluster/SecretsController
+# ---------------------------------------------------------------------------
 
 reactor.schedulers.defaultPoolSize: 16

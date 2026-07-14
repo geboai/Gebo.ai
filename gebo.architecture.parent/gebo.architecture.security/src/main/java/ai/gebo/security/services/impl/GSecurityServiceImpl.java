@@ -41,6 +41,7 @@ import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IAclGrantedAccessorService;
+import ai.gebo.security.services.IGeboSystemUserService;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 
@@ -62,6 +63,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	final IGeboCryptingService cryptService;
 	final PasswordEncoder passwordEncoder;
 	final IGPersistentObjectManager persistenceManager;
+	final IGeboSystemUserService systemUserService;
 
 	/**
 	 * Retrieves the current authenticated user's information.
@@ -75,6 +77,14 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		String email = SecurityUtils.getCurrentUserEmail();
 		if (email == null)
 			throw new RuntimeException("No principal name set");
+		// The system identity is virtual - it has no Mongo document, so the lookup below
+		// would throw "No current user found" for it. Resolving it here is enough to make
+		// the WHOLE service work for it: isCurrentUserAdmin(), getCurrentUserGroups(),
+		// getCurrentAclGrantedAccessor(), isCanAccess() and the filter* methods all read
+		// the current user through this one method. It reports as an enabled ADMIN, so
+		// authorization needs no special-casing anywhere else.
+		if (systemUserService.isSystemUser(email))
+			return systemUserService.getUserInfos();
 		Optional<User> user = usersRepo.findById(email);
 		if (user.isEmpty())
 			throw new RuntimeException("No current user found");

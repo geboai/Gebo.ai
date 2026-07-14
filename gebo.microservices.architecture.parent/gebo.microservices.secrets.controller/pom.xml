@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.secrets.controller</artifactId>
+
+	<!--
+		Service-to-service REST facade over IGeboSecretsAccessService, hosted by the
+		security microservice (heimdall.gebo.ai). It exposes the WHOLE interface -
+		including the secret-content reads that api/admin/SecretsController
+		deliberately does not expose - so gebo.microservices.secrets.client can
+		implement IGeboSecretsAccessService remotely.
+
+		Because these endpoints return decrypted secret material, they are NOT an
+		admin/UI surface: every request is checked against the set of cluster members
+		currently registered in service discovery (see ClusterParticipantsOnlyInterceptor)
+		and rejected unless it comes from one of them. The existing
+		api/admin/SecretsController is left untouched.
+
+		The autoconfiguration only activates when an IGeboSecretsAccessService bean is
+		present, so dropping this module on a service that does NOT host the secrets
+		implementation cannot accidentally expose the endpoints.
+	-->
+	<properties>
+		<!-- Matches the BOM gebo.microservices.apps.parent imports for the apps. -->
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- IGeboSecretsAccessService + the secret model, including the wire types
+		     (GeboSecretContentEnvelope, GeboSecretStoreRequest, GeboSecretContentTypes)
+		     this controller shares with the client module. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- GeboMicroservicesTopology: the set of microservice ids whose registered
+		     instances are allowed to call these endpoints. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- DiscoveryClient / ServiceInstance: the *dynamic* membership source. The
+		     concrete client (Eureka) is brought by the hosting app, not from here. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

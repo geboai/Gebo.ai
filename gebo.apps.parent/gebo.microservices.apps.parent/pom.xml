@@ -24,6 +24,8 @@
 	<modules>
 		<module>eureka.gebo.ai</module>
 		<module>gateway.gebo.ai</module>
+		<!-- The security service: keeper of the secrets (and, next, of AuthN/AuthZ). -->
+		<module>heimdall.gebo.ai</module>
 		<module>brain.gebo.ai</module>
 		<module>vectorizator.gebo.ai</module>
 		<module>graphicator.gebo.ai</module>

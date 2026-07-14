@@ -111,7 +111,7 @@ This table is the template; the same edge-analysis must be run for every module 
 
 | Service | Primary responsibility | Main feature modules (impl) it hosts |
 |---|---|---|
-| **heimdall.gebo.ai** | AuthN/AuthZ, OAuth2 integration | `gebo.architecture.security.impl`, `gebo.architecture.security.controllers.impl` (+ `.server-proxy`) |
+| **heimdall.gebo.ai** | AuthN/AuthZ, OAuth2 integration. **Also the keeper of the secrets** — the only service holding the crypting keys and the only one that ever decrypts secret material (§2.1). | `gebo.architecture.security.impl`, `gebo.architecture.security.controllers.impl` (+ `.server-proxy`); `gebo.secrets.impl` + `gebo.microservices.secrets.controller` |
 | **brain.gebo.ai** | LLMs / chat / embedding orchestration / RAG query / agents. Owns `GKnowledgeBase`, `GProject`, `GCentralizedProjectEndpoint`, `GDocumentReference`, `GVirtualFolder`. Hosts web + bing search handlers, `gebo.ragsystem.client.rest`, and MCP (client + server, since MCP surfaces agents/networks as tools). | `llms.abstraction.layer.{impl,sdk}` + all `gebo.llms.*` providers + `gebo.llms.standard.functions`, `chat.abstraction.layer.{impl,sdk}`, `agents.abstraction.layer.{impl,sdk}` + `gebo.architecture.agents.standard`, `gebo.architecture.mcp-clients`, `gebo.architecture.mcp-server`, `gebo.ragsystem.client.rest`, `gebo.knowledgebase.*.impl+server-proxy`, `gebo.googlesearch.handler`, `gebo.bingsearch.handler` |
 | **vectorizator.gebo.ai** | Consume "chunk ready" messages, embed chunks for semantic search, host rag-autotune | `gebo.ragsystem.content.vectorizator.impl`, `gebo.ragsystem.vectorstores`, `gebo.architecture.rag-threasholds-autotune`, `gebo.architecture.llms.abstraction.layer.impl` (embeddings) |
 | **textsearch.gebo.ai** | Consume "chunk ready", full-text index via OpenSearch | `gebo.ragsystem.content.fulltext.processor.impl`, `gebo.architecture.fulltext`, `gebo.architecture.opensearch` |
@@ -126,6 +126,124 @@ content-service ──(stream file bytes)──▶ chunker ──(chunk-ready ms
                                                                        ├─▶ textsearch   ─▶ (OpenSearch, own store)
                                                                        └─▶ graphsearch  ─▶ (Neo4j + shared brain Mongo)
 ```
+
+### 2.1 The secrets edge (implemented)
+
+Every service needs secrets — the LLM providers, the MCP connectors, the OAuth2
+services and the content handlers all call `IGeboSecretsAccessService`, with
+`getSecretContentById` alone having ~20 call sites. Centralising them in heimdall
+means that call has to survive becoming a network hop **without any consumer
+changing**. It does: consumers keep depending on the interface and get a different
+implementation of it.
+
+| Module | Goes on | Provides |
+|---|---|---|
+| `gebo.secrets.impl` | heimdall only | the real `GeboSecretsAccessServiceImpl` + the existing ADMIN `api/admin/SecretsController` |
+| `gebo.microservices.secrets.controller` | heimdall only | `api/cluster/SecretsController` — the **whole** interface, decrypted content included, for service-to-service use |
+| `gebo.microservices.secrets.client` | every other service | `IGeboSecretsAccessService` over REST against that cluster surface |
+
+Bean selection is automatic: the client is `@ConditionalOnMissingBean`, so heimdall
+(which owns the real impl) keeps its in-process one and everyone else transparently
+gets the remote one. **A service takes one module or the other, never both.**
+
+**Two surfaces, on purpose.** `api/admin/SecretsController` is unchanged and stays
+the UI surface: metadata plus create/delete, `@PreAuthorize("hasRole('ADMIN')")`, and
+it never returns secret content. The cluster surface exists because the interface
+needs the five things the admin one deliberately does not expose — above all
+`getSecretContentById`. Decrypted secret material crosses the network only there.
+
+**Who may call the cluster surface — dynamic membership, fail-closed.** Not a
+configured allow-list: the guard asks the `DiscoveryClient` for the instances
+currently registered for each topology microservice and admits only a caller whose
+connecting address is one of them. A service that leaves the registry loses access at
+the next refresh. If discovery reports nothing, *nobody* is admitted — it fails
+closed, so secrets stop flowing rather than flowing to anyone.
+
+Three things about that guard are load-bearing and easy to undo by accident:
+
+- **The gateway is not in the participants allow-list.** A caller is identified by the
+  address it connects from, so admitting the gateway admits everything the gateway
+  forwards — a browser's request included, since it arrives from the gateway's own
+  registered address. The gateway correspondingly routes only
+  `/heimdall_gebo_ai/api/admin/**`; a blanket `/heimdall_gebo_ai/**` would publish the
+  cluster surface at the edge. Either change alone reopens the hole.
+- **The guard reads the socket peer, not `X-Forwarded-For`.** Forwarded headers are set
+  by the caller, so trusting one would let anybody claim a participant address.
+- **`SecretsClusterController` is not a `@RestController`.** Every app component-scans
+  `ai.gebo`, and a `@Component` would be picked up by that scan *independently* of the
+  auto-configuration that installs the guard — publishing the endpoints unguarded.
+  Type-level `@RequestMapping` + `@ResponseBody` behaves identically but is invisible
+  to scanning, so the endpoints can only enter the container together with their guard.
+
+**Identity — and the system user (§2.2).** The client forwards the *caller's* own
+token, so heimdall authorises against the identity that originated the request. When
+there is no caller token it does **not** fall back to a shared static credential; it
+mints one for the platform's own identity. See §2.2 — that seam is subtle enough to
+deserve its own section.
+
+**Wire format.** Secret content travels as raw JSON plus a `GeboSecretType` beside it,
+not as a typed `AbstractGeboSecretContent`. That base class has no Jackson type
+information and **must not gain any**: the implementation encrypts
+`writeValueAsString(content)` directly, so changing that representation would make
+every already-stored secret unreadable. Custom secrets are read back through an
+any-setter passthrough so a caller-defined `GeboCustomSecretContent` subclass (e.g.
+`UserWorkflowSecret`, with its own `ticket`/`email`) round-trips intact — heimdall has
+never heard of those classes, so it reproduces the stored JSON verbatim and lets the
+caller pick the type.
+
+**Status.** heimdall exists, carries `gebo.architecture.security` (so it has a real
+filter chain and working method security) and hosts the secrets. No consumer has been
+switched over yet: every other service still carries `gebo.secrets.impl` and reads
+secrets from its own Mongo. Cutting one over = swapping that module for the client in
+its pom. Nothing else — the system identity below needs no per-service setup.
+
+### 2.2 The system user — who the platform is when no user is there
+
+A great deal of work runs on **no user's thread**: LLM clients are built at startup
+and on model replication, MCP connectors reconnect in the background, schedulers run
+jobs. Such a thread has no `SecurityContext` — or, under `IdentityUtil.doAs`, one
+holding a `UsernamePasswordAuthenticationToken` that was synthesized locally with
+**null credentials** (`IdentityUtil.java:19-27`). So when that code calls a remote
+service, **there is no token to forward**. This is not an inconvenience to engineer
+around; there is genuinely nothing to propagate.
+
+Anything reaching heimdall unauthenticated is refused (`anyRequest().authenticated()`),
+so those calls would simply fail. The platform therefore does not *forward* a token in
+that case — it **creates** one:
+
+| | |
+|---|---|
+| **Who** | `heimdall@bifrost.gebo.ai`, roles `SYSTEM` + `ADMIN` (configurable: `ai.gebo.security.system-user`) |
+| **Service** | `IGeboSystemUserService` — owns the identity and is the only thing allowed to mint its token |
+| **Token** | An ordinary short-lived `LOCAL_JWT`, signed with the same `ai.gebo.security.auth.tokenSecret` and validated on the same path as a human's |
+
+The important property: this is **not a bypass**. The fallback performs authentication
+rather than skipping it, and the call arrives *attributable* to the system identity
+instead of anonymous. It is also not a shared static bearer — the rejected alternative,
+which would have been one long-lived credential, in shared config, unlocking every
+secret in the platform, and a secret needed in order to reach the secret service.
+
+**It is a virtual user.** It has no Mongo document; it is resolved from configuration
+at the two points a user is normally loaded — `CustomUserDetailsService`
+(which is how a validated system JWT becomes a principal) and
+`GSecurityServiceImpl.getCurrentUser()` (which is how ACL, groups, `isCurrentUserAdmin`
+and the `filter*` methods see it, since every one of them reads the current user
+through that single method). Consequently it:
+
+- **cannot log in** — its password is a random value whose plaintext is discarded at
+  construction, so no presented password can ever match. There is no secret to leak,
+  because none was ever chosen;
+- **cannot be created** — `GUsersAdminServiceImpl.insertUser` refuses it, and since
+  `createUserIfNotExists` delegates there, that one guard closes both admin creation
+  *and* OAuth2 auto-provisioning;
+- **is `LOCAL_JWT` only** — never federated.
+
+**No controller changes were needed, and that is deliberate.** The platform runs
+`GrantedAuthorityDefaults("")` — no `ROLE_` prefix — so `hasRole('ADMIN')` tests for an
+authority named exactly `ADMIN`. Granting the system identity the `ADMIN` role makes all
+~90 `@PreAuthorize("hasRole('ADMIN')")` endpoints callable by it without touching one of
+them. Widening each to `hasAnyRole('ADMIN','SYSTEM')` would have been a 91-file diff that
+bought nothing.
 
 ---
 

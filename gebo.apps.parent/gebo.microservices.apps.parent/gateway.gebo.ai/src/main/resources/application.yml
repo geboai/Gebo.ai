@@ -30,7 +30,29 @@ spring:
           discovery:
             locator:
               enabled: false
-          routes: []
+          routes:
+            # heimdall (the security service) hosts NO messaging module, so it has no
+            # entry in the topology map below and the topology locator derives no route
+            # for it. It is routed by hand here - and ONLY its admin surface.
+            #
+            # This route is deliberately NOT /heimdall_gebo_ai/**. heimdall serves two
+            # secrets surfaces:
+            #   api/admin/SecretsController    metadata + create/delete, @PreAuthorize
+            #                                  ADMIN - a UI surface, routed below;
+            #   api/cluster/SecretsController  the WHOLE interface, decrypted secret
+            #                                  CONTENT included - a service-to-service
+            #                                  surface that must never be reachable from
+            #                                  a browser.
+            # A blanket /heimdall_gebo_ai/** would publish the second one at the edge.
+            # Worse, it would arrive at heimdall from the GATEWAY's address, so if the
+            # gateway were ever added to the cluster participants allow-list the guard
+            # would wave it through. Keep this path prefix narrow; do not widen it.
+            - id: heimdall_admin
+              uri: lb://heimdall-gebo-ai
+              predicates:
+                - Path=/heimdall_gebo_ai/api/admin/**
+              filters:
+                - StripPrefix=1
 
 # Dedicated HTTP port. Every Gebo microservice owns one port of the 13000-13017
 # block (gateway 13000 ... eureka 13017), so the whole deployment can run side by
@@ -140,9 +162,16 @@ gebo:
             - session-shrinker
             - sessionLifeCycleService
           brain-module: []
-        # heimdall_gebo_ai is a microservice (AuthN/AuthZ edge) but hosts NO
-        # messaging module, so it has no entry in this messaging topology map.
-        # Expose it as an lb:// gateway route (spring.cloud.gateway ... routes).
+        # heimdall_gebo_ai is a microservice (AuthN/AuthZ + secrets) but hosts NO
+        # messaging module, so it has no entry in this messaging topology map - and
+        # therefore gets no route from the topology locator. It is routed by hand,
+        # admin surface only, in spring.cloud.gateway...routes above: a blanket route
+        # would also publish its cluster secrets surface at the edge.
+        #
+        # Note this map is the gateway's OWN topology (include-defaults: false). The
+        # other services keep the built-in defaults from the topology jar, where
+        # heimdall_gebo_ai IS a member - which is what lets their secrets client
+        # resolve its base url. Do not "fix" the omission by adding it here.
         chunker_gebo_ai:
           tokenizer-module:
             - tokenizer-component
