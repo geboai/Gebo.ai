@@ -145,6 +145,13 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	@Override
 	public OperationStatus<List<GenericOpenAIAPITextToSpeechModelChoice>> getModelChoices(
 			GenericOpenAIAPITextToSpeechModelConfig config) {
+		// When the provider declares a models-list strategy (e.g. openrouter/regolo) use
+		// it so text-to-speech models can be discovered and validated; otherwise fall back
+		// to the OpenAI default suggestion.
+		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
+			return modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPITextToSpeechModelChoice.class, type);
+		}
 		GenericOpenAIAPITextToSpeechModelChoice tts1Model = new GenericOpenAIAPITextToSpeechModelChoice();
 		tts1Model.setCode("tts-1");
 		tts1Model.setDescription("OpenAI text to speech tts1 model");

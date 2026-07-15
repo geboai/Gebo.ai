@@ -47,14 +47,14 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
         - type: IMAGESGEN
           serviceHandler: images-regolo.ai
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: Qwen-Image
               description: Qwen Image 2512 (text to image generation)
               defaultChoice: true
         - type: TRANSCRIPT
           serviceHandler: transcript-regolo.ai
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: faster-whisper-large-v3
               description: Faster Whisper Large v3 (speech to text)
@@ -448,7 +448,7 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
         - type: TRANSCRIPT
           serviceHandler: transcript-openrouter.ai
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: openai/whisper-1
               description: OpenAI Whisper 1 (speech to text)

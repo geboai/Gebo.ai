@@ -101,7 +101,7 @@ ai.gebo.llms.generic.config:
       providerId: openrouter.ai
       description: OpenRouter.ai text to speech models
       baseUrl: https://openrouter.ai/api/
-    #modelsListProvider: openrouter-ai-models-list
+      modelsListProvider: openrouter-ai-models-list
 
 
   transcriptModelProviders:

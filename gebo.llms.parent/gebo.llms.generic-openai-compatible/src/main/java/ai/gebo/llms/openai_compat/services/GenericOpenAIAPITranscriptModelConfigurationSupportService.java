@@ -177,6 +177,13 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	@Override
 	public OperationStatus<List<GenericOpenAIAPITranscriptModelChoice>> getModelChoices(
 			GenericOpenAIAPITranscriptModelConfig config) {
+		// When the provider declares a models-list strategy (e.g. openrouter/regolo) use
+		// it so transcript models can be discovered and validated; otherwise fall back to
+		// the OpenAI default suggestion.
+		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
+			return modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPITranscriptModelChoice.class, type);
+		}
 		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
 		choice.setCode("whisper-1");
 		choice.setDescription("Whisper 1");

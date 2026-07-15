@@ -847,19 +847,22 @@ public class GeboLLMSSetupService {
 		// code and create directly. Validation runs only when the preset opts into lookup.
 		boolean doLookup = req.getDoModelsLookup() != null && req.getDoModelsLookup();
 		if (!doLookup) {
-			try {
-				operationsOutput.add(supportLogic.insertAndConfigure(configuration));
-			} catch (Throwable th) {
-				operationsOutput.add(OperationStatus.of(th));
-			}
+			createDirect(supportLogic, configuration, operationsOutput);
 			return;
 		}
 		OperationStatus choicesStatus = supportLogic.getModelChoices(configuration);
 		List<GBaseModelChoice> choices = (List<GBaseModelChoice>) choicesStatus.getResult();
 		boolean listAvailable = !choicesStatus.isHasErrorMessages() && choices != null && !choices.isEmpty();
-		boolean exists = listAvailable && choices.stream()
+		if (!listAvailable) {
+			// The provider does not actually enumerate this model type (empty list or a
+			// failed listing): trust the configured code and create it directly rather
+			// than silently doing nothing.
+			createDirect(supportLogic, configuration, operationsOutput);
+			return;
+		}
+		boolean exists = choices.stream()
 				.anyMatch(c -> c.getCode() != null && c.getCode().equalsIgnoreCase(req.getModelCode()));
-		if (listAvailable && !exists) {
+		if (!exists) {
 			LOGGER.warn("Requested model '{}' ({}) is not offered by the provider anymore", req.getModelCode(),
 					req.getServiceHandler());
 			LLMUnresolvedModel unresolved = new LLMUnresolvedModel();
@@ -869,12 +872,22 @@ public class GeboLLMSSetupService {
 			unresolved.setRequestedModelCode(req.getModelCode());
 			unresolved.setAvailableChoices(choices);
 			result.getUnresolved().add(unresolved);
-		} else {
-			try {
-				operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, req.getModelCode()));
-			} catch (Throwable th) {
-				operationsOutput.add(OperationStatus.of(th));
-			}
+			return;
+		}
+		try {
+			operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, req.getModelCode()));
+		} catch (Throwable th) {
+			operationsOutput.add(OperationStatus.of(th));
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void createDirect(IGModelConfigurationSupportService supportLogic, GBaseModelConfig configuration,
+			List<OperationStatus<GBaseModelConfig>> operationsOutput) {
+		try {
+			operationsOutput.add(supportLogic.insertAndConfigure(configuration));
+		} catch (Throwable th) {
+			operationsOutput.add(OperationStatus.of(th));
 		}
 	}
 
