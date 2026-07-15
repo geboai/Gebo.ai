@@ -20,15 +20,21 @@ package ai.gebo.llms.setup.model;
  */
 public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.ComponentSetupStatus {
 
-    // Boolean flag indicating whether the chat model setup is complete
+    // Boolean flag indicating whether a default chat model (uses CHAT) is configured
     public boolean chatModelSetup;
 
-    // Boolean flag indicating whether the embedded model setup is complete
+    // Boolean flag indicating whether a chat model for internal services (uses
+    // INTERNAL_SERVICES) is configured
+    public boolean internalServicesChatModelSetup;
+
+    // Boolean flag indicating whether a default embedding model is configured
     public boolean embeddedModelSetup;
-    
+
     public boolean rankingModelSetup;
-    
+
+    public boolean imagesModelSetup;
+
     public boolean ttsModelSetup;
-    
+
     public boolean transcriptModelSetup;
 }

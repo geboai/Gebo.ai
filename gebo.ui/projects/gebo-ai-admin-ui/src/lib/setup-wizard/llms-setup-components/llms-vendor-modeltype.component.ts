@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormControlStatus, FormGroup, Validators } from "@angular/forms";
-import { LLMSSetupConfiguration, SecretInfo, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter, LLMCredentialsVerificationData } from "@Gebo.ai/gebo-ai-rest-api";
+import { LLMSSetupConfiguration, SecretInfo, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter, LLMCredentialsVerificationData, LLMUnresolvedModel } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of, Subscription } from "rxjs";
@@ -13,6 +13,15 @@ interface IProviderAccess {
     requireApiKeyAniway?: boolean;
     selectedSecret?: string;
     baseUrl?: string;
+}
+// A chosen model that the provider no longer offers, plus the live choices the
+// user can pick a replacement from and the original request to rebuild.
+interface IModelResolution {
+    label: string;
+    requestedModelCode?: string;
+    availableChoices: GBaseModelChoice[];
+    control: FormControl;
+    original?: LLMCreateModelData;
 }
 @Component({
     selector: "gebo-ai-llms-vendor-model-type-config",
@@ -33,6 +42,14 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected chatModelPresetsFormGroup: FormGroup = new FormGroup({
         enableAllFunctions: new FormControl(),
         setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
+    // Internal-services chat slot: always created as a non-default model with
+    // uses = INTERNAL_SERVICES, so it has no "set as default" control.
+    protected serviceChatModelPresetsFormGroup: FormGroup = new FormGroup({
+        choosedModel: new FormControl()
+    });
+    protected serviceChatModelAdvancedFormGroup: FormGroup = new FormGroup({
         choosedModel: new FormControl()
     });
     protected embeddingModelPresetsFormGroup: FormGroup = new FormGroup({
@@ -96,6 +113,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     private oldCredentialId?: string;
     private oldBaseUrl?: string;
     protected llmsStatus!: ComponentLLMSStatus;
+    protected resolutions: IModelResolution[] = [];
     protected subscription?: Subscription;
     protected doBackendCredentialsValidation: (credentials: SecretInfo) => Observable<IOperationStatus<any>> = (credentials: SecretInfo) => {
         const baseUrl = this.secretFormGroup.controls["baseUrl"].value?.baseUrl;
@@ -216,7 +234,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         }
     }
     private loadModels(secretId?: string, baseUrl?: string) {
-
+        this.resolutions = [];
         if (!secretId && this.vendorConfiguration?.parentModel.requiresApiKey === true) {
             this.lookedUpChatModels = [];
             this.lookedUpEmbeddingModels = [];
@@ -277,16 +295,6 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         this.geboFastLLMSSetupService.getLLMSSetupStatus().subscribe({
             next: (value) => {
                 this.llmsStatus = value;
-                this.chatModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.chatModelSetup !== true);
-                this.embeddingModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.embeddedModelSetup !== true);
-                this.chatModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.chatModelSetup !== true);
-                this.embeddingModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.embeddedModelSetup !== true);
-                this.rankerModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.rankingModelSetup !== true);
-                this.transcriptModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.transcriptModelSetup !== true);
-                this.ttsModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.ttsModelSetup !== true);
-                this.rankerModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.rankingModelSetup !== true);
-                this.transcriptModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.transcriptModelSetup !== true);
-                this.ttsModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.ttsModelSetup !== true);
             },
             complete: () => {
                 this.loading = false;
@@ -338,6 +346,12 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                             if (defaultPreset?.code) {
                                 this.chatModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
                             }
+                            // Preselect a sensible internal-services model: prefer a choice
+                            // explicitly declared for INTERNAL_SERVICES, otherwise the default one.
+                            const serviceChoice = x.choices?.find(y => y.uses && y.uses.find(u => u === "INTERNAL_SERVICES")) ?? defaultPreset;
+                            if (serviceChoice?.code) {
+                                this.serviceChatModelPresetsFormGroup.patchValue({ choosedModel: serviceChoice.code })
+                            }
                         } break;
                         case "EMBEDDING": {
                             this.embeddingPresets = x.choices ? x.choices : [];
@@ -379,9 +393,31 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
 
         }
     }
+    // Per-kind visibility: a kind is offered only while its default (for chat, the
+    // matching uses-slot) is not yet configured. Once configured, further models of
+    // that kind are added from the LLMs admin per-provider / model-type screens.
+    protected get showDefaultChat(): boolean { return this.llmsStatus?.chatModelSetup !== true; }
+    protected get showServiceChat(): boolean { return this.llmsStatus?.internalServicesChatModelSetup !== true; }
+    protected get showEmbedding(): boolean { return this.llmsStatus?.embeddedModelSetup !== true; }
+    protected get showRanker(): boolean { return this.llmsStatus?.rankingModelSetup !== true; }
+    protected get showImages(): boolean { return this.llmsStatus?.imagesModelSetup !== true; }
+    protected get showTts(): boolean { return this.llmsStatus?.ttsModelSetup !== true; }
+    protected get showTranscript(): boolean { return this.llmsStatus?.transcriptModelSetup !== true; }
+    protected get allKindsConfigured(): boolean {
+        return !this.showDefaultChat && !this.showServiceChat && !this.showEmbedding
+            && !this.showRanker && !this.showImages && !this.showTts && !this.showTranscript;
+    }
+    protected get allConfiguredNotice(): ToastMessageOptions[] {
+        return this.allKindsConfigured ? [{
+            severity: "info", summary: "All model kinds already configured",
+            detail: "Every default model kind is already set up. To add or change models of an existing kind use the LLMs admin per-provider / model-type screens."
+        }] : [];
+    }
+
     protected get presetCreateBtnEnabled(): boolean {
         const modelChoices: { choosedModel?: string }[] = [
             this.chatModelPresetsFormGroup.value,
+            this.serviceChatModelPresetsFormGroup.value,
             this.embeddingModelPresetsFormGroup.value,
             this.rankerModelPresetsFormGroup.value,
             this.imagesModelPresetsFormGroup.value,
@@ -395,6 +431,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected get advancedCreateBtnEnabled(): boolean {
         const modelChoices: { choosedModel?: string }[] = [
             this.chatModelAdvancedFormGroup.value,
+            this.serviceChatModelAdvancedFormGroup.value,
             this.embeddingModelAdvancedFormGroup.value,
             this.rankerModelAdvancedFormGroup.value,
             this.imagesModelAdvancedFormGroup.value,
@@ -405,49 +442,56 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
 
     }
-    private addModelData(fg: FormGroup, array: LLMCreateModelData[], type: LLMCreateModelData.TypeEnum) {
+    private addModelData(fg: FormGroup, array: LLMCreateModelData[], type: LLMCreateModelData.TypeEnum, show: boolean, uses?: Array<LLMCreateModelData.UsesEnum>) {
         const model: IModelChoice = fg.value;
-        if (model.choosedModel) {
-            const value = this.buildCreateModelData(model, type);
+        if (show && model.choosedModel) {
+            const value = this.buildCreateModelData(model, type, uses);
             if (value)
                 array.push(value);
         }
     }
     protected createPresetLLMS() {
         const modelDataCreationArray: Array<LLMCreateModelData> = [];
-        this.addModelData(this.chatModelPresetsFormGroup, modelDataCreationArray, "CHAT");
-        this.addModelData(this.embeddingModelPresetsFormGroup, modelDataCreationArray, "EMBEDDING");
-        this.addModelData(this.rankerModelPresetsFormGroup, modelDataCreationArray, "RANKING");
-        this.addModelData(this.imagesModelPresetsFormGroup, modelDataCreationArray, "IMAGESGEN");
-        this.addModelData(this.transcriptModelPresetsFormGroup, modelDataCreationArray, "TRANSCRIPT");
-        this.addModelData(this.ttsModelPresetsFormGroup, modelDataCreationArray, "TTS");
+        this.addModelData(this.chatModelPresetsFormGroup, modelDataCreationArray, "CHAT", this.showDefaultChat, ["CHAT"]);
+        this.addModelData(this.serviceChatModelPresetsFormGroup, modelDataCreationArray, "CHAT", this.showServiceChat, ["INTERNAL_SERVICES"]);
+        this.addModelData(this.embeddingModelPresetsFormGroup, modelDataCreationArray, "EMBEDDING", this.showEmbedding);
+        this.addModelData(this.rankerModelPresetsFormGroup, modelDataCreationArray, "RANKING", this.showRanker);
+        this.addModelData(this.imagesModelPresetsFormGroup, modelDataCreationArray, "IMAGESGEN", this.showImages);
+        this.addModelData(this.transcriptModelPresetsFormGroup, modelDataCreationArray, "TRANSCRIPT", this.showTranscript);
+        this.addModelData(this.ttsModelPresetsFormGroup, modelDataCreationArray, "TTS", this.showTts);
 
         this.createLLMS(modelDataCreationArray);
     }
     protected createAdvancedLLMS() {
         const modelDataCreationArray: Array<LLMCreateModelData> = [];
-        this.addModelData(this.chatModelAdvancedFormGroup, modelDataCreationArray, "CHAT");
-        this.addModelData(this.embeddingModelAdvancedFormGroup, modelDataCreationArray, "EMBEDDING");
-        this.addModelData(this.rankerModelAdvancedFormGroup, modelDataCreationArray, "RANKING");
-        this.addModelData(this.imagesModelAdvancedFormGroup, modelDataCreationArray, "IMAGESGEN");
-        this.addModelData(this.transcriptModelAdvancedFormGroup, modelDataCreationArray, "TRANSCRIPT");
-        this.addModelData(this.ttsModelAdvancedFormGroup, modelDataCreationArray, "TTS");
+        this.addModelData(this.chatModelAdvancedFormGroup, modelDataCreationArray, "CHAT", this.showDefaultChat, ["CHAT"]);
+        this.addModelData(this.serviceChatModelAdvancedFormGroup, modelDataCreationArray, "CHAT", this.showServiceChat, ["INTERNAL_SERVICES"]);
+        this.addModelData(this.embeddingModelAdvancedFormGroup, modelDataCreationArray, "EMBEDDING", this.showEmbedding);
+        this.addModelData(this.rankerModelAdvancedFormGroup, modelDataCreationArray, "RANKING", this.showRanker);
+        this.addModelData(this.imagesModelAdvancedFormGroup, modelDataCreationArray, "IMAGESGEN", this.showImages);
+        this.addModelData(this.transcriptModelAdvancedFormGroup, modelDataCreationArray, "TRANSCRIPT", this.showTranscript);
+        this.addModelData(this.ttsModelAdvancedFormGroup, modelDataCreationArray, "TTS", this.showTts);
         this.createLLMS(modelDataCreationArray);
     }
-    private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum): LLMCreateModelData | undefined {
+    private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum, uses?: Array<LLMCreateModelData.UsesEnum>): LLMCreateModelData | undefined {
         if (this.vendorConfiguration?.libraryModel) {
             const preset = this.vendorConfiguration.libraryModel.find(providerPreset => providerPreset.type === type);
             const providerAccess: IProviderAccess = this.secretFormGroup.value;
             if (modelChoice?.choosedModel && preset) {
+                // The wizard only ever establishes the default of each kind; the internal-
+                // services chat model is the sole non-default one. There is no "set as
+                // default" choice here anymore.
+                const isInternalServices = uses ? uses.indexOf("INTERNAL_SERVICES") >= 0 : false;
                 const out: LLMCreateModelData = {
                     modelCode: modelChoice.choosedModel,
-                    setAsDefaultModel: modelChoice.setAsDefault === true,
+                    setAsDefaultModel: !isInternalServices,
                     serviceHandler: preset.serviceHandler,
                     type: type,
                     baseUrl: providerAccess.baseUrl,
                     doModelsLookup: preset.doModelsLookup === true,
                     secretId: providerAccess.selectedSecret,
-                    enableAllFunctions: modelChoice.enableAllFunctions === true
+                    enableAllFunctions: modelChoice.enableAllFunctions === true,
+                    uses: uses
                 };
                 return out;
             }
@@ -460,17 +504,65 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         if (modelDataCreationArray?.length) {
             this.loading = true;
             this.geboFastLLMSSetupService.createLLMS(modelDataCreationArray).subscribe({
-                next: (operationStatusList) => {
-                    this.assignBackendMessages(operationStatusList?.messages);
-                    if (operationStatusList && operationStatusList.hasErrorMessages !== true) {
+                next: (operationStatus) => {
+                    this.assignBackendMessages(operationStatus?.messages);
+                    const unresolved = operationStatus?.result?.unresolved ?? [];
+                    const created = operationStatus?.result?.created ?? [];
+                    // Some chosen models are no longer offered by the provider: present the
+                    // live choices so the user can pick a replacement and resubmit.
+                    this.buildResolutions(unresolved, modelDataCreationArray);
+                    // Anything actually created should refresh the parent status (hidden kinds).
+                    if (created.length > 0) {
                         this.vendorConfigurationChanged.emit(true);
                     }
-
                 }, complete: () => {
                     this.loading = false;
                 }
             });
         }
+    }
+
+    private resolutionLabel(type?: LLMUnresolvedModel.TypeEnum, isService?: boolean): string {
+        if (type === "CHAT") return isService ? "Internal services chat model" : "Default chat model";
+        switch (type) {
+            case "EMBEDDING": return "Embedding model";
+            case "RANKING": return "Ranker model";
+            case "IMAGESGEN": return "Image generation model";
+            case "TTS": return "Text to speech model";
+            case "TRANSCRIPT": return "Transcript model";
+        }
+        return type ? type : "Model";
+    }
+
+    private buildResolutions(unresolved: LLMUnresolvedModel[], requests: LLMCreateModelData[]) {
+        this.resolutions = unresolved.map(u => {
+            const isService = (u.uses ?? []).indexOf("INTERNAL_SERVICES") >= 0;
+            const original = requests.find(r => r.type === u.type
+                && (((r.uses ?? []).indexOf("INTERNAL_SERVICES") >= 0) === isService));
+            return {
+                label: this.resolutionLabel(u.type, isService),
+                requestedModelCode: u.requestedModelCode,
+                availableChoices: u.availableChoices ?? [],
+                control: new FormControl(),
+                original: original
+            } as IModelResolution;
+        });
+    }
+
+    protected get resolveCreateBtnEnabled(): boolean {
+        return this.resolutions.length > 0 && this.resolutions.some(r => r.control.value ? true : false);
+    }
+
+    protected resolveAndCreate() {
+        const modelDataCreationArray: Array<LLMCreateModelData> = [];
+        this.resolutions.forEach(r => {
+            const chosen: string | undefined = r.control.value;
+            if (chosen && r.original) {
+                modelDataCreationArray.push({ ...r.original, modelCode: chosen });
+            }
+        });
+        this.resolutions = [];
+        this.createLLMS(modelDataCreationArray);
     }
 
 }

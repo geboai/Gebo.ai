@@ -29,6 +29,7 @@ import ai.gebo.llms.setup.model.LLMCreateModelData;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
 import ai.gebo.llms.setup.model.LLMCredentialsVerificationData;
 import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
+import ai.gebo.llms.setup.model.LLMSModelsCreationResult;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.llms.setup.services.GeboLLMSSetupService;
 import ai.gebo.model.OperationStatus;
@@ -90,7 +91,7 @@ public class GeboFastLLMSSetupController {
 	}
 
 	@PostMapping(value = "createLLMS", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GBaseModelConfig>> createLLMS(
+	public OperationStatus<LLMSModelsCreationResult> createLLMS(
 			@RequestBody @Valid @NotNull List<LLMCreateModelData> configs) {
 		return service.createLLMS(configs);
 	}
