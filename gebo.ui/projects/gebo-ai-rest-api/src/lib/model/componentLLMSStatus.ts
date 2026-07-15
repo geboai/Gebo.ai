@@ -13,8 +13,10 @@
 export interface ComponentLLMSStatus { 
     isSetup?: boolean;
     chatModelSetup?: boolean;
+    internalServicesChatModelSetup?: boolean;
     embeddedModelSetup?: boolean;
     rankingModelSetup?: boolean;
+    imagesModelSetup?: boolean;
     ttsModelSetup?: boolean;
     transcriptModelSetup?: boolean;
 }

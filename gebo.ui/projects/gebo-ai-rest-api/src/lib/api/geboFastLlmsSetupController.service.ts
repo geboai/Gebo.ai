@@ -24,6 +24,7 @@ import { LLMCredentialsCreationData } from '../model/lLMCredentialsCreationData'
 import { LLMCredentialsVerificationData } from '../model/lLMCredentialsVerificationData';
 import { LLMModelsLookupParameter } from '../model/lLMModelsLookupParameter';
 import { LLMSSetupConfigurationData } from '../model/lLMSSetupConfigurationData';
+import { OperationStatusLLMSModelsCreationResult } from '../model/operationStatusLLMSModelsCreationResult';
 import { OperationStatusListGBaseModelChoice } from '../model/operationStatusListGBaseModelChoice';
 import { OperationStatusListGBaseModelConfig } from '../model/operationStatusListGBaseModelConfig';
 import { OperationStatusSecretInfo } from '../model/operationStatusSecretInfo';
@@ -165,9 +166,9 @@ export class GeboFastLlmsSetupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGBaseModelConfig>;
-    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGBaseModelConfig>>;
-    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGBaseModelConfig>>;
+    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusLLMSModelsCreationResult>;
+    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusLLMSModelsCreationResult>>;
+    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusLLMSModelsCreationResult>>;
     public createLLMS(body: Array<LLMCreateModelData>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -194,7 +195,7 @@ export class GeboFastLlmsSetupControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusListGBaseModelConfig>('post',`${this.basePath}/api/admin/GeboFastLLMSSetupController/createLLMS`,
+        return this.httpClient.request<OperationStatusLLMSModelsCreationResult>('post',`${this.basePath}/api/admin/GeboFastLLMSSetupController/createLLMS`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

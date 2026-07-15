@@ -9,13 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
+import { LLMSModelsCreationResult } from './lLMSModelsCreationResult';
 
-export interface GUserChatInfo { 
-    description?: string;
-    code?: string;
-    username?: string;
-    ragChat?: boolean;
-    chatCreationDateTime?: Date;
-    chatModelCode?: string;
-    chatProfileCode?: string;
+export interface OperationStatusLLMSModelsCreationResult { 
+    result?: LLMSModelsCreationResult;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }
