@@ -11,7 +11,7 @@
 #
 # App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id, so
 # nothing here NEEDS a host port except the gateway. Every microservice publishes
-# one anyway, on its own dedicated port from the 13000-13017 block, so each service
+# one anyway, on its own dedicated port from the 13000-13018 block, so each service
 # can be reached (and its /v3/api-docs scraped by the generated client stubs)
 # without going through the gateway:
 #
@@ -24,6 +24,10 @@
 #   13006 filesystem                                    13015 integration
 #   13007 uploads                                       13016 fulltextor
 #   13008 userspace                                     13017 eureka (registry)
+#                                                       13018 heimdall (security)
+#
+# 13018 extends what used to be a full 13000-13017 block; heimdall was added after
+# every slot in it was taken.
 #
 # Each port is fixed in that service's application.yml, so the container port and
 # the published port are the same number - no translation to keep in sync.
@@ -114,6 +118,31 @@ services:
     ports:
       - "13000:13000"
     networks: [gebo-net]
+
+  # ---------------- Security service ----------------
+  # heimdall keeps the secrets - but note it is NOT the only holder of the crypting
+  # keys, and it never decrypts on a caller's behalf. The keystore is shared (bundled,
+  # or pointed at by configuration), so the cluster surface hands back the STORED
+  # CIPHERTEXT and the caller decrypts locally. No secret is ever in the clear on the
+  # network. Everyone else reaches it through gebo.microservices.secrets.client, which
+  # speaks to api/cluster/SecretsController - a surface heimdall serves ONLY to callers
+  # whose address is that of an instance currently registered in Eureka.
+  #
+  # So the eureka dependency it already inherits from *microservice is load-bearing
+  # here in a way it is not elsewhere: with the registry unreachable heimdall knows of
+  # no participant and denies every call (it fails closed), so secrets stop flowing
+  # rather than flowing to anyone.
+  #
+  # GEBO_HOME / GEBO_WORK_DIRECTORY and the config mount come from *microservice and
+  # the parent's Jib directive, like every other service - nothing to restate here.
+  # The published 13018 is for direct access / api-docs scraping. The gateway does NOT
+  # route the cluster surface (see the gateway's application.yml) - only heimdall's
+  # admin API is reachable from the edge.
+  heimdall:
+    <<: *microservice
+    image: geboai/heimdall.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13018:13018"
 
   # ---------------- LLM / RAG backends ----------------
   # Every backend publishes its own port to the host as well, so each service's

@@ -48,7 +48,7 @@ import ai.gebo.llms.abstraction.layer.services.IGVectorSearchRestrictingFilterEx
 
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GObjectRef;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;

@@ -1,5 +1,6 @@
 package ai.gebo.security.services.impl;
 
+import ai.gebo.security.model.UserInfos;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -29,7 +30,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public Page<UserRepository.UserInfos> findByQbe(EditableUser example, Pageable pageable) {
+	public Page<UserInfos> findByQbe(EditableUser example, Pageable pageable) {
 		Query query = buildQuery(example);
 
 		long total = mongoTemplate.count(query, User.class);
@@ -45,7 +46,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 		List<User> users = mongoTemplate.find(query, User.class);
 
-		List<UserRepository.UserInfos> content = users.stream().map(UserRepository.UserInfos::of).toList();
+		List<UserInfos> content = users.stream().map(UserInfos::of).toList();
 
 		return new PageImpl<>(content, pageable, total);
 	}

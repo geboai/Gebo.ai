@@ -107,6 +107,45 @@ P3 ─▶ P4 (stand up remaining services) ─▶ P5 (edge, stubs, docker, CI, c
 
 **Phase 2 DoD:** heimdall issues tokens; every other service validates via `secure-area`; user identity survives a bus hop with ACL parity; the two hardest seams (messaging + security) are both proven.
 
+> **Landed ahead of the plan — the secrets half of heimdall.** The app exists and boots
+> as **`heimdall.gebo.ai`** (a normal module under `gebo.microservices.apps.parent`,
+> built on `gebo.microservices.starter`), **not** as the `gebo.apps.heimdall.starter` +
+> `gebo.heimdall.app` pair P2-T4 assumes — it follows the same shape as every other
+> microservice app instead. Port **13018**. It carries the secrets, not yet the auth
+> stack:
+>
+> - `gebo.secrets.{services,impl}` split (`f2da77f`), + `gebo.microservices.secrets.controller`
+>   (cluster-only REST facade over the whole `IGeboSecretsAccessService`) and
+>   `gebo.microservices.secrets.client` (the same interface over REST). See
+>   **MICROSERVICES-INTEGRATION.md §2.1** for the guard, the two surfaces and the wire format.
+> - Callers to the cluster surface are admitted by **live discovery membership**, fail-closed.
+> - It carries `gebo.architecture.security`, so it has a real `SecurityFilterChain` and
+>   working method security (without it, Boot's default auto-config secures everything
+>   with generated-password basic auth and `@PreAuthorize` is silently **inert**).
+> - **The system user** (`IGeboSystemUserService`, §2.2) — a virtual `SYSTEM`+`ADMIN`
+>   identity that mints its own `LOCAL_JWT`, so work running on no user's thread can
+>   authenticate. This is the seam P2-T7 ("identity-over-bus") will need too: note that
+>   `IdentityUtil.doAs` synthesizes an authentication with **null credentials**, so a
+>   `doAs` identity cannot be forwarded to a remote service as-is.
+>
+> **Two fixes this forced, worth knowing about:**
+> - `gebo.architecture.security` depended on `gebo.secrets.impl` rather than
+>   `.services`. Since security is on virtually every classpath, it dragged the local
+>   `GeboSecretsAccessServiceImpl` everywhere — which would have won over the remote
+>   client (`@ConditionalOnMissingBean`), making it impossible for **any** service to
+>   talk to heimdall. Now `.services`; whoever hosts the secrets declares `.impl`.
+> - ~90 `@PreAuthorize("hasRole('ADMIN')")` endpoints needed **no change**:
+>   `GrantedAuthorityDefaults("")` means `hasRole('ADMIN')` tests for an authority named
+>   `ADMIN`, which the system identity holds.
+>
+> **What P2-T4 still owes:** `security.controllers.impl` + `security.server-proxy` +
+> `secure-area` on this app, its own Mongo, and token issue/refresh for *humans*.
+>
+> **Not yet cut over (so P2-T6's "every non-heimdall service" is not true for secrets):**
+> every other service still bundles `gebo.secrets.impl` and reads secrets from its own
+> Mongo. Cutting one over = swap that module for `gebo.microservices.secrets.client` in
+> its pom; the system identity needs no per-service setup.
+
 ---
 
 ## Phase 3 — Split the shared feature modules (ordered by fan-in; §11.2)

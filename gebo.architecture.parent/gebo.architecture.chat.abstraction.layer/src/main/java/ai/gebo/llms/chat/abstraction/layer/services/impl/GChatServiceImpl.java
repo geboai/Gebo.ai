@@ -46,7 +46,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.GUserMessage;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
 

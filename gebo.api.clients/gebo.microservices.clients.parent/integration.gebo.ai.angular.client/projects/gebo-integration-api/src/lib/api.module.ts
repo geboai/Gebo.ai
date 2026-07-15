@@ -11,7 +11,6 @@ import { IntegrationInputControllerService } from './api/integrationInputControl
 import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
-import { SecretsControllerService } from './api/secretsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
@@ -27,7 +26,6 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     IntegrationSystemsControllerService,
     JobLauncherControllerService,
     JobStatusControllerService,
-    SecretsControllerService,
     WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {

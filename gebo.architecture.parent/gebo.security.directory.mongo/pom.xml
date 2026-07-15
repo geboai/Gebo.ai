@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.security.directory.mongo</artifactId>
+
+	<!--
+		The IGSecurityDirectory of a service that OWNS the user store: it reads Mongo
+		directly.
+
+		This is one half of a pair, and the pair is the point:
+
+		    owns the user store  ->  gebo.security.directory.mongo   (heimdall, monolith)
+		    does not own it      ->  gebo.microservices.security.client (every other service)
+
+		A service depends on exactly one of them, so which directory it uses is decided
+		by what it PACKAGES - stated in its pom, not toggled by a property that can be
+		set wrong.
+
+		It is a separate module rather than a class inside gebo.architecture.security
+		precisely because that module is on virtually every classpath: a directory
+		shipped inside it would always be present, would always win the
+		@ConditionalOnMissingBean race, and the remote directory could never activate
+		anywhere - exactly how gebo.secrets.impl used to defeat the secrets client.
+	-->
+	<dependencies>
+		<!-- IGSecurityDirectory, the user/group repositories and model, IGeboSystemUserService. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>

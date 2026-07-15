@@ -6,6 +6,4 @@ export * from './documentsChunkServiceController.service';
 import { DocumentsChunkServiceControllerService } from './documentsChunkServiceController.service';
 export * from './ingestionFileTypesLibraryController.service';
 import { IngestionFileTypesLibraryControllerService } from './ingestionFileTypesLibraryController.service';
-export * from './secretsController.service';
-import { SecretsControllerService } from './secretsController.service';
-export const APIS = [DocumentContentStreamerWithCacheControllerService, DocumentsCacheServiceControllerService, DocumentsChunkServiceControllerService, IngestionFileTypesLibraryControllerService, SecretsControllerService];
+export const APIS = [DocumentContentStreamerWithCacheControllerService, DocumentsCacheServiceControllerService, DocumentsChunkServiceControllerService, IngestionFileTypesLibraryControllerService];

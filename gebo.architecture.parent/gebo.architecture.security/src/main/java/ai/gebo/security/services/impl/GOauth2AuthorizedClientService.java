@@ -19,30 +19,19 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboOauth2TokenSecretContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import lombok.AllArgsConstructor;
 
 /**
  * Implements the OAuth2AuthorizedClientService to manage storing and retrieving
  * OAuth2 tokens using a secret management service.
  */
+@AllArgsConstructor
 public class GOauth2AuthorizedClientService implements OAuth2AuthorizedClientService {
 
 	private final ClientRegistrationRepository clientRegistrationRepository;
 	private final IGeboSecretsAccessService secrets;
 
-	/**
-	 * Constructs the service with the required client registration repository and
-	 * secrets access service.
-	 * 
-	 * @param clientRegistrationRepository the repository for client registrations
-	 * @param secrets                      the secret access service to store and
-	 *                                     retrieve token information
-	 */
-	public GOauth2AuthorizedClientService(ClientRegistrationRepository clientRegistrationRepository,
-			IGeboSecretsAccessService secrets) {
-		this.clientRegistrationRepository = clientRegistrationRepository;
-		this.secrets = secrets;
-	}
-
+	 
 	/**
 	 * Builds a unique secret ID for storing OAuth2 tokens based on principal and
 	 * registration ID.

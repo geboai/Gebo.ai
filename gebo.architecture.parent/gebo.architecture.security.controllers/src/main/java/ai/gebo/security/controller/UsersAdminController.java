@@ -31,7 +31,7 @@ import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.model.UsersGroup;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IGUsersAdminService;
 import jakarta.validation.Valid;

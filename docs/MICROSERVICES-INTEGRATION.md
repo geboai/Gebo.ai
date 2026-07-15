@@ -111,7 +111,7 @@ This table is the template; the same edge-analysis must be run for every module 
 
 | Service | Primary responsibility | Main feature modules (impl) it hosts |
 |---|---|---|
-| **heimdall.gebo.ai** | AuthN/AuthZ, OAuth2 integration | `gebo.architecture.security.impl`, `gebo.architecture.security.controllers.impl` (+ `.server-proxy`) |
+| **heimdall.gebo.ai** | AuthN/AuthZ, OAuth2 integration. **Also the keeper of the secret store** — though not of the crypting keys, which are shared: it moves ciphertext and never decrypts on a caller's behalf (§2.1). | `gebo.architecture.security.impl`, `gebo.architecture.security.controllers.impl` (+ `.server-proxy`); `gebo.secrets.impl` + `gebo.microservices.secrets.controller` |
 | **brain.gebo.ai** | LLMs / chat / embedding orchestration / RAG query / agents. Owns `GKnowledgeBase`, `GProject`, `GCentralizedProjectEndpoint`, `GDocumentReference`, `GVirtualFolder`. Hosts web + bing search handlers, `gebo.ragsystem.client.rest`, and MCP (client + server, since MCP surfaces agents/networks as tools). | `llms.abstraction.layer.{impl,sdk}` + all `gebo.llms.*` providers + `gebo.llms.standard.functions`, `chat.abstraction.layer.{impl,sdk}`, `agents.abstraction.layer.{impl,sdk}` + `gebo.architecture.agents.standard`, `gebo.architecture.mcp-clients`, `gebo.architecture.mcp-server`, `gebo.ragsystem.client.rest`, `gebo.knowledgebase.*.impl+server-proxy`, `gebo.googlesearch.handler`, `gebo.bingsearch.handler` |
 | **vectorizator.gebo.ai** | Consume "chunk ready" messages, embed chunks for semantic search, host rag-autotune | `gebo.ragsystem.content.vectorizator.impl`, `gebo.ragsystem.vectorstores`, `gebo.architecture.rag-threasholds-autotune`, `gebo.architecture.llms.abstraction.layer.impl` (embeddings) |
 | **textsearch.gebo.ai** | Consume "chunk ready", full-text index via OpenSearch | `gebo.ragsystem.content.fulltext.processor.impl`, `gebo.architecture.fulltext`, `gebo.architecture.opensearch` |
@@ -126,6 +126,132 @@ content-service ──(stream file bytes)──▶ chunker ──(chunk-ready ms
                                                                        ├─▶ textsearch   ─▶ (OpenSearch, own store)
                                                                        └─▶ graphsearch  ─▶ (Neo4j + shared brain Mongo)
 ```
+
+### 2.1 The secrets edge (implemented)
+
+Every service needs secrets — the LLM providers, the MCP connectors, the OAuth2
+services and the content handlers all call `IGeboSecretsAccessService`, with
+`getSecretContentById` alone having ~20 call sites. Centralising them in heimdall
+means that call has to survive becoming a network hop **without any consumer
+changing**. It does: consumers keep depending on the interface and get a different
+implementation of it.
+
+| Module | Goes on | Provides |
+|---|---|---|
+| `gebo.secrets.impl` | heimdall only | the real `GeboSecretsAccessServiceImpl` + the existing ADMIN `api/admin/SecretsController` |
+| `gebo.microservices.secrets.controller` | heimdall only | `api/cluster/SecretsController` — the **whole** interface, decrypted content included, for service-to-service use |
+| `gebo.microservices.secrets.client` | every other service | `IGeboSecretsAccessService` over REST against that cluster surface |
+
+Bean selection is automatic: the client is `@ConditionalOnMissingBean`, so heimdall
+(which owns the real impl) keeps its in-process one and everyone else transparently
+gets the remote one. **A service takes one module or the other, never both.**
+
+**Two surfaces, on purpose.** `api/admin/SecretsController` is unchanged and stays
+the UI surface: metadata plus create/delete, `@PreAuthorize("hasRole('ADMIN')")`, and
+it never returns secret content. The cluster surface exists because the interface
+needs the five things the admin one deliberately does not expose — above all
+`getSecretContentById`. Decrypted secret material crosses the network only there.
+
+**Who may call the cluster surface — dynamic membership, fail-closed.** Not a
+configured allow-list: the guard asks the `DiscoveryClient` for the instances
+currently registered for each topology microservice and admits only a caller whose
+connecting address is one of them. A service that leaves the registry loses access at
+the next refresh. If discovery reports nothing, *nobody* is admitted — it fails
+closed, so secrets stop flowing rather than flowing to anyone.
+
+Three things about that guard are load-bearing and easy to undo by accident:
+
+- **The gateway is not in the participants allow-list.** A caller is identified by the
+  address it connects from, so admitting the gateway admits everything the gateway
+  forwards — a browser's request included, since it arrives from the gateway's own
+  registered address. The gateway correspondingly routes only
+  `/heimdall_gebo_ai/api/admin/**`; a blanket `/heimdall_gebo_ai/**` would publish the
+  cluster surface at the edge. Either change alone reopens the hole.
+- **The guard reads the socket peer, not `X-Forwarded-For`.** Forwarded headers are set
+  by the caller, so trusting one would let anybody claim a participant address.
+- **`SecretsClusterController` is not a `@RestController`.** Every app component-scans
+  `ai.gebo`, and a `@Component` would be picked up by that scan *independently* of the
+  auto-configuration that installs the guard — publishing the endpoints unguarded.
+  Type-level `@RequestMapping` + `@ResponseBody` behaves identically but is invisible
+  to scanning, so the endpoints can only enter the container together with their guard.
+
+**Identity — and the system user (§2.2).** The client forwards the *caller's* own
+token, so heimdall authorises against the identity that originated the request. When
+there is no caller token it does **not** fall back to a shared static credential; it
+mints one for the platform's own identity. See §2.2 — that seam is subtle enough to
+deserve its own section.
+
+**Wire format — the ciphertext travels, not the secret.** The cluster surface hands back
+the secret content **exactly as stored: still encrypted**, and a write arrives already
+encrypted. The caller decrypts and encrypts locally with its own `IGeboCryptingService` —
+every service has one, and the key material is shared (bundled keystore, or one pointed at
+by configuration). So **no secret is ever in the clear on the network**, not even between
+two services inside the cluster, and heimdall never decrypts on anyone's behalf. The guard
+bounds *who may fetch a ciphertext*; the keys bound *who can read one* — two independent
+controls. It also makes custom secrets round-trip losslessly for free: the decrypted JSON
+is the stored JSON, so a caller-defined `GeboCustomSecretContent` subclass keeps every
+field, with no passthrough trickery. The `GeboSecretType` still travels beside it, That base class has no Jackson type
+information and **must not gain any**: the implementation encrypts
+`writeValueAsString(content)` directly, so changing that representation would make
+every already-stored secret unreadable. Custom secrets are read back through an
+any-setter passthrough so a caller-defined `GeboCustomSecretContent` subclass (e.g.
+`UserWorkflowSecret`, with its own `ticket`/`email`) round-trips intact — heimdall has
+never heard of those classes, so it reproduces the stored JSON verbatim and lets the
+caller pick the type.
+
+**Status.** heimdall exists, carries `gebo.architecture.security` (so it has a real
+filter chain and working method security) and hosts the secrets. No consumer has been
+switched over yet: every other service still carries `gebo.secrets.impl` and reads
+secrets from its own Mongo. Cutting one over = swapping that module for the client in
+its pom. Nothing else — the system identity below needs no per-service setup.
+
+### 2.2 The system user — who the platform is when no user is there
+
+A great deal of work runs on **no user's thread**: LLM clients are built at startup
+and on model replication, MCP connectors reconnect in the background, schedulers run
+jobs. Such a thread has no `SecurityContext` — or, under `IdentityUtil.doAs`, one
+holding a `UsernamePasswordAuthenticationToken` that was synthesized locally with
+**null credentials** (`IdentityUtil.java:19-27`). So when that code calls a remote
+service, **there is no token to forward**. This is not an inconvenience to engineer
+around; there is genuinely nothing to propagate.
+
+Anything reaching heimdall unauthenticated is refused (`anyRequest().authenticated()`),
+so those calls would simply fail. The platform therefore does not *forward* a token in
+that case — it **creates** one:
+
+| | |
+|---|---|
+| **Who** | `heimdall@bifrost.gebo.ai`, roles `SYSTEM` + `ADMIN` (configurable: `ai.gebo.security.system-user`) |
+| **Service** | `IGeboSystemUserService` — owns the identity and is the only thing allowed to mint its token |
+| **Token** | An ordinary short-lived `LOCAL_JWT`, signed with the same `ai.gebo.security.auth.tokenSecret` and validated on the same path as a human's |
+
+The important property: this is **not a bypass**. The fallback performs authentication
+rather than skipping it, and the call arrives *attributable* to the system identity
+instead of anonymous. It is also not a shared static bearer — the rejected alternative,
+which would have been one long-lived credential, in shared config, unlocking every
+secret in the platform, and a secret needed in order to reach the secret service.
+
+**It is a virtual user.** It has no Mongo document; it is resolved from configuration
+at the two points a user is normally loaded — `CustomUserDetailsService`
+(which is how a validated system JWT becomes a principal) and
+`GSecurityServiceImpl.getCurrentUser()` (which is how ACL, groups, `isCurrentUserAdmin`
+and the `filter*` methods see it, since every one of them reads the current user
+through that single method). Consequently it:
+
+- **cannot log in** — its password is a random value whose plaintext is discarded at
+  construction, so no presented password can ever match. There is no secret to leak,
+  because none was ever chosen;
+- **cannot be created** — `GUsersAdminServiceImpl.insertUser` refuses it, and since
+  `createUserIfNotExists` delegates there, that one guard closes both admin creation
+  *and* OAuth2 auto-provisioning;
+- **is `LOCAL_JWT` only** — never federated.
+
+**No controller changes were needed, and that is deliberate.** The platform runs
+`GrantedAuthorityDefaults("")` — no `ROLE_` prefix — so `hasRole('ADMIN')` tests for an
+authority named exactly `ADMIN`. Granting the system identity the `ADMIN` role makes all
+~90 `@PreAuthorize("hasRole('ADMIN')")` endpoints callable by it without touching one of
+them. Widening each to `hasAnyRole('ADMIN','SYSTEM')` would have been a 91-file diff that
+bought nothing.
 
 ---
 
@@ -614,6 +740,223 @@ This section is the executable mapping for Phase 2–3. Legend for target child:
 | `services/impl/**` (`GUsersAdminServiceImpl`, `GOauth2ConfigurationServiceImpl`, `CustomUserDetailsService`, `AclGrantedAccessorServiceImpl`, `authmanagers/**`, `GJwtAuthenticationConverter`, `GOAuth2UserService`, …) | IMPL |
 | `config/GeboAISecurityConfig`, `GeboAICorsFilter`, `WebMvcConfig`, `LdapConfiguration`, token filter chain + `IGHttpRequestAuthenticationManagerResolver` impl | **SECURE-AREA** (validation side) / IMPL (login side stays heimdall) |
 | **Provide:** SP controllers wrapping `IGUsersAdminService`/ACL for cross-service user & ACL lookups; CP impls of those interfaces | SP / CP |
+
+#### 13.1.1 Execution plan (measured from source — supersedes the outline above where they differ)
+
+**The surface is far smaller than the module.** Measured across every consumer outside
+`gebo.architecture.security*`:
+
+| Consumed by other modules | Count | What it really is |
+|---|---|---|
+| `IGSecurityService` | 88 imports | the hot path |
+| `ReactiveIdentityUtil` / `IdentityUtil` / `RunAs*` | 44 | **pure local helpers — no remote call, ever** |
+| `UserRepository.UserInfos` | 28 | a **type**, unfortunately nested inside a Mongo repository |
+| `UserRepository` / `UsersGroupRepository` **as an injected bean** | **4 files** | the only real DB coupling to break |
+| `IAclGrantedAccessorService`, `IGUsersAdminService`, `IGOauth2RuntimeConfigurationDao` | 4 | genuine service calls |
+
+**A client-proxy for `IGSecurityService` is impossible as a REST mirror.** 9 of its 16
+methods take the *caller's own domain objects* — `filterCanDoAction(Collection<T extends
+IGObjectWithSecurity & IAclGrantedResource>)`, `isCanAccess(IGObjectWithSecurity)`,
+`checkBeingCreator(GBaseObject)`, `setAclAliases(List<T>)`. Those entity graphs cannot go
+on the wire, and heimdall must not learn every domain model.
+
+**But they don't need to.** Those 9 methods run `AclAccessCheck` (a static in
+`gebo.base.model`) over local objects, and the *only* inputs they need from outside are the
+current user's **identity, roles, groups** and the **ACL aliases**. Read the two impls and
+the seam is tiny:
+
+- `AclGrantedAccessorServiceImpl` injects exactly **`IAclAliasesDao` + `UsersGroupRepository`**.
+- `GSecurityServiceImpl` touches the repositories for exactly three things: *look up a user*,
+  *look up a user's groups*, *check a password*. Everything else is local computation.
+
+**So do not duplicate the algorithm — extract the directory.** One small SPI, and the *same*
+impl classes serve both worlds:
+
+```java
+interface IGSecurityDirectory {                 // security.interface-models
+    UserInfos          findUserByUsername(String username);
+    List<UsersGroup>   findGroupsOfUser(String username);
+    List<UsersGroup>   findAllGroups();
+    boolean            checkPassword(String username, String rawPassword);
+}
+```
+
+| Implementation | Where | Backed by |
+|---|---|---|
+| `MongoSecurityDirectory` (module `gebo.security.directory.mongo`) | heimdall + monolith | `UserRepository`, `UsersGroupRepository`, `PasswordEncoder` |
+| `RestSecurityDirectory` (module `gebo.microservices.security.client`) | every other microservice | heimdall SP, **request-scoped cache** |
+
+**The two implementations live in two modules, and a service depends on exactly one.**
+No property, no profile: which directory a service uses is decided by what it
+*packages*, stated in its pom. That is the same shape as `gebo.secrets.impl` vs
+`gebo.microservices.secrets.client`, and it is what makes the choice impossible to get
+wrong at runtime. Critically, `MongoSecurityDirectory` must **not** sit in
+`gebo.architecture.security`: that module is a transitive dependency of nearly
+everything, so a directory inside it would be present everywhere, would always win the
+`@ConditionalOnMissingBean` race, and the remote one could never activate — precisely
+how `gebo.secrets.impl` used to defeat the secrets client. The server-proxy in turn
+depends on the *local* directory, so a service can only **serve** the directory if it
+**owns** it.
+
+`GSecurityServiceImpl` and `AclGrantedAccessorServiceImpl` then depend on
+`IGSecurityDirectory` instead of the repositories, and **ship unchanged to every service**.
+The ACL algorithm keeps running locally on local objects; only the directory is remote. Without
+the request-scoped cache every `filterCanDoAction` becomes a network round-trip — the cache is
+not an optimization, it is what makes this viable.
+
+**ACL aliases are replicated, not fetched.** `IAclAliasesDao` stays a *local* read-replica in
+every service (owner writes + `IGClusterMessageBus` broadcast — the same Hazelcast bus the LLM
+models replication already uses, §1.4). One consequence is load-bearing: `AclAliasesDaoImpl`
+allocates alias integers from a **Mongo sequence**, and `aliasForEveryone()` will `addAcl(...)`
+if an entry is missing. **Alias allocation must stay authoritative in the owner** — a replica
+that allocates its own integers will collide with another service's. On a non-owner the DAO is
+read-only; the everyone-aliases bootstrap is the owner's job.
+
+**Two prerequisites, before any module moves:**
+
+1. **Promote `UserInfos` out of `UserRepository`.** It is nested inside a `MongoRepository`, so
+   it cannot live in `interface-models` where it belongs, yet 17 files import it purely as a
+   type. Move it to a top-level type (keep a deprecated alias to stage the change).
+2. **Fix the 4 files that inject the repositories directly** — `UsersFunctions` (an LLM tool,
+   ships to brain), `GeboFastInstallationSetupService`, `SystemInitializationAdminService`,
+   and the integration-test base. Convert to `IGUsersAdminService` / `IGSecurityService` calls.
+   Behaviour-preserving, and it means the split never has to special-case them.
+
+**One lever makes the `secure-area` split cheap.** `GeboAISecurityConfig` *already* gates the
+two halves with `oauth2LoginEnabled` / `oauth2ResourceServerEnabled`. "Everyone is a resource
+server; only heimdall does login and the OAuth2 handshake" is therefore largely a
+**configuration** change today — the code split of the filter chain can follow the wiring, not
+lead it.
+
+**Phases** (each independently verifiable):
+
+| # | Step | Done when |
+|---|---|---|
+| P0 | ~~Promote `UserInfos`~~ **DONE** (now `ai.gebo.security.model.UserInfos`, 36 imports rewritten; it can no longer drag a Mongo repository into a module that only wanted to name a user). Still to do: de-repository the 4 files that inject `UserRepository`/`UsersGroupRepository` | monolith green, no behaviour change |
+| P1 | Extract `IGSecurityDirectory`; rewire `GSecurityServiceImpl` + `AclGrantedAccessorServiceImpl` onto it; `MongoSecurityDirectory` | monolith green — pure seam, no split yet |
+| P2 | `gebo.microservices.security.controller` (SP, heimdall) + `gebo.microservices.security.client` (CP: `RestSecurityDirectory`, request-cached) | a service with the CP resolves users/groups/ACL through heimdall |
+| P3 | ~~ACL alias replication~~ **SUPERSEDED - the ACL module split replaced it.** ACL is now the same owner/consumer pair as secrets and the directory: `gebo.acl.services` (contract: `IAclAliasesDao`, `AclAccessCheck`, `IAclGrantedResource`, models - extracted from `gebo.base.model` with the package name unchanged, so **not one import moved**), `gebo.acl.mongo` (the owner's Mongo DAO - **heimdall + monolith**), and `gebo.microservices.acl.client` (a REST client onto heimdall with a **local TTL cache** - everyone else). **No Hazelcast replication of the alias map is needed:** alias data is small, read on every decision and written almost never, so per-service caching of what is actually asked about beats every service maintaining a full replica. The Hazelcast cluster therefore stays as it is (LLM models only) and `ModelsReplicationClusterParticipationCondition` does **not** need widening. Alias *allocation* stays with the owner (`addAcl()` draws from a Mongo sequence; a second allocator would hand out colliding integers - a silent authorization bug), and the `EVERYONE` presets are bootstrapped only by the owner at startup. **Trade-off, explicitly:** a change made elsewhere - including a *revocation* - is visible to a consumer within `ai.gebo.acl.client.cache-ttl` (default 60s); a write made *through* a client invalidates its own cache at once. Shorten the TTL if that window is unacceptable. Discovery-based Hazelcast seeding (`DiscoveryClientClusterTopologyProvider`) was still worth keeping for the models cluster: it sees replicas and real addresses where the DNS-name seeding could not | a consumer sees an ACL change made on the owner within the TTL |
+| P4 | Module split proper: `security.{interface-models, impl, secure-area}`; `security.controllers` → heimdall-only | every new module in `gebo.apps.monolithic.starter`; monolith identical |
+| P5 | Per-service wiring: non-heimdall services take IM + secure-area + CP; heimdall takes impl + controllers + SP | non-heimdall service boots with no user/group Mongo access |
+
+**Module → service map** (the monolithic starter depends on **all** of them, so the monolith is
+unchanged; `.impl` present means the CP's `@ConditionalOnMissingBean` backs off, exactly as with
+secrets §2.1):
+
+| Module | heimdall | other microservices | monolith |
+|---|---|---|---|
+| `security.interface-models` | ✔ | ✔ | ✔ |
+| `security.secure-area` (filter chain, resource-server, CORS, url rules) | ✔ | ✔ | ✔ |
+| `security.impl` (repos, services/impl, login + oauth2 handshake, `LocalJwtTokenProvider`, system user) | ✔ | — | ✔ |
+| `security.controllers` (the 12 controllers) | ✔ | — | ✔ |
+| `gebo.microservices.security.controller` (SP) | ✔ | — | — |
+| `gebo.microservices.security.client` (CP) | — | ✔ | — |
+
+#### 13.1.2 Splitting `gebo.architecture.security` itself (P4) — measured plan
+
+Everything so far split a *store* out from under the module. This splits the module.
+
+**Only 8 of its ~45 classes touch a Mongo store.** That is the whole finding, and it
+makes the carve far smaller than it looks:
+
+| Touches a repository | Everything else |
+|---|---|
+| `CustomUserDetailsService`, `GUsersAdminServiceImpl`, `GUserWorkflowServiceImpl`, `UserRepositoryImpl`, ~~`GGeneratedApiKeyServiceImpl`~~ (extracted to `gebo.architecture.security.apikey`), `GBackendOauth2LoginSPASupportServiceImpl`, `GOauth2RuntimeConfigurationDaoImpl`, **`GeboAISecurityConfig`** | the ~37 classes of the request-authentication path, the token machinery, and local authorization |
+
+**Target modules** (package names unchanged, so the carve itself rewrites **zero
+imports** — the same trick that made the `ai.gebo.acl` extraction free):
+
+| Module | Contents | Goes on |
+|---|---|---|
+| `security.interface-models` | `model/**`, `services/I*.java`, `exception/**`, `IdentityUtil`/`ReactiveIdentityUtil`/`RunAs*`, `SecurityHeaderUtil`, `CookieUtils`. No beans, no repositories | **everyone** |
+| `security.secure-area` | the request-auth path: `GeboAISecurityConfig`, `GHttpRequestAuthenticationManagerResolverImpl`, `authmanagers/**`, the two converters, `JwtDecoderCache`, `LocalJwtTokenProvider`, `GPasswordEncoder`, `SecurityUtils`, the entry points, `GeboAICorsFilter`, `WebMvcConfig` — plus local authorization: `GSecurityServiceImpl`, `AclGrantedAccessorServiceImpl`, `GeboSystemUserServiceImpl` | **everyone** |
+| `security.impl` | `repository/**`, `UserRepositoryImpl`, `GUsersAdminServiceImpl`, `GUserWorkflow*`, the whole OAuth2 **login/handshake** stack, the Mongo `CustomUserDetailsService`, `GOauth2RuntimeConfigurationDaoImpl` | **heimdall + monolith** |
+| `gebo.architecture.security.apikey` **(done)** | generated API keys, whole: model + repository + service + both controllers | **heimdall + monolith** |
+| `security.controllers` (exists) | the 12 controllers | **heimdall + monolith** |
+
+**Two things every service needs that only the owner can currently answer.** These are
+the real work; the module carve is code motion.
+
+1. **`UserDetailsService`.** Every service turns a validated token into a principal
+   (`LocalJwtAuthenticationManager` → `loadUserByUsername`), so this cannot be
+   owner-only. But `CustomUserDetailsService` reads Mongo. Split it like the directory:
+   the owner keeps the Mongo one (it has the password, so password login works);
+   consumers get a **directory-backed** one built from `IGSecurityDirectory`
+   (`UserInfos`: username, roles, disabled) with **no password**. That is not a
+   limitation — **login only ever happens on heimdall** — and it means a password hash
+   cannot leave the owner even by accident.
+
+2. **`IGOauth2RuntimeConfigurationDao` — the one genuinely new pair, and it is a RUNTIME
+   DAO, not a cached REST client.**
+   `GHttpRequestAuthenticationManagerResolverImpl` needs it on *every* service to build
+   the OAuth2 JWT/opaque-token managers, i.e. **to validate a user's provider token at
+   all**; `GeboAISecurityConfig` reaches the same data through the Mongo repository
+   directly. Consumers only ever **read** it (`findByProvider*`); `insert`/`delete` are
+   admin operations on heimdall. Miss this and non-heimdall services silently cannot
+   authenticate OAuth2 users. (`gebo.architecture.mcp-clients` reads it too.)
+
+   **Would this make token validation a per-request call? YES, if implemented naively —
+   and that is the trap.** `GAbstractRuntimeConfigurationDao` does **not** cache:
+   `getDynamicConfigs()` calls the source every time, and
+   `Oauth2RuntimeConfigurationSource.getConfigurations()` is `repo.findAll()`. Since
+   `GHttpRequestAuthenticationManagerResolverImpl.resolve(...)` runs **per request**, the
+   monolith today performs a full Mongo `findAll()` on **every OAuth2-authenticated
+   request** (a pre-existing inefficiency). A REST-backed DAO would amplify that into a
+   network round-trip to heimdall per request. Unacceptable.
+
+   **So the consumer's DAO must be memory-resident.** Hold the resolved configurations in
+   memory and refresh them on a **TTL of minutes** (`ai.gebo.security.client.oauth2-config-ttl`,
+   suggested 5m). Per request: zero network — the resolver reads the in-memory config, JWT
+   needs only `issuerUri` (and `JwtDecoderCache` already caches the decoder per issuer),
+   opaque reads clientId/secret from that same object. (Opaque still introspects against
+   the IdP per request; inherent to opaque tokens, unchanged from the monolith.)
+
+   **A TTL is sufficient here — no cluster event bus.** Changing an OAuth2 provider
+   registration is a rare administrative act, and a few minutes of propagation across the
+   cluster is acceptable. The window means: a newly added provider is recognised within the
+   TTL; a removed one is still trusted for up to the TTL; a rotated client secret makes
+   opaque introspection fail (fail-closed) until it refreshes. All bounded and acceptable
+   for an operation that happens rarely. This is a deliberate simplification over an
+   event-driven invalidation, which would be more machinery than the change rate justifies.
+
+   **The SP must strip the secret.** `Oauth2RuntimeConfiguration` is a `@Document` whose
+   `client` field (a `GeboOauth2SecretContent`, secret included) is persisted **inline** —
+   so naively serialising the config would ship the plaintext OAuth2 client secret to every
+   microservice. The SP sends `clientSecretId` only; the consumer resolves it through the
+   secrets client **at load time**, filling `client`. Once per refresh, never per request.
+
+   (Contrast the secrets client, which caches by id and is safe doing so: a secret's content
+   is **immutable under its id** — the admin surface creates and deletes, it never updates —
+   so rotating a key produces a NEW id, i.e. a new cache key. The one in-place mutation is
+   `GOauth2ConfigurationServiceImpl` rewriting the OAuth2 client secret under the same id on
+   heimdall; that propagates to consumers within the secrets TTL, which the same rarity
+   argument makes acceptable.)
+
+**API keys are NOT a third pair, and are already extracted (DONE).** A generated key
+*is* a `LOCAL_JWT`, so a service validating one needs **no lookup** — it verifies the
+signature like any other token. The key store is read only when a key is minted, listed
+or revoked, all administrative acts. So the whole vertical slice — model, repository,
+service, and its two controllers — now lives in **`gebo.architecture.security.apikey`**, which ships
+to the **monolith and heimdall only**. That removes one of the eight repository-touching
+classes from the module about to be split, and takes a Mongo collection off every other
+service's classpath. Packages stayed `ai.gebo.security.*`, so the move rewrote no import.
+
+**Phases.** The risk is entirely in P4.1–P4.3; P4.5 is mechanical.
+
+| # | Step | Done when |
+|---|---|---|
+| P4.1 | Rewire `GeboAISecurityConfig` off `Oauth2RuntimeConfigurationRepository` onto `IGOauth2RuntimeConfigurationDao` (no split yet) | monolith context test green |
+| P4.2 | `UserDetailsService` owner/consumer pair (Mongo vs directory-backed) | monolith green; a consumer resolves a principal from a token with no user DB |
+| P4.3 | `IGOauth2RuntimeConfigurationDao` pair: SP endpoint on heimdall + cached REST client | a consumer validates an OAuth2 user token with no user DB |
+| P4.4 | The 4 files that still inject the repositories directly (`UsersFunctions`, 2× fastsetup, the integration-test base) | monolith green |
+| P4.5 | Carve `security.{interface-models, secure-area, impl}` — pure code motion, packages unchanged, **no import rewrites** | full reactor + monolith context tests green |
+| P4.6 | Per-service wiring: consumers take IM + secure-area + the clients; set `oauth2LoginEnabled: false` on them | a non-heimdall service boots with **no Mongo access to users/groups/oauth2** |
+| P4.7 | heimdall takes `security.impl` + `security.controllers` (P2-T2/T4) | heimdall issues and refreshes a human token |
+
+**Verification that actually means something:** the monolith's Spring context tests
+(`ai.gebo.ai.app.tests.*`) are what caught the one real defect of the previous phase —
+a constructor touching the crypting service before it was up, which took the whole
+context down while every compile-only build stayed green. Run them at every phase.
 
 ### 13.2 `gebo.architecture.security.controllers` → mostly IMPL (the 12 controllers), acting as heimdall's SP
 Verified constructor injections (→ these are the SP/IMPL wiring): `OAuth2AdminController(IGOauth2ConfigurationService)`; `AuthController(IGHttpRequestAuthenticationManagerResolver, UserRepository, PasswordEncoder, LocalJwtTokenProvider, IGBackendOauth2LoginSPASupportService)`; `AuthProvidersController(IGOauth2ConfigurationService, IOauth2DynamicClientRegistrationRepository, GeboSecurityConfig)`. All 12 → **IMPL** on heimdall; they *are* the server-proxy surface.

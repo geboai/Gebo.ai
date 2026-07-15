@@ -32,8 +32,9 @@ import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
+import ai.gebo.security.services.IGeboSystemUserService;
 import ai.gebo.security.services.IGUsersAdminService;
 import lombok.AllArgsConstructor;
 
@@ -53,6 +54,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	final AclGrantedAccessorServiceImpl grantedAccessorService;
 	final IAclAliasesDao aclAliasesDao;
 	final IGeboCryptingService cryptService;
+	final IGeboSystemUserService systemUserService;
 
 	/**
 	 * Inserts a new user into the database after validating uniqueness and
@@ -66,6 +68,18 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	 */
 	@Override
 	public EditableUser insertUser(EditableUser user, String password) {
+		// The system identity is virtual: it is defined by configuration, has no Mongo
+		// document, and must never acquire one - a persisted row would shadow the
+		// configured identity (and could be given a real, loginable password, turning
+		// the platform's own ADMIN account into one a human can sign in as).
+		//
+		// This is the single chokepoint for user creation: createUserIfNotExists()
+		// delegates here, and that is the hook OAuth2 login auto-provisions through. So
+		// guarding here closes BOTH doors - admin creation and federation - at once.
+		if (systemUserService.isSystemUser(user.getUsername()))
+			throw new IllegalStateException(
+					"The user " + systemUserService.getUsername() + " is the reserved Gebo.ai system identity "
+							+ "and cannot be created; it is defined by ai.gebo.security.system-user");
 		Optional<User> alreadyCheck = userRepo.findById(user.getUsername());
 		if (alreadyCheck.isPresent())
 			throw new IllegalStateException("Already existing user");

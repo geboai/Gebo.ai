@@ -13,7 +13,7 @@
 package ai.gebo.llms.abstraction.layer.functions.model;
 
 import ai.gebo.security.model.User;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 
 /**
  * Gebo.ai comment agent

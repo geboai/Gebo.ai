@@ -59,7 +59,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.model.base.GBaseObject;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;

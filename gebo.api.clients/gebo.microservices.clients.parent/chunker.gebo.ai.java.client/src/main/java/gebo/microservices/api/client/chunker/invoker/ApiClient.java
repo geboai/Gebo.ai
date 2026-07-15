@@ -50,7 +50,7 @@ import gebo.microservices.api.client.chunker.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.chunker.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.chunker.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-13T14:54:25.953953+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-14T23:59:06.148122700+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {

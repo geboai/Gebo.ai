@@ -66,6 +66,18 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+		<!--
+			The INTERFACE, not the implementation. This module only ever touches
+			IGeboSecretsAccessService + ai.gebo.secrets.model (verified: it imports
+			nothing from gebo.secrets.impl), so depending on the impl was both
+			unnecessary and actively harmful: security is on virtually every service's
+			classpath, so it dragged GeboSecretsAccessServiceImpl - a @Service - along
+			with it. That local bean would win over the remote
+			gebo.microservices.secrets.client (which backs off on
+			@ConditionalOnMissingBean), making it impossible for ANY service to actually
+			talk to heimdall. Whoever HOSTS the secrets declares gebo.secrets.impl
+			explicitly: the monolithic starter and heimdall.gebo.ai both do.
+		-->
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.secrets.services</artifactId>
@@ -90,6 +102,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<!-- JUnit 5 + AssertJ. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

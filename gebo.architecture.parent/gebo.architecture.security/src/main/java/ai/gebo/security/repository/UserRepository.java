@@ -9,8 +9,6 @@
 
 package ai.gebo.security.repository;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Example;
@@ -19,9 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import ai.gebo.security.model.User;
+import ai.gebo.security.model.UserInfos;
 
 /**
  * Gebo.ai comment agent UserRepository interface for accessing User data in a
@@ -30,91 +27,6 @@ import ai.gebo.security.model.User;
  */
 @Repository
 public interface UserRepository extends MongoRepository<User, String>, UserRepositoryCustom {
-
-	/**
-	 * Interface representing a subset of User information. Typically used for
-	 * projections.
-	 */
-	public static interface UserInfos {
-		/**
-		 * Gets the username of the user.
-		 * 
-		 * @return The username.
-		 */
-		String getUsername();
-
-		/**
-		 * Gets the name of the user.
-		 * 
-		 * @return The user's name.
-		 */
-		String getName();
-
-		/**
-		 * Gets the sourname of the user.
-		 * 
-		 * @return The user's surname.
-		 */
-		String getSourname();
-
-		/**
-		 * Indicates if the user is disabled.
-		 * 
-		 * @return True if disabled, false otherwise.
-		 */
-		Boolean getDisabled();
-
-		@JsonIgnore
-		Map<String, Object> getCustomInfos();
-
-		/**
-		 * Retrieves the roles associated with the user.
-		 * 
-		 * @return A list of roles.
-		 */
-		java.util.List<String> getRoles();
-
-		public static UserInfos of(final User user) {
-			return new UserInfos() {
-				@Override
-				@JsonIgnore
-				public Map<String, Object> getCustomInfos() {
-
-					return user.getCustomInfos();
-				}
-
-				@Override
-				public Boolean getDisabled() {
-
-					return user.getDisabled();
-				}
-
-				@Override
-				public String getUsername() {
-
-					return user.getUsername();
-				}
-
-				@Override
-				public String getName() {
-					return user.getName();
-				}
-
-				@Override
-				public String getSourname() {
-					return user.getSourname();
-				}
-
-				@Override
-				public List<String> getRoles() {
-
-					return user.getRoles();
-				}
-			};
-
-		}
-
-	}
 
 	/**
 	 * Finds a User by their username.

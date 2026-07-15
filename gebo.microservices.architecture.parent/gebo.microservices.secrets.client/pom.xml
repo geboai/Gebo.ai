@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.secrets.client</artifactId>
+
+	<!--
+		WebClient-based client that implements IGeboSecretsAccessService by calling
+		the SecretsClusterController of the security microservice (heimdall.gebo.ai,
+		see gebo.microservices.secrets.controller). The target address is NOT
+		configured here: it is resolved through the GeboMicroserviceUrlResolver from
+		the microservices topology, so the call automatically follows the deployment's
+		addressing strategy (load balancer / gateway / direct).
+
+		Drop this module on the classpath of any service that needs secrets but does
+		not host the secrets implementation (brain.gebo.ai, the LLM providers, the
+		content handlers, ...): the client bean is @ConditionalOnMissingBean, so
+		heimdall itself - which owns the real GeboSecretsAccessServiceImpl - keeps its
+		local, in-process implementation.
+
+		Deliberately does NOT depend on gebo.microservices.secrets.controller: that
+		would drag the server-side endpoints onto every consumer.
+	-->
+	<dependencies>
+		<!-- IGeboSecretsAccessService (the interface this module implements), the
+		     secret model and the wire types shared with the controller module, plus
+		     GeboCryptSecretException transitively from gebo.architecture.crypting. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- GeboMicroserviceUrlResolver + its autoconfigured bean: resolves the base
+		     url of heimdall.gebo.ai from the topology. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- WebClient. spring-webflux (not the starter) so that dropping this client
+		     on a servlet service does not pull a reactive web server in with it. -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor.netty</groupId>
+			<artifactId>reactor-netty-http</artifactId>
+		</dependency>
+		<!-- The caller-token propagator (IGeboCallerTokenPropagator), shared with every
+		     other cluster-internal client. Brings spring-security + the optional
+		     IGeboSystemUserService transitively. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- @ConfigurationProperties / @ConditionalOnMissingBean support. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

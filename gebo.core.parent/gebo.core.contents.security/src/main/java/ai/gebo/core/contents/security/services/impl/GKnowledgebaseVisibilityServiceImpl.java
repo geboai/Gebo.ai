@@ -29,7 +29,7 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
 import ai.gebo.knowledgebase.repositories.ProjectRepository;
 import ai.gebo.knowledgebase.repositories.VirtualFolderRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

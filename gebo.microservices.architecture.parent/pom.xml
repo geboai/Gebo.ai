@@ -27,5 +27,12 @@
 			gebo.architecture.microservices.documents.access
 		</module>
 		<module>gebo.microservices.content-handler.starter</module>
+		<module>gebo.microservices.cluster.commons</module>
+		<module>gebo.microservices.secrets.controller</module>
+		<module>gebo.microservices.secrets.client</module>
+		<module>gebo.microservices.security.controller</module>
+		<module>gebo.microservices.security.client</module>
+		<module>gebo.microservices.acl.controller</module>
+		<module>gebo.microservices.acl.client</module>
 	</modules>
 </project>

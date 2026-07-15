@@ -27,3 +27,12 @@ eureka:
     virtual-host-name: chunker-gebo-ai
     secure-virtual-host-name: chunker-gebo-ai
     prefer-ip-address: true
+
+# ---------------------------------------------------------------------------
+# MongoDB database. The SERVER (host, credentials) comes from the shared config;
+# the DATABASE is chosen here, per service.
+# This service owns its own database. The shared config deliberately does NOT set
+# databaseName - it is an additional-location and would override this line.
+# ---------------------------------------------------------------------------
+ai.gebo.mongodb:
+  databaseName: chunker-gebo

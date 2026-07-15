@@ -24,14 +24,41 @@
 			<artifactId>gebo.microservices.topology</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- springdoc OpenAPI/Swagger: every microservice built on this starter
-		     exposes /v3/api-docs so the Java + Angular client stubs can be
-		     regenerated from the live spec. springdoc is classpath-activated;
-		     disable in production via springdoc.api-docs.enabled / swagger-ui.enabled. -->
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.swagger</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
+
+	<profiles>
+		<!--
+			springdoc OpenAPI/Swagger. OFF by default, and that is the point.
+
+			It used to be a plain dependency here, which meant EVERY service built on this
+			starter published /v3/api-docs unconditionally - in production images too. The
+			API surface of every microservice was readable by anything that could reach the
+			port, without anyone choosing it. springdoc is classpath-activated, so the only
+			way to not have it is to not ship it.
+
+			Nothing is lost: each app already declares gebo.architecture.swagger inside its
+			OWN swagger-on profile, which is what a stub-regeneration build activates. So:
+
+			    mvn -P swagger-on ...     -> springdoc present, /v3/api-docs served,
+			                                 client stubs can be generated from the live spec
+			    (default)                 -> no springdoc, no spec endpoint, nothing to leak
+
+			Note the consequence: an image built WITHOUT swagger-on serves no /v3/api-docs,
+			so regenerating the stubs against a running container requires building that
+			container with -P swagger-on.
+		-->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 </project>

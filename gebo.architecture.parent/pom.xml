@@ -58,5 +58,8 @@
   	<module>gebo.architecture.compute.workflow</module>
   	<module>gebo.architecture.replicator</module>
 
+  	<module>gebo.secrets.impl</module>
+  	<module>gebo.security.directory.mongo</module>
+  	<module>gebo.architecture.security.apikey</module>
   </modules>
 </project>

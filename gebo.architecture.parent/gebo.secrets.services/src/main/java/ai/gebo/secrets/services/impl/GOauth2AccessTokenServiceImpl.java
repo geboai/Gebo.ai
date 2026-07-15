@@ -38,6 +38,19 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
  * Provides functionality to retrieve access tokens using client credentials.
  * AI generated comments
  */
+/**
+ * Lives in gebo.secrets.services - the module EVERY service has - and not in
+ * gebo.secrets.impl, which only the owner (heimdall/monolith) packages.
+ *
+ * <p>
+ * It is not a store: it holds no repository, and reaches secrets only through
+ * {@link IGeboSecretsAccessService}, which on a consumer is the REST client. This is
+ * OUTBOUND OAuth2 - refreshing an access token to call SharePoint or an MCP server -
+ * and the services that do it (sharepoint, mcpclient, brain) are precisely the ones
+ * that do NOT own the secrets. Shipping it with the owner's implementation left them
+ * injecting an interface with nothing behind it.
+ * </p>
+ */
 @Service
 public class GOauth2AccessTokenServiceImpl implements IGOauth2AccessTokenService {
 	@Autowired

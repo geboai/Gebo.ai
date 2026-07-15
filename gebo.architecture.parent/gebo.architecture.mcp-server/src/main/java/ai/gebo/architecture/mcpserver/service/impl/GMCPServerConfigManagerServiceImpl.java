@@ -24,7 +24,7 @@ import ai.gebo.architecture.mcpserver.runtime.GeboMcpServerRegistry;
 import ai.gebo.architecture.mcpserver.service.IGMCPServerConfigManagerService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IGSecurityService.AclOwnerInfo;
 import io.jsonwebtoken.security.SecurityException;

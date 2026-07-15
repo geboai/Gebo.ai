@@ -13,6 +13,8 @@
 	<modules>
 		<module>gebo.core</module>
 		<module>gebo.base.model</module>
+		<module>gebo.acl.services</module>
+		<module>gebo.acl.mongo</module>
 		<module>gebo.core.messages</module>
 		<module>gebo.knowledgebase.repositories</module>
 		<module>gebo.knowledgebase.model</module>

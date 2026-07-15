@@ -16,6 +16,29 @@
 	  full-text indexing/search system (OpenSearch-backed).
 	-->
 	<dependencies>
+		<!-- Does not own the ACL store either: IAclAliasesDao is a locally-cached REST
+		     client onto heimdall. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.acl.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- This service does not host the secrets either: IGeboSecretsAccessService is
+		     a REST client onto heimdall. (Not inheritable from gebo.microservices.starter
+		     - heimdall is built on that too, and it owns the real implementation.) -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.secrets.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- This service does NOT own the user store: its IGSecurityDirectory is a REST
+		     client onto heimdall. The authorization services themselves stay local - only
+		     the directory (users, groups, password checks) is remote. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.security.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.starter</artifactId>

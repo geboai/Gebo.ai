@@ -18,7 +18,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 

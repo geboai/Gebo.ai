@@ -7,7 +7,6 @@ import { DocumentContentStreamerWithCacheControllerService } from './api/documen
 import { DocumentsCacheServiceControllerService } from './api/documentsCacheServiceController.service';
 import { DocumentsChunkServiceControllerService } from './api/documentsChunkServiceController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
-import { SecretsControllerService } from './api/secretsController.service';
 
 @NgModule({
   imports:      [],
@@ -17,8 +16,7 @@ import { SecretsControllerService } from './api/secretsController.service';
     DocumentContentStreamerWithCacheControllerService,
     DocumentsCacheServiceControllerService,
     DocumentsChunkServiceControllerService,
-    IngestionFileTypesLibraryControllerService,
-    SecretsControllerService ]
+    IngestionFileTypesLibraryControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

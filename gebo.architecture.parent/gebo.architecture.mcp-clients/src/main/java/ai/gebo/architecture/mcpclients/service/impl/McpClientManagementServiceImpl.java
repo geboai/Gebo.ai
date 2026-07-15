@@ -35,7 +35,7 @@ import ai.gebo.architecture.mcpclients.service.McpClientManagementService;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.GUserMessage.MsgServerity;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import io.modelcontextprotocol.client.McpSyncClient;
 import io.modelcontextprotocol.json.McpJsonDefaults;

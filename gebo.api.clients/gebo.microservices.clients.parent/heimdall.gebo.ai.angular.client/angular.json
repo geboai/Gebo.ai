@@ -1,0 +1,33 @@
+﻿{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "gebo-heimdall-api": {
+      "projectType": "library",
+      "root": "projects/gebo-heimdall-api",
+      "sourceRoot": "projects/gebo-heimdall-api/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/gebo-heimdall-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/gebo-heimdall-api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/gebo-heimdall-api/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}
