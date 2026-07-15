@@ -103,9 +103,11 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 		protected OpenAiAudioSpeechModel configureModel(GenericOpenAIAPITextToSpeechModelConfig config,
 				GTextToSpeechModelType type) throws LLMConfigException {
 			String baseUrl = GenericOpenAIAPITextToSpeechModelConfigurationSupportService.this.type.getBaseUrl();
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "tts-1";
 			OpenAiAudioSpeechOptions.Builder optionsBuilder = OpenAiAudioSpeechOptions.builder()
 					.apiKey(new NoopApiKey())
-					.model("tts-1")
+					.model(modelName)
 					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
 					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3)
 					.speed(1.0);
@@ -159,7 +161,10 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	@Override
 	public GenericOpenAIAPITextToSpeechModelConfig createBaseConfiguration(String presetModel) {
 		GenericOpenAIAPITextToSpeechModelConfig config = new GenericOpenAIAPITextToSpeechModelConfig();
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		GenericOpenAIAPITextToSpeechModelChoice choice = new GenericOpenAIAPITextToSpeechModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "tts-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
 		return config;
 	}
 

@@ -210,7 +210,8 @@ public class GeboLLMSSetupService {
 					IGChatModelConfigurationSupportService handler = chatModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The CHAT Handler " + preset.getServiceHandler() + " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -238,8 +239,8 @@ public class GeboLLMSSetupService {
 					IGEmbeddingModelConfigurationSupportService handler = embedModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -267,8 +268,8 @@ public class GeboLLMSSetupService {
 					IGRankerModelConfigurationSupportService handler = rankerModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -295,8 +296,8 @@ public class GeboLLMSSetupService {
 					IGImageModelConfigurationSupportService handler = imageModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -323,8 +324,8 @@ public class GeboLLMSSetupService {
 					IGTranscriptModelConfigurationSupportService handler = transcriptModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -352,8 +353,8 @@ public class GeboLLMSSetupService {
 					IGTextToSpeechModelConfigurationSupportService handler = ttsModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -655,6 +656,7 @@ public class GeboLLMSSetupService {
 		md.setSecretId(secretId);
 		LLMSModelsPresets preset = vendorData.getPresets().stream().filter(x -> x.getType() == type).toList().get(0);
 		md.setServiceHandler(preset.getServiceHandler());
+		md.setDoModelsLookup(preset.isDoModelsLookup());
 		md.setSetAsDefaultModel(true);
 		md.setType(type);
 		return md;
@@ -668,6 +670,7 @@ public class GeboLLMSSetupService {
 		LLMSModelsPresets embeddingPreset = vendorData.getPresets().stream()
 				.filter(x -> x.getType() == ModelType.EMBEDDING).toList().get(0);
 		md.setServiceHandler(embeddingPreset.getServiceHandler());
+		md.setDoModelsLookup(embeddingPreset.isDoModelsLookup());
 		md.setSetAsDefaultModel(true);
 		md.setType(ModelType.EMBEDDING);
 
@@ -683,6 +686,7 @@ public class GeboLLMSSetupService {
 		LLMSModelsPresets chatPreset = vendorData.getPresets().stream().filter(x -> x.getType() == ModelType.CHAT)
 				.toList().get(0);
 		md.setServiceHandler(chatPreset.getServiceHandler());
+		md.setDoModelsLookup(chatPreset.isDoModelsLookup());
 		md.setSetAsDefaultModel(defaultModel);
 		md.setType(ModelType.CHAT);
 		md.setUses(List.of(use));
@@ -836,6 +840,20 @@ public class GeboLLMSSetupService {
 	private void configureModelValidating(IGModelConfigurationSupportService supportLogic,
 			GBaseModelConfig configuration, LLMCreateModelData req,
 			List<OperationStatus<GBaseModelConfig>> operationsOutput, LLMSModelsCreationResult result) {
+		// The .yml preset declares doModelsLookup=false for model types the provider does
+		// not enumerate through its models endpoint (typically image/tts/transcript). For
+		// those, validating the requested code against getModelChoices produces false
+		// negatives (the model is valid but simply not listed), so we trust the preset
+		// code and create directly. Validation runs only when the preset opts into lookup.
+		boolean doLookup = req.getDoModelsLookup() != null && req.getDoModelsLookup();
+		if (!doLookup) {
+			try {
+				operationsOutput.add(supportLogic.insertAndConfigure(configuration));
+			} catch (Throwable th) {
+				operationsOutput.add(OperationStatus.of(th));
+			}
+			return;
+		}
 		OperationStatus choicesStatus = supportLogic.getModelChoices(configuration);
 		List<GBaseModelChoice> choices = (List<GBaseModelChoice>) choicesStatus.getResult();
 		boolean listAvailable = !choicesStatus.isHasErrorMessages() && choices != null && !choices.isEmpty();

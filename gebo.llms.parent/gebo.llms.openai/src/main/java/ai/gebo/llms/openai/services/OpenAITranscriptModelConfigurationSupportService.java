@@ -136,7 +136,9 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 			org.springframework.ai.openai.OpenAiAudioTranscriptionOptions.Builder builder = OpenAiAudioTranscriptionOptions
 					.builder();
 
-			builder.apiKey(apiKey.getApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model("whisper-1");
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
+			builder.apiKey(apiKey.getApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model(modelName);
 			OpenAiAudioTranscriptionOptions options = builder.build();
 			OpenAiAudioTranscriptionModel model = OpenAiAudioTranscriptionModel.builder()
 					.options(options)
@@ -189,7 +191,10 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	public GOpenAITranscriptModelConfig createBaseConfiguration(String presetModel) {
 		GOpenAITranscriptModelConfig config = new GOpenAITranscriptModelConfig();
 		config.setDescription("OpenAI transcript provider");
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		GOpenAITranscriptModelChoice choice = new GOpenAITranscriptModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "whisper-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
 		return config;
 	}
 

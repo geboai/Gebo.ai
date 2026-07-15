@@ -94,7 +94,9 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 
 			apiKey = apiKeyReader.getApiKeyInfo(config);
 
-			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().apiKey(apiKey.getApiKey()).model("tts-1")
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "tts-1";
+			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().apiKey(apiKey.getApiKey()).model(modelName)
 					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
 					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3).speed(1.0).build();
 			OpenAiAudioSpeechModel model = OpenAiAudioSpeechModel.builder()
@@ -149,7 +151,10 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 	@Override
 	public GOpenAITextToSpeechModelConfig createBaseConfiguration(String presetModel) {
 		GOpenAITextToSpeechModelConfig config = new GOpenAITextToSpeechModelConfig();
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		GOpenAITextToSpeechModelChoice choice = new GOpenAITextToSpeechModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "tts-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
 		return config;
 	}
 

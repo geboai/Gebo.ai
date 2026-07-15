@@ -141,7 +141,9 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 			org.springframework.ai.openai.OpenAiAudioTranscriptionOptions.Builder builder = OpenAiAudioTranscriptionOptions
 					.builder();
 
-			builder.apiKey(new NoopApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model("whisper-1");
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
+			builder.apiKey(new NoopApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model(modelName);
 			if (baseUrl != null) {
 				builder.baseUrl(baseUrl);
 			}
@@ -192,7 +194,10 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	public GenericOpenAIAPITranscriptModelConfig createBaseConfiguration(String presetModel) {
 		GenericOpenAIAPITranscriptModelConfig config = new GenericOpenAIAPITranscriptModelConfig();
 		config.setDescription("OpenAI transcript provider");
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "whisper-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
 		return config;
 	}
 
