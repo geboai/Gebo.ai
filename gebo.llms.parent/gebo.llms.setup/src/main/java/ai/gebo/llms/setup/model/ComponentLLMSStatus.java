@@ -37,4 +37,21 @@ public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.Compon
     public boolean ttsModelSetup;
 
     public boolean transcriptModelSetup;
+
+    // Model code of the current default (or, for the chat service slot, the
+    // internal-services model) of each kind. Null when none is configured. Used by
+    // the expert (Advanced) wizard tab to show what a new model would override.
+    public String chatModelCode;
+
+    public String internalServicesChatModelCode;
+
+    public String embeddedModelCode;
+
+    public String rankingModelCode;
+
+    public String imagesModelCode;
+
+    public String ttsModelCode;
+
+    public String transcriptModelCode;
 }

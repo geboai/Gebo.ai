@@ -153,6 +153,25 @@ public class GeboLLMSSetupService {
 		boolean images;
 		boolean tts;
 		boolean transcript;
+		// The model code of the current default (or, for the chat service slot, the
+		// internal-services model) of each kind, for display in the expert UI.
+		String defaultChatCode;
+		String internalServicesChatCode;
+		String embeddingCode;
+		String rankerCode;
+		String imagesCode;
+		String ttsCode;
+		String transcriptCode;
+	}
+
+	private static String modelCodeOf(GBaseModelConfig config) {
+		if (config == null) {
+			return null;
+		}
+		if (config.getChoosedModel() != null && config.getChoosedModel().getCode() != null) {
+			return config.getChoosedModel().getCode();
+		}
+		return config.getCode();
 	}
 
 	private ModelKindPresence computeModelKindPresence() {
@@ -161,36 +180,43 @@ public class GeboLLMSSetupService {
 			if (chatModel.getConfig() instanceof GBaseChatModelConfig chatModelConfig) {
 				if (chatModelConfig.getDefaultModel() != null && chatModelConfig.getDefaultModel()) {
 					presence.defaultChat = true;
+					presence.defaultChatCode = modelCodeOf(chatModelConfig);
 				}
 				if (chatModelConfig.getForUses() != null
 						&& chatModelConfig.getForUses().contains(ChatModelsUses.INTERNAL_SERVICES)) {
 					presence.internalServicesChat = true;
+					presence.internalServicesChatCode = modelCodeOf(chatModelConfig);
 				}
 			}
 		}
 		for (IGConfigurableEmbeddingModel model : embeddingModelsConfigDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.embedding = true;
+				presence.embeddingCode = modelCodeOf(model.getConfig());
 			}
 		}
 		for (IGConfigurableRankerModel model : rankerModelsRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.ranker = true;
+				presence.rankerCode = modelCodeOf(model.getConfig());
 			}
 		}
 		for (IGConfigurableImageModel model : imageModelRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.images = true;
+				presence.imagesCode = modelCodeOf(model.getConfig());
 			}
 		}
 		for (IGConfigurableTextToSpeechModel model : ttsModelsRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.tts = true;
+				presence.ttsCode = modelCodeOf(model.getConfig());
 			}
 		}
 		for (IGConfigurableTranscriptModel model : transcriptModelsRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.transcript = true;
+				presence.transcriptCode = modelCodeOf(model.getConfig());
 			}
 		}
 		return presence;
@@ -410,6 +436,13 @@ public class GeboLLMSSetupService {
 		status.imagesModelSetup = presence.images;
 		status.ttsModelSetup = presence.tts;
 		status.transcriptModelSetup = presence.transcript;
+		status.chatModelCode = presence.defaultChatCode;
+		status.internalServicesChatModelCode = presence.internalServicesChatCode;
+		status.embeddedModelCode = presence.embeddingCode;
+		status.rankingModelCode = presence.rankerCode;
+		status.imagesModelCode = presence.imagesCode;
+		status.ttsModelCode = presence.ttsCode;
+		status.transcriptModelCode = presence.transcriptCode;
 		status.isSetup = status.chatModelSetup && status.embeddedModelSetup;
 		return status;
 	}
@@ -790,44 +823,6 @@ public class GeboLLMSSetupService {
 	}
 
 	/**
-	 * Tells whether the "kind" targeted by the given creation request is already
-	 * satisfied. The setup wizard is meant for initial configuration only, so it must
-	 * not create a second model of an already-configured kind; adding further models
-	 * of a kind is done from the LLMs admin per-model screens. Chat is treated as two
-	 * distinct slots: the default chat model (uses CHAT) and the internal-services
-	 * chat model (uses INTERNAL_SERVICES).
-	 */
-	private boolean isKindAlreadyConfigured(LLMCreateModelData config, ModelKindPresence presence) {
-		switch (config.getType()) {
-		case CHAT: {
-			boolean isInternalServices = config.getUses() != null
-					&& config.getUses().contains(ChatModelsUses.INTERNAL_SERVICES);
-			return isInternalServices ? presence.internalServicesChat : presence.defaultChat;
-		}
-		case EMBEDDING:
-			return presence.embedding;
-		case RANKING:
-			return presence.ranker;
-		case IMAGESGEN:
-			return presence.images;
-		case TTS:
-			return presence.tts;
-		case TRANSCRIPT:
-			return presence.transcript;
-		}
-		return false;
-	}
-
-	private String describeKind(LLMCreateModelData config) {
-		if (config.getType() == ModelType.CHAT) {
-			boolean isInternalServices = config.getUses() != null
-					&& config.getUses().contains(ChatModelsUses.INTERNAL_SERVICES);
-			return isInternalServices ? "internal services chat model" : "default chat model";
-		}
-		return config.getType().name().toLowerCase() + " model";
-	}
-
-	/**
 	 * Configures a model only after confirming its code is still offered by the
 	 * provider. We ask the provider for its live model list; if the requested code
 	 * (e.g. a preset from the vendor .yml) is present we create it, if the list is
@@ -893,25 +888,13 @@ public class GeboLLMSSetupService {
 
 	public OperationStatus<LLMSModelsCreationResult> createLLMS(List<LLMCreateModelData> configs) {
 
-		ModelKindPresence presence = computeModelKindPresence();
 		LLMSModelsCreationResult result = new LLMSModelsCreationResult();
-		List<GUserMessage> skippedMessages = new ArrayList<>();
 		List<OperationStatus<GBaseModelConfig>> operationsOutput = new ArrayList<>();
 		for (LLMCreateModelData config : configs) {
-			if (isKindAlreadyConfigured(config, presence)) {
-				LOGGER.warn("Skipping wizard creation of an already configured kind: {}", describeKind(config));
-				skippedMessages.add(GUserMessage.warnMessage("Model already configured",
-						"A " + describeKind(config)
-								+ " is already configured. Use the LLMs admin screens to add or change models of this kind."));
-				continue;
-			}
-			// The setup wizard only ever establishes the default of each kind; the sole
-			// exception is the internal-services chat model, which is always non-default.
-			// Force it here so a wizard request can never create a non-default extra of a
-			// not-yet-configured kind (adding such models is the admin screens' job).
-			boolean isInternalServicesChat = config.getType() == ModelType.CHAT && config.getUses() != null
-					&& config.getUses().contains(ChatModelsUses.INTERNAL_SERVICES);
-			config.setSetAsDefaultModel(!isInternalServicesChat);
+			// The guided flows (easy tab / suggested presets) gate by existence in the UI,
+			// so they never resend an already-configured kind. The expert Advanced tab may
+			// deliberately add extra models and override the default, so the requested
+			// setAsDefaultModel / uses are honoured as-is.
 			switch (config.getType()) {
 			case CHAT: {
 				try {
@@ -1031,7 +1014,6 @@ public class GeboLLMSSetupService {
 				out.getMessages().addAll(res.getMessages());
 			}
 		}
-		out.getMessages().addAll(skippedMessages);
 
 		return out;
 	}

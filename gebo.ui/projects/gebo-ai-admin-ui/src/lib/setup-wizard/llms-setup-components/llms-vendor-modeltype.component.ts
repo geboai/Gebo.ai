@@ -295,6 +295,14 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         this.geboFastLLMSSetupService.getLLMSSetupStatus().subscribe({
             next: (value) => {
                 this.llmsStatus = value;
+                // Advanced tab: pre-check "set as default" only when no default of that kind
+                // exists yet. An expert can still tick it to override an existing default.
+                this.chatModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.chatModelSetup !== true);
+                this.embeddingModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.embeddedModelSetup !== true);
+                this.rankerModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.rankingModelSetup !== true);
+                this.imagesModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.imagesModelSetup !== true);
+                this.transcriptModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.transcriptModelSetup !== true);
+                this.ttsModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.ttsModelSetup !== true);
             },
             complete: () => {
                 this.loading = false;
@@ -442,10 +450,10 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
 
     }
-    private addModelData(fg: FormGroup, array: LLMCreateModelData[], type: LLMCreateModelData.TypeEnum, show: boolean, uses?: Array<LLMCreateModelData.UsesEnum>) {
+    private addModelData(fg: FormGroup, array: LLMCreateModelData[], type: LLMCreateModelData.TypeEnum, show: boolean, uses?: Array<LLMCreateModelData.UsesEnum>, honorDefaultFlag: boolean = false) {
         const model: IModelChoice = fg.value;
         if (show && model.choosedModel) {
-            const value = this.buildCreateModelData(model, type, uses);
+            const value = this.buildCreateModelData(model, type, uses, honorDefaultFlag);
             if (value)
                 array.push(value);
         }
@@ -463,28 +471,31 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         this.createLLMS(modelDataCreationArray);
     }
     protected createAdvancedLLMS() {
+        // Advanced (expert) tab: every kind is available regardless of what already
+        // exists, and the "set as default" choice is honoured so an expert can add
+        // extra models and override the current default.
         const modelDataCreationArray: Array<LLMCreateModelData> = [];
-        this.addModelData(this.chatModelAdvancedFormGroup, modelDataCreationArray, "CHAT", this.showDefaultChat, ["CHAT"]);
-        this.addModelData(this.serviceChatModelAdvancedFormGroup, modelDataCreationArray, "CHAT", this.showServiceChat, ["INTERNAL_SERVICES"]);
-        this.addModelData(this.embeddingModelAdvancedFormGroup, modelDataCreationArray, "EMBEDDING", this.showEmbedding);
-        this.addModelData(this.rankerModelAdvancedFormGroup, modelDataCreationArray, "RANKING", this.showRanker);
-        this.addModelData(this.imagesModelAdvancedFormGroup, modelDataCreationArray, "IMAGESGEN", this.showImages);
-        this.addModelData(this.transcriptModelAdvancedFormGroup, modelDataCreationArray, "TRANSCRIPT", this.showTranscript);
-        this.addModelData(this.ttsModelAdvancedFormGroup, modelDataCreationArray, "TTS", this.showTts);
+        this.addModelData(this.chatModelAdvancedFormGroup, modelDataCreationArray, "CHAT", true, ["CHAT"], true);
+        this.addModelData(this.serviceChatModelAdvancedFormGroup, modelDataCreationArray, "CHAT", true, ["INTERNAL_SERVICES"], true);
+        this.addModelData(this.embeddingModelAdvancedFormGroup, modelDataCreationArray, "EMBEDDING", true, undefined, true);
+        this.addModelData(this.rankerModelAdvancedFormGroup, modelDataCreationArray, "RANKING", true, undefined, true);
+        this.addModelData(this.imagesModelAdvancedFormGroup, modelDataCreationArray, "IMAGESGEN", true, undefined, true);
+        this.addModelData(this.transcriptModelAdvancedFormGroup, modelDataCreationArray, "TRANSCRIPT", true, undefined, true);
+        this.addModelData(this.ttsModelAdvancedFormGroup, modelDataCreationArray, "TTS", true, undefined, true);
         this.createLLMS(modelDataCreationArray);
     }
-    private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum, uses?: Array<LLMCreateModelData.UsesEnum>): LLMCreateModelData | undefined {
+    private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum, uses?: Array<LLMCreateModelData.UsesEnum>, honorDefaultFlag: boolean = false): LLMCreateModelData | undefined {
         if (this.vendorConfiguration?.libraryModel) {
             const preset = this.vendorConfiguration.libraryModel.find(providerPreset => providerPreset.type === type);
             const providerAccess: IProviderAccess = this.secretFormGroup.value;
             if (modelChoice?.choosedModel && preset) {
-                // The wizard only ever establishes the default of each kind; the internal-
-                // services chat model is the sole non-default one. There is no "set as
-                // default" choice here anymore.
+                // Internal-services chat is always non-default. For every other kind the
+                // guided flows force the default (honorDefaultFlag=false), while the expert
+                // Advanced tab honours the per-row "set as default" checkbox.
                 const isInternalServices = uses ? uses.indexOf("INTERNAL_SERVICES") >= 0 : false;
                 const out: LLMCreateModelData = {
                     modelCode: modelChoice.choosedModel,
-                    setAsDefaultModel: !isInternalServices,
+                    setAsDefaultModel: isInternalServices ? false : (honorDefaultFlag ? (modelChoice.setAsDefault === true) : true),
                     serviceHandler: preset.serviceHandler,
                     type: type,
                     baseUrl: providerAccess.baseUrl,
