@@ -14,10 +14,13 @@ import ai.gebo.llms.chat.abstraction.layer.model.PromptsParametersCache;
 import ai.gebo.llms.chat.abstraction.layer.repository.PromptsParametersCacheRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
 import ai.gebo.security.services.IGSecurityService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+// Only the collaborators are constructor injected: idleTtlMinutes is a configuration
+// value read through @Value, and an all-args constructor would turn it into a 'long'
+// bean dependency the context cannot satisfy.
+@RequiredArgsConstructor
 public class GPromptsParametersCacheServiceImpl implements IGPromptsParametersCacheService {
 	private final PromptsParametersCacheRepository repo;
 	private final IGSecurityService securityService;
