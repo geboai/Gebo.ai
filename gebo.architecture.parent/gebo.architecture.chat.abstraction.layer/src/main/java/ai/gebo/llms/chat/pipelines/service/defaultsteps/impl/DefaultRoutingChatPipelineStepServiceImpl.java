@@ -28,6 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
@@ -96,6 +97,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final IGPersistentObjectManager persistentManager;
 	private final IGPromptConfigDao promptsDao;
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
+	private final GeboPromptsParametersCacheConfig promptsParamsCacheConfig;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final DefaultPipelineSharedPromptParamsManager paramsManager;
 	private final DefaultPipelineStreamingDelegatedStepServiceImpl chatAgentService;
@@ -242,7 +244,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			final Map<String, Object> cachedParams = this.promptsParamsCacheService.lookupCache(
 					GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
 					runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),
-					DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
+					DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP,
+					promptsParamsCacheConfig.getParametersTtlMillis(), paramsProvider);
 			params.putAll(cachedParams);
 			int usedTokens = tokensLength(latestInteractions, params.toString(), rewrited_query)
 					+ _prompt.getTokensSize();

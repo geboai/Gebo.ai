@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.repository;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -14,4 +15,6 @@ public interface PromptsParametersCacheRepository extends MongoRepository<Prompt
 		Optional<PromptsParametersCache> op = findById(code);
 		return op.isPresent() ? op.get() : null;
 	}
+
+	void deleteByLastHitDateTimeBefore(Date threshold);
 }
