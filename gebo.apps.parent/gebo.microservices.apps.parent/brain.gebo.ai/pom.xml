@@ -18,6 +18,14 @@
 			<artifactId>gebo.microservices.llms.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- LLM fast-setup owner: brain hosts the setup controller/service and the
+		     config-driven bootstrap; created models propagate to the other LLM
+		     microservices via the shared Mongo + Hazelcast models-replication cache. -->
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.setup</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
