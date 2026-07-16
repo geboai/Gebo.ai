@@ -1,5 +1,6 @@
 package ai.gebo.llms.openai.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.ai.openai.OpenAiImageModel;
@@ -22,6 +23,8 @@ import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAIImageModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIImageModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
+import ai.gebo.openai.integration.client.model.OpenAIModel;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
@@ -89,10 +92,58 @@ public class OpenAIImageModelConfigurationSupportService
 
 	@Override
 	public OperationStatus<List<GOpenAIImageModelChoice>> getModelChoices(GOpenAIImageModelConfig config) {
-		// OpenAI does not expose a listing endpoint for image models; presets in the
-		// setup library drive the available choices. Return an empty (non-null) list so
-		// callers doing a live lookup do not fail.
-		return OperationStatus.of(new java.util.ArrayList<GOpenAIImageModelChoice>());
+		try {
+			OpenAIApiConfig apiconfig = new OpenAIApiConfig();
+			apiconfig.setProviderId("openai");
+			apiconfig.setApiKey(readApiKey(config));
+			if (config.getBaseUrl() != null) {
+				apiconfig.setBasePath(config.getBaseUrl());
+			}
+			List<GOpenAIImageModelChoice> choices = new ArrayList<GOpenAIImageModelChoice>();
+			for (OpenAIModel model : openaiApiUtil.getModels(apiconfig)) {
+				if (!isImageModel(model.getId())) {
+					continue;
+				}
+				GOpenAIImageModelChoice choice = new GOpenAIImageModelChoice();
+				choice.setCode(model.getId());
+				choice.setDescription(model.getId());
+				choices.add(choice);
+			}
+			return OperationStatus.of(choices);
+		} catch (Throwable e) {
+			return OperationStatus.of(e);
+		}
+	}
+
+	/**
+	 * Reads the api key the configuration points at, the same way the live model does.
+	 */
+	private String readApiKey(GOpenAIImageModelConfig config) throws LLMConfigException {
+		if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0) {
+			throw new LLMConfigException("OpenAI api cannot work without needed api key configuration");
+		}
+		try {
+			AbstractGeboSecretContent secret = secretService.getSecretContentById(config.getApiSecretCode());
+			if (secret.type() != GeboSecretType.TOKEN) {
+				throw new LLMConfigException("OpenAI api can work only with an api key of type TOKEN");
+			}
+			return ((GeboTokenContent) secret).getToken();
+		} catch (GeboCryptSecretException e) {
+			throw new LLMConfigException("OpenAI api  key configuration gone wrong ", e);
+		}
+	}
+
+	/**
+	 * The OpenAI models listing carries no capability metadata, so the image generation
+	 * models are recognised by the identifiers OpenAI publishes for them (gpt-image-1,
+	 * dall-e-3, dall-e-2, ...).
+	 */
+	private static boolean isImageModel(String modelId) {
+		if (modelId == null) {
+			return false;
+		}
+		String id = modelId.toLowerCase();
+		return id.startsWith("dall-e") || id.contains("image");
 	}
 
 	@Override

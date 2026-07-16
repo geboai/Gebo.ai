@@ -47,14 +47,17 @@ public class GTextToSpeechModelConfigurationSupportServiceRepositoryPatternImpl
     }
 
     /**
-     * Returns the unique identifier for a given text-to-speech model configuration support service.
-     * 
+     * Returns the model type code a text-to-speech support service declares: handlers are
+     * looked up by that code, which is the same key the configurations carry in
+     * modelTypeCode. getId() defaults to the class name for any handler that does not
+     * override it, which would make it unfindable by type code.
+     *
      * @param x an instance of IGTextToSpeechModelConfigurationSupportService from which to extract the code value.
-     * @return a string representing the unique identifier of the given service.
+     * @return the model type code of the given service.
      */
     @Override
     public String getCodeValue(IGTextToSpeechModelConfigurationSupportService x) {
-        return x.getId();
+        return x.getType().getCode();
     }
 
 }

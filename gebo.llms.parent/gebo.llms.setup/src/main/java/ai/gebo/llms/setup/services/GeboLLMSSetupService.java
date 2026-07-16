@@ -867,12 +867,13 @@ public class GeboLLMSSetupService {
 
 	/**
 	 * Configures a model only after confirming its code is still offered by the
-	 * provider. We ask the provider for its live model list; if the requested code
-	 * (e.g. a preset from the vendor .yml) is present we create it, if the list is
-	 * available but the code is missing we record it as unresolved together with the
-	 * available choices so the UI can offer a replacement, and if the list cannot be
-	 * obtained we fall back to the standard insert (which reports the provider's own
-	 * messages).
+	 * provider. We ask the provider for its live model list and create the model only
+	 * when the requested code (e.g. a preset from the vendor .yml) is actually there.
+	 * A code the lookup does not discover is never force-created: it is recorded as
+	 * unresolved together with the choices the provider does offer, so the user picks
+	 * a replacement. When the provider refuses the listing (invalid credentials,
+	 * provider unreachable) nothing is created either: the provider's own messages are
+	 * handed back as the operation status.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void configureModelValidating(IGModelConfigurationSupportService supportLogic,
@@ -890,15 +891,15 @@ public class GeboLLMSSetupService {
 		}
 		OperationStatus choicesStatus = supportLogic.getModelChoices(configuration);
 		List<GBaseModelChoice> choices = (List<GBaseModelChoice>) choicesStatus.getResult();
-		boolean listAvailable = !choicesStatus.isHasErrorMessages() && choices != null && !choices.isEmpty();
-		if (!listAvailable) {
-			// The provider does not actually enumerate this model type (empty list or a
-			// failed listing): trust the configured code and create it directly rather
-			// than silently doing nothing.
-			createDirect(supportLogic, configuration, operationsOutput);
+		if (choicesStatus.isHasErrorMessages()) {
+			// The provider refused the listing: invalid credentials or the service is down.
+			// A model that could not be validated is never created nor persisted - the
+			// provider's own messages are returned instead, as every other operation does.
+			operationsOutput.add(OperationStatus.of(null, choicesStatus.getMessages()));
 			return;
 		}
-		boolean exists = choices.stream()
+		List<GBaseModelChoice> available = choices != null ? choices : List.of();
+		boolean exists = available.stream()
 				.anyMatch(c -> c.getCode() != null && c.getCode().equalsIgnoreCase(req.getModelCode()));
 		if (!exists) {
 			LOGGER.warn("Requested model '{}' ({}) is not offered by the provider anymore", req.getModelCode(),
@@ -908,7 +909,7 @@ public class GeboLLMSSetupService {
 			unresolved.setUses(req.getUses());
 			unresolved.setServiceHandler(req.getServiceHandler());
 			unresolved.setRequestedModelCode(req.getModelCode());
-			unresolved.setAvailableChoices(choices);
+			unresolved.setAvailableChoices(available);
 			result.getUnresolved().add(unresolved);
 			return;
 		}

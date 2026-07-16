@@ -102,7 +102,7 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
         - type: IMAGESGEN
           serviceHandler: image-generation-OpenAI
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: gpt-image-1
               description: GPT Image 1 (high quality image generation)
@@ -113,7 +113,7 @@ ai.gebo.llms.vendors.setup.config:
               description: DALL-E 2
         - type: TTS
           serviceHandler: openai-tts
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: gpt-4o-mini-tts
               description: GPT-4o mini text to speech
@@ -124,7 +124,7 @@ ai.gebo.llms.vendors.setup.config:
               description: TTS 1 HD (higher quality)
         - type: TRANSCRIPT
           serviceHandler: openai-transcript
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: gpt-4o-transcribe
               description: GPT-4o Transcribe (speech to text)

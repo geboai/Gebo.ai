@@ -24,8 +24,10 @@ public class GImageModelConfigurationSupportServiceRepositoryPatternImpl
 
 	@Override
 	public String getCodeValue(IGImageModelConfigurationSupportService x) {
-
-		return x.getId();
+		// Handlers are looked up by the model type code they declare - the same key the
+		// configurations carry in modelTypeCode. getId() defaults to the class name for
+		// any handler that does not override it, which makes it unfindable by type code.
+		return x.getType().getCode();
 	}
 
 }

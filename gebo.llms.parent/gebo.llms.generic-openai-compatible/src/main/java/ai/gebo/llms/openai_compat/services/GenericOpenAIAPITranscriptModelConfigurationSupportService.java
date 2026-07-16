@@ -205,6 +205,7 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "whisper-1");
 		choice.setDescription(choice.getCode());
 		config.setChoosedModel(choice);
+		config.setModelTypeCode(getType().getCode());
 		return config;
 	}
 

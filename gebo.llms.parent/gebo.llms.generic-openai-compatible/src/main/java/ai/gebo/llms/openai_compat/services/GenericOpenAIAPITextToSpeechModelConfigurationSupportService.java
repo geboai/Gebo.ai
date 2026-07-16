@@ -172,6 +172,7 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "tts-1");
 		choice.setDescription(choice.getCode());
 		config.setChoosedModel(choice);
+		config.setModelTypeCode(getType().getCode());
 		return config;
 	}
 
