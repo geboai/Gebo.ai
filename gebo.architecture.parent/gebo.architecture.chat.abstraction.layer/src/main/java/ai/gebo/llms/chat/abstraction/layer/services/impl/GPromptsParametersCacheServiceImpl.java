@@ -6,29 +6,24 @@ import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.PromptsParametersCache;
 import ai.gebo.llms.chat.abstraction.layer.repository.PromptsParametersCacheRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
 import ai.gebo.security.services.IGSecurityService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Service
-// Only the collaborators are constructor injected: idleTtlMinutes is a configuration
-// value read through @Value, and an all-args constructor would turn it into a 'long'
-// bean dependency the context cannot satisfy.
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class GPromptsParametersCacheServiceImpl implements IGPromptsParametersCacheService {
 	private final PromptsParametersCacheRepository repo;
 	private final IGSecurityService securityService;
+	private final GeboPromptsParametersCacheConfig cacheConfig;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GPromptsParametersCacheServiceImpl.class);
-
-	@Value("${ai.gebo.chat.prompts.cache.idle-ttl-minutes:30}")
-	private long idleTtlMinutes;
 
 	@Override
 	public Map<String, Object> lookupCache(String promptUse, String userChatContext, String contextKey, String langCode,
@@ -69,7 +64,7 @@ public class GPromptsParametersCacheServiceImpl implements IGPromptsParametersCa
 	@Scheduled(initialDelay = 60000, fixedRate = 300000)
 	public void scheduledEviction() {
 		try {
-			evictStaleEntries(idleTtlMinutes * 60 * 1000);
+			evictStaleEntries(cacheConfig.getIdleTtlMinutes() * 60 * 1000);
 		} catch (Throwable th) {
 			LOGGER.error("Error in prompts cache scheduled eviction", th);
 		}
