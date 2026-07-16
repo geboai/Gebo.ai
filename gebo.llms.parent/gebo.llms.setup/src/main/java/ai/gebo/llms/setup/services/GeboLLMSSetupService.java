@@ -174,17 +174,33 @@ public class GeboLLMSSetupService {
 	}
 
 	private static String modelCodeOf(GBaseModelConfig config) {
-		if (config == null) {
-			return null;
-		}
-		if (config.getChoosedModel() != null && config.getChoosedModel().getCode() != null) {
-			return config.getChoosedModel().getCode();
-		}
-		return config.getCode();
+		// Show the actual model (the chosen model code), never the internal config code.
+		return config != null && config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null;
 	}
 
-	private static String providerIdOf(GModelType type) {
-		return type != null ? type.getCode() : null;
+	/**
+	 * Resolves the provider id of a configured model by mapping its handler (model
+	 * type) code back to the vendor that declares it in the fast-setup library
+	 * ({@code library.yml}), so the UI shows e.g. "nvidia" rather than the internal
+	 * "chatmodel-nvidia" handler code. Falls back to the handler code if the model
+	 * comes from a provider not present in the library.
+	 */
+	private String providerIdOf(GModelType type) {
+		if (type == null || type.getCode() == null) {
+			return null;
+		}
+		String handlerCode = type.getCode();
+		for (LLMSVendor vendor : vendorsSetupConfig.getVendors()) {
+			if (vendor.getPresets() == null) {
+				continue;
+			}
+			for (LLMSModelsPresets preset : vendor.getPresets()) {
+				if (handlerCode.equals(preset.getServiceHandler()) && vendor.getVendorInfo() != null) {
+					return vendor.getVendorInfo().getVendorId();
+				}
+			}
+		}
+		return handlerCode;
 	}
 
 	private ModelKindPresence computeModelKindPresence() {
