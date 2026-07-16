@@ -54,4 +54,20 @@ public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.Compon
     public String ttsModelCode;
 
     public String transcriptModelCode;
+
+    // Provider (model type handler code) that owns each current default, shown next
+    // to the model code in the expert (Advanced) wizard tab.
+    public String chatModelProviderId;
+
+    public String internalServicesChatModelProviderId;
+
+    public String embeddedModelProviderId;
+
+    public String rankingModelProviderId;
+
+    public String imagesModelProviderId;
+
+    public String ttsModelProviderId;
+
+    public String transcriptModelProviderId;
 }

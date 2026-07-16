@@ -162,6 +162,15 @@ public class GeboLLMSSetupService {
 		String imagesCode;
 		String ttsCode;
 		String transcriptCode;
+		// The provider (model type handler code, e.g. chatgpt-OpenAI / chatmodel-regolo.ai)
+		// of each current default, so the expert UI can show which provider owns it.
+		String defaultChatProviderId;
+		String internalServicesChatProviderId;
+		String embeddingProviderId;
+		String rankerProviderId;
+		String imagesProviderId;
+		String ttsProviderId;
+		String transcriptProviderId;
 	}
 
 	private static String modelCodeOf(GBaseModelConfig config) {
@@ -174,6 +183,10 @@ public class GeboLLMSSetupService {
 		return config.getCode();
 	}
 
+	private static String providerIdOf(GModelType type) {
+		return type != null ? type.getCode() : null;
+	}
+
 	private ModelKindPresence computeModelKindPresence() {
 		ModelKindPresence presence = new ModelKindPresence();
 		for (IGConfigurableChatModel chatModel : chatModelsConfigDao.getConfigurations()) {
@@ -181,11 +194,13 @@ public class GeboLLMSSetupService {
 				if (chatModelConfig.getDefaultModel() != null && chatModelConfig.getDefaultModel()) {
 					presence.defaultChat = true;
 					presence.defaultChatCode = modelCodeOf(chatModelConfig);
+					presence.defaultChatProviderId = providerIdOf(chatModel.getType());
 				}
 				if (chatModelConfig.getForUses() != null
 						&& chatModelConfig.getForUses().contains(ChatModelsUses.INTERNAL_SERVICES)) {
 					presence.internalServicesChat = true;
 					presence.internalServicesChatCode = modelCodeOf(chatModelConfig);
+					presence.internalServicesChatProviderId = providerIdOf(chatModel.getType());
 				}
 			}
 		}
@@ -193,30 +208,35 @@ public class GeboLLMSSetupService {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.embedding = true;
 				presence.embeddingCode = modelCodeOf(model.getConfig());
+				presence.embeddingProviderId = providerIdOf(model.getType());
 			}
 		}
 		for (IGConfigurableRankerModel model : rankerModelsRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.ranker = true;
 				presence.rankerCode = modelCodeOf(model.getConfig());
+				presence.rankerProviderId = providerIdOf(model.getType());
 			}
 		}
 		for (IGConfigurableImageModel model : imageModelRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.images = true;
 				presence.imagesCode = modelCodeOf(model.getConfig());
+				presence.imagesProviderId = providerIdOf(model.getType());
 			}
 		}
 		for (IGConfigurableTextToSpeechModel model : ttsModelsRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.tts = true;
 				presence.ttsCode = modelCodeOf(model.getConfig());
+				presence.ttsProviderId = providerIdOf(model.getType());
 			}
 		}
 		for (IGConfigurableTranscriptModel model : transcriptModelsRuntimeDao.getConfigurations()) {
 			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
 				presence.transcript = true;
 				presence.transcriptCode = modelCodeOf(model.getConfig());
+				presence.transcriptProviderId = providerIdOf(model.getType());
 			}
 		}
 		return presence;
@@ -443,6 +463,13 @@ public class GeboLLMSSetupService {
 		status.imagesModelCode = presence.imagesCode;
 		status.ttsModelCode = presence.ttsCode;
 		status.transcriptModelCode = presence.transcriptCode;
+		status.chatModelProviderId = presence.defaultChatProviderId;
+		status.internalServicesChatModelProviderId = presence.internalServicesChatProviderId;
+		status.embeddedModelProviderId = presence.embeddingProviderId;
+		status.rankingModelProviderId = presence.rankerProviderId;
+		status.imagesModelProviderId = presence.imagesProviderId;
+		status.ttsModelProviderId = presence.ttsProviderId;
+		status.transcriptModelProviderId = presence.transcriptProviderId;
 		status.isSetup = status.chatModelSetup && status.embeddedModelSetup;
 		return status;
 	}

@@ -154,7 +154,7 @@
                                     [trueValue]="true" [falseValue]="false"></p-checkbox>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-3"><small *ngIf="llmsStatus?.chatModelCode"><span id="ChatCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.chatModelCode}}</small></div>
+                        <div class="col-3"><small *ngIf="llmsStatus?.chatModelCode"><span id="ChatCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.chatModelCode}} ({{llmsStatus?.chatModelProviderId}})</small></div>
                     </ng-container>
                     <ng-container *ngIf="lookedUpChatModels.length>0">
                         <div class="col-5" [formGroup]="serviceChatModelAdvancedFormGroup">
@@ -165,7 +165,7 @@
                             </gebo-ai-field>
                         </div>
                         <div class="col-4"></div>
-                        <div class="col-3"><small *ngIf="llmsStatus?.internalServicesChatModelCode"><span id="SvcChatCur" gebo-ai-text>Current</span>: {{llmsStatus?.internalServicesChatModelCode}}</small></div>
+                        <div class="col-3"><small *ngIf="llmsStatus?.internalServicesChatModelCode"><span id="SvcChatCur" gebo-ai-text>Current</span>: {{llmsStatus?.internalServicesChatModelCode}} ({{llmsStatus?.internalServicesChatModelProviderId}})</small></div>
                     </ng-container>
                     <ng-container *ngIf="lookedUpEmbeddingModels.length>0">
                         <div class="col-5" [formGroup]="embeddingModelAdvancedFormGroup">
@@ -182,7 +182,7 @@
                                     [trueValue]="true" [falseValue]="false"></p-checkbox>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-4"><small *ngIf="llmsStatus?.embeddedModelCode"><span id="EmbCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.embeddedModelCode}}</small></div>
+                        <div class="col-4"><small *ngIf="llmsStatus?.embeddedModelCode"><span id="EmbCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.embeddedModelCode}} ({{llmsStatus?.embeddedModelProviderId}})</small></div>
                     </ng-container>
                     <ng-container *ngIf="lookedUpRankingModels.length>0">
                         <div class="col-5" [formGroup]="rankerModelAdvancedFormGroup">
@@ -199,7 +199,7 @@
                                     [trueValue]="true" [falseValue]="false"></p-checkbox>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-4"><small *ngIf="llmsStatus?.rankingModelCode"><span id="RankCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.rankingModelCode}}</small></div>
+                        <div class="col-4"><small *ngIf="llmsStatus?.rankingModelCode"><span id="RankCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.rankingModelCode}} ({{llmsStatus?.rankingModelProviderId}})</small></div>
                     </ng-container>
                     <ng-container *ngIf="lookedUpImagesModels.length>0">
                         <div class="col-5" [formGroup]="imagesModelAdvancedFormGroup">
@@ -216,7 +216,7 @@
                                     [trueValue]="true" [falseValue]="false"></p-checkbox>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-4"><small *ngIf="llmsStatus?.imagesModelCode"><span id="ImgCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.imagesModelCode}}</small></div>
+                        <div class="col-4"><small *ngIf="llmsStatus?.imagesModelCode"><span id="ImgCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.imagesModelCode}} ({{llmsStatus?.imagesModelProviderId}})</small></div>
                     </ng-container>
                     <ng-container *ngIf="lookedUpTranscriptModels.length>0">
                         <div class="col-5" [formGroup]="transcriptModelAdvancedFormGroup">
@@ -233,7 +233,7 @@
                                     [trueValue]="true" [falseValue]="false"></p-checkbox>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-4"><small *ngIf="llmsStatus?.transcriptModelCode"><span id="TrsCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.transcriptModelCode}}</small></div>
+                        <div class="col-4"><small *ngIf="llmsStatus?.transcriptModelCode"><span id="TrsCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.transcriptModelCode}} ({{llmsStatus?.transcriptModelProviderId}})</small></div>
                     </ng-container>
                     <ng-container *ngIf="lookedUpTtsModels.length>0">
                         <div class="col-5" [formGroup]="ttsModelAdvancedFormGroup">
@@ -250,7 +250,7 @@
                                     [trueValue]="true" [falseValue]="false"></p-checkbox>
                             </gebo-ai-field>
                         </div>
-                        <div class="col-4"><small *ngIf="llmsStatus?.ttsModelCode"><span id="TtsCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.ttsModelCode}}</small></div>
+                        <div class="col-4"><small *ngIf="llmsStatus?.ttsModelCode"><span id="TtsCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.ttsModelCode}} ({{llmsStatus?.ttsModelProviderId}})</small></div>
                     </ng-container>
                     <div class="col-3">
                         <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"
