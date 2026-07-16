@@ -26,4 +26,11 @@ export interface ComponentLLMSStatus {
     imagesModelCode?: string;
     ttsModelCode?: string;
     transcriptModelCode?: string;
+    chatModelProviderId?: string;
+    internalServicesChatModelProviderId?: string;
+    embeddedModelProviderId?: string;
+    rankingModelProviderId?: string;
+    imagesModelProviderId?: string;
+    ttsModelProviderId?: string;
+    transcriptModelProviderId?: string;
 }
