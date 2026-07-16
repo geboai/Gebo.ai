@@ -60,6 +60,9 @@
 
   	<module>gebo.secrets.impl</module>
   	<module>gebo.security.directory.mongo</module>
-  	<module>gebo.architecture.security.apikey</module>
+   	<module>gebo.architecture.security.apikey</module>
+   	<module>gebo.architecture.fastsetup</module>
+   	<module>gebo.architecture.fastsetup.rag</module>
+   	<module>gebo.architecture.fastsetup.system</module>
   </modules>
 </project>

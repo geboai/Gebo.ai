@@ -93,6 +93,11 @@
 			<artifactId>gebo.architecture.security.apikey</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.fastsetup.system</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Environment, RabbitMQ messaging bridge, topology and springdoc. -->
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
