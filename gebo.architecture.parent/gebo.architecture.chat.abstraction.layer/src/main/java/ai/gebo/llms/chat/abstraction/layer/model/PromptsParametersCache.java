@@ -29,6 +29,8 @@ public class PromptsParametersCache {
 	private String langCode = "en";
 	@NotNull
 	private Date creationDateTime = new Date();
+	@NotNull
+	private Date lastHitDateTime = new Date();
 
 	public static String calculateCode(String promptUse, String userChatContext, String contextKey, String username,
 			String langCode) {
