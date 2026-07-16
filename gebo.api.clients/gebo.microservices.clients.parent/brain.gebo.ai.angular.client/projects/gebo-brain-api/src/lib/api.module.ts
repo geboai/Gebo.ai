@@ -20,6 +20,7 @@ import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesContr
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
 import { GeboDeepSearchAdminControllerService } from './api/geboDeepSearchAdminController.service';
 import { GeboDeepSearchControllerService } from './api/geboDeepSearchController.service';
+import { GeboFastLlmsSetupControllerService } from './api/geboFastLlmsSetupController.service';
 import { GeboLlmGeneratedResourceControllerService } from './api/geboLlmGeneratedResourceController.service';
 import { GeboRagChatControllerService } from './api/geboRagChatController.service';
 import { GeboTextToSpeechControllerService } from './api/geboTextToSpeechController.service';
@@ -63,6 +64,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GeboChatProfileLookupControllerService,
     GeboDeepSearchAdminControllerService,
     GeboDeepSearchControllerService,
+    GeboFastLlmsSetupControllerService,
     GeboLlmGeneratedResourceControllerService,
     GeboRagChatControllerService,
     GeboTextToSpeechControllerService,
