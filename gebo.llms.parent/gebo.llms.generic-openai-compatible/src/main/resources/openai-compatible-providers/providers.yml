@@ -53,7 +53,10 @@ ai.gebo.llms.generic.config:
     - code: embedding-openrouter.ai
       providerId: openrouter.ai
       description: OpenRouter.ai embedding models
-      baseUrl: https://openrouter.ai/api/
+      # The embedding client appends the sole endpoint name to this url, so it has to
+      # carry the api version: openrouter.ai answers the unversioned path with an html
+      # error page, which the client cannot read as json.
+      baseUrl: https://openrouter.ai/api/v1/
       modelsListProvider: openrouter-ai-models-list
 
     - code: embedding-groq
