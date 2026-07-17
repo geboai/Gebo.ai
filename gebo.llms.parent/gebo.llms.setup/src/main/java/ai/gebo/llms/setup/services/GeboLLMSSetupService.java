@@ -916,6 +916,11 @@ public class GeboLLMSSetupService {
 		try {
 			operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, req.getModelCode()));
 		} catch (Throwable th) {
+			// The user gets the message, the log keeps the stack: the cause of a failed
+			// allocation (the provider call the model does to configure itself, the vector
+			// store creation, ...) is nowhere else to be found once it becomes a message.
+			LOGGER.error("Cannot create the " + req.getType() + " model '" + req.getModelCode() + "' on "
+					+ req.getServiceHandler(), th);
 			operationsOutput.add(OperationStatus.of(th));
 		}
 	}
@@ -926,6 +931,7 @@ public class GeboLLMSSetupService {
 		try {
 			operationsOutput.add(supportLogic.insertAndConfigure(configuration));
 		} catch (Throwable th) {
+			LOGGER.error("Cannot create the model configured as " + configuration.getModelTypeCode(), th);
 			operationsOutput.add(OperationStatus.of(th));
 		}
 	}
