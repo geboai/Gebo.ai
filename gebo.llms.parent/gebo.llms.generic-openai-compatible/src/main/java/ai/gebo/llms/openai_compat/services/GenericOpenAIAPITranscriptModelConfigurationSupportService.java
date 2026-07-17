@@ -39,6 +39,10 @@ import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboSecretType;
+import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
@@ -137,13 +141,36 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 		protected OpenAiAudioTranscriptionModel configureModel(GenericOpenAIAPITranscriptModelConfig config,
 				GTranscriptModelType type) throws LLMConfigException {
 
+			String apiKey = null;
+			if (config.getApiSecretCode() != null && config.getApiSecretCode().trim().length() > 0) {
+				try {
+					AbstractGeboSecretContent secret = secretService.getSecretContentById(config.getApiSecretCode());
+					if (secret.type() == GeboSecretType.TOKEN) {
+						apiKey = ((GeboTokenContent) secret).getToken();
+					} else {
+						throw new LLMConfigException(
+								type.getDescription() + " api can work only with an api key of type TOKEN");
+					}
+				} catch (GeboCryptSecretException e) {
+					throw new LLMConfigException(type.getDescription() + " api  key configuration gone wrong ", e);
+				}
+			}
 			String baseUrl = GenericOpenAIAPITranscriptModelConfigurationSupportService.this.type.getBaseUrl();
 			org.springframework.ai.openai.OpenAiAudioTranscriptionOptions.Builder builder = OpenAiAudioTranscriptionOptions
 					.builder();
 
 			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
 					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
-			builder.apiKey(new NoopApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model(modelName);
+			// json is the format every openai compatible provider answers a transcription
+			// with, while the plain text one is not always offered (openrouter.ai refuses
+			// it): the client reads the transcription out of the json either way.
+			builder.responseFormat(AudioResponseFormat.JSON).temperature(0f).model(modelName);
+			if (apiKey != null) {
+				builder.apiKey(apiKey);
+			} else {
+				// A provider that needs no credentials (a local one) keeps the noop key.
+				builder.apiKey(new NoopApiKey());
+			}
 			if (baseUrl != null) {
 				builder.baseUrl(baseUrl);
 			}
