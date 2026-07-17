@@ -69,11 +69,12 @@ public class OpenRouterAiClient {
 	 * dedicated type parameter; a model's type is inferred from what it produces.
 	 *
 	 * <p>
-	 * {@link #serverValue} is non-{@code null} for the modalities the
-	 * {@code output_modalities} query parameter accepts (so they can be filtered
-	 * server-side); the others ({@code RERANK}, {@code SPEECH}, {@code TRANSCRIPTION})
-	 * are only reported in a model's {@code architecture.output_modalities} and must
-	 * be filtered client-side.
+	 * {@link #serverValue} is the value the {@code output_modalities} query parameter
+	 * takes, and it has to be sent for every modality: the listing returns the text
+	 * models when the parameter is omitted, so a modality left to filter client-side
+	 * over that default listing can only ever come back empty. The same value is then
+	 * reported in a model's {@code architecture.output_modalities}, which is what
+	 * {@link #architectureValue} re-checks.
 	 * </p>
 	 */
 	public enum OutputModality {
@@ -86,12 +87,12 @@ public class OpenRouterAiClient {
 		IMAGE("image", "image"),
 		/** Audio output models. */
 		AUDIO("audio", "audio"),
-		/** Reranking models (client-side filter only). */
-		RERANK(null, "rerank"),
-		/** Speech synthesis models (client-side filter only). */
-		SPEECH(null, "speech"),
-		/** Transcription models (client-side filter only). */
-		TRANSCRIPTION(null, "transcription");
+		/** Reranking models. */
+		RERANK("rerank", "rerank"),
+		/** Speech synthesis models. */
+		SPEECH("speech", "speech"),
+		/** Transcription models. */
+		TRANSCRIPTION("transcription", "transcription");
 
 		private final String serverValue;
 		private final String architectureValue;
