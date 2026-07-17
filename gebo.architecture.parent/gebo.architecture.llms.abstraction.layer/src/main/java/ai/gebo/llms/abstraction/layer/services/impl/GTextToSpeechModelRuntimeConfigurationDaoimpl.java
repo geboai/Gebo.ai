@@ -52,7 +52,7 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
      * Logger for this class
      * AI generated comments
      */
-	static Logger LOGGER = LoggerFactory.getLogger(GEmbeddingModelRuntimeConfigurationDaoImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(GTextToSpeechModelRuntimeConfigurationDaoimpl.class);
 	
 	/** 
      * ObjectMapper to handle JSON processing
@@ -99,12 +99,12 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
 			return x.getType().getCode().equals(config.getModelTypeCode());
 		});
 		if (handler == null) {
-			LOGGER.error("Received in configuration an embedding model with type=>" + config.getModelTypeCode()
+			LOGGER.error("Received in configuration a text to speech model with type=>" + config.getModelTypeCode()
 					+ " that is not found");
-			throw new LLMConfigException("Cannot find embedding model with type=>" + config.getModelTypeCode());
+			throw new LLMConfigException("Cannot find text to speech model with type=>" + config.getModelTypeCode());
 		}
 		try {
-			LOGGER.info("Initializing embedding model with configuration:" + mapper.writeValueAsString(config));
+			LOGGER.info("Initializing text to speech model with configuration:" + mapper.writeValueAsString(config));
 		} catch (JacksonException e) {
 			// Handle JSON processing exception here
 		}
@@ -144,12 +144,17 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
 			List<GBaseTextToSpeachModelConfig> configs = persistentObjectManager
 					.findAllExtendingType(GBaseTextToSpeachModelConfig.class);
 			for (GBaseTextToSpeachModelConfig config : configs) {
-				addRuntimeByConfig(config);
+				try {
+					addRuntimeByConfig(config);
+				} catch (Throwable e) {
+					// A single model that cannot be allocated (revoked key, provider down, stale
+					// configuration) must never keep the whole application from starting: report
+					// it and carry on with the remaining models.
+					LOGGER.error("Cannot initialize the text to speech model with code=>" + config.getCode(), e);
+				}
 			}
-		} catch (GeboPersistenceException | LLMConfigException e) {
-			String msg = "FATAL EMBEDDING MODELS INITIALIZATION EXCEPTION";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Cannot read the text to speech models configuration", e);
 		}
 		LOGGER.info("End initalizing  text to speech models dinamically");
 	}

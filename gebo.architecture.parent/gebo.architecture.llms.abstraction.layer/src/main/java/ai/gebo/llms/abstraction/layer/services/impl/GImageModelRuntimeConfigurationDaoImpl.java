@@ -101,12 +101,17 @@ public class GImageModelRuntimeConfigurationDaoImpl
 			List<GBaseImageModelConfig> configs = persistentObjectManager
 					.findAllExtendingType(GBaseImageModelConfig.class);
 			for (GBaseImageModelConfig config : configs) {
-				this.addRuntimeByConfig(config);
+				try {
+					this.addRuntimeByConfig(config);
+				} catch (Throwable e) {
+					// A single model that cannot be allocated (revoked key, provider down, stale
+					// configuration) must never keep the whole application from starting: report
+					// it and carry on with the remaining models.
+					LOGGER.error("Cannot initialize the image model with code=>" + config.getCode(), e);
+				}
 			}
-		} catch (GeboPersistenceException | LLMConfigException e) {
-			String msg = "FATAL CHAT MODELS INITIALIZATION EXCEPTION";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Cannot read the image models configuration", e);
 		}
 
 		LOGGER.info("End initializing image models dinamically");

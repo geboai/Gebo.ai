@@ -36,6 +36,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportService;
@@ -63,6 +64,8 @@ import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
 import ai.gebo.llms.setup.model.LLMCredentialsVerificationData;
 import ai.gebo.llms.setup.model.LLMExistingConfiguration;
 import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
+import ai.gebo.llms.setup.model.LLMSModelsCreationResult;
+import ai.gebo.llms.setup.model.LLMSModelsCreationResult.LLMUnresolvedModel;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData.LLMSSetupConfiguration;
 import ai.gebo.model.GUserMessage;
@@ -134,16 +137,129 @@ public class GeboLLMSSetupService {
 		return value;
 	}
 
+	/**
+	 * Lightweight snapshot of which model "kinds" already have a suitable model
+	 * configured. Presence is default-based (a model flagged as default), except the
+	 * internal-services chat slot which is identified by its declared uses. This is
+	 * the single source of truth shared by {@link #getActualConfiguration()},
+	 * {@link #getLLMSSetupStatus()} and the wizard-only creation guards, so the
+	 * various entry points can never disagree on what is already set up.
+	 */
+	private static class ModelKindPresence {
+		boolean defaultChat;
+		boolean internalServicesChat;
+		boolean embedding;
+		boolean ranker;
+		boolean images;
+		boolean tts;
+		boolean transcript;
+		// The model code of the current default (or, for the chat service slot, the
+		// internal-services model) of each kind, for display in the expert UI.
+		String defaultChatCode;
+		String internalServicesChatCode;
+		String embeddingCode;
+		String rankerCode;
+		String imagesCode;
+		String ttsCode;
+		String transcriptCode;
+		// The provider (model type handler code, e.g. chatgpt-OpenAI / chatmodel-regolo.ai)
+		// of each current default, so the expert UI can show which provider owns it.
+		String defaultChatProviderId;
+		String internalServicesChatProviderId;
+		String embeddingProviderId;
+		String rankerProviderId;
+		String imagesProviderId;
+		String ttsProviderId;
+		String transcriptProviderId;
+	}
+
+	private static String modelCodeOf(GBaseModelConfig config) {
+		// Show the actual model (the chosen model code), never the internal config code.
+		return config != null && config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null;
+	}
+
+	/**
+	 * Resolves the provider id of a configured model by mapping its handler (model
+	 * type) code back to the vendor that declares it in the fast-setup library
+	 * ({@code library.yml}), so the UI shows e.g. "nvidia" rather than the internal
+	 * "chatmodel-nvidia" handler code. Falls back to the handler code if the model
+	 * comes from a provider not present in the library.
+	 */
+	private String providerIdOf(GModelType type) {
+		if (type == null || type.getCode() == null) {
+			return null;
+		}
+		String handlerCode = type.getCode();
+		for (LLMSVendor vendor : vendorsSetupConfig.getVendors()) {
+			if (vendor.getPresets() == null) {
+				continue;
+			}
+			for (LLMSModelsPresets preset : vendor.getPresets()) {
+				if (handlerCode.equals(preset.getServiceHandler()) && vendor.getVendorInfo() != null) {
+					return vendor.getVendorInfo().getVendorId();
+				}
+			}
+		}
+		return handlerCode;
+	}
+
+	private ModelKindPresence computeModelKindPresence() {
+		ModelKindPresence presence = new ModelKindPresence();
+		for (IGConfigurableChatModel chatModel : chatModelsConfigDao.getConfigurations()) {
+			if (chatModel.getConfig() instanceof GBaseChatModelConfig chatModelConfig) {
+				if (chatModelConfig.getDefaultModel() != null && chatModelConfig.getDefaultModel()) {
+					presence.defaultChat = true;
+					presence.defaultChatCode = modelCodeOf(chatModelConfig);
+					presence.defaultChatProviderId = providerIdOf(chatModel.getType());
+				}
+				if (chatModelConfig.getForUses() != null
+						&& chatModelConfig.getForUses().contains(ChatModelsUses.INTERNAL_SERVICES)) {
+					presence.internalServicesChat = true;
+					presence.internalServicesChatCode = modelCodeOf(chatModelConfig);
+					presence.internalServicesChatProviderId = providerIdOf(chatModel.getType());
+				}
+			}
+		}
+		for (IGConfigurableEmbeddingModel model : embeddingModelsConfigDao.getConfigurations()) {
+			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
+				presence.embedding = true;
+				presence.embeddingCode = modelCodeOf(model.getConfig());
+				presence.embeddingProviderId = providerIdOf(model.getType());
+			}
+		}
+		for (IGConfigurableRankerModel model : rankerModelsRuntimeDao.getConfigurations()) {
+			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
+				presence.ranker = true;
+				presence.rankerCode = modelCodeOf(model.getConfig());
+				presence.rankerProviderId = providerIdOf(model.getType());
+			}
+		}
+		for (IGConfigurableImageModel model : imageModelRuntimeDao.getConfigurations()) {
+			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
+				presence.images = true;
+				presence.imagesCode = modelCodeOf(model.getConfig());
+				presence.imagesProviderId = providerIdOf(model.getType());
+			}
+		}
+		for (IGConfigurableTextToSpeechModel model : ttsModelsRuntimeDao.getConfigurations()) {
+			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
+				presence.tts = true;
+				presence.ttsCode = modelCodeOf(model.getConfig());
+				presence.ttsProviderId = providerIdOf(model.getType());
+			}
+		}
+		for (IGConfigurableTranscriptModel model : transcriptModelsRuntimeDao.getConfigurations()) {
+			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
+				presence.transcript = true;
+				presence.transcriptCode = modelCodeOf(model.getConfig());
+				presence.transcriptProviderId = providerIdOf(model.getType());
+			}
+		}
+		return presence;
+	}
+
 	public LLMSSetupConfigurationData getActualConfiguration() throws GeboCryptSecretException {
 		LLMSSetupConfigurationData configData = new LLMSSetupConfigurationData();
-		boolean canRunAutoconfigure = false;
-		boolean embeddingModelExists = false;
-		boolean rankerModelExists = false;
-		boolean imagesModelExists = false;
-		boolean ttsModelExists = false;
-		boolean transcriptModelExists = false;
-		boolean defaultChatModelExists = false;
-		boolean internalServicesChatModelExists = false;
 
 		for (LLMSVendor vendor : vendorsSetupConfig.getVendors()) {
 			LLMSSetupConfiguration vendorData = new LLMSSetupConfiguration();
@@ -156,22 +272,13 @@ public class GeboLLMSSetupService {
 					IGChatModelConfigurationSupportService handler = chatModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The CHAT Handler " + preset.getServiceHandler() + " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableChatModel> chatConfigurations = chatModelsConfigDao.getConfigurations();
 					for (IGConfigurableChatModel chatModel : chatConfigurations) {
-
-						if (chatModel.getConfig() instanceof GBaseChatModelConfig chatModelConfig) {
-							if (chatModelConfig.getDefaultModel() != null && chatModelConfig.getDefaultModel()) {
-								defaultChatModelExists = true;
-							}
-							if (chatModelConfig.getForUses() != null
-									&& chatModelConfig.getForUses().contains(ChatModelsUses.INTERNAL_SERVICES)) {
-								internalServicesChatModelExists = true;
-							}
-						}
 						if (chatModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.CHAT);
@@ -194,18 +301,14 @@ public class GeboLLMSSetupService {
 					IGEmbeddingModelConfigurationSupportService handler = embedModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableEmbeddingModel> embeddingConfigurations = embeddingModelsConfigDao
 							.getConfigurations();
 					for (IGConfigurableEmbeddingModel embeddingModel : embeddingConfigurations) {
-						if (embeddingModel.getConfig().getDefaultModel() != null
-								&& embeddingModel.getConfig().getDefaultModel()) {
-							embeddingModelExists = true;
-						}
 						if (embeddingModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.EMBEDDING);
@@ -227,17 +330,13 @@ public class GeboLLMSSetupService {
 					IGRankerModelConfigurationSupportService handler = rankerModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableRankerModel> configurations = this.rankerModelsRuntimeDao.getConfigurations();
 					for (IGConfigurableRankerModel thisModel : configurations) {
-						if (thisModel.getConfig().getDefaultModel() != null
-								&& thisModel.getConfig().getDefaultModel()) {
-							rankerModelExists = true;
-						}
 						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.RANKING);
@@ -259,17 +358,13 @@ public class GeboLLMSSetupService {
 					IGImageModelConfigurationSupportService handler = imageModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableImageModel> configurations = this.imageModelRuntimeDao.getConfigurations();
 					for (IGConfigurableImageModel thisModel : configurations) {
-						if (thisModel.getConfig().getDefaultModel() != null
-								&& thisModel.getConfig().getDefaultModel()) {
-							imagesModelExists = true;
-						}
 						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.IMAGESGEN);
@@ -291,18 +386,14 @@ public class GeboLLMSSetupService {
 					IGTranscriptModelConfigurationSupportService handler = transcriptModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableTranscriptModel> configurations = this.transcriptModelsRuntimeDao
 							.getConfigurations();
 					for (IGConfigurableTranscriptModel thisModel : configurations) {
-						if (thisModel.getConfig().getDefaultModel() != null
-								&& thisModel.getConfig().getDefaultModel()) {
-							transcriptModelExists = true;
-						}
 						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.TRANSCRIPT);
@@ -324,17 +415,13 @@ public class GeboLLMSSetupService {
 					IGTextToSpeechModelConfigurationSupportService handler = ttsModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
 					if (handler == null) {
-						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
-								+ " is not present or started up");
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableTextToSpeechModel> configurations = this.ttsModelsRuntimeDao.getConfigurations();
 					for (IGConfigurableTextToSpeechModel thisModel : configurations) {
-						if (thisModel.getConfig().getDefaultModel() != null
-								&& thisModel.getConfig().getDefaultModel()) {
-							ttsModelExists = true;
-						}
 						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.TTS);
@@ -357,15 +444,15 @@ public class GeboLLMSSetupService {
 			configData.getConfigurations().add(vendorData);
 		}
 
-		configData.setDefaultChatModelExists(defaultChatModelExists);
-		configData.setEmbeddingModelExists(embeddingModelExists);
-		configData.setInternalServicesChatModelExists(internalServicesChatModelExists);
-		configData.setImagesModelExists(imagesModelExists);
-		configData.setRankerModelExists(rankerModelExists);
-		configData.setTranscriptModelExists(transcriptModelExists);
-		configData.setTtsModelExists(ttsModelExists);
-		canRunAutoconfigure = !(defaultChatModelExists && embeddingModelExists);
-		configData.setCanRunAutoconfigure(canRunAutoconfigure);
+		ModelKindPresence presence = computeModelKindPresence();
+		configData.setDefaultChatModelExists(presence.defaultChat);
+		configData.setEmbeddingModelExists(presence.embedding);
+		configData.setInternalServicesChatModelExists(presence.internalServicesChat);
+		configData.setImagesModelExists(presence.images);
+		configData.setRankerModelExists(presence.ranker);
+		configData.setTranscriptModelExists(presence.transcript);
+		configData.setTtsModelExists(presence.tts);
+		configData.setCanRunAutoconfigure(!(presence.defaultChat && presence.embedding));
 		return configData;
 	}
 
@@ -377,11 +464,28 @@ public class GeboLLMSSetupService {
 	 */
 	public ComponentLLMSStatus getLLMSSetupStatus() {
 		ComponentLLMSStatus status = new ComponentLLMSStatus();
-		status.chatModelSetup = !chatModelsConfigDao.getConfigurations().isEmpty();
-		status.embeddedModelSetup = !embeddingModelsConfigDao.getConfigurations().isEmpty();
-		status.rankingModelSetup = !rankerModelsRuntimeDao.getConfigurations().isEmpty();
-		status.ttsModelSetup = !ttsModelsRuntimeDao.getConfigurations().isEmpty();
-		status.transcriptModelSetup = !transcriptModelsRuntimeDao.getConfigurations().isEmpty();
+		ModelKindPresence presence = computeModelKindPresence();
+		status.chatModelSetup = presence.defaultChat;
+		status.internalServicesChatModelSetup = presence.internalServicesChat;
+		status.embeddedModelSetup = presence.embedding;
+		status.rankingModelSetup = presence.ranker;
+		status.imagesModelSetup = presence.images;
+		status.ttsModelSetup = presence.tts;
+		status.transcriptModelSetup = presence.transcript;
+		status.chatModelCode = presence.defaultChatCode;
+		status.internalServicesChatModelCode = presence.internalServicesChatCode;
+		status.embeddedModelCode = presence.embeddingCode;
+		status.rankingModelCode = presence.rankerCode;
+		status.imagesModelCode = presence.imagesCode;
+		status.ttsModelCode = presence.ttsCode;
+		status.transcriptModelCode = presence.transcriptCode;
+		status.chatModelProviderId = presence.defaultChatProviderId;
+		status.internalServicesChatModelProviderId = presence.internalServicesChatProviderId;
+		status.embeddedModelProviderId = presence.embeddingProviderId;
+		status.rankingModelProviderId = presence.rankerProviderId;
+		status.imagesModelProviderId = presence.imagesProviderId;
+		status.ttsModelProviderId = presence.ttsProviderId;
+		status.transcriptModelProviderId = presence.transcriptProviderId;
 		status.isSetup = status.chatModelSetup && status.embeddedModelSetup;
 		return status;
 	}
@@ -604,7 +708,19 @@ public class GeboLLMSSetupService {
 					break;
 				}
 			}
-			return createLLMS(configs);
+			OperationStatus<LLMSModelsCreationResult> creation = createLLMS(configs);
+			OperationStatus<List<GBaseModelConfig>> out = new OperationStatus<>();
+			out.getMessages().addAll(creation.getMessages());
+			if (creation.getResult() != null) {
+				out.setResult(creation.getResult().getCreated());
+				for (LLMUnresolvedModel unresolved : creation.getResult().getUnresolved()) {
+					out.getMessages()
+							.add(GUserMessage.warnMessage("Model not available",
+									"The " + unresolved.getType() + " model '" + unresolved.getRequestedModelCode()
+											+ "' is no longer offered by the provider. Configure it from the LLMs admin screens."));
+				}
+			}
+			return out;
 		} else
 			throw new RuntimeException("Vendor not found by data:" + autoconfiguredata);
 	}
@@ -616,6 +732,7 @@ public class GeboLLMSSetupService {
 		md.setSecretId(secretId);
 		LLMSModelsPresets preset = vendorData.getPresets().stream().filter(x -> x.getType() == type).toList().get(0);
 		md.setServiceHandler(preset.getServiceHandler());
+		md.setDoModelsLookup(preset.isDoModelsLookup());
 		md.setSetAsDefaultModel(true);
 		md.setType(type);
 		return md;
@@ -629,6 +746,7 @@ public class GeboLLMSSetupService {
 		LLMSModelsPresets embeddingPreset = vendorData.getPresets().stream()
 				.filter(x -> x.getType() == ModelType.EMBEDDING).toList().get(0);
 		md.setServiceHandler(embeddingPreset.getServiceHandler());
+		md.setDoModelsLookup(embeddingPreset.isDoModelsLookup());
 		md.setSetAsDefaultModel(true);
 		md.setType(ModelType.EMBEDDING);
 
@@ -644,6 +762,7 @@ public class GeboLLMSSetupService {
 		LLMSModelsPresets chatPreset = vendorData.getPresets().stream().filter(x -> x.getType() == ModelType.CHAT)
 				.toList().get(0);
 		md.setServiceHandler(chatPreset.getServiceHandler());
+		md.setDoModelsLookup(chatPreset.isDoModelsLookup());
 		md.setSetAsDefaultModel(defaultModel);
 		md.setType(ModelType.CHAT);
 		md.setUses(List.of(use));
@@ -746,10 +865,86 @@ public class GeboLLMSSetupService {
 		throw new RuntimeException("This code zone has not to be reached");
 	}
 
-	public OperationStatus<List<GBaseModelConfig>> createLLMS(List<LLMCreateModelData> configs) {
+	/**
+	 * Configures a model only after confirming its code is still offered by the
+	 * provider. We ask the provider for its live model list and create the model only
+	 * when the requested code (e.g. a preset from the vendor .yml) is actually there.
+	 * A code the lookup does not discover is never force-created: it is recorded as
+	 * unresolved together with the choices the provider does offer, so the user picks
+	 * a replacement. When the provider refuses the listing (invalid credentials,
+	 * provider unreachable) nothing is created either: the provider's own messages are
+	 * handed back as the operation status.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void configureModelValidating(IGModelConfigurationSupportService supportLogic,
+			GBaseModelConfig configuration, LLMCreateModelData req,
+			List<OperationStatus<GBaseModelConfig>> operationsOutput, LLMSModelsCreationResult result) {
+		// The .yml preset declares doModelsLookup=false for model types the provider does
+		// not enumerate through its models endpoint (typically image/tts/transcript). For
+		// those, validating the requested code against getModelChoices produces false
+		// negatives (the model is valid but simply not listed), so we trust the preset
+		// code and create directly. Validation runs only when the preset opts into lookup.
+		boolean doLookup = req.getDoModelsLookup() != null && req.getDoModelsLookup();
+		if (!doLookup) {
+			createDirect(supportLogic, configuration, operationsOutput);
+			return;
+		}
+		OperationStatus choicesStatus = supportLogic.getModelChoices(configuration);
+		List<GBaseModelChoice> choices = (List<GBaseModelChoice>) choicesStatus.getResult();
+		if (choicesStatus.isHasErrorMessages()) {
+			// The provider refused the listing: invalid credentials or the service is down.
+			// A model that could not be validated is never created nor persisted - the
+			// provider's own messages are returned instead, as every other operation does.
+			operationsOutput.add(OperationStatus.of(null, choicesStatus.getMessages()));
+			return;
+		}
+		List<GBaseModelChoice> available = choices != null ? choices : List.of();
+		boolean exists = available.stream()
+				.anyMatch(c -> c.getCode() != null && c.getCode().equalsIgnoreCase(req.getModelCode()));
+		if (!exists) {
+			LOGGER.warn("Requested model '{}' ({}) is not offered by the provider anymore", req.getModelCode(),
+					req.getServiceHandler());
+			LLMUnresolvedModel unresolved = new LLMUnresolvedModel();
+			unresolved.setType(req.getType());
+			unresolved.setUses(req.getUses());
+			unresolved.setServiceHandler(req.getServiceHandler());
+			unresolved.setRequestedModelCode(req.getModelCode());
+			unresolved.setAvailableChoices(available);
+			result.getUnresolved().add(unresolved);
+			return;
+		}
+		try {
+			operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, req.getModelCode()));
+		} catch (Throwable th) {
+			// The user gets the message, the log keeps the stack: the cause of a failed
+			// allocation (the provider call the model does to configure itself, the vector
+			// store creation, ...) is nowhere else to be found once it becomes a message.
+			LOGGER.error("Cannot create the " + req.getType() + " model '" + req.getModelCode() + "' on "
+					+ req.getServiceHandler(), th);
+			operationsOutput.add(OperationStatus.of(th));
+		}
+	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void createDirect(IGModelConfigurationSupportService supportLogic, GBaseModelConfig configuration,
+			List<OperationStatus<GBaseModelConfig>> operationsOutput) {
+		try {
+			operationsOutput.add(supportLogic.insertAndConfigure(configuration));
+		} catch (Throwable th) {
+			LOGGER.error("Cannot create the model configured as " + configuration.getModelTypeCode(), th);
+			operationsOutput.add(OperationStatus.of(th));
+		}
+	}
+
+	public OperationStatus<LLMSModelsCreationResult> createLLMS(List<LLMCreateModelData> configs) {
+
+		LLMSModelsCreationResult result = new LLMSModelsCreationResult();
 		List<OperationStatus<GBaseModelConfig>> operationsOutput = new ArrayList<>();
 		for (LLMCreateModelData config : configs) {
+			// The guided flows (easy tab / suggested presets) gate by existence in the UI,
+			// so they never resend an already-configured kind. The expert Advanced tab may
+			// deliberately add extra models and override the default, so the requested
+			// setAsDefaultModel / uses are honoured as-is.
 			switch (config.getType()) {
 			case CHAT: {
 				try {
@@ -778,7 +973,7 @@ public class GeboLLMSSetupService {
 						}).toList();
 						configuration.setEnabledFunctions(names);
 					}
-					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}
@@ -794,7 +989,7 @@ public class GeboLLMSSetupService {
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
-					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}
@@ -808,7 +1003,7 @@ public class GeboLLMSSetupService {
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
-					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}
@@ -822,7 +1017,7 @@ public class GeboLLMSSetupService {
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
-					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}
@@ -836,7 +1031,7 @@ public class GeboLLMSSetupService {
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
-					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}
@@ -850,7 +1045,7 @@ public class GeboLLMSSetupService {
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
-					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}
@@ -859,13 +1054,11 @@ public class GeboLLMSSetupService {
 			}
 
 		}
-		OperationStatus<List<GBaseModelConfig>> out = new OperationStatus<>();
+		OperationStatus<LLMSModelsCreationResult> out = new OperationStatus<>();
+		out.setResult(result);
 		for (OperationStatus<GBaseModelConfig> res : operationsOutput) {
 			if (res.getResult() != null) {
-				if (out.getResult() == null) {
-					out.setResult(new ArrayList<>());
-				}
-				out.getResult().add(res.getResult());
+				result.getCreated().add(res.getResult());
 			}
 			if (res.isHasErrorMessages()) {
 				out.getMessages().addAll(res.getMessages());

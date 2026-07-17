@@ -32,6 +32,24 @@ public class ModelRuntimeConfigureHandler {
 	public <ModelType extends GBaseModelConfig> OperationStatus<ModelType> insertAndConfigure(ModelType model,
 			GModelType modelType) throws GeboPersistenceException, LLMConfigException {
 		model = persistentManager.insert(model);
+		try {
+			return configureInserted(model);
+		} catch (RuntimeException | GeboPersistenceException | LLMConfigException e) {
+			// The runtime refused the model (invalid credentials, provider unreachable): a
+			// configuration that could not be allocated is never kept, so the row inserted
+			// above is removed before the error travels back to the caller. The surrounding
+			// transaction cannot be relied on for this - Mongo leaves the document in place.
+			try {
+				persistentManager.delete(model);
+			} catch (Throwable th) {
+				LOGGER.error("Cannot remove the configuration that failed to be allocated", th);
+			}
+			throw e;
+		}
+	}
+
+	private <ModelType extends GBaseModelConfig> OperationStatus<ModelType> configureInserted(ModelType model)
+			throws GeboPersistenceException, LLMConfigException {
 		if (model instanceof GBaseChatModelConfig chatModel) {
 			IGChatModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGChatModelRuntimeConfigurationDao.class);
@@ -82,10 +100,15 @@ public class ModelRuntimeConfigureHandler {
 						gBaseChatModelConfig.setDefaultModel(false);
 						persistentManager.update(gBaseChatModelConfig);
 						IGConfigurableModel model = dao.findByCode(gBaseChatModelConfig.getCode());
-						try {
-							model.reconfigure(config);
-						} catch (LLMConfigException e) {
-							LOGGER.error("Error in reconfigure a llm", e);
+						if (model != null) {
+							try {
+								// The demoted model is refreshed with its OWN configuration - the one
+								// just updated to defaultModel=false. Handing it the incoming model's
+								// config would push a foreign provider's type into it (and fail).
+								model.reconfigure(gBaseChatModelConfig);
+							} catch (LLMConfigException e) {
+								LOGGER.error("Error in reconfigure a llm", e);
+							}
 						}
 					}
 				}

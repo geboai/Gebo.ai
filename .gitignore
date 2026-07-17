@@ -23,7 +23,7 @@ com.openi40/openi40.scheduler.SpringBootEnvironment/tmlog.lck
 *.deb
 *.rpm
 dockers/gebo.ai.platform/jdk-*_linux-x64_bin.tar.gz
-.claude/**
+.claude/settings.local.json
 .mcp.json
 ui-exports/
 **/node_modules/

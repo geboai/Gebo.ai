@@ -109,12 +109,17 @@ public class GRankerModelRuntimeConfigurationDaoImpl
 			List<GBaseRankerModelConfig> configs = persistentObjectManager
 					.findAllExtendingType(GBaseRankerModelConfig.class);
 			for (GBaseRankerModelConfig config : configs) {
-				this.addRuntimeByConfig(config);
+				try {
+					this.addRuntimeByConfig(config);
+				} catch (Throwable e) {
+					// A single model that cannot be allocated (revoked key, provider down, stale
+					// configuration) must never keep the whole application from starting: report
+					// it and carry on with the remaining models.
+					LOGGER.error("Cannot initialize the ranker model with code=>" + config.getCode(), e);
+				}
 			}
-		} catch (GeboPersistenceException | LLMConfigException e) {
-			String msg = "FATAL RERANK MODELS INITIALIZATION EXCEPTION";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Cannot read the ranker models configuration", e);
 		}
 
 		LOGGER.info("End initializing image models dinamically");

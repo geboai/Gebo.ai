@@ -20,9 +20,6 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
               thinking: HIGH_THINKING
               maxGeneratedTokens: 6000
-            - code: deepseek-r1-70b
-              description: DeepSeek R1 70b
-              uses: CHAT
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
@@ -38,8 +35,6 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: embedding-regolo.ai
           doModelsLookup: true
           choices:
-            - code: gte-Qwen2
-              description: Gte Qwen2 Embedding
             - code: Qwen3-Embedding-8B
               description: Qwen3 Embedding 8b
               defaultChoice: true
@@ -52,14 +47,14 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
         - type: IMAGESGEN
           serviceHandler: images-regolo.ai
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: Qwen-Image
-              description: Qwen Image (text to image generation)
+              description: Qwen Image 2512 (text to image generation)
               defaultChoice: true
         - type: TRANSCRIPT
           serviceHandler: transcript-regolo.ai
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: faster-whisper-large-v3
               description: Faster Whisper Large v3 (speech to text)
@@ -107,7 +102,7 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
         - type: IMAGESGEN
           serviceHandler: image-generation-OpenAI
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: gpt-image-1
               description: GPT Image 1 (high quality image generation)
@@ -118,7 +113,7 @@ ai.gebo.llms.vendors.setup.config:
               description: DALL-E 2
         - type: TTS
           serviceHandler: openai-tts
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: gpt-4o-mini-tts
               description: GPT-4o mini text to speech
@@ -129,7 +124,7 @@ ai.gebo.llms.vendors.setup.config:
               description: TTS 1 HD (higher quality)
         - type: TRANSCRIPT
           serviceHandler: openai-transcript
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: gpt-4o-transcribe
               description: GPT-4o Transcribe (speech to text)
@@ -153,99 +148,101 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chat-anthropic
           doModelsLookup: true
           choices:
-            - code: claude-sonnet-4-5
+            - code: claude-sonnet-5
               uses: CHAT
-              description: Claude Sonnet 4.5
+              description: Claude Sonnet 5
               defaultChoice: true
             - code: claude-haiku-4-5
               uses: INTERNAL_SERVICES
-              description: Claude Hiku 4.5
-            - code: claude-opus-4-5
-              description: Claude Opus 4.5
+              description: Claude Haiku 4.5
+            - code: claude-opus-4-8
+              description: Claude Opus 4.8
               uses: CHAT
 
-    - vendorInfo:
-        vendorId: aws-bedrock
-        name: AWS Bedrock
-        description: Amazon Bedrock (Claude, Amazon Nova, Meta Llama, Mistral, Cohere ...) plus Amazon Polly / Transcribe
-        acquireKeyUrl: https://console.aws.amazon.com/iam/home#/security_credentials
-        requiresApiKey: true
-        secretType: AWS_CONNECTION
-        requiresCustomUrl: false
-        webSite: https://aws.amazon.com/bedrock/
-        apiKeySecretContext: aws-bedrock
-        minContextWindow: 200000
-        supportsAutoconfig: true
-      presets:
-        - type: CHAT
-          serviceHandler: chat-aws-bedrock
-          doModelsLookup: true
-          choices:
-            - code: us.anthropic.claude-3-5-sonnet-20241022-v2:0
-              description: Anthropic Claude 3.5 Sonnet v2
-              uses: CHAT
-              defaultChoice: true
-            - code: us.amazon.nova-pro-v1:0
-              description: Amazon Nova Pro
-              uses: CHAT
-            - code: us.meta.llama3-3-70b-instruct-v1:0
-              description: Meta Llama 3.3 70b Instruct
-              uses: CHAT
-            - code: us.anthropic.claude-3-5-haiku-20241022-v1:0
-              description: Anthropic Claude 3.5 Haiku
-              uses: INTERNAL_SERVICES
-            - code: us.amazon.nova-lite-v1:0
-              description: Amazon Nova Lite
-              uses: INTERNAL_SERVICES
-        - type: EMBEDDING
-          serviceHandler: embedding-aws-bedrock
-          doModelsLookup: true
-          choices:
-            - code: amazon.titan-embed-text-v2:0
-              description: Amazon Titan Text Embeddings V2
-              defaultChoice: true
-            - code: cohere.embed-multilingual-v3
-              description: Cohere Embed Multilingual v3
-            - code: cohere.embed-english-v3
-              description: Cohere Embed English v3
-        - type: RANKING
-          serviceHandler: ranker-aws-bedrock
-          doModelsLookup: true
-          choices:
-            - code: amazon.rerank-v1:0
-              description: Amazon Rerank v1
-              defaultChoice: true
-            - code: cohere.rerank-v3-5:0
-              description: Cohere Rerank v3.5
-        - type: IMAGESGEN
-          serviceHandler: image-generation-aws-bedrock
-          doModelsLookup: true
-          choices:
-            - code: amazon.nova-canvas-v1:0
-              description: Amazon Nova Canvas (text to image generation)
-              defaultChoice: true
-            - code: amazon.titan-image-generator-v2:0
-              description: Amazon Titan Image Generator v2
-            - code: stability.stable-image-ultra-v1:1
-              description: Stability AI Stable Image Ultra
-        - type: TTS
-          serviceHandler: aws-polly-tts
-          doModelsLookup: false
-          choices:
-            - code: Joanna
-              description: Amazon Polly - Joanna (en-US, neural)
-              defaultChoice: true
-            - code: Matthew
-              description: Amazon Polly - Matthew (en-US, neural)
-            - code: Danielle
-              description: Amazon Polly - Danielle (en-US, generative)
-        - type: TRANSCRIPT
-          serviceHandler: aws-transcribe
-          doModelsLookup: false
-          choices:
-            - code: amazon-transcribe-streaming
-              description: Amazon Transcribe streaming (speech to text)
-              defaultChoice: true
+# AWS Bedrock vendor temporarily disabled: the Claude 4.x cross-region inference-profile
+# model ids below need verification against the live Bedrock catalog before re-enabling.
+#    - vendorInfo:
+#        vendorId: aws-bedrock
+#        name: AWS Bedrock
+#        description: Amazon Bedrock (Claude, Amazon Nova, Meta Llama, Mistral, Cohere ...) plus Amazon Polly / Transcribe
+#        acquireKeyUrl: https://console.aws.amazon.com/iam/home#/security_credentials
+#        requiresApiKey: true
+#        secretType: AWS_CONNECTION
+#        requiresCustomUrl: false
+#        webSite: https://aws.amazon.com/bedrock/
+#        apiKeySecretContext: aws-bedrock
+#        minContextWindow: 200000
+#        supportsAutoconfig: true
+#      presets:
+#        - type: CHAT
+#          serviceHandler: chat-aws-bedrock
+#          doModelsLookup: true
+#          choices:
+#            - code: us.anthropic.claude-sonnet-4-5-20250929-v1:0
+#              description: Anthropic Claude Sonnet 4.5
+#              uses: CHAT
+#              defaultChoice: true
+#            - code: us.amazon.nova-pro-v1:0
+#              description: Amazon Nova Pro
+#              uses: CHAT
+#            - code: us.meta.llama3-3-70b-instruct-v1:0
+#              description: Meta Llama 3.3 70b Instruct
+#              uses: CHAT
+#            - code: us.anthropic.claude-haiku-4-5-20251001-v1:0
+#              description: Anthropic Claude Haiku 4.5
+#              uses: INTERNAL_SERVICES
+#            - code: us.amazon.nova-lite-v1:0
+#              description: Amazon Nova Lite
+#              uses: INTERNAL_SERVICES
+#        - type: EMBEDDING
+#          serviceHandler: embedding-aws-bedrock
+#          doModelsLookup: true
+#          choices:
+#            - code: amazon.titan-embed-text-v2:0
+#              description: Amazon Titan Text Embeddings V2
+#              defaultChoice: true
+#            - code: cohere.embed-multilingual-v3
+#              description: Cohere Embed Multilingual v3
+#            - code: cohere.embed-english-v3
+#              description: Cohere Embed English v3
+#        - type: RANKING
+#          serviceHandler: ranker-aws-bedrock
+#          doModelsLookup: true
+#          choices:
+#            - code: amazon.rerank-v1:0
+#              description: Amazon Rerank v1
+#              defaultChoice: true
+#            - code: cohere.rerank-v3-5:0
+#              description: Cohere Rerank v3.5
+#        - type: IMAGESGEN
+#          serviceHandler: image-generation-aws-bedrock
+#          doModelsLookup: true
+#          choices:
+#            - code: amazon.nova-canvas-v1:0
+#              description: Amazon Nova Canvas (text to image generation)
+#              defaultChoice: true
+#            - code: amazon.titan-image-generator-v2:0
+#              description: Amazon Titan Image Generator v2
+#            - code: stability.stable-image-ultra-v1:1
+#              description: Stability AI Stable Image Ultra
+#        - type: TTS
+#          serviceHandler: aws-polly-tts
+#          doModelsLookup: false
+#          choices:
+#            - code: Joanna
+#              description: Amazon Polly - Joanna (en-US, neural)
+#              defaultChoice: true
+#            - code: Matthew
+#              description: Amazon Polly - Matthew (en-US, neural)
+#            - code: Danielle
+#              description: Amazon Polly - Danielle (en-US, generative)
+#        - type: TRANSCRIPT
+#          serviceHandler: aws-transcribe
+#          doModelsLookup: false
+#          choices:
+#            - code: amazon-transcribe-streaming
+#              description: Amazon Transcribe streaming (speech to text)
+#              defaultChoice: true
 
     - vendorInfo:
         vendorId: deepseek
@@ -337,8 +334,8 @@ ai.gebo.llms.vendors.setup.config:
               description: DeepSeek R1 0528
               defaultChoice: true
               uses: CHAT
-            - code: meta/llama-3.1-70b-instruct
-              description: Meta Llama 3.1 70b instruct
+            - code: meta/llama-3.3-70b-instruct
+              description: Meta Llama 3.3 70b instruct
               uses: CHAT
             - code: meta/llama-3.1-8b-instruct
               description: Meta Llama 3.1 8b instruct
@@ -451,11 +448,26 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
         - type: TRANSCRIPT
           serviceHandler: transcript-openrouter.ai
-          doModelsLookup: false
+          doModelsLookup: true
           choices:
             - code: openai/whisper-1
               description: OpenAI Whisper 1 (speech to text)
               defaultChoice: true
+        - type: TTS
+          serviceHandler: tts-openrouter.ai
+          doModelsLookup: true
+          choices:
+            - code: minimax/speech-2.8-hd
+              description: MiniMax Speech 2.8 HD
+              defaultChoice: true
+            - code: minimax/speech-2.8-turbo
+              description: MiniMax Speech 2.8 Turbo
+            - code: deepgram/aura-2
+              description: Deepgram Aura 2
+            - code: microsoft/mai-voice-2
+              description: Microsoft MAI Voice 2
+            - code: hexgrad/kokoro-82m
+              description: Kokoro 82M
 
     - vendorInfo:
         vendorId: ollama

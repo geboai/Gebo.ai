@@ -39,6 +39,10 @@ import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboSecretType;
+import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
@@ -137,11 +141,36 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 		protected OpenAiAudioTranscriptionModel configureModel(GenericOpenAIAPITranscriptModelConfig config,
 				GTranscriptModelType type) throws LLMConfigException {
 
+			String apiKey = null;
+			if (config.getApiSecretCode() != null && config.getApiSecretCode().trim().length() > 0) {
+				try {
+					AbstractGeboSecretContent secret = secretService.getSecretContentById(config.getApiSecretCode());
+					if (secret.type() == GeboSecretType.TOKEN) {
+						apiKey = ((GeboTokenContent) secret).getToken();
+					} else {
+						throw new LLMConfigException(
+								type.getDescription() + " api can work only with an api key of type TOKEN");
+					}
+				} catch (GeboCryptSecretException e) {
+					throw new LLMConfigException(type.getDescription() + " api  key configuration gone wrong ", e);
+				}
+			}
 			String baseUrl = GenericOpenAIAPITranscriptModelConfigurationSupportService.this.type.getBaseUrl();
 			org.springframework.ai.openai.OpenAiAudioTranscriptionOptions.Builder builder = OpenAiAudioTranscriptionOptions
 					.builder();
 
-			builder.apiKey(new NoopApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model("whisper-1");
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
+			// json is the format every openai compatible provider answers a transcription
+			// with, while the plain text one is not always offered (openrouter.ai refuses
+			// it): the client reads the transcription out of the json either way.
+			builder.responseFormat(AudioResponseFormat.JSON).temperature(0f).model(modelName);
+			if (apiKey != null) {
+				builder.apiKey(apiKey);
+			} else {
+				// A provider that needs no credentials (a local one) keeps the noop key.
+				builder.apiKey(new NoopApiKey());
+			}
 			if (baseUrl != null) {
 				builder.baseUrl(baseUrl);
 			}
@@ -175,6 +204,13 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	@Override
 	public OperationStatus<List<GenericOpenAIAPITranscriptModelChoice>> getModelChoices(
 			GenericOpenAIAPITranscriptModelConfig config) {
+		// When the provider declares a models-list strategy (e.g. openrouter/regolo) use
+		// it so transcript models can be discovered and validated; otherwise fall back to
+		// the OpenAI default suggestion.
+		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
+			return modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPITranscriptModelChoice.class, type);
+		}
 		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
 		choice.setCode("whisper-1");
 		choice.setDescription("Whisper 1");
@@ -192,7 +228,11 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	public GenericOpenAIAPITranscriptModelConfig createBaseConfiguration(String presetModel) {
 		GenericOpenAIAPITranscriptModelConfig config = new GenericOpenAIAPITranscriptModelConfig();
 		config.setDescription("OpenAI transcript provider");
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "whisper-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
+		config.setModelTypeCode(getType().getCode());
 		return config;
 	}
 

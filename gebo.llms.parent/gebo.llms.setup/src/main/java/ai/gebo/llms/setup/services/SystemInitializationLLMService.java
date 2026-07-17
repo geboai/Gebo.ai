@@ -24,6 +24,7 @@ import ai.gebo.llms.setup.config.SystemInitializationLLMConfiguration.VendorConf
 import ai.gebo.llms.setup.model.LLMCreateModelData;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
 import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
+import ai.gebo.llms.setup.model.LLMSModelsCreationResult;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.SecretInfo;
@@ -259,7 +260,7 @@ public class SystemInitializationLLMService {
 										newLLmsConfigs.add(embeddingData);
 									}
 									if (!newLLmsConfigs.isEmpty()) {
-										OperationStatus<List<GBaseModelConfig>> result = this.llmsSetupService
+										OperationStatus<LLMSModelsCreationResult> result = this.llmsSetupService
 												.createLLMS(newLLmsConfigs);
 										if (result.isHasErrorMessages()) {
 											result.getMessages().stream().forEach(x -> {
@@ -267,7 +268,7 @@ public class SystemInitializationLLMService {
 											});
 										}
 										if (result.getResult() != null) {
-											result.getResult().forEach(model -> {
+											result.getResult().getCreated().forEach(model -> {
 												LOGGER.info("Successfully created model:" + model.getCode());
 											});
 										}

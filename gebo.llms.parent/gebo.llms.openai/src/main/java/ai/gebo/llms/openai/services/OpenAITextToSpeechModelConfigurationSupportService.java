@@ -11,6 +11,7 @@ package ai.gebo.llms.openai.services;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
@@ -29,10 +30,13 @@ import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyI
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
+import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelChoice;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
+import ai.gebo.openai.integration.client.model.OpenAIModel;
 
 /**
  * Service to configure and create OpenAI text-to-speech models. AI generated
@@ -43,6 +47,8 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 		IGTextToSpeechModelConfigurationSupportService<GOpenAITextToSpeechModelChoice, GOpenAITextToSpeechModelConfig> {
 	@Autowired
 	IGModelApiAccessReadUtils apiKeyReader;
+	@Autowired
+	IGOpenAIApiUtil openaiApiUtil;
 	@Autowired
 	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	@Autowired
@@ -94,7 +100,9 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 
 			apiKey = apiKeyReader.getApiKeyInfo(config);
 
-			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().apiKey(apiKey.getApiKey()).model("tts-1")
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "tts-1";
+			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().apiKey(apiKey.getApiKey()).model(modelName)
 					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
 					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3).speed(1.0).build();
 			OpenAiAudioSpeechModel model = OpenAiAudioSpeechModel.builder()
@@ -133,11 +141,40 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 	@Override
 	public OperationStatus<List<GOpenAITextToSpeechModelChoice>> getModelChoices(
 			GOpenAITextToSpeechModelConfig config) {
-		GOpenAITextToSpeechModelChoice tts1Model = new GOpenAITextToSpeechModelChoice();
-		tts1Model.setCode("tts-1");
-		tts1Model.setDescription("OpenAI text to speech tts1 model");
+		try {
+			ApiKeyInfo apiKey = apiKeyReader.getApiKeyInfo(config);
+			OpenAIApiConfig apiconfig = new OpenAIApiConfig();
+			apiconfig.setProviderId("openai");
+			apiconfig.setApiKey(apiKey.getApiKey());
+			if (config.getBaseUrl() != null) {
+				apiconfig.setBasePath(config.getBaseUrl());
+			}
+			List<GOpenAITextToSpeechModelChoice> choices = new ArrayList<GOpenAITextToSpeechModelChoice>();
+			for (OpenAIModel model : openaiApiUtil.getModels(apiconfig)) {
+				if (!isTextToSpeechModel(model.getId())) {
+					continue;
+				}
+				GOpenAITextToSpeechModelChoice choice = new GOpenAITextToSpeechModelChoice();
+				choice.setCode(model.getId());
+				choice.setDescription(model.getId());
+				choices.add(choice);
+			}
+			return OperationStatus.of(choices);
+		} catch (Throwable e) {
+			return OperationStatus.of(e);
+		}
+	}
 
-		return OperationStatus.of(List.of(tts1Model));
+	/**
+	 * The OpenAI models listing carries no capability metadata, so the text to speech
+	 * models are recognised by the identifiers OpenAI publishes for them (tts-1,
+	 * tts-1-hd, gpt-4o-mini-tts, ...).
+	 */
+	private static boolean isTextToSpeechModel(String modelId) {
+		if (modelId == null) {
+			return false;
+		}
+		return modelId.toLowerCase().contains("tts");
 	}
 
 	/**
@@ -149,7 +186,12 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 	@Override
 	public GOpenAITextToSpeechModelConfig createBaseConfiguration(String presetModel) {
 		GOpenAITextToSpeechModelConfig config = new GOpenAITextToSpeechModelConfig();
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		config.setDescription("OpenAI text to speech provider");
+		GOpenAITextToSpeechModelChoice choice = new GOpenAITextToSpeechModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "tts-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
+		config.setModelTypeCode(getType().getCode());
 		return config;
 	}
 

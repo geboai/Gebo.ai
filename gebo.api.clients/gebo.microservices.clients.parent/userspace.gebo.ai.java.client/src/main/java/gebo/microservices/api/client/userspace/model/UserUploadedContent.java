@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UserUploadedContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-14T23:59:18.068242200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:03:01.750672300+02:00[Europe/Rome]")
 
 public class UserUploadedContent {
   @JsonProperty("code")

@@ -102,12 +102,17 @@ public class GChatModelRuntimeConfigurationDaoImpl
 			List<GBaseChatModelConfig> configs = persistentObjectManager
 					.findAllExtendingType(GBaseChatModelConfig.class);
 			for (GBaseChatModelConfig config : configs) {
-				this.addRuntimeByConfig(config);
+				try {
+					this.addRuntimeByConfig(config);
+				} catch (Throwable e) {
+					// A single model that cannot be allocated (revoked key, provider down, stale
+					// configuration) must never keep the whole application from starting: report
+					// it and carry on with the remaining models.
+					LOGGER.error("Cannot initialize the chat model with code=>" + config.getCode(), e);
+				}
 			}
-		} catch (GeboPersistenceException | LLMConfigException e) {
-			String msg = "FATAL CHAT MODELS INITIALIZATION EXCEPTION";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Cannot read the chat models configuration", e);
 		}
 
 		LOGGER.info("End initializing chat models dinamically");

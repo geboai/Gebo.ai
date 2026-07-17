@@ -20,6 +20,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseImageModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
@@ -127,6 +128,15 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 					transcriptModels.add(entry);
 				}
 				models = new ArrayList(transcriptModels);
+			} else if (GBaseTextToSpeachModelChice.class.isAssignableFrom(choiceType)) {
+				List<GBaseTextToSpeachModelChice> ttsModels = new ArrayList<GBaseTextToSpeachModelChice>();
+				for (OpenRouterModel m : client.listModelsByType(OutputModality.SPEECH)) {
+					GBaseTextToSpeachModelChice entry = (GBaseTextToSpeachModelChice) ModelsListCommonUtils
+							.newInstance(choiceType);
+					fill(entry, m);
+					ttsModels.add(entry);
+				}
+				models = new ArrayList(ttsModels);
 			} else {
 				throw new RuntimeException("This service does not handle=>" + choiceType.getName());
 			}

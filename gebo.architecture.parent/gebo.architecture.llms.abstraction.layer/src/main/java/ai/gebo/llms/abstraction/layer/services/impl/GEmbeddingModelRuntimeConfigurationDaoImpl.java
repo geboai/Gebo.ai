@@ -104,12 +104,17 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
             List<GBaseEmbeddingModelConfig> configs = persistentObjectManager
                     .findAllExtendingType(GBaseEmbeddingModelConfig.class);
             for (GBaseEmbeddingModelConfig config : configs) {
-                addRuntimeByConfig(config);
+                try {
+                    addRuntimeByConfig(config);
+                } catch (Throwable e) {
+                    // A single model that cannot be allocated (revoked key, provider down, stale
+                    // configuration) must never keep the whole application from starting: report
+                    // it and carry on with the remaining models.
+                    LOGGER.error("Cannot initialize the embedding model with code=>" + config.getCode(), e);
+                }
             }
-        } catch (GeboPersistenceException | LLMConfigException e) {
-            String msg = "FATAL EMBEDDING MODELS INITIALIZATION EXCEPTION";
-            LOGGER.error(msg, e);
-            throw new RuntimeException(msg, e);
+        } catch (GeboPersistenceException e) {
+            LOGGER.error("Cannot read the embedding models configuration", e);
         }
 
         LOGGER.info("End initializing embedding models dynamically");

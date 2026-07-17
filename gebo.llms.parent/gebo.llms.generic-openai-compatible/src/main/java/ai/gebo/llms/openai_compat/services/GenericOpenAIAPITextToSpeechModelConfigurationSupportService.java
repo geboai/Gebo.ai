@@ -31,6 +31,10 @@ import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboSecretType;
+import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
@@ -102,13 +106,34 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 		@Override
 		protected OpenAiAudioSpeechModel configureModel(GenericOpenAIAPITextToSpeechModelConfig config,
 				GTextToSpeechModelType type) throws LLMConfigException {
+			String apiKey = null;
+			if (config.getApiSecretCode() != null && config.getApiSecretCode().trim().length() > 0) {
+				try {
+					AbstractGeboSecretContent secret = secretService.getSecretContentById(config.getApiSecretCode());
+					if (secret.type() == GeboSecretType.TOKEN) {
+						apiKey = ((GeboTokenContent) secret).getToken();
+					} else {
+						throw new LLMConfigException(
+								type.getDescription() + " api can work only with an api key of type TOKEN");
+					}
+				} catch (GeboCryptSecretException e) {
+					throw new LLMConfigException(type.getDescription() + " api  key configuration gone wrong ", e);
+				}
+			}
 			String baseUrl = GenericOpenAIAPITextToSpeechModelConfigurationSupportService.this.type.getBaseUrl();
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "tts-1";
 			OpenAiAudioSpeechOptions.Builder optionsBuilder = OpenAiAudioSpeechOptions.builder()
-					.apiKey(new NoopApiKey())
-					.model("tts-1")
+					.model(modelName)
 					.voice(OpenAiAudioSpeechOptions.Voice.ALLOY)
 					.responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3)
 					.speed(1.0);
+			if (apiKey != null) {
+				optionsBuilder.apiKey(apiKey);
+			} else {
+				// A provider that needs no credentials (a local one) keeps the noop key.
+				optionsBuilder.apiKey(new NoopApiKey());
+			}
 			if (baseUrl != null) {
 				optionsBuilder.baseUrl(baseUrl);
 			}
@@ -143,6 +168,13 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	@Override
 	public OperationStatus<List<GenericOpenAIAPITextToSpeechModelChoice>> getModelChoices(
 			GenericOpenAIAPITextToSpeechModelConfig config) {
+		// When the provider declares a models-list strategy (e.g. openrouter/regolo) use
+		// it so text-to-speech models can be discovered and validated; otherwise fall back
+		// to the OpenAI default suggestion.
+		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
+			return modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPITextToSpeechModelChoice.class, type);
+		}
 		GenericOpenAIAPITextToSpeechModelChoice tts1Model = new GenericOpenAIAPITextToSpeechModelChoice();
 		tts1Model.setCode("tts-1");
 		tts1Model.setDescription("OpenAI text to speech tts1 model");
@@ -159,7 +191,12 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	@Override
 	public GenericOpenAIAPITextToSpeechModelConfig createBaseConfiguration(String presetModel) {
 		GenericOpenAIAPITextToSpeechModelConfig config = new GenericOpenAIAPITextToSpeechModelConfig();
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		config.setDescription(type.getProviderId() + " text to speech provider");
+		GenericOpenAIAPITextToSpeechModelChoice choice = new GenericOpenAIAPITextToSpeechModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "tts-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
+		config.setModelTypeCode(getType().getCode());
 		return config;
 	}
 

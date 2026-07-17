@@ -102,9 +102,14 @@ public class GenericOpenAIAPIImageModelConfigurationSupportService implements
 	@Override
 	public OperationStatus<List<GenericOpenAIAPIImageModelChoice>> getModelChoices(
 			GenericOpenAIAPIImageModelConfig config) {
-		// Image providers do not expose a listing endpoint here; presets in the setup
-		// library drive the available choices. Return an empty (non-null) list so
-		// callers doing a live lookup do not fail.
+		// When the provider declares a models-list strategy (e.g. openrouter/regolo) use
+		// it so image models can be discovered and validated. Otherwise there is no
+		// listing endpoint and presets in the setup library drive the choices: return an
+		// empty (non-null) list so callers doing a live lookup do not fail.
+		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
+			return modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPIImageModelChoice.class, type);
+		}
 		return OperationStatus.of(new java.util.ArrayList<GenericOpenAIAPIImageModelChoice>());
 	}
 
