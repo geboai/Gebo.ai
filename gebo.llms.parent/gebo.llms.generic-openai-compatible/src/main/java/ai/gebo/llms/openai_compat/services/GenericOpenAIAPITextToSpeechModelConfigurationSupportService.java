@@ -168,6 +168,7 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 	@Override
 	public GenericOpenAIAPITextToSpeechModelConfig createBaseConfiguration(String presetModel) {
 		GenericOpenAIAPITextToSpeechModelConfig config = new GenericOpenAIAPITextToSpeechModelConfig();
+		config.setDescription(type.getProviderId() + " text to speech provider");
 		GenericOpenAIAPITextToSpeechModelChoice choice = new GenericOpenAIAPITextToSpeechModelChoice();
 		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "tts-1");
 		choice.setDescription(choice.getCode());
