@@ -37,7 +37,6 @@
 		<module>gebo.ui</module>
 		<module>gebo.config</module>
 		<module>gebo.config.services</module>
-		<module>gebo.fastsetup</module>
 		<module>gebo.core.parent</module>
 		<module>gebo.apps.parent</module>
 		<module>gebo.modules.pocs</module>
