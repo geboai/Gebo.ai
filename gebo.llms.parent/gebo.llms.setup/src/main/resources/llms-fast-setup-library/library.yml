@@ -453,6 +453,21 @@ ai.gebo.llms.vendors.setup.config:
             - code: openai/whisper-1
               description: OpenAI Whisper 1 (speech to text)
               defaultChoice: true
+        - type: TTS
+          serviceHandler: tts-openrouter.ai
+          doModelsLookup: true
+          choices:
+            - code: minimax/speech-2.8-hd
+              description: MiniMax Speech 2.8 HD
+              defaultChoice: true
+            - code: minimax/speech-2.8-turbo
+              description: MiniMax Speech 2.8 Turbo
+            - code: deepgram/aura-2
+              description: Deepgram Aura 2
+            - code: microsoft/mai-voice-2
+              description: Microsoft MAI Voice 2
+            - code: hexgrad/kokoro-82m
+              description: Kokoro 82M
 
     - vendorInfo:
         vendorId: ollama
