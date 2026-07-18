@@ -1,33 +1,37 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
-<p-table *ngIf="table?.rows" [value]="tableRows">
-  <ng-template pTemplate="caption">
-    <div class="flex align-items-center justify-content-between">
+
+
+
+@if (table?.rows) {
+  <p-table [value]="tableRows">
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
         {{table?.tableTitle}}
-    </div>
-  </ng-template>
-  <ng-template pTemplate="header">
-    <tr>
-      <th *ngFor="let cell of table?.header?.cells;">{{cell.value}}</th>
-
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-row>
-    <tr>
-      <td *ngFor="let cell of row.cells;">{{ cell.value }}</td>
-
-    </tr>
-  </ng-template>
-</p-table>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        @for (cell of table?.header?.cells; track cell) {
+          <th>{{cell.value}}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        @for (cell of row.cells; track cell) {
+          <td>{{ cell.value }}</td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+}

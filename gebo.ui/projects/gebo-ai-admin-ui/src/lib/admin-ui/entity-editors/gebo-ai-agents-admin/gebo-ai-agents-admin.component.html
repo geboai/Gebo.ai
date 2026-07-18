@@ -1,162 +1,171 @@
 <p-blockUI id="BlockUi" gebo-ai-label [target]="chatAgentUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #chatAgentUI header="Editing Agent configuration" [formGroup]="formGroup">
-    <div class="geboButtonsBar" style="vertical-align: bottom" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
-                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || entity?.readOnly===true"
-                    styleClass="w-full"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
-                    (onClick)="cancelAction.emit(true)" styleClass="w-full" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" [disabled]="canDelete!==true || entity?.readOnly===true"
-                    icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" />
-            </div>
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: bottom">
+      <div class="grid">
+        <div class="col-4">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+            icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || entity?.readOnly===true"
+          styleClass="w-full"></p-button>
         </div>
-    </div>
+        <div class="col-4">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+            (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+          </div>
+          <div class="col-4">
+            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" [disabled]="canDelete!==true || entity?.readOnly===true"
+              icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" />
+            </div>
+          </div>
+        </div>
+      }
 
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-    @if(entity?.readOnly===true) {
-    <div ><b id="warnSystemAgent" gebo-ai-text>This is a default system agent, you cannot change its configuration </b></div>
-    }
-    <div class="grid geboDialogContent standardTabDialogueHeight">
+      <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      @if(entity?.readOnly===true) {
+        <div ><b id="warnSystemAgent" gebo-ai-text>This is a default system agent, you cannot change its configuration </b></div>
+      }
+      <div class="grid geboDialogContent standardTabDialogueHeight">
         <div class="col-12 standardTabDialogueHeight">
-            <p-tabView id="TabView" gebo-ai-label>
-                <p-tabPanel id="GeneralInfosTab" gebo-ai-label header="General infos">
-                    <div class="grid standardTabDialogueHeight">
-                        <div class="col-6">
-                            <gebo-ai-field id="description" label="Description" help="Enter chat Agent description."
-                                [required]="true">
-                                <input pInputText id="description" formControlName="description" maxlength="120"
-                                    [required]="true" gebo-ai-field-element />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="code" label="Unique Code"
-                                help="Automatically generated unique code of the Agent.">
-                                <input pInputText id="code" formControlName="code" readonly="true"
-                                    gebo-ai-field-element />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="agentServiceId" label="Agent service type"
-                                help="Choose the Agent service type will be run.">
-                                <geboai-editable-listbox-component formControlName="agentServiceId"
-                                    placeholder="Select the Agent type" [required]="true" [data]="agentTypes"
-                                    gebo-ai-field-element>
-                                </geboai-editable-listbox-component>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="mainLoopPromptUseCode" label="Choose main loop prompt template"
-                                help="Choose the Agent main loop prompt.">
-                                <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode"
-                                    placeholder="Select the Prompt Template type" [required]="true"
-                                    [optionsObservable]="promptLoadingObservable" gebo-ai-field-element>
-                                </geboai-editable-listbox-component>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="defaultConfiguration" label="Default Agent configuration"
-                                help="Set this as default configuration for this Agent service type">
-                                <p-check-box formControlName="defaultConfiguration" [binary]="true" [trueValue]="true"
-                                    [falseValue]="false" gebo-ai-field-element />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="maxLoopIterations" label="Max number of Agent loops"
-                                help="Set the maximum number of Agent loops (this will result in a much refined result).">
-                                <p-inputNumber formControlName="maxLoopIterations" gebo-ai-field-element
-                                    [maxFractionDigits]="0" [min]="1" [max]="20"></p-inputNumber>
-                            </gebo-ai-field>
-                        </div>
+          <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-label>General infos</p-tab>
+              <p-tab [value]="1" gebo-ai-label>Large language model &amp; usable tools settings</p-tab>
+              <p-tab [value]="2" gebo-ai-label>Security access settings</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+            <p-tabpanel [value]="0">
+              <div class="grid standardTabDialogueHeight">
+                <div class="col-6">
+                  <gebo-ai-field id="description" label="Description" help="Enter chat Agent description."
+                    [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120"
+                      [required]="true" gebo-ai-field-element />
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="code" label="Unique Code"
+                      help="Automatically generated unique code of the Agent.">
+                      <input pInputText id="code" formControlName="code" readonly="true"
+                        gebo-ai-field-element />
+                      </gebo-ai-field>
                     </div>
-                </p-tabPanel>
-                <p-tabPanel id="LanguageModelTab" gebo-ai-label header="Large language model & usable tools settings">
+                    <div class="col-6">
+                      <gebo-ai-field id="agentServiceId" label="Agent service type"
+                        help="Choose the Agent service type will be run.">
+                        <geboai-editable-listbox-component formControlName="agentServiceId"
+                          placeholder="Select the Agent type" [required]="true" [data]="agentTypes"
+                          gebo-ai-field-element>
+                        </geboai-editable-listbox-component>
+                      </gebo-ai-field>
+                    </div>
+                    <div class="col-6">
+                      <gebo-ai-field id="mainLoopPromptUseCode" label="Choose main loop prompt template"
+                        help="Choose the Agent main loop prompt.">
+                        <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode"
+                          placeholder="Select the Prompt Template type" [required]="true"
+                          [optionsObservable]="promptLoadingObservable" gebo-ai-field-element>
+                        </geboai-editable-listbox-component>
+                      </gebo-ai-field>
+                    </div>
+                    <div class="col-6">
+                      <gebo-ai-field id="defaultConfiguration" label="Default Agent configuration"
+                        help="Set this as default configuration for this Agent service type">
+                        <p-check-box formControlName="defaultConfiguration" [binary]="true" [trueValue]="true"
+                          [falseValue]="false" gebo-ai-field-element />
+                        </gebo-ai-field>
+                      </div>
+                      <div class="col-6">
+                        <gebo-ai-field id="maxLoopIterations" label="Max number of Agent loops"
+                          help="Set the maximum number of Agent loops (this will result in a much refined result).">
+                          <p-inputNumber formControlName="maxLoopIterations" gebo-ai-field-element
+                          [maxFractionDigits]="0" [min]="1" [max]="20"></p-inputNumber>
+                        </gebo-ai-field>
+                      </div>
+                    </div>
+                  </p-tabpanel>
+                  <p-tabpanel [value]="1">
                     <div class="grid standardTabDialogueHeight">
-                        <div class="col-12">
-                            <div class="flex flex-column gap-2">
-                                <label id="UseChatModelLabel" for="defaultChatModel" gebo-ai-text>Agent used chat
-                                    model</label>
-                                <div class="col-12 grid">
-                                    <div class="col-6">
-                                        <div class="flex items-center">
-                                            <p-radioButton id="UseDefaultChatModelRadio" gebo-ai-label
-                                                formControlName="useDefaultChatModel" name="useDefaultChatModel"
-                                                [value]="true" [required]="true"></p-radioButton>
-                                            <label for="useDefaultChatModel"
-                                                class="ml-2">{{defaultChatModel?.configuration?.description}}
-                                                (default)</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6  flex align-items-center gap-2"><p-radioButton id="ChooseChatModelRadio" gebo-ai-label
-                                            formControlName="useDefaultChatModel" name="useDefaultChatModel"
-                                            label="choose" [value]="false" [required]="true"></p-radioButton>
-                                        <p-select id="ChatModelSelect" gebo-ai-label styleClass="w-full"
-                                            formControlName="chatModelReference" styleClass="w-full"
-                                            [options]="chatModelsData" optionLabel="configuration.description"
-                                            optionValue="objectReference"
-                                            placeholder="Select a chat model configuration"></p-select>
-                                    </div>
-                                </div>
+                      <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                          <label id="UseChatModelLabel" for="defaultChatModel" gebo-ai-text>Agent used chat
+                          model</label>
+                          <div class="col-12 grid">
+                            <div class="col-6">
+                              <div class="flex items-center">
+                                <p-radioButton id="UseDefaultChatModelRadio" gebo-ai-label
+                                  formControlName="useDefaultChatModel" name="useDefaultChatModel"
+                                [value]="true" [required]="true"></p-radioButton>
+                                <label for="useDefaultChatModel"
+                                  class="ml-2">{{defaultChatModel?.configuration?.description}}
+                                (default)</label>
+                              </div>
                             </div>
-                            <small id="defaultChatModel-help" gebo-ai-text>
-                                Use system default chat model to perform the Agent's task or specify one.
-                            </small>
+                            <div class="col-6  flex align-items-center gap-2"><p-radioButton id="ChooseChatModelRadio" gebo-ai-label
+                              formControlName="useDefaultChatModel" name="useDefaultChatModel"
+                            label="choose" [value]="false" [required]="true"></p-radioButton>
+                            <p-select id="ChatModelSelect" gebo-ai-label styleClass="w-full"
+                              formControlName="chatModelReference" styleClass="w-full"
+                              [options]="chatModelsData" optionLabel="configuration.description"
+                              optionValue="objectReference"
+                            placeholder="Select a chat model configuration"></p-select>
+                          </div>
                         </div>
-                        
-                        <div class="col-4">
-                            <gebo-ai-field id="subscribeAllTools" label="Enable all available tools"
-                                help="When this flag is checked all the available tools will be assigned when this agents run">
-                                <p-check-box formControlName="subscribeAllTools" [binary]="true" [trueValue]="true"
-                                    [falseValue]="false" gebo-ai-field-element></p-check-box>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-8">
-                            <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this Agent"
-                                help="Functionalities that could be used by the Agent while performing its work">
-                                <gebo-ai-choose-llm-functions-component id="enabledFunctions"
-                                    formControlName="enabledFunctions" [knowledgeBaseContext]="true" dataKey="code"
-                                    optionLabel="description" optionValue="code" display="chip" class="col-12"
-                                    gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
-                            </gebo-ai-field>
-                        </div>
-                        
-                        <div class="col-4">
-                            <gebo-ai-field id="temperature" label="Temperature"
-                                help="Temperature the model will respond, from 0 to 1 (if unsure leave empty)">
-                                <p-inputNumber id="temperature" formControlName="temperature" [min]="0" [max]="1"
-                                    [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-4">
-                            <gebo-ai-field id="topP" label="TopP"
-                                help="TopP parameter, from 0 to 1 (if unsure leave empty)">
-                                <p-inputNumber id="topP" formControlName="topP" [min]="0" [max]="1"
-                                    [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-4">
-                            <gebo-ai-field id="thinking" label="Thinking efforts"
-                                help="Configure thinking efforts the model will do (not all model supports this)">
-                                <geboai-editable-listbox-component formControlName="thinking"
-                                    [data]="thinkingOptions"  gebo-ai-field-element  />
-                            </gebo-ai-field>
-                        </div>
+                      </div>
+                      <small id="defaultChatModel-help" gebo-ai-text>
+                        Use system default chat model to perform the Agent's task or specify one.
+                      </small>
                     </div>
-                </p-tabPanel>
 
-                <p-tabPanel id="SecurityAccessSettingsTab" gebo-ai-label header="Security access settings">
-                    <div class="standardTabDialogueHeight">
-                        <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                    <div class="col-4">
+                      <gebo-ai-field id="subscribeAllTools" label="Enable all available tools"
+                        help="When this flag is checked all the available tools will be assigned when this agents run">
+                        <p-check-box formControlName="subscribeAllTools" [binary]="true" [trueValue]="true"
+                        [falseValue]="false" gebo-ai-field-element></p-check-box>
+                      </gebo-ai-field>
                     </div>
-                </p-tabPanel>
-            </p-tabView>
-        </div>
-    </div>
-</p-panel>
+                    <div class="col-8">
+                      <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this Agent"
+                        help="Functionalities that could be used by the Agent while performing its work">
+                        <gebo-ai-choose-llm-functions-component id="enabledFunctions"
+                          formControlName="enabledFunctions" [knowledgeBaseContext]="true" dataKey="code"
+                          optionLabel="description" optionValue="code" display="chip" class="col-12"
+                        gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
+                      </gebo-ai-field>
+                    </div>
+
+                    <div class="col-4">
+                      <gebo-ai-field id="temperature" label="Temperature"
+                        help="Temperature the model will respond, from 0 to 1 (if unsure leave empty)">
+                        <p-inputNumber id="temperature" formControlName="temperature" [min]="0" [max]="1"
+                          [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
+                        </gebo-ai-field>
+                      </div>
+                      <div class="col-4">
+                        <gebo-ai-field id="topP" label="TopP"
+                          help="TopP parameter, from 0 to 1 (if unsure leave empty)">
+                          <p-inputNumber id="topP" formControlName="topP" [min]="0" [max]="1"
+                            [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
+                          </gebo-ai-field>
+                        </div>
+                        <div class="col-4">
+                          <gebo-ai-field id="thinking" label="Thinking efforts"
+                            help="Configure thinking efforts the model will do (not all model supports this)">
+                            <geboai-editable-listbox-component formControlName="thinking"
+                              [data]="thinkingOptions"  gebo-ai-field-element  />
+                            </gebo-ai-field>
+                          </div>
+                        </div>
+                      </p-tabpanel>
+
+                      <p-tabpanel [value]="2">
+                        <div class="standardTabDialogueHeight">
+                          <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                        </div>
+                      </p-tabpanel>
+                    </p-tabpanels>
+          </p-tabs>
+                  </div>
+                </div>
+              </p-panel>

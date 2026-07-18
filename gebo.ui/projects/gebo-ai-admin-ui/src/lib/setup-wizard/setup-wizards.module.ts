@@ -58,7 +58,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { GeboAILLMSVendorConfiguration } from "./llms-setup-components/llms-vendor-configuration.component";
 import { GeboAILlmsVendorModelTypeConfig } from "./llms-setup-components/llms-vendor-modeltype.component";
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { TabViewModule } from 'primeng/tabview';
+import { TabsModule } from 'primeng/tabs';
 
 import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./google-search-wizard.component";
 import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
@@ -68,8 +68,8 @@ import { AgentStatusService, GeboAIAgentSetupWizardComponent } from "./agent-set
 import { McpServerWizardComponent, McpServerWizardStatusService } from "./mcp-server-wizard.component";
 import { GeboAIMCPServerWizardComponent, GeboAIMcpServerWizardStatusService } from "./gebo-ai-mcp-server-wizard.component";
 import { GeneratedAdminApiKeyWizardComponent, GeneratedAdminApiKeyEnabledService } from "./generated-admin-api-key-wizard.component";
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
+import { SelectModule } from 'primeng/select';
+import { DatePickerModule } from 'primeng/datepicker';
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -388,7 +388,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule, GeboAINotificationsModule, DropdownModule, CalendarModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule],
     declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [

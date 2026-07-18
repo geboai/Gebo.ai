@@ -1,190 +1,200 @@
 <p-panel id="MainPanel" gebo-ai-label header="Insert new OAUTH2 Authentication/Integration infos" [formGroup]="formGroup">
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button
-                    id="SaveBtn"
-                    gebo-ai-label
-                    [outlined]="true"
-                    label="Save"
-                    (onClick)="doSave()"
-                    icon="pi pi-save"
-                    severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
-                ></p-button>
-            </div>
-
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
-            </div>
-            <div class="col-4">
-                <p-button
-                    id="DeleteBtn"
-                    gebo-ai-label
-                    [outlined]="true"
-                    label="Delete"
-                    severity="danger"
-                    icon="pi pi-trash"
-                    (onClick)="doDelete()"
-                    [disabled]="readonly===true"
-                ></p-button>
-            </div>
-
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-4">
+          <p-button
+            id="SaveBtn"
+            gebo-ai-label
+            [outlined]="true"
+            label="Save"
+            (onClick)="doSave()"
+            icon="pi pi-save"
+            severity="success"
+            [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
+          ></p-button>
         </div>
+        <div class="col-4">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+        </div>
+        <div class="col-4">
+          <p-button
+            id="DeleteBtn"
+            gebo-ai-label
+            [outlined]="true"
+            label="Delete"
+            severity="danger"
+            icon="pi pi-trash"
+            (onClick)="doDelete()"
+            [disabled]="readonly===true"
+          ></p-button>
+        </div>
+      </div>
     </div>
+  }
 
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-    <div class="grid geboDialogContent">
-        <div class="col-6" *ngIf="redirectUrls?.length">
-            <p-fieldset id="RedirectUrls" gebo-ai-label legend="Redirect urls to enable on oauth2 provider">
-                <ul>
-                    <li *ngFor="let h of redirectUrls;">{{h}}</li>
-                </ul>
-            </p-fieldset>
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <div class="grid geboDialogContent">
+    @if (redirectUrls?.length) {
+      <div class="col-6">
+        <p-fieldset id="RedirectUrls" gebo-ai-label legend="Redirect urls to enable on oauth2 provider">
+          <ul>
+            @for (h of redirectUrls; track h) {
+              <li>{{h}}</li>
+            }
+          </ul>
+        </p-fieldset>
+      </div>
+    }
+    @if (redirectUrls?.length) {
+      <div class="col-6">
+        <p-fieldset id="RefererUrls" gebo-ai-label legend="Referer urls to enable on oauth2 provider">
+          <ul>
+            @for (h of refererUrls; track h) {
+              <li>{{h}}</li>
+            }
+          </ul>
+        </p-fieldset>
+      </div>
+    }
+
+    <div class="col-6">
+      <gebo-ai-field id="description" label="Description" help="Enter the description of OAUTH2 Authentication/Integration infos.">
+        <input
+          pInputText
+          id="description"
+          formControlName="description"
+          maxlength="120"
+          [readOnly]="readonly"
+          gebo-ai-field-element
+          />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="code" label="Code" help="Enter the description of OAUTH2 Authentication/Integration code (registrationId).">
+          <input
+            pInputText
+            id="code"
+            formControlName="code"
+            [readOnly]="true"
+            gebo-ai-field-element
+            />
+          </gebo-ai-field>
         </div>
-        <div class="col-6" *ngIf="redirectUrls?.length">
-            <p-fieldset id="RefererUrls" gebo-ai-label legend="Referer urls to enable on oauth2 provider">
-                <ul>
-                    <li *ngFor="let h of refererUrls;">{{h}}</li>
-                </ul>
-            </p-fieldset>
+        <div class="col-6">
+          <gebo-ai-field id="authProvider" label="Provider" help="Enter the provider of OAUTH2 Authentication">
+            <geboai-editable-listbox-component
+              formControlName="authProvider"
+              placeholder="Select a OAUTH2 provider"
+              [readonly]="readonly || mode!=='NEW'"
+              [data]="providers"
+              gebo-ai-field-element
+              >
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
         </div>
 
         <div class="col-6">
-            <gebo-ai-field id="description" label="Description" help="Enter the description of OAUTH2 Authentication/Integration infos.">
-                <input
-                    pInputText
-                    id="description"
-                    formControlName="description"
-                    maxlength="120"
-                    [readOnly]="readonly"
-                    gebo-ai-field-element
-                />
-            </gebo-ai-field>
+          <gebo-ai-field id="configurationType" label="Configuration purpose" help="Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.">
+            <geboai-editable-listbox-component
+              id="configurationType"
+              formControlName="configurationType"
+              placeholder="Select configuration purpose"
+              [readonly]="readonly"
+              [data]="configurationTypesData"
+              gebo-ai-field-element
+              >
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
         </div>
-        <div class="col-6">
-            <gebo-ai-field id="code" label="Code" help="Enter the description of OAUTH2 Authentication/Integration code (registrationId).">
-                <input
-                    pInputText
-                    id="code"
-                    formControlName="code"
-                    [readOnly]="true"
-                    gebo-ai-field-element
-                />
-            </gebo-ai-field>
-        </div>
-        <div class="col-6">
-            <gebo-ai-field id="authProvider" label="Provider" help="Enter the provider of OAUTH2 Authentication">
-                <geboai-editable-listbox-component
-                    formControlName="authProvider"
-                    placeholder="Select a OAUTH2 provider"
-                    [readonly]="readonly || mode!=='NEW'"
-                    [data]="providers"
-                    gebo-ai-field-element
-                >
-                </geboai-editable-listbox-component>
-            </gebo-ai-field>
-        </div>
-
-        <div class="col-6">
-            <gebo-ai-field id="configurationType" label="Configuration purpose" help="Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.">
-                <geboai-editable-listbox-component
-                    id="configurationType"
-                    formControlName="configurationType"
-                    placeholder="Select configuration purpose"
-                    [readonly]="readonly"
-                    [data]="configurationTypesData"
-                    gebo-ai-field-element
-                >
-                </geboai-editable-listbox-component>
-            </gebo-ai-field>
-        </div>
-        <div class="col-12" formGroupName="providerConfiguration" [hidden]="currentProvider!=='oauth2_generic'" *ngIf="readonly!==true">
+        @if (readonly!==true) {
+          <div class="col-12" formGroupName="providerConfiguration" [hidden]="currentProvider!=='oauth2_generic'">
             <p-fieldset id="Oauth2ProviderUrls" gebo-ai-label legend="OAUTH2 provider URLS">
-                <div class="grid">
-                    <div class="col-6">
-                        <gebo-ai-field id="issuerUri" label="Issuer Uri" help="Enter the OAUTH2 issuer URL of the provider">
-                            <input
-                                pInputText
-                                id="issuerUri"
-                                formControlName="issuerUri"
-                                [readOnly]="readonly"
-                                gebo-ai-field-element
-                            />
-                        </gebo-ai-field>
+              <div class="grid">
+                <div class="col-6">
+                  <gebo-ai-field id="issuerUri" label="Issuer Uri" help="Enter the OAUTH2 issuer URL of the provider">
+                    <input
+                      pInputText
+                      id="issuerUri"
+                      formControlName="issuerUri"
+                      [readOnly]="readonly"
+                      gebo-ai-field-element
+                      />
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="authorizationUri" label="Authorization URL" help="Enter the OAUTH2 Authorization URL of the provider">
+                      <input
+                        pInputText
+                        id="authorizationUri"
+                        formControlName="authorizationUri"
+                        [readOnly]="readonly"
+                        gebo-ai-field-element
+                        />
+                      </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <gebo-ai-field id="authorizationUri" label="Authorization URL" help="Enter the OAUTH2 Authorization URL of the provider">
-                            <input
-                                pInputText
-                                id="authorizationUri"
-                                formControlName="authorizationUri"
-                                [readOnly]="readonly"
-                                gebo-ai-field-element
-                            />
+                      <gebo-ai-field id="tokenUri" label="Token URL" help="Enter the OAUTH2 Token URL of the provider">
+                        <input
+                          pInputText
+                          id="tokenUri"
+                          formControlName="tokenUri"
+                          [readOnly]="readonly"
+                          gebo-ai-field-element
+                          />
                         </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="tokenUri" label="Token URL" help="Enter the OAUTH2 Token URL of the provider">
-                            <input
-                                pInputText
-                                id="tokenUri"
-                                formControlName="tokenUri"
-                                [readOnly]="readonly"
-                                gebo-ai-field-element
-                            />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
+                      </div>
+                      <div class="col-6">
                         <gebo-ai-field id="userInfoUri" label="User info URL" help="Enter the OAUTH2 User info Url URL of the provider">
-                            <input
-                                pInputText
-                                id="userInfoUri"
-                                formControlName="userInfoUri"
-                                [readOnly]="readonly"
-                                gebo-ai-field-element
+                          <input
+                            pInputText
+                            id="userInfoUri"
+                            formControlName="userInfoUri"
+                            [readOnly]="readonly"
+                            gebo-ai-field-element
                             />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="introspectionUri" label="Introspection Uri" help="Enter the OAUTH2 introspection URL of the provider">
+                          </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                          <gebo-ai-field id="introspectionUri" label="Introspection Uri" help="Enter the OAUTH2 introspection URL of the provider">
                             <input
-                                pInputText
-                                id="introspectionUri"
-                                formControlName="introspectionUri"
-                                [readOnly]="readonly"
-                                gebo-ai-field-element
-                            />
-                        </gebo-ai-field>
-                    </div>
-
-                    <div class="col-6">
-                        <gebo-ai-field id="jwkSetUri" label="Jwk Set Uri" help="Enter the OAUTH2 Jwk Set url of the provider">
-                            <input
+                              pInputText
+                              id="introspectionUri"
+                              formControlName="introspectionUri"
+                              [readOnly]="readonly"
+                              gebo-ai-field-element
+                              />
+                            </gebo-ai-field>
+                          </div>
+                          <div class="col-6">
+                            <gebo-ai-field id="jwkSetUri" label="Jwk Set Uri" help="Enter the OAUTH2 Jwk Set url of the provider">
+                              <input
                                 pInputText
                                 id="jwkSetUri"
                                 formControlName="jwkSetUri"
                                 [readOnly]="readonly"
                                 gebo-ai-field-element
-                            />
-                        </gebo-ai-field>
-                    </div>
-                    <!-- userNameAttribute !?-->
-                </div>
-            </p-fieldset>
-        </div>
-        <div class="col-12" *ngIf="readonly!==true">
-            <gebo-ui-oauth2-secret-component
-                formControlName="oauth2ClientContent"
-                [forcedProviderName]="currentProvider"
-                [oauth2ChoosableScopes]="oauth2ChoosableScopes"
-                [oauth2MandatoryScopes]="oauth2MandatoryScopes"
-                [hideProviderChoice]="true"
-            >
-            </gebo-ui-oauth2-secret-component>
-            
-        </div>
-    </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+                                />
+                              </gebo-ai-field>
+                            </div>
+                            <!-- userNameAttribute !?-->
+                          </div>
+                        </p-fieldset>
+                      </div>
+                    }
+                    @if (readonly!==true) {
+                      <div class="col-12">
+                        <gebo-ui-oauth2-secret-component
+                          formControlName="oauth2ClientContent"
+                          [forcedProviderName]="currentProvider"
+                          [oauth2ChoosableScopes]="oauth2ChoosableScopes"
+                          [oauth2MandatoryScopes]="oauth2MandatoryScopes"
+                          [hideProviderChoice]="true"
+                          >
+                        </gebo-ui-oauth2-secret-component>
+                      </div>
+                    }
+                  </div>
+                </p-panel>
+                <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+                <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

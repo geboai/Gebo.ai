@@ -26,10 +26,18 @@
     <div class="geboDialogContent">
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
-        <p-tabView id="TabView">
+        <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-label>General settings</p-tab>
+              <p-tab [value]="1" gebo-ai-label>Security access settings</p-tab>
+              <p-tab [value]="2" gebo-ai-label [disabled]="!tools.length">Exported Tools</p-tab>
+              <p-tab [value]="3" gebo-ai-label [disabled]="!resources.length">Exported Resources</p-tab>
+              <p-tab [value]="4" gebo-ai-label [disabled]="!prompts.length">Exported Prompts</p-tab>
+            </p-tablist>
+            <p-tabpanels>
             <!-- General Settings Tab -->
-            <p-tabPanel id="GeneralSettingsTab" gebo-ai-label header="General settings">
-                <ng-template pTemplate="content">
+            <p-tabpanel [value]="0">
+                <ng-container>
                     <div class="grid">
                         <div class="col-6">
                             <gebo-ai-field id="description" label="Description"
@@ -49,17 +57,17 @@
                         <div class="col-4">
                             <gebo-ai-field id="transportType" label="Transport Type"
                                 help="Select the communication protocol with the MCP server." [required]="true">
-                                <p-dropdown id="transportType" formControlName="transportType"
+                                <p-select id="transportType" formControlName="transportType"
                                     [options]="transportTypes" optionLabel="label" optionValue="value"
-                                    gebo-ai-field-element [disabled]="readonly"></p-dropdown>
+                                    gebo-ai-field-element [disabled]="readonly"></p-select>
                             </gebo-ai-field>
                         </div>
                         <div class="col-4">
                             <gebo-ai-field id="authMode" label="Authentication Mode"
                                 help="Select how to authenticate calls to the MCP Server." [required]="true">
-                                <p-dropdown id="authMode" formControlName="authMode" [options]="authModes"
+                                <p-select id="authMode" formControlName="authMode" [options]="authModes"
                                     optionLabel="label" optionValue="value" gebo-ai-field-element
-                                    [disabled]="readonly"></p-dropdown>
+                                    [disabled]="readonly"></p-select>
                             </gebo-ai-field>
                         </div>
                         <div class="col-4">
@@ -109,14 +117,14 @@
                             <div class="col-6">
                                 <gebo-ai-field id="stdioArgsRaw" label="Process Arguments"
                                     help="Arguments to pass to the process, one per line.">
-                                    <textarea pInputTextarea id="stdioArgsRaw" formControlName="stdioArgsRaw" rows="4"
+                                    <textarea pTextarea id="stdioArgsRaw" formControlName="stdioArgsRaw" rows="4"
                                         style="width: 100%" gebo-ai-field-element [readonly]="readonly"></textarea>
                                 </gebo-ai-field>
                             </div>
                             <div class="col-6">
                                 <gebo-ai-field id="stdioEnvironmentRaw" label="Process Environment variables"
                                     help="Environment variables as KEY=VALUE, one per line.">
-                                    <textarea pInputTextarea id="stdioEnvironmentRaw"
+                                    <textarea pTextarea id="stdioEnvironmentRaw"
                                         formControlName="stdioEnvironmentRaw" rows="4" style="width: 100%"
                                         gebo-ai-field-element [readonly]="readonly"></textarea>
                                 </gebo-ai-field>
@@ -156,22 +164,21 @@
                                 [disabled]="loading" icon="pi pi-refresh" [outlined]="true"></p-button>
                         </div>
                     </div>
-                </ng-template>
-            </p-tabPanel>
+                </ng-container>
+            </p-tabpanel>
 
             <!-- Access Control Tab -->
-            <p-tabPanel id="SecurityAccessSettingsTab" gebo-ai-label header="Security access settings">
-                <ng-template pTemplate="content">
+            <p-tabpanel [value]="1">
+                <ng-container>
                     <div class="standardTabDialogueHeight">
                         <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
                     </div>
-                </ng-template>
-            </p-tabPanel>
+                </ng-container>
+            </p-tabpanel>
 
             <!-- Tools Tab -->
-            <p-tabPanel id="ToolsTab" [disabled]="!tools.length" gebo-ai-label header="Exported Tools"
-                title="Exported Tools">
-                <ng-template pTemplate="content">
+            <p-tabpanel [value]="2">
+                <ng-container>
 
                     <div class="grid">
                         <div class="col-12"></div>
@@ -213,12 +220,12 @@
                         </div>
                     </div>
 
-                </ng-template>
-            </p-tabPanel>
+                </ng-container>
+            </p-tabpanel>
 
             <!-- Resources Tab -->
-            <p-tabPanel id="ResourcesTab" [disabled]="!resources.length" gebo-ai-label header="Exported Resources">
-                <ng-template pTemplate="content">
+            <p-tabpanel [value]="3">
+                <ng-container>
                     <div class="grid">
                         <div class="col-12">
                             <p-table [value]="resources" [tableStyle]="{ 'min-width': '50rem' }">
@@ -257,12 +264,12 @@
                             </p-table>
                         </div>
                     </div>
-                </ng-template>
-            </p-tabPanel>
+                </ng-container>
+            </p-tabpanel>
 
             <!-- Prompts Tab -->
-            <p-tabPanel id="PromptsTab" [disabled]="!prompts.length" gebo-ai-label header="Exported Prompts">
-                <ng-template pTemplate="content">
+            <p-tabpanel [value]="4">
+                <ng-container>
                     <div class="grid">
                         <div class="col-12">
                             <p-table [value]="prompts" [tableStyle]="{ 'min-width': '50rem' }">
@@ -299,9 +306,10 @@
                             </p-table>
                         </div>
                     </div>
-                </ng-template>
-            </p-tabPanel>
-        </p-tabView>
+                </ng-container>
+            </p-tabpanel>
+        </p-tabpanels>
+          </p-tabs>
     </div>
 
     <!-- Panel buttons bar -->

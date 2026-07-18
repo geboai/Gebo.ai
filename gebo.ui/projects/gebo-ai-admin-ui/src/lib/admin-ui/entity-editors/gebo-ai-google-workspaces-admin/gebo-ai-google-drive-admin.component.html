@@ -1,73 +1,81 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
 <p-blockUI id="BlockUILock" gebo-ai-label [target]="driveSystemCtrl" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #driveSystemCtrl header="Editing google drive integration" [formGroup]="formGroup">
-  <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
       <div class="grid">
-          <div class="col-4">
-              <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                  [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+        <div class="col-4">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+          [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+        </div>
+        <div class="col-4">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+        </div>
+        <div class="col-4">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full"
+            [disabled]="canDelete===false" />
           </div>
-          <div class="col-4">
-              <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
-          </div>
-          <div class="col-4">
-              <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
-                  [disabled]="canDelete===false" />
-          </div>
+        </div>
       </div>
-  </div>
+    }
 
-  <div class="geboDialogContent">
+    <div class="geboDialogContent">
       <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-      <p-tabView id="TabView" gebo-ai-label>
-          <p-tabPanel id="GeneralSettingsTab" gebo-ai-label header="General settings">
+      <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-label>General settings</p-tab>
+              <p-tab [value]="1" [disabled]="mode!=='EDIT'">Security settings</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <div class="grid">
+
+            <div class="col-6">
+              <gebo-ai-field id="description" label="Description" help="Enter the description of the google drive system." [required]="true">
+                <input pInputText id="description" formControlName="description" maxlength="120"
+                  [required]="true" gebo-ai-field-element />
+                </gebo-ai-field>
+              </div>
+              <div class="col-6">
+                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the google drive system.">
+                  <input pInputText id="code" formControlName="code"
+                    readonly="true" gebo-ai-field-element />
+                  </gebo-ai-field>
+                </div>
+                <div class="col-6">
+                  <gebo-ai-field id="driveAccessSecret" label="Identity used" help="Select or create the identity to access the google drive system" [required]="true">
+                    <geboai-editable-listbox-component formControlName="driveAccessSecret" id="driveAccessSecret"
+                      placeholder="Select an identity" [optionsObservable]="identitiesObservable"
+                      [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
+                    </geboai-editable-listbox-component>
+                  </gebo-ai-field>
+                </div>
+              </div>
+            </p-tabpanel>
+            <!--
+            <p-tabpanel [value]="1">
               <div class="grid">
 
-                  <div class="col-6">
-                      <gebo-ai-field id="description" label="Description" help="Enter the description of the google drive system." [required]="true">
-                          <input pInputText id="description" formControlName="description" maxlength="120"
-                              [required]="true" gebo-ai-field-element />
-                      </gebo-ai-field>
-                  </div>
-                  <div class="col-6">
-                      <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the google drive system.">
-                          <input pInputText id="code" formControlName="code"
-                              readonly="true" gebo-ai-field-element />
-                      </gebo-ai-field>
-                  </div>
-                  <div class="col-6">
-                      <gebo-ai-field id="driveAccessSecret" label="Identity used" help="Select or create the identity to access the google drive system" [required]="true">
-                          <geboai-editable-listbox-component formControlName="driveAccessSecret" id="driveAccessSecret"
-                              placeholder="Select an identity" [optionsObservable]="identitiesObservable"
-                              [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
-                          </geboai-editable-listbox-component>
-                      </gebo-ai-field>
-                  </div>
-              </div>
-          </p-tabPanel>
-          <!--
-          <p-tabPanel header="Security settings" [disabled]="mode!=='EDIT'">
-              <div class="grid">
-
 
               </div>
 
-          </p-tabPanel>
-          -->
-      </p-tabView>
-  </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+            </p-tabpanel>
+            -->
+          </p-tabpanels>
+          </p-tabs>
+        </div>
+      </p-panel>
+      <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+      <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

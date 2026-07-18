@@ -1,34 +1,41 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
-<p-tabView >
-    <p-tabPanel  *ngFor="let item of nodes" [header]="titleOf(item)">
-        <p-table  [value]="item.configs" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th id="CodeHeader" gebo-ai-text>Code</th>
-                    <th id="DescriptionHeader" gebo-ai-text>Description</th>
-                    
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-config>
-                <tr>
-                    <td>{{ config.code }}</td>
-                    <td>{{ config.description }}</td>
-                    
-                </tr>
-            </ng-template>
-        </p-table>
-    </p-tabPanel>
-</p-tabView>
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+<p-tabs [value]="0">
+  <p-tablist>
+    @for (item of nodes; track item; let i = $index) {
+      <p-tab [value]="i">{{titleOf(item)}}</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+  @for (item of nodes; track item; let i = $index) {
+    <p-tabpanel [value]="i">
+      <p-table  [value]="item.configs" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th id="CodeHeader" gebo-ai-text>Code</th>
+            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-config>
+          <tr>
+            <td>{{ config.code }}</td>
+            <td>{{ config.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabpanel>
+  }
+  </p-tabpanels>
+</p-tabs>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

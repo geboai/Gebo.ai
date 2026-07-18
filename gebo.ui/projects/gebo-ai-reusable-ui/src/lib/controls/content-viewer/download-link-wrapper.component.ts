@@ -32,7 +32,7 @@ declare function geboOpenDocumentJS(url:any,token:any,iframeElement:any,contentT
  */
 @Component({
     selector: "gebo-ai-download-link-viewer-wrapper",
-    template: "<a *ngIf='downloadableContentUrl' [href]='downloadableContentUrl'> Download {{contentMetaInfo?.fileName}} </a>",
+    template: "@if (downloadableContentUrl) {<a [href]='downloadableContentUrl'> Download {{contentMetaInfo?.fileName}} </a>}",
     standalone: false
 })
 export class DownloadLinkViewerWrapperComponent implements OnInit, OnChanges {

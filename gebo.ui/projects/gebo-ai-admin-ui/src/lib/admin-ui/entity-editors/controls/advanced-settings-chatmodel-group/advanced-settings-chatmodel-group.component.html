@@ -1,53 +1,54 @@
 
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
-<p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI *ngIf="formGroup" [formGroup]="formGroup">
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+@if (formGroup) {
+  <p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI [formGroup]="formGroup">
     <p-blockUI [target]="chatModelAdvancedUI" [blocked]="loading">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
+      <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="col-12">
-        <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this model" help="Functionalities that could be used by the model during the chat">
-            <gebo-ai-choose-llm-functions-component
-                id="enabledFunctions"
-                formControlName="enabledFunctions"
-                [knowledgeBaseContext]="false"
-                dataKey="code"
-                optionLabel="description"
-                optionValue="code"
-                display="chip"
-                class="col-12"
-                gebo-ai-field-element
-            /> 
+      <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this model" help="Functionalities that could be used by the model during the chat">
+        <gebo-ai-choose-llm-functions-component
+          id="enabledFunctions"
+          formControlName="enabledFunctions"
+          [knowledgeBaseContext]="false"
+          dataKey="code"
+          optionLabel="description"
+          optionValue="code"
+          display="chip"
+          class="col-12"
+          gebo-ai-field-element
+          />
         </gebo-ai-field>
-    </div>
-    
-    <!-- 
-    <div class="col-12">
+      </div>
+      <!--
+      <div class="col-12">
         <gebo-ai-field id="defaultModelPrompt" label="Default model prompt" help="Edit the default prompt for the chat model.">
-            <textarea
-                rows="3"
-                cols="250"
-                pTextarea
-                id="TextArea1" gebo-ai-label
-                formControlName="defaultModelPrompt"
-                gebo-ai-field-element
-            ></textarea>
+          <textarea
+            rows="3"
+            cols="250"
+            pTextarea
+            id="TextArea1" gebo-ai-label
+            formControlName="defaultModelPrompt"
+            gebo-ai-field-element
+          ></textarea>
         </gebo-ai-field>
-    </div>
-    <div class="col-3">
+      </div>
+      <div class="col-3">
         <gebo-ai-prompt-wizard-component [deliveryFormGroup]="formGroup" deliveryPromptControlName="defaultModelPrompt"
-            [ragWizardMode]="false"></gebo-ai-prompt-wizard-component>
-    </div> -->
-</p-panel>
+        [ragWizardMode]="false"></gebo-ai-prompt-wizard-component>
+      </div> -->
+    </p-panel>
+  }
 
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+  <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+  <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

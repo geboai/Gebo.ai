@@ -28,7 +28,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { InputTextModule } from "primeng/inputtext";
 import { ButtonModule } from "primeng/button";
 import { FastSetupComponent } from "./fast-setup.component";
-import { DropdownModule } from "primeng/dropdown";
+import { SelectModule } from "primeng/select";
 import { CheckboxModule } from "primeng/checkbox";
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GeboAILicenceComponent } from "./licence.component";
@@ -49,7 +49,7 @@ const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];
  * The module handles routing to the setup page and provides all necessary form controls and UI elements.
  */
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, PanelModule, BlockUIModule,  InputTextModule, ButtonModule, PasswordModule, RouterModule.forRoot(routes), DropdownModule, EditableListboxModule, CheckboxModule, RadioButtonModule, ScrollPanelModule, SelectButtonModule, FieldsetModule, GeboAIFieldTranslationContainerModule,GeboAINotificationsModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, PanelModule, BlockUIModule,  InputTextModule, ButtonModule, PasswordModule, RouterModule.forRoot(routes), SelectModule, EditableListboxModule, CheckboxModule, RadioButtonModule, ScrollPanelModule, SelectButtonModule, FieldsetModule, GeboAIFieldTranslationContainerModule,GeboAINotificationsModule],
     declarations: [FastSetupComponent, GeboAILicenceComponent],
     exports: [FastSetupComponent],
     providers: [

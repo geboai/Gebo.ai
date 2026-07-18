@@ -5,7 +5,7 @@ import { Observable, take } from "rxjs";
 
 @Component({
     selector: "gebo-ai-language-resource-download",
-    template: "<p-button icon='pi pi-language' (onClick)='download()' *ngIf='enabled' [rounded]='true' [text]='true' [raised]='true' severity='info'></p-button>",
+    template: "@if (enabled) {<p-button icon='pi pi-language' (onClick)='download()' [rounded]='true' [text]='true' [raised]='true' severity='info'></p-button>}",
     standalone: false
 })
 export class GeboAILanguageResourcesDownloadComponent {

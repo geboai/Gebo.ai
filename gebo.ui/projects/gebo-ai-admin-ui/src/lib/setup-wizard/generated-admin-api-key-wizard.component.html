@@ -1,122 +1,126 @@
 <p-blockUI id="BlockUILock" gebo-ai-label [target]="apiKeySetupUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #apiKeySetupUI header="Setup Administrator API Keys">
-    <div class="grid geboLargeButtonsBar">
-        <div class="col-6">
-            <p-button id="GenerateApiKeyBtn" gebo-ai-label icon="pi pi-plus" label="Generate new API key"
-                styleClass="w-full" [outlined]="true" (onClick)="openCreateDialog()"
-                [disabled]="!isGenerationAllowed"></p-button>
-        </div>
+  <div class="grid geboLargeButtonsBar">
+    <div class="col-6">
+      <p-button id="GenerateApiKeyBtn" gebo-ai-label icon="pi pi-plus" label="Generate new API key"
+        styleClass="w-full" [outlined]="true" (onClick)="openCreateDialog()"
+      [disabled]="!isGenerationAllowed"></p-button>
     </div>
+  </div>
 
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
-    <div class="grid">
-        <div class="col-12">
-            <p-table id="Table" gebo-ai-label [value]="rows" [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template #header pTemplate="header">
-                    <tr>
-                        <th id="ImpersonatedUserHeader" gebo-ai-text>Impersonated User</th>
-                        <th id="DescriptionHeader" gebo-ai-text>Description</th>
-                        <th id="CreatedHeader" gebo-ai-text>Created Date</th>
-                        <th id="ExpirationHeader" gebo-ai-text>Expiration Date</th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template #body let-item pTemplate="body">
-                    <tr>
-                        <td>{{ item.impersonatedUser }}</td>
-                        <td>{{ item.description }}</td>
-                        <td>{{ item.dateCreated | date:'short' }}</td>
-                        <td>{{ item.expiration | date:'short' }}</td>
-                        <td>
-                            <p-button id="DeleteApiKeyBtn" gebo-ai-label label="Delete" title="Delete generated API key"
-                                icon="pi pi-trash" [outlined]="true" (onClick)="deleteApiKey(item)"></p-button>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
+  <div class="grid">
+    <div class="col-12">
+      <p-table id="Table" gebo-ai-label [value]="rows" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header pTemplate="header">
+          <tr>
+            <th id="ImpersonatedUserHeader" gebo-ai-text>Impersonated User</th>
+            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+            <th id="CreatedHeader" gebo-ai-text>Created Date</th>
+            <th id="ExpirationHeader" gebo-ai-text>Expiration Date</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item pTemplate="body">
+          <tr>
+            <td>{{ item.impersonatedUser }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.dateCreated | date:'short' }}</td>
+            <td>{{ item.expiration | date:'short' }}</td>
+            <td>
+              <p-button id="DeleteApiKeyBtn" gebo-ai-label label="Delete" title="Delete generated API key"
+              icon="pi pi-trash" [outlined]="true" (onClick)="deleteApiKey(item)"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
 
-            <p-paginator id="Paginator" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0"
-                [rows]="page.pageSize" [totalRecords]="apiKeysPaged?.page?.totalElements" />
-        </div>
+      <p-paginator id="Paginator" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0"
+        [rows]="page.pageSize" [totalRecords]="apiKeysPaged?.page?.totalElements" />
+      </div>
     </div>
-</p-panel>
+  </p-panel>
 
-<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="showCreateDialog" [modal]="true"
+  <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="showCreateDialog" [modal]="true"
     (visibleChange)="closeDialog()">
     <p-blockUI id="BlockUILock" gebo-ai-label [target]="createApiKeyUI" [blocked]="loading">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
+      <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <p-panel id="CreateApiKeyPanel" gebo-ai-label #createApiKeyUI header="Generate API key" [formGroup]="formGroup">
 
-        <!-- Only show the warning and the key once generated -->
-        <div *ngIf="newGeneratedApiKey" class="grid mb-4">
-            <div class="col-12">
-                <div class="p-message p-message-warn flex align-items-center p-3 gap-2"
-                    style="background-color: #fff3cd; border-left: 6px solid #ffc107; color: #856404;">
-                    <span class="p-message-icon pi pi-exclamation-triangle" style="font-size: 1.5rem;"></span>
-                    <div class="p-message-text" gebo-ai-text>
-                        <strong>Warning:</strong> Copy this API key now! For security reasons, it will never be
-                        displayed again after you close this dialog.
-                    </div>
+      <!-- Only show the warning and the key once generated -->
+      @if (newGeneratedApiKey) {
+        <div class="grid mb-4">
+          <div class="col-12">
+            <div class="p-message p-message-warn flex align-items-center p-3 gap-2"
+              style="background-color: #fff3cd; border-left: 6px solid #ffc107; color: #856404;">
+              <span class="p-message-icon pi pi-exclamation-triangle" style="font-size: 1.5rem;"></span>
+              <div class="p-message-text" gebo-ai-text>
+                <strong>Warning:</strong> Copy this API key now! For security reasons, it will never be
+                displayed again after you close this dialog.
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <gebo-ai-field id="generatedKeyField" label="API Key Value"
+              help="This key has been successfully generated. Copy it now.">
+              <div class="p-inputgroup" style="display: flex; width: 100%;">
+                <input pInputText id="generatedKeyValue" [value]="newGeneratedApiKey.apiKey" readonly
+                  style="font-family: monospace; font-weight: bold; flex-grow: 1;" gebo-ai-field-element />
+                  <button type="button" pButton label="Copy" icon="pi pi-copy" class="p-button-secondary"
+                  (click)="copyToClipboard(newGeneratedApiKey.apiKey)"></button>
                 </div>
+              </gebo-ai-field>
             </div>
-            <div class="col-12 mt-3">
-                <gebo-ai-field id="generatedKeyField" label="API Key Value"
-                    help="This key has been successfully generated. Copy it now.">
-                    <div class="p-inputgroup" style="display: flex; width: 100%;">
-                        <input pInputText id="generatedKeyValue" [value]="newGeneratedApiKey.apiKey" readonly
-                            style="font-family: monospace; font-weight: bold; flex-grow: 1;" gebo-ai-field-element />
-                        <button type="button" pButton label="Copy" icon="pi pi-copy" class="p-button-secondary"
-                            (click)="copyToClipboard(newGeneratedApiKey.apiKey)"></button>
-                    </div>
-                </gebo-ai-field>
-            </div>
-        </div>
+          </div>
+        }
 
         <div class="geboButtonsBar" style="vertical-align: baseline;">
-            <div class="grid">
-                <div *ngIf="!newGeneratedApiKey" class="col-4">
-                    <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Generate"
-                        (onClick)="generateApiKey()" icon="pi pi-save" severity="success" styleClass="w-full"
-                        [disabled]="formGroup.invalid"></p-button>
-                </div>
-                <div class="col-4">
-                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true"
-                        [label]="newGeneratedApiKey ? 'Close' : 'Cancel'" severity="contrast" (onClick)="closeDialog()"
-                        styleClass="w-full" />
-                </div>
+          <div class="grid">
+            @if (!newGeneratedApiKey) {
+              <div class="col-4">
+                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Generate"
+                  (onClick)="generateApiKey()" icon="pi pi-save" severity="success" styleClass="w-full"
+                [disabled]="formGroup.invalid"></p-button>
+              </div>
+            }
+            <div class="col-4">
+              <p-button id="CancelBtn" gebo-ai-label [outlined]="true"
+                [label]="newGeneratedApiKey ? 'Close' : 'Cancel'" severity="contrast" (onClick)="closeDialog()"
+                styleClass="w-full" />
+              </div>
             </div>
-        </div>
+          </div>
 
-        <!-- Form fields hidden or disabled after generation -->
-        <div *ngIf="!newGeneratedApiKey" class="grid mt-3">
-            <div class="col-12">
+          <!-- Form fields hidden or disabled after generation -->
+          @if (!newGeneratedApiKey) {
+            <div class="grid mt-3">
+              <div class="col-12">
                 <gebo-ai-field id="impersonatedUserField" label="Impersonate User"
-                    help="Select the user whose permissions this API key will run under." [required]="true">
-                    <p-dropdown id="impersonatedUser" formControlName="impersonatedUser" [options]="users"
-                        optionValue="username" optionLabel="username" placeholder="Select User" styleClass="w-full"
-                        gebo-ai-field-element></p-dropdown>
+                  help="Select the user whose permissions this API key will run under." [required]="true">
+                  <p-select id="impersonatedUser" formControlName="impersonatedUser" [options]="users"
+                    optionValue="username" optionLabel="username" placeholder="Select User" styleClass="w-full"
+                  gebo-ai-field-element></p-select>
                 </gebo-ai-field>
-            </div>
-
-            <div class="col-12">
+              </div>
+              <div class="col-12">
                 <gebo-ai-field id="descriptionField" label="Description"
-                    help="Provide a brief description of what this API key will be used for." [required]="true">
-                    <input pInputText id="description" formControlName="description" [required]="true"
-                        style="width: 100%;" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-
-            <div class="col-12">
-                <gebo-ai-field id="expirationField" label="Expiration Date"
+                  help="Provide a brief description of what this API key will be used for." [required]="true">
+                  <input pInputText id="description" formControlName="description" [required]="true"
+                    style="width: 100%;" gebo-ai-field-element />
+                  </gebo-ai-field>
+                </div>
+                <div class="col-12">
+                  <gebo-ai-field id="expirationField" label="Expiration Date"
                     help="Specify when this API key should expire." [required]="true">
-                    <p-calendar id="expiration" formControlName="expiration" [showTime]="true" [required]="true"
-                        styleClass="w-full" gebo-ai-field-element></p-calendar>
-                </gebo-ai-field>
-            </div>
-        </div>
-    </p-panel>
-</p-dialog>
+                    <p-datepicker id="expiration" formControlName="expiration" [showTime]="true" [required]="true"
+                    styleClass="w-full" gebo-ai-field-element></p-datepicker>
+                  </gebo-ai-field>
+                </div>
+              </div>
+            }
+          </p-panel>
+        </p-dialog>

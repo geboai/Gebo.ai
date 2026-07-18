@@ -10,11 +10,11 @@ import { Button } from 'primeng/button';
 import { Fieldset } from 'primeng/fieldset';
 import { Panel } from 'primeng/panel';
 import { Dialog } from 'primeng/dialog';
-import { Sidebar } from 'primeng/sidebar';
+import { Drawer } from 'primeng/drawer';
 import { Card } from 'primeng/card';
-import { TabPanel } from 'primeng/tabview';
+import { TabPanel } from 'primeng/tabs';
 
-import { AccordionTab } from 'primeng/accordion';
+import { AccordionPanel } from 'primeng/accordion';
 import { Toolbar } from 'primeng/toolbar';
 import { Chip } from 'primeng/chip';
 import { Badge } from 'primeng/badge';
@@ -23,12 +23,12 @@ import { Checkbox } from 'primeng/checkbox';
 import { RadioButton } from 'primeng/radiobutton';
 import { ToggleButton } from 'primeng/togglebutton';
 import { InputText } from 'primeng/inputtext';
-import { InputTextarea } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/textarea';
 import { InputNumber } from 'primeng/inputnumber';
-import { Dropdown } from 'primeng/dropdown';
+import { Select } from 'primeng/select';
 import { MultiSelect } from 'primeng/multiselect';
 import { Listbox } from 'primeng/listbox';
-import { Calendar } from 'primeng/calendar';
+import { DatePicker } from 'primeng/datepicker';
 import { Slider } from 'primeng/slider';
 import { ProgressBar } from 'primeng/progressbar';
 import { Steps } from 'primeng/steps';
@@ -112,12 +112,12 @@ export class PDialogLabelTarget extends LabelTargetParent {
 
 // =========== Sidebar ===========
 @Directive({
-  selector: 'p-sidebar[gebo-ai-label]',
+  selector: 'p-drawer[gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PSidebarLabelTarget }],
   standalone: false
 })
 export class PSidebarLabelTarget extends LabelTargetParent {
-  constructor(@Optional() @Host() private sb: Sidebar) {
+  constructor(@Optional() @Host() private sb: Drawer) {
     super(sb);
   }
 }
@@ -136,7 +136,7 @@ export class PCardLabelTarget extends LabelTargetParent {
 
 // =========== TabView / TabPanel ===========
 @Directive({
-  selector: 'p-tabPanel[gebo-ai-label]',
+  selector: 'p-tabpanel[gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PTabPanelLabelTarget }],
   standalone: false
 })
@@ -149,12 +149,12 @@ export class PTabPanelLabelTarget extends LabelTargetParent {
 
 // =========== Accordion / AccordionTab ===========
 @Directive({
-  selector: 'p-accordiontab[gebo-ai-label]',
+  selector: 'p-accordion-panel[gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PAccordionTabLabelTarget }],
   standalone: false
 })
 export class PAccordionTabLabelTarget extends LabelTargetParent {
-  constructor(@Optional() @Host() private tab: AccordionTab) {
+  constructor(@Optional() @Host() private tab: AccordionPanel) {
     super(tab);
   }
 
@@ -259,12 +259,12 @@ export class PInputTextLabelTarget extends LabelTargetParent {
 }
 
 @Directive({
-  selector: 'p-inputtextarea[gebo-ai-label], textarea[pInputTextarea][gebo-ai-label]',
+  selector: 'textarea[pTextarea][gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PInputTextareaLabelTarget }],
   standalone: false
 })
 export class PInputTextareaLabelTarget extends LabelTargetParent {
-  constructor(@Optional() @Host() private ta: InputTextarea) {
+  constructor(@Optional() @Host() private ta: Textarea) {
     super(ta);
   }
 
@@ -283,12 +283,12 @@ export class PInputNumberLabelTarget extends LabelTargetParent {
 }
 
 @Directive({
-  selector: 'p-dropdown[gebo-ai-label]',
+  selector: 'p-select[gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PDropdownLabelTarget }],
   standalone: false
 })
 export class PDropdownLabelTarget extends LabelTargetParent {
-  constructor(@Optional() @Host() private dd: Dropdown) {
+  constructor(@Optional() @Host() private dd: Select) {
     super(dd);
   }
 
@@ -320,12 +320,12 @@ export class PListboxLabelTarget extends LabelTargetParent {
 
 // =========== Calendar ===========
 @Directive({
-  selector: 'p-calendar[gebo-ai-label]',
+  selector: 'p-datepicker[gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PCalendarLabelTarget }],
   standalone: false
 })
 export class PCalendarLabelTarget extends LabelTargetParent {
-  constructor(@Optional() @Host() private cal: Calendar) {
+  constructor(@Optional() @Host() private cal: DatePicker) {
     super(cal);
   }
 

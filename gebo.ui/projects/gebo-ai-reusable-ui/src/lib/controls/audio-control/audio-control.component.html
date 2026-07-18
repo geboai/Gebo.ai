@@ -1,68 +1,74 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 
 
 
 <!-- in this area the start and stop record control -->
-<p-button id="RecordBtn"
-          gebo-ai-label
-          [disabled]="disabled || playMode"
-          (onClick)="startRecording()"
-          icon="pi pi-microphone"
-          title="Start recording an audio track and send it"
-          [text]="viewLabels"
-          rounded="true"
-          *ngIf="recording!==true && playMode!==true"
-          class="custom-blue-btn"
-          [severity]="(errorState===true?'danger':'primary')"> </p-button>
-<p-button id="StopBtn"
-          gebo-ai-label
-          [disabled]="disabled  || playMode"
-          (onClick)="stopRecording()"
-          icon="pi pi-stop-circle"
-          title="Recording"
-          class="custom-blue-btn"
-          [text]="viewLabels"
-          *ngIf="recording"
-          rounded="true"
-          [severity]="(errorState===true?'danger':'primary')"></p-button>
+@if (recording!==true && playMode!==true) {
+  <p-button id="RecordBtn"
+    gebo-ai-label
+    [disabled]="disabled || playMode"
+    (onClick)="startRecording()"
+    icon="pi pi-microphone"
+    title="Start recording an audio track and send it"
+    [text]="viewLabels"
+    rounded="true"
+    class="custom-blue-btn"
+  [severity]="(errorState===true?'danger':'primary')"> </p-button>
+}
+@if (recording) {
+  <p-button id="StopBtn"
+    gebo-ai-label
+    [disabled]="disabled  || playMode"
+    (onClick)="stopRecording()"
+    icon="pi pi-stop-circle"
+    title="Recording"
+    class="custom-blue-btn"
+    [text]="viewLabels"
+    rounded="true"
+  [severity]="(errorState===true?'danger':'primary')"></p-button>
+}
 <!-- Here the abandon record button or the play control-->
-<p-button id="AbortBtn"
-          gebo-ai-label
-          [disabled]="disabled"
-          (onClick)="abortRecording()"
-          [severity]="(errorState===true?'danger':'primary')"
-          icon="pi pi-times"
-          title="Abort recording"
-          class="custom-blue-btn"
-          rounded="true"
-          [text]="viewLabels"
-          *ngIf="recording"></p-button>
-<p-button id="AbortRecordingBtn"
-          gebo-ai-label
-          [disabled]="disabled"
-          *ngIf="playMode"
-          (onClick)="pausePlay()"
-          [severity]="(errorState===true?'danger':'primary')"
-          icon="pi pi-pause"
-          title="Abort recording"
-          class="custom-blue-btn"
-          rounded="true"
-          [text]="viewLabels"></p-button>
-<p-button [disabled]="disabled"
-          *ngIf="playPaused"
-          (onClick)="continuePlay()"
-          icon="pi pi-play"
-          class="custom-blue-btn"
-          rounded="true"
-          [text]="viewLabels"
-          [severity]="(errorState===true?'danger':'primary')"></p-button>
+@if (recording) {
+  <p-button id="AbortBtn"
+    gebo-ai-label
+    [disabled]="disabled"
+    (onClick)="abortRecording()"
+    [severity]="(errorState===true?'danger':'primary')"
+    icon="pi pi-times"
+    title="Abort recording"
+    class="custom-blue-btn"
+    rounded="true"
+    [text]="viewLabels"
+  ></p-button>
+}
+@if (playMode) {
+  <p-button id="AbortRecordingBtn"
+    gebo-ai-label
+    [disabled]="disabled"
+    (onClick)="pausePlay()"
+    [severity]="(errorState===true?'danger':'primary')"
+    icon="pi pi-pause"
+    title="Abort recording"
+    class="custom-blue-btn"
+    rounded="true"
+  [text]="viewLabels"></p-button>
+}
+@if (playPaused) {
+  <p-button [disabled]="disabled"
+    (onClick)="continuePlay()"
+    icon="pi pi-play"
+    class="custom-blue-btn"
+    rounded="true"
+    [text]="viewLabels"
+  [severity]="(errorState===true?'danger':'primary')"></p-button>
+}

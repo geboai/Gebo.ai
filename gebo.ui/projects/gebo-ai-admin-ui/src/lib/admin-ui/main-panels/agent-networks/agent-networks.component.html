@@ -1,29 +1,29 @@
 <p-blockUI id="BlockUI1" gebo-ai-label [target]="agentNetworksPanel" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
 
 <p-panel id="MainPanel" gebo-ai-label  #agentNetworksPanel header="Agents and Agents Networks">
-     
-    <p-table *ngIf="agentsNetworks?.length" [value]="agentsNetworks">
-        <ng-template pTemplate="header">
-            <tr>
-                <th id="CodeHeader" gebo-ai-text>Code</th>
-                <th id="DescriptionHeader" gebo-ai-text>Description</th>
-                
-                <th id="EmptyHeader" gebo-ai-text></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-model>
-            <tr>
-                <td>{{ model.code }}</td>
-                <td>{{ model.description }}</td>
-                
-                <td><p-button id="ConfigureBtn1" gebo-ai-label (onClick)="editNetwork(model)" [outlined]="true" label="configure"
-                        icon="pi pi-wrench"></p-button></td>
-            </tr>
-        </ng-template>
+
+  @if (agentsNetworks?.length) {
+    <p-table [value]="agentsNetworks">
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="CodeHeader" gebo-ai-text>Code</th>
+          <th id="DescriptionHeader" gebo-ai-text>Description</th>
+          <th id="EmptyHeader" gebo-ai-text></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-model>
+        <tr>
+          <td>{{ model.code }}</td>
+          <td>{{ model.description }}</td>
+          <td><p-button id="ConfigureBtn1" gebo-ai-label (onClick)="editNetwork(model)" [outlined]="true" label="configure"
+          icon="pi pi-wrench"></p-button></td>
+        </tr>
+      </ng-template>
     </p-table>
-    
-    
+  }
+
+
 </p-panel>
