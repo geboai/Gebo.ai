@@ -18,6 +18,33 @@
 			<artifactId>gebo.microservices.llms.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The concrete, mapped admin controllers split out of
+		     gebo.architecture.llms.abstraction.layer (ChatModelsController,
+		     EmbeddingModelsControllers, ImageModelsController,
+		     RankerModelsController, TextToSpeechModelsController,
+		     TranscriptModelsController, ChatModelsLookupController,
+		     FunctionsLookupController). Deliberately NOT bundled into
+		     gebo.microservices.llms.starter: brain owns LLM configuration
+		     admin, vectorizator/graphicator (the starter's other consumers)
+		     do not need it on their classpath. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Every LLM provider driver's admin controllers
+		     (OpenAIChatModelsConfigurationController, ...). Note this also pulls
+		     in each provider's actual driver implementation transitively (a
+		     provider's controller extends its Base*Controller parameterized with
+		     that provider's own model/service types, so the two cannot be
+		     separated) - previously NO microservice carried the provider drivers
+		     at all (only the monolith, via gebo.llms.starter); this is what
+		     makes brain the first one to. -->
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.controllers.starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- LLM fast-setup owner: brain hosts the setup controller/service and the
 		     config-driven bootstrap; created models propagate to the other LLM
 		     microservices via the shared Mongo + Hazelcast models-replication cache. -->

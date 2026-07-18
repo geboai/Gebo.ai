@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.llms</groupId>
+		<artifactId>gebo.llms.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.llms.controllers.starter</artifactId>
+
+	<!--
+	  Aggregator for every LLM provider driver's admin controllers
+	  (<provider>ChatModelsConfigurationController, ...) - the mapped
+	  @RestController classes each gebo.llms.<provider> module used to carry
+	  directly, now split into a sibling gebo.llms.<provider>.controllers
+	  module per provider (mirroring gebo.architecture.llms.abstraction.layer /
+	  .controllers). Each provider's controllers stay @ConditionalOnProperty-
+	  gated (e.g. ai.gebo.llms.config.openAIEnabled), so pulling this starter
+	  in does not expose a provider's admin endpoints unless that provider is
+	  also enabled - it only makes the controller CLASSES available to be
+	  conditionally activated, exactly as gebo.llms.starter already does for
+	  the driver implementations themselves.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.openai.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.mistral.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.generic-openai-compatible.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.ollama.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.onxx-embeddings.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.anthropic3.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.google_vertex.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.deepseek.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.aws-bedrock.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -14,8 +14,13 @@
 	  dependency gives a service the full stack to run the LLM abstraction layer
 	  in the microservices architecture with cross-node models replication:
 
-	    - gebo.architecture.llms.abstraction.layer : the LLM runtime model DAOs /
-	      controllers + the models-replication cluster synchronizer.
+	    - gebo.architecture.llms.abstraction.layer : the LLM runtime model DAOs +
+	      the models-replication cluster synchronizer. NOT the concrete admin
+	      controllers (ChatModelsController, EmbeddingModelsControllers, ...) -
+	      those live in the sibling gebo.architecture.llms.abstraction.layer.controllers
+	      module and are added directly on brain.gebo.ai's own pom, not here, so
+	      the other consumers of this starter (vectorizator, graphicator) do not
+	      pick them up.
 	    - gebo.architecture.environment.microservices : declares the MICROSERVICES
 	      GeboApplicationArchitecture bean.
 	    - gebo.architecture.messages.rabbitmq : the external RabbitMQ messaging

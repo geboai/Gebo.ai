@@ -8,9 +8,9 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 | Service | Port | Controllers | Endpoints |
 |---|---|---|---|
 | gateway.gebo.ai | 13000 | 0 | 0 |
-| brain.gebo.ai | 13001 | 42 | 141 |
-| vectorizator.gebo.ai | 13002 | 17 | 36 |
-| graphicator.gebo.ai | 13003 | 16 | 34 |
+| brain.gebo.ai | 13001 | 57 | 226 |
+| vectorizator.gebo.ai | 13002 | 9 | 17 |
+| graphicator.gebo.ai | 13003 | 8 | 15 |
 | chunker.gebo.ai | 13004 | 4 | 16 |
 | git.gebo.ai | 13005 | 8 | 25 |
 | filesystem.gebo.ai | 13006 | 10 | 33 |
@@ -26,18 +26,27 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 | fulltextor.gebo.ai | 13016 | 7 | 13 |
 | heimdall.gebo.ai | 13018 | 14 | 55 |
 
-**Base path note:** no microservice sets `server.servlet.context-path` — every path below is served at the service's own root (e.g. `GET /api/x` on port 13001 for brain, not `/brain-gebo-ai/api/x`). See [Eureka base-path conformity](#eureka-base-path-conformity) at the bottom.
+**LLM controllers-review note:** the concrete, mapped LLM admin controllers (`ChatModelsController`, `EmbeddingModelsControllers`, `ImageModelsController`, `RankerModelsController`, `TextToSpeechModelsController`, `TranscriptModelsController`, `ChatModelsLookupController`, `FunctionsLookupController`, previously carried directly inside `gebo.architecture.llms.abstraction.layer`) now live in a sibling `gebo.architecture.llms.abstraction.layer.controllers` module, wired only into `gebo.apps.monolithic.starter` and `brain.gebo.ai`. Each LLM provider driver (openai, mistral, generic-openai-compatible, ollama, onxx-embeddings, anthropic3, google_vertex, deepseek, aws-bedrock) got the same treatment: its admin controllers moved to a `<provider>.controllers` sibling module, aggregated by the new `gebo.llms.controllers.starter`, wired the same way (monolith + brain only). **Effect:** vectorizator and graphicator, which previously exposed these same LLM admin controllers as a side effect of depending on `gebo.microservices.llms.starter`, no longer do — brain is now the sole microservice hosting LLM configuration admin, and it additionally gained every provider-specific admin controller for the first time (previously only the monolith had them, via `gebo.llms.starter`).
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
 
-_Gateway routes to backends via `lb://`; it hosts no controllers of its own — its own `/v3/api-docs` is empty by design (it proxies/aggregates the backends' specs at `/api-docs/<service>` when `swagger-on` is active)._
+_Gateway routes to backends via `lb://`; it hosts no controllers of its own — its own `/v3/api-docs` is empty by design._
 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`)
 
-42 controller(s), 141 endpoint(s):
+57 controller(s), 226 endpoint(s):
 
+
+### `anthropic-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/AnthropicChatModelsConfigurationController/deleteAnthropicChatModelConfig` | deleteAnthropicChatModelConfig |
+| GET | `/api/admin/AnthropicChatModelsConfigurationController/findAnthropicChatModelConfigByCode` | findAnthropicChatModelConfigByCode |
+| POST | `/api/admin/AnthropicChatModelsConfigurationController/getAnthropicModels` | getAnthropicChatModels |
+| POST | `/api/admin/AnthropicChatModelsConfigurationController/insertAnthropicChatModelConfig` | insertAnthropicChatModelConfig |
+| POST | `/api/admin/AnthropicChatModelsConfigurationController/updateAnthropicChatModelConfig` | updateAnthropicChatModelConfig |
 
 ### `chat-models-controller`
 | Method | Path | Operation |
@@ -277,6 +286,70 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
 | POST | `/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
+### `generic-open-ai-ranker-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/GenerigOpenAIRankerModelsConfigurationController/deleteGenericOpenAIAPIRankerModelConfig` | deleteGenericOpenAIAPIRankerModelConfig |
+| GET | `/api/admin/GenerigOpenAIRankerModelsConfigurationController/findGenericOpenAIAPIRankerModelConfigByCode` | findGenericOpenAIAPIRankerModelConfigByCode |
+| POST | `/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIAPIRankerModels` | getGenericOpenAIAPIRankerModels |
+| GET | `/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelConfigs` | getGenericOpenAIRankerModelConfigs |
+| GET | `/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelTypes` | getGenericOpenAIRankerModelTypes |
+| POST | `/api/admin/GenerigOpenAIRankerModelsConfigurationController/insertGenericOpenAIAPIRankerModelConfig` | insertGenericOpenAIAPIRankerModelConfig |
+| POST | `/api/admin/GenerigOpenAIRankerModelsConfigurationController/updateGenericOpenAIAPIRankerModelConfig` | updateGenericOpenAIAPIRankerModelConfig |
+
+### `generic-open-aiapi-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/GenericOpenAIAPIChatModelsConfigurationController/deleteGenericOpenAIAPIChatModelConfig` | deleteGenericOpenAIAPIChatModelConfig |
+| GET | `/api/admin/GenericOpenAIAPIChatModelsConfigurationController/findGenericOpenAIAPIChatModelConfigByCode` | findGenericOpenAIAPIChatModelConfigByCode |
+| POST | `/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIAPIChatModels` | getGenericOpenAIAPIChatModels |
+| GET | `/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIChatModelTypes` | getGenericOpenAIChatModelTypes |
+| POST | `/api/admin/GenericOpenAIAPIChatModelsConfigurationController/insertGenericOpenAIAPIChatModelConfig` | insertGenericOpenAIAPIChatModelConfig |
+| POST | `/api/admin/GenericOpenAIAPIChatModelsConfigurationController/updateGenericOpenAIAPIChatModelConfig` | updateGenericOpenAIAPIChatModelConfig |
+
+### `generic-open-aiapi-embedding-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/deleteGenericOpenAIAPIEmbeddingModelConfig` | deleteGenericOpenAIAPIEmbeddingModelConfig |
+| GET | `/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/findGenericOpenAIAPIEmbeddingModelConfigByCode` | findGenericOpenAIAPIEmbeddingModelConfigByCode |
+| POST | `/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/getGenericOpenAIAPIEmbeddingModels` | getGenericOpenAIAPIEmbeddingModels |
+| GET | `/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/getGenericOpenAIEmbeddingModelTypes` | getGenericOpenAIEmbeddingModelTypes |
+| POST | `/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/insertGenericOpenAIAPIEmbeddingModelConfig` | insertGenericOpenAIAPIEmbeddingModelConfig |
+| POST | `/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/updateGenericOpenAIAPIEmbeddingModelConfig` | updateGenericOpenAIAPIEmbeddingModelConfig |
+
+### `generic-open-aiapi-image-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/GenericOpenAIAPIImageModelsConfigurationController/deleteGenericOpenAIAPIImageModelConfig` | deleteGenericOpenAIAPIImageModelConfig |
+| GET | `/api/admin/GenericOpenAIAPIImageModelsConfigurationController/findGenericOpenAIAPIImageModelConfigByCode` | findGenericOpenAIAPIImageModelConfigByCode |
+| POST | `/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIAPIImageModels` | getGenericOpenAIAPIImageModels |
+| GET | `/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelConfigs` | getGenericOpenAIImageModelConfigs |
+| GET | `/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelTypes` | getGenericOpenAIImageModelTypes |
+| POST | `/api/admin/GenericOpenAIAPIImageModelsConfigurationController/insertGenericOpenAIAPIImageModelConfig` | insertGenericOpenAIAPIImageModelConfig |
+| POST | `/api/admin/GenericOpenAIAPIImageModelsConfigurationController/updateGenericOpenAIAPIImageModelConfig` | updateGenericOpenAIAPIImageModelConfig |
+
+### `generic-open-aiapi-text-to-speech-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/deleteGenericOpenAIAPITextToSpeechModelConfig` | deleteGenericOpenAIAPITextToSpeechModelConfig |
+| GET | `/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/findGenericOpenAIAPITextToSpeechModelConfigByCode` | findGenericOpenAIAPITextToSpeechModelConfigByCode |
+| POST | `/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAIAPITextToSpeechModels` | getGenericOpenAIAPITextToSpeechModels |
+| GET | `/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelConfigs` | getGenericOpenAITextToSpeechModelConfigs |
+| GET | `/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelTypes` | getGenericOpenAITextToSpeechModelTypes |
+| POST | `/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/insertGenericOpenAIAPITextToSpeechModelConfig` | insertGenericOpenAIAPITextToSpeechModelConfig |
+| POST | `/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/updateGenericOpenAIAPITextToSpeechModelConfig` | updateGenericOpenAIAPITextToSpeechModelConfig |
+
+### `generic-open-aiapi-transcript-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/deleteGenericOpenAIAPITranscriptModelConfig` | deleteGenericOpenAIAPITranscriptModelConfig |
+| GET | `/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/findGenericOpenAIAPITranscriptModelConfigByCode` | findGenericOpenAIAPITranscriptModelConfigByCode |
+| POST | `/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAIAPITranscriptModels` | getGenericOpenAIAPITranscriptModels |
+| GET | `/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelConfigs` | getGenericOpenAITranscriptModelConfigs |
+| GET | `/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelTypes` | getGenericOpenAITranscriptModelTypes |
+| POST | `/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/insertGenericOpenAIAPITranscriptModelConfig` | insertGenericOpenAIAPITranscriptModelConfig |
+| POST | `/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/updateGenericOpenAIAPITranscriptModelConfig` | updateGenericOpenAIAPITranscriptModelConfig |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -318,6 +391,78 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
 
+### `ollama-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/OllamaChatModelsConfigurationController/deleteOllamaChatModelConfig` | deleteOllamaChatModelConfig |
+| GET | `/api/admin/OllamaChatModelsConfigurationController/findOllamaChatModelConfigByCode` | findOllamaChatModelConfigByCode |
+| POST | `/api/admin/OllamaChatModelsConfigurationController/getOllamaModels` | getOllamaChatModels |
+| POST | `/api/admin/OllamaChatModelsConfigurationController/insertOllamaChatModelConfig` | insertOllamaChatModelConfig |
+| POST | `/api/admin/OllamaChatModelsConfigurationController/updateOllamaChatModelConfig` | updateOllamaChatModelConfig |
+
+### `ollama-embedding-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/OllamaEmbeddingModelsConfigurationController/deleteOllamaEmbeddingModelConfig` | deleteOllamaEmbeddingModelConfig |
+| GET | `/api/admin/OllamaEmbeddingModelsConfigurationController/findOllamaEmbeddingModelConfigByCode` | findOllamaEmbeddingModelConfigByCode |
+| POST | `/api/admin/OllamaEmbeddingModelsConfigurationController/getOllamaEmbeddingModels` | getOllamaEmbeddingModels |
+| POST | `/api/admin/OllamaEmbeddingModelsConfigurationController/insertOllamaEmbeddingModelConfig` | insertOllamaEmbeddingModelConfig |
+| POST | `/api/admin/OllamaEmbeddingModelsConfigurationController/updateOllamaEmbeddingModelConfig` | updateOllamaEmbeddingModelConfig |
+
+### `onnx-transformers-embedding-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/ONNXTransformersEmbeddingModelsConfigurationController/deleteONNXTransformersEmbeddingModelConfig` | deleteONNXTransformersEmbeddingModelConfig |
+| GET | `/api/admin/ONNXTransformersEmbeddingModelsConfigurationController/findONNXTransformersEmbeddingModelConfigByCode` | findONNXTransformersEmbeddingModelConfigByCode |
+| POST | `/api/admin/ONNXTransformersEmbeddingModelsConfigurationController/getONNXTransformersEmbeddingModels` | getONNXTransformersEmbeddingModels |
+| POST | `/api/admin/ONNXTransformersEmbeddingModelsConfigurationController/insertONNXTransformersEmbeddingModelConfig` | insertONNXTransformersEmbeddingModelConfig |
+| POST | `/api/admin/ONNXTransformersEmbeddingModelsConfigurationController/updateONNXTransformersEmbeddingModelConfig` | updateONNXTransformersEmbeddingModelConfig |
+
+### `open-ai-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/OpenAIModelsConfigurationController/deleteOpenAIChatModelConfig` | deleteOpenAIChatModelConfig |
+| GET | `/api/admin/OpenAIModelsConfigurationController/findOpenAIChatModelConfigByCode` | findOpenAIChatModelConfigByCode |
+| POST | `/api/admin/OpenAIModelsConfigurationController/getOpenAIChatModels` | getOpenAIChatModels |
+| POST | `/api/admin/OpenAIModelsConfigurationController/insertOpenAIChatModelConfig` | insertOpenAIChatModelConfig |
+| POST | `/api/admin/OpenAIModelsConfigurationController/updateOpenAIChatModelConfig` | updateOpenAIChatModelConfig |
+
+### `open-ai-embedding-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/OpenAIEmbeddingModelsConfigurationController/deleteOpenAIEmbeddingModelConfig` | deleteOpenAIEmbeddingModelConfig |
+| GET | `/api/admin/OpenAIEmbeddingModelsConfigurationController/findOpenAIEmbeddingModelConfigByCode` | findOpenAIEmbeddingModelConfigByCode |
+| POST | `/api/admin/OpenAIEmbeddingModelsConfigurationController/getOpenAIEmbeddingModels` | getOpenAIEmbeddingModels |
+| POST | `/api/admin/OpenAIEmbeddingModelsConfigurationController/insertOpenAIEmbeddingModelConfig` | insertOpenAIEmbeddingModelConfig |
+| POST | `/api/admin/OpenAIEmbeddingModelsConfigurationController/updateOpenAIEmbeddingModelConfig` | updateOpenAIEmbeddingModelConfig |
+
+### `open-ai-image-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/OpenAIImageModelsConfigurationController/deleteOpenAIImageModelConfig` | deleteOpenAIImageModelConfig |
+| GET | `/api/admin/OpenAIImageModelsConfigurationController/findOpenAIImageModelConfigByCode` | findOpenAIImageModelConfigByCode |
+| POST | `/api/admin/OpenAIImageModelsConfigurationController/getOpenAIImageModels` | getOpenAIImageModels |
+| POST | `/api/admin/OpenAIImageModelsConfigurationController/insertOpenAIImageModelConfig` | insertOpenAIImageModelConfig |
+| POST | `/api/admin/OpenAIImageModelsConfigurationController/updateOpenAIImageModelConfig` | updateOpenAIImageModelConfig |
+
+### `open-ai-text-to-speech-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/OpenAITextToSpeechModelsConfigurationController/deleteOpenAITextToSpeechModelConfig` | deleteOpenAITextToSpeechModelConfig |
+| GET | `/api/admin/OpenAITextToSpeechModelsConfigurationController/findOpenAITextToSpeechModelConfigByCode` | findOpenAITextToSpeechModelConfigByCode |
+| POST | `/api/admin/OpenAITextToSpeechModelsConfigurationController/getOpenAITextToSpeechModels` | getOpenAITextToSpeechModels |
+| POST | `/api/admin/OpenAITextToSpeechModelsConfigurationController/insertOpenAITextToSpeechModelConfig` | insertOpenAITextToSpeechModelConfig |
+| POST | `/api/admin/OpenAITextToSpeechModelsConfigurationController/updateOpenAITextToSpeechModelConfig` | updateOpenAITextToSpeechModelConfig |
+
+### `open-ai-transcript-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/api/admin/OpenAITranscriptModelsConfigurationController/deleteOpenAITranscriptModelConfig` | deleteOpenAITranscriptModelConfig |
+| GET | `/api/admin/OpenAITranscriptModelsConfigurationController/findOpenAITranscriptModelConfigByCode` | findOpenAITranscriptModelConfigByCode |
+| POST | `/api/admin/OpenAITranscriptModelsConfigurationController/getOpenAITranscriptModels` | getOpenAITranscriptModels |
+| POST | `/api/admin/OpenAITranscriptModelsConfigurationController/insertOpenAITranscriptModelConfig` | insertOpenAITranscriptModelConfig |
+| POST | `/api/admin/OpenAITranscriptModelsConfigurationController/updateOpenAITranscriptModelConfig` | updateOpenAITranscriptModelConfig |
+
 ### `prompt-templates-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -350,21 +495,8 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`)
 
-17 controller(s), 36 endpoint(s):
+9 controller(s), 17 endpoint(s):
 
-
-### `chat-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
-| GET | `/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
-
-### `chat-models-lookup-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
-| GET | `/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
-| GET | `/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
 
 ### `contents-reset-controller`
 | Method | Path | Operation |
@@ -376,20 +508,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
-
-### `embedding-models-controllers`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
-| GET | `/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
-
-### `functions-lookup-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
 
 ### `gebo-core-analisys-controller`
 | Method | Path | Operation |
@@ -408,12 +526,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
-### `image-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
-| GET | `/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
-
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -434,24 +546,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
 | GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
-### `ranker-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
-| GET | `/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
-
-### `text-to-speech-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
-| GET | `/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
-
-### `transcript-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
-| GET | `/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
-
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -459,21 +553,8 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## graphicator.gebo.ai — port 13003 (`graphicator-gebo-ai`)
 
-16 controller(s), 34 endpoint(s):
+8 controller(s), 15 endpoint(s):
 
-
-### `chat-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
-| GET | `/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
-
-### `chat-models-lookup-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
-| GET | `/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
-| GET | `/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
 
 ### `contents-reset-controller`
 | Method | Path | Operation |
@@ -486,20 +567,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
-### `embedding-models-controllers`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
-| GET | `/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
-
-### `functions-lookup-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
-
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -510,12 +577,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `image-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
-| GET | `/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
@@ -536,24 +597,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
 | GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `ranker-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
-| GET | `/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
-
-### `text-to-speech-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
-| GET | `/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
-
-### `transcript-models-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
-| GET | `/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
@@ -1543,17 +1586,3 @@ _No spec captured (not polled)._
 | POST | `/api/admin/UsersAdminController/insertUser` | insertUser |
 | POST | `/api/admin/UsersAdminController/updateGroup` | updateGroup |
 | POST | `/api/admin/UsersAdminController/updateUser` | updateUser |
-
-## Eureka base-path conformity
-
-Checked every `application.yml` under `gebo.apps.parent/gebo.microservices.apps.parent/*/src/main/resources/` plus the shared `gebo.config*` locations:
-
-- **No microservice sets `server.servlet.context-path`.** All controllers are served at the container's HTTP root.
-- **All 19 apps set matching `eureka.instance.appname` / `virtual-host-name` / `secure-virtual-host-name`**, each the DNS-safe dash form of the canonical `spring.application.name` (e.g. `spring.application.name: brain_gebo_ai` → `eureka.instance.appname: brain-gebo-ai`). This is the "virtual path" Eureka/Spring Cloud LoadBalancer actually resolves instances by (`lb://<discovery-id>`) — a URI host cannot contain `_`, so the canonical underscore id alone is unroutable.
-- **Confirmed live** against `http://localhost:13017/eureka/apps`: all 18 registrable services (17 backends + gateway; the registry itself does not register) are `UP`, and each entry's `vipAddress` equals its `application.name`'s dash form — no drift between config and runtime registration.
-- **The gateway's `GeboTopologyRouteDefinitionLocator`** (`gateway.gebo.ai/.../routing/GeboTopologyRouteDefinitionLocator.java`) builds routes as `/<canonical-id>/** --StripPrefix=1--> lb://<discovery-id>`, which forwards the request to the backend with the `/<canonical-id>` segment removed and nothing else changed. This is only correct because the backend has **no context-path of its own** — a service that added one would break every gateway-routed call with a 404, since `StripPrefix=1` only strips the one segment the gateway added, not a second, service-side prefix.
-- **`GeboMicroserviceUrlResolver`** (`gebo.microservices.topology`) mirrors the same contract for direct/`LOAD_BALANCER`/`DIRECT` addressing — none of its three strategies assume a per-service path prefix either.
-- **heimdall** is the one exception worth flagging explicitly: it is deliberately **not** in the gateway's topology map (no messaging module), so it gets **no** topology-derived route. Its admin surface is hand-routed at `/heimdall_gebo_ai/api/admin/**`; its `api/cluster/**` surface is reachable only service-to-service (Eureka-membership-gated), never through the gateway. This is intentional (see the gateway `application.yml` comments), not a conformity gap.
-
-**Conclusion: conformant.** Every microservice erogates from its own root with no base path, and registers under a virtual-host-name Eureka/the gateway/the LoadBalancer all agree on. There is no service where the configured Eureka id and the actual served base path disagree.
-
