@@ -5,36 +5,36 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 ## Summary
 
-| Service | Port | Controllers | Endpoints |
-|---|---|---|---|
-| gateway.gebo.ai | 13000 | 0 | 0 |
-| brain.gebo.ai | 13001 | 42 | 141 |
-| vectorizator.gebo.ai | 13002 | 17 | 36 |
-| graphicator.gebo.ai | 13003 | 16 | 34 |
-| chunker.gebo.ai | 13004 | 4 | 16 |
-| git.gebo.ai | 13005 | 8 | 25 |
-| filesystem.gebo.ai | 13006 | 10 | 33 |
-| uploads.gebo.ai | 13007 | 9 | 24 |
-| userspace.gebo.ai | 13008 | 9 | 32 |
-| sharepoint.gebo.ai | 13009 | 9 | 31 |
-| confluence.gebo.ai | 13010 | 9 | 31 |
-| jira.gebo.ai | 13011 | 9 | 31 |
-| aws-s3.gebo.ai | 13012 | 9 | 29 |
-| googledrive.gebo.ai | 13013 | 10 | 32 |
-| mcpclient.gebo.ai | 13014 | 10 | 31 |
-| integration.gebo.ai | 13015 | 9 | 22 |
-| fulltextor.gebo.ai | 13016 | 7 | 13 |
-| heimdall.gebo.ai | 13018 | 14 | 55 |
+| Service | Port | Context-path | Controllers | Endpoints |
+|---|---|---|---|---|
+| gateway.gebo.ai | 13000 | `—` | 0 | 0 |
+| brain.gebo.ai | 13001 | `/brain` | 42 | 141 |
+| vectorizator.gebo.ai | 13002 | `/vectorizator` | 17 | 36 |
+| graphicator.gebo.ai | 13003 | `/graphicator` | 16 | 34 |
+| chunker.gebo.ai | 13004 | `/chunker` | 4 | 16 |
+| git.gebo.ai | 13005 | `/git` | 8 | 25 |
+| filesystem.gebo.ai | 13006 | `/filesystem` | 10 | 33 |
+| uploads.gebo.ai | 13007 | `/uploads` | 9 | 24 |
+| userspace.gebo.ai | 13008 | `/userspace` | 9 | 32 |
+| sharepoint.gebo.ai | 13009 | `/sharepoint` | 9 | 31 |
+| confluence.gebo.ai | 13010 | `/confluence` | 9 | 31 |
+| jira.gebo.ai | 13011 | `/jira` | 9 | 31 |
+| aws-s3.gebo.ai | 13012 | `/aws-s3` | 9 | 29 |
+| googledrive.gebo.ai | 13013 | `/googledrive` | 10 | 32 |
+| mcpclient.gebo.ai | 13014 | `/mcpclient` | 10 | 31 |
+| integration.gebo.ai | 13015 | `/integration` | 9 | 22 |
+| fulltextor.gebo.ai | 13016 | `/fulltextor` | 7 | 13 |
+| heimdall.gebo.ai | 13018 | `/heimdall` | 14 | 55 |
 
-**Base path note:** no microservice sets `server.servlet.context-path` — every path below is served at the service's own root (e.g. `GET /api/x` on port 13001 for brain, not `/brain-gebo-ai/api/x`). See [Eureka base-path conformity](#eureka-base-path-conformity) at the bottom.
+**Base path note:** every backend microservice now sets `server.servlet.context-path` to its short context name (e.g. `/brain` for brain.gebo.ai) — paths below already include it (e.g. `GET /brain/api/x` on port 13001, not `/api/x`). See [Eureka base-path conformity](#eureka-base-path-conformity) at the bottom for how this ties into gateway routing and internal service-to-service calls.
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
 
-_Gateway routes to backends via `lb://`; it hosts no controllers of its own — its own `/v3/api-docs` is empty by design (it proxies/aggregates the backends' specs at `/api-docs/<service>` when `swagger-on` is active)._
+_Gateway routes to backends via `lb://`; it hosts no controllers of its own — its own `/v3/api-docs` is empty by design (it proxies/aggregates the backends' specs at `/api-docs/<service>` when `swagger-on` is active). It has no context-path of its own either — it's the routing edge, not a topology member._
 
 
-## brain.gebo.ai — port 13001 (`brain-gebo-ai`)
+## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
 42 controller(s), 141 endpoint(s):
 
@@ -42,313 +42,313 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `chat-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
-| GET | `/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
+| GET | `/brain/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
+| GET | `/brain/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
 
 ### `chat-models-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
-| GET | `/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
-| GET | `/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
+| GET | `/brain/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
+| GET | `/brain/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
+| GET | `/brain/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/brain/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/brain/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/brain/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `embedding-models-controllers`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
-| GET | `/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
+| GET | `/brain/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
+| GET | `/brain/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
 
 ### `functions-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
+| GET | `/brain/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
+| GET | `/brain/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
+| GET | `/brain/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
+| GET | `/brain/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
 
 ### `gebo-admin-chat-profiles-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeboAdminChatProfilesConfigurationController/deleteChatProfile` | deleteChatProfile |
-| GET | `/api/admin/GeboAdminChatProfilesConfigurationController/findChatProfileConfigurationByCode` | findChatProfileConfigurationByCode |
-| POST | `/api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration` | getAllChatProfileConfiguration |
-| POST | `/api/admin/GeboAdminChatProfilesConfigurationController/getChatProfileConfigurationByQbe` | getChatProfileConfigurationByQbe |
-| POST | `/api/admin/GeboAdminChatProfilesConfigurationController/insertChatProfile` | insertChatProfile |
-| POST | `/api/admin/GeboAdminChatProfilesConfigurationController/updateChatProfile` | updateChatProfile |
+| POST | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/deleteChatProfile` | deleteChatProfile |
+| GET | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/findChatProfileConfigurationByCode` | findChatProfileConfigurationByCode |
+| POST | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration` | getAllChatProfileConfiguration |
+| POST | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/getChatProfileConfigurationByQbe` | getChatProfileConfigurationByQbe |
+| POST | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/insertChatProfile` | insertChatProfile |
+| POST | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/updateChatProfile` | updateChatProfile |
 
 ### `gebo-admin-prompt-use-info-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboAdminPromptUseController/findAll` | findAll |
-| GET | `/api/admin/GeboAdminPromptUseController/findByCode` | findByCode |
-| GET | `/api/admin/GeboAdminPromptUseController/findByModule` | findByModule |
+| GET | `/brain/api/admin/GeboAdminPromptUseController/findAll` | findAll |
+| GET | `/brain/api/admin/GeboAdminPromptUseController/findByCode` | findByCode |
+| GET | `/brain/api/admin/GeboAdminPromptUseController/findByModule` | findByModule |
 
 ### `gebo-admin-prompts-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeboAdminPromptsController/deletePromptConfig` | deletePromptConfig |
-| GET | `/api/admin/GeboAdminPromptsController/findPromptConfigByCode` | findPromptConfigByCode |
-| GET | `/api/admin/GeboAdminPromptsController/getPromptCategories` | getPromptCategories |
-| POST | `/api/admin/GeboAdminPromptsController/getPromptConfigByFilter` | getPromptConfigByFilter |
-| POST | `/api/admin/GeboAdminPromptsController/insertPromptConfig` | insertPromptConfig |
-| POST | `/api/admin/GeboAdminPromptsController/updatePromptConfig` | updatePromptConfig |
+| POST | `/brain/api/admin/GeboAdminPromptsController/deletePromptConfig` | deletePromptConfig |
+| GET | `/brain/api/admin/GeboAdminPromptsController/findPromptConfigByCode` | findPromptConfigByCode |
+| GET | `/brain/api/admin/GeboAdminPromptsController/getPromptCategories` | getPromptCategories |
+| POST | `/brain/api/admin/GeboAdminPromptsController/getPromptConfigByFilter` | getPromptConfigByFilter |
+| POST | `/brain/api/admin/GeboAdminPromptsController/insertPromptConfig` | insertPromptConfig |
+| POST | `/brain/api/admin/GeboAdminPromptsController/updatePromptConfig` | updatePromptConfig |
 
 ### `gebo-admin-rag-autotune-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores` | getLatestComputedVectorStores |
+| GET | `/brain/api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores` | getLatestComputedVectorStores |
 
 ### `gebo-advanced-setup-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus` | getFirstKnowledgeBaseSetupStatus |
-| GET | `/api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus` | getMinimalContentsSetupStatus |
+| GET | `/brain/api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus` | getFirstKnowledgeBaseSetupStatus |
+| GET | `/brain/api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus` | getMinimalContentsSetupStatus |
 
 ### `gebo-agent-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
-| DELETE | `/api/admin/GeboAgentAdminController/deleteAgent` | deleteAgent |
-| GET | `/api/admin/GeboAgentAdminController/getAgentByCode` | getAgentByCode |
-| GET | `/api/admin/GeboAgentAdminController/getAgents` | getAgents |
-| GET | `/api/admin/GeboAgentAdminController/getAgentsChoices` | getAgentsChoices |
-| GET | `/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId` | getPromptTemplatesByAgentId |
-| POST | `/api/admin/GeboAgentAdminController/insertAgent` | insertAgent |
-| POST | `/api/admin/GeboAgentAdminController/updateAgent` | updateAgent |
+| DELETE | `/brain/api/admin/GeboAgentAdminController/deleteAgent` | deleteAgent |
+| GET | `/brain/api/admin/GeboAgentAdminController/getAgentByCode` | getAgentByCode |
+| GET | `/brain/api/admin/GeboAgentAdminController/getAgents` | getAgents |
+| GET | `/brain/api/admin/GeboAgentAdminController/getAgentsChoices` | getAgentsChoices |
+| GET | `/brain/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId` | getPromptTemplatesByAgentId |
+| POST | `/brain/api/admin/GeboAgentAdminController/insertAgent` | insertAgent |
+| POST | `/brain/api/admin/GeboAgentAdminController/updateAgent` | updateAgent |
 
 ### `gebo-agents-network-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeboAgentsNetworkAdminController/deleteAgentsNetwork` | deleteAgentsNetwork |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs` | getAgentConfigs |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId` | getAgentConfigsByServiceId |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getAgentServices` | getAgentServices |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork` | getAgentsNetwork |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getAgentsNetworkByCode` | getAgentsNetworkByCode |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices` | getCompatibleNextServices |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getCompatiblePreviousServices` | getCompatiblePreviousServices |
-| GET | `/api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices` | getNetworkAdapterServices |
-| POST | `/api/admin/GeboAgentsNetworkAdminController/insertAgentsNetwork` | insertAgentsNetwork |
-| POST | `/api/admin/GeboAgentsNetworkAdminController/updateAgentsNetwork` | updateAgentsNetwork |
-| POST | `/api/admin/GeboAgentsNetworkAdminController/validateAgentsNetwork` | validateAgentsNetwork |
+| POST | `/brain/api/admin/GeboAgentsNetworkAdminController/deleteAgentsNetwork` | deleteAgentsNetwork |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs` | getAgentConfigs |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId` | getAgentConfigsByServiceId |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentServices` | getAgentServices |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork` | getAgentsNetwork |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentsNetworkByCode` | getAgentsNetworkByCode |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices` | getCompatibleNextServices |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getCompatiblePreviousServices` | getCompatiblePreviousServices |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices` | getNetworkAdapterServices |
+| POST | `/brain/api/admin/GeboAgentsNetworkAdminController/insertAgentsNetwork` | insertAgentsNetwork |
+| POST | `/brain/api/admin/GeboAgentsNetworkAdminController/updateAgentsNetwork` | updateAgentsNetwork |
+| POST | `/brain/api/admin/GeboAgentsNetworkAdminController/validateAgentsNetwork` | validateAgentsNetwork |
 
 ### `gebo-chat-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/GeboDirectModelChatController/chat` | chat |
-| GET | `/api/users/GeboDirectModelChatController/getChatModelMetaInfos` | getChatModelMetaInfos |
-| GET | `/api/users/GeboDirectModelChatController/getChatModelUserInfo` | getChatModelUserInfo |
-| GET | `/api/users/GeboDirectModelChatController/getProviderCapabilities` | getProviderCapabilities |
-| GET | `/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases` | getVisibleKnowledgeBases |
-| POST | `/api/users/GeboDirectModelChatController/streamResponse` | streamResponse |
+| POST | `/brain/api/users/GeboDirectModelChatController/chat` | chat |
+| GET | `/brain/api/users/GeboDirectModelChatController/getChatModelMetaInfos` | getChatModelMetaInfos |
+| GET | `/brain/api/users/GeboDirectModelChatController/getChatModelUserInfo` | getChatModelUserInfo |
+| GET | `/brain/api/users/GeboDirectModelChatController/getProviderCapabilities` | getProviderCapabilities |
+| GET | `/brain/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases` | getVisibleKnowledgeBases |
+| POST | `/brain/api/users/GeboDirectModelChatController/streamResponse` | streamResponse |
 
 ### `gebo-chat-pipelines-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu` | getDefaultPersonalPipelinesChatMenu |
-| POST | `/api/users/GeboChatPipelinesController/executeChatPipeline` | executeChatPipeline |
-| POST | `/api/users/GeboChatPipelinesController/executeDefaultChatPipeline` | executeDefaultChatPipeline |
-| GET | `/api/users/GeboChatPipelinesController/personalPipelinesChatMenu` | getPersonalPipelinesChatMenu |
-| GET | `/api/users/GeboChatPipelinesController/stopChatPipeline` | stopChatPipeline |
-| POST | `/api/users/GeboChatPipelinesController/streamChatPipeline` | streamChatPipeline |
-| POST | `/api/users/GeboChatPipelinesController/streamDefaultChatPipeline` | streamDefaultChatPipeline |
+| GET | `/brain/api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu` | getDefaultPersonalPipelinesChatMenu |
+| POST | `/brain/api/users/GeboChatPipelinesController/executeChatPipeline` | executeChatPipeline |
+| POST | `/brain/api/users/GeboChatPipelinesController/executeDefaultChatPipeline` | executeDefaultChatPipeline |
+| GET | `/brain/api/users/GeboChatPipelinesController/personalPipelinesChatMenu` | getPersonalPipelinesChatMenu |
+| GET | `/brain/api/users/GeboChatPipelinesController/stopChatPipeline` | stopChatPipeline |
+| POST | `/brain/api/users/GeboChatPipelinesController/streamChatPipeline` | streamChatPipeline |
+| POST | `/brain/api/users/GeboChatPipelinesController/streamDefaultChatPipeline` | streamDefaultChatPipeline |
 
 ### `gebo-chat-profile-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/GeboChatProfileLookupController/findChatProfileConfigurationLookupByCode` | findChatProfileConfigurationLookupByCode |
-| POST | `/api/users/GeboChatProfileLookupController/getAllChatProfileConfigurationLoookup` | getAllChatProfileConfigurationLoookup |
-| POST | `/api/users/GeboChatProfileLookupController/getChatProfileConfigurationLookupByQbe` | getChatProfileConfigurationLookupByQbe |
+| GET | `/brain/api/users/GeboChatProfileLookupController/findChatProfileConfigurationLookupByCode` | findChatProfileConfigurationLookupByCode |
+| POST | `/brain/api/users/GeboChatProfileLookupController/getAllChatProfileConfigurationLoookup` | getAllChatProfileConfigurationLoookup |
+| POST | `/brain/api/users/GeboChatProfileLookupController/getChatProfileConfigurationLookupByQbe` | getChatProfileConfigurationLookupByQbe |
 
 ### `gebo-deep-search-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
-| DELETE | `/api/admin/GeboDeepSearchAdminController/deleteDeepSearchConfig` | deleteDeepSearchConfig |
-| GET | `/api/admin/GeboDeepSearchAdminController/getConfigurableDataSources` | getConfigurableDataSources |
-| GET | `/api/admin/GeboDeepSearchAdminController/getDeepSeachConfigs` | getDeepSeachConfigs |
-| GET | `/api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultConfig` | getDeepSearchDefaultConfig |
-| GET | `/api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultOrSystemConfig` | getDeepSearchDefaultOrSystemConfig |
-| GET | `/api/admin/GeboDeepSearchAdminController/getDeepSearchSystemConfig` | getDeepSearchSystemConfig |
-| POST | `/api/admin/GeboDeepSearchAdminController/insertDeepSearchConfig` | insertDeepSearchConfig |
-| POST | `/api/admin/GeboDeepSearchAdminController/updateDeepSearchConfig` | updateDeepSearchConfig |
+| DELETE | `/brain/api/admin/GeboDeepSearchAdminController/deleteDeepSearchConfig` | deleteDeepSearchConfig |
+| GET | `/brain/api/admin/GeboDeepSearchAdminController/getConfigurableDataSources` | getConfigurableDataSources |
+| GET | `/brain/api/admin/GeboDeepSearchAdminController/getDeepSeachConfigs` | getDeepSeachConfigs |
+| GET | `/brain/api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultConfig` | getDeepSearchDefaultConfig |
+| GET | `/brain/api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultOrSystemConfig` | getDeepSearchDefaultOrSystemConfig |
+| GET | `/brain/api/admin/GeboDeepSearchAdminController/getDeepSearchSystemConfig` | getDeepSearchSystemConfig |
+| POST | `/brain/api/admin/GeboDeepSearchAdminController/insertDeepSearchConfig` | insertDeepSearchConfig |
+| POST | `/brain/api/admin/GeboDeepSearchAdminController/updateDeepSearchConfig` | updateDeepSearchConfig |
 
 ### `gebo-deep-search-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/GeboDeepSearchController/getDeepSearchDataSources` | getDeepSearchDataSources |
+| GET | `/brain/api/users/GeboDeepSearchController/getDeepSearchDataSources` | getDeepSearchDataSources |
 
 ### `gebo-fast-chat-profile-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboFastChatProfileStatusController/getChatProfilesSetupStatus` | getChatProfilesSetupStatus |
+| GET | `/brain/api/admin/GeboFastChatProfileStatusController/getChatProfilesSetupStatus` | getChatProfilesSetupStatus |
 
 ### `gebo-fast-knowledge-base-setup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboFastKnowledgeBaseSetupController/getCompleteKnowledgeBaseSetupStatus` | getCompleteKnowledgeBaseSetupStatus |
-| GET | `/api/admin/GeboFastKnowledgeBaseSetupController/getContentProcessRows` | getContentProcessRows |
+| GET | `/brain/api/admin/GeboFastKnowledgeBaseSetupController/getCompleteKnowledgeBaseSetupStatus` | getCompleteKnowledgeBaseSetupStatus |
+| GET | `/brain/api/admin/GeboFastKnowledgeBaseSetupController/getContentProcessRows` | getContentProcessRows |
 
 ### `gebo-fast-llms-setup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeboFastLLMSSetupController/createLLMByAutoconfigure` | createLLMByAutoconfigure |
-| POST | `/api/admin/GeboFastLLMSSetupController/createLLMCredentials` | createLLMCredentials |
-| POST | `/api/admin/GeboFastLLMSSetupController/createLLMS` | createLLMS |
-| GET | `/api/admin/GeboFastLLMSSetupController/getActualLLMSConfiguration` | getActualLLMSConfiguration |
-| GET | `/api/admin/GeboFastLLMSSetupController/getLLMSSetupStatus` | getLLMSSetupStatus |
-| POST | `/api/admin/GeboFastLLMSSetupController/verifyCredentialsAndDownloadModels` | verifyCredentialsAndDownloadModels |
-| POST | `/api/admin/GeboFastLLMSSetupController/verifyVendorCredentialsAndDownloadModels` | verifyVendorCredentialsAndDownloadModels |
+| POST | `/brain/api/admin/GeboFastLLMSSetupController/createLLMByAutoconfigure` | createLLMByAutoconfigure |
+| POST | `/brain/api/admin/GeboFastLLMSSetupController/createLLMCredentials` | createLLMCredentials |
+| POST | `/brain/api/admin/GeboFastLLMSSetupController/createLLMS` | createLLMS |
+| GET | `/brain/api/admin/GeboFastLLMSSetupController/getActualLLMSConfiguration` | getActualLLMSConfiguration |
+| GET | `/brain/api/admin/GeboFastLLMSSetupController/getLLMSSetupStatus` | getLLMSSetupStatus |
+| POST | `/brain/api/admin/GeboFastLLMSSetupController/verifyCredentialsAndDownloadModels` | verifyCredentialsAndDownloadModels |
+| POST | `/brain/api/admin/GeboFastLLMSSetupController/verifyVendorCredentialsAndDownloadModels` | verifyVendorCredentialsAndDownloadModels |
 
 ### `gebo-fast-vector-store-setup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeboFastVectorStoreSetupController/createVectorStoreConfiguration` | createVectorStoreConfiguration |
-| GET | `/api/admin/GeboFastVectorStoreSetupController/getVectorStoreStatus` | getVectorStoreStatus |
+| POST | `/brain/api/admin/GeboFastVectorStoreSetupController/createVectorStoreConfiguration` | createVectorStoreConfiguration |
+| GET | `/brain/api/admin/GeboFastVectorStoreSetupController/getVectorStoreStatus` | getVectorStoreStatus |
 
 ### `gebo-llm-generated-resource-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/GeboLLMGeneratedResourceController/serveLLMGeneratedContent/{userSessionCode}/{generatedResourceCode}` | serveLLMGeneratedContent |
+| GET | `/brain/api/users/GeboLLMGeneratedResourceController/serveLLMGeneratedContent/{userSessionCode}/{generatedResourceCode}` | serveLLMGeneratedContent |
 
 ### `gebo-rag-chat-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/GeboChatController/getChatModelUserInfoByChatProfileCode` | getChatModelUserInfoByChatProfileCode |
-| GET | `/api/users/GeboChatController/getChatProfileModelMetaInfos` | getChatProfileModelMetaInfos |
-| GET | `/api/users/GeboChatController/getProfileProviderModelCapabilities` | getProfileProviderModelCapabilities |
-| GET | `/api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode` | getVisibleKnowledgeBasesByProfileCode |
-| GET | `/api/users/GeboChatController/profiles` | getChatProfiles |
-| POST | `/api/users/GeboChatController/ragChat` | ragChat |
-| POST | `/api/users/GeboChatController/streamRagResponse` | streamRagResponse |
+| GET | `/brain/api/users/GeboChatController/getChatModelUserInfoByChatProfileCode` | getChatModelUserInfoByChatProfileCode |
+| GET | `/brain/api/users/GeboChatController/getChatProfileModelMetaInfos` | getChatProfileModelMetaInfos |
+| GET | `/brain/api/users/GeboChatController/getProfileProviderModelCapabilities` | getProfileProviderModelCapabilities |
+| GET | `/brain/api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode` | getVisibleKnowledgeBasesByProfileCode |
+| GET | `/brain/api/users/GeboChatController/profiles` | getChatProfiles |
+| POST | `/brain/api/users/GeboChatController/ragChat` | ragChat |
+| POST | `/brain/api/users/GeboChatController/streamRagResponse` | streamRagResponse |
 
 ### `gebo-text-to-speech-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/GeboTextToSpeechController/isEnabled` | isEnabled_1 |
-| POST | `/api/users/GeboTextToSpeechController/speechText` | speechText |
+| GET | `/brain/api/users/GeboTextToSpeechController/isEnabled` | isEnabled_1 |
+| POST | `/brain/api/users/GeboTextToSpeechController/speechText` | speechText |
 
 ### `gebo-transcript-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/GeboTranscriptController/isEnabled` | isEnabled |
-| POST | `/api/users/GeboTranscriptController/transcriptText` | transcriptText |
+| GET | `/brain/api/users/GeboTranscriptController/isEnabled` | isEnabled |
+| POST | `/brain/api/users/GeboTranscriptController/transcriptText` | transcriptText |
 
 ### `gebo-user-chat-uploads-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode}` | chatSessionUpload |
-| DELETE | `/api/users/GeboUserChatUploadsController/deleteSessionUploads` | deleteSessionUploads |
-| GET | `/api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId}` | serveContent |
+| POST | `/brain/api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode}` | chatSessionUpload |
+| DELETE | `/brain/api/users/GeboUserChatUploadsController/deleteSessionUploads` | deleteSessionUploads |
+| GET | `/brain/api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId}` | serveContent |
 
 ### `gebo-user-chats-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/GeboUserChatsController/changeChatDescription` | changeChatDescription |
-| GET | `/api/users/GeboUserChatsController/createCleanChatByChatProfileCode` | createCleanChatByChatProfileCode |
-| GET | `/api/users/GeboUserChatsController/createCleanChatByModelCode` | createCleanChatByModelCode |
-| DELETE | `/api/users/GeboUserChatsController/deleteChat` | deleteChat |
-| GET | `/api/users/GeboUserChatsController/exportResponse2file` | exportResponse2file |
-| GET | `/api/users/GeboUserChatsController/getChatHistory` | getChatHistory |
-| GET | `/api/users/GeboUserChatsController/getChatInfosByCode` | getChatInfosByCode |
-| POST | `/api/users/GeboUserChatsController/getChatInfosByQbe` | getChatInfosByQbe |
-| GET | `/api/users/GeboUserChatsController/getMyChats` | getMyChats |
-| GET | `/api/users/GeboUserChatsController/getMyChatsPaged` | getMyChatsPaged |
-| GET | `/api/users/GeboUserChatsController/getUIConfig` | getUIConfig |
-| GET | `/api/users/GeboUserChatsController/suggestChatDescription` | suggestChatDescription |
+| POST | `/brain/api/users/GeboUserChatsController/changeChatDescription` | changeChatDescription |
+| GET | `/brain/api/users/GeboUserChatsController/createCleanChatByChatProfileCode` | createCleanChatByChatProfileCode |
+| GET | `/brain/api/users/GeboUserChatsController/createCleanChatByModelCode` | createCleanChatByModelCode |
+| DELETE | `/brain/api/users/GeboUserChatsController/deleteChat` | deleteChat |
+| GET | `/brain/api/users/GeboUserChatsController/exportResponse2file` | exportResponse2file |
+| GET | `/brain/api/users/GeboUserChatsController/getChatHistory` | getChatHistory |
+| GET | `/brain/api/users/GeboUserChatsController/getChatInfosByCode` | getChatInfosByCode |
+| POST | `/brain/api/users/GeboUserChatsController/getChatInfosByQbe` | getChatInfosByQbe |
+| GET | `/brain/api/users/GeboUserChatsController/getMyChats` | getMyChats |
+| GET | `/brain/api/users/GeboUserChatsController/getMyChatsPaged` | getMyChatsPaged |
+| GET | `/brain/api/users/GeboUserChatsController/getUIConfig` | getUIConfig |
+| GET | `/brain/api/users/GeboUserChatsController/suggestChatDescription` | suggestChatDescription |
 
 ### `gebo-user-knowledge-base-semantic-search-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch` | semanticSearch |
+| POST | `/brain/api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch` | semanticSearch |
 
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
-| POST | `/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
+| GET | `/brain/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
+| POST | `/brain/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/brain/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `image-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
-| GET | `/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
+| GET | `/brain/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
+| GET | `/brain/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/brain/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/brain/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/brain/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/brain/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/brain/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/brain/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/brain/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/brain/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `llms-usage-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/LLMSUsageAdminLevelController/drillDown` | adminDrillDown |
+| POST | `/brain/api/admin/LLMSUsageAdminLevelController/drillDown` | adminDrillDown |
 
 ### `llms-usage-user-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
+| POST | `/brain/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
 
 ### `prompt-templates-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/PromptTemplatesController/getDefaultPrompt` | getDefaultPrompt |
-| POST | `/api/admin/PromptTemplatesController/getDefaultPromptForChatModel` | getDefaultPromptForChatModel |
-| POST | `/api/admin/PromptTemplatesController/getDefaultPromptForChatModelReference` | getDefaultPromptForChatModelReference |
+| GET | `/brain/api/admin/PromptTemplatesController/getDefaultPrompt` | getDefaultPrompt |
+| POST | `/brain/api/admin/PromptTemplatesController/getDefaultPromptForChatModel` | getDefaultPromptForChatModel |
+| POST | `/brain/api/admin/PromptTemplatesController/getDefaultPromptForChatModelReference` | getDefaultPromptForChatModelReference |
 
 ### `ranker-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
-| GET | `/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
+| GET | `/brain/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
+| GET | `/brain/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
 
 ### `text-to-speech-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
-| GET | `/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
+| GET | `/brain/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
+| GET | `/brain/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
 
 ### `transcript-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
-| GET | `/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
+| GET | `/brain/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
+| GET | `/brain/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/brain/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`)
+## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`) — context-path `/vectorizator`
 
 17 controller(s), 36 endpoint(s):
 
@@ -356,108 +356,108 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `chat-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
-| GET | `/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
+| GET | `/vectorizator/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
+| GET | `/vectorizator/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
 
 ### `chat-models-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
-| GET | `/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
-| GET | `/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
+| GET | `/vectorizator/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
+| GET | `/vectorizator/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
+| GET | `/vectorizator/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/vectorizator/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/vectorizator/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/vectorizator/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `embedding-models-controllers`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
-| GET | `/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
+| GET | `/vectorizator/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
+| GET | `/vectorizator/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
 
 ### `functions-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
+| GET | `/vectorizator/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
+| GET | `/vectorizator/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
+| GET | `/vectorizator/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
+| GET | `/vectorizator/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
 
 ### `gebo-core-analisys-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeboCoreAnalisysController/drillDown` | coreDrillDown |
-| GET | `/api/admin/GeboCoreAnalisysController/getTopLevelKnowledgeBaseCategory` | getTopLevelKnowledgeBaseCategory |
+| POST | `/vectorizator/api/admin/GeboCoreAnalisysController/drillDown` | coreDrillDown |
+| GET | `/vectorizator/api/admin/GeboCoreAnalisysController/getTopLevelKnowledgeBaseCategory` | getTopLevelKnowledgeBaseCategory |
 
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
-| POST | `/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
+| GET | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
+| POST | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/vectorizator/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `image-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
-| GET | `/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
+| GET | `/vectorizator/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
+| GET | `/vectorizator/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/vectorizator/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/vectorizator/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/vectorizator/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/vectorizator/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/vectorizator/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/vectorizator/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/vectorizator/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/vectorizator/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `ranker-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
-| GET | `/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
+| GET | `/vectorizator/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
+| GET | `/vectorizator/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
 
 ### `text-to-speech-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
-| GET | `/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
+| GET | `/vectorizator/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
+| GET | `/vectorizator/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
 
 ### `transcript-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
-| GET | `/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
+| GET | `/vectorizator/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
+| GET | `/vectorizator/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/vectorizator/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## graphicator.gebo.ai — port 13003 (`graphicator-gebo-ai`)
+## graphicator.gebo.ai — port 13003 (`graphicator-gebo-ai`) — context-path `/graphicator`
 
 16 controller(s), 34 endpoint(s):
 
@@ -465,102 +465,102 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `chat-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
-| GET | `/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
+| GET | `/graphicator/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
+| GET | `/graphicator/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
 
 ### `chat-models-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
-| GET | `/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
-| GET | `/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
+| GET | `/graphicator/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
+| GET | `/graphicator/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
+| GET | `/graphicator/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/graphicator/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/graphicator/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/graphicator/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `embedding-models-controllers`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
-| GET | `/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
+| GET | `/graphicator/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes` | getEmbeddingModelTypes |
+| GET | `/graphicator/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels` | getRuntimeConfiguredEmbeddingModels |
 
 ### `functions-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
-| GET | `/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
+| GET | `/graphicator/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
+| GET | `/graphicator/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
+| GET | `/graphicator/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
+| GET | `/graphicator/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
 
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
-| POST | `/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
+| GET | `/graphicator/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
+| POST | `/graphicator/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/graphicator/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `image-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
-| GET | `/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
+| GET | `/graphicator/api/admin/ImageModelsController/getImageModelTypes` | getImageModelTypes |
+| GET | `/graphicator/api/admin/ImageModelsController/getRuntimeConfiguredImageModels` | getRuntimeConfiguredImageModels |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/graphicator/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/graphicator/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/graphicator/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/graphicator/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/graphicator/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `ranker-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
-| GET | `/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
+| GET | `/graphicator/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
+| GET | `/graphicator/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
 
 ### `text-to-speech-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
-| GET | `/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
+| GET | `/graphicator/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels` | getRuntimeConfiguredTextToSpeechModels |
+| GET | `/graphicator/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes` | getTextToSpeechModelTypes |
 
 ### `transcript-models-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
-| GET | `/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
+| GET | `/graphicator/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
+| GET | `/graphicator/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/graphicator/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## chunker.gebo.ai — port 13004 (`chunker-gebo-ai`)
+## chunker.gebo.ai — port 13004 (`chunker-gebo-ai`) — context-path `/chunker`
 
 4 controller(s), 16 endpoint(s):
 
@@ -568,36 +568,36 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `document-content-streamer-with-cache-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/DocumentContentStreamerWithCacheController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/DocumentContentStreamerWithCacheController/streamSearchResult` | streamSearchResult |
+| POST | `/chunker/api/DocumentContentStreamerWithCacheController/streamDocumentReference` | streamDocumentReference |
+| POST | `/chunker/api/DocumentContentStreamerWithCacheController/streamSearchResult` | streamSearchResult |
 
 ### `documents-cache-service-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/DocumentsCacheServiceController/streamDocument` | streamDocument |
+| POST | `/chunker/api/DocumentsCacheServiceController/streamDocument` | streamDocument |
 
 ### `documents-chunk-service-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/DocumentsChunkServiceController/createChunkingSession` | createChunkingSession |
-| POST | `/api/DocumentsChunkServiceController/disposeChunkingSession` | disposeChunkingSession |
-| POST | `/api/DocumentsChunkServiceController/getCachedChunkSet` | getCachedChunkSet |
-| POST | `/api/DocumentsChunkServiceController/getChunkSet` | getChunkSet |
-| POST | `/api/DocumentsChunkServiceController/getNextChunkSet` | getNextChunkSet |
-| POST | `/api/DocumentsChunkServiceController/prepareChunks` | prepareChunks |
-| GET | `/api/DocumentsChunkServiceController/retrieveChunkingSession` | retrieveChunkingSession |
-| POST | `/api/DocumentsChunkServiceController/streamChunks` | streamChunks |
-| POST | `/api/DocumentsChunkServiceController/streamChunksBatch` | streamChunksBatch |
-| POST | `/api/DocumentsChunkServiceController/streamChunksReactive` | streamChunksReactive |
+| POST | `/chunker/api/DocumentsChunkServiceController/createChunkingSession` | createChunkingSession |
+| POST | `/chunker/api/DocumentsChunkServiceController/disposeChunkingSession` | disposeChunkingSession |
+| POST | `/chunker/api/DocumentsChunkServiceController/getCachedChunkSet` | getCachedChunkSet |
+| POST | `/chunker/api/DocumentsChunkServiceController/getChunkSet` | getChunkSet |
+| POST | `/chunker/api/DocumentsChunkServiceController/getNextChunkSet` | getNextChunkSet |
+| POST | `/chunker/api/DocumentsChunkServiceController/prepareChunks` | prepareChunks |
+| GET | `/chunker/api/DocumentsChunkServiceController/retrieveChunkingSession` | retrieveChunkingSession |
+| POST | `/chunker/api/DocumentsChunkServiceController/streamChunks` | streamChunks |
+| POST | `/chunker/api/DocumentsChunkServiceController/streamChunksBatch` | streamChunksBatch |
+| POST | `/chunker/api/DocumentsChunkServiceController/streamChunksReactive` | streamChunksReactive |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/chunker/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/chunker/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/chunker/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
-## git.gebo.ai — port 13005 (`git-gebo-ai`)
+## git.gebo.ai — port 13005 (`git-gebo-ai`) — context-path `/git`
 
 8 controller(s), 25 endpoint(s):
 
@@ -605,61 +605,61 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/git/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/git/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/git/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/git/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `git-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GITSystemsController/deleteGitEndpoint` | deleteGitEndpoint |
-| POST | `/api/admin/GITSystemsController/deleteGitSystem` | deleteGitSystem |
-| GET | `/api/admin/GITSystemsController/findGitEndpointsByProject` | findGitEndpointsByProject |
-| POST | `/api/admin/GITSystemsController/findGitEndpointsByQbe` | findGitEndpointsByQbe |
-| POST | `/api/admin/GITSystemsController/getBranchesList` | getBranchesList |
-| GET | `/api/admin/GITSystemsController/getGitSystemTypes` | getGitSystemTypes |
-| GET | `/api/admin/GITSystemsController/getGitSystems` | getGitSystems |
-| POST | `/api/admin/GITSystemsController/insertGitEndpoint` | insertGitEndpoint |
-| POST | `/api/admin/GITSystemsController/insertGitSystem` | insertGitSystem |
-| POST | `/api/admin/GITSystemsController/publishGitEndpoint` | publishGitEndpoint |
-| POST | `/api/admin/GITSystemsController/updateGitEndpoint` | updateGitEndpoint |
-| POST | `/api/admin/GITSystemsController/updateGitSystem` | updateGitSystem |
+| POST | `/git/api/admin/GITSystemsController/deleteGitEndpoint` | deleteGitEndpoint |
+| POST | `/git/api/admin/GITSystemsController/deleteGitSystem` | deleteGitSystem |
+| GET | `/git/api/admin/GITSystemsController/findGitEndpointsByProject` | findGitEndpointsByProject |
+| POST | `/git/api/admin/GITSystemsController/findGitEndpointsByQbe` | findGitEndpointsByQbe |
+| POST | `/git/api/admin/GITSystemsController/getBranchesList` | getBranchesList |
+| GET | `/git/api/admin/GITSystemsController/getGitSystemTypes` | getGitSystemTypes |
+| GET | `/git/api/admin/GITSystemsController/getGitSystems` | getGitSystems |
+| POST | `/git/api/admin/GITSystemsController/insertGitEndpoint` | insertGitEndpoint |
+| POST | `/git/api/admin/GITSystemsController/insertGitSystem` | insertGitSystem |
+| POST | `/git/api/admin/GITSystemsController/publishGitEndpoint` | publishGitEndpoint |
+| POST | `/git/api/admin/GITSystemsController/updateGitEndpoint` | updateGitEndpoint |
+| POST | `/git/api/admin/GITSystemsController/updateGitSystem` | updateGitSystem |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/git/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/git/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/git/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/git/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/git/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/git/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/git/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/git/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/git/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## filesystem.gebo.ai — port 13006 (`filesystem-gebo-ai`)
+## filesystem.gebo.ai — port 13006 (`filesystem-gebo-ai`) — context-path `/filesystem`
 
 10 controller(s), 33 endpoint(s):
 
@@ -667,77 +667,77 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/filesystem/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/filesystem/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/filesystem/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `file-system-shares-setting-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/FileSystemSharesSettingController/checkCanBeInsertedFileSystemShareReference` | checkCanBeInsertedFileSystemShareReference |
-| POST | `/api/admin/FileSystemSharesSettingController/deleteFileSystemShareReference` | deleteFileSystemShareReference |
-| GET | `/api/admin/FileSystemSharesSettingController/getFileSystemShareReferenceByCode` | getFileSystemShareReferenceByCode |
-| POST | `/api/admin/FileSystemSharesSettingController/getGFileSystemNodeChildrens` | getGFileSystemNodeChildrens |
-| POST | `/api/admin/FileSystemSharesSettingController/getGFileSystemNodeNavigationStatus` | getGFileSystemNodeNavigationStatus |
-| GET | `/api/admin/FileSystemSharesSettingController/getRootGFileSystemNodes` | getRootGFileSystemNodes |
-| GET | `/api/admin/FileSystemSharesSettingController/getSharedFileSystemsActualConfiguration` | getSharedFileSystemsActualConfiguration |
-| POST | `/api/admin/FileSystemSharesSettingController/getUsedFilesystemShares` | getUsedFilesystemShares |
-| POST | `/api/admin/FileSystemSharesSettingController/insertFileSystemShareReference` | insertFileSystemShareReference |
+| POST | `/filesystem/api/admin/FileSystemSharesSettingController/checkCanBeInsertedFileSystemShareReference` | checkCanBeInsertedFileSystemShareReference |
+| POST | `/filesystem/api/admin/FileSystemSharesSettingController/deleteFileSystemShareReference` | deleteFileSystemShareReference |
+| GET | `/filesystem/api/admin/FileSystemSharesSettingController/getFileSystemShareReferenceByCode` | getFileSystemShareReferenceByCode |
+| POST | `/filesystem/api/admin/FileSystemSharesSettingController/getGFileSystemNodeChildrens` | getGFileSystemNodeChildrens |
+| POST | `/filesystem/api/admin/FileSystemSharesSettingController/getGFileSystemNodeNavigationStatus` | getGFileSystemNodeNavigationStatus |
+| GET | `/filesystem/api/admin/FileSystemSharesSettingController/getRootGFileSystemNodes` | getRootGFileSystemNodes |
+| GET | `/filesystem/api/admin/FileSystemSharesSettingController/getSharedFileSystemsActualConfiguration` | getSharedFileSystemsActualConfiguration |
+| POST | `/filesystem/api/admin/FileSystemSharesSettingController/getUsedFilesystemShares` | getUsedFilesystemShares |
+| POST | `/filesystem/api/admin/FileSystemSharesSettingController/insertFileSystemShareReference` | insertFileSystemShareReference |
 
 ### `file-systems-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/FileSystemsBrowsingController/browseSharedFilesystemRootsPath` | browseSharedFilesystemRootsPath |
-| POST | `/api/admin/FileSystemsBrowsingController/getSharedFilesystemNavigationStatus` | getSharedFilesystemNavigationStatus |
-| GET | `/api/admin/FileSystemsBrowsingController/getSharedFilesystemRoots` | getSharedFilesystemRoots |
+| POST | `/filesystem/api/admin/FileSystemsBrowsingController/browseSharedFilesystemRootsPath` | browseSharedFilesystemRootsPath |
+| POST | `/filesystem/api/admin/FileSystemsBrowsingController/getSharedFilesystemNavigationStatus` | getSharedFilesystemNavigationStatus |
+| GET | `/filesystem/api/admin/FileSystemsBrowsingController/getSharedFilesystemRoots` | getSharedFilesystemRoots |
 
 ### `file-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/FileSystemsController/deleteFilesystemEndpoint` | deleteFilesystemEndpoint |
-| GET | `/api/admin/FileSystemsController/findFileSystemEndpointsByProject` | findFileSystemEndpointsByProject |
-| POST | `/api/admin/FileSystemsController/findFileSystemEndpointsByQbe` | findFileSystemEndpointsByQbe |
-| GET | `/api/admin/FileSystemsController/getFileSystemSystemTypes` | getFileSystemSystemTypes |
-| GET | `/api/admin/FileSystemsController/getFileSystemSystems` | getFileSystemSystems |
-| POST | `/api/admin/FileSystemsController/insertFilesystemEndpoint` | insertFilesystemEndpoint |
-| POST | `/api/admin/FileSystemsController/publishFilesystemEndpoint` | publishFilesystemEndpoint |
-| POST | `/api/admin/FileSystemsController/updateFilesystemEndpoint` | updateFilesystemEndpoint |
+| POST | `/filesystem/api/admin/FileSystemsController/deleteFilesystemEndpoint` | deleteFilesystemEndpoint |
+| GET | `/filesystem/api/admin/FileSystemsController/findFileSystemEndpointsByProject` | findFileSystemEndpointsByProject |
+| POST | `/filesystem/api/admin/FileSystemsController/findFileSystemEndpointsByQbe` | findFileSystemEndpointsByQbe |
+| GET | `/filesystem/api/admin/FileSystemsController/getFileSystemSystemTypes` | getFileSystemSystemTypes |
+| GET | `/filesystem/api/admin/FileSystemsController/getFileSystemSystems` | getFileSystemSystems |
+| POST | `/filesystem/api/admin/FileSystemsController/insertFilesystemEndpoint` | insertFilesystemEndpoint |
+| POST | `/filesystem/api/admin/FileSystemsController/publishFilesystemEndpoint` | publishFilesystemEndpoint |
+| POST | `/filesystem/api/admin/FileSystemsController/updateFilesystemEndpoint` | updateFilesystemEndpoint |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/filesystem/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/filesystem/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/filesystem/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/filesystem/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/filesystem/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/filesystem/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/filesystem/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## uploads.gebo.ai — port 13007 (`uploads-gebo-ai`)
+## uploads.gebo.ai — port 13007 (`uploads-gebo-ai`) — context-path `/uploads`
 
 9 controller(s), 24 endpoint(s):
 
@@ -745,64 +745,64 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/uploads/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/uploads/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/uploads/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `file-upload-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/FileUploadController/getHandShakeCode` | getHandShakeCode |
-| POST | `/api/admin/FileUploadController/upload/{handShakeCode}` | upload |
+| GET | `/uploads/api/admin/FileUploadController/getHandShakeCode` | getHandShakeCode |
+| POST | `/uploads/api/admin/FileUploadController/upload/{handShakeCode}` | upload |
 
 ### `file-uploads-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/FileUploadsController/deleteUploadsEndpoint` | deleteUploadsEndpoint |
-| GET | `/api/admin/FileUploadsController/findUploadsEndpointsByProject` | findUploadsEndpointsByProject |
-| POST | `/api/admin/FileUploadsController/findUploadsEndpointsByQbe` | findUploadsEndpointsByQbe |
-| GET | `/api/admin/FileUploadsController/getFileSystemSystemTypes` | getFileSystemSystemTypes |
-| GET | `/api/admin/FileUploadsController/getUploadableFilesExtensions` | getUploadableFilesExtensions |
-| GET | `/api/admin/FileUploadsController/getUploadsSystems` | getUploadsSystems |
-| POST | `/api/admin/FileUploadsController/insertUploadsEndpoint` | insertUploadsEndpoint |
-| POST | `/api/admin/FileUploadsController/publishUploadsEndpoint` | publishUploadsEndpoint |
-| POST | `/api/admin/FileUploadsController/updateUploadsEndpoint` | updateUploadsEndpoint |
+| POST | `/uploads/api/admin/FileUploadsController/deleteUploadsEndpoint` | deleteUploadsEndpoint |
+| GET | `/uploads/api/admin/FileUploadsController/findUploadsEndpointsByProject` | findUploadsEndpointsByProject |
+| POST | `/uploads/api/admin/FileUploadsController/findUploadsEndpointsByQbe` | findUploadsEndpointsByQbe |
+| GET | `/uploads/api/admin/FileUploadsController/getFileSystemSystemTypes` | getFileSystemSystemTypes |
+| GET | `/uploads/api/admin/FileUploadsController/getUploadableFilesExtensions` | getUploadableFilesExtensions |
+| GET | `/uploads/api/admin/FileUploadsController/getUploadsSystems` | getUploadsSystems |
+| POST | `/uploads/api/admin/FileUploadsController/insertUploadsEndpoint` | insertUploadsEndpoint |
+| POST | `/uploads/api/admin/FileUploadsController/publishUploadsEndpoint` | publishUploadsEndpoint |
+| POST | `/uploads/api/admin/FileUploadsController/updateUploadsEndpoint` | updateUploadsEndpoint |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/uploads/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/uploads/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/uploads/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/uploads/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/uploads/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/uploads/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/uploads/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/uploads/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/uploads/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/uploads/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## userspace.gebo.ai — port 13008 (`userspace-gebo-ai`)
+## userspace.gebo.ai — port 13008 (`userspace-gebo-ai`) — context-path `/userspace`
 
 9 controller(s), 32 endpoint(s):
 
@@ -810,72 +810,72 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/userspace/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/userspace/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/userspace/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/userspace/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/userspace/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/userspace/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/userspace/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/userspace/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/userspace/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/userspace/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/userspace/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/userspace/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `userspace-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/user/UserspaceController/deleteUserKnowledgebase` | deleteUserKnowledgebase |
-| POST | `/api/user/UserspaceController/deleteUserspaceFiles` | deleteUserspaceFiles |
-| POST | `/api/user/UserspaceController/deleteUserspaceFolder` | deleteUserspaceFolder |
-| GET | `/api/user/UserspaceController/findUserKnowledgebaseByCode` | findUserKnowledgebaseByCode |
-| POST | `/api/user/UserspaceController/findUserspaceFileByCodes` | findUserspaceFileByCodes |
-| GET | `/api/user/UserspaceController/findUserspaceFolderByCode` | findUserspaceFolderByCode |
-| GET | `/api/user/UserspaceController/getPersonalKnowledgebases` | getPersonalKnowledgebases |
-| POST | `/api/user/UserspaceController/getPublishingStatus` | getPublishingStatus |
-| POST | `/api/user/UserspaceController/listChildPersonalKnowledgebases` | listChildPersonalKnowledgebases |
-| GET | `/api/user/UserspaceController/listUserspaceFiles` | listUserspaceFiles |
-| GET | `/api/user/UserspaceController/listUserspaceFolders` | listUserspaceFolders |
-| POST | `/api/user/UserspaceController/newUserKnowledgebase` | newUserKnowledgebase |
-| POST | `/api/user/UserspaceController/newUserspaceFolder` | newUserspaceFolder |
-| POST | `/api/user/UserspaceController/publishFolder` | publishFolder |
-| POST | `/api/user/UserspaceController/publishUserspaceProjectEndpoint` | publishUserspaceProjectEndpoint |
-| POST | `/api/user/UserspaceController/transferUploadsToUserSpaceAndPublish` | transferUploadsToUserSpaceAndPublish |
-| POST | `/api/user/UserspaceController/updateUserKnowledgebase` | updateUserKnowledgebase |
-| POST | `/api/user/UserspaceController/updateUserspaceFolder` | updateUserspaceFolder |
+| POST | `/userspace/api/user/UserspaceController/deleteUserKnowledgebase` | deleteUserKnowledgebase |
+| POST | `/userspace/api/user/UserspaceController/deleteUserspaceFiles` | deleteUserspaceFiles |
+| POST | `/userspace/api/user/UserspaceController/deleteUserspaceFolder` | deleteUserspaceFolder |
+| GET | `/userspace/api/user/UserspaceController/findUserKnowledgebaseByCode` | findUserKnowledgebaseByCode |
+| POST | `/userspace/api/user/UserspaceController/findUserspaceFileByCodes` | findUserspaceFileByCodes |
+| GET | `/userspace/api/user/UserspaceController/findUserspaceFolderByCode` | findUserspaceFolderByCode |
+| GET | `/userspace/api/user/UserspaceController/getPersonalKnowledgebases` | getPersonalKnowledgebases |
+| POST | `/userspace/api/user/UserspaceController/getPublishingStatus` | getPublishingStatus |
+| POST | `/userspace/api/user/UserspaceController/listChildPersonalKnowledgebases` | listChildPersonalKnowledgebases |
+| GET | `/userspace/api/user/UserspaceController/listUserspaceFiles` | listUserspaceFiles |
+| GET | `/userspace/api/user/UserspaceController/listUserspaceFolders` | listUserspaceFolders |
+| POST | `/userspace/api/user/UserspaceController/newUserKnowledgebase` | newUserKnowledgebase |
+| POST | `/userspace/api/user/UserspaceController/newUserspaceFolder` | newUserspaceFolder |
+| POST | `/userspace/api/user/UserspaceController/publishFolder` | publishFolder |
+| POST | `/userspace/api/user/UserspaceController/publishUserspaceProjectEndpoint` | publishUserspaceProjectEndpoint |
+| POST | `/userspace/api/user/UserspaceController/transferUploadsToUserSpaceAndPublish` | transferUploadsToUserSpaceAndPublish |
+| POST | `/userspace/api/user/UserspaceController/updateUserKnowledgebase` | updateUserKnowledgebase |
+| POST | `/userspace/api/user/UserspaceController/updateUserspaceFolder` | updateUserspaceFolder |
 
 ### `userspace-upload-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/user/UserspaceUploadController/upload/{userspaceFolderCode}` | upload |
+| POST | `/userspace/api/user/UserspaceUploadController/upload/{userspaceFolderCode}` | upload |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/userspace/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## sharepoint.gebo.ai — port 13009 (`sharepoint-gebo-ai`)
+## sharepoint.gebo.ai — port 13009 (`sharepoint-gebo-ai`) — context-path `/sharepoint`
 
 9 controller(s), 31 endpoint(s):
 
@@ -883,71 +883,71 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/sharepoint/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/sharepoint/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/sharepoint/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/sharepoint/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/sharepoint/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/sharepoint/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/sharepoint/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/sharepoint/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/sharepoint/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `sharepoint-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/SharepointBrowsingController/browseSharepointPath` | browseSharepointPath |
-| POST | `/api/admin/SharepointBrowsingController/getSharepointNavigationStatus` | getSharepointNavigationStatus |
-| GET | `/api/admin/SharepointBrowsingController/getSharepointRoots` | getSharepointRoots |
+| POST | `/sharepoint/api/admin/SharepointBrowsingController/browseSharepointPath` | browseSharepointPath |
+| POST | `/sharepoint/api/admin/SharepointBrowsingController/getSharepointNavigationStatus` | getSharepointNavigationStatus |
+| GET | `/sharepoint/api/admin/SharepointBrowsingController/getSharepointRoots` | getSharepointRoots |
 
 ### `sharepoint-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/SharepointSystemsController/deleteSharepointEndpoint` | deleteSharepointEndpoint |
-| POST | `/api/admin/SharepointSystemsController/deleteSharepointSystem` | deleteSharepointSystem |
-| POST | `/api/admin/SharepointSystemsController/fastSharepointConfig` | fastSharepointConfig |
-| GET | `/api/admin/SharepointSystemsController/findSharepointEndpointsByCode` | findSharepointEndpointsByCode |
-| GET | `/api/admin/SharepointSystemsController/findSharepointEndpointsByProject` | findSharepointEndpointsByProject |
-| POST | `/api/admin/SharepointSystemsController/findSharepointEndpointsByQbe` | findSharepointEndpointsByQbe |
-| GET | `/api/admin/SharepointSystemsController/findSharepointSystemByCode` | findSharepointSystemByCode |
-| GET | `/api/admin/SharepointSystemsController/getSharepointSystemType` | getSharepointSystemTypes |
-| GET | `/api/admin/SharepointSystemsController/getSharepointSystems` | getSharepointSystems |
-| POST | `/api/admin/SharepointSystemsController/insertSharepointEndpoint` | insertSharepointEndpoint |
-| POST | `/api/admin/SharepointSystemsController/insertSharepointSystem` | insertSharepointSystem |
-| POST | `/api/admin/SharepointSystemsController/publishSharepointEndpoint` | publishSharepointEndpoint |
-| POST | `/api/admin/SharepointSystemsController/testSharepointSystem` | testSharepointSystem |
-| POST | `/api/admin/SharepointSystemsController/updateSharepointEndpoint` | updateSharepointEndpoint |
-| POST | `/api/admin/SharepointSystemsController/updateSharepointSystem` | updateSharepointSystem |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/deleteSharepointEndpoint` | deleteSharepointEndpoint |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/deleteSharepointSystem` | deleteSharepointSystem |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/fastSharepointConfig` | fastSharepointConfig |
+| GET | `/sharepoint/api/admin/SharepointSystemsController/findSharepointEndpointsByCode` | findSharepointEndpointsByCode |
+| GET | `/sharepoint/api/admin/SharepointSystemsController/findSharepointEndpointsByProject` | findSharepointEndpointsByProject |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/findSharepointEndpointsByQbe` | findSharepointEndpointsByQbe |
+| GET | `/sharepoint/api/admin/SharepointSystemsController/findSharepointSystemByCode` | findSharepointSystemByCode |
+| GET | `/sharepoint/api/admin/SharepointSystemsController/getSharepointSystemType` | getSharepointSystemTypes |
+| GET | `/sharepoint/api/admin/SharepointSystemsController/getSharepointSystems` | getSharepointSystems |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/insertSharepointEndpoint` | insertSharepointEndpoint |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/insertSharepointSystem` | insertSharepointSystem |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/publishSharepointEndpoint` | publishSharepointEndpoint |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/testSharepointSystem` | testSharepointSystem |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/updateSharepointEndpoint` | updateSharepointEndpoint |
+| POST | `/sharepoint/api/admin/SharepointSystemsController/updateSharepointSystem` | updateSharepointSystem |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/sharepoint/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## confluence.gebo.ai — port 13010 (`confluence-gebo-ai`)
+## confluence.gebo.ai — port 13010 (`confluence-gebo-ai`) — context-path `/confluence`
 
 9 controller(s), 31 endpoint(s):
 
@@ -955,71 +955,71 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `confluence-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ConfluenceBrowsingController/browseConfluencePath` | browseConfluencePath |
-| POST | `/api/admin/ConfluenceBrowsingController/getConfluenceNavigationStatus` | getConfluenceNavigationStatus |
-| GET | `/api/admin/ConfluenceBrowsingController/getConfluenceRoots` | getConfluenceRoots |
+| POST | `/confluence/api/admin/ConfluenceBrowsingController/browseConfluencePath` | browseConfluencePath |
+| POST | `/confluence/api/admin/ConfluenceBrowsingController/getConfluenceNavigationStatus` | getConfluenceNavigationStatus |
+| GET | `/confluence/api/admin/ConfluenceBrowsingController/getConfluenceRoots` | getConfluenceRoots |
 
 ### `confluence-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ConfluenceSystemsController/deleteConfluenceEndpoint` | deleteConfluenceEndpoint |
-| POST | `/api/admin/ConfluenceSystemsController/deleteConfluenceSystem` | deleteConfluenceSystem |
-| POST | `/api/admin/ConfluenceSystemsController/fastConfluenceConfig` | fastConfluenceConfig |
-| GET | `/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByCode` | findConfluenceEndpointsByCode |
-| GET | `/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByProject` | findConfluenceEndpointsByProject |
-| POST | `/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByQbe` | findConfluenceEndpointsByQbe |
-| GET | `/api/admin/ConfluenceSystemsController/findConfluenceSystemByCode` | findConfluenceSystemByCode |
-| GET | `/api/admin/ConfluenceSystemsController/getConfluenceSystemType` | getConfluenceSystemTypes |
-| GET | `/api/admin/ConfluenceSystemsController/getConfluenceSystems` | getConfluenceSystems |
-| POST | `/api/admin/ConfluenceSystemsController/insertConfluenceEndpoint` | insertConfluenceEndpoint |
-| POST | `/api/admin/ConfluenceSystemsController/insertConfluenceSystem` | insertConfluenceSystem |
-| POST | `/api/admin/ConfluenceSystemsController/publishConfluenceEndpoint` | publishConfluenceEndpoint |
-| POST | `/api/admin/ConfluenceSystemsController/testConfluenceSystem` | testConfluenceSystem |
-| POST | `/api/admin/ConfluenceSystemsController/updateConfluenceEndpoint` | updateConfluenceEndpoint |
-| POST | `/api/admin/ConfluenceSystemsController/updateConfluenceSystem` | updateConfluenceSystem |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/deleteConfluenceEndpoint` | deleteConfluenceEndpoint |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/deleteConfluenceSystem` | deleteConfluenceSystem |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/fastConfluenceConfig` | fastConfluenceConfig |
+| GET | `/confluence/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByCode` | findConfluenceEndpointsByCode |
+| GET | `/confluence/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByProject` | findConfluenceEndpointsByProject |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByQbe` | findConfluenceEndpointsByQbe |
+| GET | `/confluence/api/admin/ConfluenceSystemsController/findConfluenceSystemByCode` | findConfluenceSystemByCode |
+| GET | `/confluence/api/admin/ConfluenceSystemsController/getConfluenceSystemType` | getConfluenceSystemTypes |
+| GET | `/confluence/api/admin/ConfluenceSystemsController/getConfluenceSystems` | getConfluenceSystems |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/insertConfluenceEndpoint` | insertConfluenceEndpoint |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/insertConfluenceSystem` | insertConfluenceSystem |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/publishConfluenceEndpoint` | publishConfluenceEndpoint |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/testConfluenceSystem` | testConfluenceSystem |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/updateConfluenceEndpoint` | updateConfluenceEndpoint |
+| POST | `/confluence/api/admin/ConfluenceSystemsController/updateConfluenceSystem` | updateConfluenceSystem |
 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/confluence/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/confluence/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/confluence/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/confluence/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/confluence/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/confluence/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/confluence/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/confluence/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/confluence/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/confluence/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/confluence/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/confluence/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/confluence/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## jira.gebo.ai — port 13011 (`jira-gebo-ai`)
+## jira.gebo.ai — port 13011 (`jira-gebo-ai`) — context-path `/jira`
 
 9 controller(s), 31 endpoint(s):
 
@@ -1027,71 +1027,71 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/jira/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/jira/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/jira/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/jira/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/jira/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/jira/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/jira/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `jira-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/JiraBrowsingController/browseJiraPath` | browseJiraPath |
-| POST | `/api/admin/JiraBrowsingController/getJiraNavigationStatus` | getJiraNavigationStatus |
-| GET | `/api/admin/JiraBrowsingController/getJiraRoots` | getJiraRoots |
+| POST | `/jira/api/admin/JiraBrowsingController/browseJiraPath` | browseJiraPath |
+| POST | `/jira/api/admin/JiraBrowsingController/getJiraNavigationStatus` | getJiraNavigationStatus |
+| GET | `/jira/api/admin/JiraBrowsingController/getJiraRoots` | getJiraRoots |
 
 ### `jira-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/JiraSystemsController/deleteJiraEndpoint` | deleteJiraEndpoint |
-| POST | `/api/admin/JiraSystemsController/deleteJiraSystem` | deleteJiraSystem |
-| POST | `/api/admin/JiraSystemsController/fastJiraConfig` | fastJiraConfig |
-| GET | `/api/admin/JiraSystemsController/findJiraEndpointsByCode` | findJiraEndpointsByCode |
-| GET | `/api/admin/JiraSystemsController/findJiraEndpointsByProject` | findJiraEndpointsByProject |
-| POST | `/api/admin/JiraSystemsController/findJiraEndpointsByQbe` | findJiraEndpointsByQbe |
-| GET | `/api/admin/JiraSystemsController/findJiraSystemByCode` | findJiraSystemByCode |
-| GET | `/api/admin/JiraSystemsController/getJiraSystemType` | getJiraSystemTypes |
-| GET | `/api/admin/JiraSystemsController/getJiraSystems` | getJiraSystems |
-| POST | `/api/admin/JiraSystemsController/insertJiraEndpoint` | insertJiraEndpoint |
-| POST | `/api/admin/JiraSystemsController/insertJiraSystem` | insertJiraSystem |
-| POST | `/api/admin/JiraSystemsController/publishJiraEndpoint` | publishJiraEndpoint |
-| POST | `/api/admin/JiraSystemsController/testJiraSystem` | testJiraSystem |
-| POST | `/api/admin/JiraSystemsController/updateJiraEndpoint` | updateJiraEndpoint |
-| POST | `/api/admin/JiraSystemsController/updateJiraSystem` | updateJiraSystem |
+| POST | `/jira/api/admin/JiraSystemsController/deleteJiraEndpoint` | deleteJiraEndpoint |
+| POST | `/jira/api/admin/JiraSystemsController/deleteJiraSystem` | deleteJiraSystem |
+| POST | `/jira/api/admin/JiraSystemsController/fastJiraConfig` | fastJiraConfig |
+| GET | `/jira/api/admin/JiraSystemsController/findJiraEndpointsByCode` | findJiraEndpointsByCode |
+| GET | `/jira/api/admin/JiraSystemsController/findJiraEndpointsByProject` | findJiraEndpointsByProject |
+| POST | `/jira/api/admin/JiraSystemsController/findJiraEndpointsByQbe` | findJiraEndpointsByQbe |
+| GET | `/jira/api/admin/JiraSystemsController/findJiraSystemByCode` | findJiraSystemByCode |
+| GET | `/jira/api/admin/JiraSystemsController/getJiraSystemType` | getJiraSystemTypes |
+| GET | `/jira/api/admin/JiraSystemsController/getJiraSystems` | getJiraSystems |
+| POST | `/jira/api/admin/JiraSystemsController/insertJiraEndpoint` | insertJiraEndpoint |
+| POST | `/jira/api/admin/JiraSystemsController/insertJiraSystem` | insertJiraSystem |
+| POST | `/jira/api/admin/JiraSystemsController/publishJiraEndpoint` | publishJiraEndpoint |
+| POST | `/jira/api/admin/JiraSystemsController/testJiraSystem` | testJiraSystem |
+| POST | `/jira/api/admin/JiraSystemsController/updateJiraEndpoint` | updateJiraEndpoint |
+| POST | `/jira/api/admin/JiraSystemsController/updateJiraSystem` | updateJiraSystem |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/jira/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/jira/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/jira/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/jira/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/jira/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/jira/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## aws-s3.gebo.ai — port 13012 (`aws-s3-gebo-ai`)
+## aws-s3.gebo.ai — port 13012 (`aws-s3-gebo-ai`) — context-path `/aws-s3`
 
 9 controller(s), 29 endpoint(s):
 
@@ -1099,69 +1099,69 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `aws-s-3-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/AwsS3BrowsingController/browseAwsS3Path` | browseAwsS3Path |
-| GET | `/api/admin/AwsS3BrowsingController/getAwsS3Roots` | getAwsS3Roots |
+| POST | `/aws-s3/api/admin/AwsS3BrowsingController/browseAwsS3Path` | browseAwsS3Path |
+| GET | `/aws-s3/api/admin/AwsS3BrowsingController/getAwsS3Roots` | getAwsS3Roots |
 
 ### `aws-s-3-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/AwsS3SystemsController/deleteAwsS3ProjectEndpoint` | deleteAwsS3ProjectEndpoint |
-| POST | `/api/admin/AwsS3SystemsController/deleteAwsS3System` | deleteAwsS3System |
-| POST | `/api/admin/AwsS3SystemsController/fastAwsS3Config` | fastAwsS3Config |
-| GET | `/api/admin/AwsS3SystemsController/findAwsS3EndpointsByProject` | findAwsS3EndpointsByProject |
-| POST | `/api/admin/AwsS3SystemsController/findAwsS3EndpointsByQbe` | findAwsS3EndpointsByQbe |
-| GET | `/api/admin/AwsS3SystemsController/findAwsS3ProjectEndpointByCode` | findAwsS3ProjectEndpointByCode |
-| GET | `/api/admin/AwsS3SystemsController/findAwsS3SystemByCode` | findAwsS3SystemByCode |
-| GET | `/api/admin/AwsS3SystemsController/getAwsS3SystemType` | getAwsS3SystemType |
-| GET | `/api/admin/AwsS3SystemsController/getAwsS3Systems` | getAwsS3Systems |
-| POST | `/api/admin/AwsS3SystemsController/insertAwsS3ProjectEndpoint` | insertAwsS3ProjectEndpoint |
-| POST | `/api/admin/AwsS3SystemsController/insertAwsS3System` | insertAwsS3System |
-| POST | `/api/admin/AwsS3SystemsController/publishAwsS3ProjectEndpoint` | publishAwsS3ProjectEndpoint |
-| POST | `/api/admin/AwsS3SystemsController/updateAwsS3ProjectEndpoint` | updateAwsS3ProjectEndpoint |
-| POST | `/api/admin/AwsS3SystemsController/updateAwsS3System` | updateAwsS3System |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/deleteAwsS3ProjectEndpoint` | deleteAwsS3ProjectEndpoint |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/deleteAwsS3System` | deleteAwsS3System |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/fastAwsS3Config` | fastAwsS3Config |
+| GET | `/aws-s3/api/admin/AwsS3SystemsController/findAwsS3EndpointsByProject` | findAwsS3EndpointsByProject |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/findAwsS3EndpointsByQbe` | findAwsS3EndpointsByQbe |
+| GET | `/aws-s3/api/admin/AwsS3SystemsController/findAwsS3ProjectEndpointByCode` | findAwsS3ProjectEndpointByCode |
+| GET | `/aws-s3/api/admin/AwsS3SystemsController/findAwsS3SystemByCode` | findAwsS3SystemByCode |
+| GET | `/aws-s3/api/admin/AwsS3SystemsController/getAwsS3SystemType` | getAwsS3SystemType |
+| GET | `/aws-s3/api/admin/AwsS3SystemsController/getAwsS3Systems` | getAwsS3Systems |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/insertAwsS3ProjectEndpoint` | insertAwsS3ProjectEndpoint |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/insertAwsS3System` | insertAwsS3System |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/publishAwsS3ProjectEndpoint` | publishAwsS3ProjectEndpoint |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/updateAwsS3ProjectEndpoint` | updateAwsS3ProjectEndpoint |
+| POST | `/aws-s3/api/admin/AwsS3SystemsController/updateAwsS3System` | updateAwsS3System |
 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/aws-s3/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/aws-s3/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/aws-s3/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/aws-s3/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/aws-s3/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/aws-s3/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/aws-s3/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/aws-s3/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/aws-s3/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/aws-s3/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## googledrive.gebo.ai — port 13013 (`googledrive-gebo-ai`)
+## googledrive.gebo.ai — port 13013 (`googledrive-gebo-ai`) — context-path `/googledrive`
 
 10 controller(s), 32 endpoint(s):
 
@@ -1169,76 +1169,76 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/googledrive/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/googledrive/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/googledrive/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/googledrive/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `google-drive-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GoogleDriveBrowsingController/browseGoogleDrivePath` | browseGoogleDrivePath |
-| GET | `/api/admin/GoogleDriveBrowsingController/getGoogleDriveRoots` | getGoogleDriveRoots |
+| POST | `/googledrive/api/admin/GoogleDriveBrowsingController/browseGoogleDrivePath` | browseGoogleDrivePath |
+| GET | `/googledrive/api/admin/GoogleDriveBrowsingController/getGoogleDriveRoots` | getGoogleDriveRoots |
 
 ### `google-drive-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GoogleDriveSystemsController/deleteGoogleDriveProjectEndpoint` | deleteGoogleDriveProjectEndpoint |
-| POST | `/api/admin/GoogleDriveSystemsController/deleteGoogleDriveSystem` | deleteGoogleDriveSystem |
-| POST | `/api/admin/GoogleDriveSystemsController/fastGoogleDriveConfig` | fastGoogleDriveConfig |
-| GET | `/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByProject` | findGoogleDriveEndpointsByProject |
-| POST | `/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByQbe` | findGoogleDriveEndpointsByQbe |
-| GET | `/api/admin/GoogleDriveSystemsController/findGoogleDriveProjectEndpointByCode` | findGoogleDriveProjectEndpointByCode |
-| GET | `/api/admin/GoogleDriveSystemsController/findGoogleDriveSystemByCode` | findGoogleDriveSystemByCode |
-| GET | `/api/admin/GoogleDriveSystemsController/getGoogleDriveSystemType` | getGoogleDriveSystemType |
-| GET | `/api/admin/GoogleDriveSystemsController/getGoogleDriveSystems` | getGoogleDriveSystems |
-| POST | `/api/admin/GoogleDriveSystemsController/insertGoogleDriveProjectEndpoint` | insertGoogleDriveProjectEndpoint |
-| POST | `/api/admin/GoogleDriveSystemsController/insertGoogleDriveSystem` | insertGoogleDriveSystem |
-| POST | `/api/admin/GoogleDriveSystemsController/publishGoogleDriveProjectEndpoint` | publishGoogleDriveProjectEndpoint |
-| POST | `/api/admin/GoogleDriveSystemsController/updateGoogleDriveProjectEndpoint` | updateGoogleDriveProjectEndpoint |
-| POST | `/api/admin/GoogleDriveSystemsController/updateGoogleDriveSystem` | updateGoogleDriveSystem |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/deleteGoogleDriveProjectEndpoint` | deleteGoogleDriveProjectEndpoint |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/deleteGoogleDriveSystem` | deleteGoogleDriveSystem |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/fastGoogleDriveConfig` | fastGoogleDriveConfig |
+| GET | `/googledrive/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByProject` | findGoogleDriveEndpointsByProject |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/findGoogleDriveEndpointsByQbe` | findGoogleDriveEndpointsByQbe |
+| GET | `/googledrive/api/admin/GoogleDriveSystemsController/findGoogleDriveProjectEndpointByCode` | findGoogleDriveProjectEndpointByCode |
+| GET | `/googledrive/api/admin/GoogleDriveSystemsController/findGoogleDriveSystemByCode` | findGoogleDriveSystemByCode |
+| GET | `/googledrive/api/admin/GoogleDriveSystemsController/getGoogleDriveSystemType` | getGoogleDriveSystemType |
+| GET | `/googledrive/api/admin/GoogleDriveSystemsController/getGoogleDriveSystems` | getGoogleDriveSystems |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/insertGoogleDriveProjectEndpoint` | insertGoogleDriveProjectEndpoint |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/insertGoogleDriveSystem` | insertGoogleDriveSystem |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/publishGoogleDriveProjectEndpoint` | publishGoogleDriveProjectEndpoint |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/updateGoogleDriveProjectEndpoint` | updateGoogleDriveProjectEndpoint |
+| POST | `/googledrive/api/admin/GoogleDriveSystemsController/updateGoogleDriveSystem` | updateGoogleDriveSystem |
 
 ### `google-workspace-access-handshake-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/start-workspace-access` | tryGoogleWorkspaceAccess |
+| POST | `/googledrive/api/users/start-workspace-access` | tryGoogleWorkspaceAccess |
 | GET | `/oauth2/google-workspace-redirect` | googleWorkspaceRedirect |
 | GET | `/oauth2/start-workspace-access-go` | startWorkspaceAccess |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/googledrive/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/googledrive/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/googledrive/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/googledrive/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/googledrive/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/googledrive/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## mcpclient.gebo.ai — port 13014 (`mcpclient-gebo-ai`)
+## mcpclient.gebo.ai — port 13014 (`mcpclient-gebo-ai`) — context-path `/mcpclient`
 
 10 controller(s), 31 endpoint(s):
 
@@ -1246,75 +1246,75 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/mcpclient/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/mcpclient/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/mcpclient/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/mcpclient/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/mcpclient/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/mcpclient/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/mcpclient/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/mcpclient/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/mcpclient/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `mcp-client-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/MCPClientBrowsingController/browseMCPClientPath` | browseMCPClientPath |
-| POST | `/api/admin/MCPClientBrowsingController/getMCPClientNavigationStatus` | getMCPClientNavigationStatus |
-| GET | `/api/admin/MCPClientBrowsingController/getMCPClientRoots` | getMCPClientRoots |
+| POST | `/mcpclient/api/admin/MCPClientBrowsingController/browseMCPClientPath` | browseMCPClientPath |
+| POST | `/mcpclient/api/admin/MCPClientBrowsingController/getMCPClientNavigationStatus` | getMCPClientNavigationStatus |
+| GET | `/mcpclient/api/admin/MCPClientBrowsingController/getMCPClientRoots` | getMCPClientRoots |
 
 ### `mcp-client-config-controller`
 | Method | Path | Operation |
 |---|---|---|
-| DELETE | `/api/admin/McpClientConfigController/deleteMCPClientConfig` | deleteMCPClientConfig |
-| GET | `/api/admin/McpClientConfigController/findMCPClientConfigByCode` | findMCPClientConfigByCode |
-| POST | `/api/admin/McpClientConfigController/findMCPClientConfigByQbe` | findMCPClientConfigByQbe |
-| POST | `/api/admin/McpClientConfigController/insertMCPClientConfig` | insertMCPClientConfig |
-| POST | `/api/admin/McpClientConfigController/listMCPClientConfig` | listMCPClientConfig |
-| POST | `/api/admin/McpClientConfigController/testAndDiscovery` | testAndDiscovery |
-| POST | `/api/admin/McpClientConfigController/updateMCPClientConfig` | updateMCPClientConfig |
+| DELETE | `/mcpclient/api/admin/McpClientConfigController/deleteMCPClientConfig` | deleteMCPClientConfig |
+| GET | `/mcpclient/api/admin/McpClientConfigController/findMCPClientConfigByCode` | findMCPClientConfigByCode |
+| POST | `/mcpclient/api/admin/McpClientConfigController/findMCPClientConfigByQbe` | findMCPClientConfigByQbe |
+| POST | `/mcpclient/api/admin/McpClientConfigController/insertMCPClientConfig` | insertMCPClientConfig |
+| POST | `/mcpclient/api/admin/McpClientConfigController/listMCPClientConfig` | listMCPClientConfig |
+| POST | `/mcpclient/api/admin/McpClientConfigController/testAndDiscovery` | testAndDiscovery |
+| POST | `/mcpclient/api/admin/McpClientConfigController/updateMCPClientConfig` | updateMCPClientConfig |
 
 ### `mcp-client-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/MCPClientSystemsController/deleteMCPClientEndpoint` | deleteMCPClientEndpoint |
-| GET | `/api/admin/MCPClientSystemsController/findMCPClientEndpointsByCode` | findMCPClientEndpointsByCode |
-| GET | `/api/admin/MCPClientSystemsController/findMCPClientEndpointsByProject` | findMCPClientEndpointsByProject |
-| POST | `/api/admin/MCPClientSystemsController/findMCPClientEndpointsByQbe` | findMCPClientEndpointsByQbe |
-| GET | `/api/admin/MCPClientSystemsController/getMCPClientSystemType` | getMCPClientSystemType |
-| POST | `/api/admin/MCPClientSystemsController/insertMCPClientEndpoint` | insertMCPClientEndpoint |
-| POST | `/api/admin/MCPClientSystemsController/publishMCPClientEndpoint` | publishMCPClientEndpoint |
-| POST | `/api/admin/MCPClientSystemsController/updateMCPClientEndpoint` | updateMCPClientEndpoint |
+| POST | `/mcpclient/api/admin/MCPClientSystemsController/deleteMCPClientEndpoint` | deleteMCPClientEndpoint |
+| GET | `/mcpclient/api/admin/MCPClientSystemsController/findMCPClientEndpointsByCode` | findMCPClientEndpointsByCode |
+| GET | `/mcpclient/api/admin/MCPClientSystemsController/findMCPClientEndpointsByProject` | findMCPClientEndpointsByProject |
+| POST | `/mcpclient/api/admin/MCPClientSystemsController/findMCPClientEndpointsByQbe` | findMCPClientEndpointsByQbe |
+| GET | `/mcpclient/api/admin/MCPClientSystemsController/getMCPClientSystemType` | getMCPClientSystemType |
+| POST | `/mcpclient/api/admin/MCPClientSystemsController/insertMCPClientEndpoint` | insertMCPClientEndpoint |
+| POST | `/mcpclient/api/admin/MCPClientSystemsController/publishMCPClientEndpoint` | publishMCPClientEndpoint |
+| POST | `/mcpclient/api/admin/MCPClientSystemsController/updateMCPClientEndpoint` | updateMCPClientEndpoint |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/mcpclient/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## integration.gebo.ai — port 13015 (`integration-gebo-ai`)
+## integration.gebo.ai — port 13015 (`integration-gebo-ai`) — context-path `/integration`
 
 9 controller(s), 22 endpoint(s):
 
@@ -1322,62 +1322,62 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/integration/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/integration/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/integration/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/integration/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/integration/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/integration/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/integration/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `integration-input-controller`
 | Method | Path | Operation |
 |---|---|---|
-| PUT | `/api/application/IntegrationInputController/publishContents` | publishContents |
-| GET | `/api/application/IntegrationInputController/publishSync` | publishSync |
-| POST | `/api/application/IntegrationInputController/spoolDocument` | spoolDocument |
-| PUT | `/api/application/IntegrationInputController/spoolDocument` | spoolDocument_1 |
+| PUT | `/integration/api/application/IntegrationInputController/publishContents` | publishContents |
+| GET | `/integration/api/application/IntegrationInputController/publishSync` | publishSync |
+| POST | `/integration/api/application/IntegrationInputController/spoolDocument` | spoolDocument |
+| PUT | `/integration/api/application/IntegrationInputController/spoolDocument` | spoolDocument_1 |
 
 ### `integration-systems-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/IntegrationSystemsController/deleteIntegrationProjectEndpoint` | deleteIntegrationProjectEndpoint |
-| GET | `/api/admin/IntegrationSystemsController/findIntegrationEndpointsByProject` | findIntegrationEndpointsByProject |
-| POST | `/api/admin/IntegrationSystemsController/insertIntegrationProjectEndpoint` | insertIntegrationProjectEndpoint |
-| POST | `/api/admin/IntegrationSystemsController/publishIntegrationProjectEndpoint` | publishIntegrationProjectEndpoint |
-| POST | `/api/admin/IntegrationSystemsController/updateIntegrationProjectEndpoint` | updateIntegrationProjectEndpoint |
+| POST | `/integration/api/admin/IntegrationSystemsController/deleteIntegrationProjectEndpoint` | deleteIntegrationProjectEndpoint |
+| GET | `/integration/api/admin/IntegrationSystemsController/findIntegrationEndpointsByProject` | findIntegrationEndpointsByProject |
+| POST | `/integration/api/admin/IntegrationSystemsController/insertIntegrationProjectEndpoint` | insertIntegrationProjectEndpoint |
+| POST | `/integration/api/admin/IntegrationSystemsController/publishIntegrationProjectEndpoint` | publishIntegrationProjectEndpoint |
+| POST | `/integration/api/admin/IntegrationSystemsController/updateIntegrationProjectEndpoint` | updateIntegrationProjectEndpoint |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/integration/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/integration/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/integration/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/integration/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/integration/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/integration/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
-## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`)
+## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`) — context-path `/fulltextor`
 
 7 controller(s), 13 endpoint(s):
 
@@ -1385,50 +1385,50 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `contents-reset-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+| POST | `/fulltextor/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+| POST | `/fulltextor/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/fulltextor/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+| POST | `/fulltextor/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
 
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| GET | `/fulltextor/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/fulltextor/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/fulltextor/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+| GET | `/fulltextor/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/fulltextor/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/fulltextor/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ### `job-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| GET | `/fulltextor/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/fulltextor/api/admin/JobStatusController/getJobSummary` | getJobSummary |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+| POST | `/fulltextor/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
 ## eureka.gebo.ai — port 13017
 
 _No spec captured (not polled)._
 
 
-## heimdall.gebo.ai — port 13018 (`heimdall-gebo-ai`)
+## heimdall.gebo.ai — port 13018 (`heimdall-gebo-ai`) — context-path `/heimdall`
 
 14 controller(s), 55 endpoint(s):
 
@@ -1441,119 +1441,120 @@ _No spec captured (not polled)._
 ### `auth-providers-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/public/AuthProvidersController/getProviderClientConfig` | getProviderClientConfig |
-| GET | `/public/AuthProvidersController/listAuthProviders` | listAuthProviders |
-| GET | `/public/AuthProvidersController/listAvailableProvidersConfig` | listAvailableProvidersConfig |
+| GET | `/heimdall/public/AuthProvidersController/getProviderClientConfig` | getProviderClientConfig |
+| GET | `/heimdall/public/AuthProvidersController/listAuthProviders` | listAuthProviders |
+| GET | `/heimdall/public/AuthProvidersController/listAvailableProvidersConfig` | listAvailableProvidersConfig |
 
 ### `gebo-advanced-setup-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus` | getFirstKnowledgeBaseSetupStatus |
-| GET | `/api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus` | getMinimalContentsSetupStatus |
+| GET | `/heimdall/api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus` | getFirstKnowledgeBaseSetupStatus |
+| GET | `/heimdall/api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus` | getMinimalContentsSetupStatus |
 
 ### `gebo-fast-installation-setup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/public/GeboFastSetupController/createSetup` | createSetup |
-| GET | `/public/GeboFastSetupController/getInstallationStatus` | getInstallationStatus |
+| POST | `/heimdall/public/GeboFastSetupController/createSetup` | createSetup |
+| GET | `/heimdall/public/GeboFastSetupController/getInstallationStatus` | getInstallationStatus |
 
 ### `gebo-fast-work-folder-setup-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeboFastWorkFolderSetupController/configureWorkDirectory` | configureWorkDirectory |
-| GET | `/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupEnabled` | getWorkDirectorySetupEnabled |
-| GET | `/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupStatus` | getWorkDirectorySetupStatus |
+| POST | `/heimdall/api/admin/GeboFastWorkFolderSetupController/configureWorkDirectory` | configureWorkDirectory |
+| GET | `/heimdall/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupEnabled` | getWorkDirectorySetupEnabled |
+| GET | `/heimdall/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupStatus` | getWorkDirectorySetupStatus |
 
 ### `generated-admin-api-key-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/GeneratedAdminApiKeyController/deleteAdminGeneratedApiKey` | deleteAdminGeneratedApiKey |
-| POST | `/api/admin/GeneratedAdminApiKeyController/generateAdminGeneratedApiKey` | generateAdminGeneratedApiKey |
-| POST | `/api/admin/GeneratedAdminApiKeyController/getAdminGeneratedApiKeyPagedList` | getAdminGeneratedApiKeyPagedList |
-| GET | `/api/admin/GeneratedAdminApiKeyController/isAdminGeneratedApiKeyGenerationAllowed` | isAdminGeneratedApiKeyGenerationAllowed |
+| POST | `/heimdall/api/admin/GeneratedAdminApiKeyController/deleteAdminGeneratedApiKey` | deleteAdminGeneratedApiKey |
+| POST | `/heimdall/api/admin/GeneratedAdminApiKeyController/generateAdminGeneratedApiKey` | generateAdminGeneratedApiKey |
+| POST | `/heimdall/api/admin/GeneratedAdminApiKeyController/getAdminGeneratedApiKeyPagedList` | getAdminGeneratedApiKeyPagedList |
+| GET | `/heimdall/api/admin/GeneratedAdminApiKeyController/isAdminGeneratedApiKeyGenerationAllowed` | isAdminGeneratedApiKeyGenerationAllowed |
 
 ### `generated-user-api-key-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/GeneratedUserApiKeyController/deleteUserGeneratedApiKey` | deleteUserGeneratedApiKey |
-| POST | `/api/users/GeneratedUserApiKeyController/generateUserGeneratedApiKey` | generateUserGeneratedApiKey |
-| POST | `/api/users/GeneratedUserApiKeyController/getUserGeneratedApiKeyPagedList` | getUserGeneratedApiKeyPagedList |
-| GET | `/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed` | isUserGeneratedApiKeyGenerationAllowed |
+| POST | `/heimdall/api/users/GeneratedUserApiKeyController/deleteUserGeneratedApiKey` | deleteUserGeneratedApiKey |
+| POST | `/heimdall/api/users/GeneratedUserApiKeyController/generateUserGeneratedApiKey` | generateUserGeneratedApiKey |
+| POST | `/heimdall/api/users/GeneratedUserApiKeyController/getUserGeneratedApiKeyPagedList` | getUserGeneratedApiKeyPagedList |
+| GET | `/heimdall/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed` | isUserGeneratedApiKeyGenerationAllowed |
 
 ### `o-auth-2-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
-| DELETE | `/api/admin/OAuth2AdminController/deleteOauth2ProviderRegistration` | deleteOauth2ProviderRegistration |
-| GET | `/api/admin/OAuth2AdminController/findOauth2ProviderRegistrationByRegistrationId` | findOauth2ProviderRegistrationByRegistrationId |
-| GET | `/api/admin/OAuth2AdminController/getProviders` | getProviders |
-| POST | `/api/admin/OAuth2AdminController/insertOauth2ProviderRegistration` | insertOauth2ProviderRegistration |
-| POST | `/api/admin/OAuth2AdminController/updateOauth2ProviderRegistration` | updateOauth2ProviderRegistration |
+| DELETE | `/heimdall/api/admin/OAuth2AdminController/deleteOauth2ProviderRegistration` | deleteOauth2ProviderRegistration |
+| GET | `/heimdall/api/admin/OAuth2AdminController/findOauth2ProviderRegistrationByRegistrationId` | findOauth2ProviderRegistrationByRegistrationId |
+| GET | `/heimdall/api/admin/OAuth2AdminController/getProviders` | getProviders |
+| POST | `/heimdall/api/admin/OAuth2AdminController/insertOauth2ProviderRegistration` | insertOauth2ProviderRegistration |
+| POST | `/heimdall/api/admin/OAuth2AdminController/updateOauth2ProviderRegistration` | updateOauth2ProviderRegistration |
 
 ### `oauth-2-module-status-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/admin/Oauth2ModuleStatusController` | getStatus |
+| GET | `/heimdall/api/admin/Oauth2ModuleStatusController` | getStatus |
 
 ### `secrets-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/SecretsController/createAWSConnectionSecret` | createAWSConnectionSecret |
-| POST | `/api/admin/SecretsController/createCustomSecret` | createCustomSecret |
-| POST | `/api/admin/SecretsController/createGoogleJsonCredentialsSecret` | createGoogleJsonCredentialsSecret |
-| POST | `/api/admin/SecretsController/createGoogleOauth2Secret` | createGoogleOauth2Secret |
-| POST | `/api/admin/SecretsController/createOauth2StandardSecret` | createOauth2StandardSecret |
-| POST | `/api/admin/SecretsController/createSshKeySecret` | createSshKeySecret |
-| POST | `/api/admin/SecretsController/createTokenSecret` | createTokenSecret |
-| POST | `/api/admin/SecretsController/createUsernamePasswordSecret` | createUsernamePasswordSecret |
-| DELETE | `/api/admin/SecretsController/deleteSecret` | deleteSecret |
-| GET | `/api/admin/SecretsController/getSecretsByContextCode` | getSecretsByContextCode |
+| POST | `/heimdall/api/admin/SecretsController/createAWSConnectionSecret` | createAWSConnectionSecret |
+| POST | `/heimdall/api/admin/SecretsController/createCustomSecret` | createCustomSecret |
+| POST | `/heimdall/api/admin/SecretsController/createGoogleJsonCredentialsSecret` | createGoogleJsonCredentialsSecret |
+| POST | `/heimdall/api/admin/SecretsController/createGoogleOauth2Secret` | createGoogleOauth2Secret |
+| POST | `/heimdall/api/admin/SecretsController/createOauth2StandardSecret` | createOauth2StandardSecret |
+| POST | `/heimdall/api/admin/SecretsController/createSshKeySecret` | createSshKeySecret |
+| POST | `/heimdall/api/admin/SecretsController/createTokenSecret` | createTokenSecret |
+| POST | `/heimdall/api/admin/SecretsController/createUsernamePasswordSecret` | createUsernamePasswordSecret |
+| DELETE | `/heimdall/api/admin/SecretsController/deleteSecret` | deleteSecret |
+| GET | `/heimdall/api/admin/SecretsController/getSecretsByContextCode` | getSecretsByContextCode |
 
 ### `token-renew-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/api/users/TokenRenewController/renew` | renew |
+| GET | `/heimdall/api/users/TokenRenewController/renew` | renew |
 
 ### `user-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/users/ActualUserController/changePassword` | changePassword |
-| GET | `/api/users/ActualUserController/getMyGroups` | getMyGroups |
-| GET | `/api/users/ActualUserController/me` | getCurrentUser |
+| POST | `/heimdall/api/users/ActualUserController/changePassword` | changePassword |
+| GET | `/heimdall/api/users/ActualUserController/getMyGroups` | getMyGroups |
+| GET | `/heimdall/api/users/ActualUserController/me` | getCurrentUser |
 
 ### `user-workflows-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/public/UserWorkflowsController/getUserWorkflowsConfig` | getUserWorkflowsConfig |
-| POST | `/public/UserWorkflowsController/startUserWorkflow` | startUserWorkflow |
-| POST | `/public/UserWorkflowsController/userChangePasswordWithTicket` | userChangePasswordWithTicket |
+| GET | `/heimdall/public/UserWorkflowsController/getUserWorkflowsConfig` | getUserWorkflowsConfig |
+| POST | `/heimdall/public/UserWorkflowsController/startUserWorkflow` | startUserWorkflow |
+| POST | `/heimdall/public/UserWorkflowsController/userChangePasswordWithTicket` | userChangePasswordWithTicket |
 
 ### `users-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/api/admin/UsersAdminController/changeUserPassword` | changeUserPassword |
-| POST | `/api/admin/UsersAdminController/deleteGroup` | deleteGroup |
-| POST | `/api/admin/UsersAdminController/deleteUser` | deleteUser |
-| GET | `/api/admin/UsersAdminController/findGroupByCode` | findGroupByCode |
-| POST | `/api/admin/UsersAdminController/findUserByQbe` | findUserByQbe |
-| GET | `/api/admin/UsersAdminController/findUserByUsername` | findUserByUsername |
-| POST | `/api/admin/UsersAdminController/findUsersGroupByQbe` | findUsersGroupByQbe |
-| GET | `/api/admin/UsersAdminController/getAllGroups` | getAllGroups |
-| GET | `/api/admin/UsersAdminController/getAllUsers` | getAllUsers |
-| POST | `/api/admin/UsersAdminController/insertGroup` | insertGroup |
-| POST | `/api/admin/UsersAdminController/insertUser` | insertUser |
-| POST | `/api/admin/UsersAdminController/updateGroup` | updateGroup |
-| POST | `/api/admin/UsersAdminController/updateUser` | updateUser |
+| POST | `/heimdall/api/admin/UsersAdminController/changeUserPassword` | changeUserPassword |
+| POST | `/heimdall/api/admin/UsersAdminController/deleteGroup` | deleteGroup |
+| POST | `/heimdall/api/admin/UsersAdminController/deleteUser` | deleteUser |
+| GET | `/heimdall/api/admin/UsersAdminController/findGroupByCode` | findGroupByCode |
+| POST | `/heimdall/api/admin/UsersAdminController/findUserByQbe` | findUserByQbe |
+| GET | `/heimdall/api/admin/UsersAdminController/findUserByUsername` | findUserByUsername |
+| POST | `/heimdall/api/admin/UsersAdminController/findUsersGroupByQbe` | findUsersGroupByQbe |
+| GET | `/heimdall/api/admin/UsersAdminController/getAllGroups` | getAllGroups |
+| GET | `/heimdall/api/admin/UsersAdminController/getAllUsers` | getAllUsers |
+| POST | `/heimdall/api/admin/UsersAdminController/insertGroup` | insertGroup |
+| POST | `/heimdall/api/admin/UsersAdminController/insertUser` | insertUser |
+| POST | `/heimdall/api/admin/UsersAdminController/updateGroup` | updateGroup |
+| POST | `/heimdall/api/admin/UsersAdminController/updateUser` | updateUser |
 
 ## Eureka base-path conformity
 
-Checked every `application.yml` under `gebo.apps.parent/gebo.microservices.apps.parent/*/src/main/resources/` plus the shared `gebo.config*` locations:
+Checked every `application.yml` under `gebo.apps.parent/gebo.microservices.apps.parent/*/src/main/resources/` plus the shared `gebo.config*` locations, and verified live against the running stack:
 
-- **No microservice sets `server.servlet.context-path`.** All controllers are served at the container's HTTP root.
-- **All 19 apps set matching `eureka.instance.appname` / `virtual-host-name` / `secure-virtual-host-name`**, each the DNS-safe dash form of the canonical `spring.application.name` (e.g. `spring.application.name: brain_gebo_ai` → `eureka.instance.appname: brain-gebo-ai`). This is the "virtual path" Eureka/Spring Cloud LoadBalancer actually resolves instances by (`lb://<discovery-id>`) — a URI host cannot contain `_`, so the canonical underscore id alone is unroutable.
-- **Confirmed live** against `http://localhost:13017/eureka/apps`: all 18 registrable services (17 backends + gateway; the registry itself does not register) are `UP`, and each entry's `vipAddress` equals its `application.name`'s dash form — no drift between config and runtime registration.
-- **The gateway's `GeboTopologyRouteDefinitionLocator`** (`gateway.gebo.ai/.../routing/GeboTopologyRouteDefinitionLocator.java`) builds routes as `/<canonical-id>/** --StripPrefix=1--> lb://<discovery-id>`, which forwards the request to the backend with the `/<canonical-id>` segment removed and nothing else changed. This is only correct because the backend has **no context-path of its own** — a service that added one would break every gateway-routed call with a 404, since `StripPrefix=1` only strips the one segment the gateway added, not a second, service-side prefix.
-- **`GeboMicroserviceUrlResolver`** (`gebo.microservices.topology`) mirrors the same contract for direct/`LOAD_BALANCER`/`DIRECT` addressing — none of its three strategies assume a per-service path prefix either.
-- **heimdall** is the one exception worth flagging explicitly: it is deliberately **not** in the gateway's topology map (no messaging module), so it gets **no** topology-derived route. Its admin surface is hand-routed at `/heimdall_gebo_ai/api/admin/**`; its `api/cluster/**` surface is reachable only service-to-service (Eureka-membership-gated), never through the gateway. This is intentional (see the gateway `application.yml` comments), not a conformity gap.
+- **Every one of the 17 backend microservices now sets `server.servlet.context-path`** to its short context name — `GeboMicroservice.getContextName()` (`gebo.microservices.topology`), derived by stripping the `-gebo-ai` suffix from the Eureka discovery id (e.g. `brain-gebo-ai` → `brain`). Confirmed live: each service's own `/v3/api-docs` is now served at `/<context>/v3/api-docs` (verified `200` on all 17, not `401`/`404`).
+- **The gateway's `GeboTopologyRouteDefinitionLocator`** builds routes as `/<contextName>/** → lb://<discoveryServiceId>` with **no `StripPrefix` filter** — the matched segment is forwarded to the backend unchanged, landing exactly on the backend's own context-path. Live-verified: `GET /brain/api/admin/ChatModelsController/getChatModelTypes` through the gateway returns the same `401` as calling `brain:13001/brain/api/admin/...` directly.
+- **`GeboMicroserviceUrlResolver`** (the resolver every internal service-to-service client uses — secrets/security/acl clients, documents-access/documents-cache clients) appends the same context path to every base url it builds for the `LOAD_BALANCER` strategy (the deployment default), so those callers pick up the new context-path automatically with no code changes of their own.
+- **The 34 client stub poms** (`gebo.api.clients/gebo.microservices.clients.parent/*.gebo.ai.{java,angular}.client`) had their `swagger.file` updated to `http://localhost:<port>/<context>/v3/api-docs`, matching the new served location.
+- **The gateway's swagger aggregation proxy** (`GeboGatewaySwaggerRoutingConfig`) now targets `lb://<discovery-id>/<contextPath>/v3/api-docs` instead of the bare `/v3/api-docs`. Live-verified: `GET /api-docs/brain_gebo_ai` through the gateway still returns `200`.
+- **`heimdall`** is the one exception worth flagging explicitly: it is deliberately **not** in the gateway's topology map (no messaging module), so it gets no topology-derived route. Its admin surface is hand-routed at `/heimdall/api/admin/**` (renamed from `/heimdall_gebo_ai/api/admin/**`, `StripPrefix` removed to match); its `api/cluster/**` surface stays unreachable through the gateway (live-verified `404`) — service-to-service only, Eureka-membership-gated.
+- **Gateway and eureka are unchanged** — neither gets a context-path (the gateway is the routing edge with no controllers of its own; eureka is the registry, not a `swagger-on` service).
 
-**Conclusion: conformant.** Every microservice erogates from its own root with no base path, and registers under a virtual-host-name Eureka/the gateway/the LoadBalancer all agree on. There is no service where the configured Eureka id and the actual served base path disagree.
+**Conclusion: conformant.** Every microservice erogates from its own dedicated context-path, which is simultaneously the segment the gateway routes on (no rewriting needed) and the segment `GeboMicroserviceUrlResolver` appends for direct service-to-service calls — one derived value (`GeboMicroservice.getContextName()`), three consumers, kept in lockstep by construction rather than by convention.
 

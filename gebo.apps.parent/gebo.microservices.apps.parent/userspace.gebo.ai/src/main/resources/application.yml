@@ -9,6 +9,13 @@ spring:
 # deployment runs side by side on one host and each container publishes it.
 server:
   port: 13008
+  servlet:
+    # Context name = GeboMicroservice.getContextName() (discovery id minus
+    # "-gebo-ai"). This is what the gateway's topology route matches on
+    # (/userspace/** -> lb://userspace-gebo-ai, no StripPrefix) and what
+    # GeboMicroserviceUrlResolver appends to every base url it builds for
+    # this service - keep the three in lockstep.
+    context-path: /userspace
 
 # Eureka discovery client: registers this content microservice under its
 # application name so client-side load balancing resolves it to a live instance.

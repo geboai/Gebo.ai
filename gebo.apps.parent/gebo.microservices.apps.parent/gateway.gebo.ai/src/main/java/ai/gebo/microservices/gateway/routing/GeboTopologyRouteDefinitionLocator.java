@@ -18,7 +18,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
@@ -38,18 +37,25 @@ import reactor.core.publisher.Flux;
  * </p>
  *
  * <pre>
- *   /&lt;microserviceId&gt;/**  --StripPrefix=1--&gt;  lb://&lt;discoveryServiceId&gt;
- *   e.g. /brain_gebo_ai/api/x       -&gt;         lb://brain-gebo-ai/api/x
+ *   /&lt;contextName&gt;/**  --&gt;  lb://&lt;discoveryServiceId&gt;   (no path rewriting)
+ *   e.g. /brain/api/x        -&gt;   lb://brain-gebo-ai/brain/api/x
  * </pre>
  *
  * <p>
- * The path carries the CANONICAL (underscore) id - underscores are perfectly
- * legal in a URI path - while the {@code lb://} authority carries the
- * hyphenated discovery id, because a URI <i>host</i> cannot contain one (see
+ * The path segment is the short <b>context name</b>
+ * ({@link GeboMicroservice#getContextName()}, e.g. {@code brain}) - the same
+ * name the target erogates its own controllers under via its
+ * {@code server.servlet.context-path}. The request is forwarded to the
+ * backend <b>unchanged</b>: no {@code StripPrefix} filter, because the
+ * {@code /<contextName>} segment the gateway matched on is exactly the prefix
+ * the backend's own Spring context already expects on every request. Stripping
+ * it would misroute every call to a path the backend has never heard of. The
+ * {@code lb://} authority carries the hyphenated discovery id, because a URI
+ * <i>host</i> cannot contain {@code '_'} (see
  * {@link GeboMicroservice#toDiscoveryServiceId(String)}). This is exactly the
  * addressing {@code GeboMicroserviceUrlResolver}'s GATEWAY strategy already
- * assumes ({@code <gatewayBaseUrl>/{microserviceId}}), which until now pointed
- * at paths the gateway answered with 404.
+ * assumes ({@code <gatewayBaseUrl>/{microserviceId}}, expanded to the context
+ * name).
  * </p>
  *
  * <h2>Why not the built-in discovery locator</h2>
@@ -94,16 +100,13 @@ public class GeboTopologyRouteDefinitionLocator implements RouteDefinitionLocato
 	/** Route ids are prefixed so they are recognisable in /actuator/gateway/routes. */
 	private static final String ROUTE_ID_PREFIX = "topology-";
 
-	/** Strips the /<microserviceId> segment before forwarding to the backend. */
-	private static final String STRIP_PREFIX_FILTER = "StripPrefix";
-
 	private static final String PATH_PREDICATE = "Path";
 
 	private final GeboMicroservicesTopology topology;
 
 	public GeboTopologyRouteDefinitionLocator(GeboMicroservicesTopology topology) {
 		this.topology = topology;
-		LOGGER.info("Topology-driven gateway routing enabled: {} service(s) reachable as /<microserviceId>/**",
+		LOGGER.info("Topology-driven gateway routing enabled: {} service(s) reachable as /<contextName>/**",
 				topology.microservices().size());
 	}
 
@@ -123,33 +126,31 @@ public class GeboTopologyRouteDefinitionLocator implements RouteDefinitionLocato
 	}
 
 	/**
-	 * Builds {@code /<microserviceId>/** -> lb://<discoveryServiceId>} for one
-	 * service.
+	 * Builds {@code /<contextName>/** -> lb://<discoveryServiceId>} (no path
+	 * rewriting) for one service.
 	 *
 	 * @param microservice a topology member
 	 * @return its route definition
 	 */
 	private RouteDefinition toRouteDefinition(GeboMicroservice microservice) {
-		String microserviceId = microservice.getMicroserviceId();
+		String contextName = microservice.getContextName();
 
 		RouteDefinition definition = new RouteDefinition();
-		definition.setId(ROUTE_ID_PREFIX + microserviceId);
+		definition.setId(ROUTE_ID_PREFIX + contextName);
 		// lb:// + the DNS-safe id: the canonical underscore id cannot be a URI host.
 		definition.setUri(URI.create(microservice.getLoadBalancerUri()));
 
 		PredicateDefinition path = new PredicateDefinition();
 		path.setName(PATH_PREDICATE);
 		Map<String, String> pathArgs = new LinkedHashMap<>();
-		pathArgs.put("pattern", "/" + microserviceId + "/**");
+		pathArgs.put("pattern", "/" + contextName + "/**");
 		path.setArgs(pathArgs);
 		definition.setPredicates(List.of(path));
 
-		FilterDefinition stripPrefix = new FilterDefinition();
-		stripPrefix.setName(STRIP_PREFIX_FILTER);
-		Map<String, String> filterArgs = new LinkedHashMap<>();
-		filterArgs.put("parts", "1");
-		stripPrefix.setArgs(filterArgs);
-		definition.setFilters(List.of(stripPrefix));
+		// No StripPrefix: the backend's own server.servlet.context-path is
+		// "/<contextName>", so the matched segment is exactly what the backend's
+		// Spring context expects on every request - forward it unchanged.
+		definition.setFilters(List.of());
 
 		return definition;
 	}

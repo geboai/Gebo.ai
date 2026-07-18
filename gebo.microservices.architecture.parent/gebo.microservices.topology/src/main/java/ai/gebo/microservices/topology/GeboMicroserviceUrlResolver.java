@@ -47,30 +47,39 @@ import java.util.Set;
  * </p>
  * <ul>
  * <li>{@link Strategy#LOAD_BALANCER} (default) - client-side load balancing:
- * {@code <scheme>://<discoveryServiceId>} (e.g. {@code http://brain-gebo-ai}).
- * The host is the DNS-safe discovery id, NOT the canonical underscore id: a URI
- * host may not contain {@code '_'}, so {@code http://brain_gebo_ai} resolves to a
- * null host and is rejected. This is what a {@code @LoadBalanced}
+ * {@code <scheme>://<discoveryServiceId><contextPath>} (e.g.
+ * {@code http://brain-gebo-ai/brain}). The host is the DNS-safe discovery id,
+ * NOT the canonical underscore id: a URI host may not contain {@code '_'}, so
+ * {@code http://brain_gebo_ai} resolves to a null host and is rejected. The
+ * base url carries the service's own {@code server.servlet.context-path}
+ * ({@link GeboMicroservice#getContextPath()}), so a caller only needs to
+ * append the controller's relative path. This is what a {@code @LoadBalanced}
  * {@code RestTemplate}/{@code WebClient} resolves and is exactly the Feign
  * service name; the Spring Cloud LoadBalancer picks a live instance. The
- * equivalent {@code lb://} form is
+ * equivalent {@code lb://} form (host only - no context path, since path is a
+ * request/gateway concern, not part of the URI authority) is
  * {@link #loadBalancerUriForMicroserviceId(String)}.</li>
  * <li>{@link Strategy#GATEWAY} - route every call through the API gateway:
  * {@code <gatewayBaseUrl><gatewayPathTemplate>} with {@code {microserviceId}}
- * expanded (e.g. {@code http://gateway-gebo-ai:13000/brain_gebo_ai} - hyphenated
- * host, canonical id in the path, where underscores are legal). When no gateway
- * base url is configured it defaults to the load-balanced gateway
- * ({@code <scheme>://gateway-gebo-ai}).</li>
+ * expanded to the target's <b>context name</b> (e.g.
+ * {@code http://gateway-gebo-ai:13000/brain} - hyphenated host, short context
+ * name in the path), matching the gateway's own topology-derived route
+ * ({@code /<contextName>/** -> lb://<discoveryServiceId>}, no path rewriting).
+ * When no gateway base url is configured it defaults to the load-balanced
+ * gateway ({@code <scheme>://gateway-gebo-ai}).</li>
  * <li>{@link Strategy#DIRECT} - a fixed {@code microserviceId -> base url} map
- * (e.g. {@code http://localhost:13001} - each service owns a port of the
+ * (e.g. {@code http://localhost:13001/brain} - each service owns a port of the
  * 13000-13017 block), for tests, a monolith or a pinned deployment where
- * discovery is not used.</li>
+ * discovery is not used. Unlike the other two strategies this is an explicit,
+ * complete url handed by the caller and used <b>as-is</b> - include the target's
+ * context path in the configured value if it has one.</li>
  * </ul>
  *
  * <p>
  * The {@code direct} map is also honoured as a <b>per-service override</b> in the
  * {@code LOAD_BALANCER} and {@code GATEWAY} strategies: an entry present there
- * always wins, so individual services can be pinned to a fixed address without
+ * always wins and is used exactly as configured (context path included, if
+ * any), so individual services can be pinned to a fixed address without
  * switching the whole deployment to {@code DIRECT}.
  * </p>
  *
@@ -96,10 +105,16 @@ public final class GeboMicroserviceUrlResolver {
 	/** Default scheme when none is configured. */
 	public static final String DEFAULT_SCHEME = "http";
 
-	/** Default gateway path template; {@code {microserviceId}} is expanded per service. */
+	/**
+	 * Default gateway path template; the {@code {microserviceId}} token is
+	 * expanded to the target's <b>context name</b> ({@link GeboMicroservice#getContextName()},
+	 * e.g. {@code brain}), matching the gateway's topology route path segment -
+	 * kept as {@code microserviceId} for config-key backward compatibility, not
+	 * because a canonical id is substituted.
+	 */
 	public static final String DEFAULT_GATEWAY_PATH_TEMPLATE = "/{microserviceId}";
 
-	/** Placeholder replaced by the target microservice id inside a gateway path template. */
+	/** Placeholder replaced by the target microservice's context name inside a gateway path template. */
 	public static final String MICROSERVICE_ID_PLACEHOLDER = "{microserviceId}";
 
 	/**
@@ -236,10 +251,8 @@ public final class GeboMicroserviceUrlResolver {
 		if (pinned != null) {
 			return Optional.of(pinned);
 		}
-		if (topology.forMicroserviceId(canonical).isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(buildBaseUrl(canonical));
+		Optional<GeboMicroservice> member = topology.forMicroserviceId(canonical);
+		return member.map(this::buildBaseUrl);
 	}
 
 	/**
@@ -352,15 +365,21 @@ public final class GeboMicroserviceUrlResolver {
 
 	// --- Internals ----------------------------------------------------------
 
-	private String buildBaseUrl(String canonicalMicroserviceId) {
+	private String buildBaseUrl(GeboMicroservice microservice) {
+		String canonicalMicroserviceId = microservice.getMicroserviceId();
 		return switch (strategy) {
 			// The host must be the DNS-safe discovery id: a URI host cannot contain '_',
 			// so a @LoadBalanced client given http://brain_gebo_ai sees a null host and
-			// rejects it. The path of a GATEWAY url has no such limit and keeps the
-			// canonical id.
-			case LOAD_BALANCER -> scheme + "://" + GeboMicroservice.toDiscoveryServiceId(canonicalMicroserviceId);
+			// rejects it. The context path (e.g. /brain) is appended because that is
+			// exactly the server.servlet.context-path the target is deployed with - a
+			// bare host+scheme would 404 on every controller.
+			case LOAD_BALANCER ->
+				scheme + "://" + microservice.getDiscoveryServiceId() + microservice.getContextPath();
+			// The gateway's own topology route is /<contextName>/** with no path
+			// rewriting, so the template must expand to the context name too, not the
+			// canonical id, or the two would silently disagree.
 			case GATEWAY -> getGatewayBaseUrl()
-					+ normalizePath(gatewayPathTemplate.replace(MICROSERVICE_ID_PLACEHOLDER, canonicalMicroserviceId));
+					+ normalizePath(gatewayPathTemplate.replace(MICROSERVICE_ID_PLACEHOLDER, microservice.getContextName()));
 			// A DIRECT-strategy member with no entry has no address: surface it rather than guess.
 			case DIRECT -> throw new IllegalStateException("No 'direct' base url configured for microservice '"
 					+ canonicalMicroserviceId + "' (gebo.microservices.topology.url.direct). Known DIRECT entries: "

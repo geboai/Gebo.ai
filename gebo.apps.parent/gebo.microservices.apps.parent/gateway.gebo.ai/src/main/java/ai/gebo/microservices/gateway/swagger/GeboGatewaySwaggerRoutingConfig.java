@@ -35,8 +35,10 @@ import ai.gebo.microservices.topology.GeboMicroservice;
  * from {@code springdoc.swagger-ui.urls}, one entry per backend, and this class
  * registers the matching proxy route for each entry so the browser can actually
  * fetch those specs from the gateway's own origin (no CORS, no direct access to
- * the backends). Each {@code url} is routed to {@code lb://<name>/v3/api-docs},
- * i.e. through Spring Cloud LoadBalancer / Eureka to a live instance.
+ * the backends). Each {@code url} is routed to
+ * {@code lb://<name>/<contextPath>/v3/api-docs} (the backend's own
+ * {@code server.servlet.context-path} prefixed onto the standard springdoc
+ * path), i.e. through Spring Cloud LoadBalancer / Eureka to a live instance.
  * </p>
  *
  * <p>
@@ -86,10 +88,13 @@ public class GeboGatewaySwaggerRoutingConfig {
 			// everywhere else in the topology; the lb:// target must be its DNS-safe form,
 			// because a URI host cannot carry an underscore.
 			String serviceId = GeboMicroservice.toDiscoveryServiceId(definition.getName());
+			// The backend serves its spec under its own server.servlet.context-path
+			// (e.g. /brain/v3/api-docs), not at the bare BACKEND_API_DOCS_PATH.
+			String backendApiDocsPath = GeboMicroservice.toContextPath(definition.getName()) + BACKEND_API_DOCS_PATH;
 			String exposedPath = definition.getUrl();
-			LOGGER.info("Swagger UI enabled: proxying {} -> lb://{}{}", exposedPath, serviceId, BACKEND_API_DOCS_PATH);
+			LOGGER.info("Swagger UI enabled: proxying {} -> lb://{}{}", exposedPath, serviceId, backendApiDocsPath);
 			routes = routes.route("api-docs-" + serviceId, r -> r.path(exposedPath)
-					.filters(f -> f.setPath(BACKEND_API_DOCS_PATH)).uri("lb://" + serviceId));
+					.filters(f -> f.setPath(backendApiDocsPath)).uri("lb://" + serviceId));
 		}
 		return routes.build();
 	}

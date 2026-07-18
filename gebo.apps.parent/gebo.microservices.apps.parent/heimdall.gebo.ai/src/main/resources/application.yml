@@ -8,6 +8,13 @@ spring:
 # fully allocated, so the security service extends it with 13018.
 server:
   port: 13018
+  servlet:
+    # Context name = GeboMicroservice.getContextName() (discovery id minus
+    # "-gebo-ai"). This is what the gateway's topology route matches on
+    # (/heimdall/** -> lb://heimdall-gebo-ai, no StripPrefix) and what
+    # GeboMicroserviceUrlResolver appends to every base url it builds for
+    # this service - keep the three in lockstep.
+    context-path: /heimdall
 
 # Eureka discovery client: registers this service under its application name
 # (heimdall_gebo_ai) so client-side load balancing resolves it to a live instance.
