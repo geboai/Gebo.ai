@@ -175,4 +175,9 @@ public class SecretsClusterController {
 	public void deleteSecret(@RequestParam("code") String code) throws GeboCryptSecretException {
 		secretsService.deleteSecret(code);
 	}
+
+	@GetMapping(value = "getAllSecretsId", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getAllSecretsId() {
+		return repository.findAll().stream().map(GeboSecret::getCode).toList();
+	}
 }

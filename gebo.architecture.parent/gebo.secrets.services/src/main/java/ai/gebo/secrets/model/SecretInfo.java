@@ -20,6 +20,7 @@ public class SecretInfo {
 		this.code = secret.getCode();
 		this.description = secret.getDescription();
 		this.secretType = secret.getSecretType();
+		this.contextCode = secret.getContextCode();
 	}
 
 	// Unique identifier for the secret.
@@ -30,6 +31,9 @@ public class SecretInfo {
 
 	// Type of the secret.
 	private GeboSecretType secretType = null;
+
+	// Context code associated with the secret.
+	private String contextCode = null;
 
 	/**
 	 * Retrieves the unique code of the secret.
@@ -83,5 +87,13 @@ public class SecretInfo {
 	 */
 	public void setSecretType(GeboSecretType secretType) {
 		this.secretType = secretType;
+	}
+
+	public String getContextCode() {
+		return contextCode;
+	}
+
+	public void setContextCode(String contextCode) {
+		this.contextCode = contextCode;
 	}
 }
