@@ -112,6 +112,10 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
                         this.restructureFormGroup(this.value?.providerName);
                 }
             },
+            error: () => {
+                this.loading = false;
+                this.triggerRevalidate();
+            },
             complete: () => {
                 this.loading = false;
                 this.triggerRevalidate();

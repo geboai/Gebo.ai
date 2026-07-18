@@ -141,6 +141,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                     this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
                 }
             },
+            error: () => {
+                this.chatDataLoading = false;
+            },
             complete: () => {
                 this.chatDataLoading = false;
             }
@@ -160,6 +163,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected routeNewChat(): void {
         const value = this.chatFormGroup.value;
         const chatModelCode = value.chatModelCode;
+        this.chatDataLoading = true;
         this.geboUserChatsControllerService.createCleanChatByModelCode(chatModelCode).subscribe({
             next: (chatInfo: GUserChatInfo) => {
                 if (chatInfo.code) {
@@ -167,6 +171,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                     const route: string[] = ["/", "ui", "chat", chatInfo.code, "load"];
                     this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
                 }
+            },
+            error: () => {
+                this.chatDataLoading = false;
             },
             complete: () => {
                 this.chatDataLoading = false;
@@ -278,6 +285,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                     this.chatFormGroup.controls["chatModelCode"].setValue(this.chatModelsData[0].code);
                 }
             },
+            error: () => {
+                this.chatsProfilesLoading = false;
+            },
             complete: () => {
                 this.chatsProfilesLoading = false;
             }
@@ -289,6 +299,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 if (this.formGroup && this.chatProfilesData && this.chatProfilesData.length) {
                     this.formGroup.controls["chatProfileCode"].setValue(this.chatProfilesData[0].code);
                 }
+            },
+            error: () => {
+                this.chatsModelLoading = false;
             },
             complete: () => {
                 this.chatsModelLoading = false;
@@ -315,6 +328,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
                             this.activateChat(chatInfo);
                         },
+                        error: () => {
+                            this.chatDataLoading = false;
+                        },
                         complete: () => {
                             this.chatDataLoading = false;
                         }
@@ -329,6 +345,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
                             this.activateChat(chatInfo);
                         },
+                        error: () => {
+                            this.chatDataLoading = false;
+                        },
                         complete: () => {
                             this.chatDataLoading = false;
                         }
@@ -336,10 +355,14 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 }
                 if (params["modelCode"]) {
                     const modelCode = params["modelCode"];
+                    this.chatDataLoading = true;
                     this.geboUserChatsControllerService.createCleanChatByModelCode(modelCode).subscribe({
                         next: (chatInfo: GUserChatInfo) => {
 
                             this.activateChat(chatInfo);
+                        },
+                        error: () => {
+                            this.chatDataLoading = false;
                         },
                         complete: () => {
                             this.chatDataLoading = false;

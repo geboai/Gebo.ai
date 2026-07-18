@@ -215,6 +215,9 @@ export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit,
             next: (timeMetaInfos) => {
                 this.timeMetaInfos = timeMetaInfos;
             },
+            error: () => {
+                this.loading = false;
+            },
             complete: () => {
                 this.loading = false;
             }
@@ -382,6 +385,9 @@ export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit,
             this.reindexingFrequencyController.displayTimeValues(this.value).subscribe({
                 next: (dValue) => {
                     this.displayTimes = dValue;
+                },
+                error: () => {
+                    this.loading = false;
                 },
                 complete: () => {
                     this.loading = false;

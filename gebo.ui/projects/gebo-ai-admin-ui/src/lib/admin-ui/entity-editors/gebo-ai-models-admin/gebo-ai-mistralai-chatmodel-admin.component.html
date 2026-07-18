@@ -10,7 +10,7 @@
 -->
 
 
-<p-blockUI id="LockIconBlockUI" gebo-ai-label [target]="MistralAIUI" [blocked]="loading">
+<p-blockUI id="LockIconBlockUI"  [target]="MistralAIUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #MistralAIUI header="Editing MistralAI chat model configuration"
@@ -39,9 +39,9 @@
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <p-tabs [value]="0" class="standardTabDialogueHeight">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-label>General infos</p-tab>
-              <p-tab [value]="1" gebo-ai-label>Advanced settings</p-tab>
-              <p-tab [value]="2" gebo-ai-label>Model access settings</p-tab>
+              <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
+              <p-tab [value]="1" gebo-ai-text>Advanced settings</p-tab>
+              <p-tab [value]="2" gebo-ai-text>Model access settings</p-tab>
             </p-tablist>
             <p-tabpanels>
           <p-tabpanel [value]="0">

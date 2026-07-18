@@ -10,7 +10,7 @@ $
 */
 -->
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="endPointUI" [blocked]="loading">
+<p-blockUI id="BlockUI"  [target]="endPointUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Editing uploaded content" [formGroup]="formGroup">
@@ -46,8 +46,8 @@ $
 
           <p-tabs [value]="0" id="TabView" class="standardTabDialogueHeight">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-label>Settings</p-tab>
-              <p-tab [value]="1" gebo-ai-label [disabled]="!objectReference">Logs</p-tab>
+              <p-tab [value]="0" gebo-ai-text>Settings</p-tab>
+              <p-tab [value]="1" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">

@@ -27,11 +27,11 @@
     </div>
   </ng-template>
 
-  <div class="grid  w-full">
+  <div class="grid  w-full" #chatOptionsPanel="geboBlockableContainer" geboBlockableContainer>
+    <p-blockUI id="BlockUIIcon" [target]="chatOptionsPanel" [blocked]="loading">
+      <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
     <div class="col-12">
-      <p-blockUI id="BlockUIIcon" gebo-ai-label [blocked]="loading">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
-      </p-blockUI>
       @if (chatProfilesData?.length) {
         <p-button icon="pi pi-pen-to-square" id="NewRagChatMiniBtn" label="Chat with knowledge base"
           title="Create a new RAG chat with company contents" gebo-ai-label [text]="true"

@@ -9,7 +9,7 @@
 */
 -->
 
-<p-blockUI id="BlockUILock" gebo-ai-label [target]="driveSystemCtrl" [blocked]="loading">
+<p-blockUI id="BlockUILock"  [target]="driveSystemCtrl" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #driveSystemCtrl header="Editing google drive integration" [formGroup]="formGroup">
@@ -35,7 +35,7 @@
       <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
       <p-tabs [value]="0" id="TabView">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-label>General settings</p-tab>
+              <p-tab [value]="0" gebo-ai-text>General settings</p-tab>
               <p-tab [value]="1" [disabled]="mode!=='EDIT'">Security settings</p-tab>
             </p-tablist>
             <p-tabpanels>

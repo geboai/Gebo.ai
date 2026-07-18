@@ -56,6 +56,9 @@ export class GeboAIChangeUserPasswordComponent implements OnInit, OnChanges {
                     this.skipWindow();
                 }
             },
+            error:()=>{
+                this.loading=false;
+            },
             complete:()=>{
                 this.loading=false;
             }

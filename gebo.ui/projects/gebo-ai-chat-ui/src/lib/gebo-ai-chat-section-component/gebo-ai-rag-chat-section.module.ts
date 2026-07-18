@@ -31,7 +31,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { ScrollerModule } from 'primeng/scroller';
 import { TreeModule } from 'primeng/tree';
 import { PaginatorModule } from 'primeng/paginator';
-import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
+import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule, GeboBlockableContainerDirective } from "@Gebo.ai/reusable-ui";
 import { DrawerModule } from 'primeng/drawer';
 import { PanelModule } from "primeng/panel";
 import { ScrollPanelModule } from "primeng/scrollpanel";
@@ -52,7 +52,7 @@ import { RouterLinkWithHref } from "@angular/router";
  * - Custom Gebo.ai components (EditableListboxModule, GeboAIReusableChatModel)
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, DrawerModule, PanelModule, GeboAIFieldTranslationContainerModule, ScrollPanelModule, PopoverModule, RouterLinkWithHref,GeboAINotificationsModule],
+    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, DrawerModule, PanelModule, GeboAIFieldTranslationContainerModule, ScrollPanelModule, PopoverModule, RouterLinkWithHref,GeboAINotificationsModule, GeboBlockableContainerDirective],
     declarations: [GeboAiChatSectionComponent],
     exports: [GeboAiChatSectionComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }]

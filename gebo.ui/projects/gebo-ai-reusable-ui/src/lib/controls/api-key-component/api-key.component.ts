@@ -188,6 +188,9 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                                     next: () => {
 
                                     },
+                                    error: () => {
+                                        this.deleting = false;
+                                    },
                                     complete: () => {
                                         this.deleting = false;
                                     }
@@ -196,11 +199,17 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
 
 
                         },
+                        error: () => {
+                            this.validating = false;
+                        },
                         complete: () => {
                             this.validating = false;
                         }
                     })
 
+                },
+                error: () => {
+                    this.loadingBackend = false;
                 },
                 complete: () => {
                     this.loadingBackend = false;
@@ -255,6 +264,9 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                         if (this.onChange) {
                             this.onChange(this.secretId);
                         }
+                    },
+                    error: () => {
+                        this.loadingBackend = false;
                     },
                     complete: () => {
                         this.loadingBackend = false;

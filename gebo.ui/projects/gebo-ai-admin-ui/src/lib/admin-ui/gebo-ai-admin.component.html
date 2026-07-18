@@ -10,17 +10,17 @@
 -->
 <p-tabs [value]="0" (valueChange)="activatedIndex($event)" class="geboFullHeight">
   <p-tablist>
-    <p-tab [value]="0" gebo-ai-label>Dashboard</p-tab>
-    <p-tab [value]="1" gebo-ai-label>LLMs for chat &amp; embedding</p-tab>
-    <p-tab [value]="2" gebo-ai-label>Users and groups</p-tab>
-    <p-tab [value]="3" gebo-ai-label>Gebo.ai modules config</p-tab>
+    <p-tab [value]="0" gebo-ai-text>Dashboard</p-tab>
+    <p-tab [value]="1" gebo-ai-text>LLMs for chat &amp; embedding</p-tab>
+    <p-tab [value]="2" gebo-ai-text>Users and groups</p-tab>
+    <p-tab [value]="3" gebo-ai-text>Gebo.ai modules config</p-tab>
     @if (false) {
-      <p-tab [value]="4" gebo-ai-label>Build/packaging systems</p-tab>
+      <p-tab [value]="4" gebo-ai-text>Build/packaging systems</p-tab>
     }
-    <p-tab [value]="5" gebo-ai-label>Knowledge bases &amp; projects</p-tab>
-    <p-tab [value]="6" gebo-ai-label>Rag chat profiles/Model prompts</p-tab>
-    <p-tab [value]="7" gebo-ai-label>Agents/Networks of agents</p-tab>
-    <p-tab [value]="8" gebo-ai-label>Logs</p-tab>
+    <p-tab [value]="5" gebo-ai-text>Knowledge bases &amp; projects</p-tab>
+    <p-tab [value]="6" gebo-ai-text>Rag chat profiles/Model prompts</p-tab>
+    <p-tab [value]="7" gebo-ai-text>Agents/Networks of agents</p-tab>
+    <p-tab [value]="8" gebo-ai-text>Logs</p-tab>
   </p-tablist>
   <p-tabpanels>
 

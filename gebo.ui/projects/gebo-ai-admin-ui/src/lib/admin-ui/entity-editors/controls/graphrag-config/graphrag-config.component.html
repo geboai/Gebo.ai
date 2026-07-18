@@ -11,7 +11,7 @@
 
 @if (neo4jEnabled===true && (context?true:false)) {
   <p-panel #graphRagSettingUI id="graphRagSettingUI">
-    <p-blockUI id="LockBlockUI" gebo-ai-label [target]="graphRagSettingUI" [blocked]="loading">
+    <p-blockUI id="LockBlockUI"  [target]="graphRagSettingUI" [blocked]="loading">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     @if (graphRagIsSetup===true) {

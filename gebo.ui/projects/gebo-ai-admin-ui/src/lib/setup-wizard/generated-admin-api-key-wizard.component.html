@@ -1,4 +1,4 @@
-<p-blockUI id="BlockUILock" gebo-ai-label [target]="apiKeySetupUI" [blocked]="loading">
+<p-blockUI id="BlockUILock"  [target]="apiKeySetupUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #apiKeySetupUI header="Setup Administrator API Keys">
@@ -46,7 +46,7 @@
 
   <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="showCreateDialog" [modal]="true"
     (visibleChange)="closeDialog()">
-    <p-blockUI id="BlockUILock" gebo-ai-label [target]="createApiKeyUI" [blocked]="loading">
+    <p-blockUI id="BlockUILock"  [target]="createApiKeyUI" [blocked]="loading">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <p-panel id="CreateApiKeyPanel" gebo-ai-label #createApiKeyUI header="Generate API key" [formGroup]="formGroup">
