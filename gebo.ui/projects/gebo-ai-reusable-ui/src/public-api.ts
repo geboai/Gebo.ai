@@ -112,6 +112,7 @@ export * from "./lib/controls/userspace-files-component/userspace-files.componen
 
 export * from "./lib/controls/deep-search-control/deep-search-sources-choice.component";
 export * from "./lib/directives/translable/translable.directive";
+export * from "./lib/directives/blockable-container/blockable-container.directive";
 export * from "./lib/setup-wizard/setup-wizard-panel.component";
 export * from "./lib/controls/add-project-endpoint-component/project-add-context-menu.component";
 export * from "./lib/controls/strings-list-table-control/string-list.component";

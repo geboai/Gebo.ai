@@ -23,7 +23,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { GeboAiChatSectionComponent } from "./gebo-ai-rag-chat-section.component";
-import { GeboBlockableContainerDirective } from "./blockable-container.directive";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -32,7 +31,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { ScrollerModule } from 'primeng/scroller';
 import { TreeModule } from 'primeng/tree';
 import { PaginatorModule } from 'primeng/paginator';
-import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
+import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule, GeboBlockableContainerDirective } from "@Gebo.ai/reusable-ui";
 import { DrawerModule } from 'primeng/drawer';
 import { PanelModule } from "primeng/panel";
 import { ScrollPanelModule } from "primeng/scrollpanel";

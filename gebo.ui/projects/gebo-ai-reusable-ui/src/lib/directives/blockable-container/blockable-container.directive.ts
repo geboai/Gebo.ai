@@ -12,7 +12,9 @@ import { BlockableUI } from "primeng/api";
 
 /**
  * Lets a plain element be used as a p-blockUI [target], so the block mask is
- * scoped to that element instead of falling back to the whole document.body.
+ * scoped to that element instead of falling back to the whole document.body,
+ * or crashing against a PrimeNG component whose own getBlockableElement()
+ * can return undefined (e.g. a p-tree with no rendered children).
  */
 @Directive({
     selector: "[geboBlockableContainer]",

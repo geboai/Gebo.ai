@@ -10,41 +10,43 @@
 -->
 
 
-<p-blockUI id="LockBlockUIPanel"  [target]="mainTree" [blocked]="loading">
-  <i class="pi pi-lock" style="font-size: 3rem"></i>
-</p-blockUI>
-<p-tree id="MainTree" gebo-ai-label #mainTree [value]="roots" class=" col-12" selectionMode="single" [(selection)]="selectedNodes"
-  (onNodeExpand)="nodeExpand($event)" (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="nodeSelect($event)"
-  (onNodeUnselect)="nodeUnselect($event)">
-  <ng-template let-node pTemplate="default">
+<div #treeContainer="geboBlockableContainer" geboBlockableContainer>
+  <p-blockUI id="LockBlockUIPanel" [target]="treeContainer" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  </p-blockUI>
+  <p-tree id="MainTree" gebo-ai-label #mainTree [value]="roots" class=" col-12" selectionMode="single" [(selection)]="selectedNodes"
+    (onNodeExpand)="nodeExpand($event)" (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="nodeSelect($event)"
+    (onNodeUnselect)="nodeUnselect($event)">
+    <ng-template let-node pTemplate="default">
 
-    @if (node.data.isKnowledgeBase===true) {
-      <span>
-        <a (click)="openEditKnowledgeBase(node)">
-          {{ node.label }}
-        </a>
-        <a id="addNewAnchor" gebo-ai-label title="add new..." class="anchorButton"  (click)="createRootProject(node)" gebo-ai-text>+ Add item/project</a>
-      </span>
-    }
-    @if (node.data.isProject===true) {
-      <span>
-        <a (click)="openEditProject(node)" >
-          {{ node.label }}
-        </a>
-        <project-add-context-menu [data]="node.data.info"
-        (refreshUIEvent)="onDataUpdate(node)"></project-add-context-menu>
-      </span>
-    }
-    @if (!(node.data.isKnowledgeBase===true || node.data.isProject===true)) {
-      <span>
-        <a (click)="openGenericalNode(node)">
-          {{ node.label }}
-        </a>
-      </span>
-    }
+      @if (node.data.isKnowledgeBase===true) {
+        <span>
+          <a (click)="openEditKnowledgeBase(node)">
+            {{ node.label }}
+          </a>
+          <a id="addNewAnchor" gebo-ai-label title="add new..." class="anchorButton"  (click)="createRootProject(node)" gebo-ai-text>+ Add item/project</a>
+        </span>
+      }
+      @if (node.data.isProject===true) {
+        <span>
+          <a (click)="openEditProject(node)" >
+            {{ node.label }}
+          </a>
+          <project-add-context-menu [data]="node.data.info"
+          (refreshUIEvent)="onDataUpdate(node)"></project-add-context-menu>
+        </span>
+      }
+      @if (!(node.data.isKnowledgeBase===true || node.data.isProject===true)) {
+        <span>
+          <a (click)="openGenericalNode(node)">
+            {{ node.label }}
+          </a>
+        </span>
+      }
 
-  </ng-template>
-</p-tree>
+    </ng-template>
+  </p-tree>
+</div>
 <gebo-ai-content-viewer [activate]="openContentViewing" [code]="openContentViewingCode"
 (close)="openContentViewing=false"></gebo-ai-content-viewer>
 
