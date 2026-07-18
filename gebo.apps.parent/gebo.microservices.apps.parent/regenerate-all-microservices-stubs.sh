@@ -55,6 +55,9 @@ bail() {
 # Called on EXIT or explicitly.  If we haven't reached success, restore the
 # stashed pre-regen state so the repo is exactly as it was.
 restore_snapshot() {
+  # Always tear down compose — no-op if already down
+  docker compose -f "$COMPOSE_FILE" down --remove-orphans --volumes 2>/dev/null || true
+
   if [ "$ATOMIC_SUCCESS" -eq 1 ]; then
     return 0
   fi
