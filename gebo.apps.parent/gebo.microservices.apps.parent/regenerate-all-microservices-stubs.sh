@@ -14,7 +14,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 COMPOSE_FILE="$REPO_ROOT/dockers/gebo.microservices/docker-compose.yml"
 CLIENTS_PARENT="$REPO_ROOT/gebo.api.clients/gebo.microservices.clients.parent"
 MICROSERVICES_PARENT="$REPO_ROOT/gebo.apps.parent/gebo.microservices.apps.parent"
