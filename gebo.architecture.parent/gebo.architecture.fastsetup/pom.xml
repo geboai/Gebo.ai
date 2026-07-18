@@ -21,11 +21,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.repositories</artifactId>
 			<version>${project.version}</version>
@@ -34,6 +29,13 @@
 			<groupId>ai.gebo</groupId>
 			<artifactId>gebo.config</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<!-- For @PreAuthorize on GeboAdvancedSetupStatusController. Previously came in
+		     transitively through gebo.architecture.llms.abstraction.layer. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

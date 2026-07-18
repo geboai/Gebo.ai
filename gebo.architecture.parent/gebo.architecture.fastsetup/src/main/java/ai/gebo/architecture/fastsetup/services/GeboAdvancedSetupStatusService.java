@@ -29,8 +29,6 @@ import ai.gebo.config.GeboConfig;
 import ai.gebo.config.model.MongoGeboInstallation;
 import ai.gebo.architecture.fastsetup.model.GeboAdvancedSetupStatus;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
-import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 
 /**
  * Service class providing methods to check the setup status for various components
@@ -46,12 +44,6 @@ public class GeboAdvancedSetupStatusService {
 	
 	@Autowired
 	GeboConfig geboConfig;
-	
-	@Autowired
-	IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
-	
-	@Autowired
-	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsConfigDao;
 	
 	@Autowired
 	IGRuntimeModuleComponentsDao runtimeModuleComponentsDao;
@@ -127,11 +119,6 @@ public class GeboAdvancedSetupStatusService {
 			status.firstSetupDone = geboInstallation.getFirstSetupDone() != null
 					&& geboInstallation.getFirstSetupDone();
 		}
-		
-		// Verify chat model and embedding model configurations
-		status.chatModelSetup = !chatModelsConfigDao.getConfigurations().isEmpty();
-		status.embeddedModelSetup = !embeddingModelsConfigDao.getConfigurations().isEmpty();
-		status.llmsSetup = status.chatModelSetup && status.embeddedModelSetup;
 		
 		List<GModuleUseInfo> modulesUserInfo = runtimeModuleComponentsDao.getModuleUseInfo();
 		
