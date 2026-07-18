@@ -151,6 +151,18 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 	}
 
 	@Override
+	public List<String> getAllSecretsId() {
+		try {
+			String[] ids = cache.getChecked("allIds", () -> call("getAllSecretsId",
+					() -> webClient.get().uri(uri("getAllSecretsId")).headers(this::applyCallerToken)
+							.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(String[].class).block()));
+			return ids == null ? List.of() : List.of(ids);
+		} catch (GeboCryptSecretException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public <SecretType extends AbstractGeboSecretContent> String storeSecret(SecretType secret, String description,
 			String contextCode) throws GeboCryptSecretException {
 		return store(secret, description, contextCode, null);

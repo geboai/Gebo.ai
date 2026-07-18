@@ -1,12 +1,3 @@
-/**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
-
 package ai.gebo.secrets.services;
 
 import java.util.List;
@@ -16,11 +7,15 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
 import ai.gebo.secrets.model.SecretInfo;
 
-/**
- * AI generated comments Interface to define access services for managing Gebo
- * secrets.
- */
-public interface IGeboSecretsAccessService {
+public interface IGeboSecretsExternalStorageService {
+	public String getId();
+
+	public String getDescription();
+
+	public boolean isConfigured();
+
+	public boolean isActiveStorage();
+
 	public List<String> getAllSecretsId();
 
 	/**
@@ -108,4 +103,6 @@ public interface IGeboSecretsAccessService {
 	 *                                  process.
 	 */
 	public SecretInfo getSecretInfoById(String code) throws GeboCryptSecretException;
+	
+	public void switchToActiveStorage() throws GeboCryptSecretException;
 }

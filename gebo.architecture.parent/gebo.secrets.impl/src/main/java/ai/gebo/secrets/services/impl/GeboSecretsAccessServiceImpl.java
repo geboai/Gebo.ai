@@ -32,6 +32,7 @@ import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.secrets.services.IGeboSecretsExternalStorageService;
 import lombok.AllArgsConstructor;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
@@ -44,10 +45,15 @@ import tools.jackson.databind.ObjectMapper;
 @AllArgsConstructor
 public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	private static final ObjectMapper mapper = new ObjectMapper();
-	
-	private final GeboSecretRepository repository; // Repository for accessing secrets data
-	private final GeboCryptingServiceImpl cryptService; // Service for cryptography operations
 
+	private final GeboSecretRepository repository;
+	private final GeboCryptingServiceImpl cryptService;
+	private final Optional<IGeboSecretsExternalStorageService> externalStorage;
+
+	private boolean isExternalStorageActive() {
+		return externalStorage.isPresent() && externalStorage.get().isConfigured()
+				&& externalStorage.get().isActiveStorage();
+	}
 
 	/**
 	 * Retrieve secret content by its ID.
@@ -59,6 +65,8 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public AbstractGeboSecretContent getSecretContentById(String id) throws GeboCryptSecretException {
+		if (isExternalStorageActive())
+			return externalStorage.get().getSecretContentById(id);
 		Optional<GeboSecret> content = repository.findById(id);
 		GeboSecret secret = content.isPresent() ? content.get() : null;
 		if (secret == null)
@@ -148,7 +156,9 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> String storeSecret(SecretType secret, String description,
 			String contextCode) throws GeboCryptSecretException {
-		String code = UUID.randomUUID().toString(); // Generate unique ID
+		if (isExternalStorageActive())
+			return externalStorage.get().storeSecret(secret, description, contextCode);
+		String code = UUID.randomUUID().toString();
 		this.storeSecret(secret, description, contextCode, code); // Use detailed store method
 		return code;
 	}
@@ -165,6 +175,10 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> void updateSecret(SecretType secret, String description,
 			String contextCode, String code) throws GeboCryptSecretException {
+		if (isExternalStorageActive()) {
+			externalStorage.get().updateSecret(secret, description, contextCode, code);
+			return;
+		}
 		GeboSecret _secret;
 		Optional<GeboSecret> foundSecret = repository.findById(code);
 		if (foundSecret.isEmpty())
@@ -185,6 +199,10 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public void deleteSecret(String code) throws GeboCryptSecretException {
+		if (isExternalStorageActive()) {
+			externalStorage.get().deleteSecret(code);
+			return;
+		}
 		repository.deleteById(code);
 
 	}
@@ -198,6 +216,8 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws GeboCryptSecretException {
+		if (isExternalStorageActive())
+			return externalStorage.get().getSecretInfoByContextCode(contextCode);
 		List<GeboSecret> secrets = repository.findByContextCode(contextCode);
 		Stream<SecretInfo> infoStream = secrets.stream().map(x -> {
 			return new SecretInfo(x);
@@ -214,6 +234,8 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public SecretInfo getSecretInfoById(String code) throws GeboCryptSecretException {
+		if (isExternalStorageActive())
+			return externalStorage.get().getSecretInfoById(code);
 		Optional<GeboSecret> content = repository.findById(code);
 		return content.isPresent() ? new SecretInfo(content.get()) : null;
 	}
@@ -230,6 +252,10 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> void storeSecret(SecretType secret, String description,
 			String contextCode, String secretId) throws GeboCryptSecretException {
+		if (isExternalStorageActive()) {
+			externalStorage.get().storeSecret(secret, description, contextCode, secretId);
+			return;
+		}
 		GeboSecret _secret = new GeboSecret();
 		_secret.setSecretContent(cryptContent(secret)); // Store the encrypted content
 		_secret.setDescription(description);
@@ -243,6 +269,8 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <T extends GeboCustomSecretContent> T getCustomSecretContentById(String id, Class<T> type)
 			throws GeboCryptSecretException {
+		if (isExternalStorageActive())
+			return externalStorage.get().getCustomSecretContentById(id, type);
 		Optional<GeboSecret> content = repository.findById(id);
 		GeboSecret secret = content.isPresent() ? content.get() : null;
 		if (secret == null)
@@ -256,6 +284,13 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 		default:
 			throw new GeboCryptSecretException("SecretType must be CUSTOM_SECRET");
 		}
+	}
+
+	@Override
+	public List<String> getAllSecretsId() {
+		if (isExternalStorageActive())
+			return externalStorage.get().getAllSecretsId();
+		return repository.findAll().stream().map(x -> x.getCode()).toList();
 	}
 
 }
