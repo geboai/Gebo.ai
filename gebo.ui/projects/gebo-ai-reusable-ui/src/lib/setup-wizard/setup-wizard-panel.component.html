@@ -1,66 +1,87 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+
+
 <gebo-ai-display-messages></gebo-ai-display-messages>
 <p-breadcrumb class="max-w-full" [model]="bcItems" [home]="home" />
-<p-panel id="WizardUi" gebo-ai-label #wizardUI header="Choose a setup section" *ngIf="!wizardComponent">
+@if (!wizardComponent) {
+  <p-panel id="WizardUi" gebo-ai-label #wizardUI header="Choose a setup section">
     <p-blockUI [target]="wizardUI" [blocked]="loading">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
+      <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-    <!-- 
+    <!--
     <p-messages [value]="userMessages" [enableService]="false"></p-messages>
     -->
     <div class="grid" >
-        <div *ngFor="let entry of wizardsEntries" class="col-12">
-            <div class="grid">
-                <div style="with:20px;" style="vertical-align: text-top;"><p-button [text]="true"
-                        *ngIf="entry.alreadyCompleted===true" [disabled]="entry.enabled===false" icon="pi pi-check"
-                        [style]="{color: 'green'}" (onClick)="openWizard(entry)"></p-button>
-                    <p-button [text]="true" *ngIf="entry.alreadyCompleted===false && entry.mandatory===true"
-                        [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'red'}"
-                        (onClick)="openWizard(entry)"></p-button>
-                    <p-button [text]="true" *ngIf="entry.alreadyCompleted===false && entry.mandatory!==true"
-                        [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'orange'}"
-                        (onClick)="openWizard(entry)"></p-button>
-
-                </div>
-                <div class="col-2"><b>{{entry.label}}</b></div>
-                <div class="col-9">{{entry.description}} <b style="color: orange" *ngIf="entry.experimental===true">(Preview feature)</b></div>
-            </div>
-
-
+      @for (entry of wizardsEntries; track entry) {
+        <div class="col-12">
+          <div class="grid">
+            <div style="with:20px;" style="vertical-align: text-top;">@if (entry.alreadyCompleted===true) {
+              <p-button [text]="true"
+                [disabled]="entry.enabled===false" icon="pi pi-check"
+              [style]="{color: 'green'}" (onClick)="openWizard(entry)"></p-button>
+            }
+            @if (entry.alreadyCompleted===false && entry.mandatory===true) {
+              <p-button [text]="true"
+                [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'red'}"
+              (onClick)="openWizard(entry)"></p-button>
+            }
+            @if (entry.alreadyCompleted===false && entry.mandatory!==true) {
+              <p-button [text]="true"
+                [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'orange'}"
+              (onClick)="openWizard(entry)"></p-button>
+            }
+          </div>
+          <div class="col-2"><b>{{entry.label}}</b></div>
+          <div class="col-9">{{entry.description}} @if (entry.experimental===true) {
+            <b style="color: orange">(Preview feature)</b>
+          }</div>
         </div>
-    </div>
-
+      </div>
+    }
+  </div>
 </p-panel>
-<div class="grid" *ngIf="wizardComponent">
+}
+@if (wizardComponent) {
+  <div class="grid">
     <div class="col-12">
-        <p-button  id="WizardBackBtn" gebo-ai-label  [text]="true" icon="pi pi-arrow-left" (onClick)="closeWizard();" label="Back to setup home page"></p-button>
-
+      <p-button  id="WizardBackBtn" gebo-ai-label  [text]="true" icon="pi pi-arrow-left" (onClick)="closeWizard();" label="Back to setup home page"></p-button>
     </div>
     <div class="col-12">
-        <ng-container   #ngOutletItem *ngComponentOutlet="wizardComponent;inputs: {}"  />
+      <ng-container   #ngOutletItem *ngComponentOutlet="wizardComponent;inputs: {}"  />
     </div>
-    
-</div>
+  </div>
+}
 <p-dialog [visible]="mandatoryUnsatisfiedEntriesWindowOpened" [modal]="true" [maximizable]="true" [style]="{width:'98%',height:'100%'}" (visibleChange)="mandatoryUnsatisfiedEntriesWindowOpened=false;userShowedMandatoryUnsatisfiedEntries=true;">
-    <span *ngIf="mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length ==1 && mandatoryUnsatisfiedEntries[0].wizardComponent">
-        <ng-container    #ngOutletItem *ngComponentOutlet="mandatoryUnsatisfiedEntries[0].wizardComponent;inputs: {}"  />
+  @if (mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length ==1 && mandatoryUnsatisfiedEntries[0].wizardComponent) {
+    <span>
+      <ng-container    #ngOutletItem *ngComponentOutlet="mandatoryUnsatisfiedEntries[0].wizardComponent;inputs: {}"  />
     </span>
-    <p-tabview *ngIf="mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length >1">
-        <p-tabPanel *ngFor="let p of mandatoryUnsatisfiedEntries" [header]="p.config.label">
+  }
+  @if (mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length >1) {
+    <p-tabs [value]="0">
+      <p-tablist>
+        @for (p of mandatoryUnsatisfiedEntries; track p; let i = $index) {
+          <p-tab [value]="i">{{p.config.label}}</p-tab>
+        }
+      </p-tablist>
+      <p-tabpanels>
+        @for (p of mandatoryUnsatisfiedEntries; track p; let i = $index) {
+          <p-tabpanel [value]="i">
             <ng-container   #ngOutletItem *ngComponentOutlet="p.wizardComponent;inputs: {}"  />
-        </p-tabPanel>
-    </p-tabview>
+          </p-tabpanel>
+        }
+      </p-tabpanels>
+    </p-tabs>
+  }
 </p-dialog>

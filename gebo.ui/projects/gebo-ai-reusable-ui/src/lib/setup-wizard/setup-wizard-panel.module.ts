@@ -29,7 +29,7 @@ import { SetupWizardService } from "./setup-wizard.service";
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 import { DialogModule } from "primeng/dialog";
-import { TabViewModule } from "primeng/tabview";
+import { TabsModule } from "primeng/tabs";
 import { GeboAINotificationsModule } from "../notifications/notifications.module";
 
 /**
@@ -57,7 +57,7 @@ const routes: Routes = [{ path: "setup-wizard", component: SetupWizardPanelCompo
  * - SetupWizardService: Main service managing the wizard workflow
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule.forChild(routes), PanelModule, BlockUIModule, ButtonModule, GeboAINotificationsModule, BreadcrumbModule, GeboAIFieldTranslationContainerModule, DialogModule, TabViewModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule.forChild(routes), PanelModule, BlockUIModule, ButtonModule, GeboAINotificationsModule, BreadcrumbModule, GeboAIFieldTranslationContainerModule, DialogModule, TabsModule],
     declarations: [SetupWizardPanelComponent, WizardSectionWithNoUI],
     exports: [SetupWizardPanelComponent, WizardSectionWithNoUI],
     providers: [AlwaysTrueStatusService, SetupWizardService]

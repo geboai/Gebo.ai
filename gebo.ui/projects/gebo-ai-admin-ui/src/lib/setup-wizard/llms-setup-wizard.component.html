@@ -1,69 +1,80 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 <ng-template #ExtensiveSetup>
-    <div class="grid " *ngIf="actualProvidersConfiguration">
-        <div class="col-12">
-            <!-- [value]="currentIndex" (activeIndexChange)="currentIndex"-->
-            <p-accordion>
-                <p-accordion-panel
-                    *ngFor="let providerSituation of actualProvidersConfiguration.configurations;index as i;"
-                    [value]="i">
-                    <p-accordion-header>
-                        <div style="font-weight: bolder;color:black"
-                            *ngIf="(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
-                            {{providerSituation.parentModel?.name}}
-                            ({{providerSituation.runtimeConfigs?.length}})
-                        </div>
-                        <div style="font-weight: bolder;color:gray"
-                            *ngIf="!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
-                            {{providerSituation.parentModel?.name}}</div>
-                    </p-accordion-header>
-                    <p-accordion-content>
-                        <gebo-ai-llms-vendor-configuration [vendorConfiguration]="providerSituation"
-                            (vendorConfigurationChanged)="onVendorConfigurationChanged($event,i)"></gebo-ai-llms-vendor-configuration>
-                    </p-accordion-content>
-                </p-accordion-panel>
-            </p-accordion>
-        </div>
+  @if (actualProvidersConfiguration) {
+    <div class="grid ">
+      <div class="col-12">
+        <!-- [value]="currentIndex" (activeIndexChange)="currentIndex"-->
+        <p-accordion>
+          @for (providerSituation of actualProvidersConfiguration.configurations; track providerSituation; let i = $index) {
+            <p-accordion-panel
+              [value]="i">
+              <p-accordion-header>
+                @if ((providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)) {
+                  <div style="font-weight: bolder;color:black"
+                    >
+                    {{providerSituation.parentModel?.name}}
+                    ({{providerSituation.runtimeConfigs?.length}})
+                  </div>
+                }
+                @if (!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)) {
+                  <div style="font-weight: bolder;color:gray"
+                    >
+                  {{providerSituation.parentModel?.name}}</div>
+                }
+              </p-accordion-header>
+              <p-accordion-content>
+                <gebo-ai-llms-vendor-configuration [vendorConfiguration]="providerSituation"
+                (vendorConfigurationChanged)="onVendorConfigurationChanged($event,i)"></gebo-ai-llms-vendor-configuration>
+              </p-accordion-content>
+            </p-accordion-panel>
+          }
+        </p-accordion>
+      </div>
     </div>
+  }
 </ng-template>
 <p-blockUI id="BlockUi" gebo-ai-label [target]="instModeUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
 <p-panel id="MainLLMSPanelTitle" gebo-ai-label #instModeUI header="Setup Large language models">
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-     <ng-container *ngIf="actualProvidersConfiguration?.canRunAutoconfigure!==true" [ngTemplateOutlet]="ExtensiveSetup">
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  @if (actualProvidersConfiguration?.canRunAutoconfigure!==true) {
+    <ng-container [ngTemplateOutlet]="ExtensiveSetup">
     </ng-container>
-    <p-tabView class="geboFullHeight" *ngIf="actualProvidersConfiguration?.canRunAutoconfigure===true">
-
-        <p-tabPanel id="EasySetup" gebo-ai-label header="Easy initial setup/configuration fix">
-            <gebo-ai-llms-easy-vendor-configuration-component
-                [actualProvidersConfiguration]="actualProvidersConfiguration"
-                [autoSettingsConfigurations]="autoSettingsConfigurations" (llmsAutoSettingErrors)="userMessages=$event"
-                (llmsAutoSettingSuccessfull)="onAutomaticSetupDone()">
-            </gebo-ai-llms-easy-vendor-configuration-component>
-        </p-tabPanel>
-        <p-tabPanel id="ExtensiveStup" gebo-ai-label header="Extended infrastructure/suppliers choices">
-            <p>
-                <ng-container [ngTemplateOutlet]="ExtensiveSetup">
-                </ng-container>
-            </p>
-
-
-
-
-
-        </p-tabPanel>
-    </p-tabView>
+  }
+  @if (actualProvidersConfiguration?.canRunAutoconfigure===true) {
+    <p-tabs [value]="0" class="geboFullHeight">
+    <p-tablist>
+      <p-tab [value]="0" gebo-ai-label>Easy initial setup/configuration fix</p-tab>
+      <p-tab [value]="1" gebo-ai-label>Extended infrastructure/suppliers choices</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel [value]="0">
+        <gebo-ai-llms-easy-vendor-configuration-component
+          [actualProvidersConfiguration]="actualProvidersConfiguration"
+          [autoSettingsConfigurations]="autoSettingsConfigurations" (llmsAutoSettingErrors)="userMessages=$event"
+          (llmsAutoSettingSuccessfull)="onAutomaticSetupDone()">
+        </gebo-ai-llms-easy-vendor-configuration-component>
+      </p-tabpanel>
+      <p-tabpanel [value]="1">
+        <p>
+          <ng-container [ngTemplateOutlet]="ExtensiveSetup">
+          </ng-container>
+        </p>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+  }
 
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

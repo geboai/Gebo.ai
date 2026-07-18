@@ -27,7 +27,7 @@ import { DocumentRefComponent } from "./document-ref.component";
 
 
 import { GeboAIViewTableModule } from "../view-table/view-table.module";
-import { CLIPBOARD_OPTIONS, ClipboardButtonComponent, MarkdownModule, provideMarkdown } from "ngx-markdown";
+import { CLIPBOARD_OPTIONS, ClipboardButtonComponent, MarkdownModule, provideMarkdown, SANITIZE } from "ngx-markdown";
 import { SecurityContext } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 import { OverlayModule } from 'primeng/overlay';
@@ -100,7 +100,7 @@ console.log(
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
   provideMarkdown({
-    sanitize: SecurityContext.NONE,
+    sanitize: { provide: SANITIZE, useValue: SecurityContext.NONE },
     clipboardOptions: {
       provide: CLIPBOARD_OPTIONS,
       useValue: {

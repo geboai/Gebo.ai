@@ -1,44 +1,45 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
 -->
 
 <span [formGroup]="formGroup">
-    <p-treeSelect 
-        id="TreeSelect" gebo-ai-label
-        class=" col-12" 
-        containerStyleClass="w-full" 
-        formControlName="selected" 
-        [options]="root"
-        display="chip"  [loading]="loading"
-        [metaKeySelection]="false"  
-        selectionMode="checkbox" 
-        [propagateSelectionUp]="true"
-        [propagateSelectionDown]="true"
-        placeholder="Select functions"
-        [virtualScroll]="true" 
-        [virtualScrollItemSize]="46" 
-        [virtualScrollOptions]="{scrollHeight: '200px'}" 
+  <p-treeSelect
+    id="TreeSelect" gebo-ai-label
+    class=" col-12"
+    containerStyleClass="w-full"
+    formControlName="selected"
+    [options]="root"
+    display="chip"  [loading]="loading"
+    [metaKeySelection]="false"
+    selectionMode="checkbox"
+    [propagateSelectionUp]="true"
+    [propagateSelectionDown]="true"
+    placeholder="Select functions"
+    [virtualScroll]="true"
+    [virtualScrollItemSize]="46"
+    [virtualScrollOptions]="{scrollHeight: '200px'}"
     >
-        <ng-template pTemplate="value" let-value>
-            <ng-container *ngIf="hasLeaf(value); else placeholderTpl">
-                <ng-container *ngFor="let node of value">
-                    <div class="p-treeselect-token" *ngIf="node.leaf">
-                        <span class="p-treeselect-token-label">{{ node.label }}</span>
-                    </div>
-                </ng-container>
-            </ng-container>
-            <ng-template #placeholderTpl>
-                <span class="p-placeholder">Select functions</span>
-            </ng-template>
-        </ng-template>
-    </p-treeSelect>
+    <ng-template pTemplate="value" let-value>
+      @if (hasLeaf(value)) {
+        @for (node of value; track node) {
+          @if (node.leaf) {
+            <div class="p-treeselect-token">
+              <span class="p-treeselect-token-label">{{ node.label }}</span>
+            </div>
+          }
+        }
+      } @else {
+        <span class="p-placeholder">Select functions</span>
+      }
+    </ng-template>
+  </p-treeSelect>
 </span>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

@@ -1,206 +1,216 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+
+
 
 <p-blockUI id="BlockUi" gebo-ai-label [target]="chatProfileUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #chatProfileUI header="Editing retrieve augmented generation chat profile" [formGroup]="formGroup">
-    <div class="geboButtonsBar" style="vertical-align: bottom" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
-                    styleClass="w-full" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                    styleClass="w-full" />
-            </div>
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: bottom">
+      <div class="grid">
+        <div class="col-4">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+          [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
         </div>
-    </div>
+        <div class="col-4">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+            styleClass="w-full" />
+          </div>
+          <div class="col-4">
+            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+              styleClass="w-full" />
+            </div>
+          </div>
+        </div>
+      }
 
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-   
-    <div class="grid geboDialogContent standardTabDialogueHeight">
+      <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+      <div class="grid geboDialogContent standardTabDialogueHeight">
         <div class="col-12 standardTabDialogueHeight">
-            <p-tabView id="TabView" gebo-ai-label>
-                <p-tabPanel id="GeneralInfosTab" gebo-ai-label header="General infos">
-                    <div class="grid standardTabDialogueHeight">
-                        <div class="col-6">
-                            <gebo-ai-field id="description" label="Description" help="Enter chat profile description." [required]="true">
-                                <input pInputText id="description" formControlName="description" maxlength="120"
-                                    [required]="true" gebo-ai-field-element/>
-                            </gebo-ai-field>
+          <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-label>General infos</p-tab>
+              <p-tab [value]="1" gebo-ai-label>Large language model &amp; usable tools settings</p-tab>
+              <p-tab [value]="2" gebo-ai-label>RAG settings</p-tab>
+              <p-tab [value]="3" gebo-ai-label>Security access settings</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+            <p-tabpanel [value]="0">
+              <div class="grid standardTabDialogueHeight">
+                <div class="col-6">
+                  <gebo-ai-field id="description" label="Description" help="Enter chat profile description." [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120"
+                      [required]="true" gebo-ai-field-element/>
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the chat profile.">
+                      <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element/>
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-4">
+                    <gebo-ai-field id="userChoosesKnowledgeBases" label="User chooses knowledge bases" help="User can choose from accessible knowledge bases and/or upload its own files.">
+                      <p-checkbox id="userChoosesKnowledgeBases" formControlName="userChoosesKnowledgeBases"
+                      [trueValue]="true" [falseValue]="false" [binary]="true" gebo-ai-field-element></p-checkbox>
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-8">
+                    <gebo-ai-field id="knowledgeBaseCodes" label="Knowledge bases" help="Knowledge bases to use for document retrivial.">
+                      <p-multiSelect id="KnowledgeBaseCodesMultiSelect" gebo-ai-label styleClass="w-full" formControlName="knowledgeBaseCodes" optionLabel="description" optionValue="code" dataKey="code"
+                        [options]="allKnowledgeBaseData" showClear="true" styleClass="w-full"
+                      display="chip" gebo-ai-field-element></p-multiSelect>
+                    </gebo-ai-field>
+                  </div>
+                </div>
+              </p-tabpanel>
+              <p-tabpanel [value]="1">
+                <div class="grid standardTabDialogueHeight">
+                  <div class="col-6">
+                    <div class="flex flex-column gap-2">
+                      <label id="UseChatModelLabel" for="defaultChatModel" gebo-ai-text>Use chat model</label>
+                      <div class="col-12 grid">
+                        <div class="col-12">
+                          <div class="flex items-center">
+                            <p-radioButton id="UseDefaultChatModelRadio" gebo-ai-label formControlName="useDefaultChatModel"
+                              name="useDefaultChatModel" value="DEFAULT"
+                            [required]="true"></p-radioButton>
+                            <label for="useDefaultChatModel"
+                              class="ml-2">{{defaultChatModel?.description}}
+                            (default)</label>
+                          </div>
                         </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the chat profile.">
-                                <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element/>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-4">
-                            <gebo-ai-field id="userChoosesKnowledgeBases" label="User chooses knowledge bases" help="User can choose from accessible knowledge bases and/or upload its own files.">
-                                <p-checkbox id="userChoosesKnowledgeBases" formControlName="userChoosesKnowledgeBases"
-                                    [trueValue]="true" [falseValue]="false" [binary]="true" gebo-ai-field-element></p-checkbox>
-                            </gebo-ai-field>
-                        </div>
+                        <div class="col-2"><p-radioButton id="ChooseChatModelRadio" gebo-ai-label formControlName="useDefaultChatModel"
+                          name="useDefaultChatModel" label="choose"
+                        value="CHOOSEMODEL" [required]="true"></p-radioButton></div>
                         <div class="col-8">
-                            <gebo-ai-field id="knowledgeBaseCodes" label="Knowledge bases" help="Knowledge bases to use for document retrivial.">
-                                <p-multiSelect id="KnowledgeBaseCodesMultiSelect" gebo-ai-label styleClass="w-full" formControlName="knowledgeBaseCodes" optionLabel="description" optionValue="code" dataKey="code"
-                                    [options]="allKnowledgeBaseData" showClear="true" styleClass="w-full"
-                                    display="chip" gebo-ai-field-element></p-multiSelect>
-                            </gebo-ai-field>
+                          <p-select id="ChatModelSelect" gebo-ai-label styleClass="w-full" formControlName="chatModelReference"
+                            styleClass="w-full" [options]="chatModelsData" optionLabel="description"
+                          placeholder="Select a chat model configuration"></p-select>
                         </div>
+                      </div>
                     </div>
-                </p-tabPanel>
-                <p-tabPanel id="LanguageModelTab" gebo-ai-label header="Large language model & usable tools settings">
-                    <div class="grid standardTabDialogueHeight">
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label id="UseChatModelLabel" for="defaultChatModel" gebo-ai-text>Use chat model</label>
-                                <div class="col-12 grid">
-                                    <div class="col-12">
-                                        <div class="flex items-center">
-                                            <p-radioButton id="UseDefaultChatModelRadio" gebo-ai-label formControlName="useDefaultChatModel"
-                                                name="useDefaultChatModel" value="DEFAULT"
-                                                [required]="true"></p-radioButton>
-                                            <label for="useDefaultChatModel"
-                                                class="ml-2">{{defaultChatModel?.description}}
-                                                (default)</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-2"><p-radioButton id="ChooseChatModelRadio" gebo-ai-label formControlName="useDefaultChatModel"
-                                            name="useDefaultChatModel" label="choose"
-                                            value="CHOOSEMODEL" [required]="true"></p-radioButton></div>
-                                    <div class="col-8">
-                                        <p-select id="ChatModelSelect" gebo-ai-label styleClass="w-full" formControlName="chatModelReference"
-                                            styleClass="w-full" [options]="chatModelsData" optionLabel="description"
-                                            placeholder="Select a chat model configuration"></p-select>
-                                    </div>
-                                </div>
-                            </div>
-                            <small id="defaultChatModel-help">
-                                Use system default chat model or specify one.
-                            </small>
-                        </div>
-                        <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label id="UseEmbeddingModelLabel" for="defaultEmbeddingModel" gebo-ai-text>Use embedding model</label>
-                                <div class="col-12 grid">
-                                    <div class="col-12">
-                                        <div class="flex items-center">
-                                            <p-radioButton id="UseDefaultEmbeddingModelRadio" gebo-ai-label formControlName="useDefaultEmbeddingModel"
-                                                name="useDefaultEmbeddingModel" value="DEFAULT"
-                                                [required]="true"></p-radioButton>
-                                            <label for="ingredient1" class="ml-2">{{defaultEmbeddingModel?.description}}
-                                                (default)</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-2"><p-radioButton id="ChooseEmbeddingModelRadio" gebo-ai-label formControlName="useDefaultEmbeddingModel"
-                                            name="useDefaultEmbeddingModel" label="choose" value="CHOOSEMODEL"
-                                            [required]="true"></p-radioButton>
-                                    </div>
-                                    <div class="col-8">
-                                        <p-select id="EmbeddingModelSelect" gebo-ai-label styleClass="w-full" formControlName="embeddingModelReference"
-                                            class="col-12" [options]="embeddingModelsData" optionLabel="description"
-                                            styleClass="w-full"
-                                            placeholder="Select an embedding model configuration"></p-select>
-                                    </div>
-                                </div>
-                                <small id="defaultEmbeddingModel-help">
-                                    Use system default embedding model or specify one.
-                                </small>
-                            </div>
-                        </div>
+                    <small id="defaultChatModel-help">
+                      Use system default chat model or specify one.
+                    </small>
+                  </div>
+                  <div class="col-6">
+                    <div class="flex flex-column gap-2">
+                      <label id="UseEmbeddingModelLabel" for="defaultEmbeddingModel" gebo-ai-text>Use embedding model</label>
+                      <div class="col-12 grid">
                         <div class="col-12">
-                            <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this RAG chat" help="Functionalities that could be used by the llm model during the chat with the user interacting also with the selected knowledge base">
-                                <gebo-ai-choose-llm-functions-component id="enabledFunctions"
-                                    formControlName="enabledFunctions"
-                                    [knowledgeBaseContext]="true" dataKey="code" optionLabel="description"
-                                    optionValue="code" display="chip"
-                                    class="col-12" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
-                            </gebo-ai-field>
+                          <div class="flex items-center">
+                            <p-radioButton id="UseDefaultEmbeddingModelRadio" gebo-ai-label formControlName="useDefaultEmbeddingModel"
+                              name="useDefaultEmbeddingModel" value="DEFAULT"
+                            [required]="true"></p-radioButton>
+                            <label for="ingredient1" class="ml-2">{{defaultEmbeddingModel?.description}}
+                            (default)</label>
+                          </div>
                         </div>
+                        <div class="col-2"><p-radioButton id="ChooseEmbeddingModelRadio" gebo-ai-label formControlName="useDefaultEmbeddingModel"
+                          name="useDefaultEmbeddingModel" label="choose" value="CHOOSEMODEL"
+                        [required]="true"></p-radioButton>
+                      </div>
+                      <div class="col-8">
+                        <p-select id="EmbeddingModelSelect" gebo-ai-label styleClass="w-full" formControlName="embeddingModelReference"
+                          class="col-12" [options]="embeddingModelsData" optionLabel="description"
+                          styleClass="w-full"
+                        placeholder="Select an embedding model configuration"></p-select>
+                      </div>
                     </div>
-                </p-tabPanel>
-                <p-tabPanel id="RagSettingsTab" gebo-ai-label header="RAG settings">
-                    <div class="grid standardTabDialogueHeight">
-                        <div class="col-6">
-                           
-                            <gebo-ai-field id="manualThreasholdsConfiguration" label="Manual or Autotuned threashold configuration" help="Use manual distance threashold instead of Autotune it">
-                                <p-check-box formControlName="manualThreasholdsConfiguration" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-check-box>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                           
-                            <gebo-ai-field id="useAlsoKeywordSearch" label="Use keyword search when available" help="Run keyword searches additional to semantic searches if they are configured in this installation">
-                                <p-check-box formControlName="useAlsoKeywordSearch" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-check-box>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieve augmented generation, Top N found considered document fragments in semantic search">
-                                <p-inputNumber id="TopKInputNumber" gebo-ai-label formControlName="topK"
-                                    class="col-6" inputId="integeronly" [min]="4" [max]="100" gebo-ai-field-element/>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="similaritySearchThreshold" label="Similarity threshold" help="Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75 Medium filtering, 0.80–0.85 Accurate">
-                                <p-inputNumber id="SimilarityThresholdInputNumber" gebo-ai-label formControlName="similaritySearchThreshold"
-                                    class="col-6"
-                                    inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
-                                    maxFractionDigits="2" minFractionDigits="2" gebo-ai-field-element/>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="disableMultiHopRag" label="Disable 'Multi Hop' rag" help="Disable the 'multi hop rag' functionality. Multi hop search does a first semantic search and uses found documents as a context for the semantic search itself providing a larger context.">
-                                <p-checkbox id="DisableMultiHopRagCheckbox" gebo-ai-label formControlName="disableMultiHopRag"
-                                    [trueValue]="true" [falseValue]="false" [binary]="true" gebo-ai-field-element></p-checkbox>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="otherSearchSimilarityThreshold" label="2nd 'hop' similarity threshold" help="Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75 Medium filtering, 0.80–0.85 Accurate used from the 2nd search of multi-hop rag">
-                                <p-inputNumber id="OtherSearchThresholdInputNumber" gebo-ai-label formControlName="otherSearchSimilarityThreshold"
-                                    class="col-6"
-                                    inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
-                                    maxFractionDigits="2" minFractionDigits="2" gebo-ai-field-element/>
-                            </gebo-ai-field>
-                        </div>
-                        <!-- 
-                        <div class="col-12">
-                            <gebo-ai-field id="prompt" label="Prompt" help="Edit the prompt for the retrieve augmented generation sessions." [required]="true">
-                                <textarea id="PromptTextarea" gebo-ai-label rows="6" cols="250" [required]="true" pTextarea
-                                    formControlName="prompt" gebo-ai-field-element></textarea>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-3">
-                            <gebo-ai-prompt-wizard-component id="PromptWizardComponent" gebo-ai-label [deliveryFormGroup]="formGroup"
-                                deliveryPromptControlName="prompt"
-                                [ragWizardMode]="true"></gebo-ai-prompt-wizard-component>
-                        </div>
-                        -->
+                    <small id="defaultEmbeddingModel-help">
+                      Use system default embedding model or specify one.
+                    </small>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this RAG chat" help="Functionalities that could be used by the llm model during the chat with the user interacting also with the selected knowledge base">
+                    <gebo-ai-choose-llm-functions-component id="enabledFunctions"
+                      formControlName="enabledFunctions"
+                      [knowledgeBaseContext]="true" dataKey="code" optionLabel="description"
+                      optionValue="code" display="chip"
+                    class="col-12" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
+                  </gebo-ai-field>
+                </div>
+              </div>
+            </p-tabpanel>
+            <p-tabpanel [value]="2">
+              <div class="grid standardTabDialogueHeight">
+                <div class="col-6">
+
+                  <gebo-ai-field id="manualThreasholdsConfiguration" label="Manual or Autotuned threashold configuration" help="Use manual distance threashold instead of Autotune it">
+                    <p-check-box formControlName="manualThreasholdsConfiguration" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-check-box>
+                  </gebo-ai-field>
+                </div>
+                <div class="col-6">
+
+                  <gebo-ai-field id="useAlsoKeywordSearch" label="Use keyword search when available" help="Run keyword searches additional to semantic searches if they are configured in this installation">
+                    <p-check-box formControlName="useAlsoKeywordSearch" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-check-box>
+                  </gebo-ai-field>
+                </div>
+                <div class="col-6">
+                  <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieve augmented generation, Top N found considered document fragments in semantic search">
+                    <p-inputNumber id="TopKInputNumber" gebo-ai-label formControlName="topK"
+                      class="col-6" inputId="integeronly" [min]="4" [max]="100" gebo-ai-field-element/>
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="similaritySearchThreshold" label="Similarity threshold" help="Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75 Medium filtering, 0.80–0.85 Accurate">
+                      <p-inputNumber id="SimilarityThresholdInputNumber" gebo-ai-label formControlName="similaritySearchThreshold"
+                        class="col-6"
+                        inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
+                        maxFractionDigits="2" minFractionDigits="2" gebo-ai-field-element/>
+                      </gebo-ai-field>
                     </div>
-                </p-tabPanel>
-                <p-tabPanel id="SecurityAccessSettingsTab" gebo-ai-label header="Security access settings">
+                    <div class="col-6">
+                      <gebo-ai-field id="disableMultiHopRag" label="Disable 'Multi Hop' rag" help="Disable the 'multi hop rag' functionality. Multi hop search does a first semantic search and uses found documents as a context for the semantic search itself providing a larger context.">
+                        <p-checkbox id="DisableMultiHopRagCheckbox" gebo-ai-label formControlName="disableMultiHopRag"
+                        [trueValue]="true" [falseValue]="false" [binary]="true" gebo-ai-field-element></p-checkbox>
+                      </gebo-ai-field>
+                    </div>
+                    <div class="col-6">
+                      <gebo-ai-field id="otherSearchSimilarityThreshold" label="2nd 'hop' similarity threshold" help="Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75 Medium filtering, 0.80–0.85 Accurate used from the 2nd search of multi-hop rag">
+                        <p-inputNumber id="OtherSearchThresholdInputNumber" gebo-ai-label formControlName="otherSearchSimilarityThreshold"
+                          class="col-6"
+                          inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
+                          maxFractionDigits="2" minFractionDigits="2" gebo-ai-field-element/>
+                        </gebo-ai-field>
+                      </div>
+                      <!--
+                      <div class="col-12">
+                        <gebo-ai-field id="prompt" label="Prompt" help="Edit the prompt for the retrieve augmented generation sessions." [required]="true">
+                          <textarea id="PromptTextarea" gebo-ai-label rows="6" cols="250" [required]="true" pTextarea
+                          formControlName="prompt" gebo-ai-field-element></textarea>
+                        </gebo-ai-field>
+                      </div>
+                      <div class="col-3">
+                        <gebo-ai-prompt-wizard-component id="PromptWizardComponent" gebo-ai-label [deliveryFormGroup]="formGroup"
+                          deliveryPromptControlName="prompt"
+                        [ragWizardMode]="true"></gebo-ai-prompt-wizard-component>
+                      </div>
+                      -->
+                    </div>
+                  </p-tabpanel>
+                  <p-tabpanel [value]="3">
                     <div class="standardTabDialogueHeight">
-                        <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                      <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
                     </div>
-                </p-tabPanel>
-            </p-tabView>
-        </div>
-    </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+                  </p-tabpanel>
+                </p-tabpanels>
+          </p-tabs>
+              </div>
+            </div>
+          </p-panel>
+          <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+          <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

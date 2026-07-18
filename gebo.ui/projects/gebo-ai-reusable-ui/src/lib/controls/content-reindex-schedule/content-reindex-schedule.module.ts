@@ -31,7 +31,7 @@ import { TimeSetComponent } from "./time-set.component";
 import { GeboAIPeriodsSchedulingBaseComponent } from "./periods-base.component";
 import { GeboAIContentReindexScheduleComponent } from "./content-reindex-schedule.component";
 
-import { CalendarModule } from "primeng/calendar";
+import { DatePickerModule } from "primeng/datepicker";
 import { InputNumberModule } from "primeng/inputnumber";
 import { FieldsetModule } from "primeng/fieldset";
 import { SelectModule } from 'primeng/select';
@@ -53,7 +53,7 @@ import { GeboAIFieldTranslationContainerModule } from "../field-translation-cont
  * Only the GeboAIContentReindexScheduleComponent is exported for use in other modules.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, CalendarModule, InputNumberModule, FieldsetModule,GeboAIFieldTranslationContainerModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, DatePickerModule, InputNumberModule, FieldsetModule,GeboAIFieldTranslationContainerModule],
     declarations: [GeboAIPeriodsSchedulingBaseComponent, TimeSetComponent, GeboAIContentReindexScheduleComponent],
     exports: [GeboAIContentReindexScheduleComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: false }]

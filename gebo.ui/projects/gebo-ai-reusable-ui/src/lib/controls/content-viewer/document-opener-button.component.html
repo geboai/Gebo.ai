@@ -1,49 +1,61 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 
 
 
-<p-button *ngIf="document"
-          [icon]="((document?.fileType?.icon)?document.fileType?.icon:'p p-unknown')"
-          [text]="true"
-          class="custom-blue-btn"
-          (onClick)="onClickFile(document)"
-          [label]="document.name"></p-button>
+@if (document) {
+  <p-button
+    [icon]="((document?.fileType?.icon)?document.fileType?.icon:'p p-unknown')"
+    [text]="true"
+    class="custom-blue-btn"
+    (onClick)="onClickFile(document)"
+  [label]="document.name"></p-button>
+}
 
-<gebo-ai-content-viewer *ngIf="document"
-                        [code]="currentViewedDocumentCode?currentViewedDocumentCode:''"
-                        [activate]="currentViewedDocumentCode?true:false"
-                        (close)="currentViewedDocumentCode=undefined"></gebo-ai-content-viewer>
+@if (document) {
+  <gebo-ai-content-viewer
+    [code]="currentViewedDocumentCode?currentViewedDocumentCode:''"
+    [activate]="currentViewedDocumentCode?true:false"
+  (close)="currentViewedDocumentCode=undefined"></gebo-ai-content-viewer>
+}
 
-<p-button *ngIf="uploadedContent"
-          [icon]="((uploadedContent?.fileType?.icon)?uploadedContent.fileType?.icon:'p p-unknown')"
-          [text]="true"
-          class="custom-blue-btn"
-          (onClick)="onClickUploadedContent(uploadedContent)"
-          [label]="uploadedContent.fileName"></p-button>
+@if (uploadedContent) {
+  <p-button
+    [icon]="((uploadedContent?.fileType?.icon)?uploadedContent.fileType?.icon:'p p-unknown')"
+    [text]="true"
+    class="custom-blue-btn"
+    (onClick)="onClickUploadedContent(uploadedContent)"
+  [label]="uploadedContent.fileName"></p-button>
+}
 
-<gebo-ai-content-viewer *ngIf="currentViewedUploadedContent"
-                        [userUploadedContent]="currentViewedUploadedContent"
-                        [activate]="currentViewedUploadedContent?true:false"
-                        (close)="currentViewedUploadedContent=undefined"></gebo-ai-content-viewer>
+@if (currentViewedUploadedContent) {
+  <gebo-ai-content-viewer
+    [userUploadedContent]="currentViewedUploadedContent"
+    [activate]="currentViewedUploadedContent?true:false"
+  (close)="currentViewedUploadedContent=undefined"></gebo-ai-content-viewer>
+}
 
-<p-button *ngIf="generatedContent"
-          [icon]="generatedContent?.fileType?.icon?generatedContent?.fileType?.icon:'p p-unknown'"
-          (onClick)="onClickGeneratedContent(generatedContent)"
-          [text]="true"
-          [label]="generatedContent.fileName"
-          class="custom-blue-btn"></p-button>
+@if (generatedContent) {
+  <p-button
+    [icon]="generatedContent?.fileType?.icon?generatedContent?.fileType?.icon:'p p-unknown'"
+    (onClick)="onClickGeneratedContent(generatedContent)"
+    [text]="true"
+    [label]="generatedContent.fileName"
+  class="custom-blue-btn"></p-button>
+}
 
-<gebo-ai-content-viewer *ngIf="currentViewedGeneratedContent"
-                        [generatedContent]="currentViewedUploadedContent"
-                        [activate]="currentViewedGeneratedContent?true:false"
-                        (close)="currentViewedGeneratedContent=undefined"></gebo-ai-content-viewer>
+@if (currentViewedGeneratedContent) {
+  <gebo-ai-content-viewer
+    [generatedContent]="currentViewedUploadedContent"
+    [activate]="currentViewedGeneratedContent?true:false"
+  (close)="currentViewedGeneratedContent=undefined"></gebo-ai-content-viewer>
+}

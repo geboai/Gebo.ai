@@ -1,44 +1,40 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 
 
 
-<p-dialog [maximizable]="true" [visible]="visible" [modal]="true" [style]="{width:'95%',height:'20%'}"
-    [closable]="false" [showHeader]="false" *ngIf="formGroup" [formGroup]="formGroup">
+@if (formGroup) {
+  <p-dialog [maximizable]="true" [visible]="visible" [modal]="true" [style]="{width:'95%',height:'20%'}"
+    [closable]="false" [showHeader]="false" [formGroup]="formGroup">
     <div class="geboButtonsBar" style="vertical-align: baseline;">
-        <div class="grid">
-            <div class="col-3 col-sm-6">
-                <p-button [outlined]="true" id="SaveBtn" gebo-ai-label label="Save" (onClick)="saveAction.emit(true)"
-                    icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid"></p-button>
-            </div>
-
-            <div class="col-3  col-sm-6">
-                <p-button [outlined]="true" id="CancelBtn" gebo-ai-label label="Cancel" severity="contrast"
-                    (onClick)="cancelAction.emit(true)" />
-            </div>
-
-
+      <div class="grid">
+        <div class="col-3 col-sm-6">
+          <p-button [outlined]="true" id="SaveBtn" gebo-ai-label label="Save" (onClick)="saveAction.emit(true)"
+          icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid"></p-button>
         </div>
-    </div>
-    <div class="grid">
+        <div class="col-3  col-sm-6">
+          <p-button [outlined]="true" id="CancelBtn" gebo-ai-label label="Cancel" severity="contrast"
+            (onClick)="cancelAction.emit(true)" />
+          </div>
+        </div>
+      </div>
+      <div class="grid">
         <div class="col-12">
-            <gebo-ai-field id="description" label="Chat description" help="Enter the description of the chat session."
-                [required]="true">
-                <input pInputText formControlName="description" maxlength="120" [required]="true"
-                    gebo-ai-field-element />
+          <gebo-ai-field id="description" label="Chat description" help="Enter the description of the chat session."
+            [required]="true">
+            <input pInputText formControlName="description" maxlength="120" [required]="true"
+              gebo-ai-field-element />
             </gebo-ai-field>
-
+          </div>
         </div>
-
-    </div>
-
-</p-dialog>
+      </p-dialog>
+    }

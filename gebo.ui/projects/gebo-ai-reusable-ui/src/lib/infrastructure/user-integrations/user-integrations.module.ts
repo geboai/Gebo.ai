@@ -14,10 +14,10 @@ import { RouterModule, Routes } from "@angular/router";
 import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
-import { CalendarModule } from "primeng/calendar";
+import { DatePickerModule } from "primeng/datepicker";
 import { InputTextModule } from "primeng/inputtext";
 import { SelectModule } from "primeng/select";
-import { TabViewModule } from "primeng/tabview";
+import { TabsModule } from "primeng/tabs";
 import { PanelModule } from "primeng/panel";
 import { BlockUIModule } from "primeng/blockui";
 import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
@@ -37,10 +37,10 @@ const routes: Routes = [{
         TableModule,
         ButtonModule,
         DialogModule,
-        CalendarModule,
+        DatePickerModule,
         InputTextModule,
         SelectModule,
-        TabViewModule,
+        TabsModule,
         PanelModule,
         BlockUIModule,
         RouterModule.forRoot(routes),

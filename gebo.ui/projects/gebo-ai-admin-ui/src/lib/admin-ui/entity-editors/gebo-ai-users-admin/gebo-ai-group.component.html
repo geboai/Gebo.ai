@@ -1,59 +1,61 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
 <p-blockUI id="BlockUI" gebo-ai-label [target]="groupUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #groupUI header="Editing user group" [formGroup]="formGroup">
-    <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
-        <div class="col-3">
-            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                [disabled]="this.formGroup.invalid || canSave===false"></p-button>
+  @if (!isWizardMode) {
+    <div class="grid geboVeryLargeButtonsBar">
+      <div class="col-3">
+        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+        [disabled]="this.formGroup.invalid || canSave===false"></p-button>
+      </div>
+      <div class="col-3">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+      </div>
+      <div class="col-3">
+        <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+          [disabled]="canDelete===false" />
         </div>
-        <div class="col-3">
-            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
-        </div>
-        <div class="col-3">
-            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                [disabled]="canDelete===false" />
-        </div>
-    </div>
+      </div>
+    }
     <div class="geboDialogContent">
-        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
-        <div class="grid">
-            <div class="col-6">
-                <gebo-ai-field id="description" label="Description" help="Enter the description of the user group" [required]="true">
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        gebo-ai-field-element
-                    />
-                </gebo-ai-field>
-            </div>
-            <div class="col-6">
-                <gebo-ai-field id="code" label="Unique Code" help="Enter the code of the user group" [required]="true">
-                    <input pInputText id="code" formControlName="code" [required]="true"
-                        gebo-ai-field-element
-                    />
-                </gebo-ai-field>
+      <div class="grid">
+        <div class="col-6">
+          <gebo-ai-field id="description" label="Description" help="Enter the description of the user group" [required]="true">
+            <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+              gebo-ai-field-element
+              />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="code" label="Unique Code" help="Enter the code of the user group" [required]="true">
+              <input pInputText id="code" formControlName="code" [required]="true"
+                gebo-ai-field-element
+                />
+              </gebo-ai-field>
             </div>
             <div class="col-12">
-                <gebo-ai-field id="userIds" label="Users list" help="Select users partecipating the group" [required]="true">
-                    <p-multiSelect id="UserIds" gebo-ai-label styleClass="w-full" formControlName="userIds"
-                        [required]="true" dataKey="username" optionLabel="username" optionValue="username" [options]="users"
-                        placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element
-                    ></p-multiSelect>
-                </gebo-ai-field>
+              <gebo-ai-field id="userIds" label="Users list" help="Select users partecipating the group" [required]="true">
+                <p-multiSelect id="UserIds" gebo-ai-label styleClass="w-full" formControlName="userIds"
+                  [required]="true" dataKey="username" optionLabel="username" optionValue="username" [options]="users"
+                  placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element
+                ></p-multiSelect>
+              </gebo-ai-field>
             </div>
+          </div>
         </div>
-    </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+      </p-panel>
+      <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+      <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

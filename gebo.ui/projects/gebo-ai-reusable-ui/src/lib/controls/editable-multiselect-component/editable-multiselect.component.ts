@@ -23,7 +23,7 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from 
 import { Observable } from "rxjs";
 import { GeboActionPerformedEvent, GeboActionPerformedType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
-import { DropdownChangeEvent } from "primeng/dropdown";
+import { SelectChangeEvent } from "primeng/select";
 
 /**
  * Constant string that serves as a marker for creating a new record
@@ -301,7 +301,7 @@ export class EditableMultiselectComponent implements ControlValueAccessor, OnIni
      * 
      * @param event - The dropdown change event containing the new value
      */
-    changedValue(event: DropdownChangeEvent) {
+    changedValue(event: SelectChangeEvent) {
         this.value = event.value;
         if (this.canCreateRecord && this.value && this.value.length && this.value[0] === createNewValueCodeConstant) {
             this.doOpenEditWindow();

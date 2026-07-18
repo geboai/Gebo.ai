@@ -1,57 +1,63 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 
 
 
 <p-panel header="Chat configuration infos">
-    <div class="grid">
-        <div class="col-6">
-            <gebo-ai-field id="providerId" label="Chat model provider" help="LLms provider driver">
-                <div>{{data?.providerId}}</div>
-            </gebo-ai-field>
+  <div class="grid">
+    <div class="col-6">
+      <gebo-ai-field id="providerId" label="Chat model provider" help="LLms provider driver">
+        <div>{{data?.providerId}}</div>
+      </gebo-ai-field>
 
-        </div>
-        <div class="col-6">
-            <gebo-ai-field id="usedModel" label="Used model" help="Model code">
-                <div>{{data?.chatModelChoice?.code}}</div>
-            </gebo-ai-field>
-
-        </div>
-        <div class="col-12" *ngIf="data?.knowledgeBases">
-            <gebo-ai-field id="kbases" label="Available knowledge bases"
-                help="List of knowledge bases used in this RAG chat">
-                <div id="kbases"><i *ngFor="let k of data?.knowledgeBases">{{k.description}}</i>&nbsp;</div>
-            </gebo-ai-field>
-
-        </div>
-        <div class="col-12">
-            <gebo-ai-field id="functions" label="Chat model callable functions"
-                help="List of functions available to the chat model">
-                <div id="functions">
-                    <p-fieldset *ngFor="let tree of data?.availableFunctions;" [legend]="tree.category?.description">
-                        <div class="grid">
-                            <div class="col-4"><b id="NameCol" gebo-ai-text>Name</b></div>
-                            <div class="col-8"><b id="DescriptionCol" gebo-ai-text>Description</b></div>
-                            <div *ngFor="let f of tree.toolsReference" class="col-12 grid">
-                                <div class="col-4">{{f.name}}</div>
-                                <div class="col-8">{{f.description}}</div>
-                            </div>
-                        </div>
-
-                    </p-fieldset>
-
-                </div>
-            </gebo-ai-field>
-
-        </div>
     </div>
+    <div class="col-6">
+      <gebo-ai-field id="usedModel" label="Used model" help="Model code">
+        <div>{{data?.chatModelChoice?.code}}</div>
+      </gebo-ai-field>
+
+    </div>
+    @if (data?.knowledgeBases) {
+      <div class="col-12">
+        <gebo-ai-field id="kbases" label="Available knowledge bases"
+          help="List of knowledge bases used in this RAG chat">
+          <div id="kbases">@for (k of data?.knowledgeBases; track k) {
+            <i>{{k.description}}</i>
+          }&nbsp;</div>
+        </gebo-ai-field>
+      </div>
+    }
+    <div class="col-12">
+      <gebo-ai-field id="functions" label="Chat model callable functions"
+        help="List of functions available to the chat model">
+        <div id="functions">
+          @for (tree of data?.availableFunctions; track tree) {
+            <p-fieldset [legend]="tree.category?.description">
+              <div class="grid">
+                <div class="col-4"><b id="NameCol" gebo-ai-text>Name</b></div>
+                <div class="col-8"><b id="DescriptionCol" gebo-ai-text>Description</b></div>
+                @for (f of tree.toolsReference; track f) {
+                  <div class="col-12 grid">
+                    <div class="col-4">{{f.name}}</div>
+                    <div class="col-8">{{f.description}}</div>
+                  </div>
+                }
+              </div>
+            </p-fieldset>
+          }
+
+        </div>
+      </gebo-ai-field>
+
+    </div>
+  </div>
 </p-panel>
