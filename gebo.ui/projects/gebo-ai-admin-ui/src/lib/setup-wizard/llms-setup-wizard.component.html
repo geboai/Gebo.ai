@@ -42,7 +42,7 @@
     </div>
   }
 </ng-template>
-<p-blockUI id="BlockUi" gebo-ai-label [target]="instModeUI" [blocked]="loading">
+<p-blockUI id="BlockUi"  [target]="instModeUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
@@ -55,8 +55,8 @@
   @if (actualProvidersConfiguration?.canRunAutoconfigure===true) {
     <p-tabs [value]="0" class="geboFullHeight">
     <p-tablist>
-      <p-tab [value]="0" gebo-ai-label>Easy initial setup/configuration fix</p-tab>
-      <p-tab [value]="1" gebo-ai-label>Extended infrastructure/suppliers choices</p-tab>
+      <p-tab [value]="0" gebo-ai-text>Easy initial setup/configuration fix</p-tab>
+      <p-tab [value]="1" gebo-ai-text>Extended infrastructure/suppliers choices</p-tab>
     </p-tablist>
     <p-tabpanels>
       <p-tabpanel [value]="0">

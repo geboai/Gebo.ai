@@ -13,7 +13,7 @@
 
 
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="confluenceSystemCtrl" [blocked]="loading">
+<p-blockUI id="BlockUI"  [target]="confluenceSystemCtrl" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #confluenceSystemCtrl header="Editing confluence system" [formGroup]="formGroup">
@@ -39,7 +39,7 @@
       <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
       <p-tabs [value]="0" id="TabView">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-label>General settings</p-tab>
+              <p-tab [value]="0" gebo-ai-text>General settings</p-tab>
               <p-tab [value]="1" [disabled]="mode!=='EDIT'">Security settings</p-tab>
             </p-tablist>
             <p-tabpanels>

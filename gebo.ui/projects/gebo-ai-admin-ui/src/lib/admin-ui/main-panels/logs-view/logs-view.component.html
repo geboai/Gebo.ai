@@ -16,7 +16,7 @@
 <p-tabs [value]="0">
   <p-tablist>
     @for (tab of endpointTabs; track tab; let i = $index) {
-      <p-tab [value]="i" gebo-ai-label>{{tab.label + ' logs'}}</p-tab>
+      <p-tab [value]="i" gebo-ai-text>{{tab.label + ' logs'}}</p-tab>
     }
   </p-tablist>
   <p-tabpanels>

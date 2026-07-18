@@ -23,6 +23,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { GeboAiChatSectionComponent } from "./gebo-ai-rag-chat-section.component";
+import { GeboBlockableContainerDirective } from "./blockable-container.directive";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -52,7 +53,7 @@ import { RouterLinkWithHref } from "@angular/router";
  * - Custom Gebo.ai components (EditableListboxModule, GeboAIReusableChatModel)
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, DrawerModule, PanelModule, GeboAIFieldTranslationContainerModule, ScrollPanelModule, PopoverModule, RouterLinkWithHref,GeboAINotificationsModule],
+    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, DrawerModule, PanelModule, GeboAIFieldTranslationContainerModule, ScrollPanelModule, PopoverModule, RouterLinkWithHref,GeboAINotificationsModule, GeboBlockableContainerDirective],
     declarations: [GeboAiChatSectionComponent],
     exports: [GeboAiChatSectionComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }]

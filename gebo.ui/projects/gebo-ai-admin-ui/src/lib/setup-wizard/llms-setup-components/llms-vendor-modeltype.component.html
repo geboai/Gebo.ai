@@ -36,10 +36,10 @@
     <p-tabs [value]="0">
       <p-tablist>
         @if ((chatPresets.length>0 && (showDefaultChat || showServiceChat)) || (embeddingPresets.length>0 && showEmbedding) || (rankingPresets.length>0 && showRanker) || (imagePresets.length>0 && showImages) || (transcriptPresets.length>0 && showTranscript) || (ttsPresets.length>0 && showTts)) {
-          <p-tab [value]="0" gebo-ai-label>Suggested models selection</p-tab>
+          <p-tab [value]="0" gebo-ai-text>Suggested models selection</p-tab>
         }
         @if (lookedUpChatModels.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0) {
-          <p-tab [value]="1" gebo-ai-label>Advanced models selection</p-tab>
+          <p-tab [value]="1" gebo-ai-text>Advanced models selection</p-tab>
         }
       </p-tablist>
       <p-tabpanels>

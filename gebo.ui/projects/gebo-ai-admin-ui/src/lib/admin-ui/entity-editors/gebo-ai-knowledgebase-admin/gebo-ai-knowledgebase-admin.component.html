@@ -9,7 +9,7 @@
 */
 -->
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="kbCompo" [blocked]="loading">
+<p-blockUI id="BlockUI"  [target]="kbCompo" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #kbCompo header="Editing a Knowledge base" [formGroup]="formGroup">
@@ -40,8 +40,8 @@
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <p-tabs [value]="0" id="TabView">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-label>General infos</p-tab>
-              <p-tab [value]="1" gebo-ai-label>Knowledge base access settings</p-tab>
+              <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
+              <p-tab [value]="1" gebo-ai-text>Knowledge base access settings</p-tab>
             </p-tablist>
             <p-tabpanels>
           <p-tabpanel [value]="0">

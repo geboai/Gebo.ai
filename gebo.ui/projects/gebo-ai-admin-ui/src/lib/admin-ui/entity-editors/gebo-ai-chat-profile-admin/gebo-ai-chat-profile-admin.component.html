@@ -12,7 +12,7 @@
 
 
 
-<p-blockUI id="BlockUi" gebo-ai-label [target]="chatProfileUI" [blocked]="loading">
+<p-blockUI id="BlockUi"  [target]="chatProfileUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #chatProfileUI header="Editing retrieve augmented generation chat profile" [formGroup]="formGroup">
@@ -41,10 +41,10 @@
         <div class="col-12 standardTabDialogueHeight">
           <p-tabs [value]="0" id="TabView">
             <p-tablist>
-              <p-tab [value]="0" gebo-ai-label>General infos</p-tab>
-              <p-tab [value]="1" gebo-ai-label>Large language model &amp; usable tools settings</p-tab>
-              <p-tab [value]="2" gebo-ai-label>RAG settings</p-tab>
-              <p-tab [value]="3" gebo-ai-label>Security access settings</p-tab>
+              <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
+              <p-tab [value]="1" gebo-ai-text>Large language model &amp; usable tools settings</p-tab>
+              <p-tab [value]="2" gebo-ai-text>RAG settings</p-tab>
+              <p-tab [value]="3" gebo-ai-text>Security access settings</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">

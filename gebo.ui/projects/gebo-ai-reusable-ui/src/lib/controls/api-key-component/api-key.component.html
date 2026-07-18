@@ -2,7 +2,7 @@
   <gebo-ai-notifications [messages]="messages"></gebo-ai-notifications>
 }
 <p-fieldset id="HeaderFieldSet" gebo-ai-label legend="Use or create api key credentials">
-  <p-blockUI id="BlockUI" gebo-ai-label [blocked]="loading">
+  <p-blockUI id="BlockUI"  [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
   <div class="grid" [formGroup]="secretFormGroup">

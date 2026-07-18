@@ -1,4 +1,4 @@
-<p-blockUI id="BlockUILock" gebo-ai-label [target]="googleSearchSetupUI" [blocked]="loading">
+<p-blockUI id="BlockUILock"  [target]="googleSearchSetupUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #googleSearchSetupUI header="Setup google search api">
@@ -41,7 +41,7 @@
 </p-panel>
 <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="googleSearchConfig?true:false" [modal]="true"
     (visibleChange)="googleSearchConfig=undefined">
-    <p-blockUI id="BlockUILock" gebo-ai-label [target]="createCredentialsUI" [blocked]="loading">
+    <p-blockUI id="BlockUILock"  [target]="createCredentialsUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <p-panel id="CreateCredentialsPanel" gebo-ai-label #createCredentialsUI header="Create google search credentials"
