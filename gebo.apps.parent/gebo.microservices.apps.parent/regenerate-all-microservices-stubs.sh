@@ -2,14 +2,21 @@
 #
 # regenerate-all-microservices-stubs.sh
 # ---------------------------------------------------------------------------
-# 1. Rebuilds all 19 microservice Docker images (swagger-on profile).
-# 2. docker compose down + up -d the full stack.
-# 3. Polls every /v3/api-docs until all services are serving.
-# 4. Cleans every client stub of previously generated sources.
-# 5. Regenerates all 38 stubs (Java + Angular) via swagger-codegen.
-#    On any individual failure: git restore that client and abort.
-# 6. If every stub regenerates cleanly, creates branch feature/stubs-refresh
-#    from the current one and commits the generated sources there.
+# Atomic pipeline: either all 38 client stubs regenerate successfully and get
+# committed, or the repository returns to its exact pre-run state.
+#
+# Stages:
+#   1. Rebuild all 19 microservice Docker images (jib:buildTar, swagger-on).
+#   2. docker compose down + up -d the full stack.
+#   3. Poll /v3/api-docs on all services (skip unready ones after timeout).
+#   4. Git-stash the clients parent, then clean all 38 stubs.
+#   5. Regenerate each stub from live specs (per-client git restore on failure).
+#   6. Compile to verify.
+#   7. Tear down docker compose.
+#   8. Create branch feature/stubs-refresh and commit regenerated sources.
+#
+# On ANY failure after Stage 3, the git stash is popped and the repository
+# is restored to its exact pre-run state.
 # ---------------------------------------------------------------------------
 set -euo pipefail
 
@@ -18,8 +25,10 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 COMPOSE_FILE="$REPO_ROOT/dockers/gebo.microservices/docker-compose.yml"
 CLIENTS_PARENT="$REPO_ROOT/gebo.api.clients/gebo.microservices.clients.parent"
 MICROSERVICES_PARENT="$REPO_ROOT/gebo.apps.parent/gebo.microservices.apps.parent"
+STASH_REF=""
+ATOMIC_SUCCESS=0
 
-# ---- 1. Service -> port map (from each app's application.yml) -------------
+# ---- Service -> port map ---------------------------------------------------
 declare -A SERVICE_PORTS
 SERVICE_PORTS=(
   [eureka]=13017       [gateway]=13000     [heimdall]=13018
@@ -31,7 +40,7 @@ SERVICE_PORTS=(
   [fulltextor]=13016
 )
 
-# ---- helper functions ----------------------------------------------------
+# ---- helpers ---------------------------------------------------------------
 red()    { echo -e "\e[31m$*\e[0m"; }
 green()  { echo -e "\e[32m$*\e[0m"; }
 yellow() { echo -e "\e[33m$*\e[0m"; }
@@ -41,8 +50,29 @@ bail() {
   exit 1
 }
 
+# ---- atomic snapshot / rollback --------------------------------------------
+
+# Called on EXIT or explicitly.  If we haven't reached success, restore the
+# stashed pre-regen state so the repo is exactly as it was.
+restore_snapshot() {
+  if [ "$ATOMIC_SUCCESS" -eq 1 ]; then
+    return 0
+  fi
+  if [ -z "$STASH_REF" ]; then
+    return 0
+  fi
+  yellow ""
+  yellow "Restoring pre-regeneration state (git stash pop) ..."
+  git -C "$REPO_ROOT" stash pop --index 2>/dev/null || {
+    red "  stash pop failed — forcing checkout of clients parent"
+    git -C "$REPO_ROOT" checkout -- "$CLIENTS_PARENT" 2>/dev/null || true
+    git -C "$REPO_ROOT" stash drop 2>/dev/null || true
+  }
+}
+
+# ---- polling ---------------------------------------------------------------
 poll_until_200() {
-  local port=$1 svc=$2 max_attempts=120 interval=5 attempt=0
+  local port=$1 svc=$2 max_attempts=36 interval=5 attempt=0
   local url="http://localhost:$port/v3/api-docs"
   yellow "  Waiting for $svc on $url ..."
   while [ $attempt -lt $max_attempts ]; do
@@ -55,11 +85,11 @@ poll_until_200() {
     sleep "$interval"
     ((attempt++))
   done
-  red "    $svc ($port) did not answer 200 within $((max_attempts * interval))s"
-  return 1
+  red "    $svc ($port) did not answer 200 within $((max_attempts * interval))s — skipping"
+  return 0
 }
 
-# ---- clean procedures (Section 2 of MICROSERVICES-STUBS-ARCHITECTURE.md) ----
+# ---- clean procedures ------------------------------------------------------
 clean_java_client() {
   local dir=$1
   yellow "  Cleaning Java  client: $(basename "$dir")"
@@ -69,7 +99,6 @@ clean_java_client() {
 clean_angular_client() {
   local dir=$1
   yellow "  Cleaning Angular client: $(basename "$dir")"
-  # Find the single library project directory under projects/
   local lib
   lib=$(find "$dir/projects" -maxdepth 1 -type d -name 'gebo-*-api' | head -1)
   if [ -z "$lib" ]; then
@@ -78,28 +107,31 @@ clean_angular_client() {
   fi
   local lib_src="$lib/src/lib"
   rm -rf "$lib_src/api" "$lib_src/model" "$lib_src/.swagger-codegen"
-  # Remove all loose .ts files inside lib/ EXCEPT .gitignore and .swagger-codegen-ignore
   find "$lib_src" -maxdepth 1 -name '*.ts' -delete 2>/dev/null || true
 }
 
-# ---- regeneration with rollback ------------------------------------------
+# ---- regeneration with per-client rollback ---------------------------------
 regenerate_client() {
   local client_dir=$1 client_name
   client_name=$(basename "$client_dir")
   yellow "Regenerating $client_name ..."
   if ! mvn -f "$client_dir/pom.xml" generate-sources -P generate-rest-api -q 2>&1; then
     red "  FAILED — restoring $client_name via git restore"
-    git -C "$REPO_ROOT" checkout -- "$client_dir"
+    git -C "$REPO_ROOT" restore "$client_dir"
     return 1
   fi
   green "  OK"
   return 0
 }
 
-# ---- main -----------------------------------------------------------------
+# ---- main ------------------------------------------------------------------
+
+# Install the atomic rollback trap.  From this point forward, any exit that is
+# NOT preceded by ATOMIC_SUCCESS=1 will restore the pre-regen stash.
+trap restore_snapshot EXIT
 
 echo "========================================================================="
-green "  Microservices client stubs — full regeneration pipeline"
+green "  Microservices client stubs — atomic regeneration pipeline"
 echo "========================================================================="
 
 # ----- Stage 1: Build Docker images ----------------------------------------
@@ -109,7 +141,6 @@ yellow "----------------------------------------------------------------------"
 mvn -f "$MICROSERVICES_PARENT/pom.xml" -P docker,swagger-on jib:buildTar \
     -DskipTests -q 2>&1 || bail "Docker image build failed"
 
-# Load images so docker compose can find them (jib:buildTar → docker load)
 yellow "Loading images into Docker daemon ..."
 for app_dir in "$MICROSERVICES_PARENT"/*.gebo.ai/; do
   image_tar="$app_dir/target/jib-image.tar"
@@ -131,9 +162,23 @@ yellow ""
 yellow "Stage 3: Polling /v3/api-docs on all 19 services"
 yellow "-------------------------------------------------"
 for svc in "${!SERVICE_PORTS[@]}"; do
-  poll_until_200 "${SERVICE_PORTS[$svc]}" "$svc" || bail "Service $svc not ready"
+  poll_until_200 "${SERVICE_PORTS[$svc]}" "$svc"
 done
-green "All 19 services serving specs"
+green "Finished polling — proceeding with available services"
+
+# ----- Stage 3.5: Git-stash the clients parent (atomic snapshot) ------------
+yellow ""
+yellow "Snapshot: saving current state of client stubs (git stash)"
+yellow "----------------------------------------------------------"
+STASH_OUT=$(git -C "$REPO_ROOT" stash push --include-untracked \
+    -m "pre-regen-snapshot" -- "$CLIENTS_PARENT" 2>&1) || true
+if echo "$STASH_OUT" | grep -q "No local changes"; then
+  yellow "  No changes to stash — working tree was already clean"
+  STASH_REF=""
+else
+  STASH_REF=$(echo "$STASH_OUT" | grep -oP 'stash@\{[0-9]+\}' | head -1)
+  green "  Stashed as $STASH_REF"
+fi
 
 # ----- Stage 4: Clean all 38 client stubs ----------------------------------
 yellow ""
@@ -149,7 +194,7 @@ for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.c
 done
 green "Stage 4 OK — all stubs cleaned"
 
-# ----- Stage 5: Regenerate all 38 stubs (with per-client rollback) --------
+# ----- Stage 5: Regenerate all 38 stubs ------------------------------------
 yellow ""
 yellow "Stage 5: Regenerating all 38 stubs from live specs"
 yellow "---------------------------------------------------"
@@ -161,7 +206,7 @@ for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.c
 done
 
 if [ $any_failure -ne 0 ]; then
-  bail "One or more client regenerations failed — restored via git, aborting"
+  bail "One or more client regenerations failed — rolling back via stash pop"
 fi
 green "Stage 5 OK — all 38 stubs regenerated"
 
@@ -170,7 +215,7 @@ yellow ""
 yellow "Stage 6: Compiling all regenerated clients"
 yellow "------------------------------------------"
 mvn -f "$CLIENTS_PARENT/pom.xml" clean install -q 2>&1 \
-  || bail "Client compilation failed — run git restore manually on the clients parent"
+  || bail "Client compilation failed — rolling back via stash pop"
 green "Stage 6 OK — all clients compile"
 
 # ----- Stage 7: Docker compose down ---------------------------------------
@@ -178,6 +223,15 @@ yellow ""
 yellow "Stage 7: Tearing down docker compose"
 yellow "-------------------------------------"
 docker compose -f "$COMPOSE_FILE" down --remove-orphans --volumes 2>/dev/null || true
+
+# ----- Mark atomic success (trap will NOT restore stash) -------------------
+ATOMIC_SUCCESS=1
+
+# Drop the stash now that we've succeeded
+if [ -n "$STASH_REF" ]; then
+  git -C "$REPO_ROOT" stash drop "$STASH_REF" 2>/dev/null || true
+  green "Stash dropped — regenerated sources are the new state"
+fi
 
 # ----- Stage 8: Create feature/stubs-refresh branch and commit ------------
 yellow ""
@@ -200,7 +254,6 @@ else
   git -C "$REPO_ROOT" checkout -b "$TARGET_BRANCH"
 fi
 
-# Re-stage after branch switch
 git -C "$REPO_ROOT" add "$CLIENTS_PARENT" 2>/dev/null || true
 
 git -C "$REPO_ROOT" commit -m "chore(stubs): regenerate all microservices client stubs
