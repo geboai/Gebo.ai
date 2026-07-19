@@ -73,6 +73,9 @@ public final class GeboMicroservice {
 	/** Scheme prefix for a Spring Cloud LoadBalancer backend target (e.g. {@code lb://brain.gebo.ai}). */
 	public static final String LOAD_BALANCER_SCHEME = "lb://";
 
+	/** Suffix every Gebo microservice id carries, stripped to get the short context name (e.g. {@code brain-gebo-ai} -> {@code brain}). */
+	private static final String DISCOVERY_ID_SUFFIX = "-gebo-ai";
+
 	private final String applicationName;
 	/** moduleId -> immutable list of systemIds (may be empty when a module's systems are dynamic/not enumerated). */
 	private final Map<String, List<String>> messagingModules;
@@ -135,6 +138,46 @@ public final class GeboMicroservice {
 	 */
 	public static String toDiscoveryServiceId(String name) {
 		return name == null ? null : normalizeName(name).replace('_', '-');
+	}
+
+	/**
+	 * The short name this microservice erogates its own controllers under, and
+	 * registers as its {@code server.servlet.context-path}: the discovery id
+	 * (e.g. {@code brain-gebo-ai}) with the trailing {@code -gebo-ai} stripped
+	 * (e.g. {@code brain}). This is the single value shared by three things that
+	 * must otherwise be kept in lockstep by hand: the backend's own
+	 * {@code server.servlet.context-path}, the gateway's topology route path
+	 * segment ({@code /<contextName>/**}), and the path segment
+	 * {@link GeboMicroserviceUrlResolver} appends to every base url it resolves -
+	 * so a request built by any of the three always lands on a path the backend
+	 * actually serves.
+	 *
+	 * @param name a microservice name (dotted, underscore or already hyphenated);
+	 *             may be null
+	 * @return the context name, or {@code null} if {@code name} is {@code null}
+	 */
+	public static String toContextName(String name) {
+		String discoveryId = toDiscoveryServiceId(name);
+		if (discoveryId == null) {
+			return null;
+		}
+		return discoveryId.endsWith(DISCOVERY_ID_SUFFIX)
+				? discoveryId.substring(0, discoveryId.length() - DISCOVERY_ID_SUFFIX.length())
+				: discoveryId;
+	}
+
+	/**
+	 * {@link #toContextName(String)}, prefixed with {@code '/'} - ready to use as
+	 * a {@code server.servlet.context-path} value or a route path segment.
+	 *
+	 * @param name a microservice name (dotted, underscore or already hyphenated);
+	 *             may be null
+	 * @return the context path (e.g. {@code /brain}), or {@code null} if
+	 *         {@code name} is {@code null}
+	 */
+	public static String toContextPath(String name) {
+		String contextName = toContextName(name);
+		return contextName == null ? null : "/" + contextName;
 	}
 
 	/**
@@ -205,6 +248,27 @@ public final class GeboMicroservice {
 	 */
 	public String getDiscoveryServiceId() {
 		return toDiscoveryServiceId(applicationName);
+	}
+
+	/**
+	 * The short context name this microservice erogates under (e.g. {@code brain}).
+	 *
+	 * @return the context name
+	 * @see #toContextName(String)
+	 */
+	public String getContextName() {
+		return toContextName(applicationName);
+	}
+
+	/**
+	 * The {@code server.servlet.context-path} this microservice is deployed with
+	 * (e.g. {@code /brain}).
+	 *
+	 * @return the context path
+	 * @see #toContextPath(String)
+	 */
+	public String getContextPath() {
+		return toContextPath(applicationName);
 	}
 
 	/**

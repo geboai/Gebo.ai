@@ -14,11 +14,13 @@ spring:
           # GeboTopologyRouteDefinitionLocator is the allow-list version of it: it
           # derives one route per member of the gebo.microservices.topology map
           # below,
-          #     /<microserviceId>/**  --StripPrefix=1-->  lb://<discovery-id>
-          # (e.g. /brain_gebo_ai/api/x -> lb://brain-gebo-ai/api/x), which is the
+          #     /<contextName>/**  -->  lb://<discovery-id>   (no path rewriting)
+          # (e.g. /brain/api/x -> lb://brain-gebo-ai/brain/api/x), which is the
           # addressing GeboMicroserviceUrlResolver's GATEWAY strategy already
-          # assumes. So a service becomes routable by being DECLARED below, not by
-          # merely registering, and adding one is a config change - no rebuild.
+          # assumes. The <contextName> segment IS the backend's own
+          # server.servlet.context-path, so it is forwarded unchanged - no
+          # StripPrefix. So a service becomes routable by being DECLARED below, not
+          # by merely registering, and adding one is a config change - no rebuild.
           #
           # Instances stay fully dynamic either way: lb:// resolves the live
           # instances from Eureka per call, so scaling or replacing a backend needs
@@ -35,7 +37,7 @@ spring:
             # entry in the topology map below and the topology locator derives no route
             # for it. It is routed by hand here - and ONLY its admin surface.
             #
-            # This route is deliberately NOT /heimdall_gebo_ai/**. heimdall serves two
+            # This route is deliberately NOT /heimdall/**. heimdall serves two
             # secrets surfaces:
             #   api/admin/SecretsController    metadata + create/delete, @PreAuthorize
             #                                  ADMIN - a UI surface, routed below;
@@ -43,16 +45,18 @@ spring:
             #                                  CONTENT included - a service-to-service
             #                                  surface that must never be reachable from
             #                                  a browser.
-            # A blanket /heimdall_gebo_ai/** would publish the second one at the edge.
+            # A blanket /heimdall/** would publish the second one at the edge.
             # Worse, it would arrive at heimdall from the GATEWAY's address, so if the
             # gateway were ever added to the cluster participants allow-list the guard
             # would wave it through. Keep this path prefix narrow; do not widen it.
+            #
+            # No StripPrefix: heimdall's own server.servlet.context-path is
+            # /heimdall, so /heimdall/api/admin/** is exactly the path its Spring
+            # context expects - forwarded unchanged, same as every topology route.
             - id: heimdall_admin
               uri: lb://heimdall-gebo-ai
               predicates:
-                - Path=/heimdall_gebo_ai/api/admin/**
-              filters:
-                - StripPrefix=1
+                - Path=/heimdall/api/admin/**
 
 # Dedicated HTTP port. Every Gebo microservice owns one port of the 13000-13017
 # block (gateway 13000 ... eureka 13017), so the whole deployment can run side by
@@ -72,7 +76,8 @@ server:
 # The gateway owns no controller, so its own spec is empty; what it serves is the
 # BACKENDS' specs. Each entry below is one item of the Swagger UI's "Select a
 # definition" dropdown AND, read back by GeboGatewaySwaggerRoutingConfig, one
-# proxy route:  <url>  ->  lb://<name>/v3/api-docs.
+# proxy route:  <url>  ->  lb://<name>/<contextPath>/v3/api-docs  (the backend's
+# own server.servlet.context-path, e.g. /brain, prefixed onto the standard path).
 #
 #   name = the microservice id (its Eureka service-id / lb:// target)
 #   url  = the gateway path the browser fetches that spec from

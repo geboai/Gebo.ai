@@ -11,7 +11,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<swagger.file>http://localhost:13010/v3/api-docs</swagger.file>
+		<swagger.file>http://localhost:13010/confluence/v3/api-docs</swagger.file>
 		<generated-sources-path>${project.basedir}/projects/gebo-confluence-api/src/lib</generated-sources-path>
 	</properties>
 
