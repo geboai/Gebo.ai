@@ -88,6 +88,16 @@
 			<artifactId>gebo.llms.controllers.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- LLM fast-setup: NOT part of gebo.llms.starter (it carries a concrete
+		     @RestController, GeboFastLLMSSetupController, and gebo.llms.starter
+		     is also consumed by every LLM-hosting microservice via
+		     gebo.microservices.llms.starter) - wired directly here instead,
+		     same as on brain.gebo.ai. -->
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.setup</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.core</artifactId>

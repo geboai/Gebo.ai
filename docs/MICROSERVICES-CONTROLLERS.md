@@ -2,6 +2,11 @@
 
 Generated from each running microservice's live `/v3/api-docs` (springdoc), after building every image with `-P docker,swagger-on` and bringing up `dockers/gebo.microservices/docker-compose.yml`. One section per service; controllers are grouped by their springdoc `tag`, which springdoc derives 1:1 from the `@RestController` class name (kebab-case).
 
+**Base path note:** this checkout serves every backend at its own root (no `server.servlet.context-path` configured).
+
+**LLM controllers-review note:** the concrete, mapped LLM admin controllers (`ChatModelsController`, `EmbeddingModelsControllers`, `ImageModelsController`, `RankerModelsController`, `TextToSpeechModelsController`, `TranscriptModelsController`, `ChatModelsLookupController`, `FunctionsLookupController`, previously carried directly inside `gebo.architecture.llms.abstraction.layer`) now live in a sibling `gebo.architecture.llms.abstraction.layer.controllers` module, wired only into `gebo.apps.monolithic.starter` and `brain.gebo.ai`. Each LLM provider driver (openai, mistral, generic-openai-compatible, ollama, onxx-embeddings, anthropic3, google_vertex, deepseek, aws-bedrock) got the same treatment: its admin controllers moved to a `<provider>.controllers` sibling module, aggregated by the new `gebo.llms.controllers.starter`, wired the same way (monolith + brain only). **Effect:** vectorizator and graphicator, which previously exposed these same LLM admin controllers as a side effect of depending on `gebo.microservices.llms.starter`, no longer do — brain is now the sole microservice hosting LLM configuration admin, and it additionally gained every provider-specific admin controller for the first time (previously only the monolith had them, via `gebo.llms.starter`).
+
+**Follow-up (Hazelcast cluster replication):** `gebo.microservices.llms.starter` now also depends on `gebo.llms.starter` (every provider driver's model/model-choice classes, not their controllers) — without it, vectorizator/graphicator had no provider-specific classes (e.g. `GOpenAIChatModelConfig`) on their classpath, so the Hazelcast models-replication cache could not deserialize a model brain creates. `gebo.llms.setup` (fast-setup, carrying the concrete `GeboFastLLMSSetupController`) was deliberately kept OUT of `gebo.llms.starter` and wired directly on `gebo.apps.monolithic.starter` and `brain.gebo.ai` only — confirmed live: brain shows 7 `GeboFastLLMSSetupController` endpoints, vectorizator/graphicator show none. This round also fixed a latent classpath conflict surfaced by the new dependency graph: `spring-ai-openai`/`spring-ai-anthropic` transitively pull the vendor SDKs' own pre-jakarta `io.swagger.core.v3:swagger-annotations`, which defines the same classes as `swagger-annotations-jakarta` (already pulled by `spring-ai-client-chat`) but is missing methods springdoc calls at runtime (`NoSuchMethodError: Schema.$dynamicRef()`) — excluded in both provider poms.
 
 ## Summary
 
@@ -24,14 +29,13 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 | mcpclient.gebo.ai | 13014 | 10 | 31 |
 | integration.gebo.ai | 13015 | 9 | 22 |
 | fulltextor.gebo.ai | 13016 | 7 | 13 |
+| eureka.gebo.ai | 13017 | 0 | 0 |
 | heimdall.gebo.ai | 13018 | 14 | 55 |
-
-**LLM controllers-review note:** the concrete, mapped LLM admin controllers (`ChatModelsController`, `EmbeddingModelsControllers`, `ImageModelsController`, `RankerModelsController`, `TextToSpeechModelsController`, `TranscriptModelsController`, `ChatModelsLookupController`, `FunctionsLookupController`, previously carried directly inside `gebo.architecture.llms.abstraction.layer`) now live in a sibling `gebo.architecture.llms.abstraction.layer.controllers` module, wired only into `gebo.apps.monolithic.starter` and `brain.gebo.ai`. Each LLM provider driver (openai, mistral, generic-openai-compatible, ollama, onxx-embeddings, anthropic3, google_vertex, deepseek, aws-bedrock) got the same treatment: its admin controllers moved to a `<provider>.controllers` sibling module, aggregated by the new `gebo.llms.controllers.starter`, wired the same way (monolith + brain only). **Effect:** vectorizator and graphicator, which previously exposed these same LLM admin controllers as a side effect of depending on `gebo.microservices.llms.starter`, no longer do — brain is now the sole microservice hosting LLM configuration admin, and it additionally gained every provider-specific admin controller for the first time (previously only the monolith had them, via `gebo.llms.starter`).
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
 
-_Gateway routes to backends via `lb://`; it hosts no controllers of its own — its own `/v3/api-docs` is empty by design._
+_Gateway routes to backends via `lb://`; it hosts no controllers of its own — its own `/v3/api-docs` is empty by design (it proxies/aggregates the backends' specs at `/api-docs/<service>` when `swagger-on` is active)._
 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`)
@@ -1468,7 +1472,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## eureka.gebo.ai — port 13017
 
-_No spec captured (not polled)._
+_The Eureka **registry** itself; it is not a `swagger-on` service and exposes no `/v3/api-docs` — this is the registry dashboard/REST API (`/eureka/apps`), not a Gebo controller._
 
 
 ## heimdall.gebo.ai — port 13018 (`heimdall-gebo-ai`)

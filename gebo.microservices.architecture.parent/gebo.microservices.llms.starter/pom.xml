@@ -23,10 +23,10 @@
 	      pick them up.
 	    - gebo.llms.starter : every LLM provider driver (openai, mistral,
 	      ollama, anthropic3, google_vertex, deepseek, aws-bedrock,
-	      generic-openai-compatible, onxx-embeddings, standard.functions,
-	      setup) - the model/model-choice classes and support-service
-	      implementations, NOT the drivers' admin controllers (those are the
-	      sibling gebo.llms.<provider>.controllers modules, aggregated by
+	      generic-openai-compatible, onxx-embeddings, standard.functions) -
+	      the model/model-choice classes and support-service implementations,
+	      NOT the drivers' admin controllers (those are the sibling
+	      gebo.llms.<provider>.controllers modules, aggregated by
 	      gebo.llms.controllers.starter and added directly on brain.gebo.ai's
 	      own pom, same split as the abstraction layer above). Needed here,
 	      not just on brain: the Hazelcast models-replication cache carries
@@ -34,11 +34,11 @@
 	      end to end, and Hazelcast can only deserialize a class a member
 	      actually has on its classpath - without this, a model brain creates
 	      would fail to replicate onto vectorizator/graphicator, not just fail
-	      to be administrable there. NOTE gebo.llms.starter itself bundles
-	      gebo.llms.setup, whose GeboFastLLMSSetupController is a concrete
-	      @RestController (not split into its own .controllers module) - every
-	      consumer of this starter therefore also exposes that one setup
-	      endpoint, not only the driver classes.
+	      to be administrable there. gebo.llms.starter deliberately does NOT
+	      include gebo.llms.setup (fast-setup owns a concrete @RestController,
+	      GeboFastLLMSSetupController) - that stays a direct dependency of
+	      brain.gebo.ai and gebo.apps.monolithic.starter only, so it is not
+	      pulled onto every consumer of this starter.
 	    - gebo.architecture.environment.microservices : declares the MICROSERVICES
 	      GeboApplicationArchitecture bean.
 	    - gebo.architecture.messages.rabbitmq : the external RabbitMQ messaging
