@@ -196,7 +196,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				try {
 					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> sendEnvelope = GMessageEnvelope
 							.newMessageFrom(emitter, data);
-					sendEnvelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+					sendEnvelope.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 					sendEnvelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 					sendEnvelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 					broker.accept(sendEnvelope);

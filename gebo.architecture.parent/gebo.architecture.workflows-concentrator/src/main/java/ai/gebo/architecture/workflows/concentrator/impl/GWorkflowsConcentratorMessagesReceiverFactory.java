@@ -1,13 +1,13 @@
 /**
- * This Source Code is subject to the terms of the 
+ * This Source Code is subject to the terms of the
  * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
  * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
+ * Copyright (c) 2025+ Gebo.ai
  */
 
-package ai.gebo.core.impl;
+package ai.gebo.architecture.workflows.concentrator.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,8 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GMessagesBatchPayload;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
-import ai.gebo.core.config.GeboCoreConfig;
+import ai.gebo.architecture.workflows.concentrator.config.GeboWorkflowsConcentratorConfig;
+import ai.gebo.core.impl.GComputeEndOfWorkflowReceiverFactory;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GUserMessagePayload;
 import ai.gebo.core.model.ComputeWorkflowEndPayload;
@@ -41,20 +42,27 @@ import ai.gebo.model.GUserMessage;
 
 /**
  * Factory class to create message receivers for handling user messages,
- * contents processing statuses, and vectorization status updates within the
- * Gebo system. AI generated comments
+ * contents processing statuses, and vectorization status updates. Externalized
+ * out of {@code gebo.core} (formerly {@code GCoreUserMessagesReceiverFactory},
+ * hosted on {@code core-module}) into its own deployable, hosted on
+ * {@link GStandardModulesConstraints#JOBS_MASTER}. Also implements
+ * {@link IGMessageEmitter} itself now, rather than borrowing core-module's
+ * {@code GCoreMessagesEmitterImpl} identity, so the {@code ComputeWorkflowEndPayload}
+ * relay to core-module's {@code end-of-workflow-compute-service} is correctly
+ * tagged as coming from {@code jobs-master-module}.
  */
 @Component
 @Scope("singleton")
-public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageReceiverFactory {
+public class GWorkflowsConcentratorMessagesReceiverFactory extends GAbstractTimedOutMessageReceiverFactory
+		implements IGMessageEmitter {
 	/**
 	 * Constructor initializing the user message receiver configuration.
-	 * 
+	 *
 	 * @param config The configuration object containing user message receiver
 	 *               settings.
 	 */
-	public GCoreUserMessagesReceiverFactory(GeboCoreConfig config) {
-		super(config.getUserMessagesReceiverConfig());
+	public GWorkflowsConcentratorMessagesReceiverFactory(GeboWorkflowsConcentratorConfig config) {
+		super(config.getReceiverConfig());
 	}
 
 	@Autowired
@@ -64,7 +72,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 	/**
 	 * Returns the list of accepted payload types that this factory can handle.
-	 * 
+	 *
 	 * @return a list of payload type names.
 	 */
 	@Override
@@ -74,7 +82,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 	/**
 	 * Indicates whether every payload type is accepted by this receiver.
-	 * 
+	 *
 	 * @return false, indicating that not every payload type is accepted.
 	 */
 	@Override
@@ -84,17 +92,17 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 	/**
 	 * Gets the ID of the messaging module used.
-	 * 
-	 * @return the CORE_MODULE ID defined in standard module constraints.
+	 *
+	 * @return the JOBS_MASTER ID defined in standard module constraints.
 	 */
 	@Override
 	public String getMessagingModuleId() {
-		return GStandardModulesConstraints.CORE_MODULE;
+		return GStandardModulesConstraints.JOBS_MASTER;
 	}
 
 	/**
 	 * Gets the ID of the messaging system component used.
-	 * 
+	 *
 	 * @return the USER_MESSAGES_CONCENTRATOR_COMPONENT ID defined in standard
 	 *         module constraints.
 	 */
@@ -105,7 +113,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 	/**
 	 * Gets the type of the component.
-	 * 
+	 *
 	 * @return APPLICATION_COMPONENT indicating the component type.
 	 */
 	@Override
@@ -114,8 +122,21 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 	}
 
 	/**
+	 * The only payload type this factory emits itself: the relay to core-module's
+	 * end-of-workflow-compute-service once a workflow step's inputs are all
+	 * accounted for. Everything else it handles is inbound (see
+	 * {@link #getAcceptedPayloadTypes()}).
+	 *
+	 * @return a list containing only {@code ComputeWorkflowEndPayload}.
+	 */
+	@Override
+	public List<String> getEmittedPayloadTypes() {
+		return List.of(ComputeWorkflowEndPayload.class.getName());
+	}
+
+	/**
 	 * Retrieves the job status based on the job ID.
-	 * 
+	 *
 	 * @param id The ID of the job.
 	 * @return The job status if found, null otherwise.
 	 */
@@ -134,7 +155,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 		/**
 		 * Constructor initializing nested batch aggregator message receiver.
-		 * 
+		 *
 		 * @param nested         The nested batch messages receiver.
 		 * @param flushThreshold The threshold for flushing messages.
 		 */
@@ -184,10 +205,9 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 					compute.setJobId(payload.getJobId());
 					compute.setWorkflowType(payload.getWorkflowType());
 					compute.setWorkflowId(payload.getWorkflowId());
-					IGMessageEmitter emitter = binder.getImplementationOf(GCoreMessagesEmitterImpl.class);
 					IGMessageBroker broker = binder.getImplementationOf(IGMessageBroker.class);
-					GMessageEnvelope<ComputeWorkflowEndPayload> envelope = GMessageEnvelope.newMessageFrom(emitter,
-							compute);
+					GMessageEnvelope<ComputeWorkflowEndPayload> envelope = GMessageEnvelope
+							.newMessageFrom(GWorkflowsConcentratorMessagesReceiverFactory.this, compute);
 					envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 					envelope.setTargetComponent(GComputeEndOfWorkflowReceiverFactory.END_OF_WORKFLOW_COMPUTE_SERVICE);
 					envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
@@ -207,7 +227,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 		/**
 		 * Constructor to initialize the user message repository.
-		 * 
+		 *
 		 * @param umrepo The UserMessageRepository object.
 		 */
 		NestedBatchUserMessagesReceiver(UserMessageRepository umrepo) {
@@ -216,7 +236,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 		/**
 		 * Processes and accepts a batch of user messages and persists them.
-		 * 
+		 *
 		 * @param messages The batch of messages to accept and process.
 		 */
 		@Override
@@ -233,7 +253,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 
 	/**
 	 * Creates and returns a new instance of IGTimedOutMessageReceiver.
-	 * 
+	 *
 	 * @return An instance of IGTimedOutMessageReceiver.
 	 */
 	@Override

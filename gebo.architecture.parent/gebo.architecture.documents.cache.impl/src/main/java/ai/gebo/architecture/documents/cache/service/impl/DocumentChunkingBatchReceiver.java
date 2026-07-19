@@ -87,7 +87,7 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 				try {
 					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> _envelope = GMessageEnvelope
 							.newMessageFrom(emitter, data);
-					_envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+					_envelope.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 					_envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 					_envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 					broker.accept(_envelope);

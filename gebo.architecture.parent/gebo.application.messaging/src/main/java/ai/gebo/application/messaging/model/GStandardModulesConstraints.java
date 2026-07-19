@@ -24,6 +24,15 @@ public class GStandardModulesConstraints {
 			&& System.getProperty("under-development").equalsIgnoreCase("true");
 	// Constants for module names
 	public static final String CORE_MODULE = "core-module";
+	/**
+	 * The jobs/workflows-concentrator module: hosts
+	 * {@code user-messages-concentrator-component}, externalized out of
+	 * {@code core-module} into its own {@code gebo.architecture.workflows-concentrator}
+	 * module so it can be split into its own deployable independently of the
+	 * rest of core-module's components (mongo-dispose-documents-component,
+	 * end-of-workflow-compute-service, session-shrinker), which stay put.
+	 */
+	public static final String JOBS_MASTER = "jobs-master-module";
 	public static final String BRAIN_MODULE = "brain-module";
 	public static final String SHARED_FILESYSTEM_MODULE = "shared-filesystem-module";
 	public static final String UPLOADS_MODULE = "uploads-module";
@@ -66,14 +75,14 @@ public class GStandardModulesConstraints {
 	// Lists of modules categorized by their type
 	public static final List<String> EXTERNAl_MODULES = new ArrayList<String>();
 	public static final List<String> UNDER_DEVELOPMENT_MODULES = of();
-	public static final List<String> ALL_MODULES = of(CORE_MODULE, SHARED_FILESYSTEM_MODULE, UPLOADS_MODULE,
-			VECTORIZATOR_MODULE, GIT_MODULE, ATLASSIAN_CONFLUENCE_MODULE, ATLASSIAN_JIRA_MODULE, SHAREPOINT_MODULE,
-			FULLTEXT_MODULE, USERSPACE_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE, GOOGLE_DRIVE_MODULE,
-			MCP_CLIENT_MODULE, AWS_S3_MODULE);
-	public static final List<String> COMMUNITY_MODULES = of(CORE_MODULE, SHARED_FILESYSTEM_MODULE, UPLOADS_MODULE,
-			VECTORIZATOR_MODULE, GIT_MODULE, ATLASSIAN_CONFLUENCE_MODULE, ATLASSIAN_JIRA_MODULE, FULLTEXT_MODULE,
-			USERSPACE_MODULE, SHAREPOINT_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE, GOOGLE_DRIVE_MODULE,
-			MCP_CLIENT_MODULE, AWS_S3_MODULE);
+	public static final List<String> ALL_MODULES = of(CORE_MODULE, JOBS_MASTER, SHARED_FILESYSTEM_MODULE,
+			UPLOADS_MODULE, VECTORIZATOR_MODULE, GIT_MODULE, ATLASSIAN_CONFLUENCE_MODULE, ATLASSIAN_JIRA_MODULE,
+			SHAREPOINT_MODULE, FULLTEXT_MODULE, USERSPACE_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE,
+			GOOGLE_DRIVE_MODULE, MCP_CLIENT_MODULE, AWS_S3_MODULE);
+	public static final List<String> COMMUNITY_MODULES = of(CORE_MODULE, JOBS_MASTER, SHARED_FILESYSTEM_MODULE,
+			UPLOADS_MODULE, VECTORIZATOR_MODULE, GIT_MODULE, ATLASSIAN_CONFLUENCE_MODULE, ATLASSIAN_JIRA_MODULE,
+			FULLTEXT_MODULE, USERSPACE_MODULE, SHAREPOINT_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE,
+			GOOGLE_DRIVE_MODULE, MCP_CLIENT_MODULE, AWS_S3_MODULE);
 
 	static {
 		// Check system property to determine if UNDER_DEVELOPMENT modules should be

@@ -65,7 +65,7 @@ class GraphextractionProcessingStatusUpdater implements Consumer<KnowledgeExtrac
 
 			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> envelope = GMessageEnvelope
 					.newMessageFrom(emitter, payload);
-			envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+			envelope.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 			envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			broker.accept(envelope);
