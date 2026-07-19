@@ -36,6 +36,7 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
 /**
@@ -77,6 +78,7 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 	final VertexAIConfigurator configurator;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	final ObservationRegistry observationRegistry;
 	/**
 	 * Inner class that implements a configurable Google Vertex embedding model.
 	 */
@@ -85,11 +87,12 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 
 		/**
 		 * Constructor for the embedding model.
-		 * 
+		 *
 		 * @throws LLMConfigException if there's an issue with the model configuration
 		 */
 		public GoogleVertexConfigurableEmbeddingModel() throws LLMConfigException {
-			super(GoogleVertexEmbeddingModelConfigurationSupportService.this.vectorStoreFactoryProvider);
+			super(GoogleVertexEmbeddingModelConfigurationSupportService.this.vectorStoreFactoryProvider,
+					GoogleVertexEmbeddingModelConfigurationSupportService.this.observationRegistry);
 
 		}
 
@@ -114,7 +117,8 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 			VertexAiEmbeddingConnectionDetails connectionDetails = configurator
 					.createVertexAiEmbeddingConnectionDetails(config.getApiSecretCode(), config.getBaseUrl());
 			VertexAiTextEmbeddingOptions options = oBuilder.build();
-			VertexAiTextEmbeddingModel model = new VertexAiTextEmbeddingModel(connectionDetails, options);
+			VertexAiTextEmbeddingModel model = new VertexAiTextEmbeddingModel(connectionDetails, options,
+					new org.springframework.core.retry.RetryTemplate(), observationRegistry);
 			return model;
 		}
 

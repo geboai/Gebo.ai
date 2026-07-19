@@ -48,6 +48,7 @@ import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITranscriptModelConfig
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIRankerModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.ModelsListProviderProxyService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 
@@ -109,6 +110,7 @@ public class GenericOpenAIProvidersAssembler {
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final IGDocumentContentRendererProvider documentsContentRendererProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Initializes and registers all configured OpenAI-compatible providers. This
@@ -123,7 +125,7 @@ public class GenericOpenAIProvidersAssembler {
 				GenericOpenAIAPIChatModelConfigurationSupportService provider = new GenericOpenAIAPIChatModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, modelsListProxyService,
 						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern,
-						documentsContentRendererProvider, usageAdvisorFactory);
+						documentsContentRendererProvider, usageAdvisorFactory, observationRegistry);
 				chatModelProvidersRepo.addImplementation(provider);
 			}
 		}
@@ -133,7 +135,7 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAIEmbeddingModelTypeConfig pc : config.getEmbeddingModelProviders()) {
 				GenericOpenAIAPIEmbeddingModelConfigurationSupportService provider = new GenericOpenAIAPIEmbeddingModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, storeFactoryProvider, modelsListProxyService,
-						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern, observationRegistry);
 				embeddingModelProvidersRepo.addImplementation(provider);
 			}
 		}

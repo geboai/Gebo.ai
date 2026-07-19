@@ -22,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
 /**
@@ -36,6 +37,7 @@ import lombok.AllArgsConstructor;
  * @param <ModelChoice>              The type of the model choice.
  */
 @AllArgsConstructor
+@Observed(name = "gebo.llms.config.crud")
 public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<EmbeddingModelConfigType extends GBaseEmbeddingModelConfig, ModelChoice extends GBaseEmbeddingModelChoice> {
 	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

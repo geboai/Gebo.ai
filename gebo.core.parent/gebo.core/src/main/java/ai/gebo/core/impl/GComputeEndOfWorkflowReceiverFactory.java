@@ -12,6 +12,7 @@ import ai.gebo.application.messaging.GAbstractMessageReceiverFactory;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessageReceiver;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -29,6 +30,7 @@ import lombok.AllArgsConstructor;
 
 public class GComputeEndOfWorkflowReceiverFactory extends GAbstractMessageReceiverFactory {
 	private final IGRuntimeBinder runtimeBinder;
+	private final IMessageEnvelopeFactory envelopeFactory;
 	public static final String END_OF_WORKFLOW_COMPUTE_SERVICE = "end-of-workflow-compute-service";
 	public static final MessageReceiverFactoryConfig factoryConfig = new MessageReceiverFactoryConfig();
 	private static final Logger LOGGER = LoggerFactory.getLogger(GComputeEndOfWorkflowReceiverFactory.class);
@@ -58,7 +60,7 @@ public class GComputeEndOfWorkflowReceiverFactory extends GAbstractMessageReceiv
 						finishedWorkflow.setWorkflowId(payload.getWorkflowId());
 						IGMessageEmitter emitter = runtimeBinder.getImplementationOf(GCoreMessagesEmitterImpl.class);
 						IGMessageBroker broker = runtimeBinder.getImplementationOf(IGMessageBroker.class);
-						GMessageEnvelope<GFinishedWorkflowPayload> envelope = GMessageEnvelope.newMessageFrom(emitter,
+						GMessageEnvelope<GFinishedWorkflowPayload> envelope = envelopeFactory.newMessageFrom(emitter,
 								finishedWorkflow);
 						broker.broadcast(envelope);
 					}
@@ -68,9 +70,10 @@ public class GComputeEndOfWorkflowReceiverFactory extends GAbstractMessageReceiv
 
 	}
 
-	public GComputeEndOfWorkflowReceiverFactory(IGRuntimeBinder runtimeBinder) {
+	public GComputeEndOfWorkflowReceiverFactory(IGRuntimeBinder runtimeBinder, IMessageEnvelopeFactory envelopeFactory) {
 		super(factoryConfig);
 		this.runtimeBinder = runtimeBinder;
+		this.envelopeFactory = envelopeFactory;
 	}
 
 	@Override

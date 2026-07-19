@@ -43,6 +43,7 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
 /**
@@ -101,6 +102,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that implements the configurable embedding model for OpenAI
@@ -112,7 +114,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		 * Constructor for OpenAI configurable embedding model
 		 */
 		public OpenAIConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider, OpenAIEmbeddingModelConfigurationSupportService.this.observationRegistry);
 		}
 
 		/**
@@ -155,6 +157,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 			OpenAiEmbeddingModel model = OpenAiEmbeddingModel.builder()
 					.options(options)
 					.metadataMode(MetadataMode.EMBED)
+					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))
 					.build();
 			return model;

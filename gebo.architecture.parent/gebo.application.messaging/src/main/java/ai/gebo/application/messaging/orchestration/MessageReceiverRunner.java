@@ -60,14 +60,19 @@ class MessageReceiverRunner implements IGMessageReceiver, IGRunnable {
     // Single instance of the message receiver
     private IGMessageReceiver instance = null;
 
+    // Observer wrapping the actual delivery of a message to the receiver instance
+    private final IGMessageDeliveryObserver deliveryObserver;
+
     /**
      * Constructor for MessageReceiverRunner.
      * Initializes the factory and assesses the timeout capabilities.
-     * 
+     *
      * @param factory The message receiver factory to be used.
+     * @param deliveryObserver Observer wrapping the actual delivery call.
      */
-    MessageReceiverRunner(IGMessageReceiverFactory factory) {
+    MessageReceiverRunner(IGMessageReceiverFactory factory, IGMessageDeliveryObserver deliveryObserver) {
         this.factory = factory;
+        this.deliveryObserver = deliveryObserver;
         this.timeOutFactory = this.factory instanceof IGTimedOutMessageReceiverFactory;
         this.timeout = (this.timeOutFactory) ? ((IGTimedOutMessageReceiverFactory) this.factory).getReceivingTimeout()
                 : Long.MAX_VALUE;
@@ -181,7 +186,7 @@ class MessageReceiverRunner implements IGMessageReceiver, IGRunnable {
                 }
                 for (GMessageEnvelope msg : copiedMessages) {
                     try {
-                        instance.accept(msg);
+                        deliveryObserver.aroundDelivery(msg, () -> instance.accept(msg));
                     } catch (Throwable th) {
                         LOGGER.error("Exception on message delivery:" + msg.toString(), th);
                     }

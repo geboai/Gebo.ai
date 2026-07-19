@@ -21,6 +21,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
 /**
@@ -36,6 +37,7 @@ import lombok.AllArgsConstructor;
  * @param <ModelChoice>          The type of model choice.
  */
 @AllArgsConstructor
+@Observed(name = "gebo.llms.config.crud")
 public abstract class AbstractImageModelsConfigurationCRUDController<ImageModelConfigType extends GBaseImageModelConfig, ModelChoice extends GBaseImageModelChoice> {
 
 	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());

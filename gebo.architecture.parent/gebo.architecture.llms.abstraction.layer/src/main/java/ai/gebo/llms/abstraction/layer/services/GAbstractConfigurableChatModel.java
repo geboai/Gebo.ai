@@ -41,6 +41,7 @@ import org.springframework.ai.tool.ToolCallback;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
+import io.micrometer.observation.ObservationRegistry;
 import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -84,6 +85,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected final IGDocumentContentRendererProvider rendererFactory;
 	protected final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 	protected final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	/**
+	 * The application's shared Micrometer {@link ObservationRegistry}, passed
+	 * down to {@link #configureModel(GBaseChatModelConfig, GChatModelType, ToolCallingManager)}
+	 * implementations so Spring AI's built-in chat-model observability actually
+	 * reports into it, instead of each vendor building its own disconnected
+	 * registry.
+	 */
+	protected final ObservationRegistry observationRegistry;
 	protected static final ObjectMapper mapper = new ObjectMapper();
 
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
@@ -92,10 +101,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * Default constructor for GAbstractConfigurableChatModel.
 	 */
 	public GAbstractConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository, IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
 		this.rendererFactory = rendererFactory;
 		this.toolCallbacksRepository = toolCallbacksRepository;
 		this.usageAdvisorFactory = usageAdvisorFactory;
+		this.observationRegistry = observationRegistry;
 	}
 
 	/**

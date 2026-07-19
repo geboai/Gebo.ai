@@ -27,6 +27,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupp
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
  * AI generated comments
@@ -47,7 +48,9 @@ public class TestEmbeddingModelSupportServiceImpl extends AbstractTestingBusines
 	/** Provider for vector store factories */
 	@Autowired
 	IGVectorStoreFactoryProvider factoryProvider;
-	
+	@Autowired
+	ObservationRegistry observationRegistry;
+
 	/**
 	 * Static initializer to set up the test model types and codes
 	 */
@@ -69,8 +72,9 @@ public class TestEmbeddingModelSupportServiceImpl extends AbstractTestingBusines
 		 * 
 		 * @param storeFactoryProvider The provider for vector store factories
 		 */
-		public TestConfigurableEmbeddingModel(IGVectorStoreFactoryProvider storeFactoryProvider) {
-			super(storeFactoryProvider);
+		public TestConfigurableEmbeddingModel(IGVectorStoreFactoryProvider storeFactoryProvider,
+				ObservationRegistry observationRegistry) {
+			super(storeFactoryProvider, observationRegistry);
 
 		}
 
@@ -142,7 +146,7 @@ public class TestEmbeddingModelSupportServiceImpl extends AbstractTestingBusines
 	@Override
 	public IGConfigurableEmbeddingModel<TestEmbeddingModelConfiguration> create(TestEmbeddingModelConfiguration config)
 			throws LLMConfigException {
-		TestConfigurableEmbeddingModel em = new TestConfigurableEmbeddingModel(factoryProvider);
+		TestConfigurableEmbeddingModel em = new TestConfigurableEmbeddingModel(factoryProvider, observationRegistry);
 		em.initialize(config, type);
 		return em;
 	}

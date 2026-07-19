@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
 /**
@@ -51,6 +52,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class representing a test implementation of the configurable chat
@@ -61,8 +63,8 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 
 		public TestConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -85,7 +87,8 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new TestConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new TestConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 
 	};
@@ -148,7 +151,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	public IGConfigurableChatModel<TestChatModelConfiguration> create(TestChatModelConfiguration config)
 			throws LLMConfigException {
 		TestConfigurableChatModel out = new TestConfigurableChatModel(documentContentRenderProvider,
-				toolCallbacksRepository, usageAdvisorFactory);
+				toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 		out.initialize(config, type);
 		return out;
 	}

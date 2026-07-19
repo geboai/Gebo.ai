@@ -92,6 +92,7 @@ public class DeepseekChatModelConfigurationSupportService
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Implementation of configurable chat model for DeepSeek Note: The class is
@@ -103,8 +104,8 @@ public class DeepseekChatModelConfigurationSupportService
 
 		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		    }
 
@@ -175,14 +176,15 @@ public class DeepseekChatModelConfigurationSupportService
 					: functionsRepo.createToolCallingManager();
 
 			DeepSeekChatModel model = new DeepSeekChatModel(deepseekApi, deepseekChatOptions, toolCallingManager,
-					retryTemplate, ObservationRegistry.create());
+					retryTemplate, observationRegistry);
 			return model;
 		}
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new DeepseekConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new DeepseekConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -207,7 +209,7 @@ public class DeepseekChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GDeepseekChatModelConfig> create(GDeepseekChatModelConfig config)
 			throws LLMConfigException {
 		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

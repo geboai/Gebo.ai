@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessageReceiver;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -70,6 +71,8 @@ public class GSchedulingTimeServiceImpl implements IGSchedulingTimeService, IGMe
     protected IGPersistentObjectManager persistentObjectManager;
     @Autowired
     protected IGMessageBroker broker;
+    @Autowired
+    protected IMessageEnvelopeFactory envelopeFactory;
 
     /**
      * Default constructor.
@@ -265,7 +268,7 @@ public class GSchedulingTimeServiceImpl implements IGSchedulingTimeService, IGMe
         PublishProjectEndpointMessagePayload payload = new PublishProjectEndpointMessagePayload();
         payload.setProjectEndpoint(ref);
         payload.setCorrelationId(projectEndpointScheduledTask.getId());
-        GMessageEnvelope<PublishProjectEndpointMessagePayload> envelope = GMessageEnvelope.newMessageFrom(this,
+        GMessageEnvelope<PublishProjectEndpointMessagePayload> envelope = envelopeFactory.newMessageFrom(this,
                 payload);
         envelope.setTargetModule(GStandardModulesConstraints.ASYNC_PUBLISHING_JOB_MODULE);
         envelope.setTargetComponent(GStandardModulesConstraints.ASYNC_PUBLISHING_JOB_COMPONENT);

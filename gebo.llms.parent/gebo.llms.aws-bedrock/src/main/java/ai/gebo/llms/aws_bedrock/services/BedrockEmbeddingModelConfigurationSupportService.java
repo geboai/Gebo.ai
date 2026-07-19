@@ -64,12 +64,13 @@ public class BedrockEmbeddingModelConfigurationSupportService implements
 	final BedrockFoundationModelsLookupService modelsLookupService;
 	final IGVectorStoreFactoryProvider storeFactoryProvider;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ObservationRegistry observationRegistry;
 
 	class BedrockConfigurableEmbeddingModel
 			extends GAbstractConfigurableEmbeddingModel<GBedrockEmbeddingModelConfig, EmbeddingModel> {
 
 		public BedrockConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider, BedrockEmbeddingModelConfigurationSupportService.this.observationRegistry);
 		}
 
 		@Override
@@ -86,12 +87,14 @@ public class BedrockEmbeddingModelConfigurationSupportService implements
 			if (modelId.startsWith("cohere.")) {
 				CohereEmbeddingBedrockApi api = new CohereEmbeddingBedrockApi(modelId, credentials, region, jsonMapper,
 						API_TIMEOUT);
+				// BedrockCohereEmbeddingModel has no ObservationRegistry-accepting constructor
+				// in this Spring AI version - only the Titan path below can be wired.
 				return new BedrockCohereEmbeddingModel(api);
 			}
 			// Amazon Titan embeddings (amazon.titan-embed-*) and default fallback
 			TitanEmbeddingBedrockApi api = new TitanEmbeddingBedrockApi(modelId, credentials, region, jsonMapper,
 					API_TIMEOUT);
-			return new BedrockTitanEmbeddingModel(api, ObservationRegistry.NOOP);
+			return new BedrockTitanEmbeddingModel(api, observationRegistry);
 		}
 	}
 

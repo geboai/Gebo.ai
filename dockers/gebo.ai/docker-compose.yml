@@ -22,6 +22,7 @@ services:
     volumes:
       # Bind mount a local directory instead of named volume
       - /home/gebo.ai/mongo:/data/db
+    networks: [gebo-monolith-net]
 
   # =======================
   # Qdrant
@@ -41,6 +42,7 @@ services:
     volumes:
       # Bind mount a local directory
       - /home/gebo.ai/qdrant:/qdrant/storage
+    networks: [gebo-monolith-net]
   neo4j:
     image: neo4j:5
     restart: always
@@ -65,6 +67,7 @@ services:
       - /home/gebo.ai/neo4j/logs:/logs
       - /home/gebo.ai/neo4j/plugins:/plugins
       - /home/gebo.ai/neo4j/import:/import
+    networks: [gebo-monolith-net]
   opensearch:
     image: opensearchproject/opensearch:latest
     container_name: opensearch
@@ -89,7 +92,8 @@ services:
     ports:
       - "9200:9200"
       - "9600:9600"
-    
+    networks: [gebo-monolith-net]
+
   # =======================
   # gebo.ai
   # =======================
@@ -118,6 +122,7 @@ services:
 
     environment:
       SPRING_PROFILES_ACTIVE: "prod"
+      MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
       #Jvm settings
       JAVA_TOOL_OPTIONS: --enable-native-access=ALL-UNNAMED
         -Dsun.jnu.encoding=UTF-8
@@ -130,3 +135,58 @@ services:
         -Xmx4g
         -XX:MaxMetaspaceSize=512m
         --add-opens=java.base/java.nio.charset=ALL-UNNAMED
+    networks: [gebo-monolith-net]
+
+  # =======================
+  # Observability stack (metrics, traces, dashboards)
+  # =======================
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "127.0.0.1:4318:4318"
+    networks: [gebo-monolith-net]
+
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    networks: [gebo-monolith-net]
+
+  tempo:
+    image: grafana/tempo
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    networks: [gebo-monolith-net]
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks: [gebo-monolith-net]
+
+volumes:
+  opensearch-data:
+  prometheus-data:
+  grafana-data:
+  tempo-data:
+
+networks:
+  gebo-monolith-net:
+    driver: bridge

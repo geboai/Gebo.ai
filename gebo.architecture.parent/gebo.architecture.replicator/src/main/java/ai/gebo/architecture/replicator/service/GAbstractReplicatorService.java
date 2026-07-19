@@ -3,6 +3,7 @@ package ai.gebo.architecture.replicator.service;
 import java.util.List;
 
 import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.architecture.environment.GeboApplicationArchitecture;
@@ -18,14 +19,17 @@ public abstract class GAbstractReplicatorService implements IEntityReplicationSe
     private final String messagingSystemId;
     private final GeboApplicationArchitecture architecture;
     private final IGReplicationsMap replicationsMap;
+    private final IMessageEnvelopeFactory envelopeFactory;
 
     protected GAbstractReplicatorService(String messagingModuleId, String messagingSystemId,
                                           GeboApplicationArchitecture architecture,
-                                          IGReplicationsMap replicationsMap) {
+                                          IGReplicationsMap replicationsMap,
+                                          IMessageEnvelopeFactory envelopeFactory) {
         this.messagingModuleId = messagingModuleId;
         this.messagingSystemId = messagingSystemId;
         this.architecture = architecture;
         this.replicationsMap = replicationsMap;
+        this.envelopeFactory = envelopeFactory;
     }
 
     @Override
@@ -65,7 +69,7 @@ public abstract class GAbstractReplicatorService implements IEntityReplicationSe
         payload.setDeleted(deleted);
 
         for (ReplicationMessageReceiver receiver : receivers) {
-            GMessageEnvelope<?> envelope = GMessageEnvelope.newMessageFrom(this, payload);
+            GMessageEnvelope<?> envelope = envelopeFactory.newMessageFrom(this, payload);
             envelope.setTargetModule(receiver.getMessagingModuleId());
             envelope.setTargetComponent(receiver.getMessagingSystemId());
             emit(envelope);

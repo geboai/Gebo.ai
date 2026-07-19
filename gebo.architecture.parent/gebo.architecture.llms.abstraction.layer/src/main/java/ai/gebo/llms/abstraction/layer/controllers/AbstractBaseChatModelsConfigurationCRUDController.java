@@ -25,6 +25,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
 /**
@@ -33,10 +34,11 @@ import lombok.AllArgsConstructor;
  *
  * @param <ChatModelConfigType> The type of chat model configuration.
  * @param <ModelChoice> The type of model choice.
- * 
+ *
  * AI generated comments
  */
 @AllArgsConstructor
+@Observed(name = "gebo.llms.config.crud")
 public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatModelConfigType extends GBaseChatModelConfig, ModelChoice extends GBaseChatModelChoice> {
 
 	// Logger instance for logging operations and exceptions

@@ -12,6 +12,7 @@ package ai.gebo.llms.abstraction.layer.services;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.VectorStore;
 
+import io.micrometer.observation.ObservationRegistry;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.vectorstores.GAccountingExtendedVectorStoreAdapter;
@@ -49,13 +50,24 @@ public abstract class GAbstractConfigurableEmbeddingModel<ModelConfig extends GB
 	protected IGVectorStoreFactory storeFactory = null;
 
 	/**
+	 * The application's shared Micrometer {@link ObservationRegistry}, passed
+	 * down to {@link #configureModel(GBaseEmbeddingModelConfig, GEmbeddingModelType)}
+	 * implementations so Spring AI's built-in embedding-model observability
+	 * actually reports into it, instead of each vendor building its own
+	 * disconnected registry.
+	 */
+	protected final ObservationRegistry observationRegistry;
+
+	/**
 	 * Constructs a configurable embedding model with the specified vector store
 	 * factory provider.
-	 * 
+	 *
 	 * @param storeFactoryProvider Provider for the vector store factory.
 	 */
-	public GAbstractConfigurableEmbeddingModel(IGVectorStoreFactoryProvider storeFactoryProvider) {
+	public GAbstractConfigurableEmbeddingModel(IGVectorStoreFactoryProvider storeFactoryProvider,
+			ObservationRegistry observationRegistry) {
 		this.vectorStoreFactoryProvider = storeFactoryProvider;
+		this.observationRegistry = observationRegistry;
 	}
 
 	@Override

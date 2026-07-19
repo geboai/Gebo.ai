@@ -1,4 +1,5 @@
 springdoc.api-docs.version: OPENAPI_3_0
+spring.application.name: gebo-ai-monolith
 logging:
   level:
     root: INFO
@@ -16,6 +17,21 @@ server:
     enabled: true
   servlet:
     contextPath: /
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    sampling:
+      probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
+  otlp:
+    tracing:
+      endpoint: ${MANAGEMENT_OTLP_TRACING_ENDPOINT:http://localhost:4318/v1/traces}
 spring.servlet.multipart:
   enabled: true
   maxFileSize: 100MB

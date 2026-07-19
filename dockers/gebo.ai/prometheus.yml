@@ -1,0 +1,12 @@
+# Scrape config for the Gebo.ai monolith deployment.
+# The monolith serves at the root context path, so actuator is at the
+# default /actuator/prometheus (no per-service context-path prefix, unlike
+# the microservices stack's prometheus.yml).
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: gebo-ai-monolith
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["gebo.ai:12999"]

@@ -45,6 +45,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
  * AI generated comments
@@ -71,6 +72,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Constructor initializing the service with required dependencies.
@@ -88,7 +90,8 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			IGToolCallbackSourceRepositoryPattern functionsRepo, IGVectorStoreFactoryProvider storeFactoryProvider,
 			ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
-			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern) {
+			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
+			ObservationRegistry observationRegistry) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -98,6 +101,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		this.serviceClientsProviderFactory = serviceClientsProviderFactory;
 		this.configureHandler = configureHandler;
 		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
+		this.observationRegistry = observationRegistry;
 	}
 
 	/**
@@ -113,7 +117,8 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		 * provider.
 		 */
 		public GenericOpenAIConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider,
+					GenericOpenAIAPIEmbeddingModelConfigurationSupportService.this.observationRegistry);
 
 		}
 
@@ -169,6 +174,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			OpenAiEmbeddingModel model = OpenAiEmbeddingModel.builder()
 					.options(options)
 					.metadataMode(MetadataMode.EMBED)
+					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(clientsProvider))
 					.build();
 			return model;
