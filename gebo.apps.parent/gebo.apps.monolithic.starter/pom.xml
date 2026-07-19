@@ -69,6 +69,35 @@
 			<artifactId>gebo.llms.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The concrete, mapped admin controllers split out of
+		     gebo.architecture.llms.abstraction.layer (ChatModelsController,
+		     EmbeddingModelsControllers, ImageModelsController,
+		     RankerModelsController, TextToSpeechModelsController,
+		     TranscriptModelsController, ChatModelsLookupController,
+		     FunctionsLookupController) - the base/abstract classes they extend
+		     stay in the abstraction layer itself and are pulled in transitively. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Every LLM provider driver's admin controllers (OpenAIChatModelsConfigurationController,
+		     ...), split out of each gebo.llms.<provider> module the same way. -->
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.controllers.starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- LLM fast-setup: NOT part of gebo.llms.starter (it carries a concrete
+		     @RestController, GeboFastLLMSSetupController, and gebo.llms.starter
+		     is also consumed by every LLM-hosting microservice via
+		     gebo.microservices.llms.starter) - wired directly here instead,
+		     same as on brain.gebo.ai. -->
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.setup</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.core</artifactId>

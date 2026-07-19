@@ -25,6 +25,7 @@
   	<module>gebo.architecture.scheduling</module>
   	<module>gebo.multilanguage.support</module>
   	<module>gebo.architecture.llms.abstraction.layer</module>
+  	<module>gebo.architecture.llms.abstraction.layer.controllers</module>
   	<module>gebo.architecture.chat.abstraction.layer</module>
   	<module>gebo.architecture.contenthandling.interfaces</module>
   	<module>gebo.architecture.contentsystems.abstraction.layer</module>
