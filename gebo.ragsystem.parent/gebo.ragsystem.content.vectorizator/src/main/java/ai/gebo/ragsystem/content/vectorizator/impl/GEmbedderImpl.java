@@ -375,7 +375,7 @@ public class GEmbedderImpl implements IGEmbedder {
 			vectPayload.setBatchDocumentsProcessed((long) (map != null ? map.size() : 0));
 			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
 					vectPayload);
-			msg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+			msg.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			msg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 			msg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			emitter.send(msg);
@@ -407,7 +407,7 @@ public class GEmbedderImpl implements IGEmbedder {
 			GUserMessagePayload payload = new GUserMessagePayload();
 			payload.setUserMessage(userMessage);
 			GMessageEnvelope<GUserMessagePayload> userMessageMsg = GMessageEnvelope.newMessageFrom(emitter, payload);
-			userMessageMsg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+			userMessageMsg.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			userMessageMsg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 			userMessageMsg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			emitter.send(userMessageMsg);
@@ -461,7 +461,7 @@ public class GEmbedderImpl implements IGEmbedder {
 							payload);
 					payload.getUserMessage()
 							.setJobId(documentAccessResult.getDocReferenceMessage().getPayload().getJobId());
-					userMessageMsg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+					userMessageMsg.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 					userMessageMsg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 					userMessageMsg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 					emitter.send(userMessageMsg);
@@ -473,7 +473,7 @@ public class GEmbedderImpl implements IGEmbedder {
 		for (GContentsProcessingStatusUpdatePayload vectPayload : payloads.values()) {
 			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
 					vectPayload);
-			msg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+			msg.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			msg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 			msg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			emitter.send(msg);

@@ -87,7 +87,7 @@ public class FullTextIndexingBatchMessageReceiver implements IGBatchMessagesRece
 					status.setBatchDocumentsProcessed(1);
 					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> envelope = GMessageEnvelope
 							.newMessageFrom(emitter, status);
-					envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+					envelope.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 					envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 					envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 					try {

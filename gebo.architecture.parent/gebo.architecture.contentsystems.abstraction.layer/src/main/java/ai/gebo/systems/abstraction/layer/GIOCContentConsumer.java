@@ -185,7 +185,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				payload.setTimestamp(new Date());
 				GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
 						.newMessageFrom(this.dispatcher, payload);
-				cmessage.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+				cmessage.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 				cmessage.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 				cmessage.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 				batchDocumentInput = 0l;
@@ -260,7 +260,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			payload.setTimestamp(new Date());
 			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
 					.newMessageFrom(this.dispatcher, payload);
-			cmessage.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+			cmessage.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			cmessage.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 			cmessage.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			batchDocumentInput = 0l;

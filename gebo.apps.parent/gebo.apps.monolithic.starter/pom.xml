@@ -88,6 +88,15 @@
 			<artifactId>gebo.llms.controllers.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- user-messages-concentrator-component, externalized out of gebo.core onto
+		     its own jobs-master-module - see GWorkflowsConcentratorMessagesReceiverFactory.
+		     gebo.core no longer carries it, so this is required, not optional, for
+		     content-processing status/workflow-completion to keep working at all. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.workflows-concentrator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- LLM fast-setup: NOT part of gebo.llms.starter (it carries a concrete
 		     @RestController, GeboFastLLMSSetupController, and gebo.llms.starter
 		     is also consumed by every LLM-hosting microservice via

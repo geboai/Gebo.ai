@@ -83,8 +83,8 @@ server:
 #   url  = the gateway path the browser fetches that spec from
 #
 # Only services that are themselves built with THEIR swagger-on profile publish
-# a /v3/api-docs to proxy - today: brain, vectorizator, graphicator, fulltextor.
-# Adding a service to the console is one entry here.
+# a /v3/api-docs to proxy - today: brain, vectorizator, graphicator, fulltextor,
+# tyr. Adding a service to the console is one entry here.
 # ---------------------------------------------------------------------------
 springdoc:
   swagger-ui:
@@ -97,6 +97,8 @@ springdoc:
         url: /api-docs/graphicator_gebo_ai
       - name: fulltextor_gebo_ai
         url: /api-docs/fulltextor_gebo_ai
+      - name: tyr_gebo_ai
+        url: /api-docs/tyr_gebo_ai
 
 # Eureka discovery client. This is what gives the gateway a populated
 # DiscoveryClient, so lb://<microserviceId> routes and Spring Cloud LoadBalancer
@@ -196,10 +198,12 @@ gebo:
         graphicator_gebo_ai:
           knowledge-graph-module:
             - knowledge-graph-component
-        scheduler_gebo_ai:
+        # tyr is the workflows/usage/jobs-tracking microservice - consolidates the
+        # dormant scheduler-module and async-publishing-job-module roles (formerly
+        # separate, never-built placeholder entries scheduler_gebo_ai/jobs_gebo_ai).
+        tyr_gebo_ai:
           scheduler-module:
             - scheduler-component
-        jobs_gebo_ai:
           async-publishing-job-module:
             - async-publishing-job-component
             - job-status-notifier

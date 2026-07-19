@@ -2,14 +2,14 @@
 #
 # regenerate-all-microservices-stubs.sh
 # ---------------------------------------------------------------------------
-# Atomic pipeline: either all 38 client stubs regenerate successfully and get
+# Atomic pipeline: either all 40 client stubs regenerate successfully and get
 # committed, or the repository returns to its exact pre-run state.
 #
 # Stages:
-#   1. Rebuild all 19 microservice Docker images (jib:buildTar, swagger-on).
+#   1. Rebuild all 20 microservice Docker images (jib:buildTar, swagger-on).
 #   2. docker compose down + up -d the full stack.
 #   3. Poll /v3/api-docs on all services (skip unready ones after timeout).
-#   4. Git-stash the clients parent, then clean all 38 stubs.
+#   4. Git-stash the clients parent, then clean all 40 stubs.
 #   5. Regenerate each stub from live specs (per-client git restore on failure).
 #   6. Compile to verify.
 #   7. Tear down docker compose.
@@ -37,7 +37,7 @@ SERVICE_PORTS=(
   [uploads]=13007      [userspace]=13008   [sharepoint]=13009
   [confluence]=13010   [jira]=13011        [aws-s3]=13012
   [googledrive]=13013  [mcpclient]=13014   [integration]=13015
-  [fulltextor]=13016
+  [fulltextor]=13016   [tyr]=13019
 )
 
 # ---- helpers ---------------------------------------------------------------
@@ -162,7 +162,7 @@ docker compose -f "$COMPOSE_FILE" up -d 2>&1 || bail "docker compose up failed"
 
 # ----- Stage 3: Poll /v3/api-docs for every service ------------------------
 yellow ""
-yellow "Stage 3: Polling /v3/api-docs on all 19 services"
+yellow "Stage 3: Polling /v3/api-docs on all 20 services"
 yellow "-------------------------------------------------"
 for svc in "${!SERVICE_PORTS[@]}"; do
   poll_until_200 "${SERVICE_PORTS[$svc]}" "$svc"
@@ -183,9 +183,9 @@ else
   green "  Stashed as $STASH_REF"
 fi
 
-# ----- Stage 4: Clean all 38 client stubs ----------------------------------
+# ----- Stage 4: Clean all 40 client stubs ----------------------------------
 yellow ""
-yellow "Stage 4: Cleaning previously generated sources from all 38 clients"
+yellow "Stage 4: Cleaning previously generated sources from all 40 clients"
 yellow "-----------------------------------------------------------------"
 for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.client/; do
   base=$(basename "$client_dir")
@@ -197,9 +197,9 @@ for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.c
 done
 green "Stage 4 OK — all stubs cleaned"
 
-# ----- Stage 5: Regenerate all 38 stubs ------------------------------------
+# ----- Stage 5: Regenerate all 40 stubs ------------------------------------
 yellow ""
-yellow "Stage 5: Regenerating all 38 stubs from live specs"
+yellow "Stage 5: Regenerating all 40 stubs from live specs"
 yellow "---------------------------------------------------"
 any_failure=0
 for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.client/; do
@@ -211,7 +211,7 @@ done
 if [ $any_failure -ne 0 ]; then
   bail "One or more client regenerations failed — rolling back via stash pop"
 fi
-green "Stage 5 OK — all 38 stubs regenerated"
+green "Stage 5 OK — all 40 stubs regenerated"
 
 # ----- Stage 6: Compile to verify -----------------------------------------
 yellow ""
