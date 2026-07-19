@@ -86,11 +86,12 @@ public final class GeboStandardMicroservices {
 					.module("knowledge-graph-module", "knowledge-graph-component")
 					.build(),
 
-			GeboMicroservice.named("scheduler_gebo_ai")
+			// tyr is the workflows/usage/jobs-tracking microservice - the home for the
+			// dormant scheduler-module and async-publishing-job-module roles (previously
+			// separate, never-built placeholder entries scheduler_gebo_ai/jobs_gebo_ai),
+			// consolidated under one deployable.
+			GeboMicroservice.named("tyr_gebo_ai")
 					.module("scheduler-module", "scheduler-component")
-					.build(),
-
-			GeboMicroservice.named("jobs_gebo_ai")
 					.module("async-publishing-job-module", "async-publishing-job-component", "job-status-notifier")
 					.build(),
 

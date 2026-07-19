@@ -40,6 +40,7 @@
 		<module>mcpclient.gebo.ai.java.client</module>
 		<module>integration.gebo.ai.java.client</module>
 		<module>fulltextor.gebo.ai.java.client</module>
+		<module>tyr.gebo.ai.java.client</module>
 		<!-- Angular / TypeScript clients -->
 		<module>eureka.gebo.ai.angular.client</module>
 		<module>gateway.gebo.ai.angular.client</module>
@@ -60,5 +61,6 @@
 		<module>mcpclient.gebo.ai.angular.client</module>
 		<module>integration.gebo.ai.angular.client</module>
 		<module>fulltextor.gebo.ai.angular.client</module>
+		<module>tyr.gebo.ai.angular.client</module>
 	</modules>
 </project>

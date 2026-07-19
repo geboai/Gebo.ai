@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: tyr_gebo_ai
+
+server:
+  port: 13019
+  servlet:
+    context-path: /tyr
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:13017/eureka/}
+  instance:
+    appname: tyr-gebo-ai
+    virtual-host-name: tyr-gebo-ai
+    secure-virtual-host-name: tyr-gebo-ai
+    prefer-ip-address: true
