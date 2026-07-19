@@ -34,6 +34,7 @@
   	<module>gebo.restintegration.abstraction.layer</module>
   	<module>gebo.architecture.crypting</module>
   	<module>gebo.architecture.environment</module>
+  	<module>gebo.architecture.telemetry</module>
   	<module>gebo.architecture.testing</module>
   	<module>gebo.architecture.integration.tests</module>
 

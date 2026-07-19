@@ -5,7 +5,7 @@
 		class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%date [%thread] %-5level %logger{36}:%line - %msg%n
+				%date [%thread] %-5level %logger{36}:%line [%X{traceId:-},%X{spanId:-}] - %msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -14,7 +14,7 @@
 		<file>${LOGS}/ai.gebo.monolithic.app.log</file>
 		<encoder
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%date [%thread] %-5level %logger{36}:%line - %msg%n
+			<Pattern>%date [%thread] %-5level %logger{36}:%line [%X{traceId:-},%X{spanId:-}] - %msg%n
 			</Pattern>
 		</encoder>
 

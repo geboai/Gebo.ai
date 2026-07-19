@@ -76,6 +76,7 @@ public class OpenAIChatModelConfigurationSupportService
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
@@ -85,8 +86,8 @@ public class OpenAIChatModelConfigurationSupportService
 
 		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -165,7 +166,7 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiChatModel model = OpenAiChatModel.builder()
 					.options(options)
 					.toolCallingManager(toolCallingManager)
-					.observationRegistry(ObservationRegistry.NOOP)
+					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))
 					.build();
 
@@ -196,7 +197,8 @@ public class OpenAIChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -221,7 +223,7 @@ public class OpenAIChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
 		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

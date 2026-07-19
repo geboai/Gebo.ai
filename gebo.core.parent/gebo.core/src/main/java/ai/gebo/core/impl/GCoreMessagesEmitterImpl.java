@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessagePayloadType;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.ComponentMetaInfo;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
@@ -45,6 +46,8 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 	IGSecurityService securityService; // Security service for retrieving user information.
 	@Autowired
 	ProjectRepository projectsRepo; // Repository for accessing project data.
+	@Autowired
+	IMessageEnvelopeFactory envelopeFactory;
 
 	/**
 	 * Constructor for GCoreMessagesEmitterImpl. Initializes the component.
@@ -133,7 +136,7 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 		List<ComponentMetaInfo> systems = broker
 				.getComponentsByMessagingSystemId(GStandardModulesConstraints.RESOURCES_DISPOSE_COMPONENT);
 		for (ComponentMetaInfo componentMetaInfo : systems) {
-			GMessageEnvelope msg = GMessageEnvelope.newMessageFrom(this, payload, user);
+			GMessageEnvelope msg = envelopeFactory.newMessageFrom(this, payload, user);
 			msg.setTargetModule(componentMetaInfo.getMessagingModuleId());
 			msg.setTargetComponent(componentMetaInfo.getMessagingSystemId());
 			broker.accept(msg);
@@ -147,7 +150,7 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 	 */
 	protected void sendDeletingPayloadToCoreMongoDocuments(IGMessagePayloadType payload) {
 		String user = securityService.getCurrentUser().getUsername(); // Retrieve current user's username.
-		GMessageEnvelope msg = GMessageEnvelope.newMessageFrom(this, payload, user);
+		GMessageEnvelope msg = envelopeFactory.newMessageFrom(this, payload, user);
 		msg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 		msg.setTargetComponent(GStandardModulesConstraints.MONGO_DISPOSE_DOCUMENTS_COMPONENT);
 		broker.accept(msg);
@@ -160,7 +163,7 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 	 */
 	protected void sendDeletingPayloadToVectorizator(IGMessagePayloadType payload) {
 		String user = securityService.getCurrentUser().getUsername(); // Retrieve current user's username.
-		GMessageEnvelope msg = GMessageEnvelope.newMessageFrom(this, payload, user);
+		GMessageEnvelope msg = envelopeFactory.newMessageFrom(this, payload, user);
 		msg.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
 		msg.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT);
 		broker.accept(msg);

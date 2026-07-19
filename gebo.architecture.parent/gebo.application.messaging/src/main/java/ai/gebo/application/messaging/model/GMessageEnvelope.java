@@ -12,7 +12,9 @@ package ai.gebo.application.messaging.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -74,6 +76,12 @@ public class GMessageEnvelope<PayloadType extends IGMessagePayloadType> implemen
 	private String workflowStepId = null;
 	// components to forward processed results or current message
 	private List<GMessagingComponentRef> onProcessForwardDestionations = null;
+	// Distributed trace context carried across both in-process dispatch and the
+	// RabbitMQ hop (the envelope round-trips as JSON either way, so this survives
+	// the wire without any AMQP-specific header plumbing). Populated by whichever
+	// IMessageEnvelopeFactory implementation is active (see gebo.application.messaging
+	// and its tracing-aware override in gebo.architecture.telemetry).
+	private Map<String, String> traceContext = null;
 
 	/**
 	 * Default constructor for GMessageEnvelope.
@@ -103,6 +111,7 @@ public class GMessageEnvelope<PayloadType extends IGMessagePayloadType> implemen
 		dest.delivered = env.getDelivered();
 		dest.processed = env.getProcessed();
 		dest.id = env.getId();
+		dest.traceContext = env.getTraceContext();
 		return dest;
 	}
 
@@ -455,5 +464,37 @@ public class GMessageEnvelope<PayloadType extends IGMessagePayloadType> implemen
 
 	public void setWorkflowType(GWorkflowType workflowType) {
 		this.workflowType = workflowType;
+	}
+
+	/**
+	 * Gets the distributed trace context carried by this envelope, if any.
+	 *
+	 * @return the trace context as a plain map (propagator-format), or null if none.
+	 */
+	public Map<String, String> getTraceContext() {
+		return traceContext;
+	}
+
+	/**
+	 * Sets the distributed trace context to be carried by this envelope.
+	 *
+	 * @param traceContext the trace context to set.
+	 */
+	public void setTraceContext(Map<String, String> traceContext) {
+		this.traceContext = traceContext;
+	}
+
+	/**
+	 * Convenience setter used by trace-context propagators to add a single
+	 * key/value pair, creating the underlying map if necessary.
+	 *
+	 * @param key   the propagator field name.
+	 * @param value the propagator field value.
+	 */
+	public void putTraceContextField(String key, String value) {
+		if (this.traceContext == null) {
+			this.traceContext = new HashMap<String, String>();
+		}
+		this.traceContext.put(key, value);
 	}
 }

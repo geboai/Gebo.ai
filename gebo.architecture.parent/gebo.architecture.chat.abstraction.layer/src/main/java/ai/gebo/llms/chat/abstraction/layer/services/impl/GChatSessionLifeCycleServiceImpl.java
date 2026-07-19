@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -97,6 +98,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatSessionStateShrinkerService shrinkerService;
 	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
+	private final IMessageEnvelopeFactory envelopeFactory;
 
 	@NoArgsConstructor
 
@@ -603,7 +605,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			SessionShrinkRequestPayload checkPayload = new SessionShrinkRequestPayload();
 			checkPayload.setTokensBudget(budgetSize);
 			checkPayload.setUserChatSessionCode(code);
-			GMessageEnvelope<SessionShrinkRequestPayload> envelope = GMessageEnvelope.newMessageFrom(this,
+			GMessageEnvelope<SessionShrinkRequestPayload> envelope = envelopeFactory.newMessageFrom(this,
 					checkPayload);
 			envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 			envelope.setTargetComponent(SessionShrinkMessagesReceiver.SESSION_SHRINKER);

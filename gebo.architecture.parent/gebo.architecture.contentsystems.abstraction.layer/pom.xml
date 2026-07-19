@@ -11,6 +11,10 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-observation</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.contenthandling.interfaces</artifactId>
 			<version>${project.version}</version>

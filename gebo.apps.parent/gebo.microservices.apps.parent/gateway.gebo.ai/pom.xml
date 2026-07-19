@@ -28,6 +28,14 @@
 			<artifactId>gebo.microservices.topology</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Not pulled in transitively: the gateway depends on gebo.microservices.topology
+		     directly rather than on gebo.microservices.starter, so telemetry (actuator +
+		     Micrometer + tracing) has to be added explicitly here. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.telemetry</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!--
 		  The Angular web UI. The gateway is the edge of the microservices
 		  deployment, so it is the service that serves the UI to the browser:

@@ -21,6 +21,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
 /**
@@ -36,6 +37,7 @@ import lombok.AllArgsConstructor;
  * @param <ModelChoice>                The type of model choice.
  */
 @AllArgsConstructor
+@Observed(name = "gebo.llms.config.crud")
 public abstract class AbstractTranscriptModelsConfigurationCRUDController<TranscriptModelConfigType extends GBaseTranscriptModelConfig, ModelChoice extends GBaseTranscriptModelChoice> {
 
 	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());

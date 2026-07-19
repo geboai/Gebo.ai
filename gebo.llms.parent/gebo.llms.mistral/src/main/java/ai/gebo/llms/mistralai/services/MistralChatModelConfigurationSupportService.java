@@ -81,6 +81,7 @@ public class MistralChatModelConfigurationSupportService
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
@@ -91,8 +92,8 @@ public class MistralChatModelConfigurationSupportService
 
 		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -161,7 +162,7 @@ public class MistralChatModelConfigurationSupportService
 					.toolCallingManager(
 							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
 					.retryTemplate(retryTemplate)
-					.observationRegistry(ObservationRegistry.NOOP)
+					.observationRegistry(observationRegistry)
 					.build();
 			return model;
 		}
@@ -190,7 +191,8 @@ public class MistralChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -215,7 +217,7 @@ public class MistralChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
 		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

@@ -63,14 +63,15 @@ public class BedrockChatModelConfigurationSupportService
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	class BedrockConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GBedrockChatModelConfig, BedrockProxyChatModel> {
 
 		public BedrockConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 		}
 
 		@Override
@@ -107,7 +108,7 @@ public class BedrockChatModelConfigurationSupportService
 					.region(region)
 					.options(options)
 					.toolCallingManager(toolCallingManager)
-					.observationRegistry(ObservationRegistry.NOOP)
+					.observationRegistry(observationRegistry)
 					.build();
 		}
 
@@ -118,7 +119,8 @@ public class BedrockChatModelConfigurationSupportService
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
-			return new BedrockConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new BedrockConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	}
 
@@ -131,7 +133,7 @@ public class BedrockChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GBedrockChatModelConfig> create(GBedrockChatModelConfig config)
 			throws LLMConfigException {
 		BedrockConfigurableChatModel model = new BedrockConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

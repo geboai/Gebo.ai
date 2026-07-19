@@ -44,6 +44,9 @@ x-microservice: &microservice
     EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
     SPRING_CONFIG_ADDITIONAL_LOCATION: file:/opt/gebo.ai/config/
     JAVA_TOOL_OPTIONS: "-Xms256m -Xmx1g"
+    MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,prometheus,metrics
+    MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
+    MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
   volumes:
     - ./config:/opt/gebo.ai/config:ro
     - /opt/gebo.ai/home          # per-container anonymous volume
@@ -118,6 +121,49 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
     ports:
       - "13000:13000"
+    networks: [gebo-net]
+
+  # ---------------- Observability stack (metrics, traces, dashboards) --------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "127.0.0.1:4318:4318"     # OTLP HTTP (loopback only)
+    networks: [gebo-net]
+
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"     # Prometheus UI (loopback only)
+    networks: [gebo-net]
+
+  tempo:
+    image: grafana/tempo
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    networks: [gebo-net]
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "127.0.0.1:3000:3000"     # Grafana UI (loopback only)
     networks: [gebo-net]
 
   # ---------------- Security service ----------------
@@ -251,6 +297,9 @@ volumes:
   qdrant-data:
   neo4j-data:
   opensearch-data:
+  prometheus-data:
+  grafana-data:
+  tempo-data:
 
 networks:
   gebo-net:

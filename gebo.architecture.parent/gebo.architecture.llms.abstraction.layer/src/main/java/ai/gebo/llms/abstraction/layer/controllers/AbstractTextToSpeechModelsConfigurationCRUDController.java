@@ -21,6 +21,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
 /**
@@ -37,6 +38,7 @@ import lombok.AllArgsConstructor;
  * @param <ModelChoice>                  The type of model choice.
  */
 @AllArgsConstructor
+@Observed(name = "gebo.llms.config.crud")
 public abstract class AbstractTextToSpeechModelsConfigurationCRUDController<TextToSpeechModelConfigType extends GBaseTextToSpeachModelConfig, ModelChoice extends GBaseTextToSpeachModelChice> {
 
 	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());

@@ -90,10 +90,11 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Constructor that initializes all required dependencies
-	 * 
+	 *
 	 * @param type                          The configuration for the
 	 *                                      OpenAI-compatible model type
 	 * @param secretService                 Service for accessing API keys and other
@@ -109,7 +110,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
 			IGDocumentContentRendererProvider documentContentRenderProvider,
-			IChatModelUsageAdvisorFactory usageAdvisorFactory) {
+			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -120,6 +121,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
 		this.documentContentRenderProvider = documentContentRenderProvider;
 		this.usageAdvisorFactory = usageAdvisorFactory;
+		this.observationRegistry = observationRegistry;
 
 	}
 
@@ -132,8 +134,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 
 		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -211,7 +213,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			OpenAiChatModel model = OpenAiChatModel.builder()
 					.options(options)
 					.toolCallingManager(toolCallingManager)
-					.observationRegistry(ObservationRegistry.create())
+					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(clientsProvider))
 					.build();
 			return model;
@@ -274,7 +276,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -299,7 +302,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	public IGConfigurableChatModel<GenericOpenAIAPIChatModelConfig> create(GenericOpenAIAPIChatModelConfig config)
 			throws LLMConfigException {
 		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

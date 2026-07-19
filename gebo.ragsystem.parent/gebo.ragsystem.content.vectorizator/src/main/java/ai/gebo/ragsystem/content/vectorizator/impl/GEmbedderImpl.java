@@ -31,6 +31,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -58,6 +59,9 @@ public class GEmbedderImpl implements IGEmbedder {
 
 	@Autowired
 	VectorizedContentRepository vectorizedContentRepository;
+
+	@Autowired
+	IMessageEnvelopeFactory envelopeFactory;
 
 	/**
 	 * Default constructor for GTokenizatorAndEmbedderImpl.
@@ -373,7 +377,7 @@ public class GEmbedderImpl implements IGEmbedder {
 		for (GContentsProcessingStatusUpdatePayload vectPayload : vectorizationStatistics.values()) {
 			Map<String, Boolean> map = distinctJobDocumentVectorized.get(vectPayload.getJobId());
 			vectPayload.setBatchDocumentsProcessed((long) (map != null ? map.size() : 0));
-			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
+			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = envelopeFactory.newMessageFrom(emitter,
 					vectPayload);
 			msg.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			msg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
@@ -406,7 +410,7 @@ public class GEmbedderImpl implements IGEmbedder {
 		for (GUserMessage userMessage : allUserMessages) {
 			GUserMessagePayload payload = new GUserMessagePayload();
 			payload.setUserMessage(userMessage);
-			GMessageEnvelope<GUserMessagePayload> userMessageMsg = GMessageEnvelope.newMessageFrom(emitter, payload);
+			GMessageEnvelope<GUserMessagePayload> userMessageMsg = envelopeFactory.newMessageFrom(emitter, payload);
 			userMessageMsg.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			userMessageMsg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 			userMessageMsg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
@@ -457,7 +461,7 @@ public class GEmbedderImpl implements IGEmbedder {
 				if (documentAccessResult.getNegativeMessage() != null) {
 					GUserMessagePayload payload = new GUserMessagePayload();
 					payload.setUserMessage(documentAccessResult.getNegativeMessage());
-					GMessageEnvelope<GUserMessagePayload> userMessageMsg = GMessageEnvelope.newMessageFrom(emitter,
+					GMessageEnvelope<GUserMessagePayload> userMessageMsg = envelopeFactory.newMessageFrom(emitter,
 							payload);
 					payload.getUserMessage()
 							.setJobId(documentAccessResult.getDocReferenceMessage().getPayload().getJobId());
@@ -471,7 +475,7 @@ public class GEmbedderImpl implements IGEmbedder {
 
 		// Send vectorization status updates for each job with errors
 		for (GContentsProcessingStatusUpdatePayload vectPayload : payloads.values()) {
-			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
+			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = envelopeFactory.newMessageFrom(emitter,
 					vectPayload);
 			msg.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 			msg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);

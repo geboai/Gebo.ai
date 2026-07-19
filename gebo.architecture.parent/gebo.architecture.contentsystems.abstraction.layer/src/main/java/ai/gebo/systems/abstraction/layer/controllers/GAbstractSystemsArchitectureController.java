@@ -13,9 +13,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -36,14 +38,16 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
+import io.micrometer.observation.annotation.Observed;
 
 /**
  * AI generated comments Abstract controller for system architectures,
  * responsible for managing operations related to systems and endpoints.
- * 
+ *
  * @param <SystemType>   The type of the content management system.
  * @param <EndpointType> The type of the project endpoint.
  */
+@Observed(name = "gebo.systems.integration")
 public class GAbstractSystemsArchitectureController<SystemType extends GContentManagementSystem, EndpointType extends GProjectEndpoint> {
 	// Logger for logging messages
 	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
@@ -61,6 +65,12 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	protected final IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory;
 	protected final IGGeboIngestionJobQueueService jobQueueService;
 	protected final IEntityReplicationService replicationService;
+	// Field-injected rather than threaded through the constructor: this base class
+	// already has 8 constructor params and ~10 per-system subclasses that would
+	// all need updating; @Autowired works here since every concrete subclass is a
+	// Spring-managed @RestController.
+	@Autowired
+	protected IMessageEnvelopeFactory envelopeFactory;
 
 	/**
 	 * Nested emitter class for handling messaging from the controller.
@@ -134,19 +144,19 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 		// persistentObjectManager.delete(endpoint);
 
 		// Create and send messages to indicate deletion
-		GMessageEnvelope<GDeletedProjectEndpointPayload> message = GMessageEnvelope.newMessageFrom(controllerEmitter,
+		GMessageEnvelope<GDeletedProjectEndpointPayload> message = envelopeFactory.newMessageFrom(controllerEmitter,
 				newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid);
 		message.setTargetModule(controllerEmitter.getMessagingModuleId());
 		message.setTargetComponent(GStandardModulesConstraints.RESOURCES_DISPOSE_COMPONENT);
 		messageBroker.accept(message);
 
-		message = GMessageEnvelope.newMessageFrom(controllerEmitter,
+		message = envelopeFactory.newMessageFrom(controllerEmitter,
 				newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid);
 		message.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 		message.setTargetComponent(GStandardModulesConstraints.MONGO_DISPOSE_DOCUMENTS_COMPONENT);
 		messageBroker.accept(message);
 
-		message = GMessageEnvelope.newMessageFrom(controllerEmitter,
+		message = envelopeFactory.newMessageFrom(controllerEmitter,
 				newDeletedEndpointPayload(centralized, contentManagementSystemCode), userid);
 		message.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
 		message.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT);

@@ -56,6 +56,10 @@ public class MultiThreadedMessagesOrchestrator implements ApplicationListener<Co
     @Autowired
     TimeoutCallbackHandler callbackHandler;
 
+    // Observer wrapping the actual delivery of a message to a receiver's business logic
+    @Autowired
+    IGMessageDeliveryObserver deliveryObserver;
+
     // List of multiplexed message receivers
     protected List<ThreadMessageReceiverMultiplexer> multiplexingReceivers = new ArrayList<ThreadMessageReceiverMultiplexer>();
 
@@ -87,7 +91,7 @@ public class MultiThreadedMessagesOrchestrator implements ApplicationListener<Co
                         + howToCreate + " instances");
                 List<MessageReceiverRunner> receivers = new ArrayList<MessageReceiverRunner>();
                 for (int i = 0; i < howToCreate; i++) {
-                    MessageReceiverRunner receiver = new MessageReceiverRunner(factory);
+                    MessageReceiverRunner receiver = new MessageReceiverRunner(factory, deliveryObserver);
                     receivers.add(receiver);
                 }
                 allRunnables.addAll(receivers);
@@ -95,7 +99,7 @@ public class MultiThreadedMessagesOrchestrator implements ApplicationListener<Co
                 IGMessageReceiver backupReceiver = factory.useSenderThread() ? factory.create() : null;
                 // Create a multiplexer for handling multiple receivers
                 ThreadMessageReceiverMultiplexer receiver = new ThreadMessageReceiverMultiplexer(factory, receivers,
-                        backupReceiver);
+                        backupReceiver, deliveryObserver);
                 multiplexingReceivers.add(receiver);
                 // Register the receiver with the callback handler
                 callbackHandler.add(receiver);

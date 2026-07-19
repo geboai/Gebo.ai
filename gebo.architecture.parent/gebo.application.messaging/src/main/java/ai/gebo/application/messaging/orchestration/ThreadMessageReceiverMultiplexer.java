@@ -59,20 +59,25 @@ class ThreadMessageReceiverMultiplexer implements IGMessageReceiver {
 	// Indicates if the backup receiver is currently executing
 	protected boolean backupReceiverMonitorExecuting = false;
 
+	// Observer wrapping the actual delivery of a message to the backup receiver
+	protected final IGMessageDeliveryObserver deliveryObserver;
+
 	/**
 	 * Constructor to initialize the multiplexer with the given factory, receivers, and backup receiver.
 	 *
 	 * @param factory The factory to create message receivers
 	 * @param receivers The list of message receiver runners to manage
 	 * @param backupReceiver The backup receiver used when all threads are busy
+	 * @param deliveryObserver Observer wrapping the synchronous backup-receiver delivery call
 	 */
 	ThreadMessageReceiverMultiplexer(IGMessageReceiverFactory factory, List<MessageReceiverRunner> receivers,
-			IGMessageReceiver backupReceiver) {
-		
+			IGMessageReceiver backupReceiver, IGMessageDeliveryObserver deliveryObserver) {
+
 		this.receivers = receivers;
 		this.backupReceiver = backupReceiver;
 		this.factory = factory;
-		
+		this.deliveryObserver = deliveryObserver;
+
 		// Set the timeout if the factory supports timeouts
 		if (factory instanceof IGTimedOutMessageReceiverFactory) {
 			timeout = ((IGTimedOutMessageReceiverFactory) factory).getReceivingTimeout();
@@ -165,7 +170,7 @@ class ThreadMessageReceiverMultiplexer implements IGMessageReceiver {
 						backupReceiverMonitorExecuting = true;
 						lastReceviedTime = System.currentTimeMillis();
 						lastInteractionWasTimeout = false;
-						backupReceiver.accept(msg);
+						deliveryObserver.aroundDelivery(msg, () -> backupReceiver.accept(msg));
 						lastReceviedTime = System.currentTimeMillis();
 					} finally {
 						backupReceiverMonitorExecuting = false;

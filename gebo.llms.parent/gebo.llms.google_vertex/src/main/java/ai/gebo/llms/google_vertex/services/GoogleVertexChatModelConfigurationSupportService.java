@@ -81,6 +81,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that handles the configuration and initialization of Google
@@ -91,8 +92,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 
 		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -138,7 +139,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 					.options(options)
 					.toolCallingManager(
 							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
-					.observationRegistry(ObservationRegistry.create())
+					.observationRegistry(observationRegistry)
 					.build();
 			return model;
 		}
@@ -146,7 +147,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new GoogleVertexConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new GoogleVertexConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -171,7 +173,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GGoogleVertexChatModelConfig> create(GGoogleVertexChatModelConfig config)
 			throws LLMConfigException {
 		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

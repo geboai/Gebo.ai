@@ -95,6 +95,7 @@ public class OllamaChatModelConfigurationSupportService
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
@@ -103,8 +104,8 @@ public class OllamaChatModelConfigurationSupportService
 
 		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
-				IChatModelUsageAdvisorFactory usageAdvisorFactory) {
-			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -166,7 +167,7 @@ public class OllamaChatModelConfigurationSupportService
 			OllamaChatOptions options = builder.build();
 			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager(),
-					ObservationRegistry.create(), ModelManagementOptions.defaults());
+					observationRegistry, ModelManagementOptions.defaults());
 			return model;
 		}
 
@@ -194,7 +195,8 @@ public class OllamaChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory);
+			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -220,7 +222,7 @@ public class OllamaChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
 		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo, usageAdvisorFactory);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

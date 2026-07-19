@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -23,6 +24,7 @@ import lombok.AllArgsConstructor;
 public class JobStatusEmitter implements IGMessageEmitter {
 	private static final String JOB_STATUS_NOTIFIER = "job-status-notifier";
 	private final IGRuntimeBinder runtimeBinder;
+	private final IMessageEnvelopeFactory envelopeFactory;
 
 	@Override
 	public String getMessagingModuleId() {
@@ -46,7 +48,7 @@ public class JobStatusEmitter implements IGMessageEmitter {
 	}
 
 	private void _broadcast(GBaseWorkflowStatusPayload payload) {
-		GMessageEnvelope<GBaseWorkflowStatusPayload> message = GMessageEnvelope.newMessageFrom(this, payload);
+		GMessageEnvelope<GBaseWorkflowStatusPayload> message = envelopeFactory.newMessageFrom(this, payload);
 		IGMessageBroker broker = runtimeBinder.getImplementationOf(IGMessageBroker.class);
 		broker.broadcast(message);
 	}
