@@ -29,7 +29,30 @@
 			<artifactId>gebo.architecture.compute.workflow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		<!--
+		  The LLMSUsageUserLevelController moved here (from brain, via
+		  gebo.architecture.compute.workflow) pulled in gebo.architecture.security's
+		  full GeboAISecurityConfig, which needs IGeboSecretsAccessService - not
+		  satisfied by the bare gebo.microservices.starter tyr is built on (heimdall
+		  is also built on that starter and must not get these remote-client impls
+		  alongside its own local ones, see gebo.microservices.llms.starter's
+		  comment). Same client trio every other non-heimdall microservice gets.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.secrets.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.security.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.acl.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
