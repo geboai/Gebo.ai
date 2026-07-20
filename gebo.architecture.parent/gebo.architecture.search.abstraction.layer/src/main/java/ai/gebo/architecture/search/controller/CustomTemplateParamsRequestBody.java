@@ -1,0 +1,27 @@
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+
+package ai.gebo.architecture.search.controller;
+
+import java.util.List;
+
+import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import lombok.Data;
+
+/**
+ * Wire body for the {@code createCustomTemplateParamsMap} native-search endpoint:
+ * the target system plus the catalogue samples the connector needs to render its
+ * prompt-template parameters.
+ */
+@Data
+public class CustomTemplateParamsRequestBody {
+	private SearchableSystemMetaData searchableSystemMetaData;
+	private List<CatalogueSample> cataloguesSample;
+}

@@ -39,6 +39,11 @@ https://developer.atlassian.com/cloud/jira/service-desk/swagger.v3.json
 	-->
 	<dependencies>
 		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.atlassian.confluence.search.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.integrations.clients</groupId>
 			<artifactId>gebo.atlassian.confluence.cloud.client</artifactId>
 			<version>${project.version}</version>

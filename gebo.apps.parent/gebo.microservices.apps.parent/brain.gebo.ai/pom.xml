@@ -78,6 +78,26 @@
 			<artifactId>gebo.architecture.fastsetup.rag</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Topology-aware REST clients for the per-connector search services
+		     (jira/confluence/sharepoint/googledrive), so brain's deep-search reaches
+		     them on their own microservices. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.searchservices.clients</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Web-search tools that run in-process on brain (not real content handlers,
+		     so added here directly rather than via a content microservice). -->
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.bingsearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.googlesearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

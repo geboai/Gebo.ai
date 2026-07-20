@@ -23,13 +23,17 @@
 		<module>gebo.filesystem.content.handler</module>
 		<module>gebo.uploads.content.handler</module>
 		<module>gebo.googlesearch.handler</module>
+		<module>gebo.sharepoint.search.api</module>
 		<module>gebo.sharepoint.handler</module>
+		<module>gebo.atlassian.confluence.search.api</module>
 		<module>gebo.atlassian.confluence.handler</module>
+		<module>gebo.googledrive.search.api</module>
 		<module>gebo.googleworkspace.handlers</module>
 		<module>gebo.contentsystem.tests.services</module>
 		<module>gebo.userspace.handler</module>
 
 
+		<module>gebo.atlassian.jira.search.api</module>
 		<module>gebo.atlassian.jira.handler</module>
 		<module>gebo.integration.content.handler</module>
 		<module>gebo.bingsearch.handler</module>

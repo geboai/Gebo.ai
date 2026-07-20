@@ -56,5 +56,10 @@
 			<artifactId>gebo.secrets.services</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.googledrive.search.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
