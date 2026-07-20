@@ -52,7 +52,6 @@ import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 import jakarta.el.MethodNotFoundException;
 
 /**
@@ -72,9 +71,6 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 
 	@Autowired
 	IGPersistentObjectManager persistentObject;
-
-	@Autowired
-	IGContentManagementSystemHandlerRepositoryPattern contentSystemHandlersPattern;
 
 	@Autowired
 	RagDocumentCacheItemRepository cacheItemsRepository;

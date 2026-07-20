@@ -24,6 +24,7 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.documents.access.DocumentContentStreamerException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
@@ -204,7 +205,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 				try {
 					ingested = this.documentsCacheService.retrieve(doc);
 				} catch (GeboPersistenceException | GeboContentHandlerSystemException | IOException
-						| GeboIngestionException e) {
+						| GeboIngestionException | DocumentContentStreamerException e) {
 					throw new GeboChatSessionLifecycleException("Exception in ingesting docs", e);
 				}
 				state = this.fullSessionStateService.addChatWithDocumentToState(state, doc, ingested, index);
@@ -406,7 +407,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		try {
 			data = this.documentsCacheService.retrieve(reference);
 		} catch (GeboPersistenceException | GeboContentHandlerSystemException | IOException
-				| GeboIngestionException e) {
+				| GeboIngestionException | DocumentContentStreamerException e) {
 			throw new GeboChatSessionLifecycleException("Exception in ingesting docs", e);
 		}
 		state = this.fullSessionStateService.addChatWithDocumentToState(state, reference, data, index);

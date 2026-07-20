@@ -10,10 +10,7 @@
 package ai.gebo.architecture.rag.support.layer.services.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.ai.document.Document;
@@ -21,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.documents.access.DocumentContentStreamerException;
+import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -40,8 +39,6 @@ import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 import lombok.AllArgsConstructor;
 
 /**
@@ -58,7 +55,7 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 	// Inject dependencies
 	final IGPersistentObjectManager persistentObject;
 
-	final IGContentManagementSystemHandlerRepositoryPattern contentSystemHandlersPattern;
+	final IGDocumentContentStreamer streamer;
 
 	final RagDocumentCacheItemRepository cacheItemsRepository;
 
@@ -76,26 +73,23 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 	 * @throws GeboContentHandlerSystemException
 	 * @throws IOException
 	 * @throws GeboIngestionException
+	 * @throws DocumentContentStreamerException
 	 */
 	public void addCachedOrRetrieve(GObjectRef<GProjectEndpoint> objectRef, List<GDocumentReference> docList,
-			AIDocumentsSet result)
-			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException, GeboIngestionException {
+			AIDocumentsSet result) throws GeboPersistenceException, GeboContentHandlerSystemException, IOException,
+			GeboIngestionException, DocumentContentStreamerException {
 		// Retrieve the project endpoint
 		GProjectEndpoint endpoint = this.persistentObject.findByReference(objectRef, GProjectEndpoint.class);
 		if (endpoint != null) {
-			Map handlerWorkCache = new HashMap();
-			IGContentManagementSystemHandler handler = contentSystemHandlersPattern.findByHandledEndpoint(endpoint);
-			if (handler != null) {
-				// Process each document reference
-				for (GDocumentReference document : docList) {
-					addCacheOrRetrieve(document, handler, endpoint, result, handlerWorkCache);
-				}
+			// Process each document reference
+			for (GDocumentReference document : docList) {
+				addCacheOrRetrieve(document, result);
 			}
 		}
 	}
 
-	public AIDocumentReferenceItem retrieve(GDocumentReference document)
-			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException, GeboIngestionException {
+	public AIDocumentReferenceItem retrieve(GDocumentReference document) throws GeboPersistenceException,
+			GeboContentHandlerSystemException, IOException, GeboIngestionException, DocumentContentStreamerException {
 		AIDocumentsSet set = new AIDocumentsSet();
 		addCachedOrRetrieve(document.getProjectEndpointReference(), List.of(document), set);
 		if (!set.getDocumentItems().isEmpty())
@@ -105,20 +99,18 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 
 	/**
 	 * Checks if a document is in cache or needs to be loaded and cached.
-	 * 
-	 * @param document         Document reference
-	 * @param handler          Content management system handler
-	 * @param endpoint         Project endpoint
-	 * @param result           Result object to store retrieved document information
-	 * @param handlerWorkCache Cache for handler work
+	 *
+	 * @param document Document reference
+	 * @param result   Result object to store retrieved document information
 	 * @throws GeboContentHandlerSystemException
 	 * @throws IOException
 	 * @throws GeboIngestionException
 	 * @throws GeboPersistenceException
+	 * @throws DocumentContentStreamerException
 	 */
-	public void addCacheOrRetrieve(GDocumentReference document, IGContentManagementSystemHandler handler,
-			GProjectEndpoint endpoint, AIDocumentsSet result, Map handlerWorkCache)
-			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException {
+	public void addCacheOrRetrieve(GDocumentReference document, AIDocumentsSet result)
+			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException,
+			DocumentContentStreamerException {
 		// Check if the document is already in cache
 		Optional<AIDocumentCacheItem> entry = cacheItemsRepository.findById(document.getCode());
 		boolean load = true;
@@ -133,7 +125,7 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 		}
 		if (load) {
 			// Load and cache the document
-			loadAddCacheAndAddToRetrieved(document, handler, endpoint, result, handlerWorkCache);
+			loadAddCacheAndAddToRetrieved(document, result);
 		}
 	}
 
@@ -171,22 +163,23 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 	/**
 	 * Loads document content, caches it if necessary, and adds it to the retrieved
 	 * results.
-	 * 
-	 * @param document         Document reference
-	 * @param handler          Content management system handler
-	 * @param endpoint         Project endpoint
-	 * @param result           Result object to store retrieved document information
-	 * @param handlerWorkCache Cache for handler work
+	 *
+	 * @param document Document reference
+	 * @param result   Result object to store retrieved document information
 	 * @throws GeboContentHandlerSystemException
 	 * @throws IOException
 	 * @throws GeboIngestionException
 	 * @throws GeboPersistenceException
+	 * @throws DocumentContentStreamerException
 	 */
-	public void loadAddCacheAndAddToRetrieved(GDocumentReference document, IGContentManagementSystemHandler handler,
-			GProjectEndpoint endpoint, AIDocumentsSet result, Map handlerWorkCache)
-			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException {
-		// Stream content of the document
-		TypedInputStream is = handler.streamContent(StreamingPurpose.INGESTING, document, handlerWorkCache);
+	public void loadAddCacheAndAddToRetrieved(GDocumentReference document, AIDocumentsSet result)
+			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException,
+			DocumentContentStreamerException {
+		// Stream content of the document, resolved via IGDocumentContentStreamer
+		// (local on the monolith, chunker-proxying on microservices) rather than a
+		// locally co-located IGContentManagementSystemHandler, which only exists on
+		// the microservice that owns this document's content system.
+		TypedInputStream is = streamer.streamContent(StreamingPurpose.INGESTING, document);
 		// Handle content ingestion
 		IngestionHandlerData readData = ingestionHandler.handleContent(document, is);
 		if (!readData.isUnmanagedContent()) {
