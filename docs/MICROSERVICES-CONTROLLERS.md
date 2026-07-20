@@ -6,29 +6,46 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 **LLM controllers-review note:** the concrete, mapped LLM admin controllers (`ChatModelsController`, `EmbeddingModelsControllers`, `ImageModelsController`, `RankerModelsController`, `TextToSpeechModelsController`, `TranscriptModelsController`, `ChatModelsLookupController`, `FunctionsLookupController`) live in a sibling `gebo.architecture.llms.abstraction.layer.controllers` module, wired only into `gebo.apps.monolithic.starter` and `brain.gebo.ai`. Each LLM provider driver (openai, mistral, generic-openai-compatible, ollama, onxx-embeddings, anthropic3, google_vertex, deepseek, aws-bedrock) got the same treatment: its admin controllers moved to a `<provider>.controllers` sibling module, aggregated by `gebo.llms.controllers.starter`, wired the same way (monolith + brain only). **Effect:** vectorizator and graphicator do not expose any of these — brain is the sole microservice hosting LLM configuration admin, and also carries every provider-specific admin controller. `gebo.llms.setup` (fast-setup, `GeboFastLLMSSetupController`) is likewise wired only on monolith + brain, kept separate from `gebo.llms.starter` (which `gebo.microservices.llms.starter` now depends on for the Hazelcast models-replication cache to deserialize provider-specific config classes on every LLM-hosting microservice) so it doesn't leak onto vectorizator/graphicator.
 
+**Workflows consolidated into the new tyr.gebo.ai (port 13019):** `job-status-controller` and `workflow-stats-admin-level-controller` used to be duplicated on every content-ingesting microservice (vectorizator, graphicator, chunker, git, filesystem, uploads, userspace, sharepoint, confluence, jira, aws-s3, googledrive, mcpclient, integration, fulltextor). They've been removed from all of them and now live solely on the new `tyr` microservice, the JOBS_MASTER workflow/usage-tracking home consolidated out of `content.abstraction.layer` into `gebo.architecture.compute.workflows`. `tyr` currently exposes just those 2 controllers (3 endpoints); each other microservice's controller/endpoint count dropped by 2 controllers / 3 endpoints accordingly.
+
+Bringing `tyr` up initially crash-looped with `UnsatisfiedDependencyException: ... field
+'jobsRepo' ... No qualifying bean of type 'JobStatusRepository'`. Cause: `TyrApplication`
+had `@ComponentScan(basePackages = "ai.gebo")` but was missing
+`@EnableMongoRepositories(basePackages = "ai.gebo")` — Spring Data's Mongo repository
+scan defaults to the main class's own package, not the `@ComponentScan` bases, so it
+never found `ai.gebo.knowledgebase.repositories.JobStatusRepository` even though it was
+on the classpath. Every other data-backed microservice (`brain`, `uploads`,
+`vectorizator`, ...) already carries this annotation; `TyrApplication` was just missing
+it as a new module. Fixed by adding the annotation to match the existing pattern.
+
+The doc-generation skill's port map, polling list, and the generator script's `SERVICES`
+table were also updated to include `tyr` (previously only 13000–13018 were tracked).
+
+
 ## Summary
 
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 0 | 0 |
 | brain.gebo.ai | 13001 | `/brain` | 57 | 226 |
-| vectorizator.gebo.ai | 13002 | `/vectorizator` | 9 | 17 |
-| graphicator.gebo.ai | 13003 | `/graphicator` | 8 | 15 |
+| vectorizator.gebo.ai | 13002 | `/vectorizator` | 7 | 14 |
+| graphicator.gebo.ai | 13003 | `/graphicator` | 6 | 12 |
 | chunker.gebo.ai | 13004 | `/chunker` | 4 | 16 |
-| git.gebo.ai | 13005 | `/git` | 8 | 25 |
-| filesystem.gebo.ai | 13006 | `/filesystem` | 10 | 33 |
-| uploads.gebo.ai | 13007 | `/uploads` | 9 | 24 |
-| userspace.gebo.ai | 13008 | `/userspace` | 9 | 32 |
-| sharepoint.gebo.ai | 13009 | `/sharepoint` | 9 | 31 |
-| confluence.gebo.ai | 13010 | `/confluence` | 9 | 31 |
-| jira.gebo.ai | 13011 | `/jira` | 9 | 31 |
-| aws-s3.gebo.ai | 13012 | `/aws-s3` | 9 | 29 |
-| googledrive.gebo.ai | 13013 | `/googledrive` | 10 | 32 |
-| mcpclient.gebo.ai | 13014 | `/mcpclient` | 10 | 31 |
-| integration.gebo.ai | 13015 | `/integration` | 9 | 22 |
-| fulltextor.gebo.ai | 13016 | `/fulltextor` | 7 | 13 |
+| git.gebo.ai | 13005 | `/git` | 6 | 22 |
+| filesystem.gebo.ai | 13006 | `/filesystem` | 8 | 30 |
+| uploads.gebo.ai | 13007 | `/uploads` | 7 | 21 |
+| userspace.gebo.ai | 13008 | `/userspace` | 7 | 29 |
+| sharepoint.gebo.ai | 13009 | `/sharepoint` | 7 | 28 |
+| confluence.gebo.ai | 13010 | `/confluence` | 7 | 28 |
+| jira.gebo.ai | 13011 | `/jira` | 7 | 28 |
+| aws-s3.gebo.ai | 13012 | `/aws-s3` | 7 | 26 |
+| googledrive.gebo.ai | 13013 | `/googledrive` | 8 | 29 |
+| mcpclient.gebo.ai | 13014 | `/mcpclient` | 8 | 28 |
+| integration.gebo.ai | 13015 | `/integration` | 7 | 19 |
+| fulltextor.gebo.ai | 13016 | `/fulltextor` | 5 | 10 |
 | eureka.gebo.ai | 13017 | `—` | 0 | 0 |
 | heimdall.gebo.ai | 13018 | `/heimdall` | 14 | 55 |
+| tyr.gebo.ai | 13019 | `/tyr` | 2 | 3 |
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
@@ -497,7 +514,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`) — context-path `/vectorizator`
 
-9 controller(s), 17 endpoint(s):
+7 controller(s), 14 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -542,20 +559,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/vectorizator/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/vectorizator/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/vectorizator/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/vectorizator/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/vectorizator/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## graphicator.gebo.ai — port 13003 (`graphicator-gebo-ai`) — context-path `/graphicator`
 
-8 controller(s), 15 endpoint(s):
+6 controller(s), 12 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -593,17 +599,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/graphicator/api/admin/JobLauncherController/abortJob` | abortJob |
 | POST | `/graphicator/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/graphicator/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
-
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/graphicator/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/graphicator/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/graphicator/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
 ## chunker.gebo.ai — port 13004 (`chunker-gebo-ai`) — context-path `/chunker`
 
@@ -644,7 +639,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## git.gebo.ai — port 13005 (`git-gebo-ai`) — context-path `/git`
 
-8 controller(s), 25 endpoint(s):
+6 controller(s), 22 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -693,20 +688,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/git/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/git/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/git/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/git/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/git/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## filesystem.gebo.ai — port 13006 (`filesystem-gebo-ai`) — context-path `/filesystem`
 
-10 controller(s), 33 endpoint(s):
+8 controller(s), 30 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -771,20 +755,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/filesystem/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/filesystem/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/filesystem/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/filesystem/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/filesystem/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## uploads.gebo.ai — port 13007 (`uploads-gebo-ai`) — context-path `/uploads`
 
-9 controller(s), 24 endpoint(s):
+7 controller(s), 21 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -836,20 +809,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/uploads/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/uploads/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/uploads/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/uploads/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/uploads/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## userspace.gebo.ai — port 13008 (`userspace-gebo-ai`) — context-path `/userspace`
 
-9 controller(s), 32 endpoint(s):
+7 controller(s), 29 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -882,12 +844,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/userspace/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/userspace/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/userspace/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/userspace/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
 ### `userspace-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -915,14 +871,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/userspace/api/user/UserspaceUploadController/upload/{userspaceFolderCode}` | upload |
 
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/userspace/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## sharepoint.gebo.ai — port 13009 (`sharepoint-gebo-ai`) — context-path `/sharepoint`
 
-9 controller(s), 31 endpoint(s):
+7 controller(s), 28 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -955,12 +906,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/sharepoint/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/sharepoint/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/sharepoint/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/sharepoint/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
 ### `sharepoint-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -987,14 +932,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/sharepoint/api/admin/SharepointSystemsController/updateSharepointEndpoint` | updateSharepointEndpoint |
 | POST | `/sharepoint/api/admin/SharepointSystemsController/updateSharepointSystem` | updateSharepointSystem |
 
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/sharepoint/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## confluence.gebo.ai — port 13010 (`confluence-gebo-ai`) — context-path `/confluence`
 
-9 controller(s), 31 endpoint(s):
+7 controller(s), 28 endpoint(s):
 
 
 ### `confluence-browsing-controller`
@@ -1053,20 +993,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/confluence/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/confluence/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/confluence/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/confluence/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/confluence/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## jira.gebo.ai — port 13011 (`jira-gebo-ai`) — context-path `/jira`
 
-9 controller(s), 31 endpoint(s):
+7 controller(s), 28 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1125,20 +1054,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/jira/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/jira/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/jira/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/jira/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/jira/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## aws-s3.gebo.ai — port 13012 (`aws-s3-gebo-ai`) — context-path `/aws-s3`
 
-9 controller(s), 29 endpoint(s):
+7 controller(s), 26 endpoint(s):
 
 
 ### `aws-s-3-browsing-controller`
@@ -1195,20 +1113,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/aws-s3/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/aws-s3/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/aws-s3/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/aws-s3/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/aws-s3/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## googledrive.gebo.ai — port 13013 (`googledrive-gebo-ai`) — context-path `/googledrive`
 
-10 controller(s), 32 endpoint(s):
+8 controller(s), 29 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1272,20 +1179,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/googledrive/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/googledrive/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/googledrive/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/googledrive/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/googledrive/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## mcpclient.gebo.ai — port 13014 (`mcpclient-gebo-ai`) — context-path `/mcpclient`
 
-10 controller(s), 31 endpoint(s):
+8 controller(s), 28 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1318,12 +1214,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/mcpclient/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/mcpclient/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/mcpclient/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/mcpclient/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
 ### `mcp-client-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1354,14 +1244,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/mcpclient/api/admin/MCPClientSystemsController/publishMCPClientEndpoint` | publishMCPClientEndpoint |
 | POST | `/mcpclient/api/admin/MCPClientSystemsController/updateMCPClientEndpoint` | updateMCPClientEndpoint |
 
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/mcpclient/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## integration.gebo.ai — port 13015 (`integration-gebo-ai`) — context-path `/integration`
 
-9 controller(s), 22 endpoint(s):
+7 controller(s), 19 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1411,20 +1296,9 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/integration/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/integration/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/integration/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/integration/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/integration/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`) — context-path `/fulltextor`
 
-7 controller(s), 13 endpoint(s):
+5 controller(s), 10 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1456,17 +1330,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/fulltextor/api/admin/JobLauncherController/abortJob` | abortJob |
 | POST | `/fulltextor/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/fulltextor/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
-
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/fulltextor/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/fulltextor/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/fulltextor/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
 ## eureka.gebo.ai — port 13017
 
@@ -1588,3 +1451,19 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/api/admin/UsersAdminController/insertUser` | insertUser |
 | POST | `/heimdall/api/admin/UsersAdminController/updateGroup` | updateGroup |
 | POST | `/heimdall/api/admin/UsersAdminController/updateUser` | updateUser |
+
+## tyr.gebo.ai — port 13019 (`tyr-gebo-ai`) — context-path `/tyr`
+
+2 controller(s), 3 endpoint(s):
+
+
+### `job-status-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/tyr/api/admin/JobStatusController/getJobStatus` | getJobStatus |
+| GET | `/tyr/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+
+### `workflow-stats-admin-level-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/tyr/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |

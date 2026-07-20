@@ -29,10 +29,9 @@ import ai.gebo.application.messaging.model.GMessagesBatchPayload;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.workflows.concentrator.config.GeboWorkflowsConcentratorConfig;
-import ai.gebo.core.impl.GComputeEndOfWorkflowReceiverFactory;
+import ai.gebo.core.messages.ComputeWorkflowEndPayload;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GUserMessagePayload;
-import ai.gebo.core.model.ComputeWorkflowEndPayload;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
@@ -48,8 +47,9 @@ import ai.gebo.model.GUserMessage;
  * {@link GStandardModulesConstraints#JOBS_MASTER}. Also implements
  * {@link IGMessageEmitter} itself now, rather than borrowing core-module's
  * {@code GCoreMessagesEmitterImpl} identity, so the {@code ComputeWorkflowEndPayload}
- * relay to core-module's {@code end-of-workflow-compute-service} is correctly
- * tagged as coming from {@code jobs-master-module}.
+ * relay to jobs-master-module's {@code end-of-workflow-compute-service} (itself
+ * moved off {@code core-module} alongside this receiver) is correctly tagged as
+ * coming from {@code jobs-master-module}.
  */
 @Component
 @Scope("singleton")
@@ -208,8 +208,8 @@ public class GWorkflowsConcentratorMessagesReceiverFactory extends GAbstractTime
 					IGMessageBroker broker = binder.getImplementationOf(IGMessageBroker.class);
 					GMessageEnvelope<ComputeWorkflowEndPayload> envelope = GMessageEnvelope
 							.newMessageFrom(GWorkflowsConcentratorMessagesReceiverFactory.this, compute);
-					envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-					envelope.setTargetComponent(GComputeEndOfWorkflowReceiverFactory.END_OF_WORKFLOW_COMPUTE_SERVICE);
+					envelope.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
+					envelope.setTargetComponent(GStandardModulesConstraints.END_OF_WORKFLOW_COMPUTE_SERVICE);
 					envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 					broker.accept(envelope);
 				}
