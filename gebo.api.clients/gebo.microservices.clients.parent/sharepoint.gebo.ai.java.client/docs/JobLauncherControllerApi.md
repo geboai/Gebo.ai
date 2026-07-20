@@ -1,6 +1,6 @@
 # JobLauncherControllerApi
 
-All URIs are relative to *http://localhost:13009*
+All URIs are relative to *http://localhost:13009/sharepoint*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

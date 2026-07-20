@@ -26,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboAgentAdminControllerService {
 
-    protected basePath = 'http://localhost:13001';
+    protected basePath = 'http://localhost:13001/brain';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

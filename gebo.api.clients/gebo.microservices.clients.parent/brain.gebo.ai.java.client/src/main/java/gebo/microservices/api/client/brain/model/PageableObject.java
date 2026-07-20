@@ -23,9 +23,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageableObject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:02:09.509670+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:43.793671417+02:00[Europe/Rome]")
 
 public class PageableObject {
+  @JsonProperty("offset")
+  private Object offset = null;
+
+  @JsonProperty("sort")
+  private SortObject sort = null;
+
   @JsonProperty("paged")
   private Object paged = null;
 
@@ -35,14 +41,44 @@ public class PageableObject {
   @JsonProperty("pageSize")
   private Object pageSize = null;
 
-  @JsonProperty("offset")
-  private Object offset = null;
-
-  @JsonProperty("sort")
-  private SortObject sort = null;
-
   @JsonProperty("unpaged")
   private Object unpaged = null;
+
+  public PageableObject offset(Object offset) {
+    this.offset = offset;
+    return this;
+  }
+
+   /**
+   * Get offset
+   * @return offset
+  **/
+  @Schema(description = "")
+  public Object getOffset() {
+    return offset;
+  }
+
+  public void setOffset(Object offset) {
+    this.offset = offset;
+  }
+
+  public PageableObject sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
 
   public PageableObject paged(Object paged) {
     this.paged = paged;
@@ -98,42 +134,6 @@ public class PageableObject {
     this.pageSize = pageSize;
   }
 
-  public PageableObject offset(Object offset) {
-    this.offset = offset;
-    return this;
-  }
-
-   /**
-   * Get offset
-   * @return offset
-  **/
-  @Schema(description = "")
-  public Object getOffset() {
-    return offset;
-  }
-
-  public void setOffset(Object offset) {
-    this.offset = offset;
-  }
-
-  public PageableObject sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
   public PageableObject unpaged(Object unpaged) {
     this.unpaged = unpaged;
     return this;
@@ -162,17 +162,17 @@ public class PageableObject {
       return false;
     }
     PageableObject pageableObject = (PageableObject) o;
-    return Objects.equals(this.paged, pageableObject.paged) &&
+    return Objects.equals(this.offset, pageableObject.offset) &&
+        Objects.equals(this.sort, pageableObject.sort) &&
+        Objects.equals(this.paged, pageableObject.paged) &&
         Objects.equals(this.pageNumber, pageableObject.pageNumber) &&
         Objects.equals(this.pageSize, pageableObject.pageSize) &&
-        Objects.equals(this.offset, pageableObject.offset) &&
-        Objects.equals(this.sort, pageableObject.sort) &&
         Objects.equals(this.unpaged, pageableObject.unpaged);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(paged, pageNumber, pageSize, offset, sort, unpaged);
+    return Objects.hash(offset, sort, paged, pageNumber, pageSize, unpaged);
   }
 
 
@@ -181,11 +181,11 @@ public class PageableObject {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageableObject {\n");
     
+    sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    paged: ").append(toIndentedString(paged)).append("\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
-    sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    unpaged: ").append(toIndentedString(unpaged)).append("\n");
     sb.append("}");
     return sb.toString();

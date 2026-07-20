@@ -8,10 +8,9 @@ import { DocumentContentStreamerControllerService } from './api/documentContentS
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
-import { JobStatusControllerService } from './api/jobStatusController.service';
+import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
-import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
@@ -23,10 +22,9 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
     JobLauncherControllerService,
-    JobStatusControllerService,
+    SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
-    SharepointSystemsControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+    SharepointSystemsControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

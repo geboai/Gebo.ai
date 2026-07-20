@@ -1,6 +1,6 @@
 # GenericalPublisherControllerApi
 
-All URIs are relative to *http://localhost:13013*
+All URIs are relative to *http://localhost:13013/googledrive*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

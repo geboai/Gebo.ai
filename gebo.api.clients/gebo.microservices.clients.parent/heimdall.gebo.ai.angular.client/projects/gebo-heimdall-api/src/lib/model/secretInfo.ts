@@ -14,4 +14,5 @@ export interface SecretInfo {
     code?: any;
     description?: any;
     secretType?: any;
+    contextCode?: any;
 }

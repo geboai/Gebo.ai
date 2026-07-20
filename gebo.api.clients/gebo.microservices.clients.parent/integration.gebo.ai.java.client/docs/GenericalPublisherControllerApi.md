@@ -1,6 +1,6 @@
 # GenericalPublisherControllerApi
 
-All URIs are relative to *http://localhost:13015*
+All URIs are relative to *http://localhost:13015/integration*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

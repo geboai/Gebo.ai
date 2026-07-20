@@ -50,7 +50,7 @@ import gebo.microservices.api.client.confluence.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.confluence.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.confluence.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:03:11.688513200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:51.233061779+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {
@@ -70,7 +70,7 @@ public class ApiClient {
     
     private HttpHeaders defaultHeaders = new HttpHeaders();
     
-    private String basePath = "http://localhost:13010";
+    private String basePath = "http://localhost:13010/confluence";
 
     private RestTemplate restTemplate;
 

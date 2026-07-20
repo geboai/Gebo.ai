@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
+import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
+import { GeboFastInstallationSetupControllerService } from './api/geboFastInstallationSetupController.service';
+import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFolderSetupController.service';
 import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
 import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
@@ -22,6 +25,9 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
   providers: [
     AuthControllerService,
     AuthProvidersControllerService,
+    GeboAdvancedSetupStatusControllerService,
+    GeboFastInstallationSetupControllerService,
+    GeboFastWorkFolderSetupControllerService,
     GeneratedAdminApiKeyControllerService,
     GeneratedUserApiKeyControllerService,
     OAuth2AdminControllerService,

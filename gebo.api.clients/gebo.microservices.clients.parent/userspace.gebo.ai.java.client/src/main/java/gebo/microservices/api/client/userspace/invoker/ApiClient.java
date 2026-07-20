@@ -50,7 +50,7 @@ import gebo.microservices.api.client.userspace.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.userspace.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.userspace.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:03:01.750672300+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:49.981745965+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {
@@ -70,7 +70,7 @@ public class ApiClient {
     
     private HttpHeaders defaultHeaders = new HttpHeaders();
     
-    private String basePath = "http://localhost:13008";
+    private String basePath = "http://localhost:13008/userspace";
 
     private RestTemplate restTemplate;
 

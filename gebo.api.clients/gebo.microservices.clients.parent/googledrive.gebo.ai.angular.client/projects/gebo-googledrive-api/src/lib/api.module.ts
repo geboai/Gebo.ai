@@ -7,12 +7,11 @@ import { ContentsResetControllerService } from './api/contentsResetController.se
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingController.service';
+import { GoogleDriveSearchServiceControllerService } from './api/googleDriveSearchServiceController.service';
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
-import { JobStatusControllerService } from './api/jobStatusController.service';
-import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
@@ -23,12 +22,11 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
     GoogleDriveBrowsingControllerService,
+    GoogleDriveSearchServiceControllerService,
     GoogleDriveSystemsControllerService,
     GoogleWorkspaceAccessHandshakeControllerService,
     IngestionFileTypesLibraryControllerService,
-    JobLauncherControllerService,
-    JobStatusControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+    JobLauncherControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

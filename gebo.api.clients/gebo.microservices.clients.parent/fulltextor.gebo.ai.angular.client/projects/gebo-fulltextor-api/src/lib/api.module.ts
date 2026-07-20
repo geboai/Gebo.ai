@@ -3,26 +3,13 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { ContentsResetControllerService } from './api/contentsResetController.service';
-import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
-import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
-import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
-import { JobLauncherControllerService } from './api/jobLauncherController.service';
-import { JobStatusControllerService } from './api/jobStatusController.service';
-import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-    ContentsResetControllerService,
-    DocumentContentStreamerControllerService,
-    GenericalPublisherControllerService,
-    IngestionFileTypesLibraryControllerService,
-    JobLauncherControllerService,
-    JobStatusControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+     ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

@@ -1,6 +1,6 @@
 # GeboVectorStoreConfigurationControllerApi
 
-All URIs are relative to *http://localhost:13002*
+All URIs are relative to *http://localhost:13002/vectorizator*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

@@ -3,13 +3,20 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { JobStatusControllerService } from './api/jobStatusController.service';
+import { LlmsUsageAdminLevelControllerService } from './api/llmsUsageAdminLevelController.service';
+import { LlmsUsageUserLevelControllerService } from './api/llmsUsageUserLevelController.service';
+import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-     ]
+    JobStatusControllerService,
+    LlmsUsageAdminLevelControllerService,
+    LlmsUsageUserLevelControllerService,
+    WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
