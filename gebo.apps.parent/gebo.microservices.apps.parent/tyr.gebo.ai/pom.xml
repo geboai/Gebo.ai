@@ -29,11 +29,7 @@
 			<artifactId>gebo.architecture.compute.workflow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.workflows-concentrator</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 	</dependencies>
 
 	<profiles>
