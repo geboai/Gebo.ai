@@ -39,7 +39,7 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
-import ai.gebo.microservices.cluster.cache.GeboTtlCache;
+import ai.gebo.microservices.searchservices.client.config.GeboSearchServicesClientsProperties.Endpoint;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.model.base.TypedInputStream;
 
@@ -53,15 +53,14 @@ import ai.gebo.model.base.TypedInputStream;
  * synchronous {@code ISearchService} contract consumers already depend on.
  *
  * <p>
- * Three methods are answered locally rather than remoted:
+ * Static identity/metadata (id, description, productId, messagingModuleId, prompt
+ * codes) is served <b>locally</b> from configuration — never remoted — so the
+ * repository indexing that runs at startup ({@code getCodeValue -> getId}) works
+ * even while the connector microservice is down. Two other methods are also local:
  * {@link #getCustomResultsAggregationDataType()} returns the connector's shared
- * extraction {@code Class} (supplied by the concrete subclass);
- * {@link #loadSearchResult(SearchResult)} streams through the chunker's cache
- * ({@link IGDocumentContentStreamer}) rather than a dedicated search endpoint,
- * because a {@link SearchResult} is an
- * {@link ai.gebo.model.base.IGComponentOriginatedDocument} the documents-cache
- * already knows how to fetch and cache; and the static metadata getters are
- * memoized to avoid re-fetching immutable values on every deep-search iteration.
+ * extraction {@code Class}, and {@link #loadSearchResult(SearchResult)} streams
+ * through the chunker's cache ({@link IGDocumentContentStreamer}) rather than a
+ * dedicated search endpoint. Everything else is a remote call.
  * </p>
  *
  * @param <C> the connector's extraction data type
@@ -82,22 +81,22 @@ public abstract class AbstractSearchServiceRestClient<C extends BaseSearchResult
 	protected final GeboMicroserviceUrlResolver urlResolver;
 	protected final IGeboCallerTokenPropagator tokenPropagator;
 	protected final IGDocumentContentStreamer documentContentStreamer;
+	protected final Endpoint endpoint;
 	protected final String microserviceId;
 	protected final String basePath;
 	protected final Class<C> extractionType;
-	private final GeboTtlCache metadataCache;
 
 	protected AbstractSearchServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
-			String microserviceId, String basePath, Class<C> extractionType, GeboTtlCache metadataCache) {
+			Endpoint endpoint, Class<C> extractionType) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
 		this.tokenPropagator = tokenPropagator;
 		this.documentContentStreamer = documentContentStreamer;
-		this.microserviceId = microserviceId;
-		this.basePath = trimSlashes(basePath);
+		this.endpoint = endpoint;
+		this.microserviceId = endpoint.getMicroserviceId();
+		this.basePath = trimSlashes(endpoint.getBasePath());
 		this.extractionType = extractionType;
-		this.metadataCache = metadataCache;
 	}
 
 	// ---- locally answered ---------------------------------------------------
@@ -116,61 +115,48 @@ public abstract class AbstractSearchServiceRestClient<C extends BaseSearchResult
 		}
 	}
 
-	// ---- static metadata (memoized) ----------------------------------------
+	// ---- static metadata (local, from config) -------------------------------
 
 	@Override
 	public String getId() {
-		return metadataCache.get(key("getId"), () -> callUnchecked("getId",
-				() -> webClient.get().uri(uri("getId")).headers(this::applyCallerToken).retrieve()
-						.bodyToMono(String.class).block()));
+		return endpoint.getId();
 	}
 
 	@Override
 	public String getDescription() {
-		return metadataCache.get(key("getDescription"), () -> callUnchecked("getDescription",
-				() -> webClient.get().uri(uri("getDescription")).headers(this::applyCallerToken).retrieve()
-						.bodyToMono(String.class).block()));
+		return endpoint.getDescription();
 	}
 
 	@Override
 	public String getProductId() {
-		return metadataCache.get(key("getProductId"), () -> callUnchecked("getProductId",
-				() -> webClient.get().uri(uri("getProductId")).headers(this::applyCallerToken).retrieve()
-						.bodyToMono(String.class).block()));
+		return endpoint.getProductId();
 	}
 
 	@Override
 	public String getMessagingModuleId() {
-		return metadataCache.get(key("getMessagingModuleId"), () -> callUnchecked("getMessagingModuleId",
-				() -> webClient.get().uri(uri("getMessagingModuleId")).headers(this::applyCallerToken).retrieve()
-						.bodyToMono(String.class).block()));
+		return endpoint.getMessagingModuleId();
 	}
 
 	@Override
 	public String getQueriesGenerationPromptUseCode() {
-		return metadataCache.get(key("getQueriesGenerationPromptUseCode"),
-				() -> callUnchecked("getQueriesGenerationPromptUseCode",
-						() -> webClient.get().uri(uri("getQueriesGenerationPromptUseCode"))
-								.headers(this::applyCallerToken).retrieve().bodyToMono(String.class).block()));
+		return endpoint.getQueriesGenerationPromptUseCode();
 	}
 
-	// ---- remoted ------------------------------------------------------------
+	// ---- isEnabled: false when the connector microservice is absent ---------
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>
-	 * Resilient by design: returns {@code false} when the connector's controller
-	 * microservice is not part of, or not running in, this installation — i.e. when
-	 * its id resolves to no topology member and no {@code direct} entry, or when the
-	 * remote is unreachable/unregistered. This lets brain's deep-search discovery
-	 * ({@code findImplementations(x -> x.isEnabled())}) simply skip a search service
-	 * whose microservice is absent, instead of failing the whole enumeration.
+	 * Returns {@code false} when the connector's controller microservice is not part
+	 * of, or not running in, this installation — its id resolves to no topology
+	 * member and no {@code direct} entry, or the remote is unreachable. Otherwise it
+	 * calls the controller's real {@code isEnabled}. This lets brain's deep-search
+	 * discovery skip an absent search service instead of failing the enumeration.
 	 * </p>
 	 */
 	@Override
 	public boolean isEnabled() {
-		// Not a member of this installation's topology (and no direct override) -> absent.
 		if (urlResolver.baseUrlForMicroserviceId(microserviceId).isEmpty()) {
 			LOGGER.debug("Search microservice '{}' is not in the topology; treating its search service as disabled",
 					microserviceId);
@@ -181,12 +167,13 @@ public abstract class AbstractSearchServiceRestClient<C extends BaseSearchResult
 					.bodyToMono(Boolean.class).block();
 			return Boolean.TRUE.equals(enabled);
 		} catch (RuntimeException ex) {
-			// Controller microservice not running / unreachable in this installation.
 			LOGGER.debug("Search microservice '{}' not reachable; treating its search service as disabled: {}",
 					microserviceId, ex.toString());
 			return false;
 		}
 	}
+
+	// ---- remoted ------------------------------------------------------------
 
 	@Override
 	public SearchableSystemMetaData findSystemById(String systemId) throws SearchServiceException {
@@ -263,10 +250,6 @@ public abstract class AbstractSearchServiceRestClient<C extends BaseSearchResult
 
 	// ---- plumbing -----------------------------------------------------------
 
-	private String key(String endpoint) {
-		return microserviceId + "/" + basePath + "/" + endpoint;
-	}
-
 	protected void applyCallerToken(HttpHeaders headers) {
 		String token = tokenPropagator.currentToken();
 		if (StringUtils.hasText(token)) {
@@ -277,17 +260,18 @@ public abstract class AbstractSearchServiceRestClient<C extends BaseSearchResult
 		}
 	}
 
-	protected URI uri(String endpoint) {
-		return UriComponentsBuilder.fromUriString(baseUrl() + "/" + basePath + "/" + endpoint).build().encode().toUri();
+	protected URI uri(String endpointPath) {
+		return UriComponentsBuilder.fromUriString(baseUrl() + "/" + basePath + "/" + endpointPath).build().encode()
+				.toUri();
 	}
 
-	protected URI uri(String endpoint, String paramName, String paramValue) {
-		return UriComponentsBuilder.fromUriString(baseUrl() + "/" + basePath + "/" + endpoint)
+	protected URI uri(String endpointPath, String paramName, String paramValue) {
+		return UriComponentsBuilder.fromUriString(baseUrl() + "/" + basePath + "/" + endpointPath)
 				.queryParam(paramName, paramValue).build().encode().toUri();
 	}
 
-	protected URI uri(String endpoint, Map<String, String> params) {
-		UriComponentsBuilder b = UriComponentsBuilder.fromUriString(baseUrl() + "/" + basePath + "/" + endpoint);
+	protected URI uri(String endpointPath, Map<String, String> params) {
+		UriComponentsBuilder b = UriComponentsBuilder.fromUriString(baseUrl() + "/" + basePath + "/" + endpointPath);
 		params.forEach(b::queryParam);
 		return b.build().encode().toUri();
 	}

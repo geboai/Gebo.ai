@@ -2,6 +2,7 @@
 
 Generated from each running microservice's live `/v3/api-docs` (springdoc), after building every image with `-P docker,swagger-on` and bringing up `dockers/gebo.microservices/docker-compose.yml`. One section per service; controllers are grouped by their springdoc `tag`, which springdoc derives 1:1 from the `@RestController` class name (kebab-case).
 
+
 **Base path note:** this checkout serves backends under a `server.servlet.context-path` (e.g. `/brain`); every path below already includes it. Every backend's context-path is its short context name (`GeboMicroservice.getContextName()`, the Eureka discovery id minus `-gebo-ai`), which is simultaneously the segment the gateway's topology route matches on (no `StripPrefix`) and the segment `GeboMicroserviceUrlResolver` appends to every base url it resolves for internal service-to-service calls — one derived value, three consumers, kept in lockstep by construction. Gateway and eureka are unaffected (gateway is the routing edge with no context-path of its own; eureka is the registry, not a `swagger-on` service).
 
 **LLM controllers-review note:** the concrete, mapped LLM admin controllers (`ChatModelsController`, `EmbeddingModelsControllers`, `ImageModelsController`, `RankerModelsController`, `TextToSpeechModelsController`, `TranscriptModelsController`, `ChatModelsLookupController`, `FunctionsLookupController`) live in a sibling `gebo.architecture.llms.abstraction.layer.controllers` module, wired only into `gebo.apps.monolithic.starter` and `brain.gebo.ai`. Each LLM provider driver (openai, mistral, generic-openai-compatible, ollama, onxx-embeddings, anthropic3, google_vertex, deepseek, aws-bedrock) got the same treatment: its admin controllers moved to a `<provider>.controllers` sibling module, aggregated by `gebo.llms.controllers.starter`, wired the same way (monolith + brain only). **Effect:** vectorizator and graphicator do not expose any of these — brain is the sole microservice hosting LLM configuration admin, and also carries every provider-specific admin controller. `gebo.llms.setup` (fast-setup, `GeboFastLLMSSetupController`) is likewise wired only on monolith + brain, kept separate from `gebo.llms.starter` (which `gebo.microservices.llms.starter` now depends on for the Hazelcast models-replication cache to deserialize provider-specific config classes on every LLM-hosting microservice) so it doesn't leak onto vectorizator/graphicator.
@@ -13,13 +14,15 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 **LLM usage tracking lives on tyr.gebo.ai (port 13019), not brain:** `LLMSUsageAdminLevelController`/`LLMSUsageUserLevelController`, their backing `LLMSUsageAggregationService`, and the `LLMUsageDetail`/`LLMDailyUsageDetail` entities/repositories/daily-consolidation job all live in package `ai.gebo.architecture.llms.usage` inside `gebo.architecture.compute.workflow` — the same module that hosts `job-status-controller`/`workflow-stats-admin-level-controller`. `LLMSUsageCrudServiceImpl` (in `gebo.architecture.llms.abstraction.layer`, on every LLM-hosting microservice's classpath) never writes Mongo itself: it emits a `LLMUsageDetailPayload` message addressed to `LLMS-USAGE-MONITOR`/`USAGE-CONCENTRATOR`, which a dedicated threaded receiver in `compute.workflow` picks up and persists — the same `JOBS_MASTER`/`END_OF_WORKFLOW_COMPUTE_SERVICE` pattern already used for workflow completion. `gebo.architecture.compute.workflow` is wired on exactly two apps: `tyr.gebo.ai` (direct dependency) and the monolith (`gebo.apps.monolithic.starter`, transitive into `gebo.ai.app`) — `brain.gebo.ai`'s own pom carried a further direct dependency on it (a leftover from before this consolidation, exposing `job-status-controller` etc. there too, unrelated to LLM usage specifically), which has been removed.
 
+**Per-connector search services now have REST controllers + brain clients:** each virtual-filesystem search service — `JiraSearchService`, `ConfluenceSearchService`, `GMicrosoftGraphSearchService` (native `INativeSearchService`), and `GoogleDriveSearchService` (plain `ISearchService`) — is exposed for USERS/ADMIN from its own content microservice via a `*SearchServiceController` (jira/confluence/sharepoint 8 controllers/45 endpoints, googledrive 9/43), built on the new `BaseSearchController`/`BaseNativeSearchController` in `gebo.architecture.search.abstraction.layer`. Brain carries topology-aware REST clients (`gebo.microservices.searchservices.clients`, a `@LoadBalanced` WebClient resolving each target via `GeboMicroserviceUrlResolver`) that implement the same interfaces, so brain's deep-search discovers them through `ISearchServiceRepositoryPattern` exactly as the monolith does (bound as `jira`/`confluence`/`sharepoint`/`google-drive`). Static metadata (`getId`, module id, prompt codes) is served locally from config so startup indexing never blocks on a down microservice; `isEnabled()` returns `false` when the connector's microservice is absent from the topology or unreachable; `loadSearchResult` streams through the chunker documents-cache; the connectors' native-filter + extraction DTOs were extracted into lightweight `gebo.<connector>.search.api` modules so brain shares them without the heavy connector SDKs. The `bing`/`google` web-search tools run in-process on brain directly (they are search tools, not content handlers; `gebo.googlesearch.handler`'s fake content-handler classes were deleted). This also removed the global `contentsystems.abstraction.layer` dependency from `gebo.systems.parent` (it was silently forcing that module — and its `GMonolithicDocumentContentStreamerImpl` and the leaked job/content controllers — onto bing/google and thus brain); it is now declared explicitly by the 12 real content-handler modules that use it, keeping brain free of it.
+
 
 ## Summary
 
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 0 | 0 |
-| brain.gebo.ai | 13001 | `/brain` | 49 | 214 |
+| brain.gebo.ai | 13001 | `/brain` | 51 | 222 |
 | vectorizator.gebo.ai | 13002 | `/vectorizator` | 2 | 4 |
 | graphicator.gebo.ai | 13003 | `/graphicator` | 2 | 5 |
 | chunker.gebo.ai | 13004 | `/chunker` | 4 | 16 |
@@ -27,11 +30,11 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 | filesystem.gebo.ai | 13006 | `/filesystem` | 8 | 30 |
 | uploads.gebo.ai | 13007 | `/uploads` | 7 | 21 |
 | userspace.gebo.ai | 13008 | `/userspace` | 7 | 29 |
-| sharepoint.gebo.ai | 13009 | `/sharepoint` | 7 | 28 |
-| confluence.gebo.ai | 13010 | `/confluence` | 7 | 28 |
-| jira.gebo.ai | 13011 | `/jira` | 7 | 28 |
+| sharepoint.gebo.ai | 13009 | `/sharepoint` | 8 | 45 |
+| confluence.gebo.ai | 13010 | `/confluence` | 8 | 45 |
+| jira.gebo.ai | 13011 | `/jira` | 8 | 45 |
 | aws-s3.gebo.ai | 13012 | `/aws-s3` | 7 | 26 |
-| googledrive.gebo.ai | 13013 | `/googledrive` | 8 | 29 |
+| googledrive.gebo.ai | 13013 | `/googledrive` | 9 | 43 |
 | mcpclient.gebo.ai | 13014 | `/mcpclient` | 8 | 28 |
 | integration.gebo.ai | 13015 | `/integration` | 7 | 19 |
 | fulltextor.gebo.ai | 13016 | `—` | 0 | 0 |
@@ -47,7 +50,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-49 controller(s), 214 endpoint(s):
+51 controller(s), 222 endpoint(s):
 
 
 ### `anthropic-chat-models-configuration-controller`
@@ -349,6 +352,22 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/getGenericOpenAITranscriptModelTypes` | getGenericOpenAITranscriptModelTypes |
 | POST | `/brain/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/insertGenericOpenAIAPITranscriptModelConfig` | insertGenericOpenAIAPITranscriptModelConfig |
 | POST | `/brain/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/updateGenericOpenAIAPITranscriptModelConfig` | updateGenericOpenAIAPITranscriptModelConfig |
+
+### `google-search-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/GoogleSearchConfigurationController/deleteGGoogleSearchApiCredentials` | deleteGGoogleSearchApiCredentials |
+| POST | `/brain/api/admin/GoogleSearchConfigurationController/fastInsertGoogleSearchApiCredentials` | fastInsertGoogleSearchApiCredentials |
+| GET | `/brain/api/admin/GoogleSearchConfigurationController/getGoogleSearchApiCredentials` | getGoogleSearchApiCredentials |
+| GET | `/brain/api/admin/GoogleSearchConfigurationController/getGoogleSearchStatus` | getGoogleSearchStatus |
+| POST | `/brain/api/admin/GoogleSearchConfigurationController/insertGGoogleSearchApiCredentials` | insertGGoogleSearchApiCredentials |
+| GET | `/brain/api/admin/GoogleSearchConfigurationController/searchGGoogleSearchApiCredentialsByCode` | searchGGoogleSearchApiCredentialsByCode |
+| POST | `/brain/api/admin/GoogleSearchConfigurationController/updateGGoogleSearchApiCredentials` | updateGGoogleSearchApiCredentials |
+
+### `google-search-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/users/GoogleSearchController/googleSearch` | googleSearch |
 
 ### `image-models-controller`
 | Method | Path | Operation |
@@ -768,7 +787,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## sharepoint.gebo.ai — port 13009 (`sharepoint-gebo-ai`) — context-path `/sharepoint`
 
-7 controller(s), 28 endpoint(s):
+8 controller(s), 45 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -801,6 +820,27 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/sharepoint/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/sharepoint/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
+### `share-point-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/aggregate` | restAggregate |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMap |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/findSystemById` | restFindSystemById |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getDescription` | restGetDescription |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getId` | restGetId |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCode |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getProductId` | restGetProductId |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/isEnabled` | restIsEnabled |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/nativeSearch` | restNativeSearch |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/search` | restSearch |
+
 ### `sharepoint-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -829,7 +869,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## confluence.gebo.ai — port 13010 (`confluence-gebo-ai`) — context-path `/confluence`
 
-7 controller(s), 28 endpoint(s):
+8 controller(s), 45 endpoint(s):
 
 
 ### `confluence-browsing-controller`
@@ -838,6 +878,27 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/confluence/api/admin/ConfluenceBrowsingController/browseConfluencePath` | browseConfluencePath |
 | POST | `/confluence/api/admin/ConfluenceBrowsingController/getConfluenceNavigationStatus` | getConfluenceNavigationStatus |
 | GET | `/confluence/api/admin/ConfluenceBrowsingController/getConfluenceRoots` | getConfluenceRoots |
+
+### `confluence-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/aggregate` | restAggregate |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMap |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/findSystemById` | restFindSystemById |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getDescription` | restGetDescription |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getId` | restGetId |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCode |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getProductId` | restGetProductId |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/isEnabled` | restIsEnabled |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/nativeSearch` | restNativeSearch |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/search` | restSearch |
 
 ### `confluence-systems-controller`
 | Method | Path | Operation |
@@ -890,7 +951,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## jira.gebo.ai — port 13011 (`jira-gebo-ai`) — context-path `/jira`
 
-7 controller(s), 28 endpoint(s):
+8 controller(s), 45 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -922,6 +983,27 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/jira/api/admin/JiraBrowsingController/browseJiraPath` | browseJiraPath |
 | POST | `/jira/api/admin/JiraBrowsingController/getJiraNavigationStatus` | getJiraNavigationStatus |
 | GET | `/jira/api/admin/JiraBrowsingController/getJiraRoots` | getJiraRoots |
+
+### `jira-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/jira/api/users/JiraSearchServiceController/aggregate` | restAggregate |
+| POST | `/jira/api/users/JiraSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMap |
+| POST | `/jira/api/users/JiraSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
+| GET | `/jira/api/users/JiraSearchServiceController/findSystemById` | restFindSystemById |
+| POST | `/jira/api/users/JiraSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
+| GET | `/jira/api/users/JiraSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
+| GET | `/jira/api/users/JiraSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
+| GET | `/jira/api/users/JiraSearchServiceController/getDescription` | restGetDescription |
+| GET | `/jira/api/users/JiraSearchServiceController/getId` | restGetId |
+| GET | `/jira/api/users/JiraSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
+| GET | `/jira/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCode |
+| GET | `/jira/api/users/JiraSearchServiceController/getProductId` | restGetProductId |
+| GET | `/jira/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
+| GET | `/jira/api/users/JiraSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
+| GET | `/jira/api/users/JiraSearchServiceController/isEnabled` | restIsEnabled |
+| POST | `/jira/api/users/JiraSearchServiceController/nativeSearch` | restNativeSearch |
+| POST | `/jira/api/users/JiraSearchServiceController/search` | restSearch |
 
 ### `jira-systems-controller`
 | Method | Path | Operation |
@@ -1010,7 +1092,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## googledrive.gebo.ai — port 13013 (`googledrive-gebo-ai`) — context-path `/googledrive`
 
-8 controller(s), 29 endpoint(s):
+9 controller(s), 43 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1034,6 +1116,24 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/googledrive/api/admin/GoogleDriveBrowsingController/browseGoogleDrivePath` | browseGoogleDrivePath |
 | GET | `/googledrive/api/admin/GoogleDriveBrowsingController/getGoogleDriveRoots` | getGoogleDriveRoots |
+
+### `google-drive-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/aggregate` | restAggregate |
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/findSystemById` | restFindSystemById |
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getDescription` | restGetDescription |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getId` | restGetId |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getProductId` | restGetProductId |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/isEnabled` | restIsEnabled |
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/search` | restSearch |
 
 ### `google-drive-systems-controller`
 | Method | Path | Operation |

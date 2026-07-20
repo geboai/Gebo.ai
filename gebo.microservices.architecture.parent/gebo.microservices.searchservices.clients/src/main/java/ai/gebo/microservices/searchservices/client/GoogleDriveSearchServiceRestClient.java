@@ -14,7 +14,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.googledrive.search.api.GoogleDriveResultsExtractionData;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
-import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.searchservices.client.config.GeboSearchServicesClientsProperties.Endpoint;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 
@@ -29,8 +28,8 @@ public class GoogleDriveSearchServiceRestClient
 
 	public GoogleDriveSearchServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
-			Endpoint endpoint, GeboTtlCache metadataCache) {
-		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint.getMicroserviceId(),
-				endpoint.getBasePath(), GoogleDriveResultsExtractionData.class, metadataCache);
+			Endpoint endpoint) {
+		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint,
+				GoogleDriveResultsExtractionData.class);
 	}
 }

@@ -27,14 +27,15 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
-import ai.gebo.microservices.cluster.cache.GeboTtlCache;
+import ai.gebo.microservices.searchservices.client.config.GeboSearchServicesClientsProperties.Endpoint;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 
 /**
  * Native-search variant of {@link AbstractSearchServiceRestClient}. Adds the
  * {@link INativeSearchService} surface: {@code nativeSearch} is remoted;
- * {@link #getNativeSearchDataStructureType()} is answered locally with the
- * connector's shared native-filter {@code Class}.
+ * {@link #getNativeSearchDataStructureType()} returns the connector's shared
+ * native-filter {@code Class} and {@link #getNativePromptTemplateUseCode()} the
+ * configured prompt code — both answered locally.
  *
  * @param <C> the connector's extraction data type
  * @param <N> the connector's native query/filter type
@@ -49,16 +50,19 @@ public abstract class AbstractNativeSearchServiceRestClient<C extends BaseSearch
 
 	protected AbstractNativeSearchServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
-			String microserviceId, String basePath, Class<C> extractionType, Class<N> nativeType,
-			GeboTtlCache metadataCache) {
-		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, microserviceId, basePath,
-				extractionType, metadataCache);
+			Endpoint endpoint, Class<C> extractionType, Class<N> nativeType) {
+		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint, extractionType);
 		this.nativeType = nativeType;
 	}
 
 	@Override
 	public Class<N> getNativeSearchDataStructureType() {
 		return nativeType;
+	}
+
+	@Override
+	public String getNativePromptTemplateUseCode() {
+		return endpoint.getNativePromptTemplateUseCode();
 	}
 
 	@Override
@@ -72,13 +76,6 @@ public abstract class AbstractNativeSearchServiceRestClient<C extends BaseSearch
 						.headers(this::applyCallerToken).contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON).bodyValue(query).retrieve().bodyToMono(SEARCH_RESULT_LIST)
 						.block());
-	}
-
-	@Override
-	public String getNativePromptTemplateUseCode() {
-		return callUnchecked("getNativePromptTemplateUseCode",
-				() -> webClient.get().uri(uri("getNativePromptTemplateUseCode")).headers(this::applyCallerToken)
-						.retrieve().bodyToMono(String.class).block());
 	}
 
 	@Override

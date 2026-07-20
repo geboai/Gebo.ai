@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
-import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.searchservices.client.config.GeboSearchServicesClientsProperties.Endpoint;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.sharepoint.search.api.MicrosoftResultsExtractionData;
@@ -29,9 +28,8 @@ public class SharePointSearchServiceRestClient
 
 	public SharePointSearchServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
-			Endpoint endpoint, GeboTtlCache metadataCache) {
-		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint.getMicroserviceId(),
-				endpoint.getBasePath(), MicrosoftResultsExtractionData.class, SharePointSearchFilter.class,
-				metadataCache);
+			Endpoint endpoint) {
+		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint,
+				MicrosoftResultsExtractionData.class, SharePointSearchFilter.class);
 	}
 }

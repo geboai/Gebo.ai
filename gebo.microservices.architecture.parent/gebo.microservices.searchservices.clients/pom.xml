@@ -9,6 +9,22 @@
 	</parent>
 	<artifactId>gebo.microservices.searchservices.clients</artifactId>
 
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<!--
 		Topology-aware WebClient clients that implement the per-connector search
 		interfaces (INativeSearchService for jira/confluence/sharepoint,
@@ -81,6 +97,13 @@
 		<dependency>
 			<groupId>io.projectreactor.netty</groupId>
 			<artifactId>reactor-netty-http</artifactId>
+		</dependency>
+		<!-- @LoadBalanced + the reactive load-balancer filter: the search WebClient
+		     addresses the topology's discovery service-ids (e.g. jira-gebo-ai), which
+		     the load balancer resolves to a live instance. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

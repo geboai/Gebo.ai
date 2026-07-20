@@ -2,7 +2,6 @@ package ai.gebo.sharepoint.search.api;
 
 import java.util.List;
 
-import org.springframework.web.reactive.result.method.RequestMappingInfo.BuilderConfiguration;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

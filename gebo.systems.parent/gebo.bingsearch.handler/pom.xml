@@ -8,6 +8,11 @@
   <artifactId>gebo.bingsearch.handler</artifactId>
   <dependencies>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.model</artifactId>
 			<version>${project.version}</version>

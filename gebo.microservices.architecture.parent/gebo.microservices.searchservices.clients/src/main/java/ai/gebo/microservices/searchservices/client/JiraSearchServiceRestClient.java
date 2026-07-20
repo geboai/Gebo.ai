@@ -15,7 +15,6 @@ import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.atlassian.jira.search.api.JiraIssuesSearchFilter;
 import ai.gebo.atlassian.jira.search.api.JiraResultsExtractionData;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
-import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.searchservices.client.config.GeboSearchServicesClientsProperties.Endpoint;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 
@@ -29,8 +28,8 @@ public class JiraSearchServiceRestClient
 
 	public JiraSearchServiceRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
-			Endpoint endpoint, GeboTtlCache metadataCache) {
-		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint.getMicroserviceId(),
-				endpoint.getBasePath(), JiraResultsExtractionData.class, JiraIssuesSearchFilter.class, metadataCache);
+			Endpoint endpoint) {
+		super(webClient, urlResolver, tokenPropagator, documentContentStreamer, endpoint,
+				JiraResultsExtractionData.class, JiraIssuesSearchFilter.class);
 	}
 }

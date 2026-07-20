@@ -13,12 +13,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
-import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.searchservices.client.ConfluenceSearchServiceRestClient;
 import ai.gebo.microservices.searchservices.client.GoogleDriveSearchServiceRestClient;
@@ -35,65 +36,83 @@ import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfig
  * (the monolith, or the content microservice itself) it stands aside; dropped
  * onto brain — where none of these handlers exist — it supplies the remote-backed
  * {@code ISearchService} beans that brain's deep-search discovers via
- * {@code ISearchServiceRepositoryPattern}. Runs after the topology resolver and
- * the cluster-commons token propagator exist; the {@link WebClient} carries no
- * base url (the target is resolved per call from the topology).
+ * {@code ISearchServiceRepositoryPattern}.
+ *
+ * <p>
+ * The {@link WebClient} is {@link LoadBalanced @LoadBalanced} and carries no base
+ * url: the target is resolved per call from the topology
+ * ({@link GeboMicroserviceUrlResolver}) to a discovery service-id host (e.g.
+ * {@code http://jira-gebo-ai/jira}) which the load balancer resolves to a live
+ * instance. Runs after the topology resolver and the cluster-commons token
+ * propagator exist.
+ * </p>
  */
 @AutoConfiguration(after = { GeboMicroservicesTopologyAutoConfiguration.class,
 		GeboClusterCommonsAutoConfiguration.class })
 @EnableConfigurationProperties(GeboSearchServicesClientsProperties.class)
 public class GeboSearchServicesClientsAutoConfiguration {
 
+	static final String WEB_CLIENT_BUILDER_BEAN = "geboSearchServicesLbWebClientBuilder";
 	static final String WEB_CLIENT_BEAN = "geboSearchServicesClientWebClient";
+
+	/**
+	 * A dedicated {@link LoadBalanced @LoadBalanced} builder so the search calls go
+	 * through Spring Cloud LoadBalancer (resolving the topology's discovery
+	 * service-ids) without disturbing any other WebClient.Builder on the classpath.
+	 */
+	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
+	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
+	@LoadBalanced
+	public WebClient.Builder geboSearchServicesLbWebClientBuilder() {
+		return WebClient.builder();
+	}
 
 	@Bean(name = WEB_CLIENT_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
-	public WebClient geboSearchServicesClientWebClient(GeboSearchServicesClientsProperties properties) {
-		return WebClient.builder()
+	public WebClient geboSearchServicesClientWebClient(
+			@Qualifier(WEB_CLIENT_BUILDER_BEAN) WebClient.Builder builder,
+			GeboSearchServicesClientsProperties properties) {
+		return builder
 				.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(properties.getMaxInMemorySizeBytes())).build();
-	}
-
-	private GeboTtlCache metadataCache(GeboSearchServicesClientsProperties properties) {
-		return new GeboTtlCache(properties.getMetadataCacheTtl(), properties.getMetadataCacheMaxEntries());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(JiraSearchServiceRestClient.class)
 	public JiraSearchServiceRestClient jiraSearchServiceRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
 			GeboSearchServicesClientsProperties properties) {
 		return new JiraSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
-				properties.getJira(), metadataCache(properties));
+				properties.getJira());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(ConfluenceSearchServiceRestClient.class)
 	public ConfluenceSearchServiceRestClient confluenceSearchServiceRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
 			GeboSearchServicesClientsProperties properties) {
 		return new ConfluenceSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
-				properties.getConfluence(), metadataCache(properties));
+				properties.getConfluence());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(SharePointSearchServiceRestClient.class)
 	public SharePointSearchServiceRestClient sharePointSearchServiceRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
 			GeboSearchServicesClientsProperties properties) {
 		return new SharePointSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
-				properties.getSharepoint(), metadataCache(properties));
+				properties.getSharepoint());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(GoogleDriveSearchServiceRestClient.class)
 	public GoogleDriveSearchServiceRestClient googleDriveSearchServiceRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			IGeboCallerTokenPropagator tokenPropagator, IGDocumentContentStreamer documentContentStreamer,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
 			GeboSearchServicesClientsProperties properties) {
 		return new GoogleDriveSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
-				properties.getGoogledrive(), metadataCache(properties));
+				properties.getGoogledrive());
 	}
 }
