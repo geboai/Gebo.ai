@@ -6,20 +6,12 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 **LLM controllers-review note:** the concrete, mapped LLM admin controllers (`ChatModelsController`, `EmbeddingModelsControllers`, `ImageModelsController`, `RankerModelsController`, `TextToSpeechModelsController`, `TranscriptModelsController`, `ChatModelsLookupController`, `FunctionsLookupController`) live in a sibling `gebo.architecture.llms.abstraction.layer.controllers` module, wired only into `gebo.apps.monolithic.starter` and `brain.gebo.ai`. Each LLM provider driver (openai, mistral, generic-openai-compatible, ollama, onxx-embeddings, anthropic3, google_vertex, deepseek, aws-bedrock) got the same treatment: its admin controllers moved to a `<provider>.controllers` sibling module, aggregated by `gebo.llms.controllers.starter`, wired the same way (monolith + brain only). **Effect:** vectorizator and graphicator do not expose any of these — brain is the sole microservice hosting LLM configuration admin, and also carries every provider-specific admin controller. `gebo.llms.setup` (fast-setup, `GeboFastLLMSSetupController`) is likewise wired only on monolith + brain, kept separate from `gebo.llms.starter` (which `gebo.microservices.llms.starter` now depends on for the Hazelcast models-replication cache to deserialize provider-specific config classes on every LLM-hosting microservice) so it doesn't leak onto vectorizator/graphicator.
 
-**Workflows consolidated into the new tyr.gebo.ai (port 13019):** `job-status-controller` and `workflow-stats-admin-level-controller` used to be duplicated on every content-ingesting microservice (vectorizator, graphicator, chunker, git, filesystem, uploads, userspace, sharepoint, confluence, jira, aws-s3, googledrive, mcpclient, integration, fulltextor). They've been removed from all of them and now live solely on the new `tyr` microservice, the JOBS_MASTER workflow/usage-tracking home consolidated out of `content.abstraction.layer` into `gebo.architecture.compute.workflows`. `tyr` currently exposes just those 2 controllers (3 endpoints); each other microservice's controller/endpoint count dropped by 2 controllers / 3 endpoints accordingly.
+**`gebo.architecture.contentsystems.abstraction.layer` is scoped to the services that actually own content-system endpoints:** `job-launcher-controller`, `contents-reset-controller`, `generical-publisher-controller`, and `document-content-streamer-controller` (all four bundled in that one module, package `ai.gebo.systems.abstraction.layer.controllers`/`ai.gebo.jobs.services.controllers`) are legitimate on the 11 real content-handler microservices (git, filesystem, uploads, userspace, sharepoint, confluence, jira, aws-s3, googledrive, mcpclient, integration) — each hosts its own systems controller extending `GAbstractSystemsArchitectureController`, and `document-content-streamer-controller` specifically is how each serves its own locally-owned content back to chunker's cache-backed proxy. They are **not** legitimate on brain, vectorizator, graphicator, or fulltextor, none of which own a content-system endpoint:
+- `AIDocumentsCacheService` (`gebo.architecture.rag.support.layer`, reached by brain and graphicator via `gebo.architecture.chat.abstraction.layer`) now resolves document content through `IGDocumentContentStreamer` — the same deployment-aware abstraction `document-content-streamer-controller` itself uses (local on the monolith, chunker-proxying on microservices) — instead of a direct, locally-scoped `IGContentManagementSystemHandlerRepositoryPattern.findByHandledEndpoint(...)` lookup that only ever resolved on the monolith, where every content handler happens to be co-located. On brain and graphicator that lookup always returned `null` — no content-handler beans exist on either service — so the RAG full-document-contents path was a silent no-op there. `rag.support.layer`'s pom no longer depends on `gebo.architecture.contentsystems.abstraction.layer`.
+- `gebo.ragsystem.content.vectorizator` and `gebo.ragsystem.content.fulltext.processor` (vectorizator's and fulltextor's own business-logic modules) carried a direct dependency on `gebo.architecture.contentsystems.abstraction.layer` with zero actual source references to it — both consume purely through generic `gebo.core.messages` payloads (`GDocumentReferencePayload` et al.), sourced from the chunker/documents-cache pipeline, never from a content-handler directly. Dependency removed.
+`fulltextor.gebo.ai` now correctly shows 0 controllers: it never had a REST controller of its own anywhere in its dependency tree — it is a pure message-driven worker consuming chunk-availability messages, downloading each chunk via the documents-cache client, and writing it to OpenSearch. Its previously-shown 5 controllers were entirely the leaked bundle above.
 
-Bringing `tyr` up initially crash-looped with `UnsatisfiedDependencyException: ... field
-'jobsRepo' ... No qualifying bean of type 'JobStatusRepository'`. Cause: `TyrApplication`
-had `@ComponentScan(basePackages = "ai.gebo")` but was missing
-`@EnableMongoRepositories(basePackages = "ai.gebo")` — Spring Data's Mongo repository
-scan defaults to the main class's own package, not the `@ComponentScan` bases, so it
-never found `ai.gebo.knowledgebase.repositories.JobStatusRepository` even though it was
-on the classpath. Every other data-backed microservice (`brain`, `uploads`,
-`vectorizator`, ...) already carries this annotation; `TyrApplication` was just missing
-it as a new module. Fixed by adding the annotation to match the existing pattern.
-
-The doc-generation skill's port map, polling list, and the generator script's `SERVICES`
-table were also updated to include `tyr` (previously only 13000–13018 were tracked).
+**LLM usage tracking lives on tyr.gebo.ai (port 13019), not brain:** `LLMSUsageAdminLevelController`/`LLMSUsageUserLevelController`, their backing `LLMSUsageAggregationService`, and the `LLMUsageDetail`/`LLMDailyUsageDetail` entities/repositories/daily-consolidation job all live in package `ai.gebo.architecture.llms.usage` inside `gebo.architecture.compute.workflow` — the same module that hosts `job-status-controller`/`workflow-stats-admin-level-controller`. `LLMSUsageCrudServiceImpl` (in `gebo.architecture.llms.abstraction.layer`, on every LLM-hosting microservice's classpath) never writes Mongo itself: it emits a `LLMUsageDetailPayload` message addressed to `LLMS-USAGE-MONITOR`/`USAGE-CONCENTRATOR`, which a dedicated threaded receiver in `compute.workflow` picks up and persists — the same `JOBS_MASTER`/`END_OF_WORKFLOW_COMPUTE_SERVICE` pattern already used for workflow completion. `gebo.architecture.compute.workflow` is wired on exactly two apps: `tyr.gebo.ai` (direct dependency) and the monolith (`gebo.apps.monolithic.starter`, transitive into `gebo.ai.app`) — `brain.gebo.ai`'s own pom carried a further direct dependency on it (a leftover from before this consolidation, exposing `job-status-controller` etc. there too, unrelated to LLM usage specifically), which has been removed.
 
 
 ## Summary
@@ -27,9 +19,9 @@ table were also updated to include `tyr` (previously only 13000–13018 were tra
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 0 | 0 |
-| brain.gebo.ai | 13001 | `/brain` | 57 | 226 |
-| vectorizator.gebo.ai | 13002 | `/vectorizator` | 7 | 14 |
-| graphicator.gebo.ai | 13003 | `/graphicator` | 6 | 12 |
+| brain.gebo.ai | 13001 | `/brain` | 49 | 214 |
+| vectorizator.gebo.ai | 13002 | `/vectorizator` | 2 | 4 |
+| graphicator.gebo.ai | 13003 | `/graphicator` | 2 | 5 |
 | chunker.gebo.ai | 13004 | `/chunker` | 4 | 16 |
 | git.gebo.ai | 13005 | `/git` | 6 | 22 |
 | filesystem.gebo.ai | 13006 | `/filesystem` | 8 | 30 |
@@ -42,10 +34,10 @@ table were also updated to include `tyr` (previously only 13000–13018 were tra
 | googledrive.gebo.ai | 13013 | `/googledrive` | 8 | 29 |
 | mcpclient.gebo.ai | 13014 | `/mcpclient` | 8 | 28 |
 | integration.gebo.ai | 13015 | `/integration` | 7 | 19 |
-| fulltextor.gebo.ai | 13016 | `/fulltextor` | 5 | 10 |
+| fulltextor.gebo.ai | 13016 | `—` | 0 | 0 |
 | eureka.gebo.ai | 13017 | `—` | 0 | 0 |
 | heimdall.gebo.ai | 13018 | `/heimdall` | 14 | 55 |
-| tyr.gebo.ai | 13019 | `/tyr` | 2 | 3 |
+| tyr.gebo.ai | 13019 | `/tyr` | 4 | 5 |
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
@@ -55,7 +47,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-57 controller(s), 226 endpoint(s):
+49 controller(s), 214 endpoint(s):
 
 
 ### `anthropic-chat-models-configuration-controller`
@@ -79,17 +71,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
 | GET | `/brain/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
 | GET | `/brain/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
-
-### `contents-reset-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
-
-### `document-content-streamer-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/brain/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `embedding-models-controllers`
 | Method | Path | Operation |
@@ -369,11 +350,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/insertGenericOpenAIAPITranscriptModelConfig` | insertGenericOpenAIAPITranscriptModelConfig |
 | POST | `/brain/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/updateGenericOpenAIAPITranscriptModelConfig` | updateGenericOpenAIAPITranscriptModelConfig |
 
-### `generical-publisher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
 ### `image-models-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -386,29 +362,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
 | GET | `/brain/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/brain/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
-
-### `job-launcher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/brain/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/brain/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/brain/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
-
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/brain/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/brain/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `llms-usage-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/admin/LLMSUsageAdminLevelController/drillDown` | adminDrillDown |
-
-### `llms-usage-user-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
 
 ### `ollama-chat-models-configuration-controller`
 | Method | Path | Operation |
@@ -507,26 +460,10 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
 | GET | `/brain/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
 
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
-
 ## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`) — context-path `/vectorizator`
 
-7 controller(s), 14 endpoint(s):
+2 controller(s), 4 endpoint(s):
 
-
-### `contents-reset-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/vectorizator/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
-
-### `document-content-streamer-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/vectorizator/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/vectorizator/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `gebo-core-analisys-controller`
 | Method | Path | Operation |
@@ -540,40 +477,10 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
 | POST | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
-### `generical-publisher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/vectorizator/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/vectorizator/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/vectorizator/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/vectorizator/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
-
-### `job-launcher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/vectorizator/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/vectorizator/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/vectorizator/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
-
 ## graphicator.gebo.ai — port 13003 (`graphicator-gebo-ai`) — context-path `/graphicator`
 
-6 controller(s), 12 endpoint(s):
+2 controller(s), 5 endpoint(s):
 
-
-### `contents-reset-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/graphicator/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
-
-### `document-content-streamer-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/graphicator/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/graphicator/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `gebo-vector-store-configuration-controller`
 | Method | Path | Operation |
@@ -581,24 +488,12 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/graphicator/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
 | POST | `/graphicator/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
-### `generical-publisher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/graphicator/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
 ### `ingestion-file-types-library-controller`
 | Method | Path | Operation |
 |---|---|---|
 | GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
 | GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
-
-### `job-launcher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/graphicator/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/graphicator/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/graphicator/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ## chunker.gebo.ai — port 13004 (`chunker-gebo-ai`) — context-path `/chunker`
 
@@ -1296,40 +1191,10 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/integration/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/integration/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`) — context-path `/fulltextor`
+## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`)
 
-5 controller(s), 10 endpoint(s):
+_No spec captured — service was not reachable when this doc was generated._
 
-
-### `contents-reset-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/fulltextor/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
-
-### `document-content-streamer-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/fulltextor/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
-| POST | `/fulltextor/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
-
-### `generical-publisher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/fulltextor/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/fulltextor/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/fulltextor/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/fulltextor/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
-
-### `job-launcher-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/fulltextor/api/admin/JobLauncherController/abortJob` | abortJob |
-| POST | `/fulltextor/api/admin/JobLauncherController/createJob` | createJob |
-| POST | `/fulltextor/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
 ## eureka.gebo.ai — port 13017
 
@@ -1454,7 +1319,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## tyr.gebo.ai — port 13019 (`tyr-gebo-ai`) — context-path `/tyr`
 
-2 controller(s), 3 endpoint(s):
+4 controller(s), 5 endpoint(s):
 
 
 ### `job-status-controller`
@@ -1462,6 +1327,16 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 |---|---|---|
 | GET | `/tyr/api/admin/JobStatusController/getJobStatus` | getJobStatus |
 | GET | `/tyr/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+
+### `llms-usage-admin-level-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/tyr/api/admin/LLMSUsageAdminLevelController/drillDown` | adminDrillDown |
+
+### `llms-usage-user-level-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/tyr/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |

@@ -1,20 +1,24 @@
-package ai.gebo.llms.abstraction.layer.model;
+package ai.gebo.llms.abstraction.layer.dto;
 
-import java.util.UUID;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.HashIndexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
+import ai.gebo.model.ModelType;
 import lombok.Data;
 
+/**
+ * Public-API shape of {@code ILLMSUsageCrudService.enqueueUsage(...)}, decoupling
+ * callers (the usage advisor) from both the persistence entity and the internal
+ * messaging payload, which now live in {@code gebo.architecture.compute.workflow}
+ * and {@code gebo.core.messages} respectively.
+ */
 @Data
-@Document
-public class LLMUsageDetail {
+public class LLMUsageDetailDto {
 	private static final String UNKNOWN = "unknown";
-
-	@Id
-	private String id = UUID.randomUUID().toString();
 
 	private String providerId;
 	private String username;
@@ -25,11 +29,9 @@ public class LLMUsageDetail {
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
-	@HashIndexed
-	private long timestamp = System.currentTimeMillis();
 
-	public static LLMUsageDetail of(GBaseModelConfig config) {
-		LLMUsageDetail detail = new LLMUsageDetail();
+	public static LLMUsageDetailDto of(GBaseModelConfig config) {
+		LLMUsageDetailDto detail = new LLMUsageDetailDto();
 		if (config != null && config.getModelTypeCode() != null) {
 			detail.setProviderId(config.getModelTypeCode());
 		} else

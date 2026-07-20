@@ -1,11 +1,11 @@
-package ai.gebo.llms.abstraction.layer.repository;
+package ai.gebo.architecture.llms.usage.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import ai.gebo.llms.abstraction.layer.model.LLMDailyUsageDetail;
-import ai.gebo.llms.abstraction.layer.model.ModelType;
+import ai.gebo.architecture.llms.usage.model.LLMDailyUsageDetail;
+import ai.gebo.model.ModelType;
 
 public interface LLMDailyUsageDetailRepository extends MongoRepository<LLMDailyUsageDetail, String> {
 

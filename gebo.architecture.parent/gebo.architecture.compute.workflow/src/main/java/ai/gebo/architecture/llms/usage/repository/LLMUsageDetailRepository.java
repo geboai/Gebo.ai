@@ -1,11 +1,11 @@
-package ai.gebo.llms.abstraction.layer.repository;
+package ai.gebo.architecture.llms.usage.repository;
 
 import java.util.stream.Stream;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import ai.gebo.llms.abstraction.layer.model.LLMUsageDetail;
+import ai.gebo.architecture.llms.usage.model.LLMUsageDetail;
 
 public interface LLMUsageDetailRepository extends MongoRepository<LLMUsageDetail, String> {
 	/**

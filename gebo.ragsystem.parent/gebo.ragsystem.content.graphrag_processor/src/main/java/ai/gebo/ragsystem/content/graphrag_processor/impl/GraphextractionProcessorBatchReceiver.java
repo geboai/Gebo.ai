@@ -1,7 +1,5 @@
 package ai.gebo.ragsystem.content.graphrag_processor.impl;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

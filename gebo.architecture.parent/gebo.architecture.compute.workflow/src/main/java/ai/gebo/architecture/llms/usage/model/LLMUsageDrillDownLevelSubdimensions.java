@@ -1,8 +1,8 @@
-package ai.gebo.llms.chat.client.rest.model;
+package ai.gebo.architecture.llms.usage.model;
 
 import java.util.List;
 
-import ai.gebo.llms.abstraction.layer.model.ModelType;
+import ai.gebo.model.ModelType;
 import lombok.Data;
 
 @Data

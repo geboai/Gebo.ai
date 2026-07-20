@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.client.rest.services;
+package ai.gebo.architecture.llms.usage.service.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.llms.abstraction.layer.model.LLMDailyUsageDetail;
-import ai.gebo.llms.chat.client.rest.model.LLMUsageAggregationBucket;
-import ai.gebo.llms.chat.client.rest.model.LLMUsageDrillDownLevel;
-import ai.gebo.llms.chat.client.rest.model.LLMUsageDrillDownLevelSubdimensions;
-import ai.gebo.llms.chat.client.rest.model.LLMUsageDrillDownResult;
+import ai.gebo.architecture.llms.usage.model.LLMDailyUsageDetail;
+import ai.gebo.architecture.llms.usage.model.LLMUsageAggregationBucket;
+import ai.gebo.architecture.llms.usage.model.LLMUsageDrillDownLevel;
+import ai.gebo.architecture.llms.usage.model.LLMUsageDrillDownLevelSubdimensions;
+import ai.gebo.architecture.llms.usage.model.LLMUsageDrillDownResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
