@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.client.rest.controllers;
+package ai.gebo.architecture.llms.usage.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.llms.chat.client.rest.model.LLMUsageDrillDownLevel;
-import ai.gebo.llms.chat.client.rest.model.LLMUsageDrillDownResult;
-import ai.gebo.llms.chat.client.rest.services.LLMSUsageAggregationService;
+import ai.gebo.architecture.llms.usage.model.LLMUsageDrillDownLevel;
+import ai.gebo.architecture.llms.usage.model.LLMUsageDrillDownResult;
+import ai.gebo.architecture.llms.usage.service.impl.LLMSUsageAggregationService;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 

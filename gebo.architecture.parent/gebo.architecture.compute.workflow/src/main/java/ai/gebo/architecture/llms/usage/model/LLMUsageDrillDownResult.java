@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.client.rest.model;
+package ai.gebo.architecture.llms.usage.model;
 
 import java.util.List;
 

@@ -13,8 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.dto.LLMUsageDetailDto;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.model.LLMUsageDetail;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.ILLMSUsageCrudService;
@@ -81,12 +81,13 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 			Integer inputTokens = usage.getPromptTokens();
 			Integer outputTokens = usage.getCompletionTokens();
 			Integer totalTokens = usage.getTotalTokens();
-			LLMUsageDetail detail = LLMUsageDetail.of(config);
+			LLMUsageDetailDto detail = LLMUsageDetailDto.of(config);
 			detail.setInputToken(inputTokens != null ? inputTokens.longValue() : 0l);
 			detail.setOutputToken(outputTokens != null ? outputTokens.longValue() : 0l);
 			detail.setTotalToken(totalTokens != null ? totalTokens.longValue() : 0l);
 			detail.setUsername(username);
 			detail.setCallerStack(callStack);
+			detail.setLatency(latencyMs);
 			this.usageCrudService.enqueueUsage(detail);
 		}
 	}

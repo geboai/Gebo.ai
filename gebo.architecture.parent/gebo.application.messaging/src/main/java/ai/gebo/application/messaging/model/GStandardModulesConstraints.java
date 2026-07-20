@@ -72,6 +72,14 @@ public class GStandardModulesConstraints {
 	public static final String SYSTEM_SETTINGS_CONTROLLER_COMPONENT = "system-settings-controller-component";
 	public static final String USER_MESSAGES_CONCENTRATOR_COMPONENT = "user-messages-concentrator-component";
 	public static final String END_OF_WORKFLOW_COMPUTE_SERVICE = "end-of-workflow-compute-service";
+	/**
+	 * The LLM usage-tracking concentrator: hosts the receiver in
+	 * {@code gebo.architecture.compute.workflow} (module {@code ai.gebo.architecture.llms.usage})
+	 * that persists {@code LLMUsageDetail} on behalf of every LLM-hosting
+	 * microservice's {@code LLMSUsageCrudServiceImpl} emitter.
+	 */
+	public static final String LLMS_USAGE_MONITOR = "LLMS-USAGE-MONITOR";
+	public static final String USAGE_CONCENTRATOR = "USAGE-CONCENTRATOR";
 	// Lists of modules categorized by their type
 	public static final List<String> EXTERNAl_MODULES = new ArrayList<String>();
 	public static final List<String> UNDER_DEVELOPMENT_MODULES = of();
