@@ -6,20 +6,9 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 **LLM controllers-review note:** the concrete, mapped LLM admin controllers (`ChatModelsController`, `EmbeddingModelsControllers`, `ImageModelsController`, `RankerModelsController`, `TextToSpeechModelsController`, `TranscriptModelsController`, `ChatModelsLookupController`, `FunctionsLookupController`) live in a sibling `gebo.architecture.llms.abstraction.layer.controllers` module, wired only into `gebo.apps.monolithic.starter` and `brain.gebo.ai`. Each LLM provider driver (openai, mistral, generic-openai-compatible, ollama, onxx-embeddings, anthropic3, google_vertex, deepseek, aws-bedrock) got the same treatment: its admin controllers moved to a `<provider>.controllers` sibling module, aggregated by `gebo.llms.controllers.starter`, wired the same way (monolith + brain only). **Effect:** vectorizator and graphicator do not expose any of these — brain is the sole microservice hosting LLM configuration admin, and also carries every provider-specific admin controller. `gebo.llms.setup` (fast-setup, `GeboFastLLMSSetupController`) is likewise wired only on monolith + brain, kept separate from `gebo.llms.starter` (which `gebo.microservices.llms.starter` now depends on for the Hazelcast models-replication cache to deserialize provider-specific config classes on every LLM-hosting microservice) so it doesn't leak onto vectorizator/graphicator.
 
-**Workflows consolidated into the new tyr.gebo.ai (port 13019):** `job-status-controller` and `workflow-stats-admin-level-controller` used to be duplicated on every content-ingesting microservice (vectorizator, graphicator, chunker, git, filesystem, uploads, userspace, sharepoint, confluence, jira, aws-s3, googledrive, mcpclient, integration, fulltextor). They've been removed from all of them and now live solely on the new `tyr` microservice, the JOBS_MASTER workflow/usage-tracking home consolidated out of `content.abstraction.layer` into `gebo.architecture.compute.workflows`. `tyr` currently exposes just those 2 controllers (3 endpoints); each other microservice's controller/endpoint count dropped by 2 controllers / 3 endpoints accordingly.
+**LLM usage tracking lives on tyr.gebo.ai (port 13019), not brain:** `LLMSUsageAdminLevelController`/`LLMSUsageUserLevelController`, their backing `LLMSUsageAggregationService`, and the `LLMUsageDetail`/`LLMDailyUsageDetail` entities/repositories/daily-consolidation job all live in package `ai.gebo.architecture.llms.usage` inside `gebo.architecture.compute.workflow` — the same module that hosts `job-status-controller`/`workflow-stats-admin-level-controller`. `LLMSUsageCrudServiceImpl` (in `gebo.architecture.llms.abstraction.layer`, on every LLM-hosting microservice's classpath) never writes Mongo itself: it emits a `LLMUsageDetailPayload` message addressed to `LLMS-USAGE-MONITOR`/`USAGE-CONCENTRATOR`, which a dedicated threaded receiver in `compute.workflow` picks up and persists — the same `JOBS_MASTER`/`END_OF_WORKFLOW_COMPUTE_SERVICE` pattern already used for workflow completion.
 
-Bringing `tyr` up initially crash-looped with `UnsatisfiedDependencyException: ... field
-'jobsRepo' ... No qualifying bean of type 'JobStatusRepository'`. Cause: `TyrApplication`
-had `@ComponentScan(basePackages = "ai.gebo")` but was missing
-`@EnableMongoRepositories(basePackages = "ai.gebo")` — Spring Data's Mongo repository
-scan defaults to the main class's own package, not the `@ComponentScan` bases, so it
-never found `ai.gebo.knowledgebase.repositories.JobStatusRepository` even though it was
-on the classpath. Every other data-backed microservice (`brain`, `uploads`,
-`vectorizator`, ...) already carries this annotation; `TyrApplication` was just missing
-it as a new module. Fixed by adding the annotation to match the existing pattern.
-
-The doc-generation skill's port map, polling list, and the generator script's `SERVICES`
-table were also updated to include `tyr` (previously only 13000–13018 were tracked).
+`gebo.architecture.compute.workflow` is deliberately wired on exactly two apps: `tyr.gebo.ai` (direct dependency) and the monolith (`gebo.apps.monolithic.starter`, transitive into `gebo.ai.app`) — nowhere else, so its controllers, receivers, and scheduled jobs run in exactly one place per deployment shape rather than being duplicated onto every microservice that happens to depend on it. `tyr` additionally carries the same remote security/secrets/ACL client trio every non-heimdall microservice gets (`gebo.microservices.secrets.client`, `gebo.microservices.security.client`, `gebo.microservices.acl.client`) — needed because `LLMSUsageUserLevelController` depends on `IGSecurityService`, which pulls in `gebo.architecture.security`'s full security config and its `IGeboSecretsAccessService` dependency; `tyr`'s own `gebo.microservices.starter` base deliberately excludes these clients since `heimdall` (the actual security microservice) is built on that same starter and must not carry both a local and a remote implementation of the same interface.
 
 
 ## Summary
@@ -27,7 +16,7 @@ table were also updated to include `tyr` (previously only 13000–13018 were tra
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 0 | 0 |
-| brain.gebo.ai | 13001 | `/brain` | 57 | 226 |
+| brain.gebo.ai | 13001 | `/brain` | 53 | 221 |
 | vectorizator.gebo.ai | 13002 | `/vectorizator` | 7 | 14 |
 | graphicator.gebo.ai | 13003 | `/graphicator` | 6 | 12 |
 | chunker.gebo.ai | 13004 | `/chunker` | 4 | 16 |
@@ -45,7 +34,7 @@ table were also updated to include `tyr` (previously only 13000–13018 were tra
 | fulltextor.gebo.ai | 13016 | `/fulltextor` | 5 | 10 |
 | eureka.gebo.ai | 13017 | `—` | 0 | 0 |
 | heimdall.gebo.ai | 13018 | `/heimdall` | 14 | 55 |
-| tyr.gebo.ai | 13019 | `/tyr` | 2 | 3 |
+| tyr.gebo.ai | 13019 | `/tyr` | 4 | 5 |
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
@@ -55,7 +44,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-57 controller(s), 226 endpoint(s):
+53 controller(s), 221 endpoint(s):
 
 
 ### `anthropic-chat-models-configuration-controller`
@@ -394,22 +383,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/brain/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-### `job-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/brain/api/admin/JobStatusController/getJobStatus` | getJobStatus |
-| GET | `/brain/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-
-### `llms-usage-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/admin/LLMSUsageAdminLevelController/drillDown` | adminDrillDown |
-
-### `llms-usage-user-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
-
 ### `ollama-chat-models-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -506,11 +479,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | GET | `/brain/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
 | GET | `/brain/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
-
-### `workflow-stats-admin-level-controller`
-| Method | Path | Operation |
-|---|---|---|
-| POST | `/brain/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
 
 ## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`) — context-path `/vectorizator`
 
@@ -1454,7 +1422,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## tyr.gebo.ai — port 13019 (`tyr-gebo-ai`) — context-path `/tyr`
 
-2 controller(s), 3 endpoint(s):
+4 controller(s), 5 endpoint(s):
 
 
 ### `job-status-controller`
@@ -1462,6 +1430,16 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 |---|---|---|
 | GET | `/tyr/api/admin/JobStatusController/getJobStatus` | getJobStatus |
 | GET | `/tyr/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+
+### `llms-usage-admin-level-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/tyr/api/admin/LLMSUsageAdminLevelController/drillDown` | adminDrillDown |
+
+### `llms-usage-user-level-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/tyr/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
 
 ### `workflow-stats-admin-level-controller`
 | Method | Path | Operation |
