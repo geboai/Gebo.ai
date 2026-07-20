@@ -24,7 +24,7 @@ bitten once in this codebase's history (see the gotchas inline) — don't skip s
 ## 0. Preconditions
 
 - Docker daemon running (`docker version`).
-- Check host memory before starting: `free -h`. Building 19 Spring Boot modules while
+- Check host memory before starting: `free -h`. Building 20 Spring Boot modules while
   ~20+ containers are already running from a previous stack can OOM-kill the Maven
   process outright (seen in this codebase — `mvn clean install` was silently `kill`ed
   mid-reactor with no error, just a `status: killed` on the background task). If
@@ -58,7 +58,7 @@ immediately. `-P swagger-on` is equally load-bearing — without it, `gebo.archi
 (springdoc) is off the classpath, `/v3/api-docs` serves nothing, and every service in the
 doc below would show 0 controllers regardless of what's actually mapped.
 
-Expect ~5 minutes for all 19 modules.
+Expect ~5 minutes for all 20 modules.
 
 ## 3. Load images and bring the stack up
 
@@ -94,13 +94,13 @@ Port → service map (from `dockers/gebo.microservices/docker-compose.yml`):
 13002 vectorizator13009 sharepoint    13016 fulltextor
 13003 graphicator 13010 confluence    13017 eureka (registry, no api-docs)
 13004 chunker     13011 jira          13018 heimdall
-13005 git         13012 aws-s3
+13005 git         13012 aws-s3        13019 tyr
 13006 filesystem  13013 googledrive
 ```
 
 `gateway` and `eureka` never serve controllers — 0 paths is correct for both, not a
 failure (gateway is a pure proxy with no `@RestController`; eureka is the registry, not
-a `swagger-on` service). Poll only the other 17.
+a `swagger-on` service). Poll only the other 18.
 
 **Startup is slow under load, not stuck.** With 24 containers cold-starting on one host,
 individual JVMs have taken 150–300+ seconds to finish `Started XApplication in N seconds`
@@ -109,7 +109,7 @@ in this codebase's dev environment — a short 60–90s polling loop reports eve
 8+ minute total budget:
 
 ```bash
-ports="13001:brain 13002:vectorizator 13003:graphicator 13004:chunker 13005:git 13006:filesystem 13007:uploads 13008:userspace 13009:sharepoint 13010:confluence 13011:jira 13012:aws-s3 13013:googledrive 13014:mcpclient 13015:integration 13016:fulltextor 13018:heimdall"
+ports="13001:brain 13002:vectorizator 13003:graphicator 13004:chunker 13005:git 13006:filesystem 13007:uploads 13008:userspace 13009:sharepoint 13010:confluence 13011:jira 13012:aws-s3 13013:googledrive 13014:mcpclient 13015:integration 13016:fulltextor 13018:heimdall 13019:tyr"
 declare -A ready
 for tries in $(seq 1 50); do
   all_ready=1

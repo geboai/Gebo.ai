@@ -36,6 +36,7 @@ SERVICES = [
     ("fulltextor", 13016, "fulltextor-gebo-ai"),
     ("eureka", 13017, None),
     ("heimdall", 13018, "heimdall-gebo-ai"),
+    ("tyr", 13019, "tyr-gebo-ai"),
 ]
 NO_CONTROLLER_SERVICES = {"gateway", "eureka"}
 NOTES_NO_CONTROLLERS = {

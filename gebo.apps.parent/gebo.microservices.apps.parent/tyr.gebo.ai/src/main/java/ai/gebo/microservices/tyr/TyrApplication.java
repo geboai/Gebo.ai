@@ -15,6 +15,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -35,6 +36,7 @@ import ai.gebo.architecture.environment.EnvironmentHolder;
 @EnableConfigurationProperties
 @EnableAsync
 @EnableScheduling
+@EnableMongoRepositories(basePackages = "ai.gebo")
 public class TyrApplication {
 
 	private static final String ERROR_MESSAGE = "The java property or environment variable GEBO_HOME must be set";
