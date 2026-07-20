@@ -30,7 +30,7 @@ public class GeboWorkflowsConcentratorConfig {
 
 	public GeboWorkflowsConcentratorConfig() {
 		receiverConfig.setUseSenderThread(true);
-		receiverConfig.setPoolCardinality(0);
+		receiverConfig.setPoolCardinality(1);
 		receiverConfig.setTimeout(10000l);
 	}
 

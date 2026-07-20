@@ -29,10 +29,9 @@ import ai.gebo.application.messaging.model.GMessagesBatchPayload;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.workflows.concentrator.config.GeboWorkflowsConcentratorConfig;
-import ai.gebo.core.impl.GComputeEndOfWorkflowReceiverFactory;
+import ai.gebo.core.messages.ComputeWorkflowEndPayload;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GUserMessagePayload;
-import ai.gebo.core.model.ComputeWorkflowEndPayload;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
@@ -209,7 +208,7 @@ public class GWorkflowsConcentratorMessagesReceiverFactory extends GAbstractTime
 					GMessageEnvelope<ComputeWorkflowEndPayload> envelope = GMessageEnvelope
 							.newMessageFrom(GWorkflowsConcentratorMessagesReceiverFactory.this, compute);
 					envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-					envelope.setTargetComponent(GComputeEndOfWorkflowReceiverFactory.END_OF_WORKFLOW_COMPUTE_SERVICE);
+					envelope.setTargetComponent(GStandardModulesConstraints.END_OF_WORKFLOW_COMPUTE_SERVICE);
 					envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 					broker.accept(envelope);
 				}

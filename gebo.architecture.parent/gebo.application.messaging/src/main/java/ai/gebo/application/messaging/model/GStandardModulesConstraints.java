@@ -71,7 +71,7 @@ public class GStandardModulesConstraints {
 	public static final String ARCHITECTURE_EMITTER_COMPONENT = "architecture-emitter-component";
 	public static final String SYSTEM_SETTINGS_CONTROLLER_COMPONENT = "system-settings-controller-component";
 	public static final String USER_MESSAGES_CONCENTRATOR_COMPONENT = "user-messages-concentrator-component";
-
+	public static final String END_OF_WORKFLOW_COMPUTE_SERVICE = "end-of-workflow-compute-service";
 	// Lists of modules categorized by their type
 	public static final List<String> EXTERNAl_MODULES = new ArrayList<String>();
 	public static final List<String> UNDER_DEVELOPMENT_MODULES = of();
@@ -105,5 +105,7 @@ public class GStandardModulesConstraints {
 	private static List<String> of(String... params) {
 		return new ArrayList<String>(List.of(params));
 	}
+
+	
 
 }

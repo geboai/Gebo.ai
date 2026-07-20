@@ -1,4 +1,4 @@
-package ai.gebo.core.model;
+package ai.gebo.core.messages;
 
 import ai.gebo.application.messaging.model.GBaseMessagePayload;
 import lombok.Data;
