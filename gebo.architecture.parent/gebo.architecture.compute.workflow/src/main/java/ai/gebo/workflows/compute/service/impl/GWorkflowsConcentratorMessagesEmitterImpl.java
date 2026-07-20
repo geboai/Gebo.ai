@@ -23,21 +23,25 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.core.messages.GFinishedWorkflowPayload;
 
 /**
- * AI generated comments Implementation of the IGMessageEmitter interface for
- * emitting messages related to project and knowledge base deletion operations
- * in the core module.
+ * Implementation of the IGMessageEmitter interface used by
+ * {@link GComputeEndOfWorkflowReceiverFactory} to tag the
+ * {@code GFinishedWorkflowPayload} broadcast it sends once a workflow
+ * finishes. Identifies itself as the emitter side of the same
+ * jobs-master-module / end-of-workflow-compute-service address its sibling
+ * receiver factory registers as, rather than borrowing core-module's
+ * {@code GCoreMessagesEmitterImpl} identity.
  */
 @Component
 @Scope("singleton")
 public class GWorkflowsConcentratorMessagesEmitterImpl implements IGMessageEmitter {
 	@Autowired
 	IGMessageBroker broker; // Broker for handling message acceptance and dispatch.
-	
+
 	@Autowired
 	IMessageEnvelopeFactory envelopeFactory;
 
 	/**
-	 * Constructor for GCoreMessagesEmitterImpl. Initializes the component.
+	 * Constructor for GWorkflowsConcentratorMessagesEmitterImpl. Initializes the component.
 	 */
 	public GWorkflowsConcentratorMessagesEmitterImpl() {
 
@@ -45,22 +49,22 @@ public class GWorkflowsConcentratorMessagesEmitterImpl implements IGMessageEmitt
 
 	/**
 	 * Retrieves the messaging module ID.
-	 * 
-	 * @return the module ID for the core module.
+	 *
+	 * @return the module ID for the jobs-master module.
 	 */
 	@Override
 	public String getMessagingModuleId() {
-		return GStandardModulesConstraints.CORE_MODULE;
+		return GStandardModulesConstraints.JOBS_MASTER;
 	}
 
 	/**
 	 * Retrieves the messaging system ID.
-	 * 
-	 * @return the system ID for the settings controller component.
+	 *
+	 * @return the system ID for the end-of-workflow compute service.
 	 */
 	@Override
 	public String getMessagingSystemId() {
-		return GStandardModulesConstraints.SYSTEM_SETTINGS_CONTROLLER_COMPONENT;
+		return GStandardModulesConstraints.END_OF_WORKFLOW_COMPUTE_SERVICE;
 	}
 
 	/**
