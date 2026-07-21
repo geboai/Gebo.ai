@@ -29,6 +29,13 @@
 			<artifactId>gebo.architecture.telemetry</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Exposes this backend's local messaging topology (InternalMessagingTopologyController).
+		     On every real backend built on this starter; gateway/eureka are not. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.internal-topology.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
