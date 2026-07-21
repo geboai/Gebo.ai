@@ -26,6 +26,15 @@ Reach the gateway (the edge / Angular UI + aggregated API):
 
 Watch rollout:
   kubectl -n {{ .Release.Namespace }} get pods -l app.kubernetes.io/part-of=gebo-microservices -w
+{{- if .Values.observability.enabled }}
+
+Observability is ON (otel-collector -> Tempo, Prometheus, Grafana). Reach Grafana:
+{{- if eq .Values.observability.grafana.service.type "LoadBalancer" }}
+  kubectl -n {{ .Release.Namespace }} get svc {{ .Release.Name }}-grafana   # external IP
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ .Release.Name }}-grafana 3000:3000
+{{- end }}
+{{- end }}
 
 {{ if not .Values.secrets.existingSecret }}WARNING: this release uses the chart's DEV-DEFAULT secrets. Override values under
 `secrets:` (or set `secrets.existingSecret`) before any non-dev use.{{ end }}

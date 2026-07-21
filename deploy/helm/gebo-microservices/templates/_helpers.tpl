@@ -74,11 +74,15 @@ true
   value: {{ .Values.common.javaToolOptions | quote }}
 - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
   value: {{ .Values.common.managementExposure | quote }}
-{{- if .Values.common.otlpTracingEndpoint }}
+{{- $otlp := .Values.common.otlpTracingEndpoint -}}
+{{- if .Values.observability.enabled -}}
+{{- $otlp = printf "http://%s-otel-collector:4318/v1/traces" .Release.Name -}}
+{{- end }}
+{{- if $otlp }}
 - name: MANAGEMENT_TRACING_SAMPLING_PROBABILITY
   value: {{ .Values.common.tracingSamplingProbability | quote }}
 - name: MANAGEMENT_OTLP_TRACING_ENDPOINT
-  value: {{ .Values.common.otlpTracingEndpoint | quote }}
+  value: {{ $otlp | quote }}
 {{- end }}
 {{- with .Values.common.extraEnv }}
 {{ toYaml . }}

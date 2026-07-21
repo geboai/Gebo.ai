@@ -172,6 +172,30 @@ secrets:
   openaiApiKey: "DUMMYKEY"
   anthropicApiKey: "DUMMYKEY"
 
+# --- Observability stack (otel-collector + Prometheus + Tempo + Grafana) ---
+# Off by default. When enabled, backends export traces to the in-cluster collector
+# (overrides common.otlpTracingEndpoint), Tempo stores them, Prometheus scrapes the
+# enabled backends' /actuator/prometheus, and Grafana ships with both datasources +
+# a starter dashboard. Mirrors dockers/gebo.microservices observability config.
+observability:
+  enabled: false
+  otelCollector:
+    image: otel/opentelemetry-collector-contrib:latest
+  tempo:
+    image: grafana/tempo
+    storage: 5Gi
+    storageClassName: ""
+  prometheus:
+    image: prom/prometheus
+    scrapeInterval: 15s
+    storage: 5Gi
+    storageClassName: ""
+  grafana:
+    image: grafana/grafana
+    service:
+      type: ClusterIP        # LoadBalancer/NodePort to expose the UI
+    anonymousViewer: true
+
 # --- Extra shared application.yml -----------------------------------------
 # Verbatim YAML appended to the shared config additional-location (advanced).
 extraSharedConfig: ""

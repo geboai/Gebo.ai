@@ -82,10 +82,29 @@ Keeps **Eureka** + client-side load balancing (topology `url.strategy: LOAD_BALA
 matching the compose deployment — no application changes. Instances register by pod
 IP (`eureka.instance.prefer-ip-address=true`) so cross-pod discovery works in-cluster.
 
+## Observability (optional)
+
+Off by default. Enable the in-cluster stack (otel-collector → Tempo for traces,
+Prometheus for metrics, Grafana with both datasources + a starter dashboard):
+
+```yaml
+observability:
+  enabled: true
+  grafana:
+    service: { type: LoadBalancer }   # or port-forward to reach the UI
+```
+
+When enabled, backends export traces to the in-cluster collector (overrides
+`common.otlpTracingEndpoint`), and Prometheus scrapes exactly the enabled backends'
+`/<svc>/actuator/prometheus`. To use your own collector instead, leave
+`observability.enabled: false` and set `common.otlpTracingEndpoint`.
+
+> Actuator endpoints sit behind auth in these images, so Prometheus scrapes may need
+> the management endpoints opened up (or a scrape credential) to return data — the
+> config mirrors the compose setup as-is.
+
 ## Not yet included
 
-- The observability stack (otel-collector / Prometheus / Tempo / Grafana) — point
-  `common.otlpTracingEndpoint` at your own collector, or add it later.
 - Production hardening of the stateful StatefulSets (HA, backups, node tuning such as
   `vm.max_map_count` for OpenSearch).
 
