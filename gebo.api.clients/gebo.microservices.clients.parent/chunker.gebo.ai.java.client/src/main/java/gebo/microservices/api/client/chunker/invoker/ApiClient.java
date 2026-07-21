@@ -50,7 +50,7 @@ import gebo.microservices.api.client.chunker.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.chunker.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.chunker.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:02:44.507013600+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:47.936318871+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {
@@ -70,7 +70,7 @@ public class ApiClient {
     
     private HttpHeaders defaultHeaders = new HttpHeaders();
     
-    private String basePath = "http://localhost:13004";
+    private String basePath = "http://localhost:13004/chunker";
 
     private RestTemplate restTemplate;
 

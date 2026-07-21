@@ -30,6 +30,17 @@
 			<version>${project.version}</version>
 		</dependency>
 		<!--
+		  Topology-driven standard-workflow step enablement. tyr is the authority:
+		  it resolves which optional steps (embedding/graph/fulltext) are enabled
+		  from the deployment topology and exposes them to the other workflow-logic
+		  services (the chunker) over REST. Feeds tyr's own status-tree computation.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.workflow.steps.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
 		  The LLMSUsageUserLevelController moved here (from brain, via
 		  gebo.architecture.compute.workflow) pulled in gebo.architecture.security's
 		  full GeboAISecurityConfig, which needs IGeboSecretsAccessService - not

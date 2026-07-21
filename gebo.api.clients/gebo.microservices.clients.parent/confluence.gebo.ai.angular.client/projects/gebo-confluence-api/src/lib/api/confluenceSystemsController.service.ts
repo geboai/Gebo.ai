@@ -31,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ConfluenceSystemsControllerService {
 
-    protected basePath = 'http://localhost:13010';
+    protected basePath = 'http://localhost:13010/confluence';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

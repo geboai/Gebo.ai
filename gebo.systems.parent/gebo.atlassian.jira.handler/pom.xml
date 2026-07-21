@@ -10,6 +10,11 @@
 	<artifactId>gebo.atlassian.jira.handler</artifactId>
 	<dependencies>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.integrations.clients</groupId>
 			<artifactId>gebo.atlassian.jira.cloud.client</artifactId>
 			<version>${project.version}</version>
@@ -17,6 +22,11 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.ai</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.atlassian.jira.search.api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -1,6 +1,6 @@
 # FileUploadControllerApi
 
-All URIs are relative to *http://localhost:13007*
+All URIs are relative to *http://localhost:13007/uploads*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

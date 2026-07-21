@@ -31,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GoogleDriveSystemsControllerService {
 
-    protected basePath = 'http://localhost:13013';
+    protected basePath = 'http://localhost:13013/googledrive';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

@@ -40,8 +40,8 @@ import ai.gebo.sharepoint.handler.IGMicrosoftGraphVirtualFilesystemConsumingServ
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNativePositionObject;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNavigationCoordinates;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphResourceReference;
-import ai.gebo.sharepoint.handler.impl.model.MicrosoftResultsExtractionData;
-import ai.gebo.sharepoint.handler.search.model.SharePointSearchFilter;
+import ai.gebo.sharepoint.search.api.MicrosoftResultsExtractionData;
+import ai.gebo.sharepoint.search.api.SharePointSearchFilter;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
 import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;

@@ -1,6 +1,6 @@
 # DocumentContentStreamerControllerApi
 
-All URIs are relative to *http://localhost:13011*
+All URIs are relative to *http://localhost:13011/jira*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

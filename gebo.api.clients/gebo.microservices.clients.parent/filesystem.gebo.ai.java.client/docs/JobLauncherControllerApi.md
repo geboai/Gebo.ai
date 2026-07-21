@@ -1,6 +1,6 @@
 # JobLauncherControllerApi
 
-All URIs are relative to *http://localhost:13006*
+All URIs are relative to *http://localhost:13006/filesystem*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**sorted** | **Object** |  |  [optional]
 **empty** | **Object** |  |  [optional]
+**sorted** | **Object** |  |  [optional]
 **unsorted** | **Object** |  |  [optional]

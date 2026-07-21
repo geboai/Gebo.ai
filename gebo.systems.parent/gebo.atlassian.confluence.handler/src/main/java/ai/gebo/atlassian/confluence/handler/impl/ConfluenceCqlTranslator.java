@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceContentAttributeFilter;
-import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceContentSearchFilter;
-import ai.gebo.atlassian.confluence.handler.search.model.ConfluencePeopleFilter;
+import ai.gebo.atlassian.confluence.search.api.ConfluenceContentAttributeFilter;
+import ai.gebo.atlassian.confluence.search.api.ConfluenceContentSearchFilter;
+import ai.gebo.atlassian.confluence.search.api.ConfluencePeopleFilter;
 
 class ConfluenceCqlTranslator {
 

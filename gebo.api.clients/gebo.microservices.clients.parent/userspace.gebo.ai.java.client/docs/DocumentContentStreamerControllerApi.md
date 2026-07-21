@@ -1,6 +1,6 @@
 # DocumentContentStreamerControllerApi
 
-All URIs are relative to *http://localhost:13008*
+All URIs are relative to *http://localhost:13008/userspace*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

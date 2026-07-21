@@ -1,6 +1,6 @@
 # GenericalPublisherControllerApi
 
-All URIs are relative to *http://localhost:13005*
+All URIs are relative to *http://localhost:13005/git*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

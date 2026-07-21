@@ -37,5 +37,7 @@
 		<module>gebo.microservices.internal-topology.controllers</module>
 		<module>gebo.microservices.global-internal-topology</module>
 		<module>gebo.microservices.global-internal-topology.client</module>
+		<module>gebo.microservices.searchservices.clients</module>
+		<module>gebo.microservices.workflow.steps.topology</module>
 	</modules>
 </project>

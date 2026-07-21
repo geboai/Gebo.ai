@@ -1,6 +1,6 @@
 # JobLauncherControllerApi
 
-All URIs are relative to *http://localhost:13014*
+All URIs are relative to *http://localhost:13014/mcpclient*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

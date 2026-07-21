@@ -1,6 +1,6 @@
 # DocumentContentStreamerWithCacheControllerApi
 
-All URIs are relative to *http://localhost:13004*
+All URIs are relative to *http://localhost:13004/chunker*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

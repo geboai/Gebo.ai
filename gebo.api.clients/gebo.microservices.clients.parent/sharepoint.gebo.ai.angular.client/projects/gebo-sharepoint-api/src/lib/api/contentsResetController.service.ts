@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ContentsResetControllerService {
 
-    protected basePath = 'http://localhost:13009';
+    protected basePath = 'http://localhost:13009/sharepoint';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

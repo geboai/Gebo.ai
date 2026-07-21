@@ -205,6 +205,13 @@
 			<artifactId>gebo.architecture.compute.workflow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Config-driven standard-workflow step enablement (monolith variant of the
+		     enablement policy extracted from the perform-modules). -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.workflow.steps</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>

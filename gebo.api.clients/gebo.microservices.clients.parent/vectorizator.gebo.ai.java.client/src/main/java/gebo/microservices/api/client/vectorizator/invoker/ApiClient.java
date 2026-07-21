@@ -50,7 +50,7 @@ import gebo.microservices.api.client.vectorizator.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.vectorizator.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.vectorizator.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:02:26.068528300+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:47.570095160+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {
@@ -70,7 +70,7 @@ public class ApiClient {
     
     private HttpHeaders defaultHeaders = new HttpHeaders();
     
-    private String basePath = "http://localhost:13002";
+    private String basePath = "http://localhost:13002/vectorizator";
 
     private RestTemplate restTemplate;
 

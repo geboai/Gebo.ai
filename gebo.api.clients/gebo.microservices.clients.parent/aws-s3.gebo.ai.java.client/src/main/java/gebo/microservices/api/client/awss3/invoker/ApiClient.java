@@ -50,7 +50,7 @@ import gebo.microservices.api.client.awss3.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.awss3.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.awss3.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:03:22.599243+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:52.625568584+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {
@@ -70,7 +70,7 @@ public class ApiClient {
     
     private HttpHeaders defaultHeaders = new HttpHeaders();
     
-    private String basePath = "http://localhost:13012";
+    private String basePath = "http://localhost:13012/aws-s3";
 
     private RestTemplate restTemplate;
 

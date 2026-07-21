@@ -1,5 +1,7 @@
 export * from './confluenceBrowsingController.service';
 import { ConfluenceBrowsingControllerService } from './confluenceBrowsingController.service';
+export * from './confluenceSearchServiceController.service';
+import { ConfluenceSearchServiceControllerService } from './confluenceSearchServiceController.service';
 export * from './confluenceSystemsController.service';
 import { ConfluenceSystemsControllerService } from './confluenceSystemsController.service';
 export * from './contentsResetController.service';
@@ -12,8 +14,4 @@ export * from './ingestionFileTypesLibraryController.service';
 import { IngestionFileTypesLibraryControllerService } from './ingestionFileTypesLibraryController.service';
 export * from './jobLauncherController.service';
 import { JobLauncherControllerService } from './jobLauncherController.service';
-export * from './jobStatusController.service';
-import { JobStatusControllerService } from './jobStatusController.service';
-export * from './workflowStatsAdminLevelController.service';
-import { WorkflowStatsAdminLevelControllerService } from './workflowStatsAdminLevelController.service';
-export const APIS = [ConfluenceBrowsingControllerService, ConfluenceSystemsControllerService, ContentsResetControllerService, DocumentContentStreamerControllerService, GenericalPublisherControllerService, IngestionFileTypesLibraryControllerService, JobLauncherControllerService, JobStatusControllerService, WorkflowStatsAdminLevelControllerService];
+export const APIS = [ConfluenceBrowsingControllerService, ConfluenceSearchServiceControllerService, ConfluenceSystemsControllerService, ContentsResetControllerService, DocumentContentStreamerControllerService, GenericalPublisherControllerService, IngestionFileTypesLibraryControllerService, JobLauncherControllerService];

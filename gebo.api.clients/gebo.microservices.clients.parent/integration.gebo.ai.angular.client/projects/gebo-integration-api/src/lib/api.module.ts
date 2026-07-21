@@ -10,8 +10,6 @@ import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileT
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
 import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
-import { JobStatusControllerService } from './api/jobStatusController.service';
-import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
@@ -24,9 +22,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     IngestionFileTypesLibraryControllerService,
     IntegrationInputControllerService,
     IntegrationSystemsControllerService,
-    JobLauncherControllerService,
-    JobStatusControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+    JobLauncherControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

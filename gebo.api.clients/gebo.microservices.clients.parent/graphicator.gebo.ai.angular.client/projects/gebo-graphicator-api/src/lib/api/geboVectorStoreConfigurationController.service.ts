@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboVectorStoreConfigurationControllerService {
 
-    protected basePath = 'http://localhost:13003';
+    protected basePath = 'http://localhost:13003/graphicator';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

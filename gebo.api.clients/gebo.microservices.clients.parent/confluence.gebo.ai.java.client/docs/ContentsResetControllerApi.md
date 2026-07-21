@@ -1,6 +1,6 @@
 # ContentsResetControllerApi
 
-All URIs are relative to *http://localhost:13010*
+All URIs are relative to *http://localhost:13010/confluence*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

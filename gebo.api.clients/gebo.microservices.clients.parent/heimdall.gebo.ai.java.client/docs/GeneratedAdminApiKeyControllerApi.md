@@ -1,6 +1,6 @@
 # GeneratedAdminApiKeyControllerApi
 
-All URIs are relative to *http://localhost:13018*
+All URIs are relative to *http://localhost:13018/heimdall*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

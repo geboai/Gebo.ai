@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecretInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:02:02.179311+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:41.605246289+02:00[Europe/Rome]")
 
 public class SecretInfo {
   @JsonProperty("code")
@@ -33,6 +33,9 @@ public class SecretInfo {
 
   @JsonProperty("secretType")
   private Object secretType = null;
+
+  @JsonProperty("contextCode")
+  private Object contextCode = null;
 
   public SecretInfo code(Object code) {
     this.code = code;
@@ -88,6 +91,24 @@ public class SecretInfo {
     this.secretType = secretType;
   }
 
+  public SecretInfo contextCode(Object contextCode) {
+    this.contextCode = contextCode;
+    return this;
+  }
+
+   /**
+   * Get contextCode
+   * @return contextCode
+  **/
+  @Schema(description = "")
+  public Object getContextCode() {
+    return contextCode;
+  }
+
+  public void setContextCode(Object contextCode) {
+    this.contextCode = contextCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -100,12 +121,13 @@ public class SecretInfo {
     SecretInfo secretInfo = (SecretInfo) o;
     return Objects.equals(this.code, secretInfo.code) &&
         Objects.equals(this.description, secretInfo.description) &&
-        Objects.equals(this.secretType, secretInfo.secretType);
+        Objects.equals(this.secretType, secretInfo.secretType) &&
+        Objects.equals(this.contextCode, secretInfo.contextCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, secretType);
+    return Objects.hash(code, description, secretType, contextCode);
   }
 
 
@@ -117,6 +139,7 @@ public class SecretInfo {
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    secretType: ").append(toIndentedString(secretType)).append("\n");
+    sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

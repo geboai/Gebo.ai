@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GDocumentAttributeValue
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:03:38.991903500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:54.635757661+02:00[Europe/Rome]")
 
 public class GDocumentAttributeValue {
   @JsonProperty("attributeCode")

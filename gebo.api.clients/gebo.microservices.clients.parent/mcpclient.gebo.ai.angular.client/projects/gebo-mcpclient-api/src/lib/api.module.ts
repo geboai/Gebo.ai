@@ -8,11 +8,9 @@ import { DocumentContentStreamerControllerService } from './api/documentContentS
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
-import { JobStatusControllerService } from './api/jobStatusController.service';
 import { McpClientBrowsingControllerService } from './api/mcpClientBrowsingController.service';
 import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { McpClientSystemsControllerService } from './api/mcpClientSystemsController.service';
-import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
@@ -24,11 +22,9 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
     JobLauncherControllerService,
-    JobStatusControllerService,
     McpClientBrowsingControllerService,
     McpClientConfigControllerService,
-    McpClientSystemsControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+    McpClientSystemsControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
