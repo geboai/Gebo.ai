@@ -12,9 +12,12 @@ package ai.gebo.microservices.awss3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.AutoConfigurationExcludeFilter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.TypeExcludeFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -33,7 +36,20 @@ import ai.gebo.architecture.environment.EnvironmentHolder;
  * </p>
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "ai.gebo")
+// basePackages is widened to "ai.gebo" (aws-s3's own production beans live
+// outside its microservice-specific package), but @ComponentScan given DIRECTLY on
+// the class replaces - rather than merges with - the one @SpringBootApplication
+// supplies, so its default excludeFilters (TypeExcludeFilter,
+// AutoConfigurationExcludeFilter) are lost unless restated here. Without
+// AutoConfigurationExcludeFilter, plain component-scanning picks up every
+// @AutoConfiguration class under "ai.gebo" (they are @Configuration too) as an
+// ordinary bean, processed in classpath-scan order rather than through
+// @EnableAutoConfiguration's deferred, @AutoConfigureAfter/Before-sorted import -
+// silently defeating that ordering for the cluster/client auto-configurations this
+// service depends on.
+@ComponentScan(basePackages = "ai.gebo",
+		excludeFilters = { @ComponentScan.Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
+				@ComponentScan.Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
 @EnableConfigurationProperties
 @EnableAsync
 @EnableScheduling

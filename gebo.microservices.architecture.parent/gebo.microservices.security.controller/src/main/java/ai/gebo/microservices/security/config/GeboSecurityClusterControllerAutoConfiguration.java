@@ -24,6 +24,7 @@ import ai.gebo.microservices.cluster.GeboClusterParticipants;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.security.controller.SecurityDirectoryClusterController;
 import ai.gebo.security.directory.mongo.MongoSecurityDirectory;
+import ai.gebo.security.directory.mongo.config.GeboMongoSecurityDirectoryAutoConfiguration;
 import ai.gebo.security.services.IGSecurityDirectory;
 
 /**
@@ -49,9 +50,19 @@ import ai.gebo.security.services.IGSecurityDirectory;
  * this class installs alongside it.
  * </p>
  *
+ * <p>
+ * {@code after} names both producers this class is {@code @ConditionalOnBean} on:
+ * {@link MongoSecurityDirectory} comes from
+ * {@link GeboMongoSecurityDirectoryAutoConfiguration}, a separate auto-configuration
+ * (not a plain {@code @Component}), so without this ordering the
+ * {@code AutoConfigurationSorter} has no constraint between the two and may run this
+ * class first - the condition would then find no bean and never look again.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
-@AutoConfiguration(after = GeboClusterCommonsAutoConfiguration.class)
+@AutoConfiguration(
+		after = { GeboClusterCommonsAutoConfiguration.class, GeboMongoSecurityDirectoryAutoConfiguration.class })
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnBean({ MongoSecurityDirectory.class, GeboClusterParticipants.class })
 @ConditionalOnProperty(prefix = "ai.gebo.security.cluster", name = "enabled", havingValue = "true",

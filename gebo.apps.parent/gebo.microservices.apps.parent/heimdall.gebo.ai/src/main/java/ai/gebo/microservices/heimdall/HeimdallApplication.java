@@ -12,9 +12,12 @@ package ai.gebo.microservices.heimdall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.AutoConfigurationExcludeFilter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.TypeExcludeFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -50,7 +53,20 @@ import ai.gebo.architecture.environment.EnvironmentHolder;
  * </p>
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "ai.gebo")
+// basePackages is widened to "ai.gebo" (heimdall's own production beans live in
+// ai.gebo.secrets/security/acl.*, well outside ai.gebo.microservices.heimdall),
+// but @ComponentScan given DIRECTLY on the class replaces - rather than merges
+// with - the one @SpringBootApplication supplies, so its default excludeFilters
+// (TypeExcludeFilter, AutoConfigurationExcludeFilter) are lost unless restated
+// here. Without AutoConfigurationExcludeFilter, plain component-scanning picks up
+// every @AutoConfiguration class under "ai.gebo" (they are @Configuration too) as
+// an ordinary bean, processed in classpath-scan order rather than through
+// @EnableAutoConfiguration's deferred, @AutoConfigureAfter/Before-sorted import -
+// silently defeating that ordering for GeboClusterCommonsAutoConfiguration and
+// the cluster controller auto-configurations that depend on it.
+@ComponentScan(basePackages = "ai.gebo",
+		excludeFilters = { @ComponentScan.Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
+				@ComponentScan.Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
 @EnableConfigurationProperties
 @EnableAsync
 @EnableScheduling
