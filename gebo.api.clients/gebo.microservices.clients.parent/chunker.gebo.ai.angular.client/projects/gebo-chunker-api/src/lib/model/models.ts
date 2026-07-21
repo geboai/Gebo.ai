@@ -1,5 +1,6 @@
 export * from './abstractChunkingSpecs';
 export * from './chunkingParams';
+export * from './componentMetaInfo';
 export * from './documentBatch';
 export * from './documentChunk';
 export * from './documentChunkingResponse';
@@ -7,6 +8,7 @@ export * from './documentChunksSet';
 export * from './gDocumentAttributeValue';
 export * from './gDocumentReference';
 export * from './gDocumentReferenceStreamRequest';
+export * from './gModuleMetaInfo';
 export * from './gObjectRefGProjectEndpoint';
 export * from './gUserMessage';
 export * from './gVirtualFilesystemRoot';

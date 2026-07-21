@@ -1,6 +1,8 @@
+export * from './componentMetaInfo';
 export * from './computedWorkflowResult';
 export * from './computedWorkflowStatus';
 export * from './gJobStatus';
+export * from './gModuleMetaInfo';
 export * from './gObjectRefGKnowledgeBase';
 export * from './gObjectRefGProject';
 export * from './gObjectRefGProjectEndpoint';
@@ -11,6 +13,7 @@ export * from './lLMUsageAggregationBucket';
 export * from './lLMUsageDrillDownLevel';
 export * from './lLMUsageDrillDownLevelSubdimensions';
 export * from './lLMUsageDrillDownResult';
+export * from './microserviceMetaInfo';
 export * from './workflowStatsAggregationBucket';
 export * from './workflowStatsDrillDownLevel';
 export * from './workflowStatsDrillDownLevelSubdimensions';

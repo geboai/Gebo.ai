@@ -1,0 +1,78 @@
+[
+	{
+		"description": "Testing a simple question with sufficient data in the actual knowledge base, satisfable with simple r.a.g. search",
+		"request": {
+			"id": "9234-233243-UY9",
+			"query": "Chi e' l'arrogante nella pistis sophia?"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedDetectedUserIntent": [
+				"QA"
+			],
+			"allowedRoutingDecisions": [
+				"RAG_LLM_RESPONSE"
+			]
+		}
+	},
+	{
+		"description": "Testing the explicit search rule to answer a question",
+		"request": {
+			"id": "9234-233243-UXW",
+			"query": "Cerca su Google in internet dove é nata la figura della tradizione cristiana e gnostica Maria Maddalena"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedDetectedUserIntent": [
+				"QA"
+			],
+			"allowedRoutingDecisions": [
+				"DEEP_SEARCH_RESPONSE"
+			]
+		}
+	},
+	{
+		"description": "Testing the shortcut rule to answer directly from actual context information when it contains enough data (was the chat interaction #1)",
+		"request": {
+			"id": "9234-233243-UXZ",
+			"query": "Chi e' l'arrogante nella pistis sophia?"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedDetectedUserIntent": [
+				"QA"
+			],
+			"allowedRoutingDecisions": [
+				"PURE_LLM_RESPONSE","DEEP_SEARCH_RESPONSE"
+			]
+		}
+	},
+	{
+		"description": "Testing the shortcut rule to answer directly from the internal knowledge base deep search",
+		"request": {
+			"id": "9234-233243-UXX",
+			"query": "Parlami delle interazioni tra Gesu e Maria Maddalena nella tradizione Gnostica ricercando nella knowledge base interna"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": false,
+			"allowedRoutingDecisions": [
+				"RAG_LLM_RESPONSE",
+				"DEEP_SEARCH_RESPONSE"
+			]
+		}
+	},
+	{
+		"description": "Testing the shortcut rule to answer directly from actual context information when it contains enough data (was the chat interaction #1)",
+		"request": {
+			"id": "9234-233243-UY1",
+			"query": "Fai un report dettagliato di tutti gli eventi in cui Maria risponde ai discepoli al posto di Gesu nella tradizione Gnostica"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedRoutingDecisions": [
+				"RAG_LLM_RESPONSE",
+				"DEEP_SEARCH_RESPONSE"
+			]
+		}
+	}
+]

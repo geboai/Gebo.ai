@@ -1,4 +1,6 @@
+export * from './componentMetaInfo';
 export * from './gLookupEntry';
+export * from './gModuleMetaInfo';
 export * from './gStatsHolder';
 export * from './gStatsLabelValue';
 export * from './gStatsLine';

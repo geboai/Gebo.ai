@@ -9,6 +9,7 @@ import { FileUploadControllerService } from './api/fileUploadController.service'
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     FileUploadsControllerService,
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })
 export class ApiModule {

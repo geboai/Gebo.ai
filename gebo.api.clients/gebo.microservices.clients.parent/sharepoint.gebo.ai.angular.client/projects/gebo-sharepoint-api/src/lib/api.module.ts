@@ -7,6 +7,7 @@ import { ContentsResetControllerService } from './api/contentsResetController.se
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
@@ -21,6 +22,7 @@ import { SharepointSystemsControllerService } from './api/sharepointSystemsContr
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,

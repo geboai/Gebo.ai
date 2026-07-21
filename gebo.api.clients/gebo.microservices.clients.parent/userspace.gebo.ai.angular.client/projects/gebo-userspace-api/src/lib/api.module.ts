@@ -7,6 +7,7 @@ import { ContentsResetControllerService } from './api/contentsResetController.se
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { UserspaceControllerService } from './api/userspaceController.service';
 import { UserspaceUploadControllerService } from './api/userspaceUploadController.service';
@@ -20,6 +21,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     JobLauncherControllerService,
     UserspaceControllerService,
     UserspaceUploadControllerService ]

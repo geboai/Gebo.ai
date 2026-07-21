@@ -10,6 +10,7 @@ import { ContentsResetControllerService } from './api/contentsResetController.se
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
 @NgModule({
@@ -24,6 +25,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })
 export class ApiModule {

@@ -10,6 +10,7 @@ import { GeboFastInstallationSetupControllerService } from './api/geboFastInstal
 import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFolderSetupController.service';
 import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
 import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { SecretsControllerService } from './api/secretsController.service';
@@ -30,6 +31,7 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     GeboFastWorkFolderSetupControllerService,
     GeneratedAdminApiKeyControllerService,
     GeneratedUserApiKeyControllerService,
+    InternalMessagingTopologyControllerService,
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
     SecretsControllerService,

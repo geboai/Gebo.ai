@@ -1,5 +1,6 @@
 export * from './browseParam';
 export * from './buildSystemRef';
+export * from './componentMetaInfo';
 export * from './fSReference';
 export * from './gCentralizedProjectEndpoint';
 export * from './gContentManagementSystemType';
@@ -10,6 +11,7 @@ export * from './gFileSystemShareReference';
 export * from './gFilesystemContentManagementSystem';
 export * from './gFilesystemProjectEndpoint';
 export * from './gJobStatus';
+export * from './gModuleMetaInfo';
 export * from './gObjectRefGProjectEndpoint';
 export * from './gUserMessage';
 export * from './gVirtualFilesystemRoot';

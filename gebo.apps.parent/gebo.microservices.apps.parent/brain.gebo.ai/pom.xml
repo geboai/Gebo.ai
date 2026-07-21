@@ -78,6 +78,20 @@
 			<artifactId>gebo.architecture.fastsetup.rag</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Knowledge-base + project CRUD (KnowledgeBaseController,
+		     ProjectsController, UserKnowledgeBaseBrowsingController, ...).
+		     These admin controllers live in gebo.core and were monolith-only
+		     until now: brain is the LLM/RAG admin microservice, so it is the
+		     natural home for KB/project creation in the microservices cluster.
+		     Without this, the cluster has no REST surface to create a
+		     knowledge base or a project - the microservices setup-and-use
+		     integration test needs both before it can publish a filesystem
+		     endpoint and run a chat pipeline. -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Topology-aware REST clients for the per-connector search services
 		     (jira/confluence/sharepoint/googledrive), so brain's deep-search reaches
 		     them on their own microservices. -->

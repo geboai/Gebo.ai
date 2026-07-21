@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { GeboCoreAnalisysControllerService } from './api/geboCoreAnalisysController.service';
 import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 
 @NgModule({
   imports:      [],
@@ -12,7 +13,8 @@ import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorS
   exports:      [],
   providers: [
     GeboCoreAnalisysControllerService,
-    GeboVectorStoreConfigurationControllerService ]
+    GeboVectorStoreConfigurationControllerService,
+    InternalMessagingTopologyControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

@@ -11,6 +11,7 @@ import { GoogleDriveSearchServiceControllerService } from './api/googleDriveSear
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     GoogleDriveSystemsControllerService,
     GoogleWorkspaceAccessHandshakeControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })
 export class ApiModule {

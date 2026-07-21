@@ -3,7 +3,7 @@ package gebo.microservices.api.client.uploads.invoker.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:49.500873801+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-21T14:42:53.410139529+02:00[Europe/Rome]")
 public class OAuth implements Authentication {
     private String accessToken;
 
