@@ -1,6 +1,6 @@
 ﻿{
   "name": "@Gebo.ai/mcpclient",
-  "version": "1.0.2.0-SNAPSHOT",
+  "version": "1.0.2.1-SNAPSHOT",
   "peerDependencies": {
     "@angular/common": "^21.2.18",
     "@angular/core": "^21.2.18"

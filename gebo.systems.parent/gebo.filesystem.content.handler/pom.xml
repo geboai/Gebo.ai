@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.systems</groupId>
 		<artifactId>gebo.systems.parent</artifactId>
-		<version>1.0.2.0-SNAPSHOT</version>
+		<version>1.0.2.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gebo.filesystem.content.handler</artifactId>
 	<dependencies>
