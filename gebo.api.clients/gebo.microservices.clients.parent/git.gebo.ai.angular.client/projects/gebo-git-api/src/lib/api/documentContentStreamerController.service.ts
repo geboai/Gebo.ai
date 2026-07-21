@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class DocumentContentStreamerControllerService {
 
-    protected basePath = 'http://localhost:13005';
+    protected basePath = 'http://localhost:13005/git';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

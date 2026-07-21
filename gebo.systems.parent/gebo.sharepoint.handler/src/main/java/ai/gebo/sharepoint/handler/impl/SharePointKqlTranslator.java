@@ -3,9 +3,9 @@ package ai.gebo.sharepoint.handler.impl;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import ai.gebo.sharepoint.handler.search.model.SharePointContentAttributeFilter;
-import ai.gebo.sharepoint.handler.search.model.SharePointPeopleFilter;
-import ai.gebo.sharepoint.handler.search.model.SharePointSearchFilter;
+import ai.gebo.sharepoint.search.api.SharePointContentAttributeFilter;
+import ai.gebo.sharepoint.search.api.SharePointPeopleFilter;
+import ai.gebo.sharepoint.search.api.SharePointSearchFilter;
 
 public class SharePointKqlTranslator {
 

@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.searchservices.clients</artifactId>
+
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!--
+		Topology-aware WebClient clients that implement the per-connector search
+		interfaces (INativeSearchService for jira/confluence/sharepoint,
+		ISearchService for googledrive) by calling the *SearchServiceController on
+		the corresponding content microservice. Target addresses are NOT configured
+		here: they are resolved through GeboMicroserviceUrlResolver from the
+		topology, so calls follow the deployment's addressing strategy.
+
+		Dropped on brain.gebo.ai, these become the ISearchService beans that its
+		deep-search discovers (the concrete handlers do not run on brain). Each bean
+		is @ConditionalOnMissingBean, so a service already owning the local handler
+		(the monolith, or the content microservice itself) keeps its in-process one.
+
+		Deliberately depends on the lightweight gebo.<connector>.search.api DTO
+		modules (native filters + extraction data types), NOT the heavy handler
+		modules, so brain does not pull the Atlassian / Microsoft Graph / Google SDKs.
+	-->
+	<dependencies>
+		<!-- The search interfaces + base request DTOs this module implements/uses. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Shared per-connector search DTOs (native filters + extraction types). -->
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.atlassian.jira.search.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.atlassian.confluence.search.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.sharepoint.search.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.googledrive.search.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- IGDocumentContentStreamer: loadSearchResult streams through the chunker cache. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.access</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- GeboMicroserviceUrlResolver + its autoconfigured bean. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Caller-token propagator + TTL cache, shared with every cluster client. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- WebClient. spring-webflux (not the starter) so a servlet service does not
+		     pull a reactive web server in with it. -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor.netty</groupId>
+			<artifactId>reactor-netty-http</artifactId>
+		</dependency>
+		<!-- @LoadBalanced + the reactive load-balancer filter: the search WebClient
+		     addresses the topology's discovery service-ids (e.g. jira-gebo-ai), which
+		     the load balancer resolves to a live instance. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>

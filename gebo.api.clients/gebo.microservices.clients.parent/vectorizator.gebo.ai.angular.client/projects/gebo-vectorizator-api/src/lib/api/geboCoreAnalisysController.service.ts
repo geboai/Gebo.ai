@@ -26,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboCoreAnalisysControllerService {
 
-    protected basePath = 'http://localhost:13002';
+    protected basePath = 'http://localhost:13002/vectorizator';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

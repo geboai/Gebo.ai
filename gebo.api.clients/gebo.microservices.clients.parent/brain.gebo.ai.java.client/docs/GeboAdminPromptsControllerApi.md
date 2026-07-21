@@ -1,6 +1,6 @@
 # GeboAdminPromptsControllerApi
 
-All URIs are relative to *http://localhost:13001*
+All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

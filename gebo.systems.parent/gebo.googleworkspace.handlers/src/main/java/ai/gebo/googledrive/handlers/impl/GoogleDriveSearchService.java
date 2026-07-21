@@ -21,7 +21,7 @@ import ai.gebo.googledrive.handlers.config.GoogleWorkspaceHandlerConfig;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveNativePositionObject;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveNavigationCoordinates;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveResourceReference;
-import ai.gebo.googledrive.handlers.impl.model.GoogleDriveResultsExtractionData;
+import ai.gebo.googledrive.search.api.GoogleDriveResultsExtractionData;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 
 @Service

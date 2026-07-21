@@ -24,23 +24,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageGUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-16T11:02:09.509670+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:43.793671417+02:00[Europe/Rome]")
 
 public class PageGUserChatInfo {
-  @JsonProperty("totalPages")
-  private Object totalPages = null;
-
   @JsonProperty("totalElements")
   private Object totalElements = null;
 
-  @JsonProperty("pageable")
-  private PageableObject pageable = null;
-
-  @JsonProperty("first")
-  private Object first = null;
-
-  @JsonProperty("last")
-  private Object last = null;
+  @JsonProperty("totalPages")
+  private Object totalPages = null;
 
   @JsonProperty("size")
   private Object size = null;
@@ -54,29 +45,20 @@ public class PageGUserChatInfo {
   @JsonProperty("sort")
   private SortObject sort = null;
 
+  @JsonProperty("first")
+  private Object first = null;
+
+  @JsonProperty("last")
+  private Object last = null;
+
   @JsonProperty("numberOfElements")
   private Object numberOfElements = null;
 
+  @JsonProperty("pageable")
+  private PageableObject pageable = null;
+
   @JsonProperty("empty")
   private Object empty = null;
-
-  public PageGUserChatInfo totalPages(Object totalPages) {
-    this.totalPages = totalPages;
-    return this;
-  }
-
-   /**
-   * Get totalPages
-   * @return totalPages
-  **/
-  @Schema(description = "")
-  public Object getTotalPages() {
-    return totalPages;
-  }
-
-  public void setTotalPages(Object totalPages) {
-    this.totalPages = totalPages;
-  }
 
   public PageGUserChatInfo totalElements(Object totalElements) {
     this.totalElements = totalElements;
@@ -96,58 +78,22 @@ public class PageGUserChatInfo {
     this.totalElements = totalElements;
   }
 
-  public PageGUserChatInfo pageable(PageableObject pageable) {
-    this.pageable = pageable;
+  public PageGUserChatInfo totalPages(Object totalPages) {
+    this.totalPages = totalPages;
     return this;
   }
 
    /**
-   * Get pageable
-   * @return pageable
+   * Get totalPages
+   * @return totalPages
   **/
   @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
+  public Object getTotalPages() {
+    return totalPages;
   }
 
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
-  public PageGUserChatInfo first(Object first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Object getFirst() {
-    return first;
-  }
-
-  public void setFirst(Object first) {
-    this.first = first;
-  }
-
-  public PageGUserChatInfo last(Object last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Object getLast() {
-    return last;
-  }
-
-  public void setLast(Object last) {
-    this.last = last;
+  public void setTotalPages(Object totalPages) {
+    this.totalPages = totalPages;
   }
 
   public PageGUserChatInfo size(Object size) {
@@ -222,6 +168,42 @@ public class PageGUserChatInfo {
     this.sort = sort;
   }
 
+  public PageGUserChatInfo first(Object first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Object getFirst() {
+    return first;
+  }
+
+  public void setFirst(Object first) {
+    this.first = first;
+  }
+
+  public PageGUserChatInfo last(Object last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Object getLast() {
+    return last;
+  }
+
+  public void setLast(Object last) {
+    this.last = last;
+  }
+
   public PageGUserChatInfo numberOfElements(Object numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -238,6 +220,24 @@ public class PageGUserChatInfo {
 
   public void setNumberOfElements(Object numberOfElements) {
     this.numberOfElements = numberOfElements;
+  }
+
+  public PageGUserChatInfo pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
   }
 
   public PageGUserChatInfo empty(Object empty) {
@@ -268,22 +268,22 @@ public class PageGUserChatInfo {
       return false;
     }
     PageGUserChatInfo pageGUserChatInfo = (PageGUserChatInfo) o;
-    return Objects.equals(this.totalPages, pageGUserChatInfo.totalPages) &&
-        Objects.equals(this.totalElements, pageGUserChatInfo.totalElements) &&
-        Objects.equals(this.pageable, pageGUserChatInfo.pageable) &&
-        Objects.equals(this.first, pageGUserChatInfo.first) &&
-        Objects.equals(this.last, pageGUserChatInfo.last) &&
+    return Objects.equals(this.totalElements, pageGUserChatInfo.totalElements) &&
+        Objects.equals(this.totalPages, pageGUserChatInfo.totalPages) &&
         Objects.equals(this.size, pageGUserChatInfo.size) &&
         Objects.equals(this.content, pageGUserChatInfo.content) &&
         Objects.equals(this.number, pageGUserChatInfo.number) &&
         Objects.equals(this.sort, pageGUserChatInfo.sort) &&
+        Objects.equals(this.first, pageGUserChatInfo.first) &&
+        Objects.equals(this.last, pageGUserChatInfo.last) &&
         Objects.equals(this.numberOfElements, pageGUserChatInfo.numberOfElements) &&
+        Objects.equals(this.pageable, pageGUserChatInfo.pageable) &&
         Objects.equals(this.empty, pageGUserChatInfo.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalElements, totalPages, size, content, number, sort, first, last, numberOfElements, pageable, empty);
   }
 
 
@@ -292,16 +292,16 @@ public class PageGUserChatInfo {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageGUserChatInfo {\n");
     
-    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
-    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

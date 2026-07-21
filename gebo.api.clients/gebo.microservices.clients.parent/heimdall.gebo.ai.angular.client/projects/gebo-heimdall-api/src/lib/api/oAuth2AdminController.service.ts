@@ -26,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class OAuth2AdminControllerService {
 
-    protected basePath = 'http://localhost:13018';
+    protected basePath = 'http://localhost:13018/heimdall';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

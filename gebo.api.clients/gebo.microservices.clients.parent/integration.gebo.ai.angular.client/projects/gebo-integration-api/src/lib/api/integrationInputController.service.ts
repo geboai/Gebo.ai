@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class IntegrationInputControllerService {
 
-    protected basePath = 'http://localhost:13015';
+    protected basePath = 'http://localhost:13015/integration';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

@@ -1,6 +1,6 @@
 # GeboVectorStoreConfigurationControllerApi
 
-All URIs are relative to *http://localhost:13003*
+All URIs are relative to *http://localhost:13003/graphicator*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

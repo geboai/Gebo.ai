@@ -10,26 +10,31 @@
 	<groupId>ai.gebo.systems</groupId>
 	<artifactId>gebo.systems.parent</artifactId>
 	<packaging>pom</packaging>
-	<dependencies>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
+	<!--
+	  No global <dependencies> here. gebo.architecture.contentsystems.abstraction.layer
+	  used to be declared globally and inherited by every child, which silently forced
+	  it onto the web-search tools (bing/google) and the lightweight *.search.api DTO
+	  modules that do not use it - and, through them, onto brain. It is now declared
+	  explicitly by each real content-handler module that actually needs it.
+	-->
+
 	<modules>
 		<module>gebo.git.content.handler</module>
 		<module>gebo.contentsystems.starter</module>
 		<module>gebo.filesystem.content.handler</module>
 		<module>gebo.uploads.content.handler</module>
 		<module>gebo.googlesearch.handler</module>
+		<module>gebo.sharepoint.search.api</module>
 		<module>gebo.sharepoint.handler</module>
+		<module>gebo.atlassian.confluence.search.api</module>
 		<module>gebo.atlassian.confluence.handler</module>
+		<module>gebo.googledrive.search.api</module>
 		<module>gebo.googleworkspace.handlers</module>
 		<module>gebo.contentsystem.tests.services</module>
 		<module>gebo.userspace.handler</module>
 
 
+		<module>gebo.atlassian.jira.search.api</module>
 		<module>gebo.atlassian.jira.handler</module>
 		<module>gebo.integration.content.handler</module>
 		<module>gebo.bingsearch.handler</module>

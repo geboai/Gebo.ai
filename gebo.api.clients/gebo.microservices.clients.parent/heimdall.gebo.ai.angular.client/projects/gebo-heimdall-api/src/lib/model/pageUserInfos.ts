@@ -13,8 +13,8 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageUserInfos { 
-    totalPages?: any;
     totalElements?: any;
+    totalPages?: any;
     pageable?: PageableObject;
     first?: any;
     last?: any;

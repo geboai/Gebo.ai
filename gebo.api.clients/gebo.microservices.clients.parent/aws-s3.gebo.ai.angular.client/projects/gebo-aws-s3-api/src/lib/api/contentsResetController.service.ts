@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ContentsResetControllerService {
 
-    protected basePath = 'http://localhost:13012';
+    protected basePath = 'http://localhost:13012/aws-s3';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

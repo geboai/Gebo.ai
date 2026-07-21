@@ -26,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class IngestionFileTypesLibraryControllerService {
 
-    protected basePath = 'http://localhost:13007';
+    protected basePath = 'http://localhost:13007/uploads';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

@@ -1,6 +1,6 @@
 # GenericalPublisherControllerApi
 
-All URIs are relative to *http://localhost:13012*
+All URIs are relative to *http://localhost:13012/aws-s3*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

@@ -6,4 +6,11 @@
     <version>1.0.2.0-SNAPSHOT</version>
   </parent>
   <artifactId>gebo.integration.content.handler</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>

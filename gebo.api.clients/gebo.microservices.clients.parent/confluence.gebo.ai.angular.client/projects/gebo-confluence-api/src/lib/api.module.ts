@@ -4,14 +4,13 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { ConfluenceBrowsingControllerService } from './api/confluenceBrowsingController.service';
+import { ConfluenceSearchServiceControllerService } from './api/confluenceSearchServiceController.service';
 import { ConfluenceSystemsControllerService } from './api/confluenceSystemsController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
-import { JobStatusControllerService } from './api/jobStatusController.service';
-import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
   imports:      [],
@@ -19,14 +18,13 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   exports:      [],
   providers: [
     ConfluenceBrowsingControllerService,
+    ConfluenceSearchServiceControllerService,
     ConfluenceSystemsControllerService,
     ContentsResetControllerService,
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
-    JobLauncherControllerService,
-    JobStatusControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+    JobLauncherControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

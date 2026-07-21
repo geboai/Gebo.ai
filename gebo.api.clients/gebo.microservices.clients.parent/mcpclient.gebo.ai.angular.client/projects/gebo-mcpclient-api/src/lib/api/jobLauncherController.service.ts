@@ -28,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class JobLauncherControllerService {
 
-    protected basePath = 'http://localhost:13014';
+    protected basePath = 'http://localhost:13014/mcpclient';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

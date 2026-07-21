@@ -1,0 +1,277 @@
+package gebo.microservices.api.client.brain.api;
+
+import gebo.microservices.api.client.brain.invoker.ApiClient;
+
+import gebo.microservices.api.client.brain.model.GOpenAIImageModelConfig;
+import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
+import gebo.microservices.api.client.brain.model.OperationStatusGOpenAIImageModelConfig;
+import gebo.microservices.api.client.brain.model.OperationStatusListGOpenAIImageModelChoice;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-20T23:48:43.793671417+02:00[Europe/Rome]")
+
+public class OpenAiImageModelsConfigurationControllerApi {
+    private ApiClient apiClient;
+
+     public OpenAiImageModelsConfigurationControllerApi() {
+        this(new ApiClient());
+    }
+    public OpenAiImageModelsConfigurationControllerApi(ApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
+
+    public ApiClient getApiClient() {
+        return apiClient;
+    }
+
+    public void setApiClient(ApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusBoolean
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusBoolean deleteOpenAIImageModelConfig(GOpenAIImageModelConfig body) throws RestClientException {
+        return deleteOpenAIImageModelConfigWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusBoolean&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusBoolean> deleteOpenAIImageModelConfigWithHttpInfo(GOpenAIImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteOpenAIImageModelConfig");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/OpenAIImageModelsConfigurationController/deleteOpenAIImageModelConfig").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusBoolean> returnType = new ParameterizedTypeReference<OperationStatusBoolean>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return GOpenAIImageModelConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GOpenAIImageModelConfig findOpenAIImageModelConfigByCode(Object code) throws RestClientException {
+        return findOpenAIImageModelConfigByCodeWithHttpInfo(code).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return ResponseEntity&lt;GOpenAIImageModelConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GOpenAIImageModelConfig> findOpenAIImageModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'code' is set
+        if (code == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findOpenAIImageModelConfigByCode");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/OpenAIImageModelsConfigurationController/findOpenAIImageModelConfigByCode").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "code", code));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GOpenAIImageModelConfig> returnType = new ParameterizedTypeReference<GOpenAIImageModelConfig>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusListGOpenAIImageModelChoice
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusListGOpenAIImageModelChoice getOpenAIImageModels(GOpenAIImageModelConfig body) throws RestClientException {
+        return getOpenAIImageModelsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusListGOpenAIImageModelChoice&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusListGOpenAIImageModelChoice> getOpenAIImageModelsWithHttpInfo(GOpenAIImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getOpenAIImageModels");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/OpenAIImageModelsConfigurationController/getOpenAIImageModels").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusListGOpenAIImageModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGOpenAIImageModelChoice>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusGOpenAIImageModelConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGOpenAIImageModelConfig insertOpenAIImageModelConfig(GOpenAIImageModelConfig body) throws RestClientException {
+        return insertOpenAIImageModelConfigWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusGOpenAIImageModelConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGOpenAIImageModelConfig> insertOpenAIImageModelConfigWithHttpInfo(GOpenAIImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertOpenAIImageModelConfig");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/OpenAIImageModelsConfigurationController/insertOpenAIImageModelConfig").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGOpenAIImageModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGOpenAIImageModelConfig>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusGOpenAIImageModelConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGOpenAIImageModelConfig updateOpenAIImageModelConfig(GOpenAIImageModelConfig body) throws RestClientException {
+        return updateOpenAIImageModelConfigWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusGOpenAIImageModelConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGOpenAIImageModelConfig> updateOpenAIImageModelConfigWithHttpInfo(GOpenAIImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateOpenAIImageModelConfig");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/OpenAIImageModelsConfigurationController/updateOpenAIImageModelConfig").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGOpenAIImageModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGOpenAIImageModelConfig>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+}

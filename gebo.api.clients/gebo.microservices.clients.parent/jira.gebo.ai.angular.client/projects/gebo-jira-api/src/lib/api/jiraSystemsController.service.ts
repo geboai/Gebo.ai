@@ -31,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class JiraSystemsControllerService {
 
-    protected basePath = 'http://localhost:13011';
+    protected basePath = 'http://localhost:13011/jira';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
