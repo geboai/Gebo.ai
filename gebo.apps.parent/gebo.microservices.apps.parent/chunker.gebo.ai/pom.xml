@@ -37,6 +37,18 @@
 			<artifactId>gebo.architecture.documents.cache.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+		  Topology-driven standard-workflow step enablement. The chunker runs the
+		  tokenization fan-out, so it needs a complete set of step-enablement
+		  handlers in its repository pattern. As a non-authority it gets the
+		  tyr-backed resolver, which asks tyr once per run and caches, so the
+		  per-message routing decision is a local lookup.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.workflow.steps.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>

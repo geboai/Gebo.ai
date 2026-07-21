@@ -59,6 +59,7 @@
   	<module>gebo.architecture.documents.cache.impl</module>
   	<module>gebo.architecture.documents.access</module>
   	<module>gebo.architecture.compute.workflow</module>
+  	<module>gebo.architecture.workflow.steps</module>
   	<module>gebo.architecture.replicator</module>
 
   	<module>gebo.secrets.impl</module>

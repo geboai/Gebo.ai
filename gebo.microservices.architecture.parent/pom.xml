@@ -35,5 +35,6 @@
 		<module>gebo.microservices.acl.controller</module>
 		<module>gebo.microservices.acl.client</module>
 		<module>gebo.microservices.searchservices.clients</module>
+		<module>gebo.microservices.workflow.steps.topology</module>
 	</modules>
 </project>
