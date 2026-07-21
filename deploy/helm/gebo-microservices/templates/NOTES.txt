@@ -1,0 +1,31 @@
+Gebo.ai microservices installed as release "{{ .Release.Name }}" in namespace "{{ .Release.Namespace }}".
+
+Mandatory services (always installed):
+{{- range $name, $svc := .Values.backends }}{{ if $svc.mandatory }}
+  - {{ $name }}{{ end }}{{ end }}
+  - eureka (registry)
+  - gateway (edge)
+
+Optional services enabled in THIS install:
+{{- range $name, $svc := .Values.backends }}{{ if and (not $svc.mandatory) (include "gebo.backendEnabled" $svc) }}
+  - {{ $name }}{{ end }}{{ end }}
+
+The declared messaging topology (gebo.microservices.topology) was rendered to match
+exactly the services above, so the tyr coordinator and the workflow-step enablement
+see the real footprint.
+
+Reach the gateway (the edge / Angular UI + aggregated API):
+{{- if .Values.gateway.ingress.enabled }}
+  http{{ if .Values.gateway.ingress.tls.enabled }}s{{ end }}://{{ .Values.gateway.ingress.host }}/
+{{- else if eq .Values.gateway.service.type "LoadBalancer" }}
+  kubectl -n {{ .Release.Namespace }} get svc {{ .Release.Name }}-gateway   # external IP
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ .Release.Name }}-gateway {{ .Values.gateway.port }}:{{ .Values.gateway.port }}
+  then open http://localhost:{{ .Values.gateway.port }}/
+{{- end }}
+
+Watch rollout:
+  kubectl -n {{ .Release.Namespace }} get pods -l app.kubernetes.io/part-of=gebo-microservices -w
+
+{{ if not .Values.secrets.existingSecret }}WARNING: this release uses the chart's DEV-DEFAULT secrets. Override values under
+`secrets:` (or set `secrets.existingSecret`) before any non-dev use.{{ end }}

@@ -1,0 +1,236 @@
+{{- /*
+  In-cluster stateful dependencies. Each is gated by infra.<dep>.enabled; when
+  disabled, nothing is rendered and the app points at infra.<dep>.external.* .
+  Dev-grade single-replica StatefulSets mirroring docker-compose. For production,
+  prefer managed services / dedicated operators (set enabled:false + external.*).
+*/ -}}
+{{- $rel := .Release.Name -}}
+{{- $secret := include "gebo.secretName" . -}}
+
+{{- if .Values.infra.mongodb.enabled }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rel }}-mongodb
+  labels: { app.kubernetes.io/name: mongodb }
+spec:
+  serviceName: {{ $rel }}-mongodb
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: mongodb, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: mongodb, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: mongodb
+          image: {{ .Values.infra.mongodb.image }}
+          args: ["mongod", "--wiredTigerCacheSizeGB=1"]
+          ports: [{ name: mongo, containerPort: 27017 }]
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom: { secretKeyRef: { name: {{ $secret }}, key: MONGO_USERNAME } }
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $secret }}, key: MONGO_PASSWORD } }
+          volumeMounts: [{ name: data, mountPath: /data/db }]
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.infra.mongodb.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources: { requests: { storage: {{ .Values.infra.mongodb.storage }} } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-mongodb
+  labels: { app.kubernetes.io/name: mongodb }
+spec:
+  selector: { app.kubernetes.io/name: mongodb, app.kubernetes.io/instance: {{ $rel }} }
+  ports: [{ name: mongo, port: 27017, targetPort: 27017 }]
+{{- end }}
+
+{{- if .Values.infra.rabbitmq.enabled }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rel }}-rabbitmq
+  labels: { app.kubernetes.io/name: rabbitmq }
+spec:
+  serviceName: {{ $rel }}-rabbitmq
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: rabbitmq, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: rabbitmq, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: rabbitmq
+          image: {{ .Values.infra.rabbitmq.image }}
+          ports:
+            - { name: amqp, containerPort: 5672 }
+            - { name: management, containerPort: 15672 }
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: {{ .Values.infra.rabbitmq.username | quote }}
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom: { secretKeyRef: { name: {{ $secret }}, key: RABBITMQ_PASSWORD } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-rabbitmq
+  labels: { app.kubernetes.io/name: rabbitmq }
+spec:
+  selector: { app.kubernetes.io/name: rabbitmq, app.kubernetes.io/instance: {{ $rel }} }
+  ports:
+    - { name: amqp, port: 5672, targetPort: 5672 }
+    - { name: management, port: 15672, targetPort: 15672 }
+{{- end }}
+
+{{- if .Values.infra.qdrant.enabled }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rel }}-qdrant
+  labels: { app.kubernetes.io/name: qdrant }
+spec:
+  serviceName: {{ $rel }}-qdrant
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: qdrant, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: qdrant, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: qdrant
+          image: {{ .Values.infra.qdrant.image }}
+          ports:
+            - { name: http, containerPort: 6333 }
+            - { name: grpc, containerPort: 6334 }
+          env:
+            - name: QDRANT__SERVICE__API_KEY
+              valueFrom: { secretKeyRef: { name: {{ $secret }}, key: QDRANT_API_KEY } }
+            - name: QDRANT__STORAGE__OPTIMIZE_INDEXING
+              value: "true"
+          volumeMounts: [{ name: data, mountPath: /qdrant/storage }]
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.infra.qdrant.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources: { requests: { storage: {{ .Values.infra.qdrant.storage }} } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-qdrant
+  labels: { app.kubernetes.io/name: qdrant }
+spec:
+  selector: { app.kubernetes.io/name: qdrant, app.kubernetes.io/instance: {{ $rel }} }
+  ports:
+    - { name: http, port: 6333, targetPort: 6333 }
+    - { name: grpc, port: 6334, targetPort: 6334 }
+{{- end }}
+
+{{- if .Values.infra.neo4j.enabled }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rel }}-neo4j
+  labels: { app.kubernetes.io/name: neo4j }
+spec:
+  serviceName: {{ $rel }}-neo4j
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: neo4j, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: neo4j, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: neo4j
+          image: {{ .Values.infra.neo4j.image }}
+          ports:
+            - { name: bolt, containerPort: 7687 }
+            - { name: http, containerPort: 7474 }
+          env:
+            - name: NEO4J_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $secret }}, key: NEO4J_PASSWORD } }
+            - name: NEO4J_AUTH
+              value: "{{ .Values.infra.neo4j.username }}/$(NEO4J_PASSWORD)"
+            - name: NEO4JLABS_PLUGINS
+              value: '["apoc"]'
+          volumeMounts: [{ name: data, mountPath: /data }]
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.infra.neo4j.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources: { requests: { storage: {{ .Values.infra.neo4j.storage }} } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-neo4j
+  labels: { app.kubernetes.io/name: neo4j }
+spec:
+  selector: { app.kubernetes.io/name: neo4j, app.kubernetes.io/instance: {{ $rel }} }
+  ports:
+    - { name: bolt, port: 7687, targetPort: 7687 }
+    - { name: http, port: 7474, targetPort: 7474 }
+{{- end }}
+
+{{- if .Values.infra.opensearch.enabled }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rel }}-opensearch
+  labels: { app.kubernetes.io/name: opensearch }
+spec:
+  serviceName: {{ $rel }}-opensearch
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: opensearch, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: opensearch, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: opensearch
+          image: {{ .Values.infra.opensearch.image }}
+          ports: [{ name: http, containerPort: 9200 }]
+          env:
+            - { name: discovery.type, value: single-node }
+            - { name: plugins.security.ssl.http.enabled, value: "true" }
+            - { name: bootstrap.memory_lock, value: "true" }
+            - { name: OPENSEARCH_JAVA_OPTS, value: {{ .Values.infra.opensearch.javaOpts | quote }} }
+            - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ $secret }}, key: OPENSEARCH_PASSWORD } }
+          volumeMounts: [{ name: data, mountPath: /usr/share/opensearch/data }]
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.infra.opensearch.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources: { requests: { storage: {{ .Values.infra.opensearch.storage }} } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-opensearch
+  labels: { app.kubernetes.io/name: opensearch }
+spec:
+  selector: { app.kubernetes.io/name: opensearch, app.kubernetes.io/instance: {{ $rel }} }
+  ports: [{ name: http, port: 9200, targetPort: 9200 }]
+{{- end }}

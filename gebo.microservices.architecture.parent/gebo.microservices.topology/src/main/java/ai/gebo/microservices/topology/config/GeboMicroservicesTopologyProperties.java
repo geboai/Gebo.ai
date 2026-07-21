@@ -9,6 +9,7 @@
 
 package ai.gebo.microservices.topology.config;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,16 @@ public class GeboMicroservicesTopologyProperties {
 	private Map<String, Map<String, List<String>>> services = new LinkedHashMap<>();
 
 	/**
+	 * Microservice ids to REMOVE from the resolved topology (a deny-list applied
+	 * last, after defaults + {@link #services}). This is how a heterogeneous
+	 * installation declares a subset without having to re-specify every module map:
+	 * keep {@code include-defaults=true} and list the microservices that are NOT
+	 * deployed here. Ids may be dotted or underscore form. Mandatory services are
+	 * simply never listed, so they cannot be dropped by accident.
+	 */
+	private List<String> disabledServices = new ArrayList<>();
+
+	/**
 	 * Microservice ids that participate in the LLM models-replication cache. This
 	 * is part of the <b>shared</b> topology configuration: when {@code null} (the
 	 * default) the built-in
@@ -98,6 +109,14 @@ public class GeboMicroservicesTopologyProperties {
 
 	public void setServices(Map<String, Map<String, List<String>>> services) {
 		this.services = services;
+	}
+
+	public List<String> getDisabledServices() {
+		return disabledServices;
+	}
+
+	public void setDisabledServices(List<String> disabledServices) {
+		this.disabledServices = disabledServices;
 	}
 
 	public List<String> getModelsReplicationParticipants() {

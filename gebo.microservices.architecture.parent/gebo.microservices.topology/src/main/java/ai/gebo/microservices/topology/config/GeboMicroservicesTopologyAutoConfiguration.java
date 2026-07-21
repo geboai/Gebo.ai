@@ -64,6 +64,16 @@ public class GeboMicroservicesTopologyAutoConfiguration {
 		properties.getServices()
 				.forEach((microserviceId, modules) -> merged.put(microserviceId, modules == null ? Map.of() : modules));
 
+		// Deny-list applied last: drop the microservices this installation does not deploy,
+		// so a subset install keeps include-defaults=true and only lists what is absent.
+		if (properties.getDisabledServices() != null) {
+			for (String disabled : properties.getDisabledServices()) {
+				if (disabled != null && !disabled.isBlank()) {
+					merged.remove(GeboMicroservice.normalizeName(disabled));
+				}
+			}
+		}
+
 		List<GeboMicroservice> microservices = merged.entrySet().stream()
 				.map(entry -> new GeboMicroservice(entry.getKey(), entry.getValue())).toList();
 
