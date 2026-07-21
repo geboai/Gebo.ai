@@ -42,6 +42,7 @@ import { GoogleSearchConfigurationControllerService } from './api/googleSearchCo
 import { GoogleSearchControllerService } from './api/googleSearchController.service';
 import { ImageModelsControllerService } from './api/imageModelsController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
@@ -99,6 +100,7 @@ import { TranscriptModelsControllerService } from './api/transcriptModelsControl
     GoogleSearchControllerService,
     ImageModelsControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,

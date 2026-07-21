@@ -9,6 +9,7 @@ import { GenericalPublisherControllerService } from './api/genericalPublisherCon
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
 import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     IngestionFileTypesLibraryControllerService,
     IntegrationInputControllerService,
     IntegrationSystemsControllerService,
+    InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })
 export class ApiModule {

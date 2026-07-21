@@ -1,4 +1,5 @@
 export * from './buildSystemRef';
+export * from './componentMetaInfo';
 export * from './gCentralizedProjectEndpoint';
 export * from './gContentManagementSystemType';
 export * from './gDocumentAttributeValue';
@@ -7,6 +8,7 @@ export * from './gDocumentReferenceStreamRequest';
 export * from './gGitContentManagementSystem';
 export * from './gGitProjectEndpoint';
 export * from './gJobStatus';
+export * from './gModuleMetaInfo';
 export * from './gObjectRefGProjectEndpoint';
 export * from './gUserMessage';
 export * from './gVirtualFilesystemRoot';

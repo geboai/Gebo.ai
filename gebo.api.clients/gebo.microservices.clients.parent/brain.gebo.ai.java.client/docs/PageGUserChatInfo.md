@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalElements** | **Object** |  |  [optional]
 **totalPages** | **Object** |  |  [optional]
+**totalElements** | **Object** |  |  [optional]
 **size** | **Object** |  |  [optional]
 **content** | **Object** |  |  [optional]
 **number** | **Object** |  |  [optional]

@@ -1,5 +1,6 @@
 export * from './browseParam';
 export * from './buildSystemRef';
+export * from './componentMetaInfo';
 export * from './dataPage';
 export * from './findByMCPClientConfigQbeParam';
 export * from './gCentralizedProjectEndpoint';
@@ -8,6 +9,7 @@ export * from './gDocumentAttributeValue';
 export * from './gDocumentReference';
 export * from './gDocumentReferenceStreamRequest';
 export * from './gJobStatus';
+export * from './gModuleMetaInfo';
 export * from './gObjectRefGProjectEndpoint';
 export * from './gUserMessage';
 export * from './gVirtualFilesystemRoot';

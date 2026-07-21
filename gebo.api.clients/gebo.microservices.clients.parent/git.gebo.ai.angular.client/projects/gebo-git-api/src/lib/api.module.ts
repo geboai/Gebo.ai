@@ -8,6 +8,7 @@ import { DocumentContentStreamerControllerService } from './api/documentContentS
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     GenericalPublisherControllerService,
     GitSystemsControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     JobLauncherControllerService ]
 })
 export class ApiModule {

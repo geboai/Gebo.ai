@@ -15,12 +15,12 @@ import { SortObject } from './sortObject';
 export interface PageGUserChatInfo { 
     totalElements?: any;
     totalPages?: any;
+    first?: any;
+    last?: any;
     size?: any;
     content?: any;
     number?: any;
     sort?: SortObject;
-    first?: any;
-    last?: any;
     numberOfElements?: any;
     pageable?: PageableObject;
     empty?: any;

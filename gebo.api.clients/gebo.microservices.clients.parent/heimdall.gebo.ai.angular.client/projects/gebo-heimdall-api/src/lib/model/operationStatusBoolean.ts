@@ -13,6 +13,6 @@
 export interface OperationStatusBoolean { 
     result?: any;
     messages?: any;
-    hasErrorMessages?: any;
     hasWarnMessages?: any;
+    hasErrorMessages?: any;
 }

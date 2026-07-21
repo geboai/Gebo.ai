@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 
 @NgModule({
   imports:      [],
@@ -12,7 +13,8 @@ import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileT
   exports:      [],
   providers: [
     GeboVectorStoreConfigurationControllerService,
-    IngestionFileTypesLibraryControllerService ]
+    IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

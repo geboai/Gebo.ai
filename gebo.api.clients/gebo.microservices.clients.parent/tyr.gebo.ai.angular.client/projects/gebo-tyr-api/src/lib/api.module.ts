@@ -3,9 +3,12 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { GlobalInternalTopologyControllerService } from './api/globalInternalTopologyController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
 import { LlmsUsageAdminLevelControllerService } from './api/llmsUsageAdminLevelController.service';
 import { LlmsUsageUserLevelControllerService } from './api/llmsUsageUserLevelController.service';
+import { WorkflowParticipantsEnablementControllerService } from './api/workflowParticipantsEnablementController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
@@ -13,9 +16,12 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   declarations: [],
   exports:      [],
   providers: [
+    GlobalInternalTopologyControllerService,
+    InternalMessagingTopologyControllerService,
     JobStatusControllerService,
     LlmsUsageAdminLevelControllerService,
     LlmsUsageUserLevelControllerService,
+    WorkflowParticipantsEnablementControllerService,
     WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {

@@ -1,3 +1,5 @@
+export * from './componentMetaInfo';
+export * from './gModuleMetaInfo';
 export * from './gUserMessage';
 export * from './geboMongoVectorStoreConfig';
 export * from './ingestionFileType';

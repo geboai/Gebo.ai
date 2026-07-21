@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ===========================================================================
+    microservices-integration-tests - STANDALONE Maven parent POM.
+
+    This pom is intentionally NOT a child of the repository root pom
+    (ai.gebo.parent) and is NOT listed in the root reactor <modules>, so a
+    plain `mvn install` / `mvn package` at the repository root will NEVER
+    compile or run it. The whole tree is only built when the operator
+    explicitly cd's into this directory (or activates the
+    `microservices-integration-tests` profile, see below) and runs maven here.
+
+    Rationale: the Gebo microservices cluster is a heavy, docker-compose
+    driven deployment (eureka + gateway + 20+ backend services + mongo/rabbit/
+    qdrant/neo4j/opensearch). Wiring it into the root reactor would force every
+    developer build to either spin up the whole cluster or to remember to pass
+    `-pl :microservices-integration-tests -am` tricks. Keeping the parent pom
+    self-contained (parent = spring-boot-starter-parent, version pinning done
+    locally) means:
+
+      * `mvn -f microservices-integration-tests/pom.xml verify`
+        brings the cluster up via docker-compose, runs the failsafe integration
+        tests against the live microservices java client stubs, then tears the
+        cluster down. Nothing of this touches the root reactor.
+
+      * `mvn -f microservices-integration-tests/pom.xml verify -Pskip-cluster`
+        assumes the cluster is ALREADY running on the host (operator started it
+        by hand with `docker compose -f dockers/gebo.microservices/docker-compose.yml up -d`)
+        and just runs the tests. Useful while iterating on the test code.
+
+    The concrete integration-test module(s) hang off this parent as
+    <modules>. Today only setup-use-microservices-tests is here; more can be
+    added following the same pattern (one module per scenario/family).
+    ===========================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Standalone: this parent does NOT inherit from ai.gebo.parent, so it is
+	     not pulled into the root reactor and a root `mvn` invocation will never
+	     compile it. Version pinning is done here against the same Spring Boot
+	     baseline the rest of Gebo uses, to stay binary-compatible with the
+	     published client stubs. -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.1.0</version>
+		<relativePath />
+	</parent>
+
+	<groupId>ai.gebo.microservices-integration-tests</groupId>
+	<artifactId>microservices-integration-tests.parent</artifactId>
+	<version>1.0.2.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<java.version>21</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Gebo version the cluster is expected to be running. Matches the
+		     SNAPSHOT checked in under dockers/gebo.microservices/.env as
+		     GEBO_VERSION. -->
+		<gebo.version>1.0.2.0-SNAPSHOT</gebo.version>
+		<!-- Path to the canonical microservices docker-compose, relative to the
+		     reactor basedir (this directory). Overridable from the command line
+		     with -Dgebo.microservices.compose.file=/abs/path/to/docker-compose.yml -->
+		<gebo.microservices.compose.file>${project.basedir}/../dockers/gebo.microservices/docker-compose.yml</gebo.microservices.compose.file>
+		<!-- Compose project name; keep it in sync with the `name:` header in the
+		     compose file so `docker compose down` tears down exactly what
+		     `docker compose up` brought up. -->
+		<gebo.microservices.compose.project>gebo-microservices</gebo.microservices.compose.project>
+		<!-- How long to wait for the gateway health endpoint to come up after
+		     `docker compose up -d` returns. The cluster boots eureka first, then
+		     every backend registers, then the gateway can route; 180s is a safe
+		     upper bound on a cold start. -->
+		<gebo.cluster.gateway.wait.seconds>180</gebo.cluster.gateway.wait.seconds>
+		<gebo.cluster.gateway.url>http://localhost:13000</gebo.cluster.gateway.url>
+		<!-- Failsafe: include/exclude patterns for *IT.java. -->
+		<it.includes>**/*IT.java</it.includes>
+		<!-- Docker compose CLI binary. `docker compose` (v2 plugin) is the
+		     default; override to `docker-compose` on older hosts. -->
+		<docker.compose.cmd>docker compose</docker.compose.cmd>
+	</properties>
+
+	<modules>
+		<module>setup-use-microservices-tests</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Swagger-codegen stubs carry no module-info.java, so the JPMS
+				     module path (enabled by default in Spring Boot 4.1.0's
+				     parent) treats each client jar as an automatic module whose
+				     packages are then inaccessible to the test compiler.
+				     Force the traditional classpath. -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<useModulePath>false</useModulePath>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+							</path>
+						</annotationProcessorPaths>
+					</configuration>
+				</plugin>
+				<!-- Integration tests are driven by failsafe (not surefire), so the
+				     root `mvn test` of any submodule runs NOTHING here: only
+				     `mvn verify` (or the `integration-test` phase) launches them.
+				     This is the standard maven convention for tests that need an
+				     external environment. -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<configuration>
+						<includes>
+							<include>${it.includes}</include>
+						</includes>
+						<systemPropertyVariables>
+							<gebo.cluster.gateway.url>${gebo.cluster.gateway.url}</gebo.cluster.gateway.url>
+							<!-- Per-service direct ports (see dockers/gebo.microservices/docker-compose.yml).
+							     The java stub clients were generated pointing at localhost:<port>,
+							     so tests reach every microservice straight through its published
+							     host port - no need to round-trip via the gateway. -->
+							<gebo.cluster.heimdall.url>http://localhost:13018</gebo.cluster.heimdall.url>
+							<gebo.cluster.brain.url>http://localhost:13001</gebo.cluster.brain.url>
+							<gebo.cluster.filesystem.url>http://localhost:13006</gebo.cluster.filesystem.url>
+							<gebo.cluster.tyr.url>http://localhost:13019</gebo.cluster.tyr.url>
+							<gebo.cluster.gateway.wait.seconds>${gebo.cluster.gateway.wait.seconds}</gebo.cluster.gateway.wait.seconds>
+						</systemPropertyVariables>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<!--
+		  Default profile: brings the microservices cluster UP via the canonical
+		  docker-compose before the integration-test phase, waits for the gateway,
+		  runs the *IT tests, then tears the cluster DOWN in post-integration-test.
+
+		  This is the "run and shutdown during the tests" mode the user asked to
+		  evaluate. It is active by default, so a plain:
+
+		      mvn -f microservices-integration-tests/pom.xml verify
+		  does the whole lifecycle. To skip it (cluster already up) pass
+		  -Pskip-cluster.
+		-->
+		<profile>
+			<id>manage-cluster</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>skip-cluster</name>
+					<value>!true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.5.0</version>
+						<executions>
+							<!-- pre-integration-test: docker compose up -d -->
+							<execution>
+								<id>compose-up</id>
+								<phase>pre-integration-test</phase>
+								<goals><goal>exec</goal></goals>
+								<configuration>
+									<executable>${docker.compose.cmd}</executable>
+									<commandlineArgs>-f ${gebo.microservices.compose.file} -p ${gebo.microservices.compose.project} up -d --wait</commandlineArgs>
+								</configuration>
+							</execution>
+							<!-- post-integration-test: docker compose down -v (removes
+							     volumes too, so mongo/qdrant/neo4j/opensearch start clean next run). -->
+							<execution>
+								<id>compose-down</id>
+								<phase>post-integration-test</phase>
+								<goals><goal>exec</goal></goals>
+								<configuration>
+									<executable>${docker.compose.cmd}</executable>
+									<commandlineArgs>-f ${gebo.microservices.compose.file} -p ${gebo.microservices.compose.project} down -v</commandlineArgs>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!--
+		  skip-cluster: the cluster is ALREADY running (operator started it by
+		  hand). Only run the *IT tests, do NOT touch docker-compose. Handy while
+		  iterating on test code - the cluster boot is the slow part.
+
+		      mvn -f microservices-integration-tests/pom.xml verify -Pskip-cluster
+		-->
+		<profile>
+			<id>skip-cluster</id>
+			<activation>
+				<property>
+					<name>skip-cluster</name>
+					<value>true</value>
+				</property>
+			</activation>
+		</profile>
+	</profiles>
+
+</project>

@@ -7,6 +7,7 @@ import { ContentsResetControllerService } from './api/contentsResetController.se
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JiraBrowsingControllerService } from './api/jiraBrowsingController.service';
 import { JiraSearchServiceControllerService } from './api/jiraSearchServiceController.service';
 import { JiraSystemsControllerService } from './api/jiraSystemsController.service';
@@ -21,6 +22,7 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     DocumentContentStreamerControllerService,
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
+    InternalMessagingTopologyControllerService,
     JiraBrowsingControllerService,
     JiraSearchServiceControllerService,
     JiraSystemsControllerService,
