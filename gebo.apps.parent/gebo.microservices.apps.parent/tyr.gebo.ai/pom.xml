@@ -64,6 +64,16 @@
 			<artifactId>gebo.microservices.acl.client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+		  Global internal-topology coordinator: polls every microservice's
+		  InternalMessagingTopologyController on a schedule and exposes the
+		  network-wide messaging topology. tyr is the topology/jobs authority.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.global-internal-topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
