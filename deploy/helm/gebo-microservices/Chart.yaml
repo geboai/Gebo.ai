@@ -1,0 +1,17 @@
+apiVersion: v2
+name: gebo-microservices
+description: >-
+  Gebo.ai microservices platform — the Eureka registry, the API gateway edge, and
+  every backend microservice, with per-service optional/mandatory install toggles
+  and a topology ConfigMap kept in sync with the deployed footprint. Optionally
+  deploys the stateful dependencies (MongoDB, RabbitMQ, Qdrant, Neo4j, OpenSearch)
+  in-cluster, or points them at external/managed instances.
+type: application
+version: 0.1.0
+# appVersion mirrors the default image tag in values.yaml (image.tag).
+appVersion: "1.0.2.0-SNAPSHOT"
+keywords:
+  - gebo
+  - rag
+  - microservices
+home: https://gebo.ai

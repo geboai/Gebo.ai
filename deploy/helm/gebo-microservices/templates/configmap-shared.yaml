@@ -1,0 +1,131 @@
+{{- /*
+  Shared config mounted read-only at /opt/gebo.ai/config in every backend
+  (SPRING_CONFIG_ADDITIONAL_LOCATION), on top of each service's baked application.yml.
+  Mirrors dockers/gebo.microservices/config/application.yml, with:
+    - infra hosts pointing at in-cluster Services (or external.* when disabled),
+    - secrets as ${...} placeholders resolved from the Secret (envFrom),
+    - a topology that keeps include-defaults:true and removes exactly the backends
+      NOT deployed here via disabled-services, so declared == deployed. Module maps
+      come from GeboStandardMicroservices.DEFAULTS (no duplication in the chart).
+*/ -}}
+{{- $rel := .Release.Name -}}
+{{- $disabled := list -}}
+{{- range $n, $s := .Values.backends }}{{- if not (include "gebo.backendEnabled" $s) }}{{- $disabled = append $disabled (include "gebo.microserviceId" $n) }}{{- end }}{{- end -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-shared-config
+  labels:
+    {{- include "gebo.labels" . | nindent 4 }}
+data:
+  application.yml: |
+    logging:
+      level:
+        root: INFO
+    server:
+      compression:
+        enabled: true
+    spring:
+      servlet:
+        multipart:
+          enabled: true
+          max-file-size: 100MB
+          max-request-size: 100MB
+      rabbitmq:
+        host: {{ if .Values.infra.rabbitmq.enabled }}{{ $rel }}-rabbitmq{{ else }}{{ .Values.infra.rabbitmq.external.host }}{{ end }}
+        port: {{ if .Values.infra.rabbitmq.enabled }}5672{{ else }}{{ .Values.infra.rabbitmq.external.port }}{{ end }}
+        username: {{ .Values.infra.rabbitmq.username }}
+        password: ${RABBITMQ_PASSWORD}
+      neo4j:
+        uri: {{ if .Values.infra.neo4j.enabled }}bolt://{{ $rel }}-neo4j:7687{{ else }}{{ .Values.infra.neo4j.external.uri }}{{ end }}
+        authentication:
+          username: {{ .Values.infra.neo4j.username }}
+          password: ${NEO4J_PASSWORD}
+      jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        serialization:
+          INDENT_OUTPUT: true
+
+    security.provider.1: org.bouncycastle.jce.provider.BouncyCastleProvider
+
+    ai.gebo.security:
+      auth:
+        tokenSecret: ${GEBO_TOKEN_SECRET}
+        tokenExpirationMsec: 120000
+      cors:
+        allowedOrigins: {{ .Values.security.corsAllowedOrigins | quote }}
+    ai.gebo.security.system-user:
+      username: heimdall@bifrost.gebo.ai
+      roles: [SYSTEM, ADMIN]
+      token-expiration-msec: 300000
+
+    ai.gebo.config:
+      setupConfiguresWorkdir: false
+      security: true
+      setup: true
+      customKeyStore: false
+      enableCommunityModules: true
+
+    ai.gebo.mongodb:
+      enabled: true
+      connectionString: {{ if .Values.infra.mongodb.enabled }}mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@{{ $rel }}-mongodb:27017/?authSource=admin{{ else }}{{ .Values.infra.mongodb.external.connectionString }}{{ end }}
+
+    ai.gebo.vectorstore:
+      use: QDRANT
+      qdrant:
+        host: {{ if .Values.infra.qdrant.enabled }}{{ $rel }}-qdrant{{ else }}{{ .Values.infra.qdrant.external.host }}{{ end }}
+        port: {{ if .Values.infra.qdrant.enabled }}6334{{ else }}{{ .Values.infra.qdrant.external.port }}{{ end }}
+        tls: {{ if .Values.infra.qdrant.enabled }}false{{ else }}{{ .Values.infra.qdrant.external.tls }}{{ end }}
+        apiKey: ${QDRANT_API_KEY}
+
+    ai.gebo.opensearch:
+      enabled: true
+      protocol: {{ if .Values.infra.opensearch.enabled }}https{{ else }}{{ .Values.infra.opensearch.external.protocol }}{{ end }}
+      host: {{ if .Values.infra.opensearch.enabled }}{{ $rel }}-opensearch{{ else }}{{ .Values.infra.opensearch.external.host }}{{ end }}
+      port: {{ if .Values.infra.opensearch.enabled }}9200{{ else }}{{ .Values.infra.opensearch.external.port }}{{ end }}
+      username: {{ if .Values.infra.opensearch.enabled }}admin{{ else }}{{ .Values.infra.opensearch.external.username }}{{ end }}
+      password: ${OPENSEARCH_PASSWORD}
+
+    ai.gebo.llms.config:
+      openAIEnabled: {{ .Values.llm.openAIEnabled }}
+      anthropicEnabled: {{ .Values.llm.anthropicEnabled }}
+      ollamaEnabled: {{ .Values.llm.ollamaEnabled }}
+    spring.ai:
+      openai:
+        api-key: ${OPENAI_API_KEY}
+        embedding:
+          enabled: true
+          options:
+            model: {{ .Values.llm.openaiEmbeddingModel }}
+        chat:
+          api-key: ${OPENAI_API_KEY}
+          options:
+            model: {{ .Values.llm.openaiChatModel }}
+      anthropic:
+        api-key: ${ANTHROPIC_API_KEY}
+
+    ai.gebo.security.client:
+      cache-ttl: 60s
+      cache-max-entries: 10000
+    ai.gebo.acl.client:
+      cache-ttl: 60s
+      cache-max-entries: 10000
+    ai.gebo.secrets.client:
+      cache-ttl: 60s
+      cache-max-entries: 2000
+
+    reactor.schedulers.defaultPoolSize: 16
+
+    # --- Declared messaging topology: DEFAULTS minus what is not deployed here ---
+    # include-defaults keeps the authoritative module maps from
+    # GeboStandardMicroservices; disabled-services removes exactly the backends
+    # turned off in this install, so declared == deployed (mandatory ones are never
+    # in the list). Avoids re-specifying module maps in the chart.
+    gebo.microservices.topology:
+      url:
+        strategy: LOAD_BALANCER
+      include-defaults: true
+      disabled-services: {{ $disabled | toJson }}
+{{- with .Values.extraSharedConfig }}
+    {{- . | nindent 4 }}
+{{- end }}

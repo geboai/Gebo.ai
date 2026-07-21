@@ -1,0 +1,104 @@
+{{- /* One Deployment + Service per enabled backend. Mandatory ones always; optional ones gated. */ -}}
+{{- $root := . -}}
+{{- range $name, $svc := .Values.backends }}
+{{- include "gebo.assertMandatory" (dict "name" $name "svc" $svc) -}}
+{{- if include "gebo.backendEnabled" $svc }}
+{{- $port := $svc.port -}}
+{{- $resources := $svc.resources | default $root.Values.resources -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $root.Release.Name }}-{{ $name }}
+  labels:
+    {{- include "gebo.labels" $root | nindent 4 }}
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/instance: {{ $root.Release.Name }}
+    gebo.ai/microservice-id: {{ include "gebo.microserviceId" $name }}
+    gebo.ai/mandatory: {{ $svc.mandatory | default false | quote }}
+spec:
+  replicas: {{ $svc.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+      app.kubernetes.io/instance: {{ $root.Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{- include "gebo.labels" $root | nindent 8 }}
+        app.kubernetes.io/name: {{ $name }}
+        app.kubernetes.io/instance: {{ $root.Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $root.Template.BasePath "/configmap-shared.yaml") $root | sha256sum }}
+    spec:
+      {{- with $root.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ $name }}
+          image: {{ include "gebo.image" (dict "root" $root "svc" $name) }}
+          imagePullPolicy: {{ $root.Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ $port }}
+          env:
+            {{- include "gebo.backendEnv" $root | nindent 12 }}
+          envFrom:
+            - secretRef:
+                name: {{ include "gebo.secretName" $root }}
+          # tcpSocket (port-open) rather than httpGet: the actuator health endpoint
+          # sits behind the service's context-path AND requires auth, so an
+          # unauthenticated HTTP probe can't pass. The port only binds once the app
+          # has fully started, so this is a sound readiness signal for these images.
+          startupProbe:
+            tcpSocket:
+              port: {{ $port }}
+            failureThreshold: 60
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: {{ $port }}
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{ $port }}
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            {{- toYaml $resources | nindent 12 }}
+          volumeMounts:
+            - name: shared-config
+              mountPath: /opt/gebo.ai/config
+              readOnly: true
+            - name: gebo-home
+              mountPath: /opt/gebo.ai/home
+            - name: gebo-work
+              mountPath: /opt/gebo.ai/work
+      volumes:
+        - name: shared-config
+          configMap:
+            name: {{ $root.Release.Name }}-shared-config
+        - name: gebo-home
+          emptyDir: {}
+        - name: gebo-work
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $root.Release.Name }}-{{ $name }}
+  labels:
+    {{- include "gebo.labels" $root | nindent 4 }}
+    app.kubernetes.io/name: {{ $name }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/instance: {{ $root.Release.Name }}
+  ports:
+    - name: http
+      port: {{ $port }}
+      targetPort: {{ $port }}
+{{- end }}
+{{- end }}

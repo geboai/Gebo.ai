@@ -1,0 +1,88 @@
+{
+  "title": "Gebo.ai Overview",
+  "uid": "gebo-overview",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Services up",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "expr": "up",
+          "legendFormat": "{{job}} - {{service}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "HTTP request rate",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "expr": "sum(rate(http_server_requests_seconds_count[1m])) by (service, uri)",
+          "legendFormat": "{{service}} {{uri}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "HTTP average request duration",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "expr": "sum(rate(http_server_requests_seconds_sum[1m])) by (service) / sum(rate(http_server_requests_seconds_count[1m])) by (service)",
+          "legendFormat": "{{service}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Message broker routing rate (per hop)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
+      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "expr": "sum(rate(gebo_messaging_broker_routing_seconds_count[1m])) by (sourceModule, targetModule)",
+          "legendFormat": "{{sourceModule}} -> {{targetModule}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "JVM memory used",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
+      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "expr": "sum(jvm_memory_used_bytes) by (service, area)",
+          "legendFormat": "{{service}} {{area}}",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

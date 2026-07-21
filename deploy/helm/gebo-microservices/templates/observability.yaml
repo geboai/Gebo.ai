@@ -1,0 +1,310 @@
+{{- /*
+  Observability stack: otel-collector -> Tempo (traces), Prometheus (metrics),
+  Grafana (both datasources + starter dashboard). Gated by observability.enabled.
+  Mirrors dockers/gebo.microservices/{otel-collector-config,tempo-config,prometheus}.yaml.
+*/ -}}
+{{- if .Values.observability.enabled }}
+{{- $rel := .Release.Name -}}
+{{- $o := .Values.observability -}}
+# ---------------- otel-collector ----------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $rel }}-otel-collector
+  labels: { app.kubernetes.io/name: otel-collector }
+data:
+  config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          http: { endpoint: 0.0.0.0:4318 }
+          grpc: { endpoint: 0.0.0.0:4317 }
+    processors:
+      batch: {}
+    exporters:
+      otlp/tempo:
+        endpoint: {{ $rel }}-tempo:4317
+        tls: { insecure: true }
+      debug: { verbosity: basic }
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp/tempo, debug]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $rel }}-otel-collector
+  labels: { app.kubernetes.io/name: otel-collector }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: otel-collector, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: otel-collector, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: otel-collector
+          image: {{ $o.otelCollector.image }}
+          args: ["--config=/etc/otelcol/config.yaml"]
+          ports:
+            - { name: otlp-http, containerPort: 4318 }
+            - { name: otlp-grpc, containerPort: 4317 }
+          volumeMounts: [{ name: config, mountPath: /etc/otelcol }]
+      volumes:
+        - name: config
+          configMap: { name: {{ $rel }}-otel-collector }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-otel-collector
+  labels: { app.kubernetes.io/name: otel-collector }
+spec:
+  selector: { app.kubernetes.io/name: otel-collector, app.kubernetes.io/instance: {{ $rel }} }
+  ports:
+    - { name: otlp-http, port: 4318, targetPort: 4318 }
+    - { name: otlp-grpc, port: 4317, targetPort: 4317 }
+---
+# ---------------- Tempo ----------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $rel }}-tempo
+  labels: { app.kubernetes.io/name: tempo }
+data:
+  tempo.yaml: |
+    server:
+      http_listen_port: 3200
+    distributor:
+      receivers:
+        otlp:
+          protocols:
+            grpc: { endpoint: 0.0.0.0:4317 }
+            http: { endpoint: 0.0.0.0:4318 }
+    ingester:
+      trace_idle_period: 10s
+    compactor:
+      compaction:
+        block_retention: 168h
+    storage:
+      trace:
+        backend: local
+        local: { path: /var/tempo/traces }
+        wal: { path: /var/tempo/wal }
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rel }}-tempo
+  labels: { app.kubernetes.io/name: tempo }
+spec:
+  serviceName: {{ $rel }}-tempo
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: tempo, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: tempo, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: tempo
+          image: {{ $o.tempo.image }}
+          args: ["-config.file=/etc/tempo/tempo.yaml"]
+          ports:
+            - { name: http, containerPort: 3200 }
+            - { name: otlp-grpc, containerPort: 4317 }
+          volumeMounts:
+            - { name: config, mountPath: /etc/tempo }
+            - { name: data, mountPath: /var/tempo }
+      volumes:
+        - name: config
+          configMap: { name: {{ $rel }}-tempo }
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with $o.tempo.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources: { requests: { storage: {{ $o.tempo.storage }} } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-tempo
+  labels: { app.kubernetes.io/name: tempo }
+spec:
+  selector: { app.kubernetes.io/name: tempo, app.kubernetes.io/instance: {{ $rel }} }
+  ports:
+    - { name: http, port: 3200, targetPort: 3200 }
+    - { name: otlp-grpc, port: 4317, targetPort: 4317 }
+---
+# ---------------- Prometheus ----------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $rel }}-prometheus
+  labels: { app.kubernetes.io/name: prometheus }
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: {{ $o.prometheus.scrapeInterval }}
+    scrape_configs:
+      - job_name: gateway
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ["{{ $rel }}-gateway:{{ .Values.gateway.port }}"]
+      - job_name: gebo-microservices
+        relabel_configs:
+          - source_labels: [__meta_context_path]
+            target_label: __metrics_path__
+            regex: (.+)
+            replacement: ${1}/actuator/prometheus
+        static_configs:
+{{- range $name, $svc := .Values.backends }}
+{{- if include "gebo.backendEnabled" $svc }}
+          - targets: ["{{ $rel }}-{{ $name }}:{{ $svc.port }}"]
+            labels: { service: {{ $name }}, __meta_context_path: /{{ $name }} }
+{{- end }}
+{{- end }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $rel }}-prometheus
+  labels: { app.kubernetes.io/name: prometheus }
+spec:
+  serviceName: {{ $rel }}-prometheus
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: prometheus, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: prometheus, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: prometheus
+          image: {{ $o.prometheus.image }}
+          args: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus"]
+          ports: [{ name: http, containerPort: 9090 }]
+          volumeMounts:
+            - { name: config, mountPath: /etc/prometheus }
+            - { name: data, mountPath: /prometheus }
+      volumes:
+        - name: config
+          configMap: { name: {{ $rel }}-prometheus }
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with $o.prometheus.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources: { requests: { storage: {{ $o.prometheus.storage }} } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-prometheus
+  labels: { app.kubernetes.io/name: prometheus }
+spec:
+  selector: { app.kubernetes.io/name: prometheus, app.kubernetes.io/instance: {{ $rel }} }
+  ports: [{ name: http, port: 9090, targetPort: 9090 }]
+---
+# ---------------- Grafana ----------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $rel }}-grafana-provisioning
+  labels: { app.kubernetes.io/name: grafana }
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        uid: gebo-prometheus
+        type: prometheus
+        access: proxy
+        url: http://{{ $rel }}-prometheus:9090
+        isDefault: true
+        editable: false
+      - name: Tempo
+        uid: gebo-tempo
+        type: tempo
+        access: proxy
+        url: http://{{ $rel }}-tempo:3200
+        editable: false
+        jsonData:
+          tracesToMetrics: { datasourceUid: gebo-prometheus }
+          serviceMap: { datasourceUid: gebo-prometheus }
+          nodeGraph: { enabled: true }
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: Gebo default dashboards
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 30
+        allowUiUpdates: true
+        options:
+          path: /etc/grafana/provisioning/dashboards
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $rel }}-grafana-dashboards
+  labels: { app.kubernetes.io/name: grafana }
+data:
+  gebo-overview.json: |
+{{ .Files.Get "files/gebo-overview.json" | indent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $rel }}-grafana
+  labels: { app.kubernetes.io/name: grafana }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app.kubernetes.io/name: grafana, app.kubernetes.io/instance: {{ $rel }} } }
+  template:
+    metadata:
+      labels: { app.kubernetes.io/name: grafana, app.kubernetes.io/instance: {{ $rel }} }
+    spec:
+      containers:
+        - name: grafana
+          image: {{ $o.grafana.image }}
+          ports: [{ name: http, containerPort: 3000 }]
+          env:
+            - { name: GF_AUTH_ANONYMOUS_ENABLED, value: {{ $o.grafana.anonymousViewer | quote }} }
+            - { name: GF_AUTH_ANONYMOUS_ORG_ROLE, value: Viewer }
+          volumeMounts:
+            - { name: provisioning-datasources, mountPath: /etc/grafana/provisioning/datasources }
+            - { name: provisioning-dashboards-cfg, mountPath: /etc/grafana/provisioning/dashboards }
+      volumes:
+        - name: provisioning-datasources
+          configMap:
+            name: {{ $rel }}-grafana-provisioning
+            items: [{ key: datasources.yaml, path: datasources.yaml }]
+        - name: provisioning-dashboards-cfg
+          projected:
+            sources:
+              - configMap:
+                  name: {{ $rel }}-grafana-provisioning
+                  items: [{ key: dashboards.yaml, path: dashboards.yaml }]
+              - configMap:
+                  name: {{ $rel }}-grafana-dashboards
+                  items: [{ key: gebo-overview.json, path: gebo-overview.json }]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $rel }}-grafana
+  labels: { app.kubernetes.io/name: grafana }
+spec:
+  type: {{ $o.grafana.service.type }}
+  selector: { app.kubernetes.io/name: grafana, app.kubernetes.io/instance: {{ $rel }} }
+  ports: [{ name: http, port: 3000, targetPort: 3000 }]
+{{- end }}
