@@ -14,5 +14,10 @@
 			<artifactId>gebo.architecture.testing</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.graphrag.extraction</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
