@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * OperationStatusAuthResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-21T14:42:05.119748747+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:42.706770550+02:00[Europe/Rome]")
 
 public class OperationStatusAuthResponse {
   @JsonProperty("result")
@@ -32,11 +32,11 @@ public class OperationStatusAuthResponse {
   @JsonProperty("messages")
   private Object messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Object hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Object hasWarnMessages = null;
 
   public OperationStatusAuthResponse result(AuthResponse result) {
     this.result = result;
@@ -74,24 +74,6 @@ public class OperationStatusAuthResponse {
     this.messages = messages;
   }
 
-  public OperationStatusAuthResponse hasWarnMessages(Object hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Object getHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Object hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusAuthResponse hasErrorMessages(Object hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -110,6 +92,24 @@ public class OperationStatusAuthResponse {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusAuthResponse hasWarnMessages(Object hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Object getHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Object hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -122,13 +122,13 @@ public class OperationStatusAuthResponse {
     OperationStatusAuthResponse operationStatusAuthResponse = (OperationStatusAuthResponse) o;
     return Objects.equals(this.result, operationStatusAuthResponse.result) &&
         Objects.equals(this.messages, operationStatusAuthResponse.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusAuthResponse.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusAuthResponse.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusAuthResponse.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusAuthResponse.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -139,8 +139,8 @@ public class OperationStatusAuthResponse {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

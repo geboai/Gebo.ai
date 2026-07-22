@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GUserMessage
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-21T14:43:27.290471515+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:53.852057217+02:00[Europe/Rome]")
 
 public class GUserMessage {
   @JsonProperty("severity")

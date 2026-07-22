@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalElements** | **Object** |  |  [optional]
 **totalPages** | **Object** |  |  [optional]
+**totalElements** | **Object** |  |  [optional]
 **pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **first** | **Object** |  |  [optional]
 **last** | **Object** |  |  [optional]

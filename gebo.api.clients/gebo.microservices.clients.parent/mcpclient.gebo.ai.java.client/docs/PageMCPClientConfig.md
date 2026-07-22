@@ -5,9 +5,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **totalPages** | **Object** |  |  [optional]
 **totalElements** | **Object** |  |  [optional]
+**pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **first** | **Object** |  |  [optional]
 **last** | **Object** |  |  [optional]
-**pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **size** | **Object** |  |  [optional]
 **content** | **Object** |  |  [optional]
 **number** | **Object** |  |  [optional]

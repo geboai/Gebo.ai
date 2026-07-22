@@ -14,6 +14,6 @@ import { AuthResponse } from './authResponse';
 export interface OperationStatusAuthResponse { 
     result?: AuthResponse;
     messages?: any;
-    hasWarnMessages?: any;
     hasErrorMessages?: any;
+    hasWarnMessages?: any;
 }

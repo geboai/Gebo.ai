@@ -4,8 +4,13 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
+import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
+import { CompanySystemsControllerService } from './api/companySystemsController.service';
+import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
+import { ContentsResetControllerService } from './api/contentsResetController.service';
+import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
@@ -25,6 +30,8 @@ import { GeboFastKnowledgeBaseSetupControllerService } from './api/geboFastKnowl
 import { GeboFastLlmsSetupControllerService } from './api/geboFastLlmsSetupController.service';
 import { GeboFastVectorStoreSetupControllerService } from './api/geboFastVectorStoreSetupController.service';
 import { GeboLlmGeneratedResourceControllerService } from './api/geboLlmGeneratedResourceController.service';
+import { GeboMcpServerAdminControllerService } from './api/geboMcpServerAdminController.service';
+import { GeboMcpServerUserControllerService } from './api/geboMcpServerUserController.service';
 import { GeboRagChatControllerService } from './api/geboRagChatController.service';
 import { GeboTextToSpeechControllerService } from './api/geboTextToSpeechController.service';
 import { GeboTranscriptControllerService } from './api/geboTranscriptController.service';
@@ -38,11 +45,16 @@ import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from '.
 import { GenericOpenAiapiImageModelsConfigurationControllerService } from './api/genericOpenAiapiImageModelsConfigurationController.service';
 import { GenericOpenAiapiTextToSpeechModelsConfigurationControllerService } from './api/genericOpenAiapiTextToSpeechModelsConfigurationController.service';
 import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from './api/genericOpenAiapiTranscriptModelsConfigurationController.service';
+import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GoogleSearchConfigurationControllerService } from './api/googleSearchConfigurationController.service';
 import { GoogleSearchControllerService } from './api/googleSearchController.service';
 import { ImageModelsControllerService } from './api/imageModelsController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
+import { JobLauncherControllerService } from './api/jobLauncherController.service';
+import { KnowledgeBaseControllerService } from './api/knowledgeBaseController.service';
+import { LogViewControllerService } from './api/logViewController.service';
+import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
@@ -51,10 +63,13 @@ import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openA
 import { OpenAiImageModelsConfigurationControllerService } from './api/openAiImageModelsConfigurationController.service';
 import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/openAiTextToSpeechModelsConfigurationController.service';
 import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
+import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
+import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
+import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 
 @NgModule({
   imports:      [],
@@ -62,8 +77,13 @@ import { TranscriptModelsControllerService } from './api/transcriptModelsControl
   exports:      [],
   providers: [
     AnthropicChatModelsConfigurationControllerService,
+    BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
+    CompanySystemsControllerService,
+    ContentMetaInfosControllerService,
+    ContentsResetControllerService,
+    DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,
     FunctionsLookupControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
@@ -83,6 +103,8 @@ import { TranscriptModelsControllerService } from './api/transcriptModelsControl
     GeboFastLlmsSetupControllerService,
     GeboFastVectorStoreSetupControllerService,
     GeboLlmGeneratedResourceControllerService,
+    GeboMcpServerAdminControllerService,
+    GeboMcpServerUserControllerService,
     GeboRagChatControllerService,
     GeboTextToSpeechControllerService,
     GeboTranscriptControllerService,
@@ -96,11 +118,16 @@ import { TranscriptModelsControllerService } from './api/transcriptModelsControl
     GenericOpenAiapiImageModelsConfigurationControllerService,
     GenericOpenAiapiTextToSpeechModelsConfigurationControllerService,
     GenericOpenAiapiTranscriptModelsConfigurationControllerService,
+    GenericalPublisherControllerService,
     GoogleSearchConfigurationControllerService,
     GoogleSearchControllerService,
     ImageModelsControllerService,
     IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
+    JobLauncherControllerService,
+    KnowledgeBaseControllerService,
+    LogViewControllerService,
+    McpClientConfigControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,
@@ -109,10 +136,13 @@ import { TranscriptModelsControllerService } from './api/transcriptModelsControl
     OpenAiImageModelsConfigurationControllerService,
     OpenAiTextToSpeechModelsConfigurationControllerService,
     OpenAiTranscriptModelsConfigurationControllerService,
+    ProjectsControllerService,
     PromptTemplatesControllerService,
     RankerModelsControllerService,
+    ReindexingFrequencyOptionsControllerService,
     TextToSpeechModelsControllerService,
-    TranscriptModelsControllerService ]
+    TranscriptModelsControllerService,
+    UserKnowledgeBaseBrowsingControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
