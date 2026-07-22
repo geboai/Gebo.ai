@@ -16,6 +16,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
+import ai.gebo.security.services.IGeboSystemUserService;
+import ai.gebo.security.services.IdentityUtil;
 
 /**
  * Ensures the default chat profile exists on every service that carries the
@@ -38,15 +40,24 @@ public class DefaultChatProfileInitializationService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultChatProfileInitializationService.class);
 
 	private final IGChatProfileManagementService chatProfileManagementService;
+	private final IGeboSystemUserService systemUserService;
 
-	public DefaultChatProfileInitializationService(IGChatProfileManagementService chatProfileManagementService) {
+	public DefaultChatProfileInitializationService(IGChatProfileManagementService chatProfileManagementService,
+			IGeboSystemUserService systemUserService) {
 		this.chatProfileManagementService = chatProfileManagementService;
+		this.systemUserService = systemUserService;
 	}
 
 	@Scheduled(initialDelay = 20000)
 	public void onTick() {
 		try {
-			chatProfileManagementService.getOrCreateDefaultChatProfile();
+			// This scheduler thread carries no caller identity, but
+			// getOrCreateDefaultChatProfile() transitively reaches security checks (e.g.
+			// GSecurityServiceImpl.isCurrentUserAdmin()) that require an authenticated
+			// SecurityContext. Impersonate the platform's own system identity for the
+			// duration of the call instead of forwarding a (nonexistent) caller token.
+			IdentityUtil.create(systemUserService.getUsername(), systemUserService.getRoles())
+					.doAsWithException(chatProfileManagementService::getOrCreateDefaultChatProfile);
 		} catch (Throwable th) {
 			LOGGER.error("Error ensuring the default chat profile exists", th);
 		}
