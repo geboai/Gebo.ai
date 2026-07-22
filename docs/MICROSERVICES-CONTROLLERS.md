@@ -4,7 +4,38 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 **Base path note:** this checkout serves backends under a `server.servlet.context-path` (e.g. `/brain`); every path below already includes it.
 
-**Workflow step-enablement note (this revision):** tyr gains one controller — `WorkflowParticipantsEnablementController` (`GET /tyr/api/users/WorkflowParticipantsEnablementController/enabledSteps`). It is the authority for which optional standard-workflow steps (embedding / graphextraction / fulltext) are enabled in the installation, computed from the deployment topology. It comes from the new `gebo.microservices.workflow.steps.topology` module, which packages the `IWorkflowStepEnabledHandler` implementations (extracted out of the per-step perform-modules; the monolith gets the config-driven twin `gebo.architecture.workflow.steps`). The same module lands on the **chunker** — which runs the tokenization fan-out — but there it deliberately exposes **no** controller: the chunker gets a tyr-backed resolver that calls this endpoint once per run and caches the answer, so its per-message routing decision is a local lookup. That is why the endpoint appears only on tyr and the chunker's controller count is unchanged.
+### MCP-brain integration note
+
+This regeneration follows the addition of `gebo.architecture.mcp-clients` and
+`gebo.architecture.mcp-server` as explicit dependencies of the **brain**
+microservice (`brain.gebo.ai/pom.xml`). Brain is now the first microservice to
+host MCP surface: 3 new controller tags and 17 new endpoints appeared on its
+spec, bringing it from 51 controllers / 222 endpoints to **67 controllers /
+295 endpoints**.
+
+The new tags/controllers are:
+
+| Tag | Controller | Endpoints |
+|---|---|---|
+| `mcp-client-config-controller` | `McpClientConfigController` (from `gebo.architecture.mcp-clients`) | 7 — full CRUD on MCP client configs + `testAndDiscovery` connectivity test |
+| `gebo-mcp-server-admin-controller` | `GeboMCPServerAdminController` (from `gebo.architecture.mcp-server`) | 7 — admin CRUD on erogated MCP servers, ACL grants |
+| `gebo-mcp-server-user-controller` | `GeboMCPServerUserController` (from `gebo.architecture.mcp-server`) | 3 — user-facing list/browse of accessible MCP servers |
+
+The `mcpclient` microservice is unaffected — its MCP controllers
+(`mcp-client-browsing-controller`, `mcp-client-systems-controller`,
+`mcp-client-config-controller`) come from the `gebo.mcp-client.content.handler`
+content system module, not from `gebo.architecture.mcp-clients`. Both services
+now expose `McpClientConfigController` independently (brain as the LLM/RAG admin
+home, mcpclient as the content-handler home).
+
+**Gotcha hit during regeneration:** `dockers/gebo.microservices/docker-compose.yml`
+pins every service image to `${GEBO_VERSION:-1.0.2.0-SNAPSHOT}`. After building
+fresh `1.0.2.1-SNAPSHOT` images with Jib, the stack must be brought up with
+`GEBO_VERSION=1.0.2.1-SNAPSHOT docker compose up -d` — otherwise Docker Compose
+silently runs the stale `1.0.2.0-SNAPSHOT` images from the local daemon (built
+before the MCP dependencies were added), and brain's spec shows 0 MCP
+controllers despite the fat jar containing the jars. The `docker load` step
+succeeds either way, so this is easy to miss.
 
 
 ## Summary
@@ -12,25 +43,25 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 0 | 0 |
-| brain.gebo.ai | 13001 | `/brain` | 51 | 222 |
-| vectorizator.gebo.ai | 13002 | `/vectorizator` | 2 | 4 |
-| graphicator.gebo.ai | 13003 | `/graphicator` | 2 | 5 |
-| chunker.gebo.ai | 13004 | `/chunker` | 4 | 16 |
-| git.gebo.ai | 13005 | `/git` | 6 | 22 |
-| filesystem.gebo.ai | 13006 | `/filesystem` | 8 | 30 |
-| uploads.gebo.ai | 13007 | `/uploads` | 7 | 21 |
-| userspace.gebo.ai | 13008 | `/userspace` | 7 | 29 |
-| sharepoint.gebo.ai | 13009 | `/sharepoint` | 8 | 45 |
-| confluence.gebo.ai | 13010 | `/confluence` | 8 | 45 |
-| jira.gebo.ai | 13011 | `/jira` | 8 | 45 |
-| aws-s3.gebo.ai | 13012 | `/aws-s3` | 7 | 26 |
-| googledrive.gebo.ai | 13013 | `/googledrive` | 9 | 43 |
-| mcpclient.gebo.ai | 13014 | `/mcpclient` | 8 | 28 |
-| integration.gebo.ai | 13015 | `/integration` | 7 | 19 |
+| brain.gebo.ai | 13001 | `/brain` | 67 | 295 |
+| vectorizator.gebo.ai | 13002 | `/vectorizator` | 3 | 5 |
+| graphicator.gebo.ai | 13003 | `/graphicator` | 3 | 6 |
+| chunker.gebo.ai | 13004 | `/chunker` | 5 | 17 |
+| git.gebo.ai | 13005 | `/git` | 7 | 23 |
+| filesystem.gebo.ai | 13006 | `/filesystem` | 9 | 31 |
+| uploads.gebo.ai | 13007 | `/uploads` | 8 | 22 |
+| userspace.gebo.ai | 13008 | `/userspace` | 8 | 30 |
+| sharepoint.gebo.ai | 13009 | `/sharepoint` | 9 | 46 |
+| confluence.gebo.ai | 13010 | `/confluence` | 9 | 46 |
+| jira.gebo.ai | 13011 | `/jira` | 9 | 46 |
+| aws-s3.gebo.ai | 13012 | `/aws-s3` | 8 | 27 |
+| googledrive.gebo.ai | 13013 | `/googledrive` | 10 | 44 |
+| mcpclient.gebo.ai | 13014 | `/mcpclient` | 9 | 29 |
+| integration.gebo.ai | 13015 | `/integration` | 8 | 20 |
 | fulltextor.gebo.ai | 13016 | `—` | 0 | 0 |
 | eureka.gebo.ai | 13017 | `—` | 0 | 0 |
-| heimdall.gebo.ai | 13018 | `/heimdall` | 14 | 55 |
-| tyr.gebo.ai | 13019 | `/tyr` | 5 | 6 |
+| heimdall.gebo.ai | 13018 | `/heimdall` | 15 | 56 |
+| tyr.gebo.ai | 13019 | `/tyr` | 7 | 9 |
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
@@ -40,7 +71,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-51 controller(s), 222 endpoint(s):
+67 controller(s), 295 endpoint(s):
 
 
 ### `anthropic-chat-models-configuration-controller`
@@ -51,6 +82,12 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/getAnthropicModels` | getAnthropicChatModels |
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/insertAnthropicChatModelConfig` | insertAnthropicChatModelConfig |
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/updateAnthropicChatModelConfig` | updateAnthropicChatModelConfig |
+
+### `build-systems-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/BuildSystemsController/getBuildSystemConfigs` | getBuildSystemConfigs |
+| GET | `/brain/api/admin/BuildSystemsController/getBuildSystemTypes` | getBuildSystemTypes |
 
 ### `chat-models-controller`
 | Method | Path | Operation |
@@ -64,6 +101,37 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/ChatModelsLookupController/getChatModelTypesLookup` | getChatModelTypesLookup |
 | GET | `/brain/api/users/ChatModelsLookupController/getDefaultChatModel` | getDefaultChatModel |
 | GET | `/brain/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup` | getRuntimeConfiguredChatModelsLookup |
+
+### `company-systems-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/CompanySystemsController/getContentSystem` | getContentSystem |
+| GET | `/brain/api/admin/CompanySystemsController/getContentSystemType` | getContentSystemType |
+| GET | `/brain/api/admin/CompanySystemsController/getContentSystemTypes()` | getContentSystemTypes |
+| GET | `/brain/api/admin/CompanySystemsController/getContentSystems` | getContentSystems |
+| GET | `/brain/api/admin/CompanySystemsController/getProjectEndpoint` | getProjectEndpoint |
+| POST | `/brain/api/admin/CompanySystemsController/getProjectEndpointByObjectRef` | getProjectEndpointByObjectRef |
+| POST | `/brain/api/admin/CompanySystemsController/getProjectEndpointSystemInfos` | getProjectEndpointSystemInfos |
+
+### `content-meta-infos-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/users/ContentMetaInfosController/findDocumentReferenceViewByCode` | findDocumentReferenceViewByCode |
+| GET | `/brain/api/users/ContentMetaInfosController/getContentMetaInfos` | getContentMetaInfos |
+| GET | `/brain/api/users/ContentMetaInfosController/getContentObject` | getContentObject |
+| POST | `/brain/api/users/ContentMetaInfosController/searchByDocumentName` | searchByDocumentName |
+| POST | `/brain/api/users/ContentMetaInfosController/searchByDocumentNamePaged` | searchByDocumentNamePaged |
+
+### `contents-reset-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+
+### `document-content-streamer-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/brain/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
 ### `embedding-models-controllers`
 | Method | Path | Operation |
@@ -222,6 +290,24 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | GET | `/brain/api/users/GeboLLMGeneratedResourceController/serveLLMGeneratedContent/{userSessionCode}/{generatedResourceCode}` | serveLLMGeneratedContent |
 
+### `gebo-mcp-server-admin-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/GeboMCPServerAdminController/deleteMcpServer` | deleteMcpServer |
+| GET | `/brain/api/admin/GeboMCPServerAdminController/findMcpServerByCode` | findMcpServerByCode |
+| GET | `/brain/api/admin/GeboMCPServerAdminController/getAllMcpServers` | getAllMcpServers |
+| POST | `/brain/api/admin/GeboMCPServerAdminController/getMcpServerPagedList` | getMcpServerPagedList |
+| POST | `/brain/api/admin/GeboMCPServerAdminController/insertMcpServer` | insertMcpServer |
+| POST | `/brain/api/admin/GeboMCPServerAdminController/setMcpServerAccessAcls` | setMcpServerAccessAcls |
+| POST | `/brain/api/admin/GeboMCPServerAdminController/updateMcpServer` | updateMcpServer |
+
+### `gebo-mcp-server-user-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/user/GeboMCPServerUserController/findAccessibleMcpServerByCode` | findAccessibleMcpServerByCode |
+| GET | `/brain/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList` | getUsersCanAccessMcpServersList |
+| GET | `/brain/api/user/GeboMCPServerUserController/listAccessibleMcpServers` | listAccessibleMcpServers |
+
 ### `gebo-rag-chat-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -343,6 +429,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/insertGenericOpenAIAPITranscriptModelConfig` | insertGenericOpenAIAPITranscriptModelConfig |
 | POST | `/brain/api/admin/GenericOpenAIAPITranscriptModelsConfigurationController/updateGenericOpenAIAPITranscriptModelConfig` | updateGenericOpenAIAPITranscriptModelConfig |
 
+### `generical-publisher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+
 ### `google-search-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -371,6 +462,49 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
 | GET | `/brain/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/brain/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
+### `job-launcher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/brain/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/brain/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+
+### `knowledge-base-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/KnowledgeBaseController/deleteKnowledgeBase` | deleteKnowledgeBase |
+| GET | `/brain/api/admin/KnowledgeBaseController/findKnowledgeBaseByCode` | findKnowledgeBaseByCode |
+| POST | `/brain/api/admin/KnowledgeBaseController/findKnowledgeBasesByQbe` | findKnowledgeBasesByQbe |
+| GET | `/brain/api/admin/KnowledgeBaseController/getChildKnowledgeBases` | getChildKnowledgeBases |
+| GET | `/brain/api/admin/KnowledgeBaseController/getKnowledgeBases` | getKnowledgeBases |
+| POST | `/brain/api/admin/KnowledgeBaseController/insertKnowledgeBase` | insertKnowledgeBase |
+| POST | `/brain/api/admin/KnowledgeBaseController/updateKnowledgeBase` | updateKnowledgeBase |
+
+### `log-view-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/LogViewController/deleteJobStatus` | deleteJobStatus |
+| POST | `/brain/api/admin/LogViewController/getJobMessagesPaged` | getJobMessagesPaged |
+| POST | `/brain/api/admin/LogViewController/getJobsEntriesForClassName` | getJobsEntriesForClassName |
+| POST | `/brain/api/admin/LogViewController/getJobsEntriesForJobType` | getJobsEntriesForJobType |
+| POST | `/brain/api/admin/LogViewController/getJobsEntriesForProjectEndpoint` | getJobsEntriesForProjectEndpoint |
+
+### `mcp-client-config-controller`
+| Method | Path | Operation |
+|---|---|---|
+| DELETE | `/brain/api/admin/McpClientConfigController/deleteMCPClientConfig` | deleteMCPClientConfig |
+| GET | `/brain/api/admin/McpClientConfigController/findMCPClientConfigByCode` | findMCPClientConfigByCode |
+| POST | `/brain/api/admin/McpClientConfigController/findMCPClientConfigByQbe` | findMCPClientConfigByQbe |
+| POST | `/brain/api/admin/McpClientConfigController/insertMCPClientConfig` | insertMCPClientConfig |
+| POST | `/brain/api/admin/McpClientConfigController/listMCPClientConfig` | listMCPClientConfig |
+| POST | `/brain/api/admin/McpClientConfigController/testAndDiscovery` | testAndDiscovery |
+| POST | `/brain/api/admin/McpClientConfigController/updateMCPClientConfig` | updateMCPClientConfig |
 
 ### `ollama-chat-models-configuration-controller`
 | Method | Path | Operation |
@@ -444,6 +578,24 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/OpenAITranscriptModelsConfigurationController/insertOpenAITranscriptModelConfig` | insertOpenAITranscriptModelConfig |
 | POST | `/brain/api/admin/OpenAITranscriptModelsConfigurationController/updateOpenAITranscriptModelConfig` | updateOpenAITranscriptModelConfig |
 
+### `projects-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/ProjectsController/deleteProject` | deleteProject |
+| GET | `/brain/api/admin/ProjectsController/findChildProjects` | findChildProjects |
+| GET | `/brain/api/admin/ProjectsController/findOtherKnowledgeBaseIncludableProjects` | findOtherKnowledgeBaseIncludableProjects |
+| GET | `/brain/api/admin/ProjectsController/findProjectByCode` | findProjectByCode |
+| GET | `/brain/api/admin/ProjectsController/findRootProjects` | findRootProjects |
+| POST | `/brain/api/admin/ProjectsController/getChildDocuments` | getChildDocuments |
+| POST | `/brain/api/admin/ProjectsController/getChildFolders` | getChildFolders |
+| GET | `/brain/api/admin/ProjectsController/getProjects` | getProjects |
+| POST | `/brain/api/admin/ProjectsController/getRootDocuments` | getRootDocuments |
+| POST | `/brain/api/admin/ProjectsController/getRootFolders` | getRootFolders |
+| POST | `/brain/api/admin/ProjectsController/insertProject` | insertProject |
+| POST | `/brain/api/admin/ProjectsController/searchProjects` | searchProjects |
+| POST | `/brain/api/admin/ProjectsController/searchProjectsByQbe` | searchProjectsByQbe |
+| POST | `/brain/api/admin/ProjectsController/updateProject` | updateProject |
+
 ### `prompt-templates-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -457,6 +609,13 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
 | GET | `/brain/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
 
+### `reindexing-frequency-options-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/users/ReindexingFrequencyOptionsController/displayTimeValues` | displayTimeValues |
+| GET | `/brain/api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos` | getAllTimeStructureMetaInfos |
+| GET | `/brain/api/users/ReindexingFrequencyOptionsController/getTimeStructureMetaInfo` | getTimeStructureMetaInfo |
+
 ### `text-to-speech-models-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -469,9 +628,18 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
 | GET | `/brain/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
 
+### `user-knowledge-base-browsing-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/user/UserKnowledgeBaseBrowsingController/browseKnowledgeBasePath` | browseKnowledgeBasePath |
+| GET | `/brain/api/user/UserKnowledgeBaseBrowsingController/getAccessibleRootKnowledgeBases` | getAccessibleRootKnowledgeBases |
+| POST | `/brain/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseNavigationStatus` | getKnowledgeBaseNavigationStatus |
+| GET | `/brain/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseRoots` | getKnowledgeBaseRoots |
+| POST | `/brain/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes` | getVisibleKnowledgeBaseByCodes |
+
 ## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`) — context-path `/vectorizator`
 
-2 controller(s), 4 endpoint(s):
+3 controller(s), 5 endpoint(s):
 
 
 ### `gebo-core-analisys-controller`
@@ -486,9 +654,14 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/getActualVectorStoreConfiguration` | getActualVectorStoreConfiguration |
 | POST | `/vectorizator/api/admin/GeboVectorStoreConfigurationController/vectorStoreConfigurationApplyAndSave` | vectorStoreConfigurationApplyAndSave |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/vectorizator/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ## graphicator.gebo.ai — port 13003 (`graphicator-gebo-ai`) — context-path `/graphicator`
 
-2 controller(s), 5 endpoint(s):
+3 controller(s), 6 endpoint(s):
 
 
 ### `gebo-vector-store-configuration-controller`
@@ -504,9 +677,14 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/graphicator/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ## chunker.gebo.ai — port 13004 (`chunker-gebo-ai`) — context-path `/chunker`
 
-4 controller(s), 16 endpoint(s):
+5 controller(s), 17 endpoint(s):
 
 
 ### `document-content-streamer-with-cache-controller`
@@ -541,9 +719,14 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/chunker/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/chunker/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/chunker/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ## git.gebo.ai — port 13005 (`git-gebo-ai`) — context-path `/git`
 
-6 controller(s), 22 endpoint(s):
+7 controller(s), 23 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -585,6 +768,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/git/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/git/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/git/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -594,7 +782,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## filesystem.gebo.ai — port 13006 (`filesystem-gebo-ai`) — context-path `/filesystem`
 
-8 controller(s), 30 endpoint(s):
+9 controller(s), 31 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -652,6 +840,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/filesystem/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -661,7 +854,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## uploads.gebo.ai — port 13007 (`uploads-gebo-ai`) — context-path `/uploads`
 
-7 controller(s), 21 endpoint(s):
+8 controller(s), 22 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -706,6 +899,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/uploads/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/uploads/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/uploads/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -715,7 +913,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## userspace.gebo.ai — port 13008 (`userspace-gebo-ai`) — context-path `/userspace`
 
-7 controller(s), 29 endpoint(s):
+8 controller(s), 30 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -740,6 +938,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/userspace/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
 | GET | `/userspace/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/userspace/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/userspace/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
@@ -777,7 +980,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## sharepoint.gebo.ai — port 13009 (`sharepoint-gebo-ai`) — context-path `/sharepoint`
 
-8 controller(s), 45 endpoint(s):
+9 controller(s), 46 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -802,6 +1005,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
 | GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/sharepoint/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
@@ -859,7 +1067,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## confluence.gebo.ai — port 13010 (`confluence-gebo-ai`) — context-path `/confluence`
 
-8 controller(s), 45 endpoint(s):
+9 controller(s), 46 endpoint(s):
 
 
 ### `confluence-browsing-controller`
@@ -932,6 +1140,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/confluence/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/confluence/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/confluence/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -941,7 +1154,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## jira.gebo.ai — port 13011 (`jira-gebo-ai`) — context-path `/jira`
 
-8 controller(s), 45 endpoint(s):
+9 controller(s), 46 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -966,6 +1179,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/jira/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
 | GET | `/jira/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/jira/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/jira/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
 
 ### `jira-browsing-controller`
 | Method | Path | Operation |
@@ -1023,7 +1241,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## aws-s3.gebo.ai — port 13012 (`aws-s3-gebo-ai`) — context-path `/aws-s3`
 
-7 controller(s), 26 endpoint(s):
+8 controller(s), 27 endpoint(s):
 
 
 ### `aws-s-3-browsing-controller`
@@ -1073,6 +1291,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/aws-s3/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1082,7 +1305,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## googledrive.gebo.ai — port 13013 (`googledrive-gebo-ai`) — context-path `/googledrive`
 
-9 controller(s), 43 endpoint(s):
+10 controller(s), 44 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1157,6 +1380,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/googledrive/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1166,7 +1394,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## mcpclient.gebo.ai — port 13014 (`mcpclient-gebo-ai`) — context-path `/mcpclient`
 
-8 controller(s), 28 endpoint(s):
+9 controller(s), 29 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1191,6 +1419,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
 | GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
 | GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/mcpclient/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
 
 ### `job-launcher-controller`
 | Method | Path | Operation |
@@ -1231,7 +1464,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## integration.gebo.ai — port 13015 (`integration-gebo-ai`) — context-path `/integration`
 
-7 controller(s), 19 endpoint(s):
+8 controller(s), 20 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1274,6 +1507,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/integration/api/admin/IntegrationSystemsController/publishIntegrationProjectEndpoint` | publishIntegrationProjectEndpoint |
 | POST | `/integration/api/admin/IntegrationSystemsController/updateIntegrationProjectEndpoint` | updateIntegrationProjectEndpoint |
 
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/integration/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
 ### `job-launcher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1293,7 +1531,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## heimdall.gebo.ai — port 13018 (`heimdall-gebo-ai`) — context-path `/heimdall`
 
-14 controller(s), 55 endpoint(s):
+15 controller(s), 56 endpoint(s):
 
 
 ### `auth-controller`
@@ -1342,6 +1580,11 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/api/users/GeneratedUserApiKeyController/generateUserGeneratedApiKey` | generateUserGeneratedApiKey |
 | POST | `/heimdall/api/users/GeneratedUserApiKeyController/getUserGeneratedApiKeyPagedList` | getUserGeneratedApiKeyPagedList |
 | GET | `/heimdall/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed` | isUserGeneratedApiKeyGenerationAllowed |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/heimdall/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
 
 ### `o-auth-2-admin-controller`
 | Method | Path | Operation |
@@ -1409,8 +1652,19 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## tyr.gebo.ai — port 13019 (`tyr-gebo-ai`) — context-path `/tyr`
 
-5 controller(s), 6 endpoint(s):
+7 controller(s), 9 endpoint(s):
 
+
+### `global-internal-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/tyr/api/admin/GlobalInternalTopologyController/getGlobalTopology` | getGlobalTopology |
+| POST | `/tyr/api/admin/GlobalInternalTopologyController/refresh` | refresh |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/tyr/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
 
 ### `job-status-controller`
 | Method | Path | Operation |
