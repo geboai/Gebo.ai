@@ -71,6 +71,12 @@ ai:
         enabled: true
         base-path: api/cluster/SecretsController
     security:
+      # heimdall hosts AuthController (see WebMvcConfig in gebo.architecture.security),
+      # so it needs this like any other browser-facing service. No cluster-internal
+      # endpoint is covered by this CORS mapping - those are guarded by
+      # GeboClusterParticipants instead, on caller address, not by origin.
+      cors:
+        allowedOrigins: ${GEBO_UI_ORIGIN:http://localhost:4200}
       cluster:
         enabled: true
         base-path: api/cluster/SecurityController

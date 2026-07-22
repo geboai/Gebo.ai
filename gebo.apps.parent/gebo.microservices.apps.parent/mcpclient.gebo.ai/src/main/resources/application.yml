@@ -35,6 +35,18 @@ eureka:
     secure-virtual-host-name: mcpclient-gebo-ai
     prefer-ip-address: true
 
+# gebo.architecture.security's WebMvcConfig is on every microservice's classpath
+# (pulled in transitively for IGeboSystemUserService/crypting), so this property
+# must resolve even though this service has no AuthController of its own. In the
+# docker stack the shared config overlay supplies the real value; this is the
+# standalone default.
+ai:
+  gebo:
+    security:
+      cors:
+        allowedOrigins: ${GEBO_CORS_ALLOWED_ORIGINS:http://localhost:13000,http://localhost:4200}
+
+
 # ---------------------------------------------------------------------------
 # MongoDB database. The SERVER (host, credentials) comes from the shared config;
 # the DATABASE is chosen here, per service.

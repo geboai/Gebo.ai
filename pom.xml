@@ -94,6 +94,15 @@
 								<groupId>org.projectlombok</groupId>
 								<artifactId>lombok</artifactId>
 							</path>
+							<!-- Generates META-INF/spring-autoconfigure-metadata.properties, which
+							     AutoConfigurationSorter reads to honour @AutoConfigureAfter/@AutoConfigureBefore.
+							     Explicit annotationProcessorPaths (added above for lombok) disables Maven's
+							     automatic classpath-based processor discovery, so without this entry every
+							     such annotation in the codebase is silently ignored. -->
+							<path>
+								<groupId>org.springframework.boot</groupId>
+								<artifactId>spring-boot-autoconfigure-processor</artifactId>
+							</path>
 						</annotationProcessorPaths>
 					</configuration>
 				</plugin>

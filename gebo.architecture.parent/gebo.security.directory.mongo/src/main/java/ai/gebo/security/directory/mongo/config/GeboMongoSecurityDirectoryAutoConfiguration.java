@@ -42,9 +42,17 @@ import ai.gebo.security.services.IGeboSystemUserService;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GeboMongoSecurityDirectoryAutoConfiguration {
 
+	// Declared to return the CONCRETE type, not IGSecurityDirectory: consumers that
+	// @Autowire/@ConditionalOnMissingBean the interface still resolve it fine (Spring
+	// matches subtypes to a requested supertype), but GeboSecurityClusterControllerAutoConfiguration's
+	// @ConditionalOnBean(MongoSecurityDirectory.class) - "publish only if this service
+	// OWNS the directory, not merely sees the interface" - can only ever match a bean
+	// whose declared/factory-method type is that concrete class; a bean typed as the
+	// interface is invisible to a @ConditionalOnBean asking for one of its subtypes,
+	// regardless of @AutoConfigureAfter ordering between the two.
 	@Bean
 	@ConditionalOnMissingBean(IGSecurityDirectory.class)
-	public IGSecurityDirectory mongoSecurityDirectory(UserRepository usersRepo, UsersGroupRepository groupsRepo,
+	public MongoSecurityDirectory mongoSecurityDirectory(UserRepository usersRepo, UsersGroupRepository groupsRepo,
 			PasswordEncoder passwordEncoder, IGeboSystemUserService systemUserService) {
 		return new MongoSecurityDirectory(usersRepo, groupsRepo, passwordEncoder, systemUserService);
 	}

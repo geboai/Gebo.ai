@@ -15,7 +15,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.CommonsClientAutoConfiguration;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.discovery.composite.CompositeDiscoveryClientAutoConfiguration;
+import org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import ai.gebo.microservices.cluster.GeboClusterParticipants;
@@ -31,7 +34,8 @@ import ai.gebo.security.services.IGeboSystemUserService;
  *
  * Gebo.ai comment agent
  */
-@AutoConfiguration(after = GeboMicroservicesTopologyAutoConfiguration.class)
+@AutoConfiguration(after = { GeboMicroservicesTopologyAutoConfiguration.class, SimpleDiscoveryClientAutoConfiguration.class,
+		CompositeDiscoveryClientAutoConfiguration.class, CommonsClientAutoConfiguration.class })
 @EnableConfigurationProperties(GeboClusterParticipantsProperties.class)
 public class GeboClusterCommonsAutoConfiguration {
 
@@ -40,6 +44,15 @@ public class GeboClusterCommonsAutoConfiguration {
 	 * Requires a {@link DiscoveryClient}: membership must be <i>discovered</i>, never
 	 * merely configured. Absent one, no participants bean exists and the guards that
 	 * depend on it never register - so their controllers do not either.
+	 *
+	 * <p>
+	 * The class-level {@code after} above is load-bearing: without it, this
+	 * auto-configuration can sort before the ones that actually publish a
+	 * {@link DiscoveryClient} bean, so {@code @ConditionalOnBean(DiscoveryClient.class)}
+	 * finds nothing even when one is registered (a stub in tests, Eureka's in
+	 * production) - silently skipping this bean and every cluster surface downstream
+	 * of it.
+	 * </p>
 	 */
 	@Bean
 	@ConditionalOnClass(DiscoveryClient.class)
