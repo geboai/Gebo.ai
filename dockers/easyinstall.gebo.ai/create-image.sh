@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# create-image.sh — Build geboai/gebo.ai monolith image with SBOM attestation
+# create-image.sh — Build geboai/easyinstall.gebo.ai all-in-one image with SBOM
 #
 # Copies the freshly built bootable jar and Maven SBOM into the build context,
-# then builds the image. The SBOM is available both as a BuildKit attestation
-# (queryable via `docker buildx imagetools inspect`) and as an in-image file
-# at /opt/gebo.ai/sbom.cdx.json.
+# then builds the all-in-one image (MongoDB, Qdrant, Neo4j, OpenSearch + the
+# Gebo.ai app). The SBOM is available both as a BuildKit attestation (OS-level
+# packages + the Maven SBOM) and as an in-image file at /opt/gebo.ai/sbom.cdx.json.
 #
 # Usage:
 #   ./create-image.sh              (local, single-platform, --load)
@@ -40,12 +40,12 @@ fi
 cp "$JAR" .
 cp "$SBOM" .
 
-docker image rm geboai/gebo.ai --force 2>/dev/null || true
+docker image rm geboai/easyinstall.gebo.ai --force 2>/dev/null || true
 docker buildx build \
   --platform "$PLATFORMS" \
   --sbom=true \
   --build-arg JAVA_EXTRA_SECURITY_DIR=/opt/gebo.ai \
-  -t geboai/gebo.ai \
-  -t geboai/gebo.ai:${VERSION} \
+  -t geboai/easyinstall.gebo.ai \
+  -t geboai/easyinstall.gebo.ai:${VERSION} \
   $ACTION \
   .

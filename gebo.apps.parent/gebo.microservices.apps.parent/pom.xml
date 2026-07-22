@@ -92,6 +92,21 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<build>
+		<plugins>
+			<!-- Generates a CycloneDX SBOM per microservice at
+			     target/classes/META-INF/sbom/application.cdx.json, the same
+			     location the monolith (gebo.ai.app) uses. Inherited by every
+			     child microservice module. The plugin version and default
+			     execution (makeAggregateBom, generate-resources phase) come
+			     from spring-boot-starter-parent's pluginManagement. -->
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
 	<profiles>
 		<!--
 		  Docker image build (DISABLED by default). Activate with `-P docker` to
