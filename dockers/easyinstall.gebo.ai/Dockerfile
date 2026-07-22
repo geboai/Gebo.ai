@@ -62,9 +62,9 @@ RUN mkdir -p ${MONGO_DATA} /var/log/mongodb
 COPY mongod.conf /etc/mongod.conf                 
 COPY mongo-init.sh /bin/mongo-init.sh   
 
-RUN curl -L -o /tmp/qdrant.deb https://github.com/qdrant/qdrant/releases/download/v1.15.3/qdrant_1.15.3-1_amd64.deb 
-RUN apt-get update 
-RUN apt-get install -y  /tmp/qdrant.deb 
+RUN curl -L -o /tmp/qdrant.deb "https://github.com/qdrant/qdrant/releases/download/v1.15.3/qdrant_1.15.3-1_${TARGETARCH}.deb"
+RUN apt-get update
+RUN apt-get install -y  /tmp/qdrant.deb
 RUN rm -rf /var/lib/apt/lists/* /tmp/qdrant.deb && mkdir -p ${QDRANT_DIR} /var/log/qdrant
 RUN mkdir -p /etc/qdrant
 COPY qdrant-config.yaml ${QDRANT_CONFIG}
@@ -95,8 +95,10 @@ RUN rm -rf ${NEO4J_HOME}/data/dbms \
 # OpenSearch cannot run as root: create a dedicated user.
 RUN useradd --system --shell /usr/sbin/nologin --home-dir ${OPENSEARCH_HOME} opensearch
 RUN mkdir -p /var/log/opensearch
-RUN curl -L -o /tmp/opensearch.tar.gz \
-        https://artifacts.opensearch.org/releases/bundle/opensearch/${OPENSEARCH_VERSION}/opensearch-${OPENSEARCH_VERSION}-linux-x64.tar.gz \
+# Multiplatform: OpenSearch uses x64 for amd64 and arm64 for arm64.
+RUN OS_ARCH=$(case "$TARGETARCH" in amd64) echo "x64" ;; arm64) echo "arm64" ;; *) echo "x64" ;; esac) \
+    && curl -L -o /tmp/opensearch.tar.gz \
+        "https://artifacts.opensearch.org/releases/bundle/opensearch/${OPENSEARCH_VERSION}/opensearch-${OPENSEARCH_VERSION}-linux-${OS_ARCH}.tar.gz" \
     && tar -xzf /tmp/opensearch.tar.gz -C /opt \
     && rm /tmp/opensearch.tar.gz \
     && ln -sfn /opt/opensearch-${OPENSEARCH_VERSION} ${OPENSEARCH_HOME} \
@@ -109,9 +111,11 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 RUN mkdir -p /opt/
 RUN mkdir -p /opt/java/
 WORKDIR /opt/java/
-RUN curl -L -o jdk-21_linux-x64_bin.tar.gz https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz \
-    && tar -xzf jdk-21_linux-x64_bin.tar.gz \
-    && rm jdk-21_linux-x64_bin.tar.gz \
+# Multiplatform: Oracle JDK uses x64 for amd64 and aarch64 for arm64.
+RUN JDK_ARCH=$(case "$TARGETARCH" in amd64) echo "x64" ;; arm64) echo "aarch64" ;; *) echo "x64" ;; esac) \
+    && curl -L -o jdk-21.tar.gz "https://download.oracle.com/java/21/latest/jdk-21_linux-${JDK_ARCH}_bin.tar.gz" \
+    && tar -xzf jdk-21.tar.gz \
+    && rm jdk-21.tar.gz \
     && ln -sfn "$(ls -d jdk-21.* | head -n1)" jdk-21
 ENV JAVA_HOME=/opt/java/jdk-21
 ENV PATH=$JAVA_HOME/bin:$PATH
