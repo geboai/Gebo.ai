@@ -1,18 +1,8 @@
 @echo off
-REM create-image.bat — Build geboai/platform base image with SBOM attestation
+REM create-image.bat — Build geboai/platform base image locally
 REM
-REM Usage:
-REM   create-image.bat              (local, single-platform, --load)
-REM   create-image.bat --push       (push to Docker Hub, multiplatform)
-REM
-
-set "ACTION=--load"
-set "PLATFORMS=linux/amd64"
-
-if /i "%~1"=="--push" (
-  set "ACTION=--push"
-  set "PLATFORMS=linux/amd64,linux/arm64"
-)
+REM Builds locally and loads into the Docker daemon (single-platform).
+REM The SBOM attestation (--sbom) is only generated on push (push-sbom-images.bat).
 
 docker image rm geboai/platform:2.5 --force 2>nul
-docker buildx build --platform %PLATFORMS% --sbom=true -t geboai/platform:2.5 %ACTION% .
+docker buildx build --network=host --platform linux/amd64 --load -t geboai/platform:2.5 .
