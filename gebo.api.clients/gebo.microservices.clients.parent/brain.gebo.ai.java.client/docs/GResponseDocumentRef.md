@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 **nestedSearchResult** | [**SearchResult**](SearchResult.md) |  |  [optional]
 **loadPercentage** | **Object** |  |  [optional]
 **references** | **Object** |  |  [optional]
-**ntokensRelevant** | **Object** |  |  [optional]
 **ntotalContentTokens** | **Object** |  |  [optional]
 **nbytesRelevant** | **Object** |  |  [optional]
+**ntokensRelevant** | **Object** |  |  [optional]
 **shortCode** | **Object** |  |  [optional]

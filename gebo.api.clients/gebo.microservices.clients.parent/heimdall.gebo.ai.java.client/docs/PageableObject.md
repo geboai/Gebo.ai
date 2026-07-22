@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**paged** | **Object** |  |  [optional]
 **pageNumber** | **Object** |  |  [optional]
+**paged** | **Object** |  |  [optional]
 **pageSize** | **Object** |  |  [optional]
 **offset** | **Object** |  |  [optional]
 **sort** | [**SortObject**](SortObject.md) |  |  [optional]

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-21T14:57:36.399842475+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -34,11 +34,11 @@ public class DocumentReferenceView {
   @JsonProperty("description")
   private Object description = null;
 
-  @JsonProperty("code")
-  private Object code = null;
-
   @JsonProperty("messagingModuleId")
   private Object messagingModuleId = null;
+
+  @JsonProperty("code")
+  private Object code = null;
 
   @JsonProperty("modificationDate")
   private Object modificationDate = null;
@@ -118,24 +118,6 @@ public class DocumentReferenceView {
     this.description = description;
   }
 
-  public DocumentReferenceView code(Object code) {
-    this.code = code;
-    return this;
-  }
-
-   /**
-   * Get code
-   * @return code
-  **/
-  @Schema(description = "")
-  public Object getCode() {
-    return code;
-  }
-
-  public void setCode(Object code) {
-    this.code = code;
-  }
-
   public DocumentReferenceView messagingModuleId(Object messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
     return this;
@@ -152,6 +134,24 @@ public class DocumentReferenceView {
 
   public void setMessagingModuleId(Object messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
+  }
+
+  public DocumentReferenceView code(Object code) {
+    this.code = code;
+    return this;
+  }
+
+   /**
+   * Get code
+   * @return code
+  **/
+  @Schema(description = "")
+  public Object getCode() {
+    return code;
+  }
+
+  public void setCode(Object code) {
+    this.code = code;
   }
 
   public DocumentReferenceView modificationDate(Object modificationDate) {
@@ -311,8 +311,8 @@ public class DocumentReferenceView {
     return Objects.equals(this.name, documentReferenceView.name) &&
         Objects.equals(this.extension, documentReferenceView.extension) &&
         Objects.equals(this.description, documentReferenceView.description) &&
-        Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
+        Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
@@ -325,7 +325,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, description, code, messagingModuleId, modificationDate, rootKnowledgebaseCode, parentProjectCode, relativePath, parentVirtualFolderCode, deleted, creationDate, contentType);
+    return Objects.hash(name, extension, description, messagingModuleId, code, modificationDate, rootKnowledgebaseCode, parentProjectCode, relativePath, parentVirtualFolderCode, deleted, creationDate, contentType);
   }
 
 
@@ -337,8 +337,8 @@ public class DocumentReferenceView {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
