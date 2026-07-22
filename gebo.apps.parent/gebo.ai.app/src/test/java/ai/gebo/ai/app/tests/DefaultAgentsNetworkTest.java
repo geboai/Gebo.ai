@@ -21,10 +21,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -61,7 +57,8 @@ import reactor.core.publisher.Flux;
  * <li>the writer/reporter prompt -&gt; the final answer text.</li>
  * </ul>
  * Unlike a bare unit invocation, the network is driven under a coherent runtime:
- * an authenticated Spring security context for the default all-roles user and a
+ * an authenticated Spring security context for the default all-roles user
+ * (impersonated for every test by {@link AbstractBaseIntegrationTest}) and a
  * real {@link GUserChatSession} created through the chat session lifecycle
  * service, with the request bound to that session's context code. This is what
  * the pipeline relies on to resolve the session-available knowledge bases and to
@@ -113,7 +110,6 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 	@Override
 	protected void afterEachCallback() throws Exception {
 		TestChatModel.clearGlobalResponseLogic();
-		SecurityContextHolder.clearContext();
 	}
 
 	@Test
@@ -126,10 +122,10 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 						"Agents-network pipeline service not present; is ai.gebo.agents.standard.enabled=true?"));
 
 		// Coherent runtime identity: the default all-roles user is created in
-		// prepareEnvironment(); authenticate as that user so the synchronous session /
-		// knowledge-base resolution and the reactive network execution (which samples
-		// the identity through ReactiveIdentityUtil) both run authenticated.
-		authenticateAsDefaultUser();
+		// prepareEnvironment() and impersonated for every test in
+		// AbstractBaseIntegrationTest, so the synchronous session / knowledge-base
+		// resolution and the reactive network execution (which samples the identity
+		// through ReactiveIdentityUtil) both run authenticated.
 
 		// Initialize a real chat session for the current user and bind the request to
 		// it: the agents pipeline resolves the session-available knowledge bases from
@@ -206,12 +202,5 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 
 		assertTrue(foundInResponse || accumulatedText.toString().contains(ANSWER_MARKER),
 				"The report writer's answer (" + ANSWER_MARKER + ") must appear in the streamed network output");
-	}
-
-	private void authenticateAsDefaultUser() {
-		List<SimpleGrantedAuthority> authorities = ALL_ROLES.stream().map(SimpleGrantedAuthority::new).toList();
-		Authentication authentication = new UsernamePasswordAuthenticationToken(DEFAULT_ALL_ROLES_USER, "NOPASSWORD",
-				authorities);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 }
