@@ -97,6 +97,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected chatModelsData: { code?: string, description?: string }[] = [];
     protected chatUIOptions?: ChatUIOptions;
     protected id?: string;
+    /** Whether the administrator has configured at least one chat model and one embedding model. Starts true to avoid flashing the warning while the check is in flight. */
+    protected llmsSetupDone: boolean = true;
 
     /**
      * Component constructor that injects necessary services
@@ -276,6 +278,11 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         this.geboUserChatsControllerService.getUIConfig().subscribe({
             next: (options) => {
                 this.chatUIOptions = options;
+            }
+        })
+        this.geboUserChatsControllerService.isMinimalLLMSSetupDone().subscribe({
+            next: (done) => {
+                this.llmsSetupDone = done === true;
             }
         })
         this.geboChatModelsControllerService.getRuntimeConfiguredChatModelsLookup().subscribe({

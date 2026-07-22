@@ -63,6 +63,11 @@
   </div>
 }
 <p-dialog [visible]="mandatoryUnsatisfiedEntriesWindowOpened" [modal]="true" [maximizable]="true" [style]="{width:'98%',height:'100%'}" (visibleChange)="mandatoryUnsatisfiedEntriesWindowOpened=false;userShowedMandatoryUnsatisfiedEntries=true;">
+  <div class="grid">
+    <div class="col-12">
+      <p-button  id="ExitMandatorySetupPopupBtn" gebo-ai-label  [text]="true" icon="pi pi-arrow-left" (onClick)="dismissMandatoryPopup();" label="Exit setup checklist"></p-button>
+    </div>
+  </div>
   @if (mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length ==1 && mandatoryUnsatisfiedEntries[0].wizardComponent) {
     <span>
       <ng-container    #ngOutletItem *ngComponentOutlet="mandatoryUnsatisfiedEntries[0].wizardComponent;inputs: {}"  />

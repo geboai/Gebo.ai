@@ -789,7 +789,7 @@
                 "label": "Groups list"
             },
             "SournameHeader": {
-                "label": "sourname"
+                "label": "surname"
             },
             "UsernameHeader": {
                 "label": "username"
@@ -831,7 +831,7 @@
                 "placeholder": "Select role"
             },
             "searchSournameInput": {
-                "placeholder": "Search sourname"
+                "placeholder": "Search surname"
             }
         }
     },

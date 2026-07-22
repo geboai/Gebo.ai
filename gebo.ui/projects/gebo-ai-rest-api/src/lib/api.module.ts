@@ -19,6 +19,7 @@ import { ChatModelsControllerService } from './api/chatModelsController.service'
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
 import { CompanySystemsControllerService } from './api/companySystemsController.service';
 import { ConfluenceBrowsingControllerService } from './api/confluenceBrowsingController.service';
+import { ConfluenceSearchServiceControllerService } from './api/confluenceSearchServiceController.service';
 import { ConfluenceSystemsControllerService } from './api/confluenceSystemsController.service';
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
@@ -74,6 +75,7 @@ import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from '
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
 import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingController.service';
+import { GoogleDriveSearchServiceControllerService } from './api/googleDriveSearchServiceController.service';
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
 import { GoogleSearchConfigurationControllerService } from './api/googleSearchConfigurationController.service';
 import { GoogleSearchControllerService } from './api/googleSearchController.service';
@@ -86,6 +88,7 @@ import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileT
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
 import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
 import { JiraBrowsingControllerService } from './api/jiraBrowsingController.service';
+import { JiraSearchServiceControllerService } from './api/jiraSearchServiceController.service';
 import { JiraSystemsControllerService } from './api/jiraSystemsController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
 import { JobStatusControllerService } from './api/jobStatusController.service';
@@ -114,6 +117,7 @@ import { PromptTemplatesControllerService } from './api/promptTemplatesControlle
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SecretsControllerService } from './api/secretsController.service';
+import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
@@ -149,6 +153,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     ChatModelsLookupControllerService,
     CompanySystemsControllerService,
     ConfluenceBrowsingControllerService,
+    ConfluenceSearchServiceControllerService,
     ConfluenceSystemsControllerService,
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
@@ -204,6 +209,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericalPublisherControllerService,
     GitSystemsControllerService,
     GoogleDriveBrowsingControllerService,
+    GoogleDriveSearchServiceControllerService,
     GoogleDriveSystemsControllerService,
     GoogleSearchConfigurationControllerService,
     GoogleSearchControllerService,
@@ -216,6 +222,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     IntegrationInputControllerService,
     IntegrationSystemsControllerService,
     JiraBrowsingControllerService,
+    JiraSearchServiceControllerService,
     JiraSystemsControllerService,
     JobLauncherControllerService,
     JobStatusControllerService,
@@ -244,6 +251,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     RankerModelsControllerService,
     ReindexingFrequencyOptionsControllerService,
     SecretsControllerService,
+    SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
     TextToSpeechModelsControllerService,
