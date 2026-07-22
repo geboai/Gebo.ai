@@ -11,6 +11,7 @@ RUN update-locale LANG=en_US.UTF-8
 RUN apt-get update && apt-get install -y  \
       curl net-tools \
     && rm -rf /var/lib/apt/lists/*
+ARG TARGETARCH
 RUN mkdir -p /opt/
 RUN mkdir -p /opt/java/
 WORKDIR /opt/java/

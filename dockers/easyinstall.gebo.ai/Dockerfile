@@ -44,6 +44,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 ARG MONGO_MAJOR=8.0
 ARG QDRANT_VERSION=1.15.3
 ARG OPENSEARCH_VERSION=2.18.0
+ARG TARGETARCH
 
 RUN apt-get update && apt-get install -y  \
       ca-certificates curl gnupg lsb-release supervisor tini \
