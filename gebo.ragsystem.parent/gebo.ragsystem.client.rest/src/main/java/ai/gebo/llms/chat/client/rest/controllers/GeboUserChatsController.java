@@ -17,6 +17,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.utils.DataPage;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
@@ -65,6 +68,8 @@ public class GeboUserChatsController {
 	final IGChatSessionLifeCycleService sessionLifeCycleService;
 	final GeboChatUIConfig uiConfig;
 	final IGResponseToFileService response2fileService;
+	final IGChatModelRuntimeConfigurationDao chatModelRuntimeDao;
+	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelRuntimeDao;
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -228,6 +233,22 @@ public class GeboUserChatsController {
 	@GetMapping(value = "getUIConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ChatUIOptions getUIConfig() {
 		return new ChatUIOptions(uiConfig);
+	}
+
+	/**
+	 * Whether the minimal LLMs setup required to chat is done, i.e. at least one
+	 * chat model and one embedding model are configured. Reachable by any
+	 * authenticated user so the chat UI can show a clear message instead of
+	 * failing when the administrator hasn't finished the LLMs setup yet.
+	 *
+	 * @return true if at least one chat model and one embedding model are
+	 *         configured, false otherwise
+	 */
+	@GetMapping(value = "isMinimalLLMSSetupDone", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('USER','ADMIN')")
+	public boolean isMinimalLLMSSetupDone() {
+		return !chatModelRuntimeDao.getConfigurations().isEmpty()
+				&& !embeddingModelRuntimeDao.getConfigurations().isEmpty();
 	}
 
 	@GetMapping(value = "exportResponse2file")

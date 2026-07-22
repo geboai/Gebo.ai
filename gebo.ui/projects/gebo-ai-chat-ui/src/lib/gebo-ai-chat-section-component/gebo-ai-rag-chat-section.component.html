@@ -32,12 +32,17 @@
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="col-12">
-      @if (chatProfilesData?.length) {
+      @if (llmsSetupDone===false) {
+        <p-message id="LLMSNotConfiguredMessage" gebo-ai-label severity="warn" [closable]="false"
+          text="Chatting is not available yet: the system administrator must finish setting up the large language models before you can start a chat."
+        styleClass="w-full"></p-message>
+      }
+      @if (llmsSetupDone!==false && chatProfilesData?.length) {
         <p-button icon="pi pi-pen-to-square" id="NewRagChatMiniBtn" label="Chat with knowledge base"
           title="Create a new RAG chat with company contents" gebo-ai-label [text]="true"
         (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):routeNewRagChat()"></p-button>
         }<br />
-        @if (chatUIOptions?.enablePureModelChat===true) {
+        @if (llmsSetupDone!==false && chatUIOptions?.enablePureModelChat===true) {
           @if (chatModelsData?.length) {
             <p-button icon="pi pi-pen-to-square" id="NewChatMiniBtn" label="Chat"
               title="Create a new chat with large language models" gebo-ai-label [text]="true"

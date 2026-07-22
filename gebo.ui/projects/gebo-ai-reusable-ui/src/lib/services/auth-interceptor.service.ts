@@ -46,7 +46,7 @@ export class AuthInterceptor implements HttpInterceptor {
             const currentUrl = this.router.url;
             const path = window.location.pathname;
             if (!currentUrl.includes('/ui/user-workflows/') && !path.includes('/ui/user-workflows/')) {
-              this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute });
+              this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute, queryParams: { sessionExpired: true } });
             }
 
           } else if (error.status === 500) {
