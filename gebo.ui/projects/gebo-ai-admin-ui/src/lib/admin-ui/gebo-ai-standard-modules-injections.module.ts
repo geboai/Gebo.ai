@@ -677,7 +677,7 @@ const mcpClientModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = 
  */
 const awsS3ModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
     moduleId: AWS_S3_MODULE,
-    addProjectEndpointicon: "pi pi-amazon",
+    addProjectEndpointicon: "pi pi-aws-s3",
     addProjectEndpointLabel: "+AWS S3",
     addProjectEndpointTitle: "add an AWS S3 (or S3-compatible) bucket data source",
     projecteEndpointClassName: "ai.gebo.awss3.content.handler.GAwsS3ProjectEndpoint",
