@@ -1,6 +1,6 @@
 ﻿{
   "name": "@Gebo.ai/integration",
-  "version": "1.0.2.1-SNAPSHOT",
+  "version": "1.0.2.1",
   "peerDependencies": {
     "@angular/common": "^21.2.18",
     "@angular/core": "^21.2.18"
