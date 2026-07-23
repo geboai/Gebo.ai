@@ -5,9 +5,9 @@
 # Copies the freshly built bootable jar and Maven SBOM into the build context,
 # then builds locally and loads into the Docker daemon (single-platform).
 # The SBOM is COPY'd into the image at /opt/gebo.ai/sbom.cdx.json.
-# The BuildKit SBOM attestation (--sbom) is only generated on push
-# (push-sbom-images.sh) since the local Docker exporter cannot load
-# manifest-list attestations.
+# The BuildKit SBOM attestation (--sbom) is only generated on publish
+# (build-multiplatform.sh + publish-multiplatform.sh) since the local Docker
+# exporter cannot load manifest-list attestations.
 #
 # Prerequisites:
 #   mvn -f gebo.apps.parent/gebo.ai.app/pom.xml -P bootables package -DskipTests
