@@ -2,9 +2,20 @@
 @import "primeicons/primeicons.css";
 @import 'primeflex/primeflex.scss';
 @import 'styles/fonts.scss';
+@import 'ng-diagram/styles.css';
 //@import "primeng/resources/themes/lara-light-blue/theme.css";
 //@import "primeng/resources/themes/bootstrap4-light-blue/theme.css";
 //@import "primeng/resources/primeng.css";
+
+// PrimeNG's BlockUI only ever sets an inline display style from block()/unblock(), it never
+// applies one by default. If [blocked] starts (and stays) false, those methods never run and
+// the projected content renders visible from first paint. This inline styles set by block()/
+// unblock() still win over this rule, so actual blocking is unaffected.
+p-blockui,
+p-blockUI,
+p-block-ui {
+  display: none;
+}
 
 .geboButtonsBar {
   width: 360px;

@@ -15,7 +15,7 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.model.ContentMetaInfo;
 import ai.gebo.monolithic.api.client.model.ContentObject;
 import ai.gebo.monolithic.api.client.model.DocumentReferenceView;
-import ai.gebo.monolithic.api.client.model.PageDocumentReferenceView;
+import ai.gebo.monolithic.api.client.model.PagedModelDocumentReferenceView;
 import ai.gebo.monolithic.api.client.model.SearchDocumentByNamePagedParam;
 import ai.gebo.monolithic.api.client.model.SearchDocumentByNameParam;
 import org.junit.Test;
@@ -105,7 +105,7 @@ public class ContentMetaInfosControllerApiTest {
     @Test
     public void searchByDocumentNamePagedTest() {
         SearchDocumentByNamePagedParam body = null;
-        PageDocumentReferenceView response = api.searchByDocumentNamePaged(body);
+        PagedModelDocumentReferenceView response = api.searchByDocumentNamePaged(body);
 
         // TODO: test validations
     }

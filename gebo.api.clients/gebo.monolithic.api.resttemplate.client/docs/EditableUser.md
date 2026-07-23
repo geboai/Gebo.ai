@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **disabled** | **Boolean** |  |  [optional]
 **roles** | **List&lt;String&gt;** |  | 
 **authProvider** | [**AuthProviderEnum**](#AuthProviderEnum) |  | 
+**langCode** | **String** |  |  [optional]
 
 <a name="AuthProviderEnum"></a>
 ## Enum: AuthProviderEnum

@@ -64,6 +64,53 @@ public interface IGRuntimeModelConfigurationDao<IFacetype extends IGConfigurable
 
 	public void addRuntimeByConfig(ModelConfig config) throws LLMConfigException;
 
+	/**
+	 * Cluster-aware variant of {@link #addRuntimeByConfig(GBaseModelConfig)}: adds
+	 * the live model client locally and, when running in a cluster, propagates the
+	 * insertion to the other instances so they build the same client.
+	 * <p>
+	 * The default implementation is a plain local add (no propagation); cluster
+	 * behaviour is provided by
+	 * {@code ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao}.
+	 *
+	 * @param config the model configuration to add
+	 * @throws LLMConfigException if the model configuration fails
+	 */
+	public default void addRuntimeByConfigClustered(ModelConfig config) throws LLMConfigException {
+		addRuntimeByConfig(config);
+	}
+
+	/**
+	 * Cluster-aware update: reconfigures the live model client identified by the
+	 * configuration code locally and, when clustered, propagates the update to the
+	 * other instances.
+	 * <p>
+	 * The default implementation reconfigures locally only.
+	 *
+	 * @param config the new model configuration
+	 * @throws LLMConfigException if the reconfiguration fails
+	 */
+	public default void reconfigureByConfigClustered(ModelConfig config) throws LLMConfigException {
+		IFacetype handler = findByCode(config.getCode());
+		if (handler != null) {
+			handler.reconfigure(config);
+		}
+	}
+
+	/**
+	 * Cluster-aware variant of {@link #deleteByCode(String)}: deletes the live
+	 * model client locally and, when clustered, propagates the deletion to the
+	 * other instances.
+	 * <p>
+	 * The default implementation is a plain local delete (no propagation).
+	 *
+	 * @param code the unique code of the model configuration to delete
+	 * @throws LLMConfigException if the deletion fails
+	 */
+	public default void deleteByCodeClustered(String code) throws LLMConfigException {
+		deleteByCode(code);
+	}
+
 	public default IFacetype findByModelReference(GObjectRef<? extends GBaseModelConfig> modelReference) {
 		if (modelReference == null)
 			return null;

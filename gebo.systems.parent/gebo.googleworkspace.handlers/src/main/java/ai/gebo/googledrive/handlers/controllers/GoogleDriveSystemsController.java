@@ -35,11 +35,14 @@ import ai.gebo.googledrive.handlers.IGGoogleDriveSystemContentHandler;
 import ai.gebo.googledrive.handlers.impl.GGoogleDriveSystemContentHandlerImpl;
 import ai.gebo.googledrive.handlers.impl.GoogleDriveTestService;
 import ai.gebo.googledrive.handlers.repositories.GoogleDriveProjectEndpointRepository;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.GeboGoogleJsonSecretContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -99,9 +102,11 @@ public class GoogleDriveSystemsController
 			IGSecurityService securityService, IGGoogleDriveSystemContentHandler googleDriveHandler,
 			GoogleDriveProjectEndpointRepository endpointRepository, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			GoogleDriveTestService testService, IGeboSecretsAccessService secretAccessService) {
+			GoogleDriveTestService testService, IGeboSecretsAccessService secretAccessService,
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.googleDriveHandler = googleDriveHandler;
 		this.endpointRepository = endpointRepository;
 		this.testService = testService;
@@ -265,6 +270,18 @@ public class GoogleDriveSystemsController
 	public void deleteGoogleDriveProjectEndpoint(@RequestBody GGoogleDriveProjectEndpoint endpoint)
 			throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes a Google Drive project endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint The project endpoint to publish
+	 * @return Operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishGoogleDriveProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishGoogleDriveProjectEndpoint(
+			@RequestBody GGoogleDriveProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
 	/**

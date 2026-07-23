@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**createAWSConnectionSecret**](SecretsControllerApi.md#createAWSConnectionSecret) | **POST** /api/admin/SecretsController/createAWSConnectionSecret | 
 [**createCustomSecret**](SecretsControllerApi.md#createCustomSecret) | **POST** /api/admin/SecretsController/createCustomSecret | 
 [**createGoogleJsonCredentialsSecret**](SecretsControllerApi.md#createGoogleJsonCredentialsSecret) | **POST** /api/admin/SecretsController/createGoogleJsonCredentialsSecret | 
 [**createGoogleOauth2Secret**](SecretsControllerApi.md#createGoogleOauth2Secret) | **POST** /api/admin/SecretsController/createGoogleOauth2Secret | 
@@ -13,6 +14,49 @@ Method | HTTP request | Description
 [**createUsernamePasswordSecret**](SecretsControllerApi.md#createUsernamePasswordSecret) | **POST** /api/admin/SecretsController/createUsernamePasswordSecret | 
 [**deleteSecret**](SecretsControllerApi.md#deleteSecret) | **DELETE** /api/admin/SecretsController/deleteSecret | 
 [**getSecretsByContextCode**](SecretsControllerApi.md#getSecretsByContextCode) | **GET** /api/admin/SecretsController/getSecretsByContextCode | 
+
+<a name="createAWSConnectionSecret"></a>
+# **createAWSConnectionSecret**
+> SecretInfo createAWSConnectionSecret(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.SecretsControllerApi;
+
+
+SecretsControllerApi apiInstance = new SecretsControllerApi();
+SecretWrapperGeboAwsConnectionCredentials body = new SecretWrapperGeboAwsConnectionCredentials(); // SecretWrapperGeboAwsConnectionCredentials | 
+try {
+    SecretInfo result = apiInstance.createAWSConnectionSecret(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling SecretsControllerApi#createAWSConnectionSecret");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**SecretWrapperGeboAwsConnectionCredentials**](SecretWrapperGeboAwsConnectionCredentials.md)|  |
+
+### Return type
+
+[**SecretInfo**](SecretInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="createCustomSecret"></a>
 # **createCustomSecret**

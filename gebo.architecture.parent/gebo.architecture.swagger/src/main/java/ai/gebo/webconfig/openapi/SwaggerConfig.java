@@ -45,7 +45,7 @@ public class SwaggerConfig {
             GeboOpenAITypeDecoration annotation = controllerType.getAnnotation(GeboOpenAITypeDecoration.class);
             if (annotation != null) {
                 // Get the decoration class from the annotation.
-                Class _type = annotation.decorationClass();
+                Class<?> _type = annotation.decorationClass();
                 // Set the operation ID in the format of methodName plus the decoration class’s simple name.
                 operation.setOperationId(methodName + _type.getSimpleName());
             }

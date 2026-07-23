@@ -11,4 +11,6 @@ public interface IGPromptsParametersCacheService {
 			long ttl, Supplier<Map<String, Object>> parametersSupplier) {
 		return this.lookupCache(promptUse, userChatContext, contextKey, "en", ttl, parametersSupplier);
 	}
+
+	public void evictStaleEntries(long idleTtlMillis);
 }

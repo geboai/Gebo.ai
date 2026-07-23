@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.integrations.clients</groupId>
 		<artifactId>gebo.integrations.clients.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.atlassian.confluence.onpremise.client</artifactId>
 	<dependencies>

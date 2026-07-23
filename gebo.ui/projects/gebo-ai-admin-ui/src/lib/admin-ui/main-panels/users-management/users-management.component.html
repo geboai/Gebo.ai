@@ -1,133 +1,137 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 
 
 
 <p-panel id="UsersListPanel" gebo-ai-label #users header="Users list">
-    <p-blockUI [target]="users" [blocked]="loadingUsers">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
-    </p-blockUI>
-    <div class="grid">
-        <div class="col-3">
-            <p-button id="NewUserBtn" gebo-ai-label [outlined]="true" label="new user" (onClick)="newUser()"
-                icon="pi pi-user-plus"></p-button>
-        </div>
-        <div class="col-9"></div>
-        <div class="col-12">
-            <p-table *ngIf="usersPaged" [value]="usersPaged.content?usersPaged.content:[]"
-                [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            <input pInputText id="searchUsernameInput" [(ngModel)]="searchUsername" gebo-ai-label
-                                placeholder="Search username" class="w-full p-inputtext-sm" />
-                        </th>
-                        <th>
-                            <input pInputText id="searchNameInput" [(ngModel)]="searchName" placeholder="Search name"
-                                gebo-ai-label class="w-full p-inputtext-sm" />
-                        </th>
-                        <th>
-                            <input pInputText id="searchSournameInput" [(ngModel)]="searchSourname"
-                                placeholder="Search sourname" gebo-ai-label class="w-full p-inputtext-sm" />
-                        </th>
-                        <th>
-                            <p-dropdown id="searchRoleDropdown" [options]="rolesList" [(ngModel)]="searchRole"
-                                [showClear]="true" gebo-ai-label placeholder="Select role"
-                                styleClass="w-full p-inputtext-sm" appendTo="body"></p-dropdown>
-                        </th>
-                        <th></th>
-                        <th>
-                            <p-button id="SearchUsersBtn" gebo-ai-label [outlined]="true" label="search"
-                                (onClick)="searchUsers()" icon="pi pi-search" styleClass="p-button-sm"></p-button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th id="UsernameHeader" gebo-ai-text>username</th>
-                        <th id="NameHeader" gebo-ai-text>name</th>
-                        <th id="SournameHeader" gebo-ai-text>sourname</th>
-                        <th id="RolesHeader" gebo-ai-text>roles</th>
-                        <th id="DisabledHeader" gebo-ai-text>disabled</th>
-                        <th></th>
-                    </tr>
+  <p-blockUI [target]="users" [blocked]="loadingUsers">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  </p-blockUI>
+  <div class="grid">
+    <div class="col-3">
+      <p-button id="NewUserBtn" gebo-ai-label [outlined]="true" label="new user" (onClick)="newUser()"
+      icon="pi pi-user-plus"></p-button>
+    </div>
+    <div class="col-9"></div>
+    <div class="col-12">
+      @if (usersPaged) {
+        <p-table [value]="usersPaged.content?usersPaged.content:[]"
+          [tableStyle]="{ 'min-width': '50rem' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                <input pInputText id="searchUsernameInput" [(ngModel)]="searchUsername" gebo-ai-label
+                  placeholder="Search username" class="w-full p-inputtext-sm" />
+                </th>
+                <th>
+                  <input pInputText id="searchNameInput" [(ngModel)]="searchName" placeholder="Search name"
+                    gebo-ai-label class="w-full p-inputtext-sm" />
+                  </th>
+                  <th>
+                    <input pInputText id="searchSournameInput" [(ngModel)]="searchSourname"
+                      placeholder="Search surname" gebo-ai-label class="w-full p-inputtext-sm" />
+                    </th>
+                    <th>
+                      <p-select id="searchRoleDropdown" [options]="rolesList" [(ngModel)]="searchRole"
+                        [showClear]="true" gebo-ai-label placeholder="Select role"
+                      styleClass="w-full p-inputtext-sm" appendTo="body"></p-select>
+                    </th>
+                    <th></th>
+                    <th>
+                      <p-button id="SearchUsersBtn" gebo-ai-label [outlined]="true" label="search"
+                      (onClick)="searchUsers()" icon="pi pi-search" styleClass="p-button-sm"></p-button>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th id="UsernameHeader" gebo-ai-text>username</th>
+                    <th id="NameHeader" gebo-ai-text>name</th>
+                    <th id="SournameHeader" gebo-ai-text>surname</th>
+                    <th id="RolesHeader" gebo-ai-text>roles</th>
+                    <th id="DisabledHeader" gebo-ai-text>disabled</th>
+                    <th></th>
+                  </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-user>
-                    <tr>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.sourname }}</td>
-                        <td>{{ user.roles }}</td>
-                        <td>{{ (user.disabled===true? 'YES':'NO')}}</td>
-                        <td>
-
-                            <p-button id="EditBtn" gebo-ai-label [outlined]="true" label="Edit"
-                                (onClick)="editUser(user)" icon="pi pi-user-edit"></p-button>
-
-                        </td>
-                    </tr>
+                  <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.sourname }}</td>
+                    <td>{{ user.roles }}</td>
+                    <td>{{ (user.disabled===true? 'YES':'NO')}}</td>
+                    <td>
+                      <p-button id="EditBtn" gebo-ai-label [outlined]="true" label="Edit"
+                      (onClick)="editUser(user)" icon="pi pi-user-edit"></p-button>
+                    </td>
+                  </tr>
                 </ng-template>
-
-            </p-table>
-            <p-paginator id="PaginatorUsers" gebo-ai-label (onPageChange)="onUsersPageChange($event)"
+              </p-table>
+            }
+            @if (usersPaged?.content?.length) {
+              <p-paginator id="PaginatorUsers" gebo-ai-label (onPageChange)="onUsersPageChange($event)"
                 [first]="(usersPage.page ?? 0) * (usersPage.pageSize ?? 20)" [rows]="usersPage.pageSize"
-                *ngIf="usersPaged?.content?.length" [totalRecords]="usersPaged?.totalElements"
+                [totalRecords]="usersPaged?.page?.totalElements"
                 [rowsPerPageOptions]="[10, 20, 30]" />
-        </div>
+            }
+          </div>
 
-    </div>
-</p-panel>
-<p-panel id="GroupsListPanel" gebo-ai-label #groups header="Groups list">
-    <p-blockUI [target]="groups" [blocked]="loadingGroups">
-        <i class="pi pi-user-plus" style="font-size: 3rem"></i>
-    </p-blockUI>
-    <div class="grid">
-        <div class="col-3">
-            <p-button id="NewGroupBtn" gebo-ai-label [outlined]="true" label="new group" (onClick)="newGroup()"
-                icon="pi pi-users"></p-button>
         </div>
-        <div class="col-9"></div>
-        <div class="col-12">
-            <p-table *ngIf="groupsPaged?.content?.length?true:false"
+      </p-panel>
+      <p-panel id="GroupsListPanel" gebo-ai-label #groups header="Groups list">
+        <p-blockUI [target]="groups" [blocked]="loadingGroups">
+          <i class="pi pi-user-plus" style="font-size: 3rem"></i>
+        </p-blockUI>
+        <div class="grid">
+          <div class="col-3">
+            <p-button id="NewGroupBtn" gebo-ai-label [outlined]="true" label="new group" (onClick)="newGroup()"
+            icon="pi pi-users"></p-button>
+          </div>
+          <div class="col-9"></div>
+          <div class="col-12">
+            @if (groupsPaged?.content?.length?true:false) {
+              <p-table
                 [value]=" groupsPaged.content?groupsPaged.content:[]" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
-                    <tr>
-                        <th id="CodeHeader" gebo-ai-text>code</th>
-                        <th id="DescriptionHeader" gebo-ai-text>description</th>
-                        <th id="UsersHeader" gebo-ai-text>users</th>
-                        <th></th>
-                    </tr>
+                  <tr>
+                    <th id="CodeHeader" gebo-ai-text>code</th>
+                    <th id="DescriptionHeader" gebo-ai-text>description</th>
+                    <th id="UsersHeader" gebo-ai-text>users</th>
+                    <th></th>
+                  </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-grp>
-                    <tr>
-                        <td>{{ grp.code }}</td>
-                        <td>{{ grp.description }}</td>
-                        <td>{{ grp.users }}</td>
-                        <td>
-
-                            <p-button id="EditGroupBtn" gebo-ai-label [outlined]="true" label="Edit"
-                                (onClick)="editGroup(grp)" icon="pi pi-users"></p-button>
-
-                        </td>
-                    </tr>
+                  <tr>
+                    <td>{{ grp.code }}</td>
+                    <td>{{ grp.description }}</td>
+                    <td>{{ grp.users }}</td>
+                    <td>
+                      <p-button id="EditGroupBtn" gebo-ai-label [outlined]="true" label="Edit"
+                      (onClick)="editGroup(grp)" icon="pi pi-users"></p-button>
+                    </td>
+                  </tr>
                 </ng-template>
+              </p-table>
+            }
+            @if (groupsPaged?.content?.length) {
+              <p-paginator id="PaginatorGroups" gebo-ai-label (onPageChange)="onGroupsPageChange($event)" [first]="0"
+                [rows]="groupsPage.pageSize"
+                [totalRecords]="groupsPaged?.page?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
+            }
+          </div>
 
-            </p-table>
-            <p-paginator id="PaginatorGroups" gebo-ai-label (onPageChange)="onGroupsPageChange($event)" [first]="0"
-                [rows]="groupsPage.pageSize" *ngIf="groupsPaged?.content?.length"
-                [totalRecords]="groupsPaged?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
-
-    </div>
-    <gebo-ai-user-component [mode]="editedUserMode" [user]="editedUser" *ngIf="openUserEditing"
-        (changedData)="editedUserChange($event)"></gebo-ai-user-component>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+        @if (openUserEditing) {
+          <gebo-ai-user-component [mode]="editedUserMode" [user]="editedUser"
+          (changedData)="editedUserChange($event)"></gebo-ai-user-component>
+        }
+      </p-panel>
+      <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+      <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

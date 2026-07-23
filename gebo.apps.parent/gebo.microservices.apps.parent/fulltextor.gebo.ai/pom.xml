@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.apps.microservices</groupId>
+		<artifactId>gebo.microservices.apps.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>fulltextor.gebo.ai</artifactId>
+
+	<!--
+	  Full-text processor microservice. The gebo.microservices.starter provides the
+	  microservices environment, RabbitMQ bridge, shared topology and (inherited)
+	  Eureka discovery client; gebo.ragsystem.content.fulltext.processor is the hosted
+	  full-text indexing/search system (OpenSearch-backed).
+	-->
+	<dependencies>
+		<!-- Does not own the ACL store either: IAclAliasesDao is a locally-cached REST
+		     client onto heimdall. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.acl.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- This service does not host the secrets either: IGeboSecretsAccessService is
+		     a REST client onto heimdall. (Not inheritable from gebo.microservices.starter
+		     - heimdall is built on that too, and it owns the real implementation.) -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.secrets.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- This service does NOT own the user store: its IGSecurityDirectory is a REST
+		     client onto heimdall. The authorization services themselves stay local - only
+		     the directory (users, groups, password checks) is remote. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.security.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- FullTextIndexingBatchMessageReceiver resolves IDocumentsChunkService through
+		     the runtime binder (getBean), so a missing implementation only blows up when
+		     an indexing message arrives, not at startup. This REST client implements it
+		     against the chunker microservice. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache.microservice.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier bootable+swagger). -->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.fulltextor.FulltextorApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<!-- Bootable fat jar (classifier bootable). -->
+		<profile>
+			<id>bootables</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>ai.gebo.microservices.fulltextor.FulltextorApplication</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.microservices.fulltextor.FulltextorApplication</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.fulltextor.FulltextorApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

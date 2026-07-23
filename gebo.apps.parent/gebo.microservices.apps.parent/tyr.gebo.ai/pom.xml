@@ -1,0 +1,156 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.apps.microservices</groupId>
+		<artifactId>gebo.microservices.apps.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>tyr.gebo.ai</artifactId>
+
+	<!--
+	  Workflows/usage/jobs-tracking microservice. Home for the receivers and
+	  admin/reporting controllers that today live under the JOBS_MASTER messaging
+	  module (see gebo.architecture.workflows-concentrator) plus the dormant
+	  scheduler-module/async-publishing-job-module roles - not yet wired in.
+	  Deliberately built on the bare gebo.microservices.starter (environment +
+	  RabbitMQ bridge + topology + Eureka, no content-handler business logic) so it
+	  stays minimal until that work lands.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.compute.workflow</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  Topology-driven standard-workflow step enablement. tyr is the authority:
+		  it resolves which optional steps (embedding/graph/fulltext) are enabled
+		  from the deployment topology and exposes them to the other workflow-logic
+		  services (the chunker) over REST. Feeds tyr's own status-tree computation.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.workflow.steps.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  The LLMSUsageUserLevelController moved here (from brain, via
+		  gebo.architecture.compute.workflow) pulled in gebo.architecture.security's
+		  full GeboAISecurityConfig, which needs IGeboSecretsAccessService - not
+		  satisfied by the bare gebo.microservices.starter tyr is built on (heimdall
+		  is also built on that starter and must not get these remote-client impls
+		  alongside its own local ones, see gebo.microservices.llms.starter's
+		  comment). Same client trio every other non-heimdall microservice gets.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.secrets.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.security.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.acl.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  Global internal-topology coordinator: polls every microservice's
+		  InternalMessagingTopologyController on a schedule and exposes the
+		  network-wide messaging topology. tyr is the topology/jobs authority.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.global-internal-topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier
+		bootable+swagger). Off by default: production ships no API console. It is
+		also what lets this service publish /v3/api-docs, which is where its
+		generated client stubs (gebo.microservices.clients.parent) read the spec
+		from. -->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.tyr.TyrApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<!-- Bootable fat jar (classifier bootable). -->
+		<profile>
+			<id>bootables</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>ai.gebo.microservices.tyr.TyrApplication</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.microservices.tyr.TyrApplication</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.microservices.tyr.TyrApplication</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

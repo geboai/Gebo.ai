@@ -6,6 +6,7 @@ import ai.gebo.monolithic.api.client.model.FastSharepointSystemInsertRequest;
 import ai.gebo.monolithic.api.client.model.GContentManagementSystemType;
 import ai.gebo.monolithic.api.client.model.GSharepointContentManagementSystem;
 import ai.gebo.monolithic.api.client.model.GSharepointProjectEndpoint;
+import ai.gebo.monolithic.api.client.model.OperationStatusGJobStatus;
 import ai.gebo.monolithic.api.client.model.OperationStatusGSharepointContentManagementSystem;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class SharepointSystemsControllerApi {
     private ApiClient apiClient;
@@ -525,6 +526,52 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusGJobStatus
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGJobStatus publishSharepointEndpoint(GSharepointProjectEndpoint body) throws RestClientException {
+        return publishSharepointEndpointWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusGJobStatus&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGJobStatus> publishSharepointEndpointWithHttpInfo(GSharepointProjectEndpoint body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishSharepointEndpoint");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/publishSharepointEndpoint").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

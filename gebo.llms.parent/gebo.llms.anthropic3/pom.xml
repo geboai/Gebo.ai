@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.llms</groupId>
 		<artifactId>gebo.llms.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.llms.anthropic3</artifactId>
 	<dependencies>
@@ -13,6 +13,20 @@
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-anthropic</artifactId>
 			<version>${spring.ai.version}</version>
+			<exclusions>
+				<!-- com.anthropic:anthropic-java-core pulls the pre-jakarta
+				     io.swagger.core.v3:swagger-annotations, which defines the
+				     same io.swagger.v3.oas.annotations.* classes as
+				     swagger-annotations-jakarta (brought by spring-ai-client-chat,
+				     via gebo.architecture.llms.abstraction.layer) but is missing
+				     newer methods (e.g. Schema.$dynamicRef()) springdoc calls at
+				     runtime - a NoSuchMethodError, not a compile error. Same fix
+				     as gebo.llms.openai's spring-ai-openai exclusion. -->
+				<exclusion>
+					<groupId>io.swagger.core.v3</groupId>
+					<artifactId>swagger-annotations</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 	</dependencies>

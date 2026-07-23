@@ -26,4 +26,5 @@ export interface GOllamaEmbeddingModelChoice {
     contextLength?: number;
     nativeModelMetaInfos?: any;
     optimalTokenizationParam?: number;
+    modelDetails?: { [key: string]: any; };
 }

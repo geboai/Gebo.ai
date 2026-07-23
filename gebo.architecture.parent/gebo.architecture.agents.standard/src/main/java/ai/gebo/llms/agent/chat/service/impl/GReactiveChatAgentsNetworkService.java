@@ -22,17 +22,20 @@ public class GReactiveChatAgentsNetworkService
 
 	public GReactiveChatAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
-			Class<GeboChatMessageEnvelope> outputType, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao,
+			Class<ChatPipelineExecutionRuntimeData> inputType, Class<GeboChatMessageEnvelope> outputType,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao,
 			AdapterWithFlux<?, GeboChatMessageEnvelope> adapterWithFlux) {
-		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, outputType, runAs,
-				agentsDao, adapterWithFlux);
+		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,
+				runAs, agentsDao, adapterWithFlux);
 
 	}
 
 	@Override
 	protected <OutputType> OutputType compose(OutputType actualOutput, OutputType incremental) {
-
-		return null;
+		// Streaming partials are emitted to the reactive flux; the returned value is
+		// the
+		// final envelope, so the latest non-null output wins.
+		return incremental != null ? incremental : actualOutput;
 	}
 
 	@Override

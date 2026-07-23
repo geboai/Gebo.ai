@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload;
 import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload.MessageFragmentType;
 import ai.gebo.core.messages.GContentEmbeddingHandshakePayload;
@@ -42,7 +43,6 @@ import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.impl.repository.ContentHandshakeDataRepository;
 import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * AI generated comments Implementation of the IGContentDispatchingEvaluator

@@ -3,6 +3,7 @@ package ai.gebo.llms.setup.model;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.setup.config.ModelType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -23,5 +24,7 @@ public class LLMCreateModelData {
 	private String baseUrl = null;
 	private Integer contextWindow = null;
 	private List<ChatModelsUses> uses = null;
+	private Integer maxGeneratedTokens = null;
+	private ChatModelThinkingOption thinking = null;
 
 }

@@ -41,8 +41,12 @@ import ai.gebo.filesystem.content.handler.IGFilesystemContentManagementSystemHan
 import ai.gebo.filesystem.content.handler.impl.GFilesystemChangesHandlingService;
 import ai.gebo.filesystem.content.handler.impl.GFilesystemConfigurationDao;
 import ai.gebo.filesystem.content.handler.service.FileSystemsManagementService;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 
 /**
@@ -109,9 +113,11 @@ public class FileSystemsController
 	public FileSystemsController(IGPersistentObjectManager persistenceManager, IGMessageBroker messageBroker,
 			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter,
 			IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory) {
+			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistenceManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 	}
 
 	/**
@@ -212,5 +218,15 @@ public class FileSystemsController
 			throws GeboPersistenceException {
 		changesHandlingService.removeHandling(endpoint);
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes a file system endpoint, triggering an asynchronous ingestion job.
+	 * @param endpoint The endpoint to publish
+	 * @return Operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishFilesystemEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishFilesystemEndpoint(@RequestBody GFilesystemProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 }

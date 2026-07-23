@@ -21,8 +21,8 @@ import { GetJobMessagesParam } from '../model/getJobMessagesParam';
 import { JobsEntriesForClassNameFilter } from '../model/jobsEntriesForClassNameFilter';
 import { JobsEntriesForJobType } from '../model/jobsEntriesForJobType';
 import { JobsEntriesForProjectEndpointFilter } from '../model/jobsEntriesForProjectEndpointFilter';
-import { PageGJobStatusItem } from '../model/pageGJobStatusItem';
-import { PageGUserMessage } from '../model/pageGUserMessage';
+import { PagedModelGJobStatusItem } from '../model/pagedModelGJobStatusItem';
+import { PagedModelGUserMessage } from '../model/pagedModelGUserMessage';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -31,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class LogViewControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -113,9 +113,9 @@ export class LogViewControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobMessagesPaged(body: GetJobMessagesParam, observe?: 'body', reportProgress?: boolean): Observable<PageGUserMessage>;
-    public getJobMessagesPaged(body: GetJobMessagesParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGUserMessage>>;
-    public getJobMessagesPaged(body: GetJobMessagesParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGUserMessage>>;
+    public getJobMessagesPaged(body: GetJobMessagesParam, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGUserMessage>;
+    public getJobMessagesPaged(body: GetJobMessagesParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGUserMessage>>;
+    public getJobMessagesPaged(body: GetJobMessagesParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGUserMessage>>;
     public getJobMessagesPaged(body: GetJobMessagesParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -142,7 +142,7 @@ export class LogViewControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGUserMessage>('post',`${this.basePath}/api/admin/LogViewController/getJobMessagesPaged`,
+        return this.httpClient.request<PagedModelGUserMessage>('post',`${this.basePath}/api/admin/LogViewController/getJobMessagesPaged`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -160,9 +160,9 @@ export class LogViewControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobsEntriesForClassName(body: JobsEntriesForClassNameFilter, observe?: 'body', reportProgress?: boolean): Observable<PageGJobStatusItem>;
-    public getJobsEntriesForClassName(body: JobsEntriesForClassNameFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGJobStatusItem>>;
-    public getJobsEntriesForClassName(body: JobsEntriesForClassNameFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGJobStatusItem>>;
+    public getJobsEntriesForClassName(body: JobsEntriesForClassNameFilter, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGJobStatusItem>;
+    public getJobsEntriesForClassName(body: JobsEntriesForClassNameFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGJobStatusItem>>;
+    public getJobsEntriesForClassName(body: JobsEntriesForClassNameFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGJobStatusItem>>;
     public getJobsEntriesForClassName(body: JobsEntriesForClassNameFilter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -189,7 +189,7 @@ export class LogViewControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGJobStatusItem>('post',`${this.basePath}/api/admin/LogViewController/getJobsEntriesForClassName`,
+        return this.httpClient.request<PagedModelGJobStatusItem>('post',`${this.basePath}/api/admin/LogViewController/getJobsEntriesForClassName`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -207,9 +207,9 @@ export class LogViewControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobsEntriesForJobType(body: JobsEntriesForJobType, observe?: 'body', reportProgress?: boolean): Observable<PageGJobStatusItem>;
-    public getJobsEntriesForJobType(body: JobsEntriesForJobType, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGJobStatusItem>>;
-    public getJobsEntriesForJobType(body: JobsEntriesForJobType, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGJobStatusItem>>;
+    public getJobsEntriesForJobType(body: JobsEntriesForJobType, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGJobStatusItem>;
+    public getJobsEntriesForJobType(body: JobsEntriesForJobType, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGJobStatusItem>>;
+    public getJobsEntriesForJobType(body: JobsEntriesForJobType, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGJobStatusItem>>;
     public getJobsEntriesForJobType(body: JobsEntriesForJobType, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -236,7 +236,7 @@ export class LogViewControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGJobStatusItem>('post',`${this.basePath}/api/admin/LogViewController/getJobsEntriesForJobType`,
+        return this.httpClient.request<PagedModelGJobStatusItem>('post',`${this.basePath}/api/admin/LogViewController/getJobsEntriesForJobType`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -254,9 +254,9 @@ export class LogViewControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'body', reportProgress?: boolean): Observable<PageGJobStatusItem>;
-    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGJobStatusItem>>;
-    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGJobStatusItem>>;
+    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGJobStatusItem>;
+    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGJobStatusItem>>;
+    public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGJobStatusItem>>;
     public getJobsEntriesForProjectEndpoint(body: JobsEntriesForProjectEndpointFilter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -283,7 +283,7 @@ export class LogViewControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGJobStatusItem>('post',`${this.basePath}/api/admin/LogViewController/getJobsEntriesForProjectEndpoint`,
+        return this.httpClient.request<PagedModelGJobStatusItem>('post',`${this.basePath}/api/admin/LogViewController/getJobsEntriesForProjectEndpoint`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

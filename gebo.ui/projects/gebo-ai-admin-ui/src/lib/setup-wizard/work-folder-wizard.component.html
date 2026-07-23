@@ -1,9 +1,16 @@
 <form [formGroup]="formGroup">
     
-    <p-blockUI id="BlockUIComponent" gebo-ai-label [target]="workFolderUI" [blocked]="loading">
+    <p-blockUI id="BlockUIComponent"  [target]="workFolderUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <p-panel id="MainPanel" gebo-ai-label #workFolderUI header="Gebo.ai work folder configuration">
+        <div class="grid geboLargeButtonsBar">
+            
+            <div class="col-6">
+                <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="saveWorkFolder()" icon="pi pi-save"
+                    severity="success" [disabled]="this.formGroup.invalid || isSetupCompleted" styleClass="w-full"></p-button>
+            </div>
+        </div>
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid">
             <div class="col-12">
@@ -20,14 +27,6 @@
                         gebo-ai-field-element
                     />
                 </gebo-ai-field>
-            </div>
-        </div>
-
-        <div class="grid geboLargeButtonsBar">
-            
-            <div class="col-6">
-                <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="saveWorkFolder()" icon="pi pi-save"
-                    severity="success" [disabled]="this.formGroup.invalid || isSetupCompleted" styleClass="w-full"></p-button>
             </div>
         </div>
     </p-panel>

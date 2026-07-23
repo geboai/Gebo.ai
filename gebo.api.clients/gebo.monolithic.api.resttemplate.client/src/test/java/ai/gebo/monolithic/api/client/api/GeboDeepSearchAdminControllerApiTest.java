@@ -13,6 +13,7 @@
 package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.DeepSearchConfig;
+import ai.gebo.monolithic.api.client.model.GBaseObject;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -53,9 +54,8 @@ public class GeboDeepSearchAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findDeepSearchDefaultConfigByCodeTest() {
-        String code = null;
-        DeepSearchConfig response = api.findDeepSearchDefaultConfigByCode(code);
+    public void getConfigurableDataSourcesTest() {
+        List<GBaseObject> response = api.getConfigurableDataSources();
 
         // TODO: test validations
     }
@@ -69,8 +69,7 @@ public class GeboDeepSearchAdminControllerApiTest {
      */
     @Test
     public void getDeepSeachConfigsTest() {
-        String chatProfileCode = null;
-        List<DeepSearchConfig> response = api.getDeepSeachConfigs(chatProfileCode);
+        List<DeepSearchConfig> response = api.getDeepSeachConfigs();
 
         // TODO: test validations
     }
@@ -85,6 +84,20 @@ public class GeboDeepSearchAdminControllerApiTest {
     @Test
     public void getDeepSearchDefaultConfigTest() {
         DeepSearchConfig response = api.getDeepSearchDefaultConfig();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getDeepSearchDefaultOrSystemConfigTest() {
+        DeepSearchConfig response = api.getDeepSearchDefaultOrSystemConfig();
 
         // TODO: test validations
     }

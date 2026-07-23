@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.microservices.cluster.commons</artifactId>
+
+	<!--
+		The two halves of a Gebo service-to-service call, shared by every
+		cluster-internal client/controller pair (secrets, security, ...):
+
+		  server side - GeboClusterParticipants + ClusterParticipantsOnlyInterceptor:
+		      admit ONLY callers whose address is that of a microservice currently
+		      registered in service discovery. Fail-closed.
+		  client side - IGeboCallerTokenPropagator: forward the caller's own token,
+		      falling back to a freshly minted token for the platform's system identity
+		      when the calling thread has none (background work carries none).
+
+		These live here rather than in each pair because they are security-critical: a
+		second copy is a copy that a fix does not reach.
+	-->
+	<dependencies>
+		<!-- GeboMicroservicesTopology: the members whose registered instances may call. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- DiscoveryClient / ServiceInstance: the *dynamic* membership source. The
+		     concrete client (Eureka) is brought by the hosting app. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		<!-- SecurityContextHolder + the bearer-token authentication types whose token is
+		     forwarded. -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-resource-server</artifactId>
+		</dependency>
+		<!--
+			IGeboSystemUserService: mints the LOCAL_JWT used when the calling thread has no
+			token of its own. OPTIONAL - injected through an ObjectProvider, so a service
+			without the security implementation still works for its request-thread calls.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

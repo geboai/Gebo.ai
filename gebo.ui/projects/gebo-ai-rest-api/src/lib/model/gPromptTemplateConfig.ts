@@ -27,6 +27,7 @@ export interface GPromptTemplateConfig {
     configDeclarated?: boolean;
     agentPrompt?: boolean;
     agentId?: string;
+    placeholders?: { [key: string]: boolean; };
 }
 export namespace GPromptTemplateConfig {
     export type ChatHistoryEnum = 'REQUIRED' | 'NOT_REQUIRED';

@@ -18,7 +18,7 @@
 import { Component, forwardRef, Injector, SimpleChanges } from '@angular/core';
 
 import { FormControl, FormGroup } from "@angular/forms";
-import { CompanySystemsControllerService, DataPage, GJobStatus, JobLauncherControllerService, JobSummary, LogViewControllerService, PageGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
+import { CompanySystemsControllerService, DataPage, GJobStatus, JobStatusControllerService, JobSummary, LogViewControllerService, PagedModelGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
@@ -79,7 +79,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
   /**
    * Current page of user messages
    */
-  public actualPageData?: PageGUserMessage;
+  public actualPageData?: PagedModelGUserMessage;
 
   public rootGraphicData?: StatusRendering;
 
@@ -87,7 +87,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
    * Component constructor that initializes services and triggers initial data refresh
    */
   constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService,
-    private JobLauncherControllerService: JobLauncherControllerService,
+    private jobStatusControllerService: JobStatusControllerService,
     confirmService: ConfirmationService,
     private logViewControllerService: LogViewControllerService,
     geboUIActionRoutingService: GeboUIActionRoutingService,
@@ -131,10 +131,10 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
   private reloadPeriodically(): void {
     if (this.entity?.code) {
 
-      const observables: [Observable<GJobStatus>, Observable<PageGUserMessage>, Observable<JobSummary>] = [this.JobLauncherControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
+      const observables: [Observable<GJobStatus>, Observable<PagedModelGUserMessage>, Observable<JobSummary>] = [this.jobStatusControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
         jobId: this.entity?.code,
         dataPage: this.actualPage
-      }), this.JobLauncherControllerService.getJobSummary(this.entity.code)];
+      }), this.jobStatusControllerService.getJobSummary(this.entity.code)];
       this.loadingRelatedBackend = true;
       forkJoin(observables).subscribe({
         next: (values) => {
@@ -143,15 +143,12 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
           this.jobSummary = values[2];
           this.logMessages = values[1]?.content as ToastMessageOptions[];
           this.refreshGraphics();
-          const anyVersion = values[1] as any;
-          if (anyVersion && anyVersion?.page?.totalElements) {
-            this.actualPageData.totalElements = anyVersion?.page?.totalElements;
-          }
+          
 
           let delayInMilliseconds: number = 10000; // 2000 milliseconds (2 seconds) delay
-          if (this.actualPageData && this.actualPageData.totalElements !== undefined && this.actualPageData.totalElements < 3) {
-            delayInMilliseconds = 10000;
-          }
+          //if (this.actualPageData && this.actualPageData.totalElements !== undefined && this.actualPageData.totalElements < 3) {
+          //  delayInMilliseconds = 10000;
+          //}
           if (this.jobSummary?.workflowStatus?.finished !== true) {
             setTimeout(() => {
               this.reloadPeriodically();
@@ -225,7 +222,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
    * @returns Observable containing the job status or null
    */
   override findByCode(code: string): Observable<GJobStatus | null> {
-    return this.JobLauncherControllerService.getJobStatus(code);
+    return this.jobStatusControllerService.getJobStatus(code);
   }
 
   /**

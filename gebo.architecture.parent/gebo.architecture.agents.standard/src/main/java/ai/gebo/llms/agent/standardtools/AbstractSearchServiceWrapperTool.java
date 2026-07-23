@@ -3,6 +3,8 @@ package ai.gebo.llms.agent.standardtools;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.ai.model.ToolReference;
@@ -17,6 +19,7 @@ import reactor.core.publisher.ParallelFlux;
 
 @AllArgsConstructor
 public abstract class AbstractSearchServiceWrapperTool {
+	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractSearchServiceWrapperTool.class);
 	private final IDocumentsChunkService chunkingService;
 
 	public abstract ToolCallback toTool();
@@ -24,14 +27,28 @@ public abstract class AbstractSearchServiceWrapperTool {
 	public abstract ToolReference toToolReference();
 
 	protected SearchResultSampleList loadSamples(List<SearchResult> results, int textSampleTokens) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin loadSamples(...) results:" + (results != null ? results.size() : 0)
+					+ " textSampleTokens:" + textSampleTokens);
+		}
 		final String session = chunkingService.createChunkingSession("search:" + UUID.randomUUID().toString());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Created chunking session:" + session);
+		}
 		ChunkingParams params = new ChunkingParams();
 		ParallelFlux<IDocumentChunkWithRef> stream = chunkingService.streamChunks(results, params, session, 4)
 				.doOnComplete(() -> {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Disposing chunking session:" + session);
+					}
 					chunkingService.disposeChunkingSession(session);
 				});
 		ParallelFlux<SearchResultSample> out = stream.map(AbstractSearchServiceWrapperTool::toSample);
-		return new SearchResultSampleList(out.sequential().buffer().blockLast());
+		SearchResultSampleList sampleList = new SearchResultSampleList(out.sequential().buffer().blockLast());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End loadSamples(...) for session:" + session);
+		}
+		return sampleList;
 	}
 
 	static SearchResultSample toSample(IDocumentChunkWithRef object) {

@@ -27,20 +27,14 @@ import java.util.List;
  * PageDocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
 
 public class PageDocumentReferenceView {
-  @JsonProperty("totalElements")
-  private Long totalElements = null;
-
   @JsonProperty("totalPages")
   private Integer totalPages = null;
 
-  @JsonProperty("first")
-  private Boolean first = null;
-
-  @JsonProperty("last")
-  private Boolean last = null;
+  @JsonProperty("totalElements")
+  private Long totalElements = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -51,35 +45,23 @@ public class PageDocumentReferenceView {
   @JsonProperty("number")
   private Integer number = null;
 
-  @JsonProperty("sort")
-  private SortObject sort = null;
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
 
   @JsonProperty("numberOfElements")
   private Integer numberOfElements = null;
+
+  @JsonProperty("sort")
+  private SortObject sort = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
-
-  public PageDocumentReferenceView totalElements(Long totalElements) {
-    this.totalElements = totalElements;
-    return this;
-  }
-
-   /**
-   * Get totalElements
-   * @return totalElements
-  **/
-  @Schema(description = "")
-  public Long getTotalElements() {
-    return totalElements;
-  }
-
-  public void setTotalElements(Long totalElements) {
-    this.totalElements = totalElements;
-  }
 
   public PageDocumentReferenceView totalPages(Integer totalPages) {
     this.totalPages = totalPages;
@@ -99,40 +81,22 @@ public class PageDocumentReferenceView {
     this.totalPages = totalPages;
   }
 
-  public PageDocumentReferenceView first(Boolean first) {
-    this.first = first;
+  public PageDocumentReferenceView totalElements(Long totalElements) {
+    this.totalElements = totalElements;
     return this;
   }
 
    /**
-   * Get first
-   * @return first
+   * Get totalElements
+   * @return totalElements
   **/
   @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
+  public Long getTotalElements() {
+    return totalElements;
   }
 
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageDocumentReferenceView last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
+  public void setTotalElements(Long totalElements) {
+    this.totalElements = totalElements;
   }
 
   public PageDocumentReferenceView size(Integer size) {
@@ -197,22 +161,40 @@ public class PageDocumentReferenceView {
     this.number = number;
   }
 
-  public PageDocumentReferenceView sort(SortObject sort) {
-    this.sort = sort;
+  public PageDocumentReferenceView first(Boolean first) {
+    this.first = first;
     return this;
   }
 
    /**
-   * Get sort
-   * @return sort
+   * Get first
+   * @return first
   **/
   @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
+  public Boolean isFirst() {
+    return first;
   }
 
-  public void setSort(SortObject sort) {
-    this.sort = sort;
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageDocumentReferenceView last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
   }
 
   public PageDocumentReferenceView numberOfElements(Integer numberOfElements) {
@@ -231,6 +213,24 @@ public class PageDocumentReferenceView {
 
   public void setNumberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
+  }
+
+  public PageDocumentReferenceView sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
   }
 
   public PageDocumentReferenceView pageable(PageableObject pageable) {
@@ -279,22 +279,22 @@ public class PageDocumentReferenceView {
       return false;
     }
     PageDocumentReferenceView pageDocumentReferenceView = (PageDocumentReferenceView) o;
-    return Objects.equals(this.totalElements, pageDocumentReferenceView.totalElements) &&
-        Objects.equals(this.totalPages, pageDocumentReferenceView.totalPages) &&
-        Objects.equals(this.first, pageDocumentReferenceView.first) &&
-        Objects.equals(this.last, pageDocumentReferenceView.last) &&
+    return Objects.equals(this.totalPages, pageDocumentReferenceView.totalPages) &&
+        Objects.equals(this.totalElements, pageDocumentReferenceView.totalElements) &&
         Objects.equals(this.size, pageDocumentReferenceView.size) &&
         Objects.equals(this.content, pageDocumentReferenceView.content) &&
         Objects.equals(this.number, pageDocumentReferenceView.number) &&
-        Objects.equals(this.sort, pageDocumentReferenceView.sort) &&
+        Objects.equals(this.first, pageDocumentReferenceView.first) &&
+        Objects.equals(this.last, pageDocumentReferenceView.last) &&
         Objects.equals(this.numberOfElements, pageDocumentReferenceView.numberOfElements) &&
+        Objects.equals(this.sort, pageDocumentReferenceView.sort) &&
         Objects.equals(this.pageable, pageDocumentReferenceView.pageable) &&
         Objects.equals(this.empty, pageDocumentReferenceView.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, first, last, size, content, number, sort, numberOfElements, pageable, empty);
+    return Objects.hash(totalPages, totalElements, size, content, number, first, last, numberOfElements, sort, pageable, empty);
   }
 
 
@@ -303,15 +303,15 @@ public class PageDocumentReferenceView {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageDocumentReferenceView {\n");
     
-    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");

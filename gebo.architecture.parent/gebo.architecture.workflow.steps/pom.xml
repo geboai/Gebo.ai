@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.architecture.workflow.steps</artifactId>
+
+	<!--
+		Config-driven packaging of the standard INGESTION workflow's optional
+		step-enablement policy for the MONOLITHIC distribution. Holds the
+		IWorkflowStepEnabledHandler beans for the non-mandatory steps (EMBEDDING,
+		GRAPHEXTRACTION, FULLTEXT_INDEXING) whose enablement is decided from the
+		local configuration present in-process on the monolith (OpenSearchConfig,
+		the graph extraction service). Extracted out of the perform-modules
+		(vectorizator / graphrag_processor / fulltext.processor) so the enablement
+		policy lives in one module rather than scattered across the doers.
+
+		The microservices counterpart is gebo.microservices.workflow.steps.topology,
+		which decides the same steps from the deployment topology instead. Exactly
+		one of the two modules is present per distribution, so the repository
+		pattern that collects IWorkflowStepEnabledHandler never sees both.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.application.messaging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- OpenSearchConfig: FULLTEXT_INDEXING enablement. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.opensearch</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- IGraphDataExtractionService: GRAPHEXTRACTION enablement. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.graphrag.extraction</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+	</dependencies>
+</project>

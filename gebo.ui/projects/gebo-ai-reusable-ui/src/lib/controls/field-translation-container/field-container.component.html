@@ -1,5 +1,9 @@
 <div class="flex flex-column gap-2">
-  <label [attr.for]="id"><span *ngIf="computedRequired" aria-hidden="true">*</span>{{ internalLabel }}</label>
+  <label [attr.for]="id">@if (computedRequired) {
+    <span aria-hidden="true">*</span>
+  }{{ internalLabel }}</label>
   <ng-content></ng-content>
-  <small *ngIf="help" [id]="helpId">{{ internalHelp }}</small>
+  @if (help) {
+    <small [id]="helpId">{{ internalHelp }}</small>
+  }
 </div>

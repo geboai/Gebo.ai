@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<groupId>ai.gebo.ragsystem</groupId>
 	<artifactId>gebo.ragsystem.parent</artifactId>
@@ -22,13 +22,13 @@
 
 		<module>gebo.ragsystem.content.fulltext.processor</module>
 	</modules>
+	<!--
+	  gebo.architecture.llms.abstraction.layer is NOT inherited here on purpose: it
+	  registers vector-store beans that require an IGVectorStoreConfigurationProvider,
+	  so modules that never touch the LLM layer (the full-text and graphrag processors)
+	  would be forced to supply one. Each child that actually uses it declares it.
+	-->
 	<dependencies>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-transformers</artifactId>

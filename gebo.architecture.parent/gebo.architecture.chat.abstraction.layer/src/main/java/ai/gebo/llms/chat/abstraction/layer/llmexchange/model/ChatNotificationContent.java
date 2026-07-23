@@ -1,6 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatNotificationContent {
 	public static enum NotificationType {
-		INFO, DEBUG
+		INFO, DEBUG, ERROR
 	}
 
 	@NotNull

@@ -1,0 +1,360 @@
+package gebo.microservices.api.client.brain.api;
+
+import gebo.microservices.api.client.brain.invoker.ApiClient;
+
+import gebo.microservices.api.client.brain.model.ComponentLLMSStatus;
+import gebo.microservices.api.client.brain.model.LLMAutoconfigureCreationData;
+import gebo.microservices.api.client.brain.model.LLMCredentialsCreationData;
+import gebo.microservices.api.client.brain.model.LLMCredentialsVerificationData;
+import gebo.microservices.api.client.brain.model.LLMModelsLookupParameter;
+import gebo.microservices.api.client.brain.model.LLMSSetupConfigurationData;
+import gebo.microservices.api.client.brain.model.OperationStatusLLMSModelsCreationResult;
+import gebo.microservices.api.client.brain.model.OperationStatusListGBaseModelChoice;
+import gebo.microservices.api.client.brain.model.OperationStatusListGBaseModelConfig;
+import gebo.microservices.api.client.brain.model.OperationStatusSecretInfo;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
+
+public class GeboFastLlmsSetupControllerApi {
+    private ApiClient apiClient;
+
+     public GeboFastLlmsSetupControllerApi() {
+        this(new ApiClient());
+    }
+    public GeboFastLlmsSetupControllerApi(ApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
+
+    public ApiClient getApiClient() {
+        return apiClient;
+    }
+
+    public void setApiClient(ApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusListGBaseModelConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusListGBaseModelConfig createLLMByAutoconfigure(LLMAutoconfigureCreationData body) throws RestClientException {
+        return createLLMByAutoconfigureWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusListGBaseModelConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusListGBaseModelConfig> createLLMByAutoconfigureWithHttpInfo(LLMAutoconfigureCreationData body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createLLMByAutoconfigure");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastLLMSSetupController/createLLMByAutoconfigure").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusListGBaseModelConfig> returnType = new ParameterizedTypeReference<OperationStatusListGBaseModelConfig>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusSecretInfo
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusSecretInfo createLLMCredentials(LLMCredentialsCreationData body) throws RestClientException {
+        return createLLMCredentialsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusSecretInfo&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusSecretInfo> createLLMCredentialsWithHttpInfo(LLMCredentialsCreationData body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createLLMCredentials");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastLLMSSetupController/createLLMCredentials").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusSecretInfo> returnType = new ParameterizedTypeReference<OperationStatusSecretInfo>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusLLMSModelsCreationResult
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusLLMSModelsCreationResult createLLMS(Object body) throws RestClientException {
+        return createLLMSWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusLLMSModelsCreationResult&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusLLMSModelsCreationResult> createLLMSWithHttpInfo(Object body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createLLMS");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastLLMSSetupController/createLLMS").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusLLMSModelsCreationResult> returnType = new ParameterizedTypeReference<OperationStatusLLMSModelsCreationResult>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return LLMSSetupConfigurationData
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public LLMSSetupConfigurationData getActualLLMSConfiguration() throws RestClientException {
+        return getActualLLMSConfigurationWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;LLMSSetupConfigurationData&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<LLMSSetupConfigurationData> getActualLLMSConfigurationWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastLLMSSetupController/getActualLLMSConfiguration").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<LLMSSetupConfigurationData> returnType = new ParameterizedTypeReference<LLMSSetupConfigurationData>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ComponentLLMSStatus
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ComponentLLMSStatus getLLMSSetupStatus() throws RestClientException {
+        return getLLMSSetupStatusWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;ComponentLLMSStatus&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<ComponentLLMSStatus> getLLMSSetupStatusWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastLLMSSetupController/getLLMSSetupStatus").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<ComponentLLMSStatus> returnType = new ParameterizedTypeReference<ComponentLLMSStatus>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusListGBaseModelChoice
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusListGBaseModelChoice verifyCredentialsAndDownloadModels(LLMModelsLookupParameter body) throws RestClientException {
+        return verifyCredentialsAndDownloadModelsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusListGBaseModelChoice&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusListGBaseModelChoice> verifyCredentialsAndDownloadModelsWithHttpInfo(LLMModelsLookupParameter body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling verifyCredentialsAndDownloadModels");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastLLMSSetupController/verifyCredentialsAndDownloadModels").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusListGBaseModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGBaseModelChoice>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusListGBaseModelChoice
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusListGBaseModelChoice verifyVendorCredentialsAndDownloadModels(LLMCredentialsVerificationData body) throws RestClientException {
+        return verifyVendorCredentialsAndDownloadModelsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusListGBaseModelChoice&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusListGBaseModelChoice> verifyVendorCredentialsAndDownloadModelsWithHttpInfo(LLMCredentialsVerificationData body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling verifyVendorCredentialsAndDownloadModels");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastLLMSSetupController/verifyVendorCredentialsAndDownloadModels").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusListGBaseModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGBaseModelChoice>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+}

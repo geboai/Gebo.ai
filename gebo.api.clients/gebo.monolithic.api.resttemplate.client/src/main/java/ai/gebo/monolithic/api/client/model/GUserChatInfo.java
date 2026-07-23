@@ -23,20 +23,20 @@ import java.util.Date;
  * GUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GUserChatInfo {
   @JsonProperty("description")
   private String description = null;
+
+  @JsonProperty("code")
+  private String code = null;
 
   @JsonProperty("username")
   private String username = null;
 
   @JsonProperty("ragChat")
   private Boolean ragChat = null;
-
-  @JsonProperty("code")
-  private String code = null;
 
   @JsonProperty("chatModelCode")
   private String chatModelCode = null;
@@ -63,6 +63,24 @@ public class GUserChatInfo {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public GUserChatInfo code(String code) {
+    this.code = code;
+    return this;
+  }
+
+   /**
+   * Get code
+   * @return code
+  **/
+  @Schema(description = "")
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
   }
 
   public GUserChatInfo username(String username) {
@@ -99,24 +117,6 @@ public class GUserChatInfo {
 
   public void setRagChat(Boolean ragChat) {
     this.ragChat = ragChat;
-  }
-
-  public GUserChatInfo code(String code) {
-    this.code = code;
-    return this;
-  }
-
-   /**
-   * Get code
-   * @return code
-  **/
-  @Schema(description = "")
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
   }
 
   public GUserChatInfo chatModelCode(String chatModelCode) {
@@ -184,9 +184,9 @@ public class GUserChatInfo {
     }
     GUserChatInfo guserChatInfo = (GUserChatInfo) o;
     return Objects.equals(this.description, guserChatInfo.description) &&
+        Objects.equals(this.code, guserChatInfo.code) &&
         Objects.equals(this.username, guserChatInfo.username) &&
         Objects.equals(this.ragChat, guserChatInfo.ragChat) &&
-        Objects.equals(this.code, guserChatInfo.code) &&
         Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode) &&
         Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
         Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime);
@@ -194,7 +194,7 @@ public class GUserChatInfo {
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, username, ragChat, code, chatModelCode, chatProfileCode, chatCreationDateTime);
+    return Objects.hash(description, code, username, ragChat, chatModelCode, chatProfileCode, chatCreationDateTime);
   }
 
 
@@ -204,9 +204,9 @@ public class GUserChatInfo {
     sb.append("class GUserChatInfo {\n");
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");

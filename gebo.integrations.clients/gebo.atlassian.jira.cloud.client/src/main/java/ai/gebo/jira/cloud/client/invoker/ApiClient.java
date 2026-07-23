@@ -559,7 +559,7 @@ public class ApiClient {
 			throws RestClientException {
 		updateParamsForAuth(authNames, queryParams, headerParams);
 
-		final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(basePath).path(path);
+		final UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(basePath).path(path);
 		if (queryParams != null) {
 			builder.queryParams(queryParams);
 		}
@@ -604,7 +604,7 @@ public class ApiClient {
 		HttpHeaders headerParams = new HttpHeaders();
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 		updateParamsForAuth(authNames, queryParams, headerParams);
-		final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+		final UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
 		if (queryParams != null) {
 			builder.queryParams(queryParams);
 		}
@@ -632,14 +632,13 @@ public class ApiClient {
 	 * @param requestBuilder The current request
 	 */
 	protected void addHeadersToRequest(HttpHeaders headers, BodyBuilder requestBuilder) {
-		for (Entry<String, List<String>> entry : headers.entrySet()) {
-			List<String> values = entry.getValue();
+		headers.forEach((name, values) -> {
 			for (String value : values) {
 				if (value != null) {
-					requestBuilder.header(entry.getKey(), value);
+					requestBuilder.header(name, value);
 				}
 			}
-		}
+		});
 	}
 
 	/**
@@ -708,7 +707,7 @@ public class ApiClient {
 		 * @throws IOException If reading the response body fails
 		 */
 		private void logResponse(ClientHttpResponse response) throws IOException {
-			log.info("HTTP Status Code: " + response.getRawStatusCode());
+			log.info("HTTP Status Code: " + response.getStatusCode().value());
 			log.info("Status Text: " + response.getStatusText());
 			log.info("HTTP Headers: " + headersToString(response.getHeaders()));
 			log.info("Response Body: " + bodyToString(response.getBody()));
@@ -722,15 +721,15 @@ public class ApiClient {
 		 */
 		private String headersToString(HttpHeaders headers) {
 			StringBuilder builder = new StringBuilder();
-			for (Entry<String, List<String>> entry : headers.entrySet()) {
-				builder.append(entry.getKey()).append("=[");
-				for (String value : entry.getValue()) {
+			headers.forEach((name, values) -> {
+				builder.append(name).append("=[");
+				for (String value : values) {
 					builder.append(value).append(",");
 				}
-				builder.setLength(builder.length() - 1); // Get rid of trailing comma
+				builder.setLength(builder.length() - 1);
 				builder.append("],");
-			}
-			builder.setLength(builder.length() - 1); // Get rid of trailing comma
+			});
+			if (builder.length() > 0) builder.setLength(builder.length() - 1);
 			return builder.toString();
 		}
 

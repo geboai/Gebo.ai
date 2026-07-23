@@ -293,6 +293,16 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     }
 
     /**
+     * Dismisses the auto-raised mandatory-setup popup, same effect as clicking the
+     * dialog's own close (X) icon, but reachable through a clearly labeled button
+     * for users who don't notice the small header icon.
+     */
+    public dismissMandatoryPopup(): void {
+        this.mandatoryUnsatisfiedEntriesWindowOpened = false;
+        this.userShowedMandatoryUnsatisfiedEntries = true;
+    }
+
+    /**
      * Closes the current wizard step and returns to the main wizard view
      */
     public closeWizard(): void {

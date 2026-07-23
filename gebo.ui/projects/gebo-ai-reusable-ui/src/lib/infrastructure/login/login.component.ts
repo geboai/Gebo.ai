@@ -29,6 +29,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
 import { Subscription } from "rxjs";
 import { GeboAITranslationService } from "../../controls/field-translation-container/gebo-translation.service";
 const welcomeMessage: ToastMessageOptions = { summary: "Welcome to gebo.ai", detail: "Enter your username and password to login", severity: "success" };
+const sessionExpiredMessage: ToastMessageOptions = { summary: "Session expired", detail: "Your session has expired, please log in again", severity: "warn" };
 @Component({
   selector: "gebo-ai-login-component", templateUrl: "login.component.html",
   standalone: false,
@@ -123,6 +124,9 @@ export class LoginComponent implements OnInit {
       this.subscription = undefined;
     }
     //this.userMessages = [welcomeMessage];
+    if (this.activatedRoute.snapshot.queryParamMap.get("sessionExpired") === "true") {
+      this.userMessages = [sessionExpiredMessage];
+    }
     this.loginService.loginActivated.next(true);
 
     this.userWorkflowsService.getUserWorkflowsConfig().subscribe({

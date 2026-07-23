@@ -16,31 +16,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import com.openai.models.audio.AudioResponseFormat;
 import org.apache.commons.io.IOUtils;
+import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
-import org.springframework.ai.openai.api.OpenAiAudioApi;
-import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
-import org.springframework.ai.openai.api.OpenAiAudioApi.WhisperModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.retry.support.RetryTemplate;
-import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
-import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils;
-import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyInfo;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboSecretType;
+import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
@@ -76,6 +78,13 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	final ModelsListProviderProxyService modelsListProxyService;
 
 	/**
+	 * Factory for creating LLM service clients (timeout/retry config from application.yml)
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+
+	final ModelRuntimeConfigureHandler configureHandler;
+
+	/**
 	 * Implementation of a configurable transcript model for OpenAI services.
 	 * Extends the abstract transcript model and provides OpenAI-specific
 	 * functionality.
@@ -100,7 +109,7 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 				try (OutputStream os = Files.newOutputStream(created)) {
 					IOUtils.copy(audioResource, os);
 					Resource resource = new FileSystemResource(created);
-					return model.call(resource);
+					return model.call(new AudioTranscriptionPrompt(resource)).getResult().getOutput();
 				}
 			} catch (IOException exc) {
 				throw new IOException("Handled exception in call", exc);
@@ -133,14 +142,44 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 				GTranscriptModelType type) throws LLMConfigException {
 
 			String apiKey = null;
-			OpenAiAudioApi audioApi = OpenAiAudioApi.builder().apiKey(apiKey).build();
+			if (config.getApiSecretCode() != null && config.getApiSecretCode().trim().length() > 0) {
+				try {
+					AbstractGeboSecretContent secret = secretService.getSecretContentById(config.getApiSecretCode());
+					if (secret.type() == GeboSecretType.TOKEN) {
+						apiKey = ((GeboTokenContent) secret).getToken();
+					} else {
+						throw new LLMConfigException(
+								type.getDescription() + " api can work only with an api key of type TOKEN");
+					}
+				} catch (GeboCryptSecretException e) {
+					throw new LLMConfigException(type.getDescription() + " api  key configuration gone wrong ", e);
+				}
+			}
+			String baseUrl = GenericOpenAIAPITranscriptModelConfigurationSupportService.this.type.getBaseUrl();
 			org.springframework.ai.openai.OpenAiAudioTranscriptionOptions.Builder builder = OpenAiAudioTranscriptionOptions
 					.builder();
 
-			builder.responseFormat(TranscriptResponseFormat.TEXT).temperature(0f).model(WhisperModel.WHISPER_1.value);
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
+			// json is the format every openai compatible provider answers a transcription
+			// with, while the plain text one is not always offered (openrouter.ai refuses
+			// it): the client reads the transcription out of the json either way.
+			builder.responseFormat(AudioResponseFormat.JSON).temperature(0f).model(modelName);
+			if (apiKey != null) {
+				builder.apiKey(apiKey);
+			} else {
+				// A provider that needs no credentials (a local one) keeps the noop key.
+				builder.apiKey(new NoopApiKey());
+			}
+			if (baseUrl != null) {
+				builder.baseUrl(baseUrl);
+			}
 			OpenAiAudioTranscriptionOptions options = builder.build();
-			OpenAiAudioTranscriptionModel model = new OpenAiAudioTranscriptionModel(audioApi, options,
-					RetryTemplate.defaultInstance());
+			OpenAiAudioTranscriptionModel model = OpenAiAudioTranscriptionModel.builder()
+					.options(options)
+					.httpClientBuilderCustomizer(
+							OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 
 			return model;
 		}
@@ -165,8 +204,15 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	@Override
 	public OperationStatus<List<GenericOpenAIAPITranscriptModelChoice>> getModelChoices(
 			GenericOpenAIAPITranscriptModelConfig config) {
+		// When the provider declares a models-list strategy (e.g. openrouter/regolo) use
+		// it so transcript models can be discovered and validated; otherwise fall back to
+		// the OpenAI default suggestion.
+		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
+			return modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPITranscriptModelChoice.class, type);
+		}
 		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
-		choice.setCode(WhisperModel.WHISPER_1.value);
+		choice.setCode("whisper-1");
 		choice.setDescription("Whisper 1");
 		return OperationStatus.of(List.of(choice));
 	}
@@ -182,7 +228,11 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	public GenericOpenAIAPITranscriptModelConfig createBaseConfiguration(String presetModel) {
 		GenericOpenAIAPITranscriptModelConfig config = new GenericOpenAIAPITranscriptModelConfig();
 		config.setDescription("OpenAI transcript provider");
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "whisper-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
+		config.setModelTypeCode(getType().getCode());
 		return config;
 	}
 
@@ -206,8 +256,7 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 	}
 	@Override
 	public OperationStatus<GenericOpenAIAPITranscriptModelConfig> insertAndConfigure(
-			GenericOpenAIAPITranscriptModelConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+			GenericOpenAIAPITranscriptModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

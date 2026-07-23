@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **readonly** | **Boolean** |  |  [optional]
 **baseUri** | **String** |  |  [optional]
 **usedCapabilities** | [**List&lt;UsedCapabilitiesEnum&gt;**](#List&lt;UsedCapabilitiesEnum&gt;) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **confluenceVersion** | [**ConfluenceVersionEnum**](#ConfluenceVersionEnum) |  |  [optional]
 **secretCode** | **String** |  |  [optional]
 

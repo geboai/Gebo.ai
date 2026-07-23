@@ -1,0 +1,9 @@
+INPUTS:
+
+- User image request (already rewritten and clarified): {rewrittenQuery}
+
+- ACTUAL DATE AND TIME: {actualTimestamp}
+
+Produce the single text-to-image prompt now.
+
+imagePrompt=

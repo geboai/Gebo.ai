@@ -1,0 +1,129 @@
+<p-blockUI id="BlockUI"  [target]="mcpServerCtrl" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+
+<p-panel id="MainPanel" gebo-ai-label #mcpServerCtrl header="Editing MCP Server Configuration" [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-4">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+            icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false "
+          styleClass="w-full"></p-button>
+        </div>
+        <div class="col-4">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+            (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+          </div>
+          <div class="col-4">
+            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+              icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" [disabled]="canDelete===false " />
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="geboDialogContent">
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+        <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-text>General settings</p-tab>
+              <p-tab [value]="1" gebo-ai-text>Security access settings</p-tab>
+              <p-tab [value]="2" gebo-ai-text>Exported Tools</p-tab>
+              <p-tab [value]="3" gebo-ai-text>Exported Resources</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+          <!-- General Settings Tab -->
+          <p-tabpanel [value]="0">
+            <ng-container>
+              <div class="grid">
+                <div class="col-6">
+                  <gebo-ai-field id="description" label="Description"
+                    help="Enter the description of this MCP Server configuration." [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120"
+                      [required]="true" gebo-ai-field-element />
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="code" label="Unique Code"
+                      help="Automatically generated unique code of the MCP Client.">
+                      <input pInputText id="code" formControlName="code" readonly="true"
+                        gebo-ai-field-element />
+                      </gebo-ai-field>
+                    </div>
+                    <div class="col-12">
+                      <gebo-ai-field id="exportedUniqueRelativeUrl" label="Exported Unique Relative URL"
+                        help="Enter the unique relative URL path at which the server will be published." [required]="true">
+                        <input pInputText id="exportedUniqueRelativeUrl" formControlName="exportedUniqueRelativeUrl"
+                          [required]="true" class="col-12" gebo-ai-field-element />
+                        </gebo-ai-field>
+                      </div>
+                      <div class="col-6">
+                        <gebo-ai-field id="enabled" label="Enabled"
+                          help="Check to activate this MCP Server configuration.">
+                          <p-checkbox formControlName="enabled" [binary]="true" [trueValue]="true"
+                          [falseValue]="false" gebo-ai-field-element></p-checkbox>
+                        </gebo-ai-field>
+                      </div>
+
+                    </div>
+                  </ng-container>
+                </p-tabpanel>
+
+                <!-- Access Control Tab -->
+                <p-tabpanel [value]="1">
+                  <ng-container>
+                    <div class="standardTabDialogueHeight">
+                      <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                    </div>
+                  </ng-container>
+                </p-tabpanel>
+
+                <!-- Tools Tab -->
+                <p-tabpanel [value]="2">
+                  <ng-container>
+                    <div class="grid">
+                      <div class="col-12">
+                        <gebo-ai-field id="enabledTools" label="Enabled Tools" help="Select the tools that this MCP Server is authorized to expose.">
+                          <gebo-ai-choose-llm-functions-component id="enabledTools"
+                            formControlName="enabledTools" [knowledgeBaseContext]="false" [escludeExternalTools]="true" dataKey="code"
+                            optionLabel="description" optionValue="code" display="chip" class="col-12"
+                          gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
+                        </gebo-ai-field>
+                      </div>
+                    </div>
+                  </ng-container>
+                </p-tabpanel>
+
+                <!-- Resources Tab -->
+                <p-tabpanel [value]="3">
+                  <ng-container>
+                    <div class="grid">
+                      <div class="col-12">
+                        <gebo-ai-field id="resourcesTree" label="Exported Resources Tree" help="Select Knowledge Bases, Projects, and Project Endpoints to export as resources.">
+                          <p-tree id="ResourcesTree"
+                            gebo-ai-label
+                            [value]="resourceTreeRoots"
+                            selectionMode="checkbox"
+                            [(selection)]="selectedResourceNodes"
+                            [propagateSelectionUp]="false"
+                            [propagateSelectionDown]="false"
+                            (onNodeExpand)="expandResourceNode($event)"
+                            (onNodeSelect)="nodeSelect($event)"
+                            (onNodeUnselect)="nodeUnselect($event)"
+                            class="col-12"
+                            gebo-ai-field-element>
+                          </p-tree>
+                        </gebo-ai-field>
+                      </div>
+                    </div>
+                  </ng-container>
+                </p-tabpanel>
+
+              </p-tabpanels>
+          </p-tabs>
+            </div>
+
+            <!-- Panel buttons bar -->
+          </p-panel>

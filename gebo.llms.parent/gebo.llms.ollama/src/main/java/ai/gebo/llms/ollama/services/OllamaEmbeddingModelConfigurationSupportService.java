@@ -73,6 +73,7 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that implements configurable embedding model for Ollama. Handles
@@ -85,7 +86,7 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		 * Constructor for the Ollama configurable embedding model.
 		 */
 		public OllamaConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider, OllamaEmbeddingModelConfigurationSupportService.this.observationRegistry);
 		}
 
 		/**
@@ -118,7 +119,6 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 
 			OllamaEmbeddingOptions options = builder.build();
 			MetadataMode meta = MetadataMode.EMBED;
-			ObservationRegistry observationRegistry = ObservationRegistry.create();
 			ModelManagementOptions modelManagementOptions = ModelManagementOptions.defaults();
 			OllamaEmbeddingModel model = new OllamaEmbeddingModel(ollamaapi, options, observationRegistry,
 					modelManagementOptions);

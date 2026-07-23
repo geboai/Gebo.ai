@@ -16,8 +16,8 @@ import ai.gebo.monolithic.api.client.model.GetJobMessagesParam;
 import ai.gebo.monolithic.api.client.model.JobsEntriesForClassNameFilter;
 import ai.gebo.monolithic.api.client.model.JobsEntriesForJobType;
 import ai.gebo.monolithic.api.client.model.JobsEntriesForProjectEndpointFilter;
-import ai.gebo.monolithic.api.client.model.PageGJobStatusItem;
-import ai.gebo.monolithic.api.client.model.PageGUserMessage;
+import ai.gebo.monolithic.api.client.model.PagedModelGJobStatusItem;
+import ai.gebo.monolithic.api.client.model.PagedModelGUserMessage;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -60,7 +60,7 @@ public class LogViewControllerApiTest {
     @Test
     public void getJobMessagesPagedTest() {
         GetJobMessagesParam body = null;
-        PageGUserMessage response = api.getJobMessagesPaged(body);
+        PagedModelGUserMessage response = api.getJobMessagesPaged(body);
 
         // TODO: test validations
     }
@@ -75,7 +75,7 @@ public class LogViewControllerApiTest {
     @Test
     public void getJobsEntriesForClassNameTest() {
         JobsEntriesForClassNameFilter body = null;
-        PageGJobStatusItem response = api.getJobsEntriesForClassName(body);
+        PagedModelGJobStatusItem response = api.getJobsEntriesForClassName(body);
 
         // TODO: test validations
     }
@@ -90,7 +90,7 @@ public class LogViewControllerApiTest {
     @Test
     public void getJobsEntriesForJobTypeTest() {
         JobsEntriesForJobType body = null;
-        PageGJobStatusItem response = api.getJobsEntriesForJobType(body);
+        PagedModelGJobStatusItem response = api.getJobsEntriesForJobType(body);
 
         // TODO: test validations
     }
@@ -105,7 +105,7 @@ public class LogViewControllerApiTest {
     @Test
     public void getJobsEntriesForProjectEndpointTest() {
         JobsEntriesForProjectEndpointFilter body = null;
-        PageGJobStatusItem response = api.getJobsEntriesForProjectEndpoint(body);
+        PagedModelGJobStatusItem response = api.getJobsEntriesForProjectEndpoint(body);
 
         // TODO: test validations
     }

@@ -3,7 +3,7 @@
   <parent>
    <groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-    <version>1.0.1.0-BETA</version>
+    <version>1.0.2.1</version>
   </parent>
   <groupId>ai.gebo.architecture</groupId>
   <artifactId>gebo.architecture.parent</artifactId>
@@ -18,6 +18,7 @@
   	<module>gebo.architecture.security</module>
   	<module>gebo.architecture.ai</module>
   	<module>gebo.application.messaging</module>
+  	
   	<module>gebo.secrets.services</module>
   	<module>gebo.architecture.security.controllers</module>  	
   	
@@ -25,6 +26,7 @@
   	<module>gebo.architecture.scheduling</module>
   	<module>gebo.multilanguage.support</module>
   	<module>gebo.architecture.llms.abstraction.layer</module>
+  	<module>gebo.architecture.llms.abstraction.layer.controllers</module>
   	<module>gebo.architecture.chat.abstraction.layer</module>
   	<module>gebo.architecture.contenthandling.interfaces</module>
   	<module>gebo.architecture.contentsystems.abstraction.layer</module>
@@ -32,6 +34,7 @@
   	<module>gebo.restintegration.abstraction.layer</module>
   	<module>gebo.architecture.crypting</module>
   	<module>gebo.architecture.environment</module>
+  	<module>gebo.architecture.telemetry</module>
   	<module>gebo.architecture.testing</module>
   	<module>gebo.architecture.integration.tests</module>
 
@@ -52,5 +55,18 @@
   	<module>gebo.architecture.redis</module>
   	<module>gebo.architecture.agents.abstraction.layer</module>
   	<module>gebo.architecture.agents.standard</module>
+  	<module>gebo.architecture.environment.monolithic</module>
+  	<module>gebo.architecture.documents.cache.impl</module>
+  	<module>gebo.architecture.documents.access</module>
+  	<module>gebo.architecture.compute.workflow</module>
+  	<module>gebo.architecture.workflow.steps</module>
+  	<module>gebo.architecture.replicator</module>
+
+  	<module>gebo.secrets.impl</module>
+  	<module>gebo.security.directory.mongo</module>
+   	<module>gebo.architecture.security.apikey</module>
+   	<module>gebo.architecture.fastsetup</module>
+   	<module>gebo.architecture.fastsetup.rag</module>
+   	<module>gebo.architecture.fastsetup.system</module>
   </modules>
 </project>

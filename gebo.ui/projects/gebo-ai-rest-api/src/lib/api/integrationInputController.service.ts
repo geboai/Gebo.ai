@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class IntegrationInputControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -164,19 +164,19 @@ export class IntegrationInputControllerService {
     /**
      * 
      * 
-     * @param file 
+     * @param body 
      * @param endpointCode 
      * @param relativePath 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public spoolDocumentForm(file: Blob, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public spoolDocumentForm(file: Blob, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public spoolDocumentForm(file: Blob, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public spoolDocumentForm(file: Blob, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (file === null || file === undefined) {
-            throw new Error('Required parameter file was null or undefined when calling spoolDocument.');
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling spoolDocument.');
         }
 
         if (endpointCode === null || endpointCode === undefined) {
@@ -185,6 +185,72 @@ export class IntegrationInputControllerService {
 
         if (relativePath === null || relativePath === undefined) {
             throw new Error('Required parameter relativePath was null or undefined when calling spoolDocument.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (endpointCode !== undefined && endpointCode !== null) {
+            queryParameters = queryParameters.set('endpointCode', <any>endpointCode);
+        }
+        if (relativePath !== undefined && relativePath !== null) {
+            queryParameters = queryParameters.set('relativePath', <any>relativePath);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<JobTicket>('post',`${this.basePath}/api/application/IntegrationInputController/spoolDocument`,
+            {
+                body: body,
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param file 
+     * @param endpointCode 
+     * @param relativePath 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (file === null || file === undefined) {
+            throw new Error('Required parameter file was null or undefined when calling spoolDocument1.');
+        }
+
+        if (endpointCode === null || endpointCode === undefined) {
+            throw new Error('Required parameter endpointCode was null or undefined when calling spoolDocument1.');
+        }
+
+        if (relativePath === null || relativePath === undefined) {
+            throw new Error('Required parameter relativePath was null or undefined when calling spoolDocument1.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -232,72 +298,6 @@ export class IntegrationInputControllerService {
         return this.httpClient.request<JobTicket>('put',`${this.basePath}/api/application/IntegrationInputController/spoolDocument`,
             {
                 body: convertFormParamsToString ? formParams.toString() : formParams,
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param body 
-     * @param endpointCode 
-     * @param relativePath 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public spoolDocument1(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public spoolDocument1(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public spoolDocument1(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public spoolDocument1(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling spoolDocument1.');
-        }
-
-        if (endpointCode === null || endpointCode === undefined) {
-            throw new Error('Required parameter endpointCode was null or undefined when calling spoolDocument1.');
-        }
-
-        if (relativePath === null || relativePath === undefined) {
-            throw new Error('Required parameter relativePath was null or undefined when calling spoolDocument1.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (endpointCode !== undefined && endpointCode !== null) {
-            queryParameters = queryParameters.set('endpointCode', <any>endpointCode);
-        }
-        if (relativePath !== undefined && relativePath !== null) {
-            queryParameters = queryParameters.set('relativePath', <any>relativePath);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<JobTicket>('post',`${this.basePath}/api/application/IntegrationInputController/spoolDocument`,
-            {
-                body: body,
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

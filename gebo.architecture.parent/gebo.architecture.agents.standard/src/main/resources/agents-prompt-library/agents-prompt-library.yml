@@ -17,12 +17,12 @@ ai.gebo.agents.prompts.library:
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: NOT_REQUIRED
-  - promptUse: internal-knowledgebase-search-agent-prompt
+  - promptUse: tool-calling-agent-prompt
     langCode: en
-    systemReference: /agents-prompt-library/en/internal-knowledgebase-search-agent-system-prompt.txt
-    userReference: /agents-prompt-library/en/internal-knowledgebase-search-agent-user-prompt.txt
+    systemReference: /agents-prompt-library/en/tool-calling-agent-system-prompt.txt
+    userReference: /agents-prompt-library/en/tool-calling-agent-user-prompt.txt
     agentPrompt: true
-    agentId: internalKnowledgeBaseSearcher
-    chatHistory: REQUIRED
-    contextDocuments: REQUIRED
-    toolsCalling: NOT_REQUIRED
+    agentId: stringToStringToolCallingAgentService
+    chatHistory: NOT_REQUIRED
+    contextDocuments: NOT_REQUIRED
+    toolsCalling: REQUIRED

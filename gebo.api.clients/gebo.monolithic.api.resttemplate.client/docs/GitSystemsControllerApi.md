@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**getGitSystems**](GitSystemsControllerApi.md#getGitSystems) | **GET** /api/admin/GITSystemsController/getGitSystems | 
 [**insertGitEndpoint**](GitSystemsControllerApi.md#insertGitEndpoint) | **POST** /api/admin/GITSystemsController/insertGitEndpoint | 
 [**insertGitSystem**](GitSystemsControllerApi.md#insertGitSystem) | **POST** /api/admin/GITSystemsController/insertGitSystem | 
+[**publishGitEndpoint**](GitSystemsControllerApi.md#publishGitEndpoint) | **POST** /api/admin/GITSystemsController/publishGitEndpoint | 
 [**updateGitEndpoint**](GitSystemsControllerApi.md#updateGitEndpoint) | **POST** /api/admin/GITSystemsController/updateGitEndpoint | 
 [**updateGitSystem**](GitSystemsControllerApi.md#updateGitSystem) | **POST** /api/admin/GITSystemsController/updateGitSystem | 
 
@@ -387,6 +388,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GGitContentManagementSystem**](GGitContentManagementSystem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishGitEndpoint"></a>
+# **publishGitEndpoint**
+> OperationStatusGJobStatus publishGitEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GitSystemsControllerApi;
+
+
+GitSystemsControllerApi apiInstance = new GitSystemsControllerApi();
+GGitProjectEndpoint body = new GGitProjectEndpoint(); // GGitProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishGitEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GitSystemsControllerApi#publishGitEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GGitProjectEndpoint**](GGitProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

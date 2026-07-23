@@ -12,8 +12,11 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.model.OperationStatus;
 import lombok.AllArgsConstructor;
@@ -29,22 +32,58 @@ public class ModelRuntimeConfigureHandler {
 	public <ModelType extends GBaseModelConfig> OperationStatus<ModelType> insertAndConfigure(ModelType model,
 			GModelType modelType) throws GeboPersistenceException, LLMConfigException {
 		model = persistentManager.insert(model);
+		try {
+			return configureInserted(model);
+		} catch (RuntimeException | GeboPersistenceException | LLMConfigException e) {
+			// The runtime refused the model (invalid credentials, provider unreachable): a
+			// configuration that could not be allocated is never kept, so the row inserted
+			// above is removed before the error travels back to the caller. The surrounding
+			// transaction cannot be relied on for this - Mongo leaves the document in place.
+			try {
+				persistentManager.delete(model);
+			} catch (Throwable th) {
+				LOGGER.error("Cannot remove the configuration that failed to be allocated", th);
+			}
+			throw e;
+		}
+	}
+
+	private <ModelType extends GBaseModelConfig> OperationStatus<ModelType> configureInserted(ModelType model)
+			throws GeboPersistenceException, LLMConfigException {
 		if (model instanceof GBaseChatModelConfig chatModel) {
 			IGChatModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGChatModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(chatModel);
+			dao.addRuntimeByConfigClustered(chatModel);
 			handleDefaultModel(GBaseChatModelConfig.class, chatModel, dao);
 		}
 		if (model instanceof GBaseEmbeddingModelConfig embeddingModel) {
 			IGEmbeddingModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGEmbeddingModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(embeddingModel);
+			dao.addRuntimeByConfigClustered(embeddingModel);
 			handleDefaultModel(GBaseEmbeddingModelConfig.class, embeddingModel, dao);
 		}
 		if (model instanceof GBaseRankerModelConfig rankerConfig) {
 			IGRankerModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGRankerModelRuntimeConfigurationDao.class);
-			dao.addRuntimeByConfig(rankerConfig);
+			dao.addRuntimeByConfigClustered(rankerConfig);
+		}
+		if (model instanceof GBaseTextToSpeachModelConfig ttsConfig) {
+			IGTextToSpeechModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGTextToSpeechModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfigClustered(ttsConfig);
+			handleDefaultModel(GBaseTextToSpeachModelConfig.class, ttsConfig, dao);
+		}
+		if (model instanceof GBaseTranscriptModelConfig transcriptConfig) {
+			IGTranscriptModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGTranscriptModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfigClustered(transcriptConfig);
+			handleDefaultModel(GBaseTranscriptModelConfig.class, transcriptConfig, dao);
+		}
+		if (model instanceof GBaseImageModelConfig imageConfig) {
+			IGImageModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGImageModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfigClustered(imageConfig);
+			handleDefaultModel(GBaseImageModelConfig.class, imageConfig, dao);
 		}
 		return OperationStatus.of(model);
 	}
@@ -61,10 +100,15 @@ public class ModelRuntimeConfigureHandler {
 						gBaseChatModelConfig.setDefaultModel(false);
 						persistentManager.update(gBaseChatModelConfig);
 						IGConfigurableModel model = dao.findByCode(gBaseChatModelConfig.getCode());
-						try {
-							model.reconfigure(config);
-						} catch (LLMConfigException e) {
-							LOGGER.error("Error in reconfigure a llm", e);
+						if (model != null) {
+							try {
+								// The demoted model is refreshed with its OWN configuration - the one
+								// just updated to defaultModel=false. Handing it the incoming model's
+								// config would push a foreign provider's type into it (and fail).
+								model.reconfigure(gBaseChatModelConfig);
+							} catch (LLMConfigException e) {
+								LOGGER.error("Error in reconfigure a llm", e);
+							}
 						}
 					}
 				}

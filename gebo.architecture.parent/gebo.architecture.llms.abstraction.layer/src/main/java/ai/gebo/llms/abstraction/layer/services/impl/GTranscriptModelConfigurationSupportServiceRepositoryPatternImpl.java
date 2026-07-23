@@ -45,14 +45,16 @@ public class GTranscriptModelConfigurationSupportServiceRepositoryPatternImpl
     }
 
     /**
-     * Retrieves the code value for a given IGTranscriptModelConfigurationSupportService.
-     * This method returns the ID of the provided service implementation.
-     * 
+     * Retrieves the model type code a transcript support service declares: handlers are
+     * looked up by that code, which is the same key the configurations carry in
+     * modelTypeCode. getId() defaults to the class name for any handler that does not
+     * override it, which would make it unfindable by type code.
+     *
      * @param x an instance of IGTranscriptModelConfigurationSupportService
-     * @return the unique identifier (ID) of the service.
+     * @return the model type code of the given service.
      */
     @Override
     public String getCodeValue(IGTranscriptModelConfigurationSupportService x) {
-        return x.getId();
+        return x.getType().getCode();
     }
 }

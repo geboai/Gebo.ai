@@ -14,7 +14,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 
 /**
  * Gebo.ai comment agent An implementation of the UserInfos interface that holds
@@ -42,6 +42,40 @@ public class UserInfosImpl implements UserInfos {
 		roles = user.getRoles(); // Initialize roles with the user's roles
 		disabled = user.getDisabled(); // Initialize disabled status with the user's disabled status
 		customInfos = user.getCustomInfos();
+	}
+
+	/**
+	 * Empty constructor - this type is also the wire carrier for {@link UserInfos},
+	 * which is an interface and so cannot itself be deserialised, and Jackson needs
+	 * somewhere to start. Used by the security directory server-proxy/client
+	 * ({@code gebo.microservices.security.*}).
+	 */
+	public UserInfosImpl() {
+	}
+
+	/** @param username the username; stored as the email, which is what it is */
+	public void setUsername(String username) {
+		this.email = username;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSourname(String sourname) {
+		this.sourname = sourname;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public void setCustomInfos(Map<String, Object> customInfos) {
+		this.customInfos = customInfos;
 	}
 
 	@Override

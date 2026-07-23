@@ -2,12 +2,14 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
+import ai.gebo.monolithic.api.client.model.ChangeUsernamePasswordData;
 import ai.gebo.monolithic.api.client.model.EditableUser;
 import ai.gebo.monolithic.api.client.model.FindUserByQbeParam;
 import ai.gebo.monolithic.api.client.model.FindUsersGroupParam;
+import ai.gebo.monolithic.api.client.model.GUserMessage;
 import ai.gebo.monolithic.api.client.model.InsertUserParam;
-import ai.gebo.monolithic.api.client.model.PageUserInfos;
-import ai.gebo.monolithic.api.client.model.PageUsersGroup;
+import ai.gebo.monolithic.api.client.model.PagedModelUserInfos;
+import ai.gebo.monolithic.api.client.model.PagedModelUsersGroup;
 import ai.gebo.monolithic.api.client.model.UserInfos;
 import ai.gebo.monolithic.api.client.model.UsersGroup;
 
@@ -29,7 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class UsersAdminControllerApi {
     private ApiClient apiClient;
@@ -49,6 +51,52 @@ public class UsersAdminControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return GUserMessage
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GUserMessage changeUserPassword(ChangeUsernamePasswordData body) throws RestClientException {
+        return changeUserPasswordWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;GUserMessage&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GUserMessage> changeUserPasswordWithHttpInfo(ChangeUsernamePasswordData body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling changeUserPassword");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/changeUserPassword").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GUserMessage> returnType = new ParameterizedTypeReference<GUserMessage>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
@@ -185,10 +233,10 @@ public class UsersAdminControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageUserInfos
+     * @return PagedModelUserInfos
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageUserInfos findUserByQbe(FindUserByQbeParam body) throws RestClientException {
+    public PagedModelUserInfos findUserByQbe(FindUserByQbeParam body) throws RestClientException {
         return findUserByQbeWithHttpInfo(body).getBody();
     }
 
@@ -197,10 +245,10 @@ public class UsersAdminControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageUserInfos&gt;
+     * @return ResponseEntity&lt;PagedModelUserInfos&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageUserInfos> findUserByQbeWithHttpInfo(FindUserByQbeParam body) throws RestClientException {
+    public ResponseEntity<PagedModelUserInfos> findUserByQbeWithHttpInfo(FindUserByQbeParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -223,7 +271,7 @@ public class UsersAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageUserInfos> returnType = new ParameterizedTypeReference<PageUserInfos>() {};
+        ParameterizedTypeReference<PagedModelUserInfos> returnType = new ParameterizedTypeReference<PagedModelUserInfos>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -276,10 +324,10 @@ public class UsersAdminControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageUsersGroup
+     * @return PagedModelUsersGroup
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageUsersGroup findUsersGroupByQbe(FindUsersGroupParam body) throws RestClientException {
+    public PagedModelUsersGroup findUsersGroupByQbe(FindUsersGroupParam body) throws RestClientException {
         return findUsersGroupByQbeWithHttpInfo(body).getBody();
     }
 
@@ -288,10 +336,10 @@ public class UsersAdminControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageUsersGroup&gt;
+     * @return ResponseEntity&lt;PagedModelUsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageUsersGroup> findUsersGroupByQbeWithHttpInfo(FindUsersGroupParam body) throws RestClientException {
+    public ResponseEntity<PagedModelUsersGroup> findUsersGroupByQbeWithHttpInfo(FindUsersGroupParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -314,7 +362,7 @@ public class UsersAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageUsersGroup> returnType = new ParameterizedTypeReference<PageUsersGroup>() {};
+        ParameterizedTypeReference<PagedModelUsersGroup> returnType = new ParameterizedTypeReference<PagedModelUsersGroup>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

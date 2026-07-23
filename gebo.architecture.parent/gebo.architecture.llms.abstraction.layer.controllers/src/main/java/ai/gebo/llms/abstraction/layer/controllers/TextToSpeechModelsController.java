@@ -1,0 +1,78 @@
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+
+package ai.gebo.llms.abstraction.layer.controllers;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import ai.gebo.llms.abstraction.layer.controllers.model.ConfigurationEntry;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelType;
+import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+
+/**
+ * AI generated comments
+ * Controller class responsible for handling text to speech model configurations.
+ * Only accessible by users with ADMIN role.
+ */
+@RestController
+@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("api/admin/TextToSpeechModelsController")
+public class TextToSpeechModelsController {
+
+	@Autowired
+	IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern textToSpeechModelsTypesRepo;
+
+	@Autowired
+	IGTextToSpeechModelRuntimeConfigurationDao runtimeDao;
+
+	public TextToSpeechModelsController() {
+	}
+
+	@GetMapping(value = "getTextToSpeechModelTypes", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GTextToSpeechModelType> getTextToSpeechModelTypes() {
+		List<GModelType> list = textToSpeechModelsTypesRepo.map((x) -> {
+			return x.getType();
+		});
+		return new ArrayList(list);
+	}
+
+	@GetMapping(value = "getRuntimeConfiguredTextToSpeechModels", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<ConfigurationEntry<GBaseTextToSpeachModelConfig>> getRuntimeConfiguredTextToSpeechModels(
+			@RequestParam(name = "modelTypeCode", required = false) String modelTypeCode) {
+		if (modelTypeCode != null) {
+			List<ConfigurationEntry<GBaseTextToSpeachModelConfig>> configs = new ArrayList<ConfigurationEntry<GBaseTextToSpeachModelConfig>>();
+			List<IGConfigurableTextToSpeechModel> elements = this.runtimeDao.findListByPredicate(x -> {
+				return x.getType().getCode().equals(modelTypeCode);
+			});
+			if (elements != null) {
+				configs = new ArrayList(elements.stream().map(x -> {
+					return new ConfigurationEntry(x.getConfig());
+				}).toList());
+			}
+			return configs;
+		} else {
+			return new ArrayList(this.runtimeDao.getConfigurations().stream().map(x -> {
+				return new ConfigurationEntry(x.getConfig());
+			}).toList());
+		}
+	}
+}

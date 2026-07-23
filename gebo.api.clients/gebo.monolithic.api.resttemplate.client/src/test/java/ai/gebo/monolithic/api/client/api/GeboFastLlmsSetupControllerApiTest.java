@@ -19,8 +19,8 @@ import ai.gebo.monolithic.api.client.model.LLMCredentialsCreationData;
 import ai.gebo.monolithic.api.client.model.LLMCredentialsVerificationData;
 import ai.gebo.monolithic.api.client.model.LLMModelsLookupParameter;
 import ai.gebo.monolithic.api.client.model.LLMSSetupConfigurationData;
-import ai.gebo.monolithic.api.client.model.OperationStatusList;
 import ai.gebo.monolithic.api.client.model.OperationStatusListGBaseModelChoice;
+import ai.gebo.monolithic.api.client.model.OperationStatusListGBaseModelConfig;
 import ai.gebo.monolithic.api.client.model.OperationStatusSecretInfo;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -49,7 +49,7 @@ public class GeboFastLlmsSetupControllerApiTest {
     @Test
     public void createLLMByAutoconfigureTest() {
         LLMAutoconfigureCreationData body = null;
-        OperationStatusList response = api.createLLMByAutoconfigure(body);
+        OperationStatusListGBaseModelConfig response = api.createLLMByAutoconfigure(body);
 
         // TODO: test validations
     }
@@ -79,7 +79,7 @@ public class GeboFastLlmsSetupControllerApiTest {
     @Test
     public void createLLMSTest() {
         List<LLMCreateModelData> body = null;
-        OperationStatusList response = api.createLLMS(body);
+        OperationStatusListGBaseModelConfig response = api.createLLMS(body);
 
         // TODO: test validations
     }

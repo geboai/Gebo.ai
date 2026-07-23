@@ -5,11 +5,15 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 	<dependencies>
 
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-observation</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.contenthandling.interfaces</artifactId>
@@ -20,6 +24,12 @@
 			<artifactId>gebo.architecture.buildsystems.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.async.config</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.model</artifactId>
@@ -77,6 +87,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.environment</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -93,6 +108,16 @@
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.scheduling</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.replicator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.access</artifactId>
+			<version>${project.version}</version>			
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -9,12 +9,13 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
@@ -22,8 +23,15 @@ import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupport
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Service
-public class GRankerModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigurationDao<IGConfigurableRankerModel>
+public class GRankerModelRuntimeConfigurationDaoImpl
+		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableRankerModel, GBaseRankerModelConfig>
 		implements IGRankerModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+
+	@Override
+	protected GLlmModelClusterCategory getClusterCategory() {
+		return GLlmModelClusterCategory.RANKER;
+	}
+
 	// AI generated comments
 	// Logger for this class
 	static final Logger LOGGER = LoggerFactory.getLogger(GRankerModelRuntimeConfigurationDaoImpl.class);
@@ -77,7 +85,7 @@ public class GRankerModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeCon
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Initializing reranker with configuration:" + mapper.writeValueAsString(config));
 				}
-			} catch (JsonProcessingException e) {
+			} catch (JacksonException e) {
 				// Log parsing exception if necessary
 			}
 			IGConfigurableRankerModel imageModel = handler.create(config);
@@ -101,12 +109,17 @@ public class GRankerModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeCon
 			List<GBaseRankerModelConfig> configs = persistentObjectManager
 					.findAllExtendingType(GBaseRankerModelConfig.class);
 			for (GBaseRankerModelConfig config : configs) {
-				this.addRuntimeByConfig(config);
+				try {
+					this.addRuntimeByConfig(config);
+				} catch (Throwable e) {
+					// A single model that cannot be allocated (revoked key, provider down, stale
+					// configuration) must never keep the whole application from starting: report
+					// it and carry on with the remaining models.
+					LOGGER.error("Cannot initialize the ranker model with code=>" + config.getCode(), e);
+				}
 			}
-		} catch (GeboPersistenceException | LLMConfigException e) {
-			String msg = "FATAL RERANK MODELS INITIALIZATION EXCEPTION";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Cannot read the ranker models configuration", e);
 		}
 
 		LOGGER.info("End initializing image models dinamically");

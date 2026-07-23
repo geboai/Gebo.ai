@@ -1,0 +1,277 @@
+package ai.gebo.monolithic.api.client.api;
+
+import ai.gebo.monolithic.api.client.invoker.ApiClient;
+
+import ai.gebo.monolithic.api.client.model.GBedrockImageModelConfig;
+import ai.gebo.monolithic.api.client.model.OperationStatusBoolean;
+import ai.gebo.monolithic.api.client.model.OperationStatusGBedrockImageModelConfig;
+import ai.gebo.monolithic.api.client.model.OperationStatusListGBedrockImageModelChoice;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
+
+public class BedrockImageModelsConfigurationControllerApi {
+    private ApiClient apiClient;
+
+     public BedrockImageModelsConfigurationControllerApi() {
+        this(new ApiClient());
+    }
+    public BedrockImageModelsConfigurationControllerApi(ApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
+
+    public ApiClient getApiClient() {
+        return apiClient;
+    }
+
+    public void setApiClient(ApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusBoolean
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusBoolean deleteBedrockImageModelConfig(GBedrockImageModelConfig body) throws RestClientException {
+        return deleteBedrockImageModelConfigWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusBoolean&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusBoolean> deleteBedrockImageModelConfigWithHttpInfo(GBedrockImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteBedrockImageModelConfig");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/BedrockImageModelsConfigurationController/deleteBedrockImageModelConfig").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusBoolean> returnType = new ParameterizedTypeReference<OperationStatusBoolean>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return GBedrockImageModelConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GBedrockImageModelConfig findBedrockImageModelConfigByCode(String code) throws RestClientException {
+        return findBedrockImageModelConfigByCodeWithHttpInfo(code).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return ResponseEntity&lt;GBedrockImageModelConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GBedrockImageModelConfig> findBedrockImageModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'code' is set
+        if (code == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findBedrockImageModelConfigByCode");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/BedrockImageModelsConfigurationController/findBedrockImageModelConfigByCode").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "code", code));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GBedrockImageModelConfig> returnType = new ParameterizedTypeReference<GBedrockImageModelConfig>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusListGBedrockImageModelChoice
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusListGBedrockImageModelChoice getBedrockImageModels(GBedrockImageModelConfig body) throws RestClientException {
+        return getBedrockImageModelsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusListGBedrockImageModelChoice&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusListGBedrockImageModelChoice> getBedrockImageModelsWithHttpInfo(GBedrockImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getBedrockImageModels");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/BedrockImageModelsConfigurationController/getBedrockImageModels").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusListGBedrockImageModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGBedrockImageModelChoice>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusGBedrockImageModelConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGBedrockImageModelConfig insertBedrockImageModelConfig(GBedrockImageModelConfig body) throws RestClientException {
+        return insertBedrockImageModelConfigWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusGBedrockImageModelConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGBedrockImageModelConfig> insertBedrockImageModelConfigWithHttpInfo(GBedrockImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertBedrockImageModelConfig");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/BedrockImageModelsConfigurationController/insertBedrockImageModelConfig").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGBedrockImageModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGBedrockImageModelConfig>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusGBedrockImageModelConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGBedrockImageModelConfig updateBedrockImageModelConfig(GBedrockImageModelConfig body) throws RestClientException {
+        return updateBedrockImageModelConfigWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusGBedrockImageModelConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGBedrockImageModelConfig> updateBedrockImageModelConfigWithHttpInfo(GBedrockImageModelConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateBedrockImageModelConfig");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/BedrockImageModelsConfigurationController/updateBedrockImageModelConfig").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGBedrockImageModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGBedrockImageModelConfig>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+}

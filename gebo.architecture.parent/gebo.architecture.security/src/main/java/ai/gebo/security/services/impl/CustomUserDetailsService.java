@@ -22,6 +22,7 @@ import ai.gebo.security.exception.ResourceNotFoundException;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.repository.UserRepository;
+import ai.gebo.security.services.IGeboSystemUserService;
 
 /**
  * Gebo.ai comment agent
@@ -35,6 +36,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	UserRepository userRepository;
 
+	// The platform's own identity, which lives in configuration rather than Mongo.
+	@Autowired
+	IGeboSystemUserService systemUserService;
+
 	/**
 	 * Loads a user by their email address for authentication purposes.
 	 *
@@ -44,6 +49,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		// The system identity has no Mongo document by design, so it must be resolved
+		// before the repository is consulted - this is the point at which a validated
+		// system LOCAL_JWT becomes an authenticated principal. Its password is unusable,
+		// so admitting it here does NOT open a password login (see GeboSystemUserServiceImpl).
+		if (systemUserService.isSystemUser(email)) {
+			return systemUserService.getUserPrincipal();
+		}
 		// Retrieve user by email from the repository
 		User user = userRepository.findByUsername(email)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + email));
@@ -66,6 +78,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 * @throws ResourceNotFoundException if user is not found or disabled.
 	 */
 	public UserDetails loadUserById(String id) {
+		// Same reasoning as loadUserByUsername: no Mongo document exists for it.
+		if (systemUserService.isSystemUser(id)) {
+			return systemUserService.getUserPrincipal();
+		}
 		// Retrieve user by ID from the repository
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", id));

@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.core</groupId>
+		<artifactId>gebo.core.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.acl.services</artifactId>
+
+	<!--
+		The ACL contract: interfaces + models, no implementation.
+
+		  IAclAliasesDao          the alias store (read AND write)
+		  IAclGrantedAccessor     who is asking, and which aliases they hold
+		  IAclGrantedAccess
+		  IAclGrantedResource     what is being asked for
+		  AclAccessCheck          the decision itself - a pure function
+		  AclGrantType, GAclEntry, ContentAccessPolicy
+
+		Every service carries this, because every service makes authorization
+		decisions locally: AclAccessCheck runs over the caller's own objects. What a
+		service does NOT necessarily carry is the store behind IAclAliasesDao - that
+		is either gebo.acl.mongo (owner) or gebo.microservices.acl.client (everyone
+		else).
+
+		The package stays ai.gebo.acl, so extracting it from gebo.base.model changed
+		no import anywhere: base.model now depends on this module and hands it on.
+
+		Depends on nothing but Lombok - a contract should not drag a persistence stack
+		behind it.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	</dependencies>
+</project>

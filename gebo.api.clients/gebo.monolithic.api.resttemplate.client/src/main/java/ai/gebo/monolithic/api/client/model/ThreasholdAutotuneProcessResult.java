@@ -19,12 +19,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 /**
  * ThreasholdAutotuneProcessResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class ThreasholdAutotuneProcessResult {
   @JsonProperty("code")
@@ -68,6 +71,9 @@ public class ThreasholdAutotuneProcessResult {
 
   @JsonProperty("processedDateTime")
   private Date processedDateTime = null;
+
+  @JsonProperty("computedElements")
+  private List<Map<String, Object>> computedElements = null;
 
   public ThreasholdAutotuneProcessResult code(String code) {
     this.code = code;
@@ -321,6 +327,32 @@ public class ThreasholdAutotuneProcessResult {
     this.processedDateTime = processedDateTime;
   }
 
+  public ThreasholdAutotuneProcessResult computedElements(List<Map<String, Object>> computedElements) {
+    this.computedElements = computedElements;
+    return this;
+  }
+
+  public ThreasholdAutotuneProcessResult addComputedElementsItem(Map<String, Object> computedElementsItem) {
+    if (this.computedElements == null) {
+      this.computedElements = new ArrayList<>();
+    }
+    this.computedElements.add(computedElementsItem);
+    return this;
+  }
+
+   /**
+   * Get computedElements
+   * @return computedElements
+  **/
+  @Schema(description = "")
+  public List<Map<String, Object>> getComputedElements() {
+    return computedElements;
+  }
+
+  public void setComputedElements(List<Map<String, Object>> computedElements) {
+    this.computedElements = computedElements;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -344,12 +376,13 @@ public class ThreasholdAutotuneProcessResult {
         Objects.equals(this.vectorStoreVectorizedCount, threasholdAutotuneProcessResult.vectorStoreVectorizedCount) &&
         Objects.equals(this.evaluationPoints, threasholdAutotuneProcessResult.evaluationPoints) &&
         Objects.equals(this.score, threasholdAutotuneProcessResult.score) &&
-        Objects.equals(this.processedDateTime, threasholdAutotuneProcessResult.processedDateTime);
+        Objects.equals(this.processedDateTime, threasholdAutotuneProcessResult.processedDateTime) &&
+        Objects.equals(this.computedElements, threasholdAutotuneProcessResult.computedElements);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, threasholds, rootKnowledgeBase, vectorStoreId, embeddingModelCode, vectorStoreVectorizedCount, evaluationPoints, score, processedDateTime);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, threasholds, rootKnowledgeBase, vectorStoreId, embeddingModelCode, vectorStoreVectorizedCount, evaluationPoints, score, processedDateTime, computedElements);
   }
 
 
@@ -372,6 +405,7 @@ public class ThreasholdAutotuneProcessResult {
     sb.append("    evaluationPoints: ").append(toIndentedString(evaluationPoints)).append("\n");
     sb.append("    score: ").append(toIndentedString(score)).append("\n");
     sb.append("    processedDateTime: ").append(toIndentedString(processedDateTime)).append("\n");
+    sb.append("    computedElements: ").append(toIndentedString(computedElements)).append("\n");
     sb.append("}");
     return sb.toString();
   }

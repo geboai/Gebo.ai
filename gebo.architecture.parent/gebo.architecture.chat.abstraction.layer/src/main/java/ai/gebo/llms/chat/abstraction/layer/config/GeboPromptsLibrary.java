@@ -26,6 +26,7 @@ public class GeboPromptsLibrary {
 	public static final String DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT = "default-pipeline-rag-output-prompt";
 	public static final String DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-pipeline-routing-decision-prompt";
 	public static final String DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT = "default-pipeline-initial-query-rewriting-prompt";
+	public static final String DEFAULT_PIPELINE_IMAGE_PROMPT_CRAFTING_PROMPT = "default-pipeline-image-prompt-crafting-prompt";
 	public static final String DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT = "default-pipeline-tools-call-output-prompt";
 	public static final String DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT = "default-pipeline-rag-search-planner";
 	public static final String DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT = "default-pipeline-chat-with-documents-prompt";
@@ -53,7 +54,8 @@ public class GeboPromptsLibrary {
 			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT,
 			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT,
 			DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT, DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT,
-			DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT, DEFAULT_CHAT_AGENT_PROMPT);
+			DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT, DEFAULT_CHAT_AGENT_PROMPT,
+			DEFAULT_PIPELINE_IMAGE_PROMPT_CRAFTING_PROMPT);
 
 	@Bean
 	public IGStaticPromptsProvider standardChatsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {

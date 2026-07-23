@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**getFileSystemSystemTypes1**](FileSystemsControllerApi.md#getFileSystemSystemTypes1) | **GET** /api/admin/FileSystemsController/getFileSystemSystemTypes | 
 [**getFileSystemSystems**](FileSystemsControllerApi.md#getFileSystemSystems) | **GET** /api/admin/FileSystemsController/getFileSystemSystems | 
 [**insertFilesystemEndpoint**](FileSystemsControllerApi.md#insertFilesystemEndpoint) | **POST** /api/admin/FileSystemsController/insertFilesystemEndpoint | 
+[**publishFilesystemEndpoint**](FileSystemsControllerApi.md#publishFilesystemEndpoint) | **POST** /api/admin/FileSystemsController/publishFilesystemEndpoint | 
 [**updateFilesystemEndpoint**](FileSystemsControllerApi.md#updateFilesystemEndpoint) | **POST** /api/admin/FileSystemsController/updateFilesystemEndpoint | 
 
 <a name="deleteFilesystemEndpoint"></a>
@@ -255,6 +256,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GFilesystemProjectEndpoint**](GFilesystemProjectEndpoint.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishFilesystemEndpoint"></a>
+# **publishFilesystemEndpoint**
+> OperationStatusGJobStatus publishFilesystemEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FileSystemsControllerApi;
+
+
+FileSystemsControllerApi apiInstance = new FileSystemsControllerApi();
+GFilesystemProjectEndpoint body = new GFilesystemProjectEndpoint(); // GFilesystemProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishFilesystemEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileSystemsControllerApi#publishFilesystemEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GFilesystemProjectEndpoint**](GFilesystemProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

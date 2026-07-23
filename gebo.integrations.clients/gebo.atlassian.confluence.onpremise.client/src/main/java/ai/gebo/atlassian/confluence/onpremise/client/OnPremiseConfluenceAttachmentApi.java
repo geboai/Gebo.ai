@@ -123,7 +123,7 @@ public class OnPremiseConfluenceAttachmentApi {
 		String encodedId = URLEncoder.encode(attachmentId, StandardCharsets.UTF_8);
 		String baseUrl = api.getBaseUrl() + "/rest/api/content/" + encodedId;
 
-		UriComponentsBuilder b = UriComponentsBuilder.fromHttpUrl(baseUrl);
+		UriComponentsBuilder b = UriComponentsBuilder.fromUriString(baseUrl);
 		if (expand != null && !expand.isBlank()) {
 			b.queryParam("expand", expand);
 		}

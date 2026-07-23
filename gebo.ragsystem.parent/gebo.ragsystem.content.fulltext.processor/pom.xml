@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.ragsystem</groupId>
 		<artifactId>gebo.ragsystem.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
 	<dependencies>
@@ -27,11 +27,6 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.documents.cache</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

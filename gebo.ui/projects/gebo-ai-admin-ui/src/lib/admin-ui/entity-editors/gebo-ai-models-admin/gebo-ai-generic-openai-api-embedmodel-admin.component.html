@@ -1,93 +1,92 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
-<p-blockUI id="LockIconUI" gebo-ai-label [target]="openaiUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+<p-blockUI id="LockIconUI"  [target]="openaiUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #openaiUI [header]="'Editing embedding model configuration'"
-    [formGroup]="formGroup">
-    <div class="geboDialogContent">
+  [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="grid geboLargeButtonsBar">
+      <div class="col-4">
+        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+        [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
+      </div>
+      <div class="col-4">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+          styleClass="w-full" />
+        </div>
+        <div class="col-4">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            styleClass="w-full" [disabled]="canDelete===false" />
+          </div>
+        </div>
+      }
+      <div class="geboDialogContent">
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid standardTabDialogueHeight">
 
-            <div class="col-12">
-                <h3><span id="TitleFragment" gebo-ai-text>Editing embedding model
-                        provider:</span>{{modelType?.description}}
-                </h3>
-            </div>
+          <div class="col-12">
+            <h3><span id="TitleFragment" gebo-ai-text>Editing embedding model
+            provider:</span>{{modelType?.description}}
+          </h3>
+        </div>
 
-            <div class="col-6">
-                <gebo-ai-field id="description" label="Description"
-                    help="Enter the description of the Embedding model  configuration" [required]="true">
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        gebo-ai-field-element />
-                </gebo-ai-field>
+        <div class="col-6">
+          <gebo-ai-field id="description" label="Description"
+            help="Enter the description of the Embedding model  configuration" [required]="true">
+            <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+              gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="code" label="Unique Code"
+              help="Automatically generated unique code of the Embedding model  configuration">
+              <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="baseUrl" label="Embedding model  API server address"
+              help="Base address of the Embedding model  server." [required]="true">
+              <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true"
+                [readOnly]="modelType?.baseUrl?true:false" gebo-ai-field-element />
+              </gebo-ai-field>
             </div>
             <div class="col-6">
-                <gebo-ai-field id="code" label="Unique Code"
-                    help="Automatically generated unique code of the Embedding model  configuration">
-                    <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+              <gebo-ai-field id="apiSecretCode" label="Embedding model  API token"
+                help="Choose the Embedding model  API token to be used for this model"
+                [required]="modelType?.optionalAuthentication!==true">
+                <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token"
+                  [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
+                  gebo-ai-field-element />
                 </gebo-ai-field>
-            </div>
-            <div class="col-6">
-                <gebo-ai-field id="baseUrl" label="Embedding model  API server address"
-                    help="Base address of the Embedding model  server." [required]="true">
-                    <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true"
-                        [readOnly]="modelType?.baseUrl?true:false" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-            <div class="col-6">
-                <gebo-ai-field id="apiSecretCode" label="Embedding model  API token"
-                    help="Choose the Embedding model  API token to be used for this model"
-                    [required]="modelType?.optionalAuthentication!==true">
-                    <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token"
-                        [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
-                        gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-            <div class="col-6">
+              </div>
+              <div class="col-6">
                 <gebo-ai-field id="choosedModel" label="Embedding model  embedding model choice"
-                    help="Choose the Embedding model  embedding model to work with." [required]="true">
-                    <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel"
-                        placeholder="Select a model" [required]="true" [options]="modelChoicesData"
-                        optionLabel="description" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
+                  help="Choose the Embedding model  embedding model to work with." [required]="true">
+                  <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel"
+                    placeholder="Select a model" [required]="true" [options]="modelChoicesData"
+                    optionLabel="description" gebo-ai-field-element />
+                  </gebo-ai-field>
+                </div>
 
-            <div class="col-6">
-                <gebo-ai-field id="defaultModel" label="set this as default embedding model"
+                <div class="col-6">
+                  <gebo-ai-field id="defaultModel" label="set this as default embedding model"
                     help="If true this will be used as default embedding model where embedding model is not indicated">
                     <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true" [trueValue]="true"
-                        [falseValue]="false" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid geboLargeButtonsBar" *ngIf="!isWizardMode">
-        <div class="col-4">
-            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
-        </div>
-        <div class="col-4">
-            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
-                styleClass="w-full" />
-        </div>
-        <div class="col-4">
-            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                styleClass="w-full" [disabled]="canDelete===false" />
-        </div>
-
-    </div>
-
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+                      [falseValue]="false" gebo-ai-field-element />
+                    </gebo-ai-field>
+                  </div>
+                </div>
+              </div>
+            </p-panel>
+            <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+            <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

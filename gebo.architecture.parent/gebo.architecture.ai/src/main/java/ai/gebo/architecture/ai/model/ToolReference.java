@@ -14,6 +14,8 @@ package ai.gebo.architecture.ai.model;
 
 import org.springframework.ai.tool.ToolCallback;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * Represents a reference to a tool, including its name, description, and a user UI function description.
  * 
@@ -42,6 +44,7 @@ public class ToolReference {
      * 
      * @param wraps A ToolCallback object that provides tool definition details.
      */
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     public ToolReference(ToolCallback wraps) {
         // Initialize name and description using the tool definition provided by the ToolCallback
         this.name = wraps.getToolDefinition().name();

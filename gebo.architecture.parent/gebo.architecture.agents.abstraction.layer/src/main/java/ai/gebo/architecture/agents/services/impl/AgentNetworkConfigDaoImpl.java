@@ -3,6 +3,8 @@ package ai.gebo.architecture.agents.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 @Service
 public class AgentNetworkConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GAgentsNetwork>
 		implements IAgentsNetworkDao {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AgentNetworkConfigDaoImpl.class);
 	private final IGPersistentObjectManager persistentObjectManager;
 
 	public AgentNetworkConfigDaoImpl(@Autowired(required = false) List<IDynamicAgentsNetworkDataSource> dataSources,
@@ -67,6 +70,9 @@ public class AgentNetworkConfigDaoImpl extends GAbstractRuntimeConfigurationDao<
 
 	@Override
 	public GAgentsNetwork insert(GAgentsNetwork config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Inserting agents network code:" + (config != null ? config.getCode() : null));
+		}
 		if (config.getReadOnly() != null && config.getReadOnly())
 			throw new GeboPersistenceException("This GAgentsNetwork cannot be inserted " + config);
 		return persistentObjectManager.insert(config);
@@ -74,6 +80,9 @@ public class AgentNetworkConfigDaoImpl extends GAbstractRuntimeConfigurationDao<
 
 	@Override
 	public GAgentsNetwork update(GAgentsNetwork config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Updating agents network code:" + (config != null ? config.getCode() : null));
+		}
 		if (config.getReadOnly() != null && config.getReadOnly())
 			throw new GeboPersistenceException("This GAgentsNetwork cannot be updated " + config);
 		return persistentObjectManager.update(config);
@@ -81,6 +90,9 @@ public class AgentNetworkConfigDaoImpl extends GAbstractRuntimeConfigurationDao<
 
 	@Override
 	public void delete(GAgentsNetwork config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Deleting agents network code:" + (config != null ? config.getCode() : null));
+		}
 		if (config.getReadOnly() != null && config.getReadOnly())
 			throw new GeboPersistenceException("This GAgentsNetwork cannot be deleted " + config);
 		persistentObjectManager.delete(config);

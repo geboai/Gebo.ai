@@ -1,0 +1,306 @@
+# ===========================================================================
+# Gebo.ai MICROSERVICES deployment.
+#
+# Infra (mongo, rabbit, qdrant, neo4j, opensearch) + the eureka registry + the
+# api gateway + every backend microservice.
+#
+# 1. Build the images first (from gebo.apps.parent/gebo.microservices.apps.parent):
+#        mvn -P docker package -DskipTests
+#    -> produces geboai/<artifactId>:<version> in the local Docker daemon.
+# 2. Then:  docker compose up -d
+#
+# App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id, so
+# nothing here NEEDS a host port except the gateway. Every microservice publishes
+# one anyway, on its own dedicated port from the 13000-13019 block, so each service
+# can be reached (and its /v3/api-docs scraped by the generated client stubs)
+# without going through the gateway:
+#
+#   13000 gateway (edge: Angular UI + aggregated API)   13009 sharepoint
+#   13001 brain                                         13010 confluence
+#   13002 vectorizator                                  13011 jira
+#   13003 graphicator                                   13012 aws-s3
+#   13004 chunker                                       13013 googledrive
+#   13005 git                                           13014 mcpclient
+#   13006 filesystem                                    13015 integration
+#   13007 uploads                                       13016 fulltextor
+#   13008 userspace                                     13017 eureka (registry)
+#                                                       13018 heimdall (security)
+#                                                       13019 tyr (workflows/usage/jobs)
+#
+# 13018 extends what used to be a full 13000-13017 block; heimdall was added after
+# every slot in it was taken. 13019 (tyr) followed the same way.
+#
+# Each port is fixed in that service's application.yml, so the container port and
+# the published port are the same number - no translation to keep in sync.
+# Override the image tag with GEBO_VERSION in .env.
+# ===========================================================================
+name: gebo-microservices
+
+# Common definition shared by every backend microservice.
+x-microservice: &microservice
+  restart: unless-stopped
+  depends_on: [eureka, rabbit, mongo]
+  environment:
+    EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
+    SPRING_CONFIG_ADDITIONAL_LOCATION: file:/opt/gebo.ai/config/
+    JAVA_TOOL_OPTIONS: "-Xms256m -Xmx1g"
+    MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,prometheus,metrics
+    MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
+    MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
+  volumes:
+    - ./config:/opt/gebo.ai/config:ro
+    - /opt/gebo.ai/home          # per-container anonymous volume
+    - /opt/gebo.ai/work
+  networks: [gebo-net]
+
+services:
+  # ---------------- Infrastructure ----------------
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoroot
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+    command: ["mongod", "--wiredTigerCacheSizeGB=1"]
+    volumes: [mongo-data:/data/db]
+    networks: [gebo-net]
+
+  rabbit:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "127.0.0.1:15672:15672"   # management UI (loopback only)
+    networks: [gebo-net]
+
+  qdrant:
+    image: qdrant/qdrant
+    restart: always
+    environment:
+      QDRANT__SERVICE__API_KEY: ce7c85bc-f037-4c64-91d8-70335638329d
+      QDRANT__STORAGE__OPTIMIZE_INDEXING: "true"
+    volumes: [qdrant-data:/qdrant/storage]
+    networks: [gebo-net]
+
+  neo4j:
+    image: neo4j:5
+    restart: always
+    environment:
+      NEO4J_AUTH: "neo4j/neo4jmaster"
+      NEO4JLABS_PLUGINS: '["apoc"]'
+    volumes: [neo4j-data:/data]
+    networks: [gebo-net]
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
+      - plugins.security.ssl.http.enabled=true
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+      nofile: { soft: 65536, hard: 65536 }
+    volumes: [opensearch-data:/usr/share/opensearch/data]
+    networks: [gebo-net]
+
+  # ---------------- Service registry ----------------
+  eureka:
+    image: geboai/eureka.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    restart: unless-stopped
+    ports:
+      - "13017:13017"             # Eureka dashboard / registry
+    networks: [gebo-net]
+
+  # ---------------- API gateway (the edge: Angular UI + aggregated API) --------
+  gateway:
+    image: geboai/gateway.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    restart: unless-stopped
+    depends_on: [eureka]
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
+    ports:
+      - "13000:13000"
+    networks: [gebo-net]
+
+  # ---------------- Observability stack (metrics, traces, dashboards) --------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "127.0.0.1:4318:4318"     # OTLP HTTP (loopback only)
+    networks: [gebo-net]
+
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"     # Prometheus UI (loopback only)
+    networks: [gebo-net]
+
+  tempo:
+    image: grafana/tempo
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    networks: [gebo-net]
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "127.0.0.1:3000:3000"     # Grafana UI (loopback only)
+    networks: [gebo-net]
+
+  # ---------------- Security service ----------------
+  # heimdall keeps the secrets - but note it is NOT the only holder of the crypting
+  # keys, and it never decrypts on a caller's behalf. The keystore is shared (bundled,
+  # or pointed at by configuration), so the cluster surface hands back the STORED
+  # CIPHERTEXT and the caller decrypts locally. No secret is ever in the clear on the
+  # network. Everyone else reaches it through gebo.microservices.secrets.client, which
+  # speaks to api/cluster/SecretsController - a surface heimdall serves ONLY to callers
+  # whose address is that of an instance currently registered in Eureka.
+  #
+  # So the eureka dependency it already inherits from *microservice is load-bearing
+  # here in a way it is not elsewhere: with the registry unreachable heimdall knows of
+  # no participant and denies every call (it fails closed), so secrets stop flowing
+  # rather than flowing to anyone.
+  #
+  # GEBO_HOME / GEBO_WORK_DIRECTORY and the config mount come from *microservice and
+  # the parent's Jib directive, like every other service - nothing to restate here.
+  # The published 13018 is for direct access / api-docs scraping. The gateway does NOT
+  # route the cluster surface (see the gateway's application.yml) - only heimdall's
+  # admin API is reachable from the edge.
+  heimdall:
+    <<: *microservice
+    image: geboai/heimdall.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13018:13018"
+
+  # ---------------- LLM / RAG backends ----------------
+  # Every backend publishes its own port to the host as well, so each service's
+  # /v3/api-docs (and its Swagger UI, in a swagger-on build) is reachable directly
+  # at localhost:<port> - which is exactly what the generated client stubs under
+  # gebo.microservices.clients.parent point their <swagger.file> at.
+  brain:
+    <<: *microservice
+    image: geboai/brain.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, qdrant]
+    ports:
+      - "13001:13001"
+
+  vectorizator:
+    <<: *microservice
+    image: geboai/vectorizator.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, qdrant]
+    ports:
+      - "13002:13002"
+
+  graphicator:
+    <<: *microservice
+    image: geboai/graphicator.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, neo4j]
+    ports:
+      - "13003:13003"
+
+  chunker:
+    <<: *microservice
+    image: geboai/chunker.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13004:13004"
+
+  fulltextor:
+    <<: *microservice
+    image: geboai/fulltextor.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    depends_on: [eureka, rabbit, mongo, opensearch]
+    ports:
+      - "13016:13016"
+
+  # ---------------- Content-handler microservices ----------------
+  git:
+    <<: *microservice
+    image: geboai/git.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13005:13005"
+  filesystem:
+    <<: *microservice
+    image: geboai/filesystem.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13006:13006"
+  uploads:
+    <<: *microservice
+    image: geboai/uploads.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13007:13007"
+  userspace:
+    <<: *microservice
+    image: geboai/userspace.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13008:13008"
+  sharepoint:
+    <<: *microservice
+    image: geboai/sharepoint.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13009:13009"
+  confluence:
+    <<: *microservice
+    image: geboai/confluence.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13010:13010"
+  jira:
+    <<: *microservice
+    image: geboai/jira.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13011:13011"
+  aws-s3:
+    <<: *microservice
+    image: geboai/aws-s3.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13012:13012"
+  googledrive:
+    <<: *microservice
+    image: geboai/googledrive.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13013:13013"
+  mcpclient:
+    <<: *microservice
+    image: geboai/mcpclient.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13014:13014"
+  integration:
+    <<: *microservice
+    image: geboai/integration.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13015:13015"
+  tyr:
+    <<: *microservice
+    image: geboai/tyr.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    ports:
+      - "13019:13019"
+
+volumes:
+  mongo-data:
+  qdrant-data:
+  neo4j-data:
+  opensearch-data:
+  prometheus-data:
+  grafana-data:
+  tempo-data:
+
+networks:
+  gebo-net:
+    driver: bridge

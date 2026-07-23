@@ -1,9 +1,90 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>ai.gebo.architecture</groupId>
-    <artifactId>gebo.architecture.parent</artifactId>
-    <version>1.0.1.0-BETA</version>
-  </parent>
-  <artifactId>gebo.architecture.mcp-server</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.architecture.mcp-server</artifactId>
+	<dependencies>
+		<!-- Core MCP support -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mcp</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+
+		<!-- Se vuoi esportare @McpTool, @McpResource, @McpPrompt, @McpComplete -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mcp-annotations</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+
+		<!-- Trasporto Spring MVC: SSE / Streamable HTTP / Stateless -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>mcp-spring-webmvc</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.knowledgebase.model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.knowledgebase.repositories</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Per-user visibility navigation of the KB/project/endpoint/virtual-folder hierarchy -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.core.contents.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Streams (and locally caches) GDocumentReference content for serving over MCP -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.ai</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.standard</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>

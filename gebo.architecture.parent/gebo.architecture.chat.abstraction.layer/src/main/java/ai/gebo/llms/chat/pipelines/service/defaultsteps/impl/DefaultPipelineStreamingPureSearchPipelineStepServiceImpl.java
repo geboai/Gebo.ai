@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GInputProcessingEvent;
@@ -69,6 +70,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final IGPromptConfigDao promptsDao;
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
+	private final GeboPromptsParametersCacheConfig promptsParamsCacheConfig;
 	private final IGDeepSearchService deepSearchService;
 	private final IGRankerService rankerService;
 	private final GeboRagSearchConfig ragSearchConfig;
@@ -356,7 +358,8 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		final Map<String, Object> cachedParams = this.promptsParamsCacheService.lookupCache(
 				GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT,
 				runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),
-				DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
+				DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP,
+				promptsParamsCacheConfig.getParametersTtlMillis(), paramsProvider);
 		params.putAll(cachedParams);
 		int variablesTokensSize = ITokensCountable.tokensSize(params);
 		int promtTokensSize = _prompt.getTokensSize();

@@ -9,19 +9,15 @@
 
 package ai.gebo.llms.mistralai.services;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.ai.mistralai.MistralAiChatModel;
 import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
-import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
 import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -30,6 +26,7 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
@@ -83,6 +80,8 @@ public class MistralChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
@@ -92,8 +91,9 @@ public class MistralChatModelConfigurationSupportService
 			extends GAbstractConfigurableChatModel<GMistralChatModelConfig, MistralAiChatModel> {
 
 		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -136,7 +136,7 @@ public class MistralChatModelConfigurationSupportService
 			apiBuilder.restClientBuilder(restClient);
 
 			MistralAiApi mistralApi = apiBuilder.build();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
+			org.springframework.core.retry.RetryTemplate retryTemplate = clientsProvider.getCoreRetryTemplate();
 
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
@@ -152,24 +152,18 @@ public class MistralChatModelConfigurationSupportService
 			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-
 				builder = builder.toolCallbacks(functions);
-				List<String> names = functions.stream().map(x -> {
-					return x.getToolDefinition().name();
-				}).toList();
-				builder = builder.toolNames(new HashSet<String>(names));
-				builder.internalToolExecutionEnabled(!functions.isEmpty());
 			}
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				
-				builder.internalToolExecutionEnabled(true);
-			}
-			
-			ToolExecutionEligibilityPredicate toolEligibilityPredicate = new DefaultToolExecutionEligibilityPredicate();
+
 			MistralAiChatOptions options = builder.build();
-			MistralAiChatModel model = new MistralAiChatModel(mistralApi, options,
-					toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager(),
-					retryTemplate, ObservationRegistry.NOOP, toolEligibilityPredicate);
+			MistralAiChatModel model = MistralAiChatModel.builder()
+					.mistralAiApi(mistralApi)
+					.options(options)
+					.toolCallingManager(
+							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
+					.retryTemplate(retryTemplate)
+					.observationRegistry(observationRegistry)
+					.build();
 			return model;
 		}
 
@@ -197,7 +191,8 @@ public class MistralChatModelConfigurationSupportService
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -222,7 +217,7 @@ public class MistralChatModelConfigurationSupportService
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
 		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

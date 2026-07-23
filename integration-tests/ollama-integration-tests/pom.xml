@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.integration-tests</groupId>
 		<artifactId>gebo.integration-tests.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>ollama-integration-tests</artifactId>
 	<dependencies>
@@ -22,7 +22,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>qdrant</artifactId>
+			<artifactId>testcontainers-qdrant</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

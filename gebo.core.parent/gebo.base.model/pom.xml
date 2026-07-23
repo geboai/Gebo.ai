@@ -5,17 +5,26 @@
 	<parent>
 		<groupId>ai.gebo.core</groupId>
 		<artifactId>gebo.core.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.base.model</artifactId>
 	<dependencies>
+		<!-- The ACL contract (ai.gebo.acl), extracted from this module into its own.
+		     Depended on here so every module that already had gebo.base.model keeps
+		     seeing ai.gebo.acl exactly as before - the package name did not change, so
+		     not one import had to be rewritten. -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.acl.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
+			<groupId>tools.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<scope>provided</scope>
 		</dependency>

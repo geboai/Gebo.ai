@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.microservices.security.controller</artifactId>
+
+	<!--
+		heimdall's server-proxy for the SECURITY DIRECTORY: who the users are, which
+		groups they are in, and whether a password is theirs.
+
+		That is the whole surface, and deliberately so. IGSecurityService looks
+		unsplittable - 9 of its 16 methods take the caller's own domain objects - but
+		those methods only ever needed the user's identity, roles, groups and ACL
+		aliases from outside; the authorization algorithm itself runs locally, on local
+		objects, in every service. So what has to cross the network is not the
+		authorization, it is the directory. See IGSecurityDirectory.
+
+		Like the secrets cluster surface, these endpoints answer only microservices
+		currently registered in service discovery (gebo.microservices.cluster.commons)
+		and are never reachable from the edge.
+	-->
+	<dependencies>
+		<!-- IGSecurityDirectory + the user/group model. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The LOCAL directory. Depending on it is what makes "you may only serve the
+		     directory if you own it" enforceable: this module cannot be published by a
+		     service running the remote directory. It also gives heimdall its own
+		     MongoSecurityDirectory, so heimdall needs no separate declaration. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.security.directory.mongo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The cluster participants guard, shared with every cluster-internal controller. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

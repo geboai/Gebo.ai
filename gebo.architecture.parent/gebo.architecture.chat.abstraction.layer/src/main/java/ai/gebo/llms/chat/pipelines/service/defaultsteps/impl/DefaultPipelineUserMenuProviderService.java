@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItem;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItemParameter;
@@ -21,8 +22,6 @@ import lombok.AllArgsConstructor;
 @Scope("singleton")
 @AllArgsConstructor
 public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenuProviderService {
-	private static final String PURE_SEARCH_ICON = "pi pi-search";
-	private static final String ASSISTED_SEARCH = "Assisted search";
 	private static final String INTERNAL_KNOWLEDGEBASE_DEEP_SEARCH_ICON = "pi pi-sitemap";
 	private static final String RAG_CHAT_ICON = "pi pi-database";
 	private static final String MULTIPLE_SOURCES_DEEP_SEARCH_DESCRIPTION = "Multiple sources";
@@ -37,8 +36,12 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 	private static final String KNOWLEDGE_BASE_DEEP_SEARCH = "Knowledge base deep search";
 	private static final String KNOWLEDGE_BASE_SEARCH = "Knowledge base search";
 	private static final String INTERNAL_KNOWLEDGE_OPTION = "internalKnowledgeOption";
+	private static final String IMAGE_GENERATION_ID = "imageGeneration";
+	private static final String IMAGE_GENERATION_DESCRIPTION = "Image generation";
+	private static final String IMAGE_GENERATION_ICON = "pi pi-image";
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledDeepSearchDataSourceLookupService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
+	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
 	static final PipelineChatMenu agenticChatMenu = new PipelineChatMenu();
 	static final PipelineChatMenuItem agenticChatItem = new PipelineChatMenuItem();
 
@@ -74,20 +77,6 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 		ragMenuItem.setRouteOption(RespondingWith.RAG_LLM_RESPONSE.name());
 		ragMenu.getItems().add(ragMenuItem);
 	}
-	static final PipelineChatMenu pureSearchMenu = new PipelineChatMenu();
-	static final PipelineChatMenuItem pureSearchChatItem = new PipelineChatMenuItem();
-	static {
-		pureSearchMenu.setDescription(ASSISTED_SEARCH);
-		pureSearchMenu.setIcon(PURE_SEARCH_ICON);
-		pureSearchMenu.setMenuId(RespondingWith.PURE_SEARCH.name() + "_MENU");
-		pureSearchChatItem.setOptionId(RespondingWith.PURE_SEARCH.name());
-		pureSearchChatItem.setPipelineId(null);
-		pureSearchChatItem.setDescription(ASSISTED_SEARCH);
-		pureSearchChatItem.setDefaultOption(false);
-		pureSearchChatItem.setIcon(PURE_SEARCH_ICON);
-		pureSearchMenu.setItems(List.of(pureSearchChatItem));
-	}
-
 	@Override
 	public String getPipelineId() {
 
@@ -147,7 +136,20 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			ikMenu.setItems(List.of(ikMenuItem));
 			outMenu.add(ikMenu);
 		}
-		outMenu.add(pureSearchMenu);
+		// Image generation shortcut is offered only when an image model is configured
+		if (DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.isImageGenerationAvailable(imageModelsDao)) {
+			PipelineChatMenuItem imageMenuItem = new PipelineChatMenuItem();
+			imageMenuItem.setOptionId(IMAGE_GENERATION_ID);
+			imageMenuItem.setDescription(IMAGE_GENERATION_DESCRIPTION);
+			imageMenuItem.setIcon(IMAGE_GENERATION_ICON);
+			imageMenuItem.setRouteOption(RespondingWith.IMAGE_GENERATION_RESPONSE.name());
+			PipelineChatMenu imageMenu = new PipelineChatMenu();
+			imageMenu.setMenuId(IMAGE_GENERATION_ID);
+			imageMenu.setDescription(IMAGE_GENERATION_DESCRIPTION);
+			imageMenu.setIcon(IMAGE_GENERATION_ICON);
+			imageMenu.setItems(new ArrayList<>(List.of(imageMenuItem)));
+			outMenu.add(imageMenu);
+		}
 		return outMenu;
 	}
 

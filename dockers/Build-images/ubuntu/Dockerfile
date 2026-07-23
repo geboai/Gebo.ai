@@ -23,7 +23,7 @@ RUN tar zxvfs jdk-21_linux-x64_bin.tar.gz
 RUN tar zxvfs apache-maven-3.9.11-bin.tar.gz 
 RUN rm jdk-21_linux-x64_bin.tar.gz
 RUN rm apache-maven-3.9.11-bin.tar.gz
-ENV JAVA_HOME=/opt/java/jdk-21.0.9
+ENV JAVA_HOME=/opt/java/jdk-21.0.11
 ENV MVN_HOME=/opt/java/apache-maven-3.9.11
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV PATH=$MVN_HOME/bin:$PATH

@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**getGoogleDriveSystems**](GoogleDriveSystemsControllerApi.md#getGoogleDriveSystems) | **GET** /api/admin/GoogleDriveSystemsController/getGoogleDriveSystems | 
 [**insertGoogleDriveProjectEndpoint**](GoogleDriveSystemsControllerApi.md#insertGoogleDriveProjectEndpoint) | **POST** /api/admin/GoogleDriveSystemsController/insertGoogleDriveProjectEndpoint | 
 [**insertGoogleDriveSystem**](GoogleDriveSystemsControllerApi.md#insertGoogleDriveSystem) | **POST** /api/admin/GoogleDriveSystemsController/insertGoogleDriveSystem | 
+[**publishGoogleDriveProjectEndpoint**](GoogleDriveSystemsControllerApi.md#publishGoogleDriveProjectEndpoint) | **POST** /api/admin/GoogleDriveSystemsController/publishGoogleDriveProjectEndpoint | 
 [**updateGoogleDriveProjectEndpoint**](GoogleDriveSystemsControllerApi.md#updateGoogleDriveProjectEndpoint) | **POST** /api/admin/GoogleDriveSystemsController/updateGoogleDriveProjectEndpoint | 
 [**updateGoogleDriveSystem**](GoogleDriveSystemsControllerApi.md#updateGoogleDriveSystem) | **POST** /api/admin/GoogleDriveSystemsController/updateGoogleDriveSystem | 
 
@@ -471,6 +472,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OperationStatusGGoogleDriveSystem**](OperationStatusGGoogleDriveSystem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishGoogleDriveProjectEndpoint"></a>
+# **publishGoogleDriveProjectEndpoint**
+> OperationStatusGJobStatus publishGoogleDriveProjectEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GoogleDriveSystemsControllerApi;
+
+
+GoogleDriveSystemsControllerApi apiInstance = new GoogleDriveSystemsControllerApi();
+GGoogleDriveProjectEndpoint body = new GGoogleDriveProjectEndpoint(); // GGoogleDriveProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishGoogleDriveProjectEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GoogleDriveSystemsControllerApi#publishGoogleDriveProjectEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GGoogleDriveProjectEndpoint**](GGoogleDriveProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

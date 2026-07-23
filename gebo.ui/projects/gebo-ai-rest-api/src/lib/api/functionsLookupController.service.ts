@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class FunctionsLookupControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -126,6 +126,86 @@ export class FunctionsLookupControllerService {
         ];
 
         return this.httpClient.request<Array<ToolCategoriesTree>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllFunctionsTree`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllLocalFunctions(observe?: 'body', reportProgress?: boolean): Observable<Array<GLookupEntry>>;
+    public getAllLocalFunctions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GLookupEntry>>>;
+    public getAllLocalFunctions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GLookupEntry>>>;
+    public getAllLocalFunctions(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GLookupEntry>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllLocalFunctions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param ragContextFunctions 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<ToolCategoriesTree>>;
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ToolCategoriesTree>>>;
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ToolCategoriesTree>>>;
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (ragContextFunctions !== undefined && ragContextFunctions !== null) {
+            queryParameters = queryParameters.set('ragContextFunctions', <any>ragContextFunctions);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<ToolCategoriesTree>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllLocalFunctionsTree`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

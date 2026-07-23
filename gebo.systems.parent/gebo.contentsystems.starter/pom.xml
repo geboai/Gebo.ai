@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.systems</groupId>
 		<artifactId>gebo.systems.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.contentsystems.starter</artifactId>
 	<dependencies>
@@ -60,6 +60,16 @@
 		<dependency>
 			<groupId>ai.gebo.systems</groupId>
 			<artifactId>gebo.integration.content.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.mcp-client.content.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.aws-s3.content.handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

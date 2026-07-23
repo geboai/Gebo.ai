@@ -1,0 +1,91 @@
+spring:
+  application:
+    # Canonical microservice id (underscore form): matches the shared topology
+    # entry and the Eureka service-id that @LoadBalanced / lb:// lookups resolve.
+    name: heimdall_gebo_ai
+
+# Dedicated HTTP port. The original block (gateway 13000 ... eureka 13017) was
+# fully allocated, so the security service extends it with 13018.
+server:
+  port: 13018
+  servlet:
+    # Context name = GeboMicroservice.getContextName() (discovery id minus
+    # "-gebo-ai"). This is what the gateway's topology route matches on
+    # (/heimdall/** -> lb://heimdall-gebo-ai, no StripPrefix) and what
+    # GeboMicroserviceUrlResolver appends to every base url it builds for
+    # this service - keep the three in lockstep.
+    context-path: /heimdall
+
+# Eureka discovery client: registers this service under its application name
+# (heimdall_gebo_ai) so client-side load balancing resolves it to a live instance.
+# Points at the eureka.gebo.ai registry; override
+# EUREKA_CLIENT_SERVICEURL_DEFAULTZONE for a distributed deployment.
+#
+# Discovery is not merely how heimdall is FOUND, it is also how it decides who may
+# ask it for a secret: the cluster endpoints below admit only callers whose address
+# is that of an instance currently registered here (see GeboClusterParticipants).
+# With the registry unreachable the guard reports no participant and denies every
+# call - it fails closed, by design.
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:13017/eureka/}
+  instance:
+    # Registered under the DNS-safe id: a URI host cannot contain '_', so
+    # lb://heimdall_gebo_ai is unroutable ("Invalid host"). virtual-host-name is the
+    # key Spring Cloud actually resolves instances BY, so appname alone is not
+    # enough. spring.application.name keeps the canonical id for topology/queues.
+    appname: heimdall-gebo-ai
+    virtual-host-name: heimdall-gebo-ai
+    secure-virtual-host-name: heimdall-gebo-ai
+    prefer-ip-address: true
+
+# The service-to-service secrets surface (api/cluster/SecretsController). Unlike
+# the admin one it returns decrypted secret content, so it is reachable only from
+# the microservices the registry currently knows about.
+ai:
+  gebo:
+    # WHO may call the cluster-internal endpoints. One rule, shared by every such
+    # controller this service hosts (secrets, security, ...) - a per-module copy is
+    # how the rules drift apart.
+    cluster:
+      participants:
+        # Service ids admitted on top of the topology members.
+        #
+        # The GATEWAY IS DELIBERATELY ABSENT. The guard identifies a caller by the
+        # address it connects from, so admitting the gateway would admit everything
+        # the gateway forwards - a browser's request included, since it reaches this
+        # service from the gateway's own registered address. That would hand the
+        # secret-content and identity endpoints to anyone who can reach the edge.
+        # Nothing needs it: the default LOAD_BALANCER strategy has services call
+        # heimdall directly. gateway.gebo.ai also refuses to route these base paths
+        # from outside, so the two protections are independent.
+        extra-service-ids: []
+        # Addresses admitted on top of whatever discovery reports. Keep this EMPTY
+        # in a real deployment: membership must come from the registry. It exists
+        # for a single-host dev run, where callers are not registered.
+        additional-allowed-addresses: []
+        cache-ttl: 30s
+    secrets:
+      cluster:
+        enabled: true
+        base-path: api/cluster/SecretsController
+    security:
+      # heimdall hosts AuthController (see WebMvcConfig in gebo.architecture.security),
+      # so it needs this like any other browser-facing service. No cluster-internal
+      # endpoint is covered by this CORS mapping - those are guarded by
+      # GeboClusterParticipants instead, on caller address, not by origin.
+      cors:
+        allowedOrigins: ${GEBO_UI_ORIGIN:http://localhost:4200}
+      cluster:
+        enabled: true
+        base-path: api/cluster/SecurityController
+
+# ---------------------------------------------------------------------------
+# MongoDB database. The SERVER (host, credentials) comes from the shared config;
+# the DATABASE is chosen here, per service.
+# This service owns its own database. The shared config deliberately does NOT set
+# databaseName - it is an additional-location and would override this line.
+# ---------------------------------------------------------------------------
+ai.gebo.mongodb:
+  databaseName: heimdall-gebo

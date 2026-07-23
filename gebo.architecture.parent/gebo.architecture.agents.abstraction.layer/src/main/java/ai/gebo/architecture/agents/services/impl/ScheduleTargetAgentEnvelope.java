@@ -5,9 +5,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.agents.model.TargetAgentEnvelope;
 
 public class ScheduleTargetAgentEnvelope {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleTargetAgentEnvelope.class);
 
 	public static TreeMap<Integer, List<TargetAgentEnvelope<?>>> normalizeDeliveryPlan(
 			List<TargetAgentEnvelope<?>> envelopes) {
@@ -20,6 +24,10 @@ public class ScheduleTargetAgentEnvelope {
 		envelopes.stream().sorted(Comparator.comparingInt(TargetAgentEnvelope::getDeliveryOrder))
 				.forEach(envelope -> insertEnvelope(result, envelope));
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("normalizeDeliveryPlan(...) mapped " + envelopes.size() + " envelope(s) into " + result.size()
+					+ " delivery level(s)");
+		}
 		return result;
 	}
 

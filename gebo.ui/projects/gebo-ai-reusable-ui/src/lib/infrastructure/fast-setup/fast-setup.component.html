@@ -1,85 +1,88 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 
 
 
 <p-blockUI [target]="setupUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="SetupPage" gebo-ai-label #setupUI header="Setup your gebo.ai installation" [formGroup]="formGroup">
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-    <div class="grid">
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <div class="grid">
 
-        <div class="col-12">
-            <p-fieldset id="LocalAdmin" gebo-ai-label legend="Create your local admin account">
-                <p id="LocalAdminExplanation" gebo-ai-text>You'll use this account in the future to setup/administer the software, this data will remain local
-                    to your system and is not sent over the network</p>
-                <div class="grid">
-                    <div class="col-12">
-                        <gebo-ai-field id="username" label="E-mail" help="E-mail as username to login">
-                            <input pInputText formControlName="username" class="col-12" [required]="true" [email]="true"
-                                [readonly]="status?.result===true">
-                        </gebo-ai-field>
+    <div class="col-12">
+      <p-fieldset id="LocalAdmin" gebo-ai-label legend="Create your local admin account">
+        <p id="LocalAdminExplanation" gebo-ai-text>You'll use this account in the future to setup/administer the software, this data will remain local
+        to your system and is not sent over the network</p>
+        <div class="grid">
+          <div class="col-12">
+            <gebo-ai-field id="username" label="E-mail" help="E-mail as username to login">
+              <input pInputText formControlName="username" class="col-12" [required]="true" [email]="true"
+                [readonly]="status?.result===true">
+              </gebo-ai-field>
 
-                    </div>
-                    <div class="col-12">
-                        <gebo-ai-field id="langCode" label="Default system language" help="Default system language for this Gebo.ai installation" [required]="true">
-                            <gebo-ai-language-choice-component formControlName="lang" [required]="true"></gebo-ai-language-choice-component>
-                        </gebo-ai-field>
+            </div>
+            <div class="col-12">
+              <gebo-ai-field id="langCode" label="Default system language" help="Default system language for this Gebo.ai installation" [required]="true">
+                <gebo-ai-language-choice-component formControlName="lang" [required]="true"></gebo-ai-language-choice-component>
+              </gebo-ai-field>
 
-                    </div>
-                    <div class="col-3" *ngIf="!status?.result">
-                        <gebo-ai-field id="password" label="Password" help="Password to login (at least 8 characters)">
-                            <p-password formControlName="password" styleClass="w-full" [required]="true"></p-password>
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-3" *ngIf="!status?.result">
-                        <gebo-ai-field id="passwordC" label="Confirm password" help="Confirm password">
-                            <p-password formControlName="passwordC" styleClass="w-full" [required]="true"
-                                [feedback]="false"></p-password>
-                        </gebo-ai-field>
+            </div>
+            @if (!status?.result) {
+              <div class="col-3">
+                <gebo-ai-field id="password" label="Password" help="Password to login (at least 8 characters)">
+                  <p-password formControlName="password" styleClass="w-full" [required]="true"></p-password>
+                </gebo-ai-field>
+              </div>
+            }
+            @if (!status?.result) {
+              <div class="col-3">
+                <gebo-ai-field id="passwordC" label="Confirm password" help="Confirm password">
+                  <p-password formControlName="passwordC" styleClass="w-full" [required]="true"
+                  [feedback]="false"></p-password>
+                </gebo-ai-field>
+              </div>
+            }
+            <div class="col-6" style="text-align: left;color:red;">
+              <span [hidden]="formGroup.controls['password'].value===formGroup.controls['passwordC'].value"
+                id="PasswordNotMatching" gebo-ai-text>
+                passwords do not match
+              </span>
 
-                    </div>
-                    <div class="col-6" style="text-align: left;color:red;">
-                        <span [hidden]="formGroup.controls['password'].value===formGroup.controls['passwordC'].value"
-                            id="PasswordNotMatching" gebo-ai-text>
-                            passwords do not match
-                        </span>
-
-                        <span
-                            [hidden]="!(formGroup.controls['password'].value && formGroup.controls['password'].value.length<8)"
-                            gebo-ai-text>
-                            must be at least 8 characters long
-                        </span>
-                    </div>
-                </div>
-            </p-fieldset>
-        </div>
-        <div class="col-12">
-            <gebo-ai-licence-component formControlName="licenceAgreement" [licencee]="licencee"
-                [required]="true"></gebo-ai-licence-component>
-        </div>
+              <span
+                [hidden]="!(formGroup.controls['password'].value && formGroup.controls['password'].value.length<8)"
+                gebo-ai-text>
+                must be at least 8 characters long
+              </span>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="col-12">
+        <gebo-ai-licence-component formControlName="licenceAgreement" [licencee]="licencee"
+        [required]="true"></gebo-ai-licence-component>
+      </div>
 
 
 
-        <div class="col-4" [hidden]="status?.result">
-            <p-button id="CreateBtn" gebo-ai-label icon="pi pi-wrench" label="Create system setup" (onClick)="doSetup()"
-                [disabled]="formGroup.invalid"></p-button>
-        </div>
-        <div class="col-12" [hidden]="!(status?.result)">
-            <p-button id="EnterBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in"
-                label="Go to the login page to enter" (onClick)="doLogin()"></p-button>
-        </div>
+      <div class="col-4" [hidden]="status?.result">
+        <p-button id="CreateBtn" gebo-ai-label icon="pi pi-wrench" label="Create system setup" (onClick)="doSetup()"
+        [disabled]="formGroup.invalid"></p-button>
+      </div>
+      <div class="col-12" [hidden]="!(status?.result)">
+        <p-button id="EnterBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in"
+        label="Go to the login page to enter" (onClick)="doLogin()"></p-button>
+      </div>
 
 
     </div>
-</p-panel>
+  </p-panel>

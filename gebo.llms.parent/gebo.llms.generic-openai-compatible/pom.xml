@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.llms</groupId>
 		<artifactId>gebo.llms.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.llms.generic-openai-compatible</artifactId>
 	<dependencies>
@@ -18,6 +18,12 @@
 		<dependency>
 			<groupId>ai.gebo.llms</groupId>
 			<artifactId>gebo.llms.openai.api.utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.integrations.clients</groupId>
+			<artifactId>gebo.openrouter.ai.client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

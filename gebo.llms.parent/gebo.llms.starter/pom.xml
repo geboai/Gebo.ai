@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.llms</groupId>
 		<artifactId>gebo.llms.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.llms.starter</artifactId>
 	<dependencies>
@@ -51,26 +51,25 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>ai.gebo.llms</groupId>
-			<artifactId>gebo.llms.huggingface</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>ai.gebo.llms</groupId>
 			<artifactId>gebo.llms.deepseek</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>ai.gebo.llms</groupId>
-			<artifactId>gebo.llms.openai-azure</artifactId>
+			<artifactId>gebo.llms.aws-bedrock</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.llms</groupId>
-			<artifactId>gebo.llms.setup</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+
+		<!-- gebo.llms.setup is deliberately NOT here: it carries
+		     GeboFastLLMSSetupController (a concrete @RestController, not split
+		     into its own .controllers module), and this starter is consumed by
+		     gebo.microservices.llms.starter - every LLM-hosting microservice,
+		     not just the one that should own fast-setup. Wired directly on
+		     gebo.apps.monolithic.starter and brain.gebo.ai instead. -->
 	</dependencies>
 	<profiles>
 		<profile>

@@ -34,5 +34,5 @@ public @interface GeboOpenAITypeDecoration {
      * 
      * @return the class used for decoration
      */
-    public Class decorationClass();
+    public Class<?> decorationClass();
 }

@@ -13,9 +13,10 @@
 package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.ChatInfosByQbeParam;
+import ai.gebo.monolithic.api.client.model.ChatUIOptions;
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
-import ai.gebo.monolithic.api.client.model.PageGUserChatInfo;
+import ai.gebo.monolithic.api.client.model.PagedModelGUserChatInfo;
 import ai.gebo.monolithic.api.client.model.UserChatHistory;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -102,6 +103,23 @@ public class GeboUserChatsControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void exportResponse2fileTest() {
+        String userContextCode = null;
+        String responseId = null;
+        String format = null;
+        api.exportResponse2file(userContextCode, responseId, format);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void getChatHistoryTest() {
         String code = null;
         UserChatHistory response = api.getChatHistory(code);
@@ -134,7 +152,7 @@ public class GeboUserChatsControllerApiTest {
     @Test
     public void getChatInfosByQbeTest() {
         ChatInfosByQbeParam body = null;
-        PageGUserChatInfo response = api.getChatInfosByQbe(body);
+        PagedModelGUserChatInfo response = api.getChatInfosByQbe(body);
 
         // TODO: test validations
     }
@@ -164,7 +182,21 @@ public class GeboUserChatsControllerApiTest {
     public void getMyChatsPagedTest() {
         Integer page = null;
         Integer pageSize = null;
-        PageGUserChatInfo response = api.getMyChatsPaged(page, pageSize);
+        PagedModelGUserChatInfo response = api.getMyChatsPaged(page, pageSize);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getUIConfigTest() {
+        ChatUIOptions response = api.getUIConfig();
 
         // TODO: test validations
     }

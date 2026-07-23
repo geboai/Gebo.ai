@@ -1,87 +1,90 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="sharepointSystemCtrl" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+<p-blockUI id="BlockUI"  [target]="sharepointSystemCtrl" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #sharepointSystemCtrl header="Create SharePoint/OneDrive system configuration" [formGroup]="formGroup">
+  <div class="geboButtonsBar" style="vertical-align: baseline;">
+    <div class="grid">
+      <div class="col-4">
+        <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"
+        styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
+      </div>
+      <div class="col-4">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+          styleClass="w-full" />
+        </div>
+
+      </div>
+    </div>
+
     <div class="geboDialogContent">
-        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
-        <div class="grid">
+      <div class="grid">
 
-            <div class="col-6">
-                <gebo-ai-field id="description" label="Description" help="Enter the description of the SharPpoint/OneDrive system.">
-                    <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-            <div class="col-6">
-                <gebo-ai-field id="sharepointVersion" label="Sharepoint version" [required]="true" help="sharepoint version">
-                    <geboai-editable-listbox-component id="sharepointVersion" formControlName="sharepointVersion" [required]="true" placeholder="Select a sharepoint version" class="col-12 required" [data]="sharepointVersions" gebo-ai-field-element>
-                    </geboai-editable-listbox-component>
-                </gebo-ai-field>
-            </div>
-
-            <div class="col-12" *ngIf="currentSharepointVersion!=='CLOUD_VERSION'">
-                <gebo-ai-field id="baseUri" label="Base internet address" help='Base url for your organization sharepoint cloud system or for an "on premise" installation'>
-                    <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12 required" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-
-            <div class="col-12" [formGroup]="oauth2Credentials" *ngIf="currentSharepointVersion==='CLOUD_VERSION'">
-                <p-fieldset id="MicrosofOauth2Fieldset" gebo-ai-label legend="Microsof oauth2 app registration infos for Gebo.ai">
-                    <p>Please go to your organization Microsoft Azure Administrative section or Microsoft Entra
-                        Administrative section, add a new app for this Gebo.ai installation,
-                        note the client-id, tenant-id, and client-secret and report them here</p>
-                    <div class="grid">
-                        <div class="col-6" [formGroup]="customAttributes" >
-                            <gebo-ai-field id="tenantId" label="Tenant ID" [required]="true" help="Oauth2 tenant identifier for you organization microsoft &quot;entra&quot; product (to be retrieved in microsoft cloud admin console)">
-                                <input pInputText id="tenantId" formControlName="tenantId" [required]="true" gebo-ai-field-element />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="clientId" label="Client ID" [required]="true" help="Oauth2 client identifier for this app registered in the microsoft &quot;entra&quot; product (to be retrieved in microsoft cloud admin console)">
-                                <input pInputText id="clientId" formControlName="clientId" [required]="true" gebo-ai-field-element />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-12">
-                            <gebo-ai-field id="secret" label="Secret key" [required]="true" help="Oauth2 client secret for this app registered in the microsoft &quot;entra&quot; product (to be retrieved in microsoft cloud admin console)">
-                                <textarea rows="2" cols="120" pTextarea id="secret" formControlName="secret" [required]="true" gebo-ai-field-element>
-                                </textarea>
-                            </gebo-ai-field>
-                        </div>
-                    </div>
-                </p-fieldset>
-            </div>
-
-
+        <div class="col-6">
+          <gebo-ai-field id="description" label="Description" help="Enter the description of the SharPpoint/OneDrive system.">
+            <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
+          </gebo-ai-field>
         </div>
+        <div class="col-6">
+          <gebo-ai-field id="sharepointVersion" label="Sharepoint version" [required]="true" help="sharepoint version">
+            <geboai-editable-listbox-component id="sharepointVersion" formControlName="sharepointVersion" [required]="true" placeholder="Select a sharepoint version" class="col-12 required" [data]="sharepointVersions" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+        </div>
+
+        @if (currentSharepointVersion!=='CLOUD_VERSION') {
+          <div class="col-12">
+            <gebo-ai-field id="baseUri" label="Base internet address" help='Base url for your organization sharepoint cloud system or for an "on premise" installation'>
+              <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12 required" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+        }
+
+        @if (currentSharepointVersion==='CLOUD_VERSION') {
+          <div class="col-12" [formGroup]="oauth2Credentials">
+            <p-fieldset id="MicrosofOauth2Fieldset" gebo-ai-label legend="Microsof oauth2 app registration infos for Gebo.ai">
+              <p>Please go to your organization Microsoft Azure Administrative section or Microsoft Entra
+                Administrative section, add a new app for this Gebo.ai installation,
+              note the client-id, tenant-id, and client-secret and report them here</p>
+              <div class="grid">
+                <div class="col-6" [formGroup]="customAttributes" >
+                  <gebo-ai-field id="tenantId" label="Tenant ID" [required]="true" help="Oauth2 tenant identifier for you organization microsoft &quot;entra&quot; product (to be retrieved in microsoft cloud admin console)">
+                    <input pInputText id="tenantId" formControlName="tenantId" [required]="true" gebo-ai-field-element />
+                  </gebo-ai-field>
+                </div>
+                <div class="col-6">
+                  <gebo-ai-field id="clientId" label="Client ID" [required]="true" help="Oauth2 client identifier for this app registered in the microsoft &quot;entra&quot; product (to be retrieved in microsoft cloud admin console)">
+                    <input pInputText id="clientId" formControlName="clientId" [required]="true" gebo-ai-field-element />
+                  </gebo-ai-field>
+                </div>
+                <div class="col-12">
+                  <gebo-ai-field id="secret" label="Secret key" [required]="true" help="Oauth2 client secret for this app registered in the microsoft &quot;entra&quot; product (to be retrieved in microsoft cloud admin console)">
+                    <textarea rows="2" cols="120" pTextarea id="secret" formControlName="secret" [required]="true" gebo-ai-field-element>
+                    </textarea>
+                  </gebo-ai-field>
+                </div>
+              </div>
+            </p-fieldset>
+          </div>
+        }
+
+
+      </div>
 
 
     </div>
-
-
-    <div class="geboButtonsBar" style="vertical-align: baseline;">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"
-                    styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
-                    styleClass="w-full" />
-            </div>
-
-        </div>
-    </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+  </p-panel>
+  <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+  <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

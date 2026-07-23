@@ -20,16 +20,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.MInfoType;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.ModuleType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -47,8 +48,14 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
  */
 @Component
 @Scope("singleton")
-public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigurationDao<IGConfigurableChatModel>
+public class GChatModelRuntimeConfigurationDaoImpl
+		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableChatModel, GBaseChatModelConfig>
 		implements IGChatModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+
+	@Override
+	protected GLlmModelClusterCategory getClusterCategory() {
+		return GLlmModelClusterCategory.CHAT;
+	}
 
 	// Logger instance for this class
 	static Logger LOGGER = LoggerFactory.getLogger(GChatModelRuntimeConfigurationDaoImpl.class);
@@ -95,12 +102,17 @@ public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfi
 			List<GBaseChatModelConfig> configs = persistentObjectManager
 					.findAllExtendingType(GBaseChatModelConfig.class);
 			for (GBaseChatModelConfig config : configs) {
-				this.addRuntimeByConfig(config);
+				try {
+					this.addRuntimeByConfig(config);
+				} catch (Throwable e) {
+					// A single model that cannot be allocated (revoked key, provider down, stale
+					// configuration) must never keep the whole application from starting: report
+					// it and carry on with the remaining models.
+					LOGGER.error("Cannot initialize the chat model with code=>" + config.getCode(), e);
+				}
 			}
-		} catch (GeboPersistenceException | LLMConfigException e) {
-			String msg = "FATAL CHAT MODELS INITIALIZATION EXCEPTION";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Cannot read the chat models configuration", e);
 		}
 
 		LOGGER.info("End initializing chat models dinamically");
@@ -137,7 +149,7 @@ public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfi
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Initializing chatModel with configuration:" + mapper.writeValueAsString(config));
 				}
-			} catch (JsonProcessingException e) {
+			} catch (JacksonException e) {
 				// Log parsing exception if necessary
 			}
 			IGConfigurableChatModel chatModel = handler.create(config);

@@ -1,77 +1,83 @@
 
 <form [formGroup]="formGroup">
-    <p-blockUI id="BlockUI" gebo-ai-label [target]="vectorStoreUI" [blocked]="loading">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
-    </p-blockUI>
-    
-    <p-panel id="MainPanel" gebo-ai-label #vectorStoreUI header="Vector database configuration">
-        <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
-            search, please choose wich of the supported products you'ld like to use</p>
-        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-        <div class="grid geboLargeButtonsBar">
-            <div class="col-6">
-                <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"
-                    severity="success" [disabled]="this.formGroup.invalid" styleClass="w-full"></p-button>
-            </div>
+  <p-blockUI id="BlockUI"  [target]="vectorStoreUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  </p-blockUI>
+
+  <p-panel id="MainPanel" gebo-ai-label #vectorStoreUI header="Vector database configuration">
+    <div class="grid geboLargeButtonsBar">
+      <div class="col-6">
+        <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"
+        severity="success" [disabled]="this.formGroup.invalid" styleClass="w-full"></p-button>
+      </div>
+    </div>
+    <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
+  search, please choose wich of the supported products you'ld like to use</p>
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <div style="height: 500px;">
+    @for (item of vectorStoreProducts; track item) {
+      <p>
+        <p-radioButton id="RadioButton" gebo-ai-label formControlName="product" [value]="item.code" [required]="true"
+        (ngModelChange)="productChange($event)" [inputId]="item.code"></p-radioButton>
+        <b>{{item.label}}:</b>
+        {{item.description}}
+      </p>
+    }
+    @if (product==='QDRANT') {
+      <p-fieldset id="QdrantConnectionFieldset" gebo-ai-label legend="Qdrant connection settings">
+        <div class="grid" formGroupName="qdrantConfig">
+          <div class="col-6">
+            <gebo-ai-field id="host" label="Qdrant host" help="Qdrant host name or ip address" [required]="true">
+              <input pInputText id="host" formControlName="host" class="col-12" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-4">
+            <gebo-ai-field id="port" label="Qdrant port" help="Qdrant comunication port (6334 is the standard)" [required]="true">
+              <input pInputText id="port" formControlName="port" class="col-12" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-2">
+            <gebo-ai-field id="tls" label="Qdrant TLS parameter" help="TLS" [required]="true">
+              <p-checkbox id="tls" formControlName="tls" class="col-12" [required]="true" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+            </gebo-ai-field>
+          </div>
+          <div class="col-12">
+            <gebo-ai-field id="apiKey" label="Qdrant api key" help="Api key for Qdrant authentication">
+              <input pInputText id="apiKey" formControlName="apiKey" class="col-12" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
         </div>
-        <div style="height: 500px;">
-            <p *ngFor="let item of vectorStoreProducts;">
-                <p-radioButton id="RadioButton" gebo-ai-label formControlName="product" [value]="item.code" [required]="true"
-                    (ngModelChange)="productChange($event)" [inputId]="item.code"></p-radioButton>
-                <b>{{item.label}}:</b>
-                {{item.description}}
-            </p>
-            <p-fieldset id="QdrantConnectionFieldset" gebo-ai-label legend="Qdrant connection settings" *ngIf="product==='QDRANT'">
-                <div class="grid" formGroupName="qdrantConfig">
-                    <div class="col-6">
-                        <gebo-ai-field id="host" label="Qdrant host" help="Qdrant host name or ip address" [required]="true">
-                            <input pInputText id="host" formControlName="host" class="col-12" [required]="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-4">
-                        <gebo-ai-field id="port" label="Qdrant port" help="Qdrant comunication port (6334 is the standard)" [required]="true">
-                            <input pInputText id="port" formControlName="port" class="col-12" [required]="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-2">
-                        <gebo-ai-field id="tls" label="Qdrant TLS parameter" help="TLS" [required]="true">
-                            <p-checkbox id="tls" formControlName="tls" class="col-12" [required]="true" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-12">
-                        <gebo-ai-field id="apiKey" label="Qdrant api key" help="Api key for Qdrant authentication">
-                            <input pInputText id="apiKey" formControlName="apiKey" class="col-12" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                </div>
-            </p-fieldset>
-            <p-fieldset id="RedisConnectionFieldset" gebo-ai-label legend="Redis connection settings" *ngIf="product==='REDIS'">
-                <div class="grid" formGroupName="redisConfig">
-                    <div class="col-6">
-                        <gebo-ai-field id="host" label="Redis host" help="Redis host name or ip address" [required]="true">
-                            <input pInputText id="host" formControlName="host" class="col-12" [required]="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="port" label="Redis port" help="Redis comunication port (6334 is the standard)" [required]="true">
-                            <input pInputText id="port" formControlName="port" class="col-12" [required]="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="username" label="Redis username" help="Redis username">
-                            <input pInputText id="username" formControlName="username" class="col-12" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="password" label="Redis password" help="Redis password">
-                            <input pInputText id="password" formControlName="password" class="col-12" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                </div>
-            </p-fieldset>
+      </p-fieldset>
+    }
+    @if (product==='REDIS') {
+      <p-fieldset id="RedisConnectionFieldset" gebo-ai-label legend="Redis connection settings">
+        <div class="grid" formGroupName="redisConfig">
+          <div class="col-6">
+            <gebo-ai-field id="host" label="Redis host" help="Redis host name or ip address" [required]="true">
+              <input pInputText id="host" formControlName="host" class="col-12" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="port" label="Redis port" help="Redis comunication port (6334 is the standard)" [required]="true">
+              <input pInputText id="port" formControlName="port" class="col-12" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="username" label="Redis username" help="Redis username">
+              <input pInputText id="username" formControlName="username" class="col-12" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="password" label="Redis password" help="Redis password">
+              <input pInputText id="password" formControlName="password" class="col-12" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
         </div>
-        
-    </p-panel>
+      </p-fieldset>
+    }
+  </div>
+
+</p-panel>
 </form>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 

@@ -40,7 +40,7 @@ interface PDFSrc {
  */
 @Component({
     selector: "gebo-ai-pdf-viewer-wrapper2",
-    template: "<ngx-extended-pdf-viewer *ngIf='pdfSrc'  [authorization]='true' [httpHeaders]='httpHeaders'  [src]='pdfSrc'     style='height: 650px;width: 100%' (error)='onError($event)' ></ngx-extended-pdf-viewer>",
+    template: "@if (pdfSrc) {<ngx-extended-pdf-viewer  [authorization]='true' [httpHeaders]='httpHeaders'  [src]='pdfSrc'     style='height: 650px;width: 100%' (error)='onError($event)' ></ngx-extended-pdf-viewer>}",
     standalone: false
 })
 export class PDFViewerWrapper2Component implements OnInit, OnChanges {

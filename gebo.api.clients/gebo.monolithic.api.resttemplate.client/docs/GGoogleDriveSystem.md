@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **readonly** | **Boolean** |  |  [optional]
 **baseUri** | **String** |  |  [optional]
 **usedCapabilities** | [**List&lt;UsedCapabilitiesEnum&gt;**](#List&lt;UsedCapabilitiesEnum&gt;) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **driveAccessSecret** | **String** |  |  [optional]
 
 <a name="List<UsedCapabilitiesEnum>"></a>

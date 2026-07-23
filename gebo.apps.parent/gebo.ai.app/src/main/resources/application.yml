@@ -1,3 +1,5 @@
+springdoc.api-docs.version: OPENAPI_3_0
+spring.application.name: gebo-ai-monolith
 logging:
   level:
     root: INFO
@@ -15,6 +17,21 @@ server:
     enabled: true
   servlet:
     contextPath: /
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    sampling:
+      probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
+  otlp:
+    tracing:
+      endpoint: ${MANAGEMENT_OTLP_TRACING_ENDPOINT:http://localhost:4318/v1/traces}
 spring.servlet.multipart:
   enabled: true
   maxFileSize: 100MB
@@ -34,7 +51,7 @@ spring:
 ai.gebo.security:
   auth:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
-    tokenExpirationMsec: 120000
+    tokenExpirationMsec: 1800000
   cors:
     allowedOrigins: http://localhost:12999,http://localhost:4200
   oauth2configs:
@@ -72,6 +89,7 @@ ai.gebo.llms.config:
   huggingfaceEnabled: false
   deepseekEnabled: true
   azureOpenAIEnabled: true
+  awsBedrockEnabled: true
 
 ai.gebo.vectorstore:
   use: QDRANT
@@ -284,8 +302,8 @@ ai.gebo.opensearch:
   password: dothesearch1973-Advanced
 
 ai.gebo.rag-threashold-autotune.config.enabled: false	
-ai.gebo.agents.standard.enabled: false
-ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: false
+ai.gebo.agents.standard.enabled: true
+ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: true
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -42,6 +44,7 @@ public class TestChatModelConfiguration extends GBaseChatModelConfig {
 	 * 
 	 * @return the function that transforms input strings to response strings
 	 */
+	@JsonIgnore
 	public Function<String, String> getTestResponseLogic() {
 		return testResponseLogic;
 	}

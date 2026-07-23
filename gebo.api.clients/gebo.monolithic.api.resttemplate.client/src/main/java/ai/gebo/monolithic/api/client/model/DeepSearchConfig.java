@@ -14,18 +14,20 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.GObjectRefGBaseChatModelConfig;
+import ai.gebo.monolithic.api.client.model.DeepSearchDataSourceAccess;
 import ai.gebo.monolithic.api.client.model.RagQueryOptions;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 /**
  * DeepSearchConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class DeepSearchConfig {
   @JsonProperty("code")
@@ -95,20 +97,26 @@ public class DeepSearchConfig {
   @JsonProperty("tokensLimit")
   private Integer tokensLimit = null;
 
-  @JsonProperty("documentsParallelism")
-  private Integer documentsParallelism = null;
-
   @JsonProperty("manualThreasholdsConfiguration")
   private Boolean manualThreasholdsConfiguration = null;
-
-  @JsonProperty("chatModelConfiguration")
-  private GObjectRefGBaseChatModelConfig chatModelConfiguration = null;
 
   @JsonProperty("defaultConfig")
   private Boolean defaultConfig = null;
 
-  @JsonProperty("chatProfileCode")
-  private String chatProfileCode = null;
+  @JsonProperty("accessibleGroups")
+  private List<String> accessibleGroups = null;
+
+  @JsonProperty("accessibleUsers")
+  private List<String> accessibleUsers = null;
+
+  @JsonProperty("accessibleToAll")
+  private Boolean accessibleToAll = null;
+
+  @JsonProperty("dataSourcesAccesses")
+  private List<DeepSearchDataSourceAccess> dataSourcesAccesses = null;
+
+  @JsonProperty("perDataSourceConfigured")
+  private Boolean perDataSourceConfigured = null;
 
   public DeepSearchConfig code(String code) {
     this.code = code;
@@ -326,24 +334,6 @@ public class DeepSearchConfig {
     this.tokensLimit = tokensLimit;
   }
 
-  public DeepSearchConfig documentsParallelism(Integer documentsParallelism) {
-    this.documentsParallelism = documentsParallelism;
-    return this;
-  }
-
-   /**
-   * Get documentsParallelism
-   * @return documentsParallelism
-  **/
-  @Schema(description = "")
-  public Integer getDocumentsParallelism() {
-    return documentsParallelism;
-  }
-
-  public void setDocumentsParallelism(Integer documentsParallelism) {
-    this.documentsParallelism = documentsParallelism;
-  }
-
   public DeepSearchConfig manualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
     return this;
@@ -360,24 +350,6 @@ public class DeepSearchConfig {
 
   public void setManualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
-  }
-
-  public DeepSearchConfig chatModelConfiguration(GObjectRefGBaseChatModelConfig chatModelConfiguration) {
-    this.chatModelConfiguration = chatModelConfiguration;
-    return this;
-  }
-
-   /**
-   * Get chatModelConfiguration
-   * @return chatModelConfiguration
-  **/
-  @Schema(description = "")
-  public GObjectRefGBaseChatModelConfig getChatModelConfiguration() {
-    return chatModelConfiguration;
-  }
-
-  public void setChatModelConfiguration(GObjectRefGBaseChatModelConfig chatModelConfiguration) {
-    this.chatModelConfiguration = chatModelConfiguration;
   }
 
   public DeepSearchConfig defaultConfig(Boolean defaultConfig) {
@@ -398,22 +370,118 @@ public class DeepSearchConfig {
     this.defaultConfig = defaultConfig;
   }
 
-  public DeepSearchConfig chatProfileCode(String chatProfileCode) {
-    this.chatProfileCode = chatProfileCode;
+  public DeepSearchConfig accessibleGroups(List<String> accessibleGroups) {
+    this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public DeepSearchConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
    /**
-   * Get chatProfileCode
-   * @return chatProfileCode
+   * Get accessibleGroups
+   * @return accessibleGroups
   **/
   @Schema(description = "")
-  public String getChatProfileCode() {
-    return chatProfileCode;
+  public List<String> getAccessibleGroups() {
+    return accessibleGroups;
   }
 
-  public void setChatProfileCode(String chatProfileCode) {
-    this.chatProfileCode = chatProfileCode;
+  public void setAccessibleGroups(List<String> accessibleGroups) {
+    this.accessibleGroups = accessibleGroups;
+  }
+
+  public DeepSearchConfig accessibleUsers(List<String> accessibleUsers) {
+    this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public DeepSearchConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
+    return this;
+  }
+
+   /**
+   * Get accessibleUsers
+   * @return accessibleUsers
+  **/
+  @Schema(description = "")
+  public List<String> getAccessibleUsers() {
+    return accessibleUsers;
+  }
+
+  public void setAccessibleUsers(List<String> accessibleUsers) {
+    this.accessibleUsers = accessibleUsers;
+  }
+
+  public DeepSearchConfig accessibleToAll(Boolean accessibleToAll) {
+    this.accessibleToAll = accessibleToAll;
+    return this;
+  }
+
+   /**
+   * Get accessibleToAll
+   * @return accessibleToAll
+  **/
+  @Schema(description = "")
+  public Boolean isAccessibleToAll() {
+    return accessibleToAll;
+  }
+
+  public void setAccessibleToAll(Boolean accessibleToAll) {
+    this.accessibleToAll = accessibleToAll;
+  }
+
+  public DeepSearchConfig dataSourcesAccesses(List<DeepSearchDataSourceAccess> dataSourcesAccesses) {
+    this.dataSourcesAccesses = dataSourcesAccesses;
+    return this;
+  }
+
+  public DeepSearchConfig addDataSourcesAccessesItem(DeepSearchDataSourceAccess dataSourcesAccessesItem) {
+    if (this.dataSourcesAccesses == null) {
+      this.dataSourcesAccesses = new ArrayList<>();
+    }
+    this.dataSourcesAccesses.add(dataSourcesAccessesItem);
+    return this;
+  }
+
+   /**
+   * Get dataSourcesAccesses
+   * @return dataSourcesAccesses
+  **/
+  @Schema(description = "")
+  public List<DeepSearchDataSourceAccess> getDataSourcesAccesses() {
+    return dataSourcesAccesses;
+  }
+
+  public void setDataSourcesAccesses(List<DeepSearchDataSourceAccess> dataSourcesAccesses) {
+    this.dataSourcesAccesses = dataSourcesAccesses;
+  }
+
+  public DeepSearchConfig perDataSourceConfigured(Boolean perDataSourceConfigured) {
+    this.perDataSourceConfigured = perDataSourceConfigured;
+    return this;
+  }
+
+   /**
+   * Get perDataSourceConfigured
+   * @return perDataSourceConfigured
+  **/
+  @Schema(description = "")
+  public Boolean isPerDataSourceConfigured() {
+    return perDataSourceConfigured;
+  }
+
+  public void setPerDataSourceConfigured(Boolean perDataSourceConfigured) {
+    this.perDataSourceConfigured = perDataSourceConfigured;
   }
 
 
@@ -438,16 +506,18 @@ public class DeepSearchConfig {
         Objects.equals(this.secondHopSimilarityThreashold, deepSearchConfig.secondHopSimilarityThreashold) &&
         Objects.equals(this.graphRagTopN, deepSearchConfig.graphRagTopN) &&
         Objects.equals(this.tokensLimit, deepSearchConfig.tokensLimit) &&
-        Objects.equals(this.documentsParallelism, deepSearchConfig.documentsParallelism) &&
         Objects.equals(this.manualThreasholdsConfiguration, deepSearchConfig.manualThreasholdsConfiguration) &&
-        Objects.equals(this.chatModelConfiguration, deepSearchConfig.chatModelConfiguration) &&
         Objects.equals(this.defaultConfig, deepSearchConfig.defaultConfig) &&
-        Objects.equals(this.chatProfileCode, deepSearchConfig.chatProfileCode);
+        Objects.equals(this.accessibleGroups, deepSearchConfig.accessibleGroups) &&
+        Objects.equals(this.accessibleUsers, deepSearchConfig.accessibleUsers) &&
+        Objects.equals(this.accessibleToAll, deepSearchConfig.accessibleToAll) &&
+        Objects.equals(this.dataSourcesAccesses, deepSearchConfig.dataSourcesAccesses) &&
+        Objects.equals(this.perDataSourceConfigured, deepSearchConfig.perDataSourceConfigured);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, documentsParallelism, manualThreasholdsConfiguration, chatModelConfiguration, defaultConfig, chatProfileCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, manualThreasholdsConfiguration, defaultConfig, accessibleGroups, accessibleUsers, accessibleToAll, dataSourcesAccesses, perDataSourceConfigured);
   }
 
 
@@ -468,11 +538,13 @@ public class DeepSearchConfig {
     sb.append("    secondHopSimilarityThreashold: ").append(toIndentedString(secondHopSimilarityThreashold)).append("\n");
     sb.append("    graphRagTopN: ").append(toIndentedString(graphRagTopN)).append("\n");
     sb.append("    tokensLimit: ").append(toIndentedString(tokensLimit)).append("\n");
-    sb.append("    documentsParallelism: ").append(toIndentedString(documentsParallelism)).append("\n");
     sb.append("    manualThreasholdsConfiguration: ").append(toIndentedString(manualThreasholdsConfiguration)).append("\n");
-    sb.append("    chatModelConfiguration: ").append(toIndentedString(chatModelConfiguration)).append("\n");
     sb.append("    defaultConfig: ").append(toIndentedString(defaultConfig)).append("\n");
-    sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
+    sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
+    sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
+    sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
+    sb.append("    dataSourcesAccesses: ").append(toIndentedString(dataSourcesAccesses)).append("\n");
+    sb.append("    perDataSourceConfigured: ").append(toIndentedString(perDataSourceConfigured)).append("\n");
     sb.append("}");
     return sb.toString();
   }

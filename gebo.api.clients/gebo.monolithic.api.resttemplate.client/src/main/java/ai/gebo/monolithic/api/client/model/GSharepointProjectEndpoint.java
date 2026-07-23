@@ -28,7 +28,7 @@ import java.util.List;
  * GSharepointProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GSharepointProjectEndpoint {
   @JsonProperty("code")
@@ -143,6 +143,9 @@ public class GSharepointProjectEndpoint {
 
   }  @JsonProperty("objectSpaceType")
   private ObjectSpaceTypeEnum objectSpaceType = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("paths")
   private List<VFilesystemReference> paths = null;
@@ -480,6 +483,32 @@ public class GSharepointProjectEndpoint {
     this.objectSpaceType = objectSpaceType;
   }
 
+  public GSharepointProjectEndpoint aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GSharepointProjectEndpoint addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GSharepointProjectEndpoint paths(List<VFilesystemReference> paths) {
     this.paths = paths;
     return this;
@@ -551,13 +580,14 @@ public class GSharepointProjectEndpoint {
         Objects.equals(this.vectorizeOnlyExtensions, gsharepointProjectEndpoint.vectorizeOnlyExtensions) &&
         Objects.equals(this.synchroStrategy, gsharepointProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gsharepointProjectEndpoint.objectSpaceType) &&
+        Objects.equals(this.aclAliases, gsharepointProjectEndpoint.aclAliases) &&
         Objects.equals(this.paths, gsharepointProjectEndpoint.paths) &&
         Objects.equals(this.sharePointSystemCode, gsharepointProjectEndpoint.sharePointSystemCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, paths, sharePointSystemCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, sharePointSystemCode);
   }
 
 
@@ -583,6 +613,7 @@ public class GSharepointProjectEndpoint {
     sb.append("    vectorizeOnlyExtensions: ").append(toIndentedString(vectorizeOnlyExtensions)).append("\n");
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    sharePointSystemCode: ").append(toIndentedString(sharePointSystemCode)).append("\n");
     sb.append("}");

@@ -13,6 +13,7 @@
 package ai.gebo.atlassian.confluence.cloud.client;
 
 import java.nio.charset.Charset;
+import java.util.Base64;
 
 import org.springframework.http.HttpHeaders;
 
@@ -69,8 +70,8 @@ public class CloudConfluenceConnection {
                 String auth = username + ":" + password;
                 
                 // Encode the authentication string using Base64
-                byte[] encodedAuth = org.apache.tomcat.util.codec.binary.Base64
-                        .encodeBase64(auth.getBytes(Charset.forName("US-ASCII")), false);
+                byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(Charset.forName("US-ASCII")));
+                        //.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")), false);
                 
                 // Create the Authorization header using Basic authentication scheme
                 String authHeader = "Basic " + new String(encodedAuth);

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMAutoconfigureCreationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class LLMAutoconfigureCreationData {
   @JsonProperty("vendorId")
@@ -45,6 +45,18 @@ public class LLMAutoconfigureCreationData {
 
   @JsonProperty("embeddingModel")
   private String embeddingModel = null;
+
+  @JsonProperty("rankerModel")
+  private String rankerModel = null;
+
+  @JsonProperty("transcriptModel")
+  private String transcriptModel = null;
+
+  @JsonProperty("ttsModel")
+  private String ttsModel = null;
+
+  @JsonProperty("imagesModel")
+  private String imagesModel = null;
 
   public LLMAutoconfigureCreationData vendorId(String vendorId) {
     this.vendorId = vendorId;
@@ -172,6 +184,78 @@ public class LLMAutoconfigureCreationData {
     this.embeddingModel = embeddingModel;
   }
 
+  public LLMAutoconfigureCreationData rankerModel(String rankerModel) {
+    this.rankerModel = rankerModel;
+    return this;
+  }
+
+   /**
+   * Get rankerModel
+   * @return rankerModel
+  **/
+  @Schema(description = "")
+  public String getRankerModel() {
+    return rankerModel;
+  }
+
+  public void setRankerModel(String rankerModel) {
+    this.rankerModel = rankerModel;
+  }
+
+  public LLMAutoconfigureCreationData transcriptModel(String transcriptModel) {
+    this.transcriptModel = transcriptModel;
+    return this;
+  }
+
+   /**
+   * Get transcriptModel
+   * @return transcriptModel
+  **/
+  @Schema(description = "")
+  public String getTranscriptModel() {
+    return transcriptModel;
+  }
+
+  public void setTranscriptModel(String transcriptModel) {
+    this.transcriptModel = transcriptModel;
+  }
+
+  public LLMAutoconfigureCreationData ttsModel(String ttsModel) {
+    this.ttsModel = ttsModel;
+    return this;
+  }
+
+   /**
+   * Get ttsModel
+   * @return ttsModel
+  **/
+  @Schema(description = "")
+  public String getTtsModel() {
+    return ttsModel;
+  }
+
+  public void setTtsModel(String ttsModel) {
+    this.ttsModel = ttsModel;
+  }
+
+  public LLMAutoconfigureCreationData imagesModel(String imagesModel) {
+    this.imagesModel = imagesModel;
+    return this;
+  }
+
+   /**
+   * Get imagesModel
+   * @return imagesModel
+  **/
+  @Schema(description = "")
+  public String getImagesModel() {
+    return imagesModel;
+  }
+
+  public void setImagesModel(String imagesModel) {
+    this.imagesModel = imagesModel;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -188,12 +272,16 @@ public class LLMAutoconfigureCreationData {
         Objects.equals(this.newUserName, llMAutoconfigureCreationData.newUserName) &&
         Objects.equals(this.defaultChatModel, llMAutoconfigureCreationData.defaultChatModel) &&
         Objects.equals(this.internalServicesModel, llMAutoconfigureCreationData.internalServicesModel) &&
-        Objects.equals(this.embeddingModel, llMAutoconfigureCreationData.embeddingModel);
+        Objects.equals(this.embeddingModel, llMAutoconfigureCreationData.embeddingModel) &&
+        Objects.equals(this.rankerModel, llMAutoconfigureCreationData.rankerModel) &&
+        Objects.equals(this.transcriptModel, llMAutoconfigureCreationData.transcriptModel) &&
+        Objects.equals(this.ttsModel, llMAutoconfigureCreationData.ttsModel) &&
+        Objects.equals(this.imagesModel, llMAutoconfigureCreationData.imagesModel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vendorId, secretId, newApiSecret, newUserName, defaultChatModel, internalServicesModel, embeddingModel);
+    return Objects.hash(vendorId, secretId, newApiSecret, newUserName, defaultChatModel, internalServicesModel, embeddingModel, rankerModel, transcriptModel, ttsModel, imagesModel);
   }
 
 
@@ -209,6 +297,10 @@ public class LLMAutoconfigureCreationData {
     sb.append("    defaultChatModel: ").append(toIndentedString(defaultChatModel)).append("\n");
     sb.append("    internalServicesModel: ").append(toIndentedString(internalServicesModel)).append("\n");
     sb.append("    embeddingModel: ").append(toIndentedString(embeddingModel)).append("\n");
+    sb.append("    rankerModel: ").append(toIndentedString(rankerModel)).append("\n");
+    sb.append("    transcriptModel: ").append(toIndentedString(transcriptModel)).append("\n");
+    sb.append("    ttsModel: ").append(toIndentedString(ttsModel)).append("\n");
+    sb.append("    imagesModel: ").append(toIndentedString(imagesModel)).append("\n");
     sb.append("}");
     return sb.toString();
   }

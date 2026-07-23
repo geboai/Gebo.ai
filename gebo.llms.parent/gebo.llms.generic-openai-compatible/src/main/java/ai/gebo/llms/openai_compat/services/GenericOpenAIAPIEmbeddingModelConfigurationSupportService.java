@@ -16,11 +16,6 @@ import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions.Builder;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
-import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -38,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelConfig;
@@ -49,6 +45,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
  * AI generated comments
@@ -75,6 +72,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Constructor initializing the service with required dependencies.
@@ -92,7 +90,8 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			IGToolCallbackSourceRepositoryPattern functionsRepo, IGVectorStoreFactoryProvider storeFactoryProvider,
 			ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
-			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern) {
+			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
+			ObservationRegistry observationRegistry) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -102,6 +101,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		this.serviceClientsProviderFactory = serviceClientsProviderFactory;
 		this.configureHandler = configureHandler;
 		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
+		this.observationRegistry = observationRegistry;
 	}
 
 	/**
@@ -117,7 +117,8 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		 * provider.
 		 */
 		public GenericOpenAIConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider,
+					GenericOpenAIAPIEmbeddingModelConfigurationSupportService.this.observationRegistry);
 
 		}
 
@@ -154,22 +155,15 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			if (config.getBaseUrl() != null) {
 				baseUrl = config.getBaseUrl();
 			}
-			org.springframework.ai.openai.api.OpenAiApi.Builder apiBuilder = OpenAiApi.builder();
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
-			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
-			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
-					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			apiBuilder.restClientBuilder(restClient);
-			apiBuilder.webClientBuilder(webClient);
-			if (apiKey != null) {
-				apiBuilder = apiBuilder.apiKey(apiKey);
-			} else {
-				apiBuilder = apiBuilder.apiKey(new NoopApiKey());
-			}
-			OpenAiApi openaiApi = apiBuilder.baseUrl(baseUrl).build();
-			Builder builder = OpenAiEmbeddingOptions.builder();
 
+			Builder builder = OpenAiEmbeddingOptions.builder();
+			builder.baseUrl(baseUrl);
+			if (apiKey != null) {
+				builder.apiKey(apiKey);
+			} else {
+				builder.apiKey(new NoopApiKey());
+			}
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -177,8 +171,12 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 				builder = builder.user(user);
 			}
 			OpenAiEmbeddingOptions options = builder.build();
-			MetadataMode meta = MetadataMode.EMBED;
-			OpenAiEmbeddingModel model = new OpenAiEmbeddingModel(openaiApi, meta, options);
+			OpenAiEmbeddingModel model = OpenAiEmbeddingModel.builder()
+					.options(options)
+					.metadataMode(MetadataMode.EMBED)
+					.observationRegistry(observationRegistry)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(clientsProvider))
+					.build();
 			return model;
 		}
 

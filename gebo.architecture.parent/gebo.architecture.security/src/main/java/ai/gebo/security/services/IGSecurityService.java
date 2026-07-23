@@ -22,7 +22,7 @@ import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.model.UsersGroup;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

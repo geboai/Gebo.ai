@@ -1,0 +1,97 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+<p-blockUI id="BlockUIButton"  [target]="openaiUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #openaiUI [header]="'Editing transcript model configuration'"
+  [formGroup]="formGroup">
+
+  @if (!isWizardMode) {
+    <div class="grid geboLargeButtonsBar">
+      <div class="col-4">
+        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+          severity="success" [disabled]="this.formGroup.invalid || canSave===false"
+        styleClass="w-full"></p-button>
+      </div>
+      <div class="col-4">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+          (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+        </div>
+        <div class="col-4">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash"
+            (onClick)="doDelete()" styleClass="w-full" [disabled]="canDelete===false" />
+          </div>
+        </div>
+      }
+      <div class="geboDialogContent">
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+        <div class="grid">
+          <div class="col-12">
+            <h3><span id="TitleFragment" gebo-ai-text>Editing transcript model
+            provider:</span>{{modelType?.description}}
+          </h3>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="col-6">
+          <gebo-ai-field id="description" label="Description"
+            help="Enter the description of the model configuration" [required]="true">
+            <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+              gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="code" label="Unique Code"
+              help="Automatically generated unique code of the model configuration">
+              <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-6">
+            <gebo-ai-field id="baseUrl" label="Transcript model API base server address"
+              help="Base address of transcript model." [required]="true">
+              <input pInputText id="baseUrl" formControlName="baseUrl" [readOnly]="modelType?.baseUrl?true:false"
+                [required]="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="apiSecretCode" label="Transcript model API token"
+                help="Choose the transcript model API token to be used for this model (optional)">
+                <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token"
+                  [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
+                  gebo-ai-field-element>
+                </geboai-editable-listbox-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="choosedModel" label="Transcript model choice"
+                help="Choose the transcript model to work with." [required]="true">
+                <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel"
+                  placeholder="Select a model" [required]="true" [options]="modelChoicesData"
+                optionLabel="description" gebo-ai-field-element></p-select>
+              </gebo-ai-field>
+            </div>
+
+            <div class="col-6">
+              <gebo-ai-field id="defaultModel" label="set this as default transcript model"
+                help="If true this will be used as default transcript model where transcript model is not indicated">
+                <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true" [trueValue]="true"
+                [falseValue]="false" gebo-ai-field-element></p-checkbox>
+              </gebo-ai-field>
+            </div>
+          </div>
+
+
+        </div>
+      </p-panel>
+      <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+      <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

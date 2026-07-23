@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.ai.service.impl;
 
@@ -34,23 +31,25 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 
 /**
- * Implementation of the IGToolCallbackSourceRepositoryPattern interface. This class manages a repository
- * of IGToolCallbackSource instances, allowing for retrieval and organization of tool callbacks.
+ * Implementation of the IGToolCallbackSourceRepositoryPattern interface. This
+ * class manages a repository of IGToolCallbackSource instances, allowing for
+ * retrieval and organization of tool callbacks.
  * 
  * AI generated comments
  */
 @Service
 public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementationsRepositoryPattern<IGToolCallbackSource>
 		implements IGToolCallbackSourceRepositoryPattern {
-	
-    /** Logger for logging information and errors. */
+
+	/** Logger for logging information and errors. */
 	static final Logger LOGGER = LoggerFactory.getLogger(GToolCallbackRepositoryPatternImpl.class);
 
 	/**
-	 * Constructs a new GToolCallbackRepositoryPatternImpl with the given implementations.
-	 * Logs each implementation's ID if provided.
+	 * Constructs a new GToolCallbackRepositoryPatternImpl with the given
+	 * implementations. Logs each implementation's ID if provided.
 	 * 
-	 * @param implementations a list of IGToolCallbackSource implementations, may be null.
+	 * @param implementations a list of IGToolCallbackSource implementations, may be
+	 *                        null.
 	 */
 	public GToolCallbackRepositoryPatternImpl(@Autowired(required = false) List<IGToolCallbackSource> implementations) {
 		super(implementations);
@@ -109,7 +108,8 @@ public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementations
 	}
 
 	/**
-	 * Retrieves a tree structure of tool categories that pass a given category search predicate.
+	 * Retrieves a tree structure of tool categories that pass a given category
+	 * search predicate.
 	 * 
 	 * @param categorySearch the predicate to filter tool categories.
 	 * @return a list of ToolCategoriesTree objects.
@@ -134,7 +134,7 @@ public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementations
 			trees.get(y.getToolCategory().getCode()).getToolsReference().addAll(functions.values());
 		});
 		// Return the list of all ToolCategoriesTree instances
-		return new ArrayList<ToolCategoriesTree>(trees.values());
+		return new ArrayList<ToolCategoriesTree>(trees.values().stream().map(x -> x.unmutableClone()).toList());
 	}
 
 	/**
@@ -151,7 +151,8 @@ public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementations
 	}
 
 	/**
-	 * Retrieves a filtered tree structure of tool categories containing only enabled functions.
+	 * Retrieves a filtered tree structure of tool categories containing only
+	 * enabled functions.
 	 * 
 	 * @param enabledFunctions a list of enabled function names.
 	 * @return a list of ToolCategoriesTree objects with only enabled functions.
@@ -164,26 +165,28 @@ public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementations
 		List<ToolCategoriesTree> enabledtrees = new ArrayList<ToolCategoriesTree>();
 		for (ToolCategoriesTree t : trees) {
 			if (t.getToolsReference() != null) {
+				ToolCategoriesTree cloned = t.jsonClone();
 				List<ToolReference> toremove = new ArrayList<ToolReference>();
-				for (ToolReference r : t.getToolsReference()) {
+				for (ToolReference r : cloned.getToolsReference()) {
 					if (!enabledFunctions.contains(r.getName()))
 						toremove.add(r);
 				}
 				// Remove functions not in enabled list
 				for (ToolReference r : toremove) {
-					t.getToolsReference().remove(r);
+					cloned.getToolsReference().remove(r);
 				}
 				// Add the tree if it contains any enabled functions
-				if (!t.getToolsReference().isEmpty()) {
-					enabledtrees.add(t);
+				if (!cloned.getToolsReference().isEmpty()) {
+					enabledtrees.add(cloned.unmutableClone());
 				}
 			}
 		}
-		return enabledtrees;
+		return List.copyOf(enabledtrees);
 	}
 
 	/**
-	 * Creates and returns a ToolCallingManager instance configured with this repository as the callback resolver.
+	 * Creates and returns a ToolCallingManager instance configured with this
+	 * repository as the callback resolver.
 	 * 
 	 * @return a new ToolCallingManager instance.
 	 */

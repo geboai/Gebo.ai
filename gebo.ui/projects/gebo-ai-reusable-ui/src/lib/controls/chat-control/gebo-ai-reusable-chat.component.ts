@@ -22,7 +22,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, EventEmitter, forwardRef, HostListener, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable, of } from "rxjs";
@@ -329,6 +329,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         private geboAiTranslationService: GeboAITranslationService,
         private geboChatPipelineService: GeboChatPipelinesControllerService,
         private userChatControllerService: GeboUserChatsControllerService,
+        private textToSpeechService: GeboTextToSpeechControllerService,
+        private transcriptService: GeboTranscriptControllerService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
         this.formGroup.controls["userChatContextCode"].valueChanges.subscribe({
@@ -968,21 +970,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * @param text Text to convert to speech
      */
     speechPlay(text: string) {
-        let chatModelCode: string | undefined;
-        if (!chatModelCode) {
-            chatModelCode = this.capabilities?.configurationCode;
-        }
         const sr: SpeechRequest = {
             text: text
         };
 
-
-        if (chatModelCode) {
+        if (this.capabilities?.supportsSpeech === true) {
             this.messageService.addMessage(moduleId, entityId, loading_vocal_answer);
 
 
             this.waitingForAudiocontent = true;
-            this.chatService.speechText(sr, chatModelCode).subscribe(
+            this.textToSpeechService.speechText(sr).subscribe(
                 {
                     next: (value) => {
                         this.currentAudioTrack = value;
@@ -1031,26 +1028,18 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * @param event Event containing the audio data to transcribe
      */
     onSpeechEvent(event: { data: Blob; url: string; }) {
-        let chatModelCode: string | undefined;
-        if (!chatModelCode) {
-            chatModelCode = this.capabilities?.configurationCode;
-        }
-        if (chatModelCode) {
+        if (this.capabilities?.supportsTranscript === true) {
             this.messageService.addMessage(moduleId, entityId, your_speech_is_uploading);
 
 
-            const url: string = this.basePath + "/api/users/GeboDirectModelChatController/transcriptText";
-            console.log("sending directly to model code:" + chatModelCode);
+            const url: string = this.basePath + "/api/users/GeboTranscriptController/transcriptText";
             if (event.data) {
 
-                const params: any = {
-                    "modelCode": chatModelCode
-                };
                 this.waitingForTranscript = true;
                 event.data.arrayBuffer().then((value: ArrayBuffer) => {
                     this.httpClient.post(url, value, {
-                        params: params
-
+                        responseType: 'json',
+                        withCredentials: true
                     }).subscribe({
                         next: (value: TranscriptResponse) => {
                             this.formGroup.controls["query"].setValue(value?.text);

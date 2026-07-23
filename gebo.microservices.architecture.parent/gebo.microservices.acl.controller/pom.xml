@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.microservices.acl.controller</artifactId>
+
+	<!--
+		heimdall's server-proxy for the ACL alias store: the whole IAclAliasesDao,
+		reads and writes.
+
+		The writes are the reason this is not read-only. addAcl() draws alias integers
+		from a Mongo sequence, so allocation MUST happen in one place - a second
+		allocator would hand out colliding integers. Consumers therefore do not write
+		locally and reconcile; they ask the owner to allocate, and the owner is the
+		only holder of gebo.acl.mongo.
+
+		Depends on gebo.acl.mongo: you may only SERVE the ACL store if you OWN it.
+		Reachable only from microservices currently registered in service discovery.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.acl.mongo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>

@@ -48,7 +48,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredChatModels"></a>
 # **getRuntimeConfiguredChatModels**
-> List&lt;ConfigurationEntry&gt; getRuntimeConfiguredChatModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseChatModelConfig&gt; getRuntimeConfiguredChatModels(modelTypeCode)
 
 
 
@@ -62,7 +62,7 @@ No authorization required
 ChatModelsControllerApi apiInstance = new ChatModelsControllerApi();
 String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    List<ConfigurationEntry> result = apiInstance.getRuntimeConfiguredChatModels(modelTypeCode);
+    List<ConfigurationEntryGBaseChatModelConfig> result = apiInstance.getRuntimeConfiguredChatModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ChatModelsControllerApi#getRuntimeConfiguredChatModels");
@@ -78,7 +78,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List&lt;ConfigurationEntry&gt;**](ConfigurationEntry.md)
+[**List&lt;ConfigurationEntryGBaseChatModelConfig&gt;**](ConfigurationEntryGBaseChatModelConfig.md)
 
 ### Authorization
 

@@ -1,83 +1,89 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+
+
 
 <p-blockUI [target]="confluenceSystemCtrl" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #confluenceSystemCtrl header="Editing jira system" [formGroup]="formGroup">
-    <div class="geboDialogContent">
-        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-        <p-tabView>
-            <p-tabPanel header="General settings">
-                <div class="grid">
-                    
-                    <div class="col-6">
-                        <gebo-ai-field id="description" label="Description" help="Enter the description of the jira system." [required]="true">
-                            <input pInputText id="description" formControlName="description" maxlength="120"
-                                [required]="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the jira system.">
-                            <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-12">
-                        <gebo-ai-field id="baseUri" label="Base internet address" help="Url of the base jira system address" [required]="true">
-                            <input type="text" id="baseUri" pInputText formControlName="baseUri" [required]="true"
-                                class="col-12 required" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="secretCode" label="Identity used" help="Select or create the identity to access the jira system" [required]="true">
-                            <geboai-editable-listbox-component formControlName="secretCode" id="secretCode"
-                                placeholder="Select an identity" [optionsObservable]="identitiesObservable"
-                                [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
-                            </geboai-editable-listbox-component>
-                        </gebo-ai-field>
-                    </div>
-                </div>
-            </p-tabPanel>
-            <!--
-            <p-tabPanel header="Security settings" [disabled]="mode!=='EDIT'">
-                <div class="grid">
-
-
-                </div>
-
-            </p-tabPanel>
-            -->
-        </p-tabView>
-    </div>
-
-
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-3">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
-            </div>
-           
-            <div class="col-3">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
-            </div>
-            <div class="col-3">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
-                    [disabled]="canDelete===false" />
-            </div>
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-3">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+          [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
         </div>
-    </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+        <div class="col-3">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+        </div>
+        <div class="col-3">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full"
+            [disabled]="canDelete===false" />
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="geboDialogContent">
+      <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      <p-tabs [value]="0">
+            <p-tablist>
+              <p-tab [value]="0">General settings</p-tab>
+              <p-tab [value]="1" [disabled]="mode!=='EDIT'">Security settings</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <div class="grid">
+
+            <div class="col-6">
+              <gebo-ai-field id="description" label="Description" help="Enter the description of the jira system." [required]="true">
+                <input pInputText id="description" formControlName="description" maxlength="120"
+                  [required]="true" gebo-ai-field-element />
+                </gebo-ai-field>
+              </div>
+              <div class="col-6">
+                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the jira system.">
+                  <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                </gebo-ai-field>
+              </div>
+              <div class="col-12">
+                <gebo-ai-field id="baseUri" label="Base internet address" help="Url of the base jira system address" [required]="true">
+                  <input type="text" id="baseUri" pInputText formControlName="baseUri" [required]="true"
+                    class="col-12 required" gebo-ai-field-element />
+                  </gebo-ai-field>
+                </div>
+                <div class="col-6">
+                  <gebo-ai-field id="secretCode" label="Identity used" help="Select or create the identity to access the jira system" [required]="true">
+                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode"
+                      placeholder="Select an identity" [optionsObservable]="identitiesObservable"
+                      [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
+                    </geboai-editable-listbox-component>
+                  </gebo-ai-field>
+                </div>
+              </div>
+            </p-tabpanel>
+            <!--
+            <p-tabpanel [value]="1">
+              <div class="grid">
+
+
+              </div>
+
+            </p-tabpanel>
+            -->
+          </p-tabpanels>
+          </p-tabs>
+        </div>
+      </p-panel>
+      <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+      <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

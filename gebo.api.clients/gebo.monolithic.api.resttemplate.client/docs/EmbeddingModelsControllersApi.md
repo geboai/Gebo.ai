@@ -48,7 +48,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredEmbeddingModels"></a>
 # **getRuntimeConfiguredEmbeddingModels**
-> List&lt;ConfigurationEntry&gt; getRuntimeConfiguredEmbeddingModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt; getRuntimeConfiguredEmbeddingModels(modelTypeCode)
 
 
 
@@ -62,7 +62,7 @@ No authorization required
 EmbeddingModelsControllersApi apiInstance = new EmbeddingModelsControllersApi();
 String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    List<ConfigurationEntry> result = apiInstance.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
+    List<ConfigurationEntryGBaseEmbeddingModelConfig> result = apiInstance.getRuntimeConfiguredEmbeddingModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling EmbeddingModelsControllersApi#getRuntimeConfiguredEmbeddingModels");
@@ -78,7 +78,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List&lt;ConfigurationEntry&gt;**](ConfigurationEntry.md)
+[**List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt;**](ConfigurationEntryGBaseEmbeddingModelConfig.md)
 
 ### Authorization
 

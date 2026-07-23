@@ -12,7 +12,9 @@
 
 package ai.gebo.heavy_workload_integration_tests;
 
-import static org.junit.Assert.assertTrue;
+
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -112,7 +114,7 @@ public class HeavyDutyMonolithicIntegrationTests extends AbstractGeboMonolithicI
 		}
 		for (TesterRunnable testerRunnable : testRunnables) {
 			String msg = "The test on folder:" + testerRunnable.endpoint.getPath() + " was expected to be ok";
-			assertTrue(msg, testerRunnable.testsOk);
+			assertTrue( testerRunnable.testsOk,msg); 
 		}
 	}
 }

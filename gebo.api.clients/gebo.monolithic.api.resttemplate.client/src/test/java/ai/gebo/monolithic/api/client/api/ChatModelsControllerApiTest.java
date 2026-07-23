@@ -12,7 +12,7 @@
 
 package ai.gebo.monolithic.api.client.api;
 
-import ai.gebo.monolithic.api.client.model.ConfigurationEntry;
+import ai.gebo.monolithic.api.client.model.ConfigurationEntryGBaseChatModelConfig;
 import ai.gebo.monolithic.api.client.model.GChatModelType;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -55,7 +55,7 @@ public class ChatModelsControllerApiTest {
     @Test
     public void getRuntimeConfiguredChatModelsTest() {
         String modelTypeCode = null;
-        List<ConfigurationEntry> response = api.getRuntimeConfiguredChatModels(modelTypeCode);
+        List<ConfigurationEntryGBaseChatModelConfig> response = api.getRuntimeConfiguredChatModels(modelTypeCode);
 
         // TODO: test validations
     }

@@ -1,6 +1,7 @@
 package ai.gebo.llms.openai_compat.modeltypes;
 
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelConfig;
 import lombok.Data;
 @Data
 public class GenericOpenAITranscriptModelType extends GTranscriptModelType {
@@ -13,4 +14,8 @@ public class GenericOpenAITranscriptModelType extends GTranscriptModelType {
 	private String providerId = null;
 	/** Flag indicating whether authentication is optional */
 	private boolean optionalAuthentication = false;
+
+	public GenericOpenAITranscriptModelType() {
+		setModelConfigurationClass(GenericOpenAIAPITranscriptModelConfig.class.getName());
+	}
 }

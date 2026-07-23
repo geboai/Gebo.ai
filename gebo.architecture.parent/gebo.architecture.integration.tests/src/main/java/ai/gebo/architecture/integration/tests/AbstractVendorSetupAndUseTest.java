@@ -1,6 +1,5 @@
 package ai.gebo.architecture.integration.tests;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.FileNotFoundException;
@@ -10,7 +9,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.TimeZone;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
@@ -22,16 +20,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.qdrant.QdrantContainer;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import ai.gebo.architecture.integration.tests.model.IntegrationTestSetup;
 import ai.gebo.architecture.integration.tests.model.TestGeboSystemInfo;
@@ -87,6 +75,7 @@ import ai.gebo.monolithic.api.client.model.OperationStatusGGoogleDriveSystem;
 import ai.gebo.monolithic.api.client.model.OperationStatusGJiraSystem;
 import ai.gebo.monolithic.api.client.model.OperationStatusGSharepointContentManagementSystem;
 import ai.gebo.monolithic.api.client.model.OperationStatusList;
+import ai.gebo.monolithic.api.client.model.OperationStatusListGBaseModelConfig;
 import ai.gebo.monolithic.api.client.model.SecretInfo;
 import ai.gebo.monolithic.api.client.model.SecretWrapperGeboTokenContent;
 import ai.gebo.monolithic.api.client.model.SecurityHeaderData;
@@ -95,6 +84,10 @@ import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
 
 /****************************************************************************************
  * Base for llm multivendor integration tests, taking admin account, llm vendor
@@ -109,16 +102,16 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 	protected static ObjectMapper objectMapper = new ObjectMapper();
 	static {
 		// Supporto per java.time.*
-		objectMapper.registerModule(new JavaTimeModule());
+		// object
 		// Date -> ISO-8601 (string), non timestamp numerico
-		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		// objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		// Date parsing ISO-8601 robusto (accetta anche offset/Z)
-		objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+		// objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
 		// Timezone coerente (scegli UTC per evitare sorprese tra ambienti)
-		objectMapper.setTimeZone(TimeZone.getTimeZone("UTC"));
+		// objectMapper.setTimeZone(TimeZone.getTimeZone("UTC"));
 		// Opzionali ma spesso utili
-		objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		// objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+		// objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 	}
 	@Autowired
 	protected GeboVectorStoreConfigurationService vectorStoreConfigurationService;
@@ -167,7 +160,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
 
 		// Crea il converter Jackson con il tuo mapper
-		MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter(objectMapper);
+		MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
 
 		// (Opzionale) aggiungi anche text/plain se alcuni endpoint rispondono JSON con
 		// content-type sbagliato
@@ -196,7 +189,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		actualConfiguration.getQdrantConfig().setTls(false);
 		OperationStatus<GeboMongoVectorStoreConfig> result = vectorStoreConfigurationService
 				.validateAndTestConfiguration(actualConfiguration);
-		assertFalse("Change of vector store to qdrant have to be without errors", result.isHasErrorMessages());
+		assertFalse(result.isHasErrorMessages(), "Change of vector store to qdrant have to be without errors");
 		LOGGER.info("Change to qdrant vector store: " + mapper.writeValueAsString(result));
 		vectorStoreConfigurationService.save(actualConfiguration);
 	}
@@ -217,7 +210,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		LOGGER.info("Begin executingPredefinedSystemSetup(...)");
 		ApiClient geboClient = createApiClient(host, port, null);
 		geboClient.setBasePath("http://" + host + ":" + port);
-		LOGGER.info("Running initial admin registration setup");
+		LOGGER.info("Running initial admin registration setup"); 
 		GeboFastInstallationSetupControllerApi fastInstallationSetup = new GeboFastInstallationSetupControllerApi(
 				geboClient);
 		FastInstallationSetupData installationSetupData = new FastInstallationSetupData();
@@ -306,7 +299,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				autoConfigureData.getDefaultChatModel() == null || autoConfigureData.getEmbeddingModel() == null
 						|| autoConfigureData.getInternalServicesModel() == null,
 				"Setup defaultChatModel,embeddingModel,internalServicesModel have to be not null");
-		OperationStatusList llmCreationInfos = llmSetupApi.createLLMByAutoconfigure(autoConfigureData);
+		OperationStatusListGBaseModelConfig llmCreationInfos = llmSetupApi.createLLMByAutoconfigure(autoConfigureData);
 		printMessages(llmCreationInfos.getMessages());
 		assertFalse(llmCreationInfos.isHasErrorMessages(),
 				"The vendor passed (" + vendorId + ") cannot be setup correctly");
@@ -437,7 +430,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				setup.getSystemSetup().getUsername(), setup.getSystemSetup().getPassword(), header);
 	}
 
-	protected TestGeboSystemInfo executeSystemSetupBySecret() throws JsonMappingException, JsonProcessingException {
+	protected TestGeboSystemInfo executeSystemSetupBySecret() throws DatabindException, JacksonException {
 		String jsonSetup = environment.getProperty(FULL_SETUP_ENVIRONMENT_JSON_STRING);
 		assertFalse(jsonSetup == null || jsonSetup.trim().length() == 0, "The environment property "
 				+ FULL_SETUP_ENVIRONMENT_JSON_STRING + " must contain a valid json setup configuration");

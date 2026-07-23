@@ -26,4 +26,5 @@ export interface ThreasholdAutotuneProcessResult {
     evaluationPoints?: number;
     score?: number;
     processedDateTime?: Date;
+    computedElements?: Array<{ [key: string]: any; }>;
 }

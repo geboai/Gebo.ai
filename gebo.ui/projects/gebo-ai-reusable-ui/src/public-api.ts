@@ -55,6 +55,9 @@ export * from "./lib/infrastructure/user-profile/user-profile.component";
 export * from "./lib/infrastructure/user-workflows/user-workflows.module";
 export * from "./lib/infrastructure/user-workflows/user-workflows-start.component";
 export * from "./lib/infrastructure/user-workflows/user-workflows-land.component";
+export * from "./lib/infrastructure/user-integrations/user-integrations.module";
+export * from "./lib/infrastructure/user-integrations/user-integrations.component";
+
 
 
 export * from "./lib/directives/translable/translable.module";
@@ -109,6 +112,7 @@ export * from "./lib/controls/userspace-files-component/userspace-files.componen
 
 export * from "./lib/controls/deep-search-control/deep-search-sources-choice.component";
 export * from "./lib/directives/translable/translable.directive";
+export * from "./lib/directives/blockable-container/blockable-container.directive";
 export * from "./lib/setup-wizard/setup-wizard-panel.component";
 export * from "./lib/controls/add-project-endpoint-component/project-add-context-menu.component";
 export * from "./lib/controls/strings-list-table-control/string-list.component";
@@ -151,3 +155,10 @@ export * from "./lib/architecture/desktop/gebo-ai-desktop.component";
 export * from "./lib/architecture/desktop/application-menu-provider.service";
 export * from "./lib/architecture/gebo-ui-entity-forms-launcher.service";
 export * from "./lib/infrastructure/user-workflows/user-workflows.module";
+export * from "./lib/dashboard/llms-usage-dashboard.module";
+export * from "./lib/dashboard/llms-usage-dashboard.component";
+export * from "./lib/dashboard/llms-usage-admin-dashboard.component";
+export * from "./lib/dashboard/llms-usage-user-dashboard.component";
+export * from "./lib/dashboard/workflow-stats-dashboard.module";
+export * from "./lib/dashboard/workflow-stats-dashboard.component";
+export * from "./lib/dashboard/workflow-stats-admin-dashboard.component";

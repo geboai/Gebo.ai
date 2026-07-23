@@ -1,165 +1,287 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="llmSystems" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+<p-blockUI id="BlockUI"  [target]="llmSystems" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #llmSystems>
 
-    <div class="grid geboFullHeight">
-        <div class="col-12 ">
-            <div class="grid" [formGroup]="createChoices">
-                <div class="col-4">
-                    <gebo-ai-field id="chat" label="New chat model"
-                        help="Select the supplier to add a new chat model capable of chatting with user or executing automations"
-                        placeholder="Select the chat model provider">
-                        <geboai-editable-listbox-component formControlName="chat" [data]="chatModelsTypes"
-                            gebo-ai-field-element>
-                        </geboai-editable-listbox-component>
-                    </gebo-ai-field>
-                    <p-button id="NewChatModelConfigurationBtn" gebo-ai-label label="New chat model configuration"
-                        [outlined]="true" icon="pi pi-microchip-ai"
-                        [disabled]="createChoices.controls['chat'].value?false:true"
-                        (onClick)="configureChatModel()"></p-button>
-                </div>
-                <div class="col-4">
-                    <gebo-ai-field id="embed"  label="New embedding model" help="Select the supplier to add a new embedding model capable of doing semantical indexing of contents" placeholder="Select the embedding model provider">
-                        <geboai-editable-listbox-component formControlName="embed"
-                         [data]="embeddingModelsTypes" gebo-ai-field-element>
-                    </geboai-editable-listbox-component>
-                    </gebo-ai-field>
-                    <p-button id="NewEmbeddingModelConfigurationBtn" gebo-ai-label
-                        label="New embedding model configuration" [outlined]="true" icon="pi pi-microchip-ai"
-                        [disabled]="createChoices.controls['embed'].value?false:true"
-                        (onClick)="configureEmbeddingModel();"></p-button>
-                </div>
-                <div class="col-4">
-                    <gebo-ai-field id="ranker"  label="New rerank model" help="Select the supplier to add a new reranker model" placeholder="Select the reranker model provider">
-                        <geboai-editable-listbox-component formControlName="rerank"
-                         [data]="rerankerModelsTypes" gebo-ai-field-element>
-                    </geboai-editable-listbox-component>
-                    </gebo-ai-field>
-                    <p-button id="NewRerankerModelConfigurationBtn" gebo-ai-label
-                        label="New reranker model configuration" [outlined]="true" icon="pi pi-microchip-ai"
-                        [disabled]="createChoices.controls['rerank'].value?false:true"
-                        (onClick)="configureRerankerModel();"></p-button>
-                </div>
-                <div class="col-3">
-                    
-                </div>
-                <div class="col-3">
-                    
-
-                </div>
-            </div>
+  <div class="grid geboFullHeight">
+    <div class="col-12 ">
+      <div class="grid" [formGroup]="createChoices">
+        <div class="col-4">
+          <gebo-ai-field id="chat" label="New chat model"
+            help="Select the supplier to add a new chat model capable of chatting with user or executing automations"
+            placeholder="Select the chat model provider">
+            <geboai-editable-listbox-component formControlName="chat" [data]="chatModelsTypes"
+              gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+          <p-button id="NewChatModelConfigurationBtn" gebo-ai-label label="New chat model configuration"
+            [outlined]="true" icon="pi pi-microchip-ai"
+            [disabled]="createChoices.controls['chat'].value?false:true"
+          (onClick)="configureChatModel()"></p-button>
         </div>
-        <div class="col-12 geboThirdHeight">
-            <p-panel id="ChatmodelsZone" gebo-ai-label header="Configured chat models"
-                *ngIf="chatModels && chatModels.length">
-                <p-table [value]="chatModels">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th id="CodeHeader" gebo-ai-text>Code</th>
-                            <th id="DescriptionHeader" gebo-ai-text>Description</th>
-                            <th id="ModelProviderHeader" gebo-ai-text>Model provider</th>
-                            <th id="ModelHeader" gebo-ai-text>Model </th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-model>
-                        <tr>
-                            <td>{{ model.configuration?.code }}</td>
-                            <td>{{ model.configuration?.description }}</td>
-                            <td>{{ model.configuration?.modelTypeCode }}</td>
-                            <td>{{ model.configuration?.choosedModel?.code }}</td>
-                            <td>
-                                <gebo-ai-test-chat-component
-                                    [chatModelCode]="model.configuration.code"></gebo-ai-test-chat-component>
-                            </td>
-                            <td>
-                                <p-button id="ConfigureBtn" gebo-ai-label (onClick)="editModel(model)" [outlined]="true"
-                                    label="configure" icon="pi pi-wrench"></p-button>
-                            </td>
-                        </tr>
-                    </ng-template>
-
-                </p-table>
-            </p-panel>
+        <div class="col-4">
+          <gebo-ai-field id="embed"  label="New embedding model" help="Select the supplier to add a new embedding model capable of doing semantical indexing of contents" placeholder="Select the embedding model provider">
+            <geboai-editable-listbox-component formControlName="embed"
+              [data]="embeddingModelsTypes" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+          <p-button id="NewEmbeddingModelConfigurationBtn" gebo-ai-label
+            label="New embedding model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+            [disabled]="createChoices.controls['embed'].value?false:true"
+          (onClick)="configureEmbeddingModel();"></p-button>
         </div>
-        <div class="col-12 geboThirdHeight">
-            <p-panel id="EmneddingModelsZone" gebo-ai-label *ngIf="embeddingModels && embeddingModels.length"
-                header="Configured embedding models">
-
-                <p-table [value]="embeddingModels" *ngIf="embeddingModels && embeddingModels.length">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th id="CodeHeader2" gebo-ai-text>Code</th>
-                            <th id="DescriptionHeader2" gebo-ai-text>Description</th>
-                            <th id="ModelProviderHeader2" gebo-ai-text>Model provider</th>
-                            <th id="ModelHeader2" gebo-ai-text>Model </th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-model>
-                        <tr>
-                            <td>{{ model.configuration?.code }}</td>
-                            <td>{{ model.configuration?.description }}</td>
-                            <td>{{ model.configuration?.modelTypeCode }}</td>
-                            <td>{{ model.configuration?.choosedModel?.code }}</td>
-                            <td>
-
-                            </td>
-                            <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editEmbeddingModel(model)"
-                                    [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
-                        </tr>
-                    </ng-template>
-
-                </p-table></p-panel>
+        <div class="col-4">
+          <gebo-ai-field id="ranker"  label="New rerank model" help="Select the supplier to add a new reranker model" placeholder="Select the reranker model provider">
+            <geboai-editable-listbox-component formControlName="rerank"
+              [data]="rerankerModelsTypes" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+          <p-button id="NewRerankerModelConfigurationBtn" gebo-ai-label
+            label="New reranker model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+            [disabled]="createChoices.controls['rerank'].value?false:true"
+          (onClick)="configureRerankerModel();"></p-button>
         </div>
-        <div class="col-12 geboThirdHeight">
-            <p-panel id="RerankerModelsZone" gebo-ai-label *ngIf="rerankerModels && rerankerModels.length"
-                header="Configured rerank models">
-
-                <p-table [value]="rerankerModels" *ngIf="rerankerModels && rerankerModels.length">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th id="CodeHeader3" gebo-ai-text>Code</th>
-                            <th id="DescriptionHeader3" gebo-ai-text>Description</th>
-                            <th id="ModelProviderHeader3" gebo-ai-text>Model provider</th>
-                            <th id="ModelHeader3" gebo-ai-text>Model </th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-model>
-                        <tr>
-                            <td>{{ model?.code }}</td>
-                            <td>{{ model?.description }}</td>
-                            <td>{{ model?.modelTypeCode }}</td>
-                            <td>{{ model?.choosedModel?.code }}</td>
-                            <td>
-
-                            </td>
-                            <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editRerankerModel(model)"
-                                    [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
-                        </tr>
-                    </ng-template>
-
-                </p-table></p-panel>
+        <div class="col-4">
+          <gebo-ai-field id="tts"  label="New text to speech model" help="Select the supplier to add a new text to speech model" placeholder="Select the text to speech model provider">
+            <geboai-editable-listbox-component formControlName="tts"
+              [data]="textToSpeechModelsTypes" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+          <p-button id="NewTextToSpeechModelConfigurationBtn" gebo-ai-label
+            label="New text to speech model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+            [disabled]="createChoices.controls['tts'].value?false:true"
+          (onClick)="configureTextToSpeechModel();"></p-button>
         </div>
+        <div class="col-4">
+          <gebo-ai-field id="transcript"  label="New transcript model" help="Select the supplier to add a new transcript model" placeholder="Select the transcript model provider">
+            <geboai-editable-listbox-component formControlName="transcript"
+              [data]="transcriptModelsTypes" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+          <p-button id="NewTranscriptModelConfigurationBtn" gebo-ai-label
+            label="New transcript model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+            [disabled]="createChoices.controls['transcript'].value?false:true"
+          (onClick)="configureTranscriptModel();"></p-button>
+        </div>
+        <div class="col-4">
+          <gebo-ai-field id="image"  label="New image model" help="Select the supplier to add a new image model" placeholder="Select the image model provider">
+            <geboai-editable-listbox-component formControlName="image"
+              [data]="imageModelsTypes" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+          <p-button id="NewImageModelConfigurationBtn" gebo-ai-label
+            label="New image model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+            [disabled]="createChoices.controls['image'].value?false:true"
+          (onClick)="configureImageModel();"></p-button>
+        </div>
+      </div>
     </div>
-</p-panel>
+    <div class="col-12 geboThirdHeight">
+      @if (chatModels && chatModels.length) {
+        <p-panel id="ChatmodelsZone" gebo-ai-label header="Configured chat models"
+          >
+          <p-table [value]="chatModels">
+            <ng-template pTemplate="header">
+              <tr>
+                <th id="CodeHeader" gebo-ai-text>Code</th>
+                <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                <th id="ModelProviderHeader" gebo-ai-text>Model provider</th>
+                <th id="ModelHeader" gebo-ai-text>Model </th>
+                <th></th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-model>
+              <tr>
+                <td>{{ model.configuration?.code }}</td>
+                <td>{{ model.configuration?.description }}</td>
+                <td>{{ model.configuration?.modelTypeCode }}</td>
+                <td>{{ model.configuration?.choosedModel?.code }}</td>
+                <td>
+                  <gebo-ai-test-chat-component
+                  [chatModelCode]="model.configuration.code"></gebo-ai-test-chat-component>
+                </td>
+                <td>
+                  <p-button id="ConfigureBtn" gebo-ai-label (onClick)="editModel(model)" [outlined]="true"
+                  label="configure" icon="pi pi-wrench"></p-button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-panel>
+      }
+    </div>
+    <div class="col-12 geboThirdHeight">
+      @if (embeddingModels && embeddingModels.length) {
+        <p-panel id="EmneddingModelsZone" gebo-ai-label
+          header="Configured embedding models">
+          @if (embeddingModels && embeddingModels.length) {
+            <p-table [value]="embeddingModels">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th id="CodeHeader2" gebo-ai-text>Code</th>
+                  <th id="DescriptionHeader2" gebo-ai-text>Description</th>
+                  <th id="ModelProviderHeader2" gebo-ai-text>Model provider</th>
+                  <th id="ModelHeader2" gebo-ai-text>Model </th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-model>
+                <tr>
+                  <td>{{ model.configuration?.code }}</td>
+                  <td>{{ model.configuration?.description }}</td>
+                  <td>{{ model.configuration?.modelTypeCode }}</td>
+                  <td>{{ model.configuration?.choosedModel?.code }}</td>
+                  <td>
+                  </td>
+                  <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editEmbeddingModel(model)"
+                  [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          }</p-panel>
+        }
+      </div>
+      <div class="col-12 geboThirdHeight">
+        @if (rerankerModels && rerankerModels.length) {
+          <p-panel id="RerankerModelsZone" gebo-ai-label
+            header="Configured rerank models">
+            @if (rerankerModels && rerankerModels.length) {
+              <p-table [value]="rerankerModels">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th id="CodeHeader3" gebo-ai-text>Code</th>
+                    <th id="DescriptionHeader3" gebo-ai-text>Description</th>
+                    <th id="ModelProviderHeader3" gebo-ai-text>Model provider</th>
+                    <th id="ModelHeader3" gebo-ai-text>Model </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-model>
+                  <tr>
+                    <td>{{ model.configuration?.code }}</td>
+                    <td>{{ model.configuration?.description }}</td>
+                    <td>{{ model.configuration?.modelTypeCode }}</td>
+                    <td>{{ model.configuration?.choosedModel?.code }}</td>
+                    <td>
+                    </td>
+                    <td><p-button id="ConfigureBtn3" gebo-ai-label (onClick)="editRerankerModel(model)"
+                    [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            }</p-panel>
+          }
+        </div>
+        <div class="col-12 geboThirdHeight">
+          @if (textToSpeechModels && textToSpeechModels.length) {
+            <p-panel id="TextToSpeechModelsZone" gebo-ai-label
+              header="Configured text to speech models">
+              @if (textToSpeechModels && textToSpeechModels.length) {
+                <p-table [value]="textToSpeechModels">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th id="CodeHeader4" gebo-ai-text>Code</th>
+                      <th id="DescriptionHeader4" gebo-ai-text>Description</th>
+                      <th id="ModelProviderHeader4" gebo-ai-text>Model provider</th>
+                      <th id="ModelHeader4" gebo-ai-text>Model </th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-model>
+                    <tr>
+                      <td>{{ model.configuration?.code }}</td>
+                      <td>{{ model.configuration?.description }}</td>
+                      <td>{{ model.configuration?.modelTypeCode }}</td>
+                      <td>{{ model.configuration?.choosedModel?.code }}</td>
+                      <td></td>
+                      <td><p-button id="ConfigureBtn4" gebo-ai-label (onClick)="editTextToSpeechModel(model)"
+                      [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              }</p-panel>
+            }
+          </div>
+          <div class="col-12 geboThirdHeight">
+            @if (transcriptModels && transcriptModels.length) {
+              <p-panel id="TranscriptModelsZone" gebo-ai-label
+                header="Configured transcript models">
+                @if (transcriptModels && transcriptModels.length) {
+                  <p-table [value]="transcriptModels">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th id="CodeHeader5" gebo-ai-text>Code</th>
+                        <th id="DescriptionHeader5" gebo-ai-text>Description</th>
+                        <th id="ModelProviderHeader5" gebo-ai-text>Model provider</th>
+                        <th id="ModelHeader5" gebo-ai-text>Model </th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-model>
+                      <tr>
+                        <td>{{ model.configuration?.code }}</td>
+                        <td>{{ model.configuration?.description }}</td>
+                        <td>{{ model.configuration?.modelTypeCode }}</td>
+                        <td>{{ model.configuration?.choosedModel?.code }}</td>
+                        <td></td>
+                        <td><p-button id="ConfigureBtn5" gebo-ai-label (onClick)="editTranscriptModel(model)"
+                        [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                }</p-panel>
+              }
+            </div>
+            <div class="col-12 geboThirdHeight">
+              @if (imageModels && imageModels.length) {
+                <p-panel id="ImageModelsZone" gebo-ai-label
+                  header="Configured image models">
+                  @if (imageModels && imageModels.length) {
+                    <p-table [value]="imageModels">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th id="CodeHeader6" gebo-ai-text>Code</th>
+                          <th id="DescriptionHeader6" gebo-ai-text>Description</th>
+                          <th id="ModelProviderHeader6" gebo-ai-text>Model provider</th>
+                          <th id="ModelHeader6" gebo-ai-text>Model </th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-model>
+                        <tr>
+                          <td>{{ model.configuration?.code }}</td>
+                          <td>{{ model.configuration?.description }}</td>
+                          <td>{{ model.configuration?.modelTypeCode }}</td>
+                          <td>{{ model.configuration?.choosedModel?.code }}</td>
+                          <td></td>
+                          <td><p-button id="ConfigureBtn6" gebo-ai-label (onClick)="editImageModel(model)"
+                          [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  }</p-panel>
+                }
+              </div>
+            </div>
+          </p-panel>
 
 
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+          <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+          <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

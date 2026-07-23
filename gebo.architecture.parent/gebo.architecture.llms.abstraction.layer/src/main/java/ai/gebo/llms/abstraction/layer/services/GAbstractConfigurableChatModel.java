@@ -21,6 +21,7 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.Builder;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -37,9 +38,10 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
+import io.micrometer.observation.ObservationRegistry;
 import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -82,6 +84,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected ChatClient chatClient = null;
 	protected final IGDocumentContentRendererProvider rendererFactory;
 	protected final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
+	protected final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	/**
+	 * The application's shared Micrometer {@link ObservationRegistry}, passed
+	 * down to {@link #configureModel(GBaseChatModelConfig, GChatModelType, ToolCallingManager)}
+	 * implementations so Spring AI's built-in chat-model observability actually
+	 * reports into it, instead of each vendor building its own disconnected
+	 * registry.
+	 */
+	protected final ObservationRegistry observationRegistry;
 	protected static final ObjectMapper mapper = new ObjectMapper();
 
 	protected abstract IGConfigurableChatModel cloneMeWithInjection();
@@ -90,9 +101,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * Default constructor for GAbstractConfigurableChatModel.
 	 */
 	public GAbstractConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
 		this.rendererFactory = rendererFactory;
 		this.toolCallbacksRepository = toolCallbacksRepository;
+		this.usageAdvisorFactory = usageAdvisorFactory;
+		this.observationRegistry = observationRegistry;
 	}
 
 	/**
@@ -154,7 +168,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.config = config;
 		this.type = type;
 		this.model = configureModel(config, type, null);
-		this.chatClient = ChatClient.create(configureModel(config, type, null));
+		Builder builder = ChatClient.builder(configureModel(config, type, null));
+		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config)).build();
 	}
 
 	@Override
@@ -284,6 +299,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		} else {
 			LOGGER.error("No config value for configurable model!!");
 		}
+		Integer generated = config.getMaxGeneratedTokens();
+		if (contextLength != null && generated != null) {
+			int contextWindow = contextLength.intValue();
+			int generatedTokens = generated.intValue();
+			int realContextWindow = contextWindow - generatedTokens;
+			if (realContextWindow > 0) {
+				contextLength = realContextWindow;
+			}
+		}
 		if (contextLength == null || contextLength.intValue() == 0)
 			contextLength = 8192;
 		return contextLength;
@@ -333,10 +357,11 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		}
 
 		ChatClientRequestSpec reqObject = client.prompt();
+
 		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
 			reqObject = reqObject.toolCallbacks(wrapTools(runAs, chatContext.getToolCallListener()));
 		} else {
-			reqObject = reqObject.toolCallbacks(List.of()).toolNames(new String[0]);
+			reqObject = reqObject.toolCallbacks(List.of());
 		}
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
@@ -674,16 +699,27 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				configurableChatModel.type = this.type;
 				configurableChatModel.model = configurableChatModel.configureModel(modelConfigClone, type,
 						configOptions.getToolCallingManager());
-				configurableChatModel.chatClient = ChatClient.create(
-						configurableChatModel.configureModel(config, type, configOptions.getToolCallingManager()));
+				configurableChatModel.chatClient = ChatClient
+						.builder(configurableChatModel.configureModel(modelConfigClone, type,
+								configOptions.getToolCallingManager()))
+						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone)).build();
 			} else
 				throw new IllegalStateException(
 						"The actual configurable chat model is not an GAbstractConfigurableChatModel");
 
 			return handler;
-		} catch (IOException e) {
+		} catch (JacksonException e) {
 			throw new LLMConfigException("Cannot clone model correctly");
 		}
+	}
+
+	public static List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener,
+			List<ToolCallback> additionalTools) {
+		List<ToolCallback> wrapped = new ArrayList<ToolCallback>();
+		for (ToolCallback toolCallback : additionalTools) {
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs, callBacksListener));
+		}
+		return wrapped;
 	}
 
 }

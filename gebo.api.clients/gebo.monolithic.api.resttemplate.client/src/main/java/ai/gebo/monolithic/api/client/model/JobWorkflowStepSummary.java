@@ -20,12 +20,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * JobWorkflowStepSummary
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class JobWorkflowStepSummary {
   @JsonProperty("workflowType")
@@ -36,6 +37,39 @@ public class JobWorkflowStepSummary {
 
   @JsonProperty("workflowStepId")
   private String workflowStepId = null;
+
+  @JsonProperty("startDateTime")
+  private Date startDateTime = null;
+
+  @JsonProperty("endDateTime")
+  private Date endDateTime = null;
+
+  @JsonProperty("batchDocumentsInput")
+  private Long batchDocumentsInput = null;
+
+  @JsonProperty("batchDiscardedInput")
+  private Long batchDiscardedInput = null;
+
+  @JsonProperty("batchSentToNextStep")
+  private Long batchSentToNextStep = null;
+
+  @JsonProperty("chunksProcessed")
+  private Long chunksProcessed = null;
+
+  @JsonProperty("tokensProcessed")
+  private Long tokensProcessed = null;
+
+  @JsonProperty("batchDocumentsProcessingErrors")
+  private Long batchDocumentsProcessingErrors = null;
+
+  @JsonProperty("batchDocumentsProcessed")
+  private Long batchDocumentsProcessed = null;
+
+  @JsonProperty("errorChunks")
+  private Long errorChunks = null;
+
+  @JsonProperty("errorTokens")
+  private Long errorTokens = null;
 
   @JsonProperty("timesamples")
   private List<JobWorkflowStepSummaryTimeSlotStats> timesamples = null;
@@ -94,6 +128,204 @@ public class JobWorkflowStepSummary {
     this.workflowStepId = workflowStepId;
   }
 
+  public JobWorkflowStepSummary startDateTime(Date startDateTime) {
+    this.startDateTime = startDateTime;
+    return this;
+  }
+
+   /**
+   * Get startDateTime
+   * @return startDateTime
+  **/
+  @Schema(description = "")
+  public Date getStartDateTime() {
+    return startDateTime;
+  }
+
+  public void setStartDateTime(Date startDateTime) {
+    this.startDateTime = startDateTime;
+  }
+
+  public JobWorkflowStepSummary endDateTime(Date endDateTime) {
+    this.endDateTime = endDateTime;
+    return this;
+  }
+
+   /**
+   * Get endDateTime
+   * @return endDateTime
+  **/
+  @Schema(description = "")
+  public Date getEndDateTime() {
+    return endDateTime;
+  }
+
+  public void setEndDateTime(Date endDateTime) {
+    this.endDateTime = endDateTime;
+  }
+
+  public JobWorkflowStepSummary batchDocumentsInput(Long batchDocumentsInput) {
+    this.batchDocumentsInput = batchDocumentsInput;
+    return this;
+  }
+
+   /**
+   * Get batchDocumentsInput
+   * @return batchDocumentsInput
+  **/
+  @Schema(description = "")
+  public Long getBatchDocumentsInput() {
+    return batchDocumentsInput;
+  }
+
+  public void setBatchDocumentsInput(Long batchDocumentsInput) {
+    this.batchDocumentsInput = batchDocumentsInput;
+  }
+
+  public JobWorkflowStepSummary batchDiscardedInput(Long batchDiscardedInput) {
+    this.batchDiscardedInput = batchDiscardedInput;
+    return this;
+  }
+
+   /**
+   * Get batchDiscardedInput
+   * @return batchDiscardedInput
+  **/
+  @Schema(description = "")
+  public Long getBatchDiscardedInput() {
+    return batchDiscardedInput;
+  }
+
+  public void setBatchDiscardedInput(Long batchDiscardedInput) {
+    this.batchDiscardedInput = batchDiscardedInput;
+  }
+
+  public JobWorkflowStepSummary batchSentToNextStep(Long batchSentToNextStep) {
+    this.batchSentToNextStep = batchSentToNextStep;
+    return this;
+  }
+
+   /**
+   * Get batchSentToNextStep
+   * @return batchSentToNextStep
+  **/
+  @Schema(description = "")
+  public Long getBatchSentToNextStep() {
+    return batchSentToNextStep;
+  }
+
+  public void setBatchSentToNextStep(Long batchSentToNextStep) {
+    this.batchSentToNextStep = batchSentToNextStep;
+  }
+
+  public JobWorkflowStepSummary chunksProcessed(Long chunksProcessed) {
+    this.chunksProcessed = chunksProcessed;
+    return this;
+  }
+
+   /**
+   * Get chunksProcessed
+   * @return chunksProcessed
+  **/
+  @Schema(description = "")
+  public Long getChunksProcessed() {
+    return chunksProcessed;
+  }
+
+  public void setChunksProcessed(Long chunksProcessed) {
+    this.chunksProcessed = chunksProcessed;
+  }
+
+  public JobWorkflowStepSummary tokensProcessed(Long tokensProcessed) {
+    this.tokensProcessed = tokensProcessed;
+    return this;
+  }
+
+   /**
+   * Get tokensProcessed
+   * @return tokensProcessed
+  **/
+  @Schema(description = "")
+  public Long getTokensProcessed() {
+    return tokensProcessed;
+  }
+
+  public void setTokensProcessed(Long tokensProcessed) {
+    this.tokensProcessed = tokensProcessed;
+  }
+
+  public JobWorkflowStepSummary batchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
+    this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
+    return this;
+  }
+
+   /**
+   * Get batchDocumentsProcessingErrors
+   * @return batchDocumentsProcessingErrors
+  **/
+  @Schema(description = "")
+  public Long getBatchDocumentsProcessingErrors() {
+    return batchDocumentsProcessingErrors;
+  }
+
+  public void setBatchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
+    this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
+  }
+
+  public JobWorkflowStepSummary batchDocumentsProcessed(Long batchDocumentsProcessed) {
+    this.batchDocumentsProcessed = batchDocumentsProcessed;
+    return this;
+  }
+
+   /**
+   * Get batchDocumentsProcessed
+   * @return batchDocumentsProcessed
+  **/
+  @Schema(description = "")
+  public Long getBatchDocumentsProcessed() {
+    return batchDocumentsProcessed;
+  }
+
+  public void setBatchDocumentsProcessed(Long batchDocumentsProcessed) {
+    this.batchDocumentsProcessed = batchDocumentsProcessed;
+  }
+
+  public JobWorkflowStepSummary errorChunks(Long errorChunks) {
+    this.errorChunks = errorChunks;
+    return this;
+  }
+
+   /**
+   * Get errorChunks
+   * @return errorChunks
+  **/
+  @Schema(description = "")
+  public Long getErrorChunks() {
+    return errorChunks;
+  }
+
+  public void setErrorChunks(Long errorChunks) {
+    this.errorChunks = errorChunks;
+  }
+
+  public JobWorkflowStepSummary errorTokens(Long errorTokens) {
+    this.errorTokens = errorTokens;
+    return this;
+  }
+
+   /**
+   * Get errorTokens
+   * @return errorTokens
+  **/
+  @Schema(description = "")
+  public Long getErrorTokens() {
+    return errorTokens;
+  }
+
+  public void setErrorTokens(Long errorTokens) {
+    this.errorTokens = errorTokens;
+  }
+
   public JobWorkflowStepSummary timesamples(List<JobWorkflowStepSummaryTimeSlotStats> timesamples) {
     this.timesamples = timesamples;
     return this;
@@ -133,12 +365,23 @@ public class JobWorkflowStepSummary {
     return Objects.equals(this.workflowType, jobWorkflowStepSummary.workflowType) &&
         Objects.equals(this.workflowId, jobWorkflowStepSummary.workflowId) &&
         Objects.equals(this.workflowStepId, jobWorkflowStepSummary.workflowStepId) &&
+        Objects.equals(this.startDateTime, jobWorkflowStepSummary.startDateTime) &&
+        Objects.equals(this.endDateTime, jobWorkflowStepSummary.endDateTime) &&
+        Objects.equals(this.batchDocumentsInput, jobWorkflowStepSummary.batchDocumentsInput) &&
+        Objects.equals(this.batchDiscardedInput, jobWorkflowStepSummary.batchDiscardedInput) &&
+        Objects.equals(this.batchSentToNextStep, jobWorkflowStepSummary.batchSentToNextStep) &&
+        Objects.equals(this.chunksProcessed, jobWorkflowStepSummary.chunksProcessed) &&
+        Objects.equals(this.tokensProcessed, jobWorkflowStepSummary.tokensProcessed) &&
+        Objects.equals(this.batchDocumentsProcessingErrors, jobWorkflowStepSummary.batchDocumentsProcessingErrors) &&
+        Objects.equals(this.batchDocumentsProcessed, jobWorkflowStepSummary.batchDocumentsProcessed) &&
+        Objects.equals(this.errorChunks, jobWorkflowStepSummary.errorChunks) &&
+        Objects.equals(this.errorTokens, jobWorkflowStepSummary.errorTokens) &&
         Objects.equals(this.timesamples, jobWorkflowStepSummary.timesamples);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(workflowType, workflowId, workflowStepId, timesamples);
+    return Objects.hash(workflowType, workflowId, workflowStepId, startDateTime, endDateTime, batchDocumentsInput, batchDiscardedInput, batchSentToNextStep, chunksProcessed, tokensProcessed, batchDocumentsProcessingErrors, batchDocumentsProcessed, errorChunks, errorTokens, timesamples);
   }
 
 
@@ -150,6 +393,17 @@ public class JobWorkflowStepSummary {
     sb.append("    workflowType: ").append(toIndentedString(workflowType)).append("\n");
     sb.append("    workflowId: ").append(toIndentedString(workflowId)).append("\n");
     sb.append("    workflowStepId: ").append(toIndentedString(workflowStepId)).append("\n");
+    sb.append("    startDateTime: ").append(toIndentedString(startDateTime)).append("\n");
+    sb.append("    endDateTime: ").append(toIndentedString(endDateTime)).append("\n");
+    sb.append("    batchDocumentsInput: ").append(toIndentedString(batchDocumentsInput)).append("\n");
+    sb.append("    batchDiscardedInput: ").append(toIndentedString(batchDiscardedInput)).append("\n");
+    sb.append("    batchSentToNextStep: ").append(toIndentedString(batchSentToNextStep)).append("\n");
+    sb.append("    chunksProcessed: ").append(toIndentedString(chunksProcessed)).append("\n");
+    sb.append("    tokensProcessed: ").append(toIndentedString(tokensProcessed)).append("\n");
+    sb.append("    batchDocumentsProcessingErrors: ").append(toIndentedString(batchDocumentsProcessingErrors)).append("\n");
+    sb.append("    batchDocumentsProcessed: ").append(toIndentedString(batchDocumentsProcessed)).append("\n");
+    sb.append("    errorChunks: ").append(toIndentedString(errorChunks)).append("\n");
+    sb.append("    errorTokens: ").append(toIndentedString(errorTokens)).append("\n");
     sb.append("    timesamples: ").append(toIndentedString(timesamples)).append("\n");
     sb.append("}");
     return sb.toString();

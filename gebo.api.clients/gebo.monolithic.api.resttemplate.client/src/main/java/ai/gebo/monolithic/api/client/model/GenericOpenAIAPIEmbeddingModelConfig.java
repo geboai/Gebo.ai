@@ -24,7 +24,7 @@ import java.util.Date;
  * GenericOpenAIAPIEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GenericOpenAIAPIEmbeddingModelConfig {
   @JsonProperty("code")
@@ -59,6 +59,9 @@ public class GenericOpenAIAPIEmbeddingModelConfig {
 
   @JsonProperty("baseUrl")
   private String baseUrl = null;
+
+  @JsonProperty("contextLength")
+  private Integer contextLength = null;
 
   @JsonProperty("tokenizationThreshold")
   private Integer tokenizationThreshold = null;
@@ -261,6 +264,24 @@ public class GenericOpenAIAPIEmbeddingModelConfig {
     this.baseUrl = baseUrl;
   }
 
+  public GenericOpenAIAPIEmbeddingModelConfig contextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+    return this;
+  }
+
+   /**
+   * Get contextLength
+   * @return contextLength
+  **/
+  @Schema(description = "")
+  public Integer getContextLength() {
+    return contextLength;
+  }
+
+  public void setContextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+  }
+
   public GenericOpenAIAPIEmbeddingModelConfig tokenizationThreshold(Integer tokenizationThreshold) {
     this.tokenizationThreshold = tokenizationThreshold;
     return this;
@@ -300,12 +321,13 @@ public class GenericOpenAIAPIEmbeddingModelConfig {
         Objects.equals(this.apiSecretCode, genericOpenAIAPIEmbeddingModelConfig.apiSecretCode) &&
         Objects.equals(this.choosedModel, genericOpenAIAPIEmbeddingModelConfig.choosedModel) &&
         Objects.equals(this.baseUrl, genericOpenAIAPIEmbeddingModelConfig.baseUrl) &&
+        Objects.equals(this.contextLength, genericOpenAIAPIEmbeddingModelConfig.contextLength) &&
         Objects.equals(this.tokenizationThreshold, genericOpenAIAPIEmbeddingModelConfig.tokenizationThreshold);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, tokenizationThreshold);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, tokenizationThreshold);
   }
 
 
@@ -325,6 +347,7 @@ public class GenericOpenAIAPIEmbeddingModelConfig {
     sb.append("    apiSecretCode: ").append(toIndentedString(apiSecretCode)).append("\n");
     sb.append("    choosedModel: ").append(toIndentedString(choosedModel)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
+    sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    tokenizationThreshold: ").append(toIndentedString(tokenizationThreshold)).append("\n");
     sb.append("}");
     return sb.toString();

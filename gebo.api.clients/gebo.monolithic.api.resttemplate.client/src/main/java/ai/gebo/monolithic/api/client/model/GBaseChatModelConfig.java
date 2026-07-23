@@ -26,7 +26,7 @@ import java.util.List;
  * GBaseChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GBaseChatModelConfig {
   @JsonProperty("code")
@@ -62,6 +62,9 @@ public class GBaseChatModelConfig {
   @JsonProperty("baseUrl")
   private String baseUrl = null;
 
+  @JsonProperty("contextLength")
+  private Integer contextLength = null;
+
   @JsonProperty("topP")
   private Double topP = null;
 
@@ -79,12 +82,6 @@ public class GBaseChatModelConfig {
 
   @JsonProperty("temperature")
   private Double temperature = null;
-
-  @JsonProperty("contextLength")
-  private Integer contextLength = null;
-
-  @JsonProperty("defaultModelPrompt")
-  private String defaultModelPrompt = null;
 
   /**
    * Gets or Sets forUses
@@ -156,6 +153,46 @@ public class GBaseChatModelConfig {
 
   }  @JsonProperty("features")
   private List<FeaturesEnum> features = null;
+
+  /**
+   * Gets or Sets thinking
+   */
+  public enum ThinkingEnum {
+    NO_THINKING("NO_THINKING"),
+    LOW_THINKING("LOW_THINKING"),
+    MEDIUM_THINKING("MEDIUM_THINKING"),
+    HIGH_THINKING("HIGH_THINKING"),
+    AUTO("AUTO");
+
+    private String value;
+
+    ThinkingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ThinkingEnum fromValue(String input) {
+      for (ThinkingEnum b : ThinkingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("thinking")
+  private ThinkingEnum thinking = null;
+
+  @JsonProperty("maxGeneratedTokens")
+  private Integer maxGeneratedTokens = null;
 
   public GBaseChatModelConfig code(String code) {
     this.code = code;
@@ -355,6 +392,24 @@ public class GBaseChatModelConfig {
     this.baseUrl = baseUrl;
   }
 
+  public GBaseChatModelConfig contextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+    return this;
+  }
+
+   /**
+   * Get contextLength
+   * @return contextLength
+  **/
+  @Schema(description = "")
+  public Integer getContextLength() {
+    return contextLength;
+  }
+
+  public void setContextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+  }
+
   public GBaseChatModelConfig topP(Double topP) {
     this.topP = topP;
     return this;
@@ -487,42 +542,6 @@ public class GBaseChatModelConfig {
     this.temperature = temperature;
   }
 
-  public GBaseChatModelConfig contextLength(Integer contextLength) {
-    this.contextLength = contextLength;
-    return this;
-  }
-
-   /**
-   * Get contextLength
-   * @return contextLength
-  **/
-  @Schema(description = "")
-  public Integer getContextLength() {
-    return contextLength;
-  }
-
-  public void setContextLength(Integer contextLength) {
-    this.contextLength = contextLength;
-  }
-
-  public GBaseChatModelConfig defaultModelPrompt(String defaultModelPrompt) {
-    this.defaultModelPrompt = defaultModelPrompt;
-    return this;
-  }
-
-   /**
-   * Get defaultModelPrompt
-   * @return defaultModelPrompt
-  **/
-  @Schema(description = "")
-  public String getDefaultModelPrompt() {
-    return defaultModelPrompt;
-  }
-
-  public void setDefaultModelPrompt(String defaultModelPrompt) {
-    this.defaultModelPrompt = defaultModelPrompt;
-  }
-
   public GBaseChatModelConfig forUses(List<ForUsesEnum> forUses) {
     this.forUses = forUses;
     return this;
@@ -575,6 +594,42 @@ public class GBaseChatModelConfig {
     this.features = features;
   }
 
+  public GBaseChatModelConfig thinking(ThinkingEnum thinking) {
+    this.thinking = thinking;
+    return this;
+  }
+
+   /**
+   * Get thinking
+   * @return thinking
+  **/
+  @Schema(description = "")
+  public ThinkingEnum getThinking() {
+    return thinking;
+  }
+
+  public void setThinking(ThinkingEnum thinking) {
+    this.thinking = thinking;
+  }
+
+  public GBaseChatModelConfig maxGeneratedTokens(Integer maxGeneratedTokens) {
+    this.maxGeneratedTokens = maxGeneratedTokens;
+    return this;
+  }
+
+   /**
+   * Get maxGeneratedTokens
+   * @return maxGeneratedTokens
+  **/
+  @Schema(description = "")
+  public Integer getMaxGeneratedTokens() {
+    return maxGeneratedTokens;
+  }
+
+  public void setMaxGeneratedTokens(Integer maxGeneratedTokens) {
+    this.maxGeneratedTokens = maxGeneratedTokens;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -596,21 +651,22 @@ public class GBaseChatModelConfig {
         Objects.equals(this.apiSecretCode, gbaseChatModelConfig.apiSecretCode) &&
         Objects.equals(this.choosedModel, gbaseChatModelConfig.choosedModel) &&
         Objects.equals(this.baseUrl, gbaseChatModelConfig.baseUrl) &&
+        Objects.equals(this.contextLength, gbaseChatModelConfig.contextLength) &&
         Objects.equals(this.topP, gbaseChatModelConfig.topP) &&
         Objects.equals(this.accessibleGroups, gbaseChatModelConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gbaseChatModelConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gbaseChatModelConfig.accessibleToAll) &&
         Objects.equals(this.enabledFunctions, gbaseChatModelConfig.enabledFunctions) &&
         Objects.equals(this.temperature, gbaseChatModelConfig.temperature) &&
-        Objects.equals(this.contextLength, gbaseChatModelConfig.contextLength) &&
-        Objects.equals(this.defaultModelPrompt, gbaseChatModelConfig.defaultModelPrompt) &&
         Objects.equals(this.forUses, gbaseChatModelConfig.forUses) &&
-        Objects.equals(this.features, gbaseChatModelConfig.features);
+        Objects.equals(this.features, gbaseChatModelConfig.features) &&
+        Objects.equals(this.thinking, gbaseChatModelConfig.thinking) &&
+        Objects.equals(this.maxGeneratedTokens, gbaseChatModelConfig.maxGeneratedTokens);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, contextLength, defaultModelPrompt, forUses, features);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, forUses, features, thinking, maxGeneratedTokens);
   }
 
 
@@ -630,16 +686,17 @@ public class GBaseChatModelConfig {
     sb.append("    apiSecretCode: ").append(toIndentedString(apiSecretCode)).append("\n");
     sb.append("    choosedModel: ").append(toIndentedString(choosedModel)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
+    sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    topP: ").append(toIndentedString(topP)).append("\n");
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
-    sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
-    sb.append("    defaultModelPrompt: ").append(toIndentedString(defaultModelPrompt)).append("\n");
     sb.append("    forUses: ").append(toIndentedString(forUses)).append("\n");
     sb.append("    features: ").append(toIndentedString(features)).append("\n");
+    sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
+    sb.append("    maxGeneratedTokens: ").append(toIndentedString(maxGeneratedTokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,0 +1,27 @@
+## (A) Agents network shared context
+
+The following shared context is the common working memory of the network: the visible outputs, observations, intermediate findings, evidence, tool outputs, partial conclusions, and status updates produced so far by the agents:
+
+{SHARED_CONTEXT}
+
+Rules for using the shared context:
+
+1. Prefer information supported by explicit evidence, source references, document excerpts, logs, or tool outputs.
+2. Do not re-run a tool whose result is already available here, unless that result is stale, ambiguous, or contradictory.
+3. Use it to fill in arguments for your tool calls and to avoid duplicating work already done by other agents.
+
+## (B) Current agent private memory
+
+The following private context is visible only to you and preserves what you did in your previous turns:
+
+{PRIVATE_CONTEXT}
+
+Use it to avoid repeating tool calls you already made and to continue unfinished work.
+
+## (C) Current command / input (maximum priority)
+
+This is the command you must satisfy by calling the appropriate tools. Treat it as your single highest-priority objective:
+
+{INPUT}
+
+Now select and invoke the tools needed to satisfy the command, then return the concise, factual, self-contained textual result described in your instructions. Preferably answer in the same language as the command.

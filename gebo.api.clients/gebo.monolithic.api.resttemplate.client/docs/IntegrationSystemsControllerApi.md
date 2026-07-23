@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**deleteIntegrationProjectEndpoint**](IntegrationSystemsControllerApi.md#deleteIntegrationProjectEndpoint) | **POST** /api/admin/IntegrationSystemsController/deleteIntegrationProjectEndpoint | 
 [**findIntegrationEndpointsByProject**](IntegrationSystemsControllerApi.md#findIntegrationEndpointsByProject) | **GET** /api/admin/IntegrationSystemsController/findIntegrationEndpointsByProject | 
 [**insertIntegrationProjectEndpoint**](IntegrationSystemsControllerApi.md#insertIntegrationProjectEndpoint) | **POST** /api/admin/IntegrationSystemsController/insertIntegrationProjectEndpoint | 
+[**publishIntegrationProjectEndpoint**](IntegrationSystemsControllerApi.md#publishIntegrationProjectEndpoint) | **POST** /api/admin/IntegrationSystemsController/publishIntegrationProjectEndpoint | 
 [**updateIntegrationProjectEndpoint**](IntegrationSystemsControllerApi.md#updateIntegrationProjectEndpoint) | **POST** /api/admin/IntegrationSystemsController/updateIntegrationProjectEndpoint | 
 
 <a name="deleteIntegrationProjectEndpoint"></a>
@@ -127,6 +128,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GIntegrationProjectEndpoint**](GIntegrationProjectEndpoint.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishIntegrationProjectEndpoint"></a>
+# **publishIntegrationProjectEndpoint**
+> OperationStatusGJobStatus publishIntegrationProjectEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.IntegrationSystemsControllerApi;
+
+
+IntegrationSystemsControllerApi apiInstance = new IntegrationSystemsControllerApi();
+GIntegrationProjectEndpoint body = new GIntegrationProjectEndpoint(); // GIntegrationProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishIntegrationProjectEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling IntegrationSystemsControllerApi#publishIntegrationProjectEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GIntegrationProjectEndpoint**](GIntegrationProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

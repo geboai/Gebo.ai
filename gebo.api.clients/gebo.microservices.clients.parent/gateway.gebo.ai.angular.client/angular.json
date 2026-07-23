@@ -1,0 +1,33 @@
+﻿{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "gebo-gateway-api": {
+      "projectType": "library",
+      "root": "projects/gebo-gateway-api",
+      "sourceRoot": "projects/gebo-gateway-api/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/gebo-gateway-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/gebo-gateway-api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/gebo-gateway-api/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

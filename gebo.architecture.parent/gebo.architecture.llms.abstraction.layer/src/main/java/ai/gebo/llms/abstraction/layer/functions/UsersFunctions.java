@@ -36,7 +36,7 @@ import ai.gebo.llms.abstraction.layer.functions.model.RestrictedUserInfos;
 import ai.gebo.llms.abstraction.layer.functions.model.VoidObject;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGSecurityService;
 

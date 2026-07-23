@@ -11,7 +11,7 @@
 
 
 import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -62,7 +62,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     /** Flag indicating if a regular chat is currently open */
     protected openChat: boolean = false;
     /** Stores the current page of chat history */
-    protected chatsPage?: PageGUserChatInfo;
+    protected chatsPage?: PagedModelGUserChatInfo;
     /** Stores the currently active chat information */
     protected currentChat: GUserChatInfo = {};
 
@@ -97,6 +97,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected chatModelsData: { code?: string, description?: string }[] = [];
     protected chatUIOptions?: ChatUIOptions;
     protected id?: string;
+    /** Whether the administrator has configured at least one chat model and one embedding model. Starts true to avoid flashing the warning while the check is in flight. */
+    protected llmsSetupDone: boolean = true;
 
     /**
      * Component constructor that injects necessary services
@@ -141,6 +143,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                     this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
                 }
             },
+            error: () => {
+                this.chatDataLoading = false;
+            },
             complete: () => {
                 this.chatDataLoading = false;
             }
@@ -160,6 +165,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected routeNewChat(): void {
         const value = this.chatFormGroup.value;
         const chatModelCode = value.chatModelCode;
+        this.chatDataLoading = true;
         this.geboUserChatsControllerService.createCleanChatByModelCode(chatModelCode).subscribe({
             next: (chatInfo: GUserChatInfo) => {
                 if (chatInfo.code) {
@@ -167,6 +173,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                     const route: string[] = ["/", "ui", "chat", chatInfo.code, "load"];
                     this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
                 }
+            },
+            error: () => {
+                this.chatDataLoading = false;
             },
             complete: () => {
                 this.chatDataLoading = false;
@@ -271,12 +280,20 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 this.chatUIOptions = options;
             }
         })
+        this.geboUserChatsControllerService.isMinimalLLMSSetupDone().subscribe({
+            next: (done) => {
+                this.llmsSetupDone = done === true;
+            }
+        })
         this.geboChatModelsControllerService.getRuntimeConfiguredChatModelsLookup().subscribe({
             next: (value) => {
                 this.chatModelsData = value;
                 if (this.chatFormGroup && this.chatModelsData && this.chatModelsData.length) {
                     this.chatFormGroup.controls["chatModelCode"].setValue(this.chatModelsData[0].code);
                 }
+            },
+            error: () => {
+                this.chatsProfilesLoading = false;
             },
             complete: () => {
                 this.chatsProfilesLoading = false;
@@ -289,6 +306,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 if (this.formGroup && this.chatProfilesData && this.chatProfilesData.length) {
                     this.formGroup.controls["chatProfileCode"].setValue(this.chatProfilesData[0].code);
                 }
+            },
+            error: () => {
+                this.chatsModelLoading = false;
             },
             complete: () => {
                 this.chatsModelLoading = false;
@@ -315,6 +335,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
                             this.activateChat(chatInfo);
                         },
+                        error: () => {
+                            this.chatDataLoading = false;
+                        },
                         complete: () => {
                             this.chatDataLoading = false;
                         }
@@ -329,6 +352,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
                             this.activateChat(chatInfo);
                         },
+                        error: () => {
+                            this.chatDataLoading = false;
+                        },
                         complete: () => {
                             this.chatDataLoading = false;
                         }
@@ -336,10 +362,14 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 }
                 if (params["modelCode"]) {
                     const modelCode = params["modelCode"];
+                    this.chatDataLoading = true;
                     this.geboUserChatsControllerService.createCleanChatByModelCode(modelCode).subscribe({
                         next: (chatInfo: GUserChatInfo) => {
 
                             this.activateChat(chatInfo);
+                        },
+                        error: () => {
+                            this.chatDataLoading = false;
                         },
                         complete: () => {
                             this.chatDataLoading = false;

@@ -1,16 +1,15 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
@@ -49,9 +48,8 @@ public final class RoutingPromptUtil {
 			}
 			StringBuilder sb = new StringBuilder();
 			sb.append("TOOL_PARAMETERS:\n");
-			Iterator<Map.Entry<String, JsonNode>> fields = properties.fields();
-			while (fields.hasNext()) {
-				Map.Entry<String, JsonNode> field = fields.next();
+			Set<Map.Entry<String, JsonNode>> fields = properties.properties();
+			for (Map.Entry<String, JsonNode> field : fields) {
 				String name = field.getKey();
 				JsonNode prop = field.getValue();
 				String type = prop.has("type") ? prop.get("type").asText() : "unknown";
@@ -337,10 +335,12 @@ public final class RoutingPromptUtil {
 	public static String dataSourcesListPromptPart(List<DeepSearchDataSourceMetaInfos> dataSources,
 			List<GKnowledgeBase> knowledgeBases) {
 		StringBuffer buffer = new StringBuffer();
-		if (knowledgeBases != null && !knowledgeBases.isEmpty()) {
+		boolean hasKnowledgeBases = knowledgeBases != null && !knowledgeBases.isEmpty();
+		boolean hasExternalSources = dataSources != null && !dataSources.isEmpty();
+		if (hasKnowledgeBases || hasExternalSources) {
 			buffer.append(DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
-			if (!knowledgeBases.isEmpty()) {
+			if (hasKnowledgeBases) {
 				buffer.append(DEEP_SEARCH_DATA_SOURCE);
 				buffer.append(NEWLINE);
 				buffer.append(CODE);
@@ -364,29 +364,31 @@ public final class RoutingPromptUtil {
 				buffer.append(END_DEEP_SEARCH_DATA_SOURCE);
 				buffer.append(NEWLINE);
 			}
-			for (DeepSearchDataSourceMetaInfos obj : dataSources) {
-				buffer.append(DEEP_SEARCH_DATA_SOURCE);
-				buffer.append(NEWLINE);
-				buffer.append(CODE);
-				buffer.append(obj.getHandlerId());
-				buffer.append(NEWLINE);
-				buffer.append(DESCRIPTION);
-				buffer.append(obj.getDescription());
-				buffer.append(NEWLINE);
-				if (obj.getCatalogues() != null && !obj.getCatalogues().isEmpty()) {
-					buffer.append(MAIN_SECTIONS_SAMPLE);
+			if (hasExternalSources) {
+				for (DeepSearchDataSourceMetaInfos obj : dataSources) {
+					buffer.append(DEEP_SEARCH_DATA_SOURCE);
 					buffer.append(NEWLINE);
-					for (CatalogueSample catalog : obj.getCatalogues()) {
-						buffer.append(LIST_ITEM);
-						buffer.append(SPACE);
-						buffer.append(catalog.getDescription());
+					buffer.append(CODE);
+					buffer.append(obj.getHandlerId());
+					buffer.append(NEWLINE);
+					buffer.append(DESCRIPTION);
+					buffer.append(obj.getDescription());
+					buffer.append(NEWLINE);
+					if (obj.getCatalogues() != null && !obj.getCatalogues().isEmpty()) {
+						buffer.append(MAIN_SECTIONS_SAMPLE);
+						buffer.append(NEWLINE);
+						for (CatalogueSample catalog : obj.getCatalogues()) {
+							buffer.append(LIST_ITEM);
+							buffer.append(SPACE);
+							buffer.append(catalog.getDescription());
+							buffer.append(NEWLINE);
+						}
+						buffer.append(END_MAIN_SECTIONS_SAMPLE);
 						buffer.append(NEWLINE);
 					}
-					buffer.append(END_MAIN_SECTIONS_SAMPLE);
+					buffer.append(END_DEEP_SEARCH_DATA_SOURCE);
 					buffer.append(NEWLINE);
 				}
-				buffer.append(END_DEEP_SEARCH_DATA_SOURCE);
-				buffer.append(NEWLINE);
 			}
 			buffer.append(END_DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);

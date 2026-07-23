@@ -135,8 +135,10 @@ public class GDisposeMongoContentsMessageReceiverFactoryImpl extends GAbstractMe
             // Handle specific payload types and delete corresponding data
             if (msg.getPayload() instanceof GDeletedProjectEndpointPayload) {
                 GDeletedProjectEndpointPayload payload = (GDeletedProjectEndpointPayload) msg.getPayload();
-                vfolderRepository.deleteByProjectEndpoint(payload.getEndpoint());
-                docRepository.deleteByProjectEndpoint(payload.getEndpoint());
+                // The payload carries the shareable centralized endpoint; delete by the original concrete
+                // endpoint reference (real class name + code) it points back to.
+                vfolderRepository.deleteByProjectEndpointRef(payload.getEndpoint().getRemoteProjectReference());
+                docRepository.deleteByProjectEndpointRef(payload.getEndpoint().getRemoteProjectReference());
             } else if (msg.getPayload() instanceof GInternalDeletionMessagePayload) {
                 GInternalDeletionMessagePayload payload = (GInternalDeletionMessagePayload) msg.getPayload();
                 switch (payload.getObjectsType()) {

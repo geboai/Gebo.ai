@@ -15,6 +15,7 @@ import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFacto
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkServiceFactory;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -29,13 +30,11 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 	public static final String REACTIVE_CHAT_AGENTS_NETWORK = "REACTIVE_CHAT_AGENTS_NETWORK";
 	private final IGeboThreadManager threadManager;
 
-	public GReactiveChatAgentsNetworkServiceFactoryImpl( IAgentRoleDao agentRoleDao,
-			IGAgentServiceRuntimeDao agentServiceRuntimeDao, IAgentConfigDao agentConfigDao,
+	public GReactiveChatAgentsNetworkServiceFactoryImpl(
 			IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo,
-			IGeboThreadManager threadManager) {
+			IGeboThreadManager threadManager, IGRuntimeBinder runtimeBinder) {
 		super(REACTIVE_CHAT_AGENTS_NETWORK, _REACTIVE_CHAT_AGENTS_NETWORK_DESCRIPTION,
-				IGReactiveChatAgentsNetworkService.class, agentRoleDao, agentServiceRuntimeDao, agentConfigDao,
-				reactiveAgentAdapterFactoryRepo);
+				IGReactiveChatAgentsNetworkService.class, reactiveAgentAdapterFactoryRepo, runtimeBinder);
 		this.threadManager = threadManager;
 
 	}
@@ -45,10 +44,24 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 			INotificationSink notificationSink, Class<ChatPipelineExecutionRuntimeData> inputType,
 			Class<GeboChatMessageEnvelope> outputType, ReactiveIdentityUtil runAs,
 			Map<String, RuntimeAgentInfos> agentsCache, AdapterWithFlux adapter) {
-
+		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
+				.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
+		IAgentRoleDao agentRoleDao = runtimeBinder.getImplementationOf(IAgentRoleDao.class);
 		return new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao, threadManager, network,
-				notificationSink, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
+				notificationSink, inputType, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
 
+	}
+
+	@Override
+	public Class<GeboChatMessageEnvelope> getOutputType() {
+		return GeboChatMessageEnvelope.class;
+	}
+
+	@Override
+	public Class<ChatPipelineExecutionRuntimeData> getInputType() {
+
+		return ChatPipelineExecutionRuntimeData.class;
 	}
 
 }

@@ -4,7 +4,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.DefaultPromptForChatModelParam;
 import ai.gebo.monolithic.api.client.model.DefaultPromptForChatModelReferenceParam;
-import ai.gebo.monolithic.api.client.model.GPromptConfig;
+import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class PromptTemplatesControllerApi {
     private ApiClient apiClient;
@@ -49,10 +49,10 @@ public class PromptTemplatesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param ragPrompt  (required)
-     * @return GPromptConfig
+     * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptConfig getDefaultPrompt(Boolean ragPrompt) throws RestClientException {
+    public GPromptTemplateConfig getDefaultPrompt(Boolean ragPrompt) throws RestClientException {
         return getDefaultPromptWithHttpInfo(ragPrompt).getBody();
     }
 
@@ -61,10 +61,10 @@ public class PromptTemplatesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param ragPrompt  (required)
-     * @return ResponseEntity&lt;GPromptConfig&gt;
+     * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptConfig> getDefaultPromptWithHttpInfo(Boolean ragPrompt) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> getDefaultPromptWithHttpInfo(Boolean ragPrompt) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'ragPrompt' is set
         if (ragPrompt == null) {
@@ -86,7 +86,7 @@ public class PromptTemplatesControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<GPromptConfig> returnType = new ParameterizedTypeReference<GPromptConfig>() {};
+        ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -94,10 +94,10 @@ public class PromptTemplatesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return GPromptConfig
+     * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptConfig getDefaultPromptForChatModel(DefaultPromptForChatModelParam body) throws RestClientException {
+    public GPromptTemplateConfig getDefaultPromptForChatModel(DefaultPromptForChatModelParam body) throws RestClientException {
         return getDefaultPromptForChatModelWithHttpInfo(body).getBody();
     }
 
@@ -106,10 +106,10 @@ public class PromptTemplatesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;GPromptConfig&gt;
+     * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptConfig> getDefaultPromptForChatModelWithHttpInfo(DefaultPromptForChatModelParam body) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> getDefaultPromptForChatModelWithHttpInfo(DefaultPromptForChatModelParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -132,7 +132,7 @@ public class PromptTemplatesControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<GPromptConfig> returnType = new ParameterizedTypeReference<GPromptConfig>() {};
+        ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -140,10 +140,10 @@ public class PromptTemplatesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return GPromptConfig
+     * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptConfig getDefaultPromptForChatModelReference(DefaultPromptForChatModelReferenceParam body) throws RestClientException {
+    public GPromptTemplateConfig getDefaultPromptForChatModelReference(DefaultPromptForChatModelReferenceParam body) throws RestClientException {
         return getDefaultPromptForChatModelReferenceWithHttpInfo(body).getBody();
     }
 
@@ -152,10 +152,10 @@ public class PromptTemplatesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;GPromptConfig&gt;
+     * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptConfig> getDefaultPromptForChatModelReferenceWithHttpInfo(DefaultPromptForChatModelReferenceParam body) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> getDefaultPromptForChatModelReferenceWithHttpInfo(DefaultPromptForChatModelReferenceParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -178,7 +178,7 @@ public class PromptTemplatesControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<GPromptConfig> returnType = new ParameterizedTypeReference<GPromptConfig>() {};
+        ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

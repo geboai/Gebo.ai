@@ -1,22 +1,26 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
-<table *ngIf="item" class='grid'>
+
+
+
+@if (item) {
+  <table class='grid'>
     <div class="col-12"><b>{{item.parentData?.label}} <span id="SpanEmbedding" gebo-ai-text>embedding vs total nr of documents</span> </b></div>
-    <div class="col-2"><p-button id="MoreDetailsBtn" gebo-ai-label label="More details" *ngIf="item.parentData?.data?.canDrillDown===true" (onClick)="drillDown.emit(item.parentData?.data)"></p-button></div>
+    <div class="col-2">@if (item.parentData?.data?.canDrillDown===true) {
+      <p-button id="MoreDetailsBtn" gebo-ai-label label="More details" (onClick)="drillDown.emit(item.parentData?.data)"></p-button>
+    }</div>
     <div class='col-10'>
-            <p-chart id="Chart" gebo-ai-label type="pie" [data]="pieChartData" [options]="pieOptions" [height]="'300px'" />
-        </div>
-</table>
+      <p-chart id="Chart" gebo-ai-label type="pie" [data]="pieChartData" [options]="pieOptions" [height]="'300px'" />
+    </div>
+  </table>
+}
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

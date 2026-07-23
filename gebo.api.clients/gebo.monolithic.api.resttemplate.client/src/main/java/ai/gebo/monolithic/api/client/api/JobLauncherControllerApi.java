@@ -2,10 +2,8 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
-import ai.gebo.monolithic.api.client.model.GJobStatus;
 import ai.gebo.monolithic.api.client.model.GObjectRefGProjectEndpoint;
 import ai.gebo.monolithic.api.client.model.HasRunningJobs;
-import ai.gebo.monolithic.api.client.model.JobSummary;
 import ai.gebo.monolithic.api.client.model.OperationStatusGJobStatus;
 
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class JobLauncherControllerApi {
     private ApiClient apiClient;
@@ -179,95 +177,5 @@ public class JobLauncherControllerApi {
 
         ParameterizedTypeReference<HasRunningJobs> returnType = new ParameterizedTypeReference<HasRunningJobs>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
-    }
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @param jobCode  (required)
-     * @return GJobStatus
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public GJobStatus getJobStatus(String jobCode) throws RestClientException {
-        return getJobStatusWithHttpInfo(jobCode).getBody();
-    }
-
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @param jobCode  (required)
-     * @return ResponseEntity&lt;GJobStatus&gt;
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public ResponseEntity<GJobStatus> getJobStatusWithHttpInfo(String jobCode) throws RestClientException {
-        Object postBody = null;
-        // verify the required parameter 'jobCode' is set
-        if (jobCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'jobCode' when calling getJobStatus");
-        }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JobLauncherController/getJobStatus").build().toUriString();
-        
-        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
-        final HttpHeaders headerParams = new HttpHeaders();
-        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "jobCode", jobCode));
-
-        final String[] accepts = { 
-            "application/json"
-         };
-        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
-        final String[] contentTypes = {  };
-        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
-
-        String[] authNames = new String[] {  };
-
-        ParameterizedTypeReference<GJobStatus> returnType = new ParameterizedTypeReference<GJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
-    }
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @param jobCode  (required)
-     * @return JobSummary
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public JobSummary getJobSummary(String jobCode) throws RestClientException {
-        return getJobSummaryWithHttpInfo(jobCode).getBody();
-    }
-
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @param jobCode  (required)
-     * @return ResponseEntity&lt;JobSummary&gt;
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public ResponseEntity<JobSummary> getJobSummaryWithHttpInfo(String jobCode) throws RestClientException {
-        Object postBody = null;
-        // verify the required parameter 'jobCode' is set
-        if (jobCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'jobCode' when calling getJobSummary");
-        }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JobLauncherController/getJobSummary").build().toUriString();
-        
-        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
-        final HttpHeaders headerParams = new HttpHeaders();
-        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "jobCode", jobCode));
-
-        final String[] accepts = { 
-            "application/json"
-         };
-        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
-        final String[] contentTypes = {  };
-        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
-
-        String[] authNames = new String[] {  };
-
-        ParameterizedTypeReference<JobSummary> returnType = new ParameterizedTypeReference<JobSummary>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

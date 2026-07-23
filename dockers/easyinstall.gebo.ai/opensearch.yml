@@ -1,0 +1,20 @@
+cluster.name: gebo-easyinstall
+node.name: gebo-node
+# Single-node cluster (no discovery)
+discovery.type: single-node
+
+# NOTE: network.host is intentionally NOT set. With the default loopback bind
+# OpenSearch runs in "development mode", so the production bootstrap checks
+# (e.g. vm.max_map_count) are logged as warnings instead of refusing to start.
+# The gebo.ai app reaches OpenSearch on 127.0.0.1:9200 (same container).
+http.port: 9200
+
+# Security plugin disabled for the all-in-one easy-install image (HTTP, no auth).
+plugins.security.disabled: true
+
+# Do not try to lock memory (works inside a standard container)
+bootstrap.memory_lock: false
+
+# Paths
+path.data: /opt/opensearch/data
+path.logs: /var/log/opensearch

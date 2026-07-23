@@ -1,32 +1,34 @@
 
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
-<div class="grid" *ngIf="formGroup" [formGroup]="formGroup">
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+@if (formGroup) {
+  <div class="grid" [formGroup]="formGroup">
     <div class="col-2">
-        <gebo-ai-field id="accessibleToAll" label="Everyone uses" help="Everyone can use">
-            <p-checkbox id="accessibleToAll" formControlName="accessibleToAll" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
-        </gebo-ai-field>
+      <gebo-ai-field id="accessibleToAll" label="Everyone uses" help="Everyone can use">
+        <p-checkbox id="accessibleToAll" formControlName="accessibleToAll" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+      </gebo-ai-field>
     </div>
     <div class="col-5">
-        <gebo-ai-field id="accessibleGroups" label="Groups list" help="Select allowed groups">
-            <p-multiSelect id="accessibleGroups" formControlName="accessibleGroups" dataKey="code" optionLabel="description" optionValue="code" [options]="groups" [disabled]="accessibleToAll" placeholder="Select groups" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
-        </gebo-ai-field>
+      <gebo-ai-field id="accessibleGroups" label="Groups list" help="Select allowed groups">
+        <p-multiSelect id="accessibleGroups" formControlName="accessibleGroups" dataKey="code" optionLabel="description" optionValue="code" [options]="groups" [disabled]="accessibleToAll" placeholder="Select groups" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
+      </gebo-ai-field>
     </div>
     <div class="col-5">
-        <gebo-ai-field id="accessibleUsers" label="Users list" help="Select allowed users">
-            <p-multiSelect id="accessibleUsers" formControlName="accessibleUsers" dataKey="username" optionLabel="username" optionValue="username" [options]="users" [disabled]="accessibleToAll" placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
-        </gebo-ai-field>
+      <gebo-ai-field id="accessibleUsers" label="Users list" help="Select allowed users">
+        <p-multiSelect id="accessibleUsers" formControlName="accessibleUsers" dataKey="username" optionLabel="username" optionValue="username" [options]="users" [disabled]="accessibleToAll" placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
+      </gebo-ai-field>
     </div>
-</div>
+  </div>
+}
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

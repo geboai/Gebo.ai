@@ -1,0 +1,33 @@
+﻿{
+  "name": "gebo-ai-chunker-client",
+  "version": "1.0.2.1",
+  "scripts": {
+    "ng": "ng",
+    "build": "ng build gebo-chunker-api",
+    "pack": "npm pack ./dist/gebo-chunker-api",
+    "build-lib": "npm run build && npm run pack"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^21.2.18",
+    "@angular/common": "^21.2.18",
+    "@angular/compiler": "^21.2.18",
+    "@angular/core": "^21.2.18",
+    "@angular/forms": "^21.2.18",
+    "@angular/platform-browser": "^21.2.18",
+    "@angular/platform-browser-dynamic": "^21.2.18",
+    "@angular/router": "^21.2.18",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^21.2.19",
+    "@angular/cli": "^21.2.19",
+    "@angular/compiler-cli": "^21.2.18",
+    "ng-packagr": "^21.2.5",
+    "typescript": "~5.9.0"
+  }
+}
+
+

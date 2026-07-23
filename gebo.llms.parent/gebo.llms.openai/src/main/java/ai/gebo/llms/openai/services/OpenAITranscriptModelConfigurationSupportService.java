@@ -14,31 +14,37 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.openai.models.audio.AudioResponseFormat;
 import org.apache.commons.io.IOUtils;
+import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
-import org.springframework.ai.openai.api.OpenAiAudioApi;
-import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
-import org.springframework.ai.openai.api.OpenAiAudioApi.WhisperModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils;
 import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyInfo;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
+import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelChoice;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
+import ai.gebo.openai.integration.client.model.OpenAIModel;
 
 /**
  * AI generated comments
@@ -59,13 +65,22 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	static {
 		type.setCode("openai-transcript");
 		type.setDescription("OpenAI transcript service");
+		type.setModelConfigurationClass(GOpenAITranscriptModelConfig.class.getName());
 	}
 
 	/**
 	 * Utility for reading API access information
 	 */
+	private static final String MODELS_DOC_URL = "https://platform.openai.com/docs/models/";
+
 	@Autowired
 	IGModelApiAccessReadUtils apiKeyReader;
+	@Autowired
+	IGOpenAIApiUtil openaiApiUtil;
+	@Autowired
+	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	@Autowired
+	ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Implementation of a configurable transcript model for OpenAI services.
@@ -91,8 +106,8 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 				created = Files.createTempFile("usr-audio", ".webm");
 				try (OutputStream os = Files.newOutputStream(created)) {
 					IOUtils.copy(audioResource, os);
-					Resource resource=new FileSystemResource(created);
-					return model.call(resource);
+					Resource resource = new FileSystemResource(created);
+					return model.call(new AudioTranscriptionPrompt(resource)).getResult().getOutput();
 				}
 			} catch (IOException exc) {
 				throw new IOException("Handled exception in call",exc);
@@ -126,14 +141,17 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 			ApiKeyInfo apiKey;
 
 			apiKey = apiKeyReader.getApiKeyInfo(config);
-			OpenAiAudioApi audioApi = OpenAiAudioApi.builder().apiKey(apiKey.getApiKey()).build();
 			org.springframework.ai.openai.OpenAiAudioTranscriptionOptions.Builder builder = OpenAiAudioTranscriptionOptions
 					.builder();
 
-			builder.responseFormat(TranscriptResponseFormat.TEXT).temperature(0f).model(WhisperModel.WHISPER_1.value);
+			String modelName = config.getChoosedModel() != null && config.getChoosedModel().getCode() != null
+					&& !config.getChoosedModel().getCode().isBlank() ? config.getChoosedModel().getCode() : "whisper-1";
+			builder.apiKey(apiKey.getApiKey()).responseFormat(AudioResponseFormat.TEXT).temperature(0f).model(modelName);
 			OpenAiAudioTranscriptionOptions options = builder.build();
-			OpenAiAudioTranscriptionModel model = new OpenAiAudioTranscriptionModel(audioApi, options,
-					RetryTemplate.defaultInstance());
+			OpenAiAudioTranscriptionModel model = OpenAiAudioTranscriptionModel.builder()
+					.options(options)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 
 			return model;
 		}
@@ -164,10 +182,42 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	 */
 	@Override
 	public OperationStatus<List<GOpenAITranscriptModelChoice>> getModelChoices(GOpenAITranscriptModelConfig config) {
-		GOpenAITranscriptModelChoice choice = new GOpenAITranscriptModelChoice();
-		choice.setCode(WhisperModel.WHISPER_1.value);
-		choice.setDescription("Whisper 1");
-		return OperationStatus.of(List.of(choice));
+		try {
+			ApiKeyInfo apiKey = apiKeyReader.getApiKeyInfo(config);
+			OpenAIApiConfig apiconfig = new OpenAIApiConfig();
+			apiconfig.setProviderId("openai");
+			apiconfig.setApiKey(apiKey.getApiKey());
+			if (config.getBaseUrl() != null) {
+				apiconfig.setBasePath(config.getBaseUrl());
+			}
+			List<GOpenAITranscriptModelChoice> choices = new ArrayList<GOpenAITranscriptModelChoice>();
+			for (OpenAIModel model : openaiApiUtil.getModels(apiconfig)) {
+				if (!isTranscriptModel(model.getId())) {
+					continue;
+				}
+				GOpenAITranscriptModelChoice choice = new GOpenAITranscriptModelChoice();
+				choice.setCode(model.getId());
+				choice.setDescription(model.getId());
+				choice.setInformativeUrl(MODELS_DOC_URL);
+				choices.add(choice);
+			}
+			return OperationStatus.of(choices);
+		} catch (Throwable e) {
+			return OperationStatus.of(e);
+		}
+	}
+
+	/**
+	 * The OpenAI models listing carries no capability metadata, so the speech to text
+	 * models are recognised by the identifiers OpenAI publishes for them (whisper-1,
+	 * gpt-4o-transcribe, gpt-4o-mini-transcribe, ...).
+	 */
+	private static boolean isTranscriptModel(String modelId) {
+		if (modelId == null) {
+			return false;
+		}
+		String id = modelId.toLowerCase();
+		return id.contains("whisper") || id.contains("transcribe");
 	}
 
 	/**
@@ -181,7 +231,11 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	public GOpenAITranscriptModelConfig createBaseConfiguration(String presetModel) {
 		GOpenAITranscriptModelConfig config = new GOpenAITranscriptModelConfig();
 		config.setDescription("OpenAI transcript provider");
-		config.setChoosedModel(getModelChoices(config).getResult().get(0));
+		GOpenAITranscriptModelChoice choice = new GOpenAITranscriptModelChoice();
+		choice.setCode(presetModel != null && !presetModel.isBlank() ? presetModel : "whisper-1");
+		choice.setDescription(choice.getCode());
+		config.setChoosedModel(choice);
+		config.setModelTypeCode(getType().getCode());
 		return config;
 	}
 
@@ -201,8 +255,8 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	}
 
 	@Override
-	public OperationStatus<GOpenAITranscriptModelConfig> insertAndConfigure(GOpenAITranscriptModelConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+	public OperationStatus<GOpenAITranscriptModelConfig> insertAndConfigure(GOpenAITranscriptModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

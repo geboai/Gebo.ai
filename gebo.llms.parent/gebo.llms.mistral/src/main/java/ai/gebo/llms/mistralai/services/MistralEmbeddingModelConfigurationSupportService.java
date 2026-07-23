@@ -24,7 +24,6 @@ import org.springframework.ai.mistralai.MistralAiEmbeddingOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -75,6 +74,7 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 	final MistralModelsLookupService mistralModelsLookupService;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ObservationRegistry observationRegistry;
 	/*
 	 * @Autowired IGOpenAIApiUtil openaiApiUtil;
 	 */
@@ -91,7 +91,7 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 		 * provider.
 		 */
 		public MistralConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider, MistralEmbeddingModelConfigurationSupportService.this.observationRegistry);
 
 		}
 
@@ -128,7 +128,7 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
 					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
+			org.springframework.core.retry.RetryTemplate retryTemplate = clientsProvider.getCoreRetryTemplate();
 			Builder apiBuilder = MistralAiApi.builder();
 			apiBuilder.apiKey(apiKey);
 			apiBuilder.restClientBuilder(restClient);
@@ -138,13 +138,13 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 					.builder();
 
 			if (config.getChoosedModel() != null) {
-				builder = builder.withModel(config.getChoosedModel().getCode());
+				builder = builder.model(config.getChoosedModel().getCode());
 			}
 
 			MistralAiEmbeddingOptions options = builder.build();
 			MetadataMode meta = MetadataMode.EMBED;
 			MistralAiEmbeddingModel model = new MistralAiEmbeddingModel(mistralApi, meta, options, retryTemplate,
-					ObservationRegistry.NOOP);
+					observationRegistry);
 			return model;
 		}
 

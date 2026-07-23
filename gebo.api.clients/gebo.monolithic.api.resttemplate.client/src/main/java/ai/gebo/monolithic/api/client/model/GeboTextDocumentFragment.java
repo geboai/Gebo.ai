@@ -18,13 +18,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GeboTextDocumentFragment
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GeboTextDocumentFragment {
+  @JsonProperty("customMetaData")
+  private Map<String, Object> customMetaData = null;
+
   /**
    * Gets or Sets fragmentType
    */
@@ -79,6 +85,32 @@ public class GeboTextDocumentFragment {
 
   @JsonProperty("uniqueCode")
   private String uniqueCode = null;
+
+  public GeboTextDocumentFragment customMetaData(Map<String, Object> customMetaData) {
+    this.customMetaData = customMetaData;
+    return this;
+  }
+
+  public GeboTextDocumentFragment putCustomMetaDataItem(String key, Object customMetaDataItem) {
+    if (this.customMetaData == null) {
+      this.customMetaData = new HashMap<>();
+    }
+    this.customMetaData.put(key, customMetaDataItem);
+    return this;
+  }
+
+   /**
+   * Get customMetaData
+   * @return customMetaData
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getCustomMetaData() {
+    return customMetaData;
+  }
+
+  public void setCustomMetaData(Map<String, Object> customMetaData) {
+    this.customMetaData = customMetaData;
+  }
 
   public GeboTextDocumentFragment fragmentType(FragmentTypeEnum fragmentType) {
     this.fragmentType = fragmentType;
@@ -216,7 +248,8 @@ public class GeboTextDocumentFragment {
       return false;
     }
     GeboTextDocumentFragment geboTextDocumentFragment = (GeboTextDocumentFragment) o;
-    return Objects.equals(this.fragmentType, geboTextDocumentFragment.fragmentType) &&
+    return Objects.equals(this.customMetaData, geboTextDocumentFragment.customMetaData) &&
+        Objects.equals(this.fragmentType, geboTextDocumentFragment.fragmentType) &&
         Objects.equals(this.contentType, geboTextDocumentFragment.contentType) &&
         Objects.equals(this.characterEncoding, geboTextDocumentFragment.characterEncoding) &&
         Objects.equals(this.encoding, geboTextDocumentFragment.encoding) &&
@@ -227,7 +260,7 @@ public class GeboTextDocumentFragment {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fragmentType, contentType, characterEncoding, encoding, content, name, uniqueCode);
+    return Objects.hash(customMetaData, fragmentType, contentType, characterEncoding, encoding, content, name, uniqueCode);
   }
 
 
@@ -236,6 +269,7 @@ public class GeboTextDocumentFragment {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboTextDocumentFragment {\n");
     
+    sb.append("    customMetaData: ").append(toIndentedString(customMetaData)).append("\n");
     sb.append("    fragmentType: ").append(toIndentedString(fragmentType)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("    characterEncoding: ").append(toIndentedString(characterEncoding)).append("\n");

@@ -1,13 +1,14 @@
 {
   "name": "@Gebo.ai/admin-ui",
-  "version": "1.0.1.0-BETA",
+  "version": "1.0.2.1",
   "peerDependencies": {
-    "@angular/common": "^19.2.5",
-    "@angular/core": "^19.2.5",
-    "primeng": "^19.1.4",
+    "@angular/common": "^21.2.18",
+    "@angular/core": "^21.2.18",
+    "primeng": "^21.1.9",
     "primeicons": "^7.0.0",
     "primeflex": "^4.0.0",
-    "@primeng/themes": "^19.1.4"
+    "@primeng/themes": "^21.0.4",
+    "ng-diagram": "^1.2.4"
   },
   "dependencies": {
     "tslib": "^2.3.0"

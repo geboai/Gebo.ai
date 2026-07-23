@@ -16,6 +16,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -31,27 +32,31 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
+public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  AggregatedResponses>
 		extends GAbstractGenericalAgentService
-		implements IGReactiveAgentService<RequestType, ResponseType, NotificationObject> {
+		implements IGReactiveAgentService<RequestType, ResponseType> {
 
 	public GAbstractReactiveAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IGRuntimeBinder runtimeBinder, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, runtimeBinder, securityService, agentRoleDao);
+			IGRuntimeBinder runtimeBinder, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
+			IGDocumentContentRendererProvider rendererFactory) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, runtimeBinder, securityService, agentRoleDao,
+				rendererFactory);
 
 	}
 
 	@Override
 	public Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException {
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin execute(...)");
+			LOGGER.debug("Begin execute(...) reactive agent service id:" + getId() + " agentConfig code:"
+					+ (agentConfig != null ? agentConfig.getCode() : null) + " useDefaultChatModel:"
+					+ (agentConfig != null ? agentConfig.getUseDefaultChatModel() : null));
 		}
 		IGConfigurableChatModel copiedModel = null;
 		if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
@@ -70,70 +75,44 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
 			if (toolsList != null) {
-				allFunctions = toolsList.stream().map(x -> x.getToolDefinition().name()).toList();
+				// Honor the auto-mount exclusions (see AgentsToolsAutoMountingConfig) so tools
+				// kept out of automatic mounting are not subscribed by reactive agents either.
+				allFunctions = filterAutoMountedTools(
+						toolsList.stream().map(x -> x.getToolDefinition().name()).toList());
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reactive agent id:" + getId() + " resolved " + (allFunctions != null ? allFunctions.size() : 0)
+					+ " enabled function(s); cloning model with temperature:" + agentConfig.getTemperature() + " topP:"
+					+ agentConfig.getTopP() + " thinking:" + agentConfig.getThinking());
 		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, runAs));
+				createToolCallingManager(callBacksListener, allFunctions, null, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
-		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
-				? agentConfig.getMaxLoopIterations()
-				: 4;
+
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
-		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
-		final AtomicReference<List<AggregatedResponses>> aggregatedResponses = new AtomicReference(
-				new ArrayList<AggregatedResponses>());
-		Flux<IGPartialOperation<ResponseType>> out = Flux.defer(() -> {
-			return Flux.range(0, maxLoop).concatMap(index -> {
-				Flux<IGPartialOperation<ResponseType>> iterationStream = Flux.defer(() -> {
-					return runAs.doRunAsWithReturn(() -> {
-						try {
-							if (!iterationFinished.get()) {
-								if (LOGGER.isDebugEnabled()) {
-									LOGGER.debug("Begin agentic iteration " + getId() + " index=" + index);
-								}
-								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
-								Flux<IGPartialOperation<ResponseType>> iteration = createResponse(request,
-										pastResponses, agentModel, agentConfig, agentRole, index, maxLoop, agentPrompt,
-										runAs, callBacksListener);
-								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
-										aggregatedResponses);
-
-								return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).map(aggregator)
-										.map(x -> {
-											if (x.isLastMessage())
-												iterationFinished.set(true);
-											return x;
-										}).doOnComplete(() -> LOGGER.debug("End agentic iteration {} index={}", getId(),
-												index));
-							} else
-								return Flux.empty();
-						} catch (Throwable th) {
-							LOGGER.error("Error in agent execution", th);
-							return Flux.just(IGPartialOperation.of(null,
-									GUserMessage.errorMessage("Error in agent execution", th)));
-						}
-					});
-				});
-				return iterationStream;
-			});
-
-		});
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End execute(...)");
+			LOGGER.debug("End execute(...) building reactive response flux for agent id:" + getId() + " agentRole:"
+					+ (agentRole != null ? agentRole.getCode() : null));
 		}
-		return out;
+		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(chatRequestContext, agentConfig, request,
+				network, contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole,
+				agentPrompt, runAs, callBacksListener);
+		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))
+				.doOnSubscribe(s -> LOGGER.debug("Begin reactive agentic iteration subscription {} ", getId()))
+				.doOnComplete(() -> LOGGER.debug("End agentic iteration {} ", getId()))
+				.doOnError(th -> LOGGER.error("Error in reactive agentic iteration " + getId(), th));
 	}
 
-	protected abstract Flux<IGPartialOperation<ResponseType>> createResponse(RequestType request,
-			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel, GAgentConfig agentConfig,
-			GAgentRole agentRole, Integer index, int maxLoop, GPromptTemplateConfig agentPrompt,
-			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener);
-
-	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
-			AtomicReference<List<AggregatedResponses>> aggregatorList);
+	protected abstract Flux<IGPartialOperation<ResponseType>> createResponse(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink  notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, IGConfigurableChatModel agentModel,
+			GAgentRole agentRole, GPromptTemplateConfig agentPrompt, ReactiveIdentityUtil runAs,
+			ToolCallsListener callBacksListener) throws LLMConfigException, AgentException;
 
 }

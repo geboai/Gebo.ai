@@ -3,12 +3,18 @@
   <parent>
     <groupId>ai.gebo</groupId>
     <artifactId>ai.gebo.parent</artifactId>
-    <version>1.0.1.0-BETA</version>
+    <version>1.0.2.1</version>
   </parent>
   <groupId>ai.gebo.clients</groupId>
   <artifactId>gebo.api.clients</artifactId>
   <packaging>pom</packaging>
   <modules>
   	<module>gebo.monolithic.api.resttemplate.client</module>
+  	<!-- 
+		Following module will be regenerated/compiled on specific pipelines no reason to 
+		take always part on an "cascade" build. -->
+		<!--  
+  		<module>gebo.microservices.clients.parent</module>
+  	-->
   </modules>
 </project>

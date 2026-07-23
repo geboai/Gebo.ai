@@ -72,10 +72,10 @@ public class IntegrationInputControllerApiTest {
      */
     @Test
     public void spoolDocumentTest() {
-        File file = null;
+        IntegrationDocumentEnvelop body = null;
         String endpointCode = null;
         String relativePath = null;
-        JobTicket response = api.spoolDocument(file, endpointCode, relativePath);
+        JobTicket response = api.spoolDocument(body, endpointCode, relativePath);
 
         // TODO: test validations
     }
@@ -89,10 +89,10 @@ public class IntegrationInputControllerApiTest {
      */
     @Test
     public void spoolDocument1Test() {
-        IntegrationDocumentEnvelop body = null;
+        File file = null;
         String endpointCode = null;
         String relativePath = null;
-        JobTicket response = api.spoolDocument1(body, endpointCode, relativePath);
+        JobTicket response = api.spoolDocument1(file, endpointCode, relativePath);
 
         // TODO: test validations
     }

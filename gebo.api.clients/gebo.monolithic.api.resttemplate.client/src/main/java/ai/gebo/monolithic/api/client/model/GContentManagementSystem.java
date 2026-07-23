@@ -25,7 +25,7 @@ import java.util.List;
  * GContentManagementSystem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GContentManagementSystem {
   @JsonProperty("code")
@@ -99,6 +99,9 @@ public class GContentManagementSystem {
 
   }  @JsonProperty("usedCapabilities")
   private List<UsedCapabilitiesEnum> usedCapabilities = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   public GContentManagementSystem code(String code) {
     this.code = code;
@@ -342,6 +345,32 @@ public class GContentManagementSystem {
     this.usedCapabilities = usedCapabilities;
   }
 
+  public GContentManagementSystem aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GContentManagementSystem addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -364,12 +393,13 @@ public class GContentManagementSystem {
         Objects.equals(this.contentManagementSystemType, gcontentManagementSystem.contentManagementSystemType) &&
         Objects.equals(this.readonly, gcontentManagementSystem.readonly) &&
         Objects.equals(this.baseUri, gcontentManagementSystem.baseUri) &&
-        Objects.equals(this.usedCapabilities, gcontentManagementSystem.usedCapabilities);
+        Objects.equals(this.usedCapabilities, gcontentManagementSystem.usedCapabilities) &&
+        Objects.equals(this.aclAliases, gcontentManagementSystem.aclAliases);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, contentManagementSystemType, readonly, baseUri, usedCapabilities);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, contentManagementSystemType, readonly, baseUri, usedCapabilities, aclAliases);
   }
 
 
@@ -391,6 +421,7 @@ public class GContentManagementSystem {
     sb.append("    readonly: ").append(toIndentedString(readonly)).append("\n");
     sb.append("    baseUri: ").append(toIndentedString(baseUri)).append("\n");
     sb.append("    usedCapabilities: ").append(toIndentedString(usedCapabilities)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("}");
     return sb.toString();
   }

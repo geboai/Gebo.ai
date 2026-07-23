@@ -11,4 +11,11 @@ import lombok.Data;
 public class StandardAgentsConfig {
 	private boolean enabled = false;
 
+	/**
+	 * Hard cap on the number of chunks kept per source document by the standard
+	 * document-search agents, bounding the candidate pool fed to the ranker. Set via
+	 * {@code ai.gebo.agents.standard.max-chunks-per-document} in application.yml.
+	 */
+	private int maxChunksPerDocument = 10;
+
 }

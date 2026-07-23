@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 
@@ -70,6 +72,7 @@ public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapper
 
 	@Setter
 	public static class WrappedNativeSearcher<NativeObjectType extends INativeQueryObject> {
+		private static final Logger LOGGER = LoggerFactory.getLogger(WrappedNativeSearcher.class);
 		private INativeSearchService<?, NativeObjectType> wrapped;
 		private NativeSearchServiceWrapperTool wrappedTool;
 		private String toolName;
@@ -77,21 +80,34 @@ public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapper
 		private Class<NativeSearchParam<NativeObjectType>> paramType;
 
 		public SearchResultSampleList search(NativeSearchParam<NativeObjectType> param) {
-
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Begin native search tool:" + toolName + " topK:"
+						+ (param != null ? param.getTopK() : null) + " textSampleTokens:"
+						+ (param != null ? param.getTextSampleTokens() : null));
+			}
 			List<SearchResult> results = new ArrayList<>();
 
 			try {
 				List<SearchableSystemMetaData> systems = wrapped.getSearchableSystems();
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Native search tool:" + toolName + " querying " + (systems != null ? systems.size() : 0)
+							+ " searchable system(s)");
+				}
 				for (SearchableSystemMetaData searchableSystemMetaData : systems) {
 					List<SearchResult> found;
 					found = wrapped.nativeSearch(param.getQuery(), searchableSystemMetaData, param.getTopK());
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Native search on system:" + searchableSystemMetaData.getCode() + " returned "
+								+ (found != null ? found.size() : 0) + " result(s)");
+					}
 					results.addAll(found);
 				}
 			} catch (IOException | SearchServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error("Exception during native search for tool:" + toolName, e);
 			}
-
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End native search tool:" + toolName + " collected " + results.size() + " result(s)");
+			}
 			return wrappedTool.loadSamples(results, param.getTextSampleTokens());
 		}
 

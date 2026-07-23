@@ -15,7 +15,7 @@ import ai.gebo.integration.content.handler.IGIntegrationSystemContentHandler;
 import ai.gebo.integration.content.handler.model.IntegrationDocumentEnvelop;
 import ai.gebo.integration.content.handler.model.JobTicket;
 import ai.gebo.integration.content.handler.repositories.IntegrationProjectEndpointRepository;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import jakarta.validation.Valid;

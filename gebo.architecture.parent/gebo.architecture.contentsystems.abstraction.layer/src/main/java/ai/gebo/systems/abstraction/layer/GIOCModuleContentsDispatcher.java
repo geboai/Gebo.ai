@@ -257,7 +257,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 				GMessageEnvelope<GUserMessagePayload> message = GMessageEnvelope
 						.newMessageFrom(GIOCModuleContentsDispatcher.this, new GUserMessagePayload());
 				message.getPayload().setUserMessage(t);
-				message.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+				message.setTargetModule(GStandardModulesConstraints.JOBS_MASTER);
 				message.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 				broker.accept(message);
 			}

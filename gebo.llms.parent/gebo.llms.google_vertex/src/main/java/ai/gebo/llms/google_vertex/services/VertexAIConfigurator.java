@@ -18,21 +18,15 @@ import java.util.List;
 
 import org.springframework.ai.vertexai.embedding.VertexAiEmbeddingConnectionDetails;
 import org.springframework.ai.vertexai.embedding.VertexAiEmbeddingConnectionDetails.Builder;
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.aiplatform.v1.PredictionServiceSettings;
-import com.google.cloud.aiplatform.v1.stub.PredictionServiceStubSettings;
-import com.google.cloud.vertexai.Transport;
-import com.google.cloud.vertexai.VertexAI;
-import com.google.cloud.vertexai.api.PredictionServiceClient;
-import com.google.common.base.Supplier;
+import com.google.genai.Client;
+import com.google.genai.types.HttpOptions;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -58,14 +52,16 @@ class VertexAIConfigurator {
 	private IGeboSecretsAccessService secretService;
 
 	/**
-	 * Creates and configures a VertexAI instance using provided secret credentials.
-	 * 
+	 * Creates and configures a Google GenAI {@link Client} (Vertex AI mode) using the provided
+	 * secret credentials. Spring AI 2.0 replaced the old {@code com.google.cloud.vertexai.VertexAI}
+	 * transport with the unified Google GenAI SDK ({@code com.google.genai.Client}).
+	 *
 	 * @param secretCode The identifier for the secret to be used for authentication
-	 * @param baseUrl Optional custom API endpoint URL
-	 * @return Configured VertexAI instance
+	 * @param baseUrl    Optional custom API endpoint URL
+	 * @return Configured GenAI {@link Client} in Vertex AI mode
 	 * @throws LLMConfigException If configuration fails due to invalid credentials or other issues
 	 */
-	VertexAI createVertexAI(String secretCode, String baseUrl) throws LLMConfigException {
+	Client createGenAiClient(String secretCode, String baseUrl) throws LLMConfigException {
 		GeboGoogleOauth2SecretContent googleOauth2 = null;
 		GeboGoogleJsonSecretContent googleJson = null;
 		try {
@@ -86,58 +82,38 @@ class VertexAIConfigurator {
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("Google vertex  api  key configuration gone wrong ", e);
 			}
-			VertexAI vertexAI = null;
-			VertexAI.Builder vBuilder = new VertexAI.Builder();
 			GoogleCredentials credentials = null;
-			CredentialsProvider cProvider = null;
-			
+
 			// Configure credentials based on secret type
 			if (googleOauth2 != null) {
 				credentials = GoogleCredentials.create(new AccessToken(googleOauth2.getToken(), null));
-				final GoogleCredentials gcredentials=credentials;
-				cProvider=()->gcredentials;
 			}
 			if (googleJson != null) {
 				credentials = GoogleCredentials
 						.fromStream(new ByteArrayInputStream(googleJson.getJsonContent().getBytes()));
-				final GoogleCredentials gcredentials=credentials;
-				cProvider=()->gcredentials;
 			}
 			credentials.refreshIfExpired();
-			com.google.cloud.aiplatform.v1.PredictionServiceSettings.Builder predictionBuilder = PredictionServiceSettings
-					.newBuilder().setCredentialsProvider(FixedCredentialsProvider.create(credentials));
+
+			Client.Builder clientBuilder = Client.builder()
+					.vertexAI(true)
+					.credentials(credentials);
+
+			// Set project and location from OAuth2 credentials if available
+			if (googleOauth2 != null) {
+				if (googleOauth2.getProjectId() != null) {
+					clientBuilder.project(googleOauth2.getProjectId());
+				}
+				if (googleOauth2.getLocation() != null) {
+					clientBuilder.location(googleOauth2.getLocation());
+				}
+			}
 
 			// Configure custom endpoint if provided
 			if (baseUrl != null && baseUrl.trim().length() > 0) {
-				vBuilder.setApiEndpoint(baseUrl);
-				predictionBuilder.setEndpoint(baseUrl);
+				clientBuilder.httpOptions(HttpOptions.builder().baseUrl(baseUrl).build());
 			}
 
-			com.google.cloud.vertexai.api.PredictionServiceSettings serviceSettings = com.google.cloud.vertexai.api.PredictionServiceSettings
-					.newBuilder().setCredentialsProvider(cProvider).build();
-			final PredictionServiceClient serviceClient = PredictionServiceClient.create(serviceSettings);
-			vBuilder.setPredictionClientSupplier(() -> serviceClient);
-			vBuilder.setTransport(Transport.REST);
-			vBuilder = vBuilder.setCredentials(credentials);
-			
-			// Set additional configuration properties from OAuth2 credentials if available
-			if (googleOauth2 != null) {
-				if (googleOauth2.getProjectId() != null) {
-					vBuilder = vBuilder.setProjectId(googleOauth2.getProjectId());
-				}
-				if (googleOauth2.getLocation() != null) {
-					vBuilder = vBuilder.setLocation(googleOauth2.getLocation());
-				}
-				if (googleOauth2.getScopes() != null && !googleOauth2.getScopes().isEmpty()) {
-					vBuilder = vBuilder.setScopes(googleOauth2.getScopes());
-				} else {
-					vBuilder = vBuilder.setScopes(List.of("https://www.googleapis.com/auth/cloud-platform"));
-				}
-			} else {
-				vBuilder = vBuilder.setScopes(List.of("https://www.googleapis.com/auth/cloud-platform"));
-			}
-			vertexAI = vBuilder.build();
-			return vertexAI;
+			return clientBuilder.build();
 		} catch (IOException e) {
 			throw new LLMConfigException(
 					"IO Exception while trying to configure Google Vertex AI [" + e.getMessage() + "]", e);

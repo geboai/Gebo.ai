@@ -25,7 +25,6 @@ export interface DeepSearchConfig {
     secondHopSimilarityThreashold?: number;
     graphRagTopN?: number;
     tokensLimit?: number;
-    documentsParallelism?: number;
     manualThreasholdsConfiguration?: boolean;
     defaultConfig?: boolean;
     accessibleGroups?: Array<string>;

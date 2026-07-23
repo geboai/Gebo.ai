@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-	<version>1.0.1.0-BETA</version>
+	<version>1.0.2.1</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.14</version>
+		<version>4.1.0</version>
 	</parent>
 	<properties>
 		<java.version>21</java.version>
@@ -20,10 +20,13 @@
 		<org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
 		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
 		<apache-poi.version>5.5.1</apache-poi.version>
-		<spring.ai.version>1.1.8</spring.ai.version>
+		<spring.ai.version>2.0.0</spring.ai.version>
+		<springdoc.version>3.0.3</springdoc.version>
+		<spring-retry.version>2.0.12</spring-retry.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
+		<maven.compiler.release></maven.compiler.release>
 	</properties>
 	<modules>
 		<module>gebo.boot</module>
@@ -32,10 +35,8 @@
 		<module>gebo.architecture.parent</module>
 		<module>gebo.system.ingestion</module>
 		<module>gebo.ui</module>
-		<module>gebo.jobs.services</module>
 		<module>gebo.config</module>
 		<module>gebo.config.services</module>
-		<module>gebo.fastsetup</module>
 		<module>gebo.core.parent</module>
 		<module>gebo.apps.parent</module>
 		<module>gebo.modules.pocs</module>
@@ -43,6 +44,7 @@
 		<module>gebo.llms.parent</module>
 		<module>gebo.buildsystems.parent</module>
 		<module>gebo.api.clients</module>
+		<module>gebo.microservices.architecture.parent</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -81,6 +83,29 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+
+				<!-- === lombok annotation processor === -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+							</path>
+							<!-- Generates META-INF/spring-autoconfigure-metadata.properties, which
+							     AutoConfigurationSorter reads to honour @AutoConfigureAfter/@AutoConfigureBefore.
+							     Explicit annotationProcessorPaths (added above for lombok) disables Maven's
+							     automatic classpath-based processor discovery, so without this entry every
+							     such annotation in the codebase is silently ignored. -->
+							<path>
+								<groupId>org.springframework.boot</groupId>
+								<artifactId>spring-boot-autoconfigure-processor</artifactId>
+							</path>
+						</annotationProcessorPaths>
+					</configuration>
+				</plugin>
 
 				<!-- === sources === -->
 				<plugin>
@@ -149,4 +174,15 @@
 			</snapshots>
 		</repository>
 	</distributionManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.modelcontextprotocol.sdk</groupId>
+				<artifactId>mcp-bom</artifactId>
+				<version>2.0.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

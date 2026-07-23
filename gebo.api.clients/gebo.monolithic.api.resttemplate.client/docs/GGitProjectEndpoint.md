@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **vectorizeOnlyExtensions** | **List&lt;String&gt;** |  |  [optional]
 **synchroStrategy** | [**SynchroStrategyEnum**](#SynchroStrategyEnum) |  |  [optional]
 **objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **repositoryUri** | **String** |  |  [optional]
 **branch** | **String** |  |  [optional]
 **identityCode** | **String** |  |  [optional]

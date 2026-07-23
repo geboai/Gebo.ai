@@ -16,6 +16,8 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -30,6 +32,8 @@ import lombok.Data;
  */
 @Data
 public class GResponseDocumentRef implements Serializable {
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+
 	/**
 	 * Represents an internal reference to a document, including its ID and page.
 	 * Implements Serializable interface.
@@ -143,6 +147,28 @@ public class GResponseDocumentRef implements Serializable {
 		this.geboFileTypeDescription = get(metadata, DocumentMetaInfos.GEBO_FILE_TYPE_DESCRIPTION);
 		this.geboFileTypeId = get(metadata, DocumentMetaInfos.GEBO_FILE_TYPE_ID);
 		this.name = get(metadata, DocumentMetaInfos.GEBO_FILE_NAME);
+		String searchResultJSON = get(metadata, DocumentMetaInfos.GEBO_EXTERNAL_SEARCH_RESULT_JSON);
+		if (searchResultJSON != null && searchResultJSON.trim().length() > 0) {
+			try {
+				SearchResult sr = objectMapper.readValue(searchResultJSON, SearchResult.class);
+				if (sr != null) {
+					this.nestedSearchResult = sr;
+					if (this.name == null) {
+						this.name = sr.getResultReference() != null ? sr.getResultReference().getName()
+								: sr.getNavigationReference() != null && sr.getNavigationReference().path != null
+										? sr.getNavigationReference().path.name
+										: null;
+					}
+					if (this.description == null) {
+						this.description = sr.getResultReference() != null ? sr.getResultReference().getName()
+								: sr.getNavigationReference() != null && sr.getNavigationReference().path != null
+										? sr.getNavigationReference().path.name
+										: null;
+					}
+				}
+			} catch (Throwable th) {
+			}
+		}
 		this.uuid = document.getId();
 		String referenceType = get(metadata, DocumentMetaInfos.GEBO_REFERENCE_TYPE);
 		if (referenceType != null) {

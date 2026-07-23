@@ -33,6 +33,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
@@ -41,7 +42,6 @@ import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
-import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;

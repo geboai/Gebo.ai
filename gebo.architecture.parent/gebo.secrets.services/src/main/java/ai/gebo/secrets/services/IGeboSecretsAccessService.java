@@ -21,6 +21,7 @@ import ai.gebo.secrets.model.SecretInfo;
  * secrets.
  */
 public interface IGeboSecretsAccessService {
+	public List<String> getAllSecretsId();
 
 	/**
 	 * Retrieves the content of a secret by its unique identifier.

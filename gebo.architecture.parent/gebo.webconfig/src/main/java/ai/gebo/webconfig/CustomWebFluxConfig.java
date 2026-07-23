@@ -17,11 +17,11 @@ import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.codec.HttpMessageWriter;
 import org.springframework.http.codec.ServerCodecConfigurer;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.http.codec.json.JacksonJsonEncoder;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 // Gebo.ai comment agent
 
@@ -35,8 +35,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class CustomWebFluxConfig implements WebFluxConfigurer {
 
-    // Instance of ObjectMapper used for JSON serialization and deserialization
-    ObjectMapper objectMapper = new ObjectMapper();
+    // Instance of JsonMapper used for JSON serialization and deserialization
+    JsonMapper objectMapper = JsonMapper.builder().build();
 
     /**
      * Default constructor for CustomWebFluxConfig.
@@ -62,6 +62,6 @@ public class CustomWebFluxConfig implements WebFluxConfigurer {
         writers.removeIf(writer -> writer.getClass().getName().contains("ServerSentEventHttpMessageWriter"));
 
         // Set a custom JSON encoder using Jackson2JsonEncoder
-        configurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper));
+        configurer.defaultCodecs().jacksonJsonEncoder(new JacksonJsonEncoder(objectMapper));
     }
 }

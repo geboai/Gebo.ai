@@ -25,7 +25,7 @@ Method | HTTP request | Description
 
 
 GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
-GPromptConfig body = new GPromptConfig(); // GPromptConfig | 
+GPromptTemplateConfig body = new GPromptTemplateConfig(); // GPromptTemplateConfig | 
 try {
     apiInstance.deletePromptConfig(body);
 } catch (ApiException e) {
@@ -38,7 +38,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**GPromptConfig**](GPromptConfig.md)|  |
+ **body** | [**GPromptTemplateConfig**](GPromptTemplateConfig.md)|  |
 
 ### Return type
 
@@ -55,7 +55,7 @@ No authorization required
 
 <a name="findPromptConfigByCode"></a>
 # **findPromptConfigByCode**
-> GPromptConfig findPromptConfigByCode(code)
+> GPromptTemplateConfig findPromptConfigByCode(code)
 
 
 
@@ -69,7 +69,7 @@ No authorization required
 GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
 String code = "code_example"; // String | 
 try {
-    GPromptConfig result = apiInstance.findPromptConfigByCode(code);
+    GPromptTemplateConfig result = apiInstance.findPromptConfigByCode(code);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminPromptsControllerApi#findPromptConfigByCode");
@@ -85,7 +85,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GPromptConfig**](GPromptConfig.md)
+[**GPromptTemplateConfig**](GPromptTemplateConfig.md)
 
 ### Authorization
 
@@ -137,7 +137,7 @@ No authorization required
 
 <a name="getPromptConfigByFilter"></a>
 # **getPromptConfigByFilter**
-> GPromptConfig getPromptConfigByFilter(body)
+> GPromptTemplateConfig getPromptConfigByFilter(body)
 
 
 
@@ -151,7 +151,7 @@ No authorization required
 GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
 PromptFilter body = new PromptFilter(); // PromptFilter | 
 try {
-    GPromptConfig result = apiInstance.getPromptConfigByFilter(body);
+    GPromptTemplateConfig result = apiInstance.getPromptConfigByFilter(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminPromptsControllerApi#getPromptConfigByFilter");
@@ -167,7 +167,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GPromptConfig**](GPromptConfig.md)
+[**GPromptTemplateConfig**](GPromptTemplateConfig.md)
 
 ### Authorization
 
@@ -180,7 +180,7 @@ No authorization required
 
 <a name="insertPromptConfig"></a>
 # **insertPromptConfig**
-> GPromptConfig insertPromptConfig(body)
+> GPromptTemplateConfig insertPromptConfig(body)
 
 
 
@@ -192,9 +192,9 @@ No authorization required
 
 
 GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
-GPromptConfig body = new GPromptConfig(); // GPromptConfig | 
+GPromptTemplateConfig body = new GPromptTemplateConfig(); // GPromptTemplateConfig | 
 try {
-    GPromptConfig result = apiInstance.insertPromptConfig(body);
+    GPromptTemplateConfig result = apiInstance.insertPromptConfig(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminPromptsControllerApi#insertPromptConfig");
@@ -206,11 +206,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**GPromptConfig**](GPromptConfig.md)|  |
+ **body** | [**GPromptTemplateConfig**](GPromptTemplateConfig.md)|  |
 
 ### Return type
 
-[**GPromptConfig**](GPromptConfig.md)
+[**GPromptTemplateConfig**](GPromptTemplateConfig.md)
 
 ### Authorization
 
@@ -223,7 +223,7 @@ No authorization required
 
 <a name="updatePromptConfig"></a>
 # **updatePromptConfig**
-> GPromptConfig updatePromptConfig(body)
+> GPromptTemplateConfig updatePromptConfig(body)
 
 
 
@@ -235,9 +235,9 @@ No authorization required
 
 
 GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
-GPromptConfig body = new GPromptConfig(); // GPromptConfig | 
+GPromptTemplateConfig body = new GPromptTemplateConfig(); // GPromptTemplateConfig | 
 try {
-    GPromptConfig result = apiInstance.updatePromptConfig(body);
+    GPromptTemplateConfig result = apiInstance.updatePromptConfig(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminPromptsControllerApi#updatePromptConfig");
@@ -249,11 +249,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**GPromptConfig**](GPromptConfig.md)|  |
+ **body** | [**GPromptTemplateConfig**](GPromptTemplateConfig.md)|  |
 
 ### Return type
 
-[**GPromptConfig**](GPromptConfig.md)
+[**GPromptTemplateConfig**](GPromptTemplateConfig.md)
 
 ### Authorization
 

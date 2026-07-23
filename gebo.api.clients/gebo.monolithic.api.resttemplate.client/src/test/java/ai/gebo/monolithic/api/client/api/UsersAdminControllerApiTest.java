@@ -12,12 +12,14 @@
 
 package ai.gebo.monolithic.api.client.api;
 
+import ai.gebo.monolithic.api.client.model.ChangeUsernamePasswordData;
 import ai.gebo.monolithic.api.client.model.EditableUser;
 import ai.gebo.monolithic.api.client.model.FindUserByQbeParam;
 import ai.gebo.monolithic.api.client.model.FindUsersGroupParam;
+import ai.gebo.monolithic.api.client.model.GUserMessage;
 import ai.gebo.monolithic.api.client.model.InsertUserParam;
-import ai.gebo.monolithic.api.client.model.PageUserInfos;
-import ai.gebo.monolithic.api.client.model.PageUsersGroup;
+import ai.gebo.monolithic.api.client.model.PagedModelUserInfos;
+import ai.gebo.monolithic.api.client.model.PagedModelUsersGroup;
 import ai.gebo.monolithic.api.client.model.UserInfos;
 import ai.gebo.monolithic.api.client.model.UsersGroup;
 import org.junit.Test;
@@ -36,6 +38,21 @@ public class UsersAdminControllerApiTest {
 
     private final UsersAdminControllerApi api = new UsersAdminControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void changeUserPasswordTest() {
+        ChangeUsernamePasswordData body = null;
+        GUserMessage response = api.changeUserPassword(body);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -92,7 +109,7 @@ public class UsersAdminControllerApiTest {
     @Test
     public void findUserByQbeTest() {
         FindUserByQbeParam body = null;
-        PageUserInfos response = api.findUserByQbe(body);
+        PagedModelUserInfos response = api.findUserByQbe(body);
 
         // TODO: test validations
     }
@@ -122,7 +139,7 @@ public class UsersAdminControllerApiTest {
     @Test
     public void findUsersGroupByQbeTest() {
         FindUsersGroupParam body = null;
-        PageUsersGroup response = api.findUsersGroupByQbe(body);
+        PagedModelUsersGroup response = api.findUsersGroupByQbe(body);
 
         // TODO: test validations
     }

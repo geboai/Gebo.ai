@@ -5,10 +5,15 @@
 	<parent>
 		<groupId>ai.gebo.systems</groupId>
 		<artifactId>gebo.systems.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.googleworkspace.handlers</artifactId>
 	<dependencies><!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-sheets -->
 		<!-- <dependency> <groupId>com.google.apis</groupId> <artifactId>google-api-services-sheets</artifactId> 
 			<version>v4-rev612-1.25.0</version> </dependency> -->
@@ -54,6 +59,11 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.secrets.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.googledrive.search.api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -24,8 +24,6 @@ import { GeboChatResponse } from '../model/geboChatResponse';
 import { GeboChatUserInfo } from '../model/geboChatUserInfo';
 import { ModelProviderCapabilities } from '../model/modelProviderCapabilities';
 import { ServerSentEventString } from '../model/serverSentEventString';
-import { SpeechRequest } from '../model/speechRequest';
-import { TranscriptResponse } from '../model/transcriptResponse';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -34,7 +32,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboChatControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -291,65 +289,6 @@ export class GeboChatControllerService {
      * 
      * 
      * @param body 
-     * @param modelCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public speechText(body: SpeechRequest, modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
-    public speechText(body: SpeechRequest, modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
-    public speechText(body: SpeechRequest, modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
-    public speechText(body: SpeechRequest, modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling speechText.');
-        }
-
-        if (modelCode === null || modelCode === undefined) {
-            throw new Error('Required parameter modelCode was null or undefined when calling speechText.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (modelCode !== undefined && modelCode !== null) {
-            queryParameters = queryParameters.set('modelCode', <any>modelCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/octet-stream'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request('post',`${this.basePath}/api/users/GeboDirectModelChatController/speechText`,
-            {
-                body: body,
-                params: queryParameters,
-                responseType: "blob",
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -385,53 +324,6 @@ export class GeboChatControllerService {
         return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDirectModelChatController/streamResponse`,
             {
                 body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param modelCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public transcriptText(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<TranscriptResponse>;
-    public transcriptText(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TranscriptResponse>>;
-    public transcriptText(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TranscriptResponse>>;
-    public transcriptText(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (modelCode === null || modelCode === undefined) {
-            throw new Error('Required parameter modelCode was null or undefined when calling transcriptText.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (modelCode !== undefined && modelCode !== null) {
-            queryParameters = queryParameters.set('modelCode', <any>modelCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<TranscriptResponse>('post',`${this.basePath}/api/users/GeboDirectModelChatController/transcriptText`,
-            {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

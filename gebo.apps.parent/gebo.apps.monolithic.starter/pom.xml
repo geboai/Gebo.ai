@@ -5,10 +5,34 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.apps.monolithic.starter</artifactId>
 	<dependencies>
+		<!-- Generated API keys (model + repository + service + the two controllers).
+		     Owner-only: a key IS a LOCAL_JWT, so nothing on the request path needs the
+		     key store - only minting, listing and revoking do, and those are admin acts. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security.apikey</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The monolith OWNS the ACL store: it reads AND allocates aliases in Mongo.
+		     (A microservice that does not own it takes gebo.microservices.acl.client
+		     instead - a service depends on exactly one of the two.) -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.acl.mongo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The monolith OWNS the user store: it reads the directory from Mongo directly.
+		     (A microservice that does not own it takes gebo.microservices.security.client
+		     instead - a service depends on exactly one of the two.) -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.security.directory.mongo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.ragsystem</groupId>
 			<artifactId>gebo.ragsystem.starter</artifactId>
@@ -17,6 +41,11 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.webconfig</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -40,6 +69,36 @@
 			<artifactId>gebo.llms.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The concrete, mapped admin controllers split out of
+		     gebo.architecture.llms.abstraction.layer (ChatModelsController,
+		     EmbeddingModelsControllers, ImageModelsController,
+		     RankerModelsController, TextToSpeechModelsController,
+		     TranscriptModelsController, ChatModelsLookupController,
+		     FunctionsLookupController) - the base/abstract classes they extend
+		     stay in the abstraction layer itself and are pulled in transitively. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Every LLM provider driver's admin controllers (OpenAIChatModelsConfigurationController,
+		     ...), split out of each gebo.llms.<provider> module the same way. -->
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.controllers.starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- LLM fast-setup: NOT part of gebo.llms.starter (it carries a concrete
+		     @RestController, GeboFastLLMSSetupController, and gebo.llms.starter
+		     is also consumed by every LLM-hosting microservice via
+		     gebo.microservices.llms.starter) - wired directly here instead,
+		     same as on brain.gebo.ai. -->
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.setup</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.core</artifactId>
@@ -60,7 +119,21 @@
 			<artifactId>gebo.architecture.angular.persistence.support</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.environment.monolithic</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.telemetry</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.security</artifactId>
@@ -68,8 +141,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.fastsetup</artifactId>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.fastsetup.rag</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.fastsetup.system</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -106,6 +184,37 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.neo4j</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.mcp-clients</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.mcp-server</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- user-messages-concentrator-component, externalized out of gebo.core onto
+		     its own jobs-master-module - see GWorkflowsConcentratorMessagesReceiverFactory.
+		     gebo.core no longer carries it, so this is required, not optional, for
+		     content-processing status/workflow-completion to keep working at all. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.compute.workflow</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Config-driven standard-workflow step enablement (monolith variant of the
+		     enablement policy extracted from the perform-modules). -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.workflow.steps</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- -->

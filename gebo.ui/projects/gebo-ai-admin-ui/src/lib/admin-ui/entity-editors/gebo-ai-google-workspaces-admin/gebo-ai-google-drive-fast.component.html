@@ -9,10 +9,23 @@
  */
 -->
  
-<p-blockUI id="BlockUI" gebo-ai-label [target]="confluenceSystemCtrl" [blocked]="loading">
+<p-blockUI id="BlockUI"  [target]="confluenceSystemCtrl" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #confluenceSystemCtrl header="Create Google Drive/Workspace connection" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success" styleClass="w-full"
+                    [disabled]="this.formGroup.invalid"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancel()" styleClass="w-full" />
+            </div>
+
+        </div>
+    </div>
+
     <div class="geboDialogContent">
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
@@ -33,18 +46,6 @@
                     <textarea pTextarea id="jsonContent" formControlName="jsonContent" rows="10" cols="80" gebo-ai-field-element></textarea>
                 </gebo-ai-field>
             </div>
-        </div>
-    </div>
-    <div class="geboButtonsBar" style="vertical-align: baseline;">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success" styleClass="w-full"
-                    [disabled]="this.formGroup.invalid"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancel()" styleClass="w-full" />
-            </div>
-
         </div>
     </div>
 </p-panel>

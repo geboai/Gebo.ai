@@ -32,5 +32,6 @@ export interface GeboChatResponse {
     contextWindowStats?: ChatModelRequestContextWindowStats;
     generatedResources?: Array<LLMGeneratedResource>;
     pipelineRouterDecisionCode?: string;
+    pipelineParams?: { [key: string]: any; };
     deepSearchRequestId?: string;
 }

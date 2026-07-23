@@ -12,7 +12,7 @@
 
 import { Component, forwardRef, Injector, Input, SimpleChanges } from "@angular/core";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent, SecretWrapperGeboGoogleOauth2SecretContent, SecretWrapperGeboOauth2SecretContent, SecretWrapperGeboCustomSecretContent, SecretWrapperGeboGoogleJsonSecretContent } from "@Gebo.ai/gebo-ai-rest-api"
+import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent, SecretWrapperGeboGoogleOauth2SecretContent, SecretWrapperGeboOauth2SecretContent, SecretWrapperGeboCustomSecretContent, SecretWrapperGeboGoogleJsonSecretContent, GeboAwsConnectionCredentials, SecretWrapperGeboAwsConnectionCredentials } from "@Gebo.ai/gebo-ai-rest-api"
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { map, Observable, of } from "rxjs";
 import { ConfirmationService } from "primeng/api";
@@ -39,6 +39,7 @@ export interface SecretWrapper {
     oauth2StandardContent?: GeboOauth2SecretContent;
     googleOauth2Content?: GeboGoogleOauth2SecretContent;
     googleJsonContent?: GeboGoogleJsonSecretContent;
+    awsConnectionContent?: GeboAwsConnectionCredentials;
 }
 
 /**
@@ -72,10 +73,15 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
         { code: SecretInfo.SecretTypeEnum.SSHKEY, description: "SSh key" },
         { code: SecretInfo.SecretTypeEnum.OAUTH2GOOGLE, description: "Google Oauth2" },
         { code: SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS, description: "Google credentials Json file content" },
-        { code: SecretInfo.SecretTypeEnum.OAUTH2STANDARD, description: "Oauth2 standard registered client with scopes" }];
+        { code: SecretInfo.SecretTypeEnum.OAUTH2STANDARD, description: "Oauth2 standard registered client with scopes" },
+        { code: SecretInfo.SecretTypeEnum.AWSCONNECTION, description: "AWS connection (access key, secret key & region)" }];
 
     /** Filtered secret types that can be selected by the user */
     public choosableTypes: { code?: SecretInfo.SecretTypeEnum, description?: string }[] = [];
+
+    /** Selectable AWS regions for the AWS connection secret (value = AWS region code). */
+    public awsRegionOptions: { label: string, value: GeboAwsConnectionCredentials.RegionEnum }[] =
+        Object.values(GeboAwsConnectionCredentials.RegionEnum).map(region => ({ label: region, value: region }));
 
     /** Currently selected secret type */
     public actualSecretType?: SecretInfo.SecretTypeEnum;
@@ -115,6 +121,13 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
                 delegatedUser: new FormControl()
             }
         ),
+        awsConnectionContent: new FormGroup(
+            {
+                accessKeyId: new FormControl(),
+                secretAccessKey: new FormControl(),
+                region: new FormControl()
+            }
+        ),
         oauth2Content: new FormGroup({
 
         })
@@ -135,6 +148,7 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
                 this.switchRequired("oauth2StandardContent", false);
                 this.switchRequired("googleOauth2Content", false);
                 this.switchRequired("googleJsonContent", false);
+                this.switchRequired("awsConnectionContent", false);
                 const googleJsonContent: FormGroup = this.formGroup.controls["googleJsonContent"] as FormGroup;
                 if (googleJsonContent) {
                     const jsonContent = googleJsonContent.controls["jsonContent"];
@@ -157,6 +171,9 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
                         }; break;
                         case SecretInfo.SecretTypeEnum.OAUTH2GOOGLE: {
                             this.switchRequired("googleOauth2Content", true);
+                        }; break;
+                        case SecretInfo.SecretTypeEnum.AWSCONNECTION: {
+                            this.switchRequired("awsConnectionContent", true);
                         }; break;
                         case SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS: {
                             this.switchRequired("googleJsonContent", true);
@@ -341,6 +358,13 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
             }
             case "GOOGLE_CLOUD_JSON_CREDENTIALS": {
                 return this.secretControllerService.createGoogleJsonCredentialsSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.googleJsonContent } as SecretWrapperGeboGoogleJsonSecretContent).pipe(map(returned => {
+                    value.code = returned.code;
+                    value.description = returned.description;
+                    return value;
+                }));
+            }
+            case "AWS_CONNECTION": {
+                return this.secretControllerService.createAWSConnectionSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.awsConnectionContent } as SecretWrapperGeboAwsConnectionCredentials).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;

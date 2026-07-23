@@ -1,66 +1,63 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 <p-dialog  [maximizable]="true" [visible]="visible" [modal]="true" [style]="{width:'95%',height:'800px'}" [closable]="true"
-    [showHeader]="true" (onHide)="closeMe($event)" (visibleChange)="closeMe($event)"
-    header="Shared filesystem paths setting">
+  [showHeader]="true" (onHide)="closeMe($event)" (visibleChange)="closeMe($event)"
+  header="Shared filesystem paths setting">
 
-    <p-panel id="MainPanel" gebo-ai-label  #contentUI [showHeader]="false" *ngIf="visible">
-        <p-blockUI [target]="contentUI" [blocked]="loading">
-            <i class="pi pi-lock" style="font-size: 3rem"></i>
-        </p-blockUI>
-        <div class="grid">
-
-            <div class="col-12">
-                <p-table [value]="shares" [tableStyle]="{ 'min-width': '50rem' }">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th id="CodeHeader" gebo-ai-text>Code</th>
-                            <th id="DescriptionHeader" gebo-ai-text>Description</th>
-                            <th id="AbsolutePathHeader" gebo-ai-text>Absolute path</th>
-                            <th id="DbOrYmlFileConfigHeader" gebo-ai-text>db or yml file config</th>
-                            <th id="ModifyHeader" gebo-ai-text>Modify</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-config>
-                        <tr>
-                            <td>{{ config.code }}</td>
-                            <td>{{ config.description }}</td>
-                            <td>{{ config.absolutePath }}</td>
-                            <td>
-                                {{config.mongoConfigured===true?'db':'yml file'}}
-                            </td>
-                            <td>
-                                <p-button *ngIf="config.mongoConfigured===true" id="ConfigureBtn" gebo-ai-label icon="pi pi-wrench" [outlined]="true" label="Configure" 
-                                    (onClick)="openFileShare(config)"></p-button>
-                            </td>
-
-                        </tr>
-                    </ng-template>
-
-                </p-table>
-            </div>
-            <div class="col-4">
-
-                <p-button id="NewFileShareAreaBtn" gebo-ai-label [outlined]="true" label="New file share area" (onClick)="newFileShare()"
-                    icon="pi pi-folder"   styleClass="w-full" ></p-button>
-
-
-            </div>
-            <div class="col-4">
-
-            </div>
-            <div class="col-4"></div>
+  @if (visible) {
+    <p-panel id="MainPanel" gebo-ai-label  #contentUI [showHeader]="false">
+      <p-blockUI [target]="contentUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+      </p-blockUI>
+      <div class="grid">
+        <div class="col-12">
+          <p-table [value]="shares" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+              <tr>
+                <th id="CodeHeader" gebo-ai-text>Code</th>
+                <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                <th id="AbsolutePathHeader" gebo-ai-text>Absolute path</th>
+                <th id="DbOrYmlFileConfigHeader" gebo-ai-text>db or yml file config</th>
+                <th id="ModifyHeader" gebo-ai-text>Modify</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-config>
+              <tr>
+                <td>{{ config.code }}</td>
+                <td>{{ config.description }}</td>
+                <td>{{ config.absolutePath }}</td>
+                <td>
+                  {{config.mongoConfigured===true?'db':'yml file'}}
+                </td>
+                <td>
+                  @if (config.mongoConfigured===true) {
+                    <p-button id="ConfigureBtn" gebo-ai-label icon="pi pi-wrench" [outlined]="true" label="Configure"
+                    (onClick)="openFileShare(config)"></p-button>
+                  }
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
+        <div class="col-4">
+          <p-button id="NewFileShareAreaBtn" gebo-ai-label [outlined]="true" label="New file share area" (onClick)="newFileShare()"
+          icon="pi pi-folder"   styleClass="w-full" ></p-button>
+        </div>
+        <div class="col-4">
+        </div>
+        <div class="col-4"></div>
+      </div>
     </p-panel>
+  }
 </p-dialog>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

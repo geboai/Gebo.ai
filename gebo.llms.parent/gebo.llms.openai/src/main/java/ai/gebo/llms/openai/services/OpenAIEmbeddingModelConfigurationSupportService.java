@@ -16,11 +16,8 @@ import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions.Builder;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiApi.EmbeddingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
@@ -35,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactory;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -45,6 +43,7 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
 /**
@@ -75,11 +74,10 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 	 */
 	static final List<GOpenAIEmbeddingModelChoice> choices = new ArrayList<GOpenAIEmbeddingModelChoice>();
 	static {
-		EmbeddingModel[] models = EmbeddingModel.values();
-		for (EmbeddingModel embeddingModel : models) {
+		for (String modelCode : new String[] { "text-embedding-ada-002", "text-embedding-3-small", "text-embedding-3-large" }) {
 			GOpenAIEmbeddingModelChoice choice = new GOpenAIEmbeddingModelChoice();
-			choice.setCode(embeddingModel.getValue());
-			choice.setDescription(embeddingModel.getValue());
+			choice.setCode(modelCode);
+			choice.setDescription(modelCode);
 			choices.add(choice);
 		}
 	}
@@ -104,6 +102,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that implements the configurable embedding model for OpenAI
@@ -115,7 +114,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		 * Constructor for OpenAI configurable embedding model
 		 */
 		public OpenAIConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider, OpenAIEmbeddingModelConfigurationSupportService.this.observationRegistry);
 		}
 
 		/**
@@ -146,17 +145,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("OpenAI api  key configuration gone wrong ", e);
 			}
-			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
-			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
-			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
-					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			org.springframework.ai.openai.api.OpenAiApi.Builder apiBuilder = OpenAiApi.builder();
-			apiBuilder.webClientBuilder(webClient);
-			apiBuilder.restClientBuilder(restClient);
-			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).build();
-
-			Builder builder = OpenAiEmbeddingOptions.builder();
+			Builder builder = OpenAiEmbeddingOptions.builder().apiKey(apiKey);
 
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
@@ -165,8 +154,12 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 				builder = builder.user(user);
 			}
 			OpenAiEmbeddingOptions options = builder.build();
-			MetadataMode meta = MetadataMode.EMBED;
-			OpenAiEmbeddingModel model = new OpenAiEmbeddingModel(openaiApi, meta, options);
+			OpenAiEmbeddingModel model = OpenAiEmbeddingModel.builder()
+					.options(options)
+					.metadataMode(MetadataMode.EMBED)
+					.observationRegistry(observationRegistry)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))
+					.build();
 			return model;
 		}
 

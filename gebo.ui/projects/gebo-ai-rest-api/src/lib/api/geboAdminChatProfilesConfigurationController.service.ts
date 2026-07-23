@@ -20,7 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { ChatProfileConfigurationByQbeParam } from '../model/chatProfileConfigurationByQbeParam';
 import { DataPage } from '../model/dataPage';
 import { GChatProfileConfiguration } from '../model/gChatProfileConfiguration';
-import { PageGChatProfileConfiguration } from '../model/pageGChatProfileConfiguration';
+import { PagedModelGChatProfileConfiguration } from '../model/pagedModelGChatProfileConfiguration';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboAdminChatProfilesConfigurationControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -158,9 +158,9 @@ export class GeboAdminChatProfilesConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllChatProfileConfiguration(body: DataPage, observe?: 'body', reportProgress?: boolean): Observable<PageGChatProfileConfiguration>;
-    public getAllChatProfileConfiguration(body: DataPage, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGChatProfileConfiguration>>;
-    public getAllChatProfileConfiguration(body: DataPage, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGChatProfileConfiguration>>;
+    public getAllChatProfileConfiguration(body: DataPage, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGChatProfileConfiguration>;
+    public getAllChatProfileConfiguration(body: DataPage, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGChatProfileConfiguration>>;
+    public getAllChatProfileConfiguration(body: DataPage, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGChatProfileConfiguration>>;
     public getAllChatProfileConfiguration(body: DataPage, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -187,7 +187,7 @@ export class GeboAdminChatProfilesConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGChatProfileConfiguration>('post',`${this.basePath}/api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration`,
+        return this.httpClient.request<PagedModelGChatProfileConfiguration>('post',`${this.basePath}/api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -205,9 +205,9 @@ export class GeboAdminChatProfilesConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatProfileConfigurationByQbe(body: ChatProfileConfigurationByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PageGChatProfileConfiguration>;
-    public getChatProfileConfigurationByQbe(body: ChatProfileConfigurationByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGChatProfileConfiguration>>;
-    public getChatProfileConfigurationByQbe(body: ChatProfileConfigurationByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGChatProfileConfiguration>>;
+    public getChatProfileConfigurationByQbe(body: ChatProfileConfigurationByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGChatProfileConfiguration>;
+    public getChatProfileConfigurationByQbe(body: ChatProfileConfigurationByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGChatProfileConfiguration>>;
+    public getChatProfileConfigurationByQbe(body: ChatProfileConfigurationByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGChatProfileConfiguration>>;
     public getChatProfileConfigurationByQbe(body: ChatProfileConfigurationByQbeParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -234,7 +234,7 @@ export class GeboAdminChatProfilesConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGChatProfileConfiguration>('post',`${this.basePath}/api/admin/GeboAdminChatProfilesConfigurationController/getChatProfileConfigurationByQbe`,
+        return this.httpClient.request<PagedModelGChatProfileConfiguration>('post',`${this.basePath}/api/admin/GeboAdminChatProfilesConfigurationController/getChatProfileConfigurationByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

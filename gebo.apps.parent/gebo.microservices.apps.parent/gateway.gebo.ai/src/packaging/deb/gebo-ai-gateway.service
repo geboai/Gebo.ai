@@ -1,0 +1,17 @@
+[Unit]
+Description=Gebo.ai API Gateway Service
+After=network.target
+
+[Service]
+Type=simple
+User=gebo-ai-gateway
+Group=gebo-ai-gateway
+WorkingDirectory=/home/gebo-ai-gateway
+
+# ATTENZIONE: verifica il path reale del launcher dopo il primo build/install
+ExecStart=/home/gebo-ai-gateway/gebo-ai-gateway/bin/gebo-ai-gateway
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

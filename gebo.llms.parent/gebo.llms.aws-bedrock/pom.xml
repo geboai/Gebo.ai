@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.llms</groupId>
+		<artifactId>gebo.llms.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.llms.aws-bedrock</artifactId>
+
+	<properties>
+		<aws.sdk.version>2.44.9</aws.sdk.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>${aws.sdk.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- Spring AI - Amazon Bedrock Converse (unified chat/text API for all
+		     Bedrock chat models: Anthropic, Amazon Nova, Meta Llama, Mistral,
+		     Cohere Command, AI21 ...) -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-bedrock-converse</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+
+		<!-- Spring AI - Amazon Bedrock (Titan / Cohere embeddings) -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-bedrock</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+
+		<!-- Jackson (used to build/parse the InvokeModel image JSON payloads) -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<!-- AWS SDK v2 - control plane, used for ListFoundationModels model lookup -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>bedrock</artifactId>
+		</dependency>
+		<!-- AWS SDK v2 - runtime, used for image generation (InvokeModel) -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>bedrockruntime</artifactId>
+		</dependency>
+		<!-- AWS SDK v2 - agent runtime, used for native reranking (Rerank API) -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>bedrockagentruntime</artifactId>
+		</dependency>
+		<!-- AWS SDK v2 - Amazon Polly (text to speech) -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>polly</artifactId>
+		</dependency>
+		<!-- AWS SDK v2 - Amazon Transcribe streaming (speech to text) -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>transcribestreaming</artifactId>
+		</dependency>
+	</dependencies>
+</project>

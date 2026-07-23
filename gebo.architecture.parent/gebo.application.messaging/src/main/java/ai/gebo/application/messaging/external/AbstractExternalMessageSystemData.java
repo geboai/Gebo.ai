@@ -6,82 +6,82 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.application.messaging.external;
 
 import ai.gebo.application.messaging.SystemComponentType;
+import jakarta.validation.constraints.NotNull;
 
 /**
- * Gebo.ai comment agent
- * AbstractExternalMessageSystemData encapsulates the information related
- * to an external messaging system which includes the messaging module ID,
- * messaging system ID, and the type of system component.
+ * Gebo.ai comment agent AbstractExternalMessageSystemData encapsulates the
+ * information related to an external messaging system which includes the
+ * messaging module ID, messaging system ID, and the type of system component.
  */
 public class AbstractExternalMessageSystemData {
+	//logical system name for routing
+	@NotNull
+	private String logicalSystemName = null;
+	@NotNull
+	// Identifier for the messaging module
+	private String messagingModuleId = null;
+	@NotNull
+	// Identifier for the messaging system
+	private String messagingSystemId = null;
 
-    // Identifier for the messaging module
-    private String messagingModuleId = null;
+	// The type of system component
+	private SystemComponentType componentType = null;
 
-    // Identifier for the messaging system
-    private String messagingSystemId = null;
+	/**
+	 * Gets the messaging module ID.
+	 * 
+	 * @return the messaging module ID
+	 */
+	public String getMessagingModuleId() {
+		return messagingModuleId;
+	}
 
-    // The type of system component
-    private SystemComponentType componentType = null;
+	/**
+	 * Sets the messaging module ID.
+	 * 
+	 * @param messagingModuleId the new messaging module ID
+	 */
+	public void setMessagingModuleId(String messagingModuleId) {
+		this.messagingModuleId = messagingModuleId;
+	}
 
-    /**
-     * Gets the messaging module ID.
-     * 
-     * @return the messaging module ID
-     */
-    public String getMessagingModuleId() {
-        return messagingModuleId;
-    }
+	/**
+	 * Gets the messaging system ID.
+	 * 
+	 * @return the messaging system ID
+	 */
+	public String getMessagingSystemId() {
+		return messagingSystemId;
+	}
 
-    /**
-     * Sets the messaging module ID.
-     * 
-     * @param messagingModuleId the new messaging module ID
-     */
-    public void setMessagingModuleId(String messagingModuleId) {
-        this.messagingModuleId = messagingModuleId;
-    }
+	/**
+	 * Sets the messaging system ID.
+	 * 
+	 * @param messagingSystemId the new messaging system ID
+	 */
+	public void setMessagingSystemId(String messagingSystemId) {
+		this.messagingSystemId = messagingSystemId;
+	}
 
-    /**
-     * Gets the messaging system ID.
-     * 
-     * @return the messaging system ID
-     */
-    public String getMessagingSystemId() {
-        return messagingSystemId;
-    }
+	/**
+	 * Gets the component type of the system.
+	 * 
+	 * @return the component type
+	 */
+	public SystemComponentType getComponentType() {
+		return componentType;
+	}
 
-    /**
-     * Sets the messaging system ID.
-     * 
-     * @param messagingSystemId the new messaging system ID
-     */
-    public void setMessagingSystemId(String messagingSystemId) {
-        this.messagingSystemId = messagingSystemId;
-    }
-
-    /**
-     * Gets the component type of the system.
-     * 
-     * @return the component type
-     */
-    public SystemComponentType getComponentType() {
-        return componentType;
-    }
-
-    /**
-     * Sets the component type of the system.
-     * 
-     * @param componentType the new component type
-     */
-    public void setComponentType(SystemComponentType componentType) {
-        this.componentType = componentType;
-    }
+	/**
+	 * Sets the component type of the system.
+	 * 
+	 * @param componentType the new component type
+	 */
+	public void setComponentType(SystemComponentType componentType) {
+		this.componentType = componentType;
+	}
 }

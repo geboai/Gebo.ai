@@ -1,73 +1,72 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
-<p-blockUI id="BlockUILock3rem" gebo-ai-label [target]="endPointUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+
+
+
+<p-blockUI id="BlockUILock3rem"  [target]="endPointUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Editing google custom search api credentials" [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-4">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+          [disabled]="this.formGroup.invalid || canSave===false"></p-button>
+        </div>
+        <div class="col-4">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+        </div>
+        <div class="col-4">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            />
+          </div>
+        </div>
+      </div>
+    }
+
     <div class="geboDialogContent">
-        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
-        <div class="grid">
+      <div class="grid">
 
-            <div class="col-6">
-                <gebo-ai-field id="description" label="Description" help="Enter the description of google search api configuration." [required]="true">
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-            <div class="col-6">
-                <gebo-ai-field id="code" label="Unique Code" help="unique code of the google search api configuration.">
-                    <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-            <div class="col-6">
-                <gebo-ai-field id="secretCode" label="Google search api token" help="Choose or insert the google search api token" [required]="true">
-                    <geboai-editable-listbox-component formControlName="secretCode" placeholder="Select a token"
-                        [required]="true" [optionsObservable]="identitiesObservable"
-                        [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
-                    </geboai-editable-listbox-component>
-                </gebo-ai-field>
-            </div>
-            <div class="col-6">
-                <gebo-ai-field id="customSearchEngineId" label="Google search engine id" help="Google search engine id">
-                    <input pInputText id="customSearchEngineId" formControlName="customSearchEngineId" gebo-ai-field-element />
-                </gebo-ai-field>
-            </div>
-            <div class="col-12"> <p id="ForMoreInformations" gebo-ai-text>
-                For more informations on Google custom search API or getting your api key (for free) visit: <a href="https://developers.google.com/custom-search" target="_blank">https://developers.google.com/custom-search</a>
-            </p></div>
+        <div class="col-6">
+          <gebo-ai-field id="description" label="Description" help="Enter the description of google search api configuration." [required]="true">
+            <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
         </div>
-    </div>
-   
-
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false"></p-button>
-            </div>
-
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                     />
-            </div>
-
+        <div class="col-6">
+          <gebo-ai-field id="code" label="Unique Code" help="unique code of the google search api configuration.">
+            <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+          </gebo-ai-field>
         </div>
+        <div class="col-6">
+          <gebo-ai-field id="secretCode" label="Google search api token" help="Choose or insert the google search api token" [required]="true">
+            <geboai-editable-listbox-component formControlName="secretCode" placeholder="Select a token"
+              [required]="true" [optionsObservable]="identitiesObservable"
+              [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+        </div>
+        <div class="col-6">
+          <gebo-ai-field id="customSearchEngineId" label="Google search engine id" help="Google search engine id">
+            <input pInputText id="customSearchEngineId" formControlName="customSearchEngineId" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+        <div class="col-12"> <p id="ForMoreInformations" gebo-ai-text>
+          For more informations on Google custom search API or getting your api key (for free) visit: <a href="https://developers.google.com/custom-search" target="_blank">https://developers.google.com/custom-search</a>
+        </p></div>
+      </div>
     </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+  </p-panel>
+  <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+  <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

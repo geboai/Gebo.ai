@@ -16,7 +16,6 @@
  */
 package ai.gebo.llms.openai_compat.services;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.ai.converter.BeanOutputConverter;
@@ -25,9 +24,7 @@ import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatOptions.Builder;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.retry.support.RetryTemplate;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -35,6 +32,7 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
@@ -45,6 +43,7 @@ import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.services.ThinkTagSkippingOutputConverter;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
@@ -90,10 +89,12 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IChatModelUsageAdvisorFactory usageAdvisorFactory;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Constructor that initializes all required dependencies
-	 * 
+	 *
 	 * @param type                          The configuration for the
 	 *                                      OpenAI-compatible model type
 	 * @param secretService                 Service for accessing API keys and other
@@ -108,7 +109,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			IGToolCallbackSourceRepositoryPattern functionsRepo, ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
-			IGDocumentContentRendererProvider documentContentRenderProvider) {
+			IGDocumentContentRendererProvider documentContentRenderProvider,
+			IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -118,6 +120,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		this.configureHandler = configureHandler;
 		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
 		this.documentContentRenderProvider = documentContentRenderProvider;
+		this.usageAdvisorFactory = usageAdvisorFactory;
+		this.observationRegistry = observationRegistry;
 
 	}
 
@@ -129,8 +133,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
 
 		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
-				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
-			super(rendererFactory, toolCallbacksRepository);
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
+				IChatModelUsageAdvisorFactory usageAdvisorFactory, ObservationRegistry observationRegistry) {
+			super(rendererFactory, toolCallbacksRepository, usageAdvisorFactory, observationRegistry);
 
 		}
 
@@ -170,24 +175,16 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (config.getBaseUrl() != null) {
 				baseUrl = config.getBaseUrl();
 			}
-			org.springframework.ai.openai.api.OpenAiApi.Builder apiBuilder = OpenAiApi.builder();
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
-			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
-			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
-					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			apiBuilder.restClientBuilder(restClient);
-			apiBuilder.webClientBuilder(webClient);
 
-			if (apiKey != null) {
-				apiBuilder = apiBuilder.apiKey(apiKey);
-			} else {
-				apiBuilder = apiBuilder.apiKey(new NoopApiKey());
-			}
-			OpenAiApi openaiApi = apiBuilder.baseUrl(baseUrl).build();
-
-			// Configure model options
+			// Configure model options (apiKey + baseUrl live in options in Spring AI 2.0)
 			Builder builder = OpenAiChatOptions.builder();
+			builder.baseUrl(baseUrl);
+			if (apiKey != null) {
+				builder.apiKey(apiKey);
+			} else {
+				builder.apiKey(new NoopApiKey());
+			}
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -202,20 +199,10 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			}
 
 			// Configure tool callbacks (functions)
-
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
-				List<String> names = functions.stream().map(x -> {
-					return x.getToolDefinition().name();
-				}).toList();
-				builder = builder.toolNames(new HashSet<String>(names));
-
-			}
-
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				builder.parallelToolCalls(true);
-				builder.internalToolExecutionEnabled(true);
 			}
 			if (user != null) {
 				builder = builder.user(user);
@@ -223,8 +210,12 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();
-			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
-					ObservationRegistry.create());
+			OpenAiChatModel model = OpenAiChatModel.builder()
+					.options(options)
+					.toolCallingManager(toolCallingManager)
+					.observationRegistry(observationRegistry)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(clientsProvider))
+					.build();
 			return model;
 		}
 
@@ -285,7 +276,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
-			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository, usageAdvisorFactory,
+					observationRegistry);
 		}
 	};
 
@@ -310,7 +302,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	public IGConfigurableChatModel<GenericOpenAIAPIChatModelConfig> create(GenericOpenAIAPIChatModelConfig config)
 			throws LLMConfigException {
 		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel(documentContentRenderProvider,
-				functionsRepo);
+				functionsRepo, usageAdvisorFactory, observationRegistry);
 		model.initialize(config, type);
 		return model;
 	}

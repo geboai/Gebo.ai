@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessagePayloadType;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GMessagingComponentRef;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
@@ -24,6 +25,7 @@ import lombok.AllArgsConstructor;
 public class WorkflowRouterImpl implements IWorkflowRouter {
 	private final IGMessageBroker broker;
 	private final IWorkflowMessagesRouterRepositoryPattern workflowMessagesRouterRepositoryPattern;
+	private final IMessageEnvelopeFactory envelopeFactory;
 	private final static Logger LOGGER = LoggerFactory.getLogger(WorkflowRouterImpl.class);
 
 	@Override
@@ -43,7 +45,7 @@ public class WorkflowRouterImpl implements IWorkflowRouter {
 		}
 		for (GMessagingComponentRef target : destinations) {
 			try {
-				GMessageEnvelope<IGMessagePayloadType> envelope = GMessageEnvelope.newMessageFrom(emitter,
+				GMessageEnvelope<IGMessagePayloadType> envelope = envelopeFactory.newMessageFrom(emitter,
 						messageContext.getPayload());
 				envelope.setWorkflowType(workflowType);
 				envelope.setWorkflowId(target.getWorkflowId());

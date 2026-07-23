@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**getConfluenceSystems**](ConfluenceSystemsControllerApi.md#getConfluenceSystems) | **GET** /api/admin/ConfluenceSystemsController/getConfluenceSystems | 
 [**insertConfluenceEndpoint**](ConfluenceSystemsControllerApi.md#insertConfluenceEndpoint) | **POST** /api/admin/ConfluenceSystemsController/insertConfluenceEndpoint | 
 [**insertConfluenceSystem**](ConfluenceSystemsControllerApi.md#insertConfluenceSystem) | **POST** /api/admin/ConfluenceSystemsController/insertConfluenceSystem | 
+[**publishConfluenceEndpoint**](ConfluenceSystemsControllerApi.md#publishConfluenceEndpoint) | **POST** /api/admin/ConfluenceSystemsController/publishConfluenceEndpoint | 
 [**testConfluenceSystem**](ConfluenceSystemsControllerApi.md#testConfluenceSystem) | **POST** /api/admin/ConfluenceSystemsController/testConfluenceSystem | 
 [**updateConfluenceEndpoint**](ConfluenceSystemsControllerApi.md#updateConfluenceEndpoint) | **POST** /api/admin/ConfluenceSystemsController/updateConfluenceEndpoint | 
 [**updateConfluenceSystem**](ConfluenceSystemsControllerApi.md#updateConfluenceSystem) | **POST** /api/admin/ConfluenceSystemsController/updateConfluenceSystem | 
@@ -472,6 +473,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OperationStatusGConfluenceSystem**](OperationStatusGConfluenceSystem.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishConfluenceEndpoint"></a>
+# **publishConfluenceEndpoint**
+> OperationStatusGJobStatus publishConfluenceEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.ConfluenceSystemsControllerApi;
+
+
+ConfluenceSystemsControllerApi apiInstance = new ConfluenceSystemsControllerApi();
+GConfluenceProjectEndpoint body = new GConfluenceProjectEndpoint(); // GConfluenceProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishConfluenceEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling ConfluenceSystemsControllerApi#publishConfluenceEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GConfluenceProjectEndpoint**](GConfluenceProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

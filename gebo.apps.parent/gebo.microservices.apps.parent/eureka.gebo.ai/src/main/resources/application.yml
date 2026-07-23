@@ -1,0 +1,23 @@
+spring:
+  application:
+    # Canonical (underscore) microservice id of the registry itself.
+    name: eureka_gebo_ai
+
+# Eureka server listens here: the last port of the 13000-13017 block every Gebo
+# microservice draws from (gateway 13000 ... eureka 13017). The clients default
+# their eureka.client.service-url.defaultZone to http://localhost:13017/eureka/,
+# and the defaultZone below is derived from this very property.
+server:
+  port: 13017
+
+eureka:
+  instance:
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+  client:
+    # Standalone registry: do not try to register with, or fetch a registry from,
+    # itself. For an HA cluster, set these true and peer the nodes via
+    # service-url.defaultZone (comma-separated peer /eureka/ urls).
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${eureka.instance.hostname}:${server.port}/eureka/}

@@ -20,7 +20,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
-import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
 import lombok.AllArgsConstructor;
@@ -36,7 +36,7 @@ import lombok.AllArgsConstructor;
  *                                    AI generated comments
  */
 @AllArgsConstructor
-public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConfigType extends GBaseTranscriptModelConfig, ModelChoice extends GBaseTranscriptModelChoice, Iface extends IGImageModelConfigurationSupportService> {
+public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConfigType extends GBaseTranscriptModelConfig, ModelChoice extends GBaseTranscriptModelChoice, Iface extends IGTranscriptModelConfigurationSupportService> {
 
 	// Logger instance for logging operations and exceptions
 	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -71,7 +71,7 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 			return OperationStatus.<TranscriptModelConfigType>of(e);
 		}
 		try {
-			this.modelRuntimeConfigurationDao.addRuntimeByConfig(config);
+			this.modelRuntimeConfigurationDao.addRuntimeByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while configuring new chat model ", e);
 			try {
@@ -116,8 +116,7 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 	 */
 	protected OperationStatus<TranscriptModelConfigType> update(TranscriptModelConfigType config) {
 		try {
-			IGConfigurableTranscriptModel handler = this.modelRuntimeConfigurationDao.findByCode(config.getCode());
-			handler.reconfigure(config);
+			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception reconfiguring model", e);
 			return OperationStatus.<TranscriptModelConfigType>of(e);
@@ -142,7 +141,7 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 	 */
 	protected OperationStatus<Boolean> delete(TranscriptModelConfigType type) {
 		try {
-			this.modelRuntimeConfigurationDao.deleteByCode(type.getCode());
+			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);
 		} catch (Throwable e) {
 			LOGGER.error("Exception deleting model", e);

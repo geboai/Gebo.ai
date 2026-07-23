@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseImageModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
+import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProvider;
@@ -33,7 +36,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 	private static final String REGOLO_AI_MODELS_LIST = "regolo-ai-models-list";
+	// LiteLLM model_info.mode values (regolo.ai is served through a LiteLLM proxy).
 	private static final String EMBEDDING = "embedding";
+	private static final String RERANK = "rerank";
+	private static final String IMAGE_GENERATION = "image_generation";
+	private static final String AUDIO_SPEECH = "audio_speech";
+	private static final String AUDIO_TRANSCRIPTION = "audio_transcription";
+	private static final String MODERATION = "moderation";
 	private static final String REGOLO_AI_MODELS_INFO_URL = "https://api.regolo.ai/v1/model/info";
 	final IGModelChoiceMetaInfoEnricherService enricherService;
 	final RestTemplateWrapperService restTemplateWrapper;
@@ -61,79 +70,58 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 			ModelType modelType) {
 		List<ModelChoice> models = new ArrayList<ModelChoice>();
 		try {
+			HttpEntity<String> request = new HttpEntity<String>(ModelsListCommonUtils.getHeaders(clearApiKey));
+			ResponseEntity<RegoloAIModelList> response = restTemplateWrapper.exchange(REGOLO_AI_MODELS_INFO_URL,
+					HttpMethod.GET, request, RegoloAIModelList.class);
+			RegoloAIModelList result = response.hasBody() ? response.getBody() : new RegoloAIModelList();
+			List<RegoloAIModel> data = result.getData() != null ? result.getData() : new ArrayList<RegoloAIModel>();
+
 			if (GBaseEmbeddingModelChoice.class.isAssignableFrom(choiceType)) {
-				List<GBaseEmbeddingModelChoice> embeddingmodels = new ArrayList<GBaseEmbeddingModelChoice>();
-
-				HttpEntity<String> request = new HttpEntity<String>(ModelsListCommonUtils.getHeaders(clearApiKey));
-				ResponseEntity<RegoloAIModelList> response = restTemplateWrapper.exchange(REGOLO_AI_MODELS_INFO_URL,
-						HttpMethod.GET, request, RegoloAIModelList.class);
-				RegoloAIModelList result = response.hasBody() ? response.getBody() : new RegoloAIModelList();
-				if (result.getData() != null) {
-					for (RegoloAIModel m : result.getData()) {
-						GBaseEmbeddingModelChoice entry = (GBaseEmbeddingModelChoice) ModelsListCommonUtils
-								.newInstance(choiceType);
-						entry.setCode(m.getModel_name());
-						entry.setContextLength(getContextWindowLength(m));
-						entry.setDescription(m.getModel_name());
-						entry.setNativeModelMetaInfos(m);
-						String mode = getMode(m);
-						if (mode != null && mode.equalsIgnoreCase(EMBEDDING)) {
-							embeddingmodels.add(entry);
-						}
-					}
+				List<GBaseEmbeddingModelChoice> list = new ArrayList<GBaseEmbeddingModelChoice>();
+				for (RegoloAIModel m : data) {
+					if (isMode(m, EMBEDDING))
+						list.add((GBaseEmbeddingModelChoice) toChoice(choiceType, m));
 				}
-				enricherService.enrichEmbeddingModelMetaInfos(providerId, embeddingmodels,
-						(GBaseEmbeddingModelChoice x) -> {
-							return new ModelMetaInfo();
-						});
-				models = new ArrayList(embeddingmodels);
-			} else if (GBaseChatModelChoice.class.isAssignableFrom(choiceType)) {
-
-				HttpEntity<String> request = new HttpEntity<String>(ModelsListCommonUtils.getHeaders(clearApiKey));
-				ResponseEntity<RegoloAIModelList> response = restTemplateWrapper.exchange(REGOLO_AI_MODELS_INFO_URL,
-						HttpMethod.GET, request, RegoloAIModelList.class);
-				RegoloAIModelList result = response.hasBody() ? response.getBody() : new RegoloAIModelList();
-				if (result.getData() != null) {
-					List<GBaseChatModelChoice> chatmodels = new ArrayList<GBaseChatModelChoice>();
-					for (RegoloAIModel m : result.getData()) {
-						GBaseChatModelChoice entry = (GBaseChatModelChoice) ModelsListCommonUtils
-								.newInstance(choiceType);
-						entry.setCode(m.getModel_name());
-						entry.setDescription(m.getModel_name());
-						entry.setContextLength(getContextWindowLength(m));
-						entry.setNativeModelMetaInfos(m);
-						String mode = getMode(m);
-						if (mode == null || !mode.equalsIgnoreCase(EMBEDDING)) {
-							chatmodels.add(entry);
-						}
-					}
-					enricherService.enrichChatModelMetaInfos(providerId, chatmodels, (GBaseChatModelChoice x) -> {
-						return new ModelMetaInfo();
-					});
-					models = new ArrayList(chatmodels);
-				}
+				enricherService.enrichEmbeddingModelMetaInfos(providerId, list,
+						(GBaseEmbeddingModelChoice x) -> new ModelMetaInfo());
+				models = new ArrayList(list);
 			} else if (GBaseRankerModelChoice.class.isAssignableFrom(choiceType)) {
-				HttpEntity<String> request = new HttpEntity<String>(ModelsListCommonUtils.getHeaders(clearApiKey));
-				ResponseEntity<RegoloAIModelList> response = restTemplateWrapper.exchange(REGOLO_AI_MODELS_INFO_URL,
-						HttpMethod.GET, request, RegoloAIModelList.class);
-				RegoloAIModelList result = response.hasBody() ? response.getBody() : new RegoloAIModelList();
-				if (result.getData() != null) {
-					List<GBaseRankerModelChoice> rankermodels = new ArrayList<GBaseRankerModelChoice>();
-					for (RegoloAIModel m : result.getData()) {
-						GBaseRankerModelChoice entry = (GBaseRankerModelChoice) ModelsListCommonUtils
-								.newInstance(choiceType);
-						entry.setCode(m.getModel_name());
-						entry.setDescription(m.getModel_name());
-						entry.setContextLength(getContextWindowLength(m));
-						entry.setNativeModelMetaInfos(m);
-						String mode = getMode(m);
-						if (mode == null || !mode.equalsIgnoreCase(EMBEDDING)) {
-							rankermodels.add(entry);
-						}
-					}
-
-					models = new ArrayList(rankermodels);
+				List<GBaseRankerModelChoice> list = new ArrayList<GBaseRankerModelChoice>();
+				for (RegoloAIModel m : data) {
+					if (isMode(m, RERANK))
+						list.add((GBaseRankerModelChoice) toChoice(choiceType, m));
 				}
+				models = new ArrayList(list);
+			} else if (GBaseImageModelChoice.class.isAssignableFrom(choiceType)) {
+				List<GBaseImageModelChoice> list = new ArrayList<GBaseImageModelChoice>();
+				for (RegoloAIModel m : data) {
+					if (isMode(m, IMAGE_GENERATION))
+						list.add((GBaseImageModelChoice) toChoice(choiceType, m));
+				}
+				models = new ArrayList(list);
+			} else if (GBaseTranscriptModelChoice.class.isAssignableFrom(choiceType)) {
+				List<GBaseTranscriptModelChoice> list = new ArrayList<GBaseTranscriptModelChoice>();
+				for (RegoloAIModel m : data) {
+					if (isMode(m, AUDIO_TRANSCRIPTION))
+						list.add((GBaseTranscriptModelChoice) toChoice(choiceType, m));
+				}
+				models = new ArrayList(list);
+			} else if (GBaseTextToSpeachModelChice.class.isAssignableFrom(choiceType)) {
+				List<GBaseTextToSpeachModelChice> list = new ArrayList<GBaseTextToSpeachModelChice>();
+				for (RegoloAIModel m : data) {
+					if (isMode(m, AUDIO_SPEECH))
+						list.add((GBaseTextToSpeachModelChice) toChoice(choiceType, m));
+				}
+				models = new ArrayList(list);
+			} else if (GBaseChatModelChoice.class.isAssignableFrom(choiceType)) {
+				List<GBaseChatModelChoice> list = new ArrayList<GBaseChatModelChoice>();
+				for (RegoloAIModel m : data) {
+					if (isChatMode(m))
+						list.add((GBaseChatModelChoice) toChoice(choiceType, m));
+				}
+				enricherService.enrichChatModelMetaInfos(providerId, list,
+						(GBaseChatModelChoice x) -> new ModelMetaInfo());
+				models = new ArrayList(list);
 			} else
 				throw new RuntimeException("This service does not handle=>" + choiceType.getName());
 		} catch (GeboRestIntegrationException e) {
@@ -145,6 +133,34 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 		}
 		return OperationStatus.of(models);
 
+	}
+
+	private boolean isMode(RegoloAIModel model, String targetMode) {
+		String mode = getMode(model);
+		return mode != null && mode.equalsIgnoreCase(targetMode);
+	}
+
+	/**
+	 * A chat model is anything that is not one of the specialised modes. Models with
+	 * no declared mode are kept as chat, preserving the previous lenient behaviour.
+	 */
+	private boolean isChatMode(RegoloAIModel model) {
+		String mode = getMode(model);
+		if (mode == null)
+			return true;
+		return !(mode.equalsIgnoreCase(EMBEDDING) || mode.equalsIgnoreCase(RERANK)
+				|| mode.equalsIgnoreCase(IMAGE_GENERATION) || mode.equalsIgnoreCase(AUDIO_SPEECH)
+				|| mode.equalsIgnoreCase(AUDIO_TRANSCRIPTION) || mode.equalsIgnoreCase(MODERATION));
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private GBaseModelChoice toChoice(Class choiceType, RegoloAIModel model) {
+		GBaseModelChoice entry = ModelsListCommonUtils.newInstance(choiceType);
+		entry.setCode(model.getModel_name());
+		entry.setDescription(model.getModel_name());
+		entry.setContextLength(getContextWindowLength(model));
+		entry.setNativeModelMetaInfos(model);
+		return entry;
 	}
 
 	private Integer getContextWindowLength(RegoloAIModel model) {

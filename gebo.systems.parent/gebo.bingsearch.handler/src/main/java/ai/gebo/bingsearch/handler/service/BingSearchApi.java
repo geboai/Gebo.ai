@@ -48,7 +48,7 @@ public class BingSearchApi {
 		}
 
 		// request params
-		UriComponentsBuilder b = UriComponentsBuilder.fromHttpUrl(BING_SEARCH_SERVICE_URL).queryParam("q", q.getQuery())
+		UriComponentsBuilder b = UriComponentsBuilder.fromUriString(BING_SEARCH_SERVICE_URL).queryParam("q", q.getQuery())
 
 				.queryParam("textDecorations", "false").queryParam("textFormat", "Raw");
 

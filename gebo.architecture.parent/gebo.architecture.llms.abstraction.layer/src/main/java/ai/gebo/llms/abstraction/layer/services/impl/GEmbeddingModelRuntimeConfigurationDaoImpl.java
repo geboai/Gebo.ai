@@ -24,17 +24,18 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.model.GModuleTrafficInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.MInfoType;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.ModuleType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -47,8 +48,13 @@ import ai.gebo.llms.abstraction.layer.vectorstores.model.EmbeddingTrafficInfo;
 @Component
 @Scope("singleton")
 public class GEmbeddingModelRuntimeConfigurationDaoImpl
-        extends GAbstractRuntimeConfigurationDao<IGConfigurableEmbeddingModel>
+        extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableEmbeddingModel, GBaseEmbeddingModelConfig>
         implements IGEmbeddingModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+
+    @Override
+    protected GLlmModelClusterCategory getClusterCategory() {
+        return GLlmModelClusterCategory.EMBEDDING;
+    }
 
     // AI generated comments
     // Logger for this class
@@ -98,12 +104,17 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
             List<GBaseEmbeddingModelConfig> configs = persistentObjectManager
                     .findAllExtendingType(GBaseEmbeddingModelConfig.class);
             for (GBaseEmbeddingModelConfig config : configs) {
-                addRuntimeByConfig(config);
+                try {
+                    addRuntimeByConfig(config);
+                } catch (Throwable e) {
+                    // A single model that cannot be allocated (revoked key, provider down, stale
+                    // configuration) must never keep the whole application from starting: report
+                    // it and carry on with the remaining models.
+                    LOGGER.error("Cannot initialize the embedding model with code=>" + config.getCode(), e);
+                }
             }
-        } catch (GeboPersistenceException | LLMConfigException e) {
-            String msg = "FATAL EMBEDDING MODELS INITIALIZATION EXCEPTION";
-            LOGGER.error(msg, e);
-            throw new RuntimeException(msg, e);
+        } catch (GeboPersistenceException e) {
+            LOGGER.error("Cannot read the embedding models configuration", e);
         }
 
         LOGGER.info("End initializing embedding models dynamically");
@@ -137,7 +148,7 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
         }
         try {
             LOGGER.info("Initializing embedding model with configuration:" + mapper.writeValueAsString(config));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             // Error during JSON processing, no action required here
         }
         IGConfigurableEmbeddingModel embedModel = handler.create(config);

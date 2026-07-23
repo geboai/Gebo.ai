@@ -50,7 +50,7 @@ import ai.gebo.monolithic.api.client.invoker.auth.HttpBasicAuth;
 import ai.gebo.monolithic.api.client.invoker.auth.ApiKeyAuth;
 import ai.gebo.monolithic.api.client.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {
@@ -478,7 +478,7 @@ public class ApiClient {
     public <T> ResponseEntity<T> invokeAPI(String path, HttpMethod method, MultiValueMap<String, String> queryParams, Object body, HttpHeaders headerParams, MultiValueMap<String, Object> formParams, List<MediaType> accept, MediaType contentType, String[] authNames, ParameterizedTypeReference<T> returnType) throws RestClientException {
         updateParamsForAuth(authNames, queryParams, headerParams);
         
-        final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(basePath).path(path);
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(basePath).path(path);
         if (queryParams != null) {
             builder.queryParams(queryParams);
         }
@@ -512,14 +512,13 @@ public class ApiClient {
      * @param requestBuilder The current request
      */
     protected void addHeadersToRequest(HttpHeaders headers, BodyBuilder requestBuilder) {
-        for (Entry<String, List<String>> entry : headers.entrySet()) {
-            List<String> values = entry.getValue();
-            for(String value : values) {
+        headers.forEach((name, values) -> {
+            for (String value : values) {
                 if (value != null) {
-                    requestBuilder.header(entry.getKey(), value);
+                    requestBuilder.header(name, value);
                 }
             }
-        }
+        });
     }
 
     /**
@@ -574,7 +573,7 @@ public class ApiClient {
         }
 
         private void logResponse(ClientHttpResponse response) throws IOException {
-            log.info("HTTP Status Code: " + response.getRawStatusCode());
+            log.info("HTTP Status Code: " + response.getStatusCode().value());
             log.info("Status Text: " + response.getStatusText());
             log.info("HTTP Headers: " + headersToString(response.getHeaders()));
             log.info("Response Body: " + bodyToString(response.getBody()));
@@ -582,15 +581,15 @@ public class ApiClient {
 
         private String headersToString(HttpHeaders headers) {
             StringBuilder builder = new StringBuilder();
-            for(Entry<String, List<String>> entry : headers.entrySet()) {
-                builder.append(entry.getKey()).append("=[");
-                for(String value : entry.getValue()) {
+            headers.forEach((name, values) -> {
+                builder.append(name).append("=[");
+                for (String value : values) {
                     builder.append(value).append(",");
                 }
-                builder.setLength(builder.length() - 1); // Get rid of trailing comma
+                builder.setLength(builder.length() - 1);
                 builder.append("],");
-            }
-            builder.setLength(builder.length() - 1); // Get rid of trailing comma
+            });
+            if (builder.length() > 0) builder.setLength(builder.length() - 1);
             return builder.toString();
         }
         

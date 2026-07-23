@@ -39,6 +39,105 @@ public class TokensBudgetFluxCoordinator {
 		boolean higherThanBudgetTokens(List<D> d, long budget);
 	}
 
+	public static <D, T, Y> Flux<Y> tokenBudgetCoordinateAlreadySplitted(Flux<D> source, ISinkUIEmitter emitter,
+			Predicate<D> validDocumentCheck, GenerativeFunction<D, T> generative, LastWork<T, Y> finalWork,
+			T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue, Y finalOutOFBoundValue,
+			Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
+			Function<T, T> outputCleaningFunction, Function<T, Flux<Y>> streamingFunction, ReactiveIdentityUtil runAs,
+			int parallelism, Consumer<D> unprocessedCumulator) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin tokenBudgetCoordinate(..) ");
+		}
+		final AtomicBoolean endOfProcessing = new AtomicBoolean(false);
+		Flux<List<T>> flux = source.parallel(parallelism).runOn(runAs.wrap(Schedulers.boundedElastic())).map(input -> {
+			return runAs.doRunAsWithReturn(() -> {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Begin map(...) code with 1  batch of documents");
+				}
+				if (endOfProcessing.get()) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Shortcutting process in map(...)");
+					}
+					if (input != null) {
+						unprocessedCumulator.accept(input);
+					}
+					return null;
+				}
+				try {
+					try {
+						emitter.notifyUser(UUID.randomUUID().toString(), "Analyzing 1 batch of documents", null, 3000l,
+								NotificationType.INFO);
+					} catch (Throwable th) {
+						LOGGER.error("Error notifying user about documents analysis start", th);
+					}
+					T result = generative.iterateCumulation(initialValue, emitter, List.of(input));
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("End map(...) code with 1 batch of documents returning:" + result);
+					}
+					try {
+						emitter.notifyUser(UUID.randomUUID().toString(), "Analyzing 1 batch of documents!", null, 3000l,
+								NotificationType.INFO);
+					} catch (Throwable th) {
+						LOGGER.error("Error notifying user about documents analysis completion", th);
+					}
+					if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
+						endOfProcessing.set(true);
+					}
+					return outputCleaningFunction.apply(result);
+				} catch (Throwable th) {
+					emitter.notifyLLMProblems();
+					LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
+					return outOfBandValue;
+				}
+			});
+		}).filter(V -> V != null && !isOutOfBandValue.test(V)).sequential().buffer();
+		Flux<Y> finalFlux = flux.flatMap(IntermediateResult -> {
+			return runAs.doRunAsWithReturn(() -> {
+				try {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Begin flatMap(...) code with " + IntermediateResult.size() + " input elements");
+					}
+					Flux<Y> finalResult = null;
+					if (IntermediateResult.size() == 1) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Returning shortcutted value");
+						}
+
+						finalResult = streamingFunction.apply(IntermediateResult.get(0));
+					} else {
+						try {
+							emitter.notifyUser(UUID.randomUUID().toString(),
+									"Aggregating " + IntermediateResult.size() + " analisys", null, 3000l,
+									NotificationType.INFO);
+						} catch (Throwable th) {
+							LOGGER.error("Error notifying user about analisys aggregation start", th);
+						}
+						finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
+						try {
+							emitter.notifyUser(UUID.randomUUID().toString(),
+									"Aggregated " + IntermediateResult.size() + " analisys!", null, 3000l,
+									NotificationType.INFO);
+						} catch (Throwable th) {
+							LOGGER.error("Error notifying user about analisys aggregation completion", th);
+						}
+					}
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("End flatMap(...) code");
+					}
+					return finalResult;
+				} catch (Throwable th) {
+					emitter.notifyLLMProblems();
+					LOGGER.error(EXCEPTION_IN_FLAT_MAP, th);
+					return Flux.just(finalOutOFBoundValue);
+				}
+			}).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
+		});
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End tokenBudgetCoordinate(..) ");
+		}
+		return finalFlux;
+	}
+
 	public static <D, T, Y> Flux<Y> tokenBudgetCoordinate(Flux<D> source, ISinkUIEmitter emitter,
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			LastWork<T, Y> finalWork, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
@@ -64,7 +163,9 @@ public class TokensBudgetFluxCoordinator {
 							if (input != null) {
 								input.forEach(unprocessedCumulator);
 							}
-							return null;
+							// Reactor's map() forbids null: return the out-of-band value, which is
+							// dropped downstream by the isOutOfBandValue filter (see .filter below).
+							return outOfBandValue;
 						}
 						try {
 							try {

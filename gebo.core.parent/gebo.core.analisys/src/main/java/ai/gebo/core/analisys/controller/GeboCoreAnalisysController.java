@@ -63,7 +63,7 @@ public class GeboCoreAnalisysController {
      * @return a list of GStatsHolder objects representing drilled down statistics.
      */
     @PostMapping(value = "drillDown", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<GStatsHolder> drillDown(@RequestBody GStatsHolder holder) {
+    public List<GStatsHolder> coreDrillDown(@RequestBody GStatsHolder holder) {
         return source.drillDown(holder);
     }
 

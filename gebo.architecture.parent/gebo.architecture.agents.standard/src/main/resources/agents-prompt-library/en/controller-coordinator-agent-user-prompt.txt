@@ -2,6 +2,10 @@
 
 {NETWORK_SCENARY}
 
+The network is composed of the following agents, each exposing the capabilities, catalogs/collections, systems/resources and tools listed below:
+
+{NETWORK_AGENTS_CAPABILITIES}
+
 ## (NCAP) Current agent communication capabilities
 
 You can send messages only to the following agents, according to the current communication capability rules:
@@ -39,6 +43,18 @@ Do not invent facts from private memory that are not relevant to the current inp
 
 This is the current command, user request, or instruction that you must satisfy.
 
-## (C) Current agent command/input
+## (C) Current agent command/input (maximum priority input)
 
 {INPUT}
+
+## (D) Required deliverable completeness (user intent signal)
+
+The user's request has been classified with the following required deliverable completeness, expressed as `INTENT: description`. 
+
+Treat it as an AUTHORITATIVE signal of how complete and how deep the final deliverable must be, and size your routing plan accordingly:
+
+{REQUIRED_AGENT_COMPLETENESS}
+
+## (E) Current user actual question: {question}
+
+IMPORTANT: preferibly generate commands in the same language of the user question.

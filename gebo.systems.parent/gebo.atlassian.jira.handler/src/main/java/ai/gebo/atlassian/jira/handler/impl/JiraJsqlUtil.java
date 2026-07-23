@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import ai.gebo.atlassian.jira.handler.search.model.JiraIssueAttributeFilter;
-import ai.gebo.atlassian.jira.handler.search.model.JiraIssuesSearchFilter;
-import ai.gebo.atlassian.jira.handler.search.model.JiraPeopleFilter;
+import ai.gebo.atlassian.jira.search.api.JiraIssueAttributeFilter;
+import ai.gebo.atlassian.jira.search.api.JiraIssuesSearchFilter;
+import ai.gebo.atlassian.jira.search.api.JiraPeopleFilter;
 
 public class JiraJsqlUtil {
 

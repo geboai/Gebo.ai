@@ -13,7 +13,6 @@
 package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
-import ai.gebo.monolithic.api.client.model.GLookupEntryRef;
 import ai.gebo.monolithic.api.client.model.GLookupEntryRefGBaseChatModelConfig;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -70,7 +69,7 @@ public class ChatModelsLookupControllerApiTest {
     @Test
     public void getRuntimeConfiguredChatModelsLookupTest() {
         String modelTypeCode = null;
-        List<GLookupEntryRef> response = api.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
+        List<GLookupEntryRefGBaseChatModelConfig> response = api.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
 
         // TODO: test validations
     }

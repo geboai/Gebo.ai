@@ -11,13 +11,18 @@ RUN update-locale LANG=en_US.UTF-8
 RUN apt-get update && apt-get install -y  \
       curl net-tools \
     && rm -rf /var/lib/apt/lists/*
+ARG TARGETARCH
 RUN mkdir -p /opt/
 RUN mkdir -p /opt/java/
-RUN curl -L -o /opt/java/jdk-21_linux-x64_bin.tar.gz https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz
 WORKDIR /opt/java/
-RUN tar zxvfs jdk-21_linux-x64_bin.tar.gz
-RUN rm jdk-21_linux-x64_bin.tar.gz
-ENV JAVA_HOME=/opt/java/jdk-21.0.10
+# Multiplatform: TARGETARCH is set automatically by docker buildx (amd64 or arm64).
+# Oracle JDK uses x64 for amd64 and aarch64 for arm64.
+RUN ARCH=$(case "$TARGETARCH" in amd64) echo "x64" ;; arm64) echo "aarch64" ;; *) echo "x64" ;; esac) \
+    && curl -L -o jdk-21.tar.gz "https://download.oracle.com/java/21/latest/jdk-21_linux-${ARCH}_bin.tar.gz" \
+    && tar xzf jdk-21.tar.gz \
+    && rm jdk-21.tar.gz \
+    && ln -sfn "$(ls -d jdk-21.* | head -n1)" jdk-21
+ENV JAVA_HOME=/opt/java/jdk-21
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8

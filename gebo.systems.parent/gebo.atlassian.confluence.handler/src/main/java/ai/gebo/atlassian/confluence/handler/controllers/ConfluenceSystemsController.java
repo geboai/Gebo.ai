@@ -50,6 +50,8 @@ import ai.gebo.atlassian.confluence.handler.impl.ConfluenceSystemsTestService;
 import ai.gebo.atlassian.confluence.handler.repositories.ConfluenceProjectEndpointRepository;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceConnection;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceSpaceApi;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
 import ai.gebo.model.GUserMessage;
@@ -60,6 +62,7 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -111,9 +114,11 @@ public class ConfluenceSystemsController
 			IGConfluenceContentManagementHandler handler, ConfluenceProjectEndpointRepository endpointRepository,
 			IGeboSecretsAccessService secretAccessService, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			RestTemplateWrapperService restTemplateWrapper, ConfluenceSystemsTestService confluenceTestService) {
+			RestTemplateWrapperService restTemplateWrapper, ConfluenceSystemsTestService confluenceTestService,
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 		this.endpointRepository = endpointRepository;
 		this.secretAccessService = secretAccessService;
@@ -288,6 +293,17 @@ public class ConfluenceSystemsController
 	public void deleteConfluenceEndpoint(@RequestBody GConfluenceProjectEndpoint endpoint)
 			throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes a Confluence project endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint The Confluence endpoint to publish
+	 * @return Operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishConfluenceEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishConfluenceEndpoint(@RequestBody GConfluenceProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
 	/**

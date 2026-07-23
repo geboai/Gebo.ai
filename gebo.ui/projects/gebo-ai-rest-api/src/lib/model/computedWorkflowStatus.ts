@@ -28,5 +28,7 @@ export interface ComputedWorkflowStatus {
     startedRunning?: boolean;
     levelId?: number;
     enabledStep?: boolean;
+    startProcessingTimestamp?: Date;
+    lastProcessingTimestamp?: Date;
     childs?: Array<ComputedWorkflowStatus>;
 }

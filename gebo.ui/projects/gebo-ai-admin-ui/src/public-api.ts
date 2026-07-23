@@ -47,6 +47,12 @@ export * from "./lib/setup-wizard/vectorstore-wizard.component";
 export * from "./lib/setup-wizard/work-folder-wizard.component";
 export * from "./lib/setup-wizard/agent-setup-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-ranker-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-text-to-speech-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-transcript-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-text-to-speech-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-transcript-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-image-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-image-model-admin.component";
 export * from "./lib/admin-ui/gebo-ai-standard-modules-injections.module";
 export * from "./lib/admin-ui/main-panels/build-packaging-systems/build-packaging-systems.component";
 export * from "./lib/admin-ui/main-panels/chat-profiles/chat-profiles.component";
@@ -67,6 +73,12 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-job-status-viewer/log-table
 export * from "./lib/admin-ui/entity-editors/gebo-ai-filesystems-admin/gebo-ai-filesystem-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-embedmodel-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-chatmodel-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-embedmodel-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-image-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-text-to-speech-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-transcript-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-bedrock-ranker-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-test-chat.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-ollama-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-ollama-embedmodel-admin.component";
@@ -100,14 +112,27 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-mistra
 export * from "./lib/admin-ui/entity-editors/controls/standard-chat-model-settings/standard-chat-model-settings.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-system-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-endpoint.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-system-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3-system-fast.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-oauth2-admin/gebo-ai-oauth2-registration.component";
-export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-azure-openai-embedmodel-admin.component";
-export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-azure-openai-chatmodel-admin.component";
+
 export * from "./lib/admin-ui/entity-editors/gebo-graph-rag-extraction-config-admin/graph-rag-extraction-config.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-job-status-viewer/graphic-visualizer.component";
 export * from "./lib/admin-ui/entity-editors/controls/graphrag-config/graphrag-config.component";
 export * from "./lib/admin-ui/entity-editors/gebo-deep-search-admin/gebo-deep-search-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-agents-admin/gebo-ai-agents-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-agents-network-admin/gebo-ai-agents-network-admin.component";
+export * from "./lib/admin-ui/main-panels/agent-networks/agent-networks.component";
+
+export * from "./lib/setup-wizard/mcp-server-wizard.component";
+export * from "./lib/setup-wizard/gebo-ai-mcp-server-wizard.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-mcp-client-admin/gebo-ai-mcp-client-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-change-user-password.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-mcp-server-admin/gebo-ai-mcp-server-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-mcpclient-admin/gebo-ai-mcpclient-endpoint.component";
+
+

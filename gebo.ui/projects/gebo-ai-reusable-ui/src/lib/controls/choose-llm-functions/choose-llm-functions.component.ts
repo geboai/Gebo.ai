@@ -16,9 +16,10 @@
  */
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FunctionsLookupControllerService, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
+import { FunctionsLookupControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { TreeNode } from "primeng/api";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "gebo-ai-choose-llm-functions-component",
@@ -38,6 +39,7 @@ export class GeboAIChooseLLMFunctionscomponent implements ControlValueAccessor, 
      * which affects which functions are available for selection.
      */
     @Input() knowledgeBaseContext?: boolean;
+    @Input() escludeExternalTools?: boolean = false;
 
     /**
      * Flag to track if writeValue has been called to prevent premature onChange events
@@ -95,49 +97,49 @@ export class GeboAIChooseLLMFunctionscomponent implements ControlValueAccessor, 
             }
         });
     }
-
+    private reloadFunctions() {
+        this.loading = true;
+        const observable: Observable<ToolCategoriesTree[]> = this.escludeExternalTools !== true ? this.functionsLookupService.getAllFunctionsTree(this.knowledgeBaseContext) : this.functionsLookupService.getAllLocalFunctionsTree(this.knowledgeBaseContext);
+        observable.subscribe({
+            next: (trees) => {
+                const root: TreeNode<any>[] = [];
+                if (trees != null) {
+                    trees.forEach(x => {
+                        const item: TreeNode<any> = {
+                            label: x.category?.description,
+                            data: x,
+                            leaf: false,
+                            selectable: true
+                        };
+                        if (x.toolsReference) {
+                            const childs: TreeNode<ToolReference>[] = [];
+                            x.toolsReference.forEach(y => {
+                                childs.push({
+                                    label: y.description,
+                                    data: y,
+                                    leaf: true
+                                });
+                            });
+                            item.children = childs;
+                        }
+                        root.push(item);
+                    });
+                }
+                this.root = root;
+                this.tryDisplay();
+            },
+            complete: () => {
+                this.loading = false;
+            }
+        })
+    }
     /**
      * Responds to changes in inputs, specifically knowledgeBaseContext.
      * Fetches the function tree from the service when the context is defined.
      * @param changes SimpleChanges object containing information about changed properties
      */
     ngOnChanges(changes: SimpleChanges): void {
-        if (this.knowledgeBaseContext !== undefined) {
-            this.loading = true;
-            this.functionsLookupService.getAllFunctionsTree(this.knowledgeBaseContext).subscribe({
-                next: (trees) => {
-                    const root: TreeNode<any>[] = [];
-                    if (trees != null) {
-                        trees.forEach(x => {
-                            const item: TreeNode<any> = {
-                                label: x.category?.description,
-                                data: x,
-                                leaf: false,
-                                selectable: false
-                            };
-                            if (x.toolsReference) {
-                                const childs: TreeNode<ToolReference>[] = [];
-                                x.toolsReference.forEach(y => {
-                                    childs.push({
-                                        label: y.description,
-                                        data: y,
-                                        leaf: true
-                                    });
-                                });
-                                item.children = childs;
-                            }
-                            root.push(item);
-                        });
-                    }
-                    this.root = root;
-                    this.tryDisplay();
-                },
-                complete: () => {
-                    this.loading = false;
-                }
-            })
-
-        }
+         this.reloadFunctions();
     }
 
     /**
@@ -147,20 +149,44 @@ export class GeboAIChooseLLMFunctionscomponent implements ControlValueAccessor, 
      */
     private tryDisplay(): void {
         if (this.functionsList && this.functionsList.length && this.root && this.root.length) {
-            const childs: TreeNode<any>[] = [];
+            const selectedNodes: TreeNode<any>[] = [];
+            const leafNames: string[] = [];
             this.root.forEach(x => {
-                if (x.children) {
+                if (x.children && x.children.length) {
                     x.children.forEach(y => {
-                        if (this.functionsList.find(s => s === y.data.name)) {
-                            childs.push(y);
+                        if (y.data?.name) {
+                            leafNames.push(y.data.name);
                         }
                     });
                 }
             });
-            this.formGroup.setValue({ selected: childs }, { onlySelf: true, emitEvent: false });
+            // Filter functionsList to keep only valid leaf names
+            this.functionsList = this.functionsList.filter(name => leafNames.includes(name));
+
+            this.root.forEach(x => {
+                if (x.children && x.children.length) {
+                    const selectedChildren = x.children.filter(y => y.data?.name && this.functionsList.includes(y.data.name));
+                    if (selectedChildren.length === x.children.length) {
+                        // All children are selected, so parent is fully selected
+                        selectedNodes.push(x);
+                        selectedNodes.push(...selectedChildren);
+                    } else {
+                        // Only some children are selected
+                        selectedNodes.push(...selectedChildren);
+                    }
+                }
+            });
+            this.formGroup.setValue({ selected: selectedNodes }, { onlySelf: true, emitEvent: false });
         } else {
             this.formGroup.setValue({ selected: [] }, { onlySelf: true, emitEvent: false });
         }
+    }
+
+    /**
+     * Checks if the value array contains at least one leaf node.
+     */
+    hasLeaf(value: TreeNode<any>[]): boolean {
+        return value && value.some(node => node.leaf);
     }
 
     /**

@@ -53,7 +53,7 @@ No authorization required
 
 <a name="getAllChatProfileConfigurationLoookup"></a>
 # **getAllChatProfileConfigurationLoookup**
-> PageGLookupEntry getAllChatProfileConfigurationLoookup(body)
+> PagedModelGLookupEntry getAllChatProfileConfigurationLoookup(body)
 
 
 
@@ -67,7 +67,7 @@ No authorization required
 GeboChatProfileLookupControllerApi apiInstance = new GeboChatProfileLookupControllerApi();
 DataPage body = new DataPage(); // DataPage | 
 try {
-    PageGLookupEntry result = apiInstance.getAllChatProfileConfigurationLoookup(body);
+    PagedModelGLookupEntry result = apiInstance.getAllChatProfileConfigurationLoookup(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatProfileLookupControllerApi#getAllChatProfileConfigurationLoookup");
@@ -83,7 +83,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGLookupEntry**](PageGLookupEntry.md)
+[**PagedModelGLookupEntry**](PagedModelGLookupEntry.md)
 
 ### Authorization
 
@@ -96,7 +96,7 @@ No authorization required
 
 <a name="getChatProfileConfigurationLookupByQbe"></a>
 # **getChatProfileConfigurationLookupByQbe**
-> PageGLookupEntry getChatProfileConfigurationLookupByQbe(body)
+> PagedModelGLookupEntry getChatProfileConfigurationLookupByQbe(body)
 
 
 
@@ -110,7 +110,7 @@ No authorization required
 GeboChatProfileLookupControllerApi apiInstance = new GeboChatProfileLookupControllerApi();
 ChatProfileConfigurationLookupByQbeParam body = new ChatProfileConfigurationLookupByQbeParam(); // ChatProfileConfigurationLookupByQbeParam | 
 try {
-    PageGLookupEntry result = apiInstance.getChatProfileConfigurationLookupByQbe(body);
+    PagedModelGLookupEntry result = apiInstance.getChatProfileConfigurationLookupByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatProfileLookupControllerApi#getChatProfileConfigurationLookupByQbe");
@@ -126,7 +126,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageGLookupEntry**](PageGLookupEntry.md)
+[**PagedModelGLookupEntry**](PagedModelGLookupEntry.md)
 
 ### Authorization
 

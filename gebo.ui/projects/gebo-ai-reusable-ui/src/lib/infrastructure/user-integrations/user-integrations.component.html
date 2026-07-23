@@ -1,0 +1,230 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="grid p-3">
+  <!-- Loading & Access Check State -->
+  @if (checkingAccess) {
+    <div class="col-12">
+      <p-panel id="VerifyingAccessPanel" gebo-ai-label header="Verifying Access">
+        <div class="flex align-items-center justify-content-center p-5">
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem; margin-right: 1rem;"></i>
+          <span id="LoadingIntegrationsText" gebo-ai-text>Loading integrations configuration...</span>
+        </div>
+      </p-panel>
+    </div>
+  }
+
+  @if (!checkingAccess && accessDenied) {
+    <div class="col-12">
+      <p-panel id="AccessDeniedPanel" gebo-ai-label header="Access Denied">
+        <div class="flex flex-column align-items-center justify-content-center p-5 text-center">
+          <i class="pi pi-exclamation-triangle text-red-500" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+          <h3 id="AccessRestrictedHeader" gebo-ai-text>Access Restricted</h3>
+          <p id="AccessRestrictedText" gebo-ai-text>You do not have the required permissions to access this page.</p>
+        </div>
+      </p-panel>
+    </div>
+  }
+
+  <!-- Main Integrations Dashboard -->
+  @if (!checkingAccess && !accessDenied) {
+    <div class="col-12">
+      <p-panel header="Integrations & API Access" id="userIntegrationsUI" gebo-ai-label #integrationsUI>
+        <p-blockUI [target]="integrationsUI" [blocked]="loading">
+          <div class="flex flex-column align-items-center justify-content-center w-full h-full">
+            <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i>
+          </div>
+        </p-blockUI>
+        <!-- Global Notifications -->
+        <gebo-ai-notifications [messages]="userMessages" />
+        <p-tabs [value]="0">
+          <p-tablist>
+            <p-tab [value]="0" gebo-ai-text>Model Context Protocol (MCP) Servers</p-tab>
+            <p-tab [value]="1" gebo-ai-text>Personal API Keys</p-tab>
+          </p-tablist>
+          <p-tabpanels>
+          <!-- Tab 1: MCP Servers -->
+          <p-tabpanel [value]="0">
+            <div class="p-3">
+              <h4 id="ExposedMcpServersHeader" class="mt-0" gebo-ai-text>Exposed MCP Servers</h4>
+              <p id="McpServersDescription" class="text-secondary" gebo-ai-text>
+                These are the Model Context Protocol (MCP) servers configured in the system that you have access to.
+                You can connect external MCP clients (like Claude Desktop, Cursor, or IDE extensions) to these servers using their SSE endpoints.
+              </p>
+            </div>
+            <p-table [value]="mcpServers" responsiveLayout="scroll" styleClass="p-datatable-striped">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th id="ThServerNameCode" gebo-ai-text style="width: 25%">Server Name & Code</th>
+                  <th id="ThServerDescription" gebo-ai-text style="width: 30%">Description</th>
+                  <th id="ThServerCapabilities" gebo-ai-text style="width: 15%">Capabilities</th>
+                  <th id="ThServerStatus" gebo-ai-text style="width: 10%">Status</th>
+                  <th id="ThServerSSE" gebo-ai-text style="width: 20%">SSE Connection Endpoint</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-server>
+                <tr>
+                  <td>
+                    <div class="font-bold">{{server.name || 'Unnamed Server'}}</div>
+                    <small class="text-secondary">{{server.code}}</small>
+                  </td>
+                  <td>{{server.description || 'No description provided.'}}</td>
+                  <td>
+                    <div class="flex flex-column gap-1 text-sm">
+                      <span><i class="pi pi-wrench mr-1"></i> {{server.toolsCount || 0}} Tools</span>
+                      <span><i class="pi pi-file mr-1"></i> {{server.resourcesCount || 0}} Resources</span>
+                      <span><i class="pi pi-align-left mr-1"></i> {{server.promptsCount || 0}} Prompts</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex align-items-center gap-1">
+                      @if (server.enabled) {
+                        <i class="pi pi-check-circle text-green-500"></i>
+                      }
+                      @if (!server.enabled) {
+                        <i class="pi pi-times-circle text-red-500"></i>
+                      }
+                      <span>{{server.enabled ? 'Active' : 'Inactive'}}</span>
+                    </div>
+                  </td>
+                  <td>
+                    @if (server.exportedUniqueRelativeUrl) {
+                      <div class="flex gap-1 align-items-center">
+                        <div class="p-inputgroup flex-1">
+                          <input pInputText type="text" [value]="getMcpEndpointUrl(server)" readonly class="p-inputtext-sm text-xs" />
+                          <button pButton icon="pi pi-copy" class="p-button-secondary p-button-sm"
+                          (click)="copyToClipboard(getMcpEndpointUrl(server), 'SSE Endpoint URL')"></button>
+                        </div>
+                      </div>
+                    }
+                    @if (!server.exportedUniqueRelativeUrl) {
+                      <span id="McpEndpointUnavailable" class="text-secondary text-sm" gebo-ai-text>Endpoint unavailable</span>
+                    }
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td id="NoMcpServersText" colspan="5" class="text-center p-4" gebo-ai-text>No accessible MCP servers found.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-tabpanel>
+          <!-- Tab 2: Personal API Keys -->
+          <p-tabpanel [value]="1">
+            <div class="flex justify-content-between align-items-center p-3">
+              <div>
+                <h4 id="UserApiKeysHeader" class="mt-0" gebo-ai-text>User API Keys</h4>
+                <p id="UserApiKeysDescription" class="text-secondary" gebo-ai-text>
+                  Generate personal API keys to authenticate your external MCP clients or scripts when connecting to Gebo.ai services.
+                </p>
+              </div>
+              <p-button id="GenerateNewKeyBtn" gebo-ai-label label="Generate New Key" icon="pi pi-key" [outlined]="true" (onClick)="openCreateDialog()"></p-button>
+            </div>
+            <p-table [value]="apiKeys" responsiveLayout="scroll" styleClass="p-datatable-striped">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th id="ThKeyDescription" gebo-ai-text style="width: 40%">Description</th>
+                  <th id="ThKeyCreatedAt" gebo-ai-text style="width: 25%">Created At</th>
+                  <th id="ThKeyExpirationDate" gebo-ai-text style="width: 25%">Expiration Date</th>
+                  <th id="ThKeyActions" gebo-ai-text style="width: 10%" class="text-center">Actions</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-key>
+                <tr>
+                  <td>
+                    <div class="font-bold">{{key.description}}</div>
+                    <small class="text-secondary">Code: {{key.code}}</small>
+                  </td>
+                  <td>{{key.dateCreated | date:'medium'}}</td>
+                  <td>
+                    <span [class.text-red-500]="isExpired(key.expiration)">
+                      {{key.expiration | date:'medium'}}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <p-button id="DeleteApiKeyBtn_{{key.code}}" gebo-ai-label icon="pi pi-trash" severity="danger" [outlined]="true" [rounded]="true" size="small"
+                    (onClick)="deleteApiKey(key.code)"></p-button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td id="NoApiKeysText" colspan="4" class="text-center p-4" gebo-ai-text>No generated API keys found. Click "Generate New Key" to create one.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-tabpanel>
+        </p-tabpanels>
+        </p-tabs>
+      </p-panel>
+    </div>
+  }
+</div>
+
+<!-- Generate API Key Dialog -->
+<p-dialog id="GenerateApiKeyDialog" gebo-ai-label header="Generate New API Key" [(visible)]="showCreateDialog" [modal]="true" [style]="{width: '500px'}" [closable]="true" [dismissableMask]="true">
+  <div class="grid p-3" [formGroup]="formGroup">
+    <!-- Action buttons on top -->
+    <div class="col-12 flex justify-content-start gap-2 mb-3">
+      <p-button id="ConfirmGenerateBtn" gebo-ai-label label="Generate Key" icon="pi pi-check" [outlined]="true" [disabled]="formGroup.invalid" (onClick)="generateApiKey()"></p-button>
+      <p-button id="CancelGenerateBtn" gebo-ai-label label="Cancel" severity="secondary" [outlined]="true" (onClick)="showCreateDialog = false"></p-button>
+    </div>
+
+    <div class="col-12">
+      <gebo-ai-field id="description" label="Description" help="Identify what this API key will be used for" [required]="true">
+        <input pInputText id="description" formControlName="description" class="w-full" maxlength="100" gebo-ai-field-element />
+      </gebo-ai-field>
+    </div>
+
+    <div class="col-12">
+      <gebo-ai-field id="expirationPreset" label="Expiration" help="Choose when this API key expires" [required]="true">
+        <p-select [options]="expirationPresets" optionLabel="label" optionValue="value" formControlName="expirationPreset" class="w-full" gebo-ai-field-element></p-select>
+      </gebo-ai-field>
+    </div>
+
+    <!-- Custom Expiration Calendar -->
+    @if (formGroup.value.expirationPreset === 0) {
+      <div class="col-12">
+        <gebo-ai-field id="customExpiration" label="Custom Expiration Date" help="Select a custom date and time for expiration" [required]="true">
+          <p-datepicker formControlName="customExpiration" [showIcon]="true" [showTime]="true" [required]="true" appendTo="body" class="w-full" gebo-ai-field-element></p-datepicker>
+        </gebo-ai-field>
+      </div>
+    }
+  </div>
+</p-dialog>
+
+<!-- Show Raw API Key Dialog (Shown Only Once Upon Generation) -->
+<p-dialog id="ApiKeyGeneratedDialog" gebo-ai-label header="API Key Generated Successfully" [(visible)]="showRawKeyDialog" [modal]="true" [style]="{width: '550px'}" [closable]="false">
+  <div class="p-3 flex flex-column gap-3">
+    <!-- Action buttons on top -->
+    <div class="flex justify-content-start mb-2">
+      <p-button id="CopiedKeyBtn" gebo-ai-label label="I Have Copied the Key" severity="contrast" [outlined]="true" (onClick)="showRawKeyDialog = false; generatedRawKey = ''"></p-button>
+    </div>
+
+    <div class="p-3 border-round bg-orange-50 border-left-3 border-orange-500 text-orange-800">
+      <div class="flex align-items-center gap-2 font-bold mb-2">
+        <i class="pi pi-exclamation-triangle text-xl"></i>
+        <span id="SecurityNoticeHeader" gebo-ai-text>Important Security Notice</span>
+      </div>
+      <p id="SecurityNoticeText" class="m-0 text-sm" gebo-ai-text>
+        Please copy this API key now. For your security, it will not be displayed again once you close this dialog.
+      </p>
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label id="GeneratedApiKeyLabel" class="font-semibold text-sm" gebo-ai-text>Your Generated API Key</label>
+      <div class="p-inputgroup">
+        <input pInputText type="text" [value]="generatedRawKey" readonly class="font-monospace text-sm select-all" />
+        <button pButton icon="pi pi-copy" severity="success" (click)="copyToClipboard(generatedRawKey, 'API Key')"></button>
+      </div>
+    </div>
+  </div>
+</p-dialog>

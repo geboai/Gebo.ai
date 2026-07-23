@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.microservices.internal-topology.controllers</artifactId>
+
+	<!--
+		Exposes each microservice's LOCAL messaging topology over an admin endpoint:
+		InternalMessagingTopologyController reads the local IGMessageBroker and returns
+		only the pure-local modules/components (localSystem == true), dropping the
+		external, rabbitmq-bound ones (localSystem == false). Lands on every real
+		backend via gebo.microservices.starter (not gateway/eureka). The global
+		coordinator (gebo.microservices.global-internal-topology, on tyr) polls it.
+	-->
+	<dependencies>
+		<!-- IGMessageBroker + GModuleMetaInfo/ComponentMetaInfo. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.application.messaging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- @RequestMapping/@ResponseBody (servlet server provided by the host app). -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<!-- @PreAuthorize. -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>

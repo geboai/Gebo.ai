@@ -28,7 +28,7 @@ import java.util.List;
  * GGoogleDriveProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GGoogleDriveProjectEndpoint {
   @JsonProperty("code")
@@ -143,6 +143,9 @@ public class GGoogleDriveProjectEndpoint {
 
   }  @JsonProperty("objectSpaceType")
   private ObjectSpaceTypeEnum objectSpaceType = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("paths")
   private List<VFilesystemReference> paths = null;
@@ -480,6 +483,32 @@ public class GGoogleDriveProjectEndpoint {
     this.objectSpaceType = objectSpaceType;
   }
 
+  public GGoogleDriveProjectEndpoint aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GGoogleDriveProjectEndpoint addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GGoogleDriveProjectEndpoint paths(List<VFilesystemReference> paths) {
     this.paths = paths;
     return this;
@@ -551,13 +580,14 @@ public class GGoogleDriveProjectEndpoint {
         Objects.equals(this.vectorizeOnlyExtensions, ggoogleDriveProjectEndpoint.vectorizeOnlyExtensions) &&
         Objects.equals(this.synchroStrategy, ggoogleDriveProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, ggoogleDriveProjectEndpoint.objectSpaceType) &&
+        Objects.equals(this.aclAliases, ggoogleDriveProjectEndpoint.aclAliases) &&
         Objects.equals(this.paths, ggoogleDriveProjectEndpoint.paths) &&
         Objects.equals(this.driveSystemCode, ggoogleDriveProjectEndpoint.driveSystemCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, paths, driveSystemCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, driveSystemCode);
   }
 
 
@@ -583,6 +613,7 @@ public class GGoogleDriveProjectEndpoint {
     sb.append("    vectorizeOnlyExtensions: ").append(toIndentedString(vectorizeOnlyExtensions)).append("\n");
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    driveSystemCode: ").append(toIndentedString(driveSystemCode)).append("\n");
     sb.append("}");

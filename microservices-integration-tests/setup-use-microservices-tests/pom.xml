@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ===========================================================================
+    setup-use-microservices-tests
+
+    Concrete integration-test module: drives the FULL running microservices
+    cluster (eureka + gateway + brain + vectorizator + graphicator + chunker +
+    filesystem + uploads + userspace + sharepoint + confluence + jira +
+    aws-s3 + googledrive + mcpclient + integration + fulltextor + heimdall +
+    tyr + the infra services) through its generated java REST-template client
+    stubs (gebo.api.clients/gebo.microservices.clients.parent/*).
+
+    This is the microservices-cluster counterpart of
+    integration-tests/full-setup-and-use-integration-tests, which instead boots
+    the gebo.ai.app MONOLITH in-process via @SpringBootTest and drives it
+    through the single gebo.monolithic.api.resttemplate.client. Here the SUT is
+    external (the docker-compose cluster), so the tests are plain JUnit 5 +
+    failsafe: no Spring context is started by the test JVM.
+
+    The flow mirrors the monolith test:
+      1. read the vendor/system setup secret (JSON) from -DFullSetupSecret=...
+      2. heimdall: fast installation setup, login, create llm api-key secret,
+         token-renew.
+      3. brain: fast llms setup (autoconfigure default chat/embedding/internal
+         models).
+      4. filesystem: create a filesystem-backed knowledge base, launch the
+         publication job.
+      5. tyr: poll the job status until finished.
+      6. brain: replay the registered chat session against the default chat
+         pipeline and assert routing decisions + non-empty responses.
+    ===========================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices-integration-tests</groupId>
+		<artifactId>microservices-integration-tests.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+
+	<artifactId>setup-use-microservices-tests</artifactId>
+	<packaging>jar</packaging>
+
+	<properties>
+		<!-- Failsafe pattern: only *IT.java are integration tests. -->
+		<it.includes>**/*IT.java</it.includes>
+	</properties>
+
+	<dependencies>
+		<!-- Test runtime: JUnit 5 + Spring Boot test (only for its AssertJ /
+		     JsonPath helpers, NOT for @SpringBootTest). -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Microservices java stub clients - the ones this test is about.
+		     Each client's ApiClient points at localhost:<port> by default
+		     (see each client's pom.xml swagger.file), and tests can override
+		     the base path at runtime via setBasePath(...). -->
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>heimdall.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>brain.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>filesystem.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>tyr.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Lombok for the registered-interaction model classes (mirrors the
+		     monolith test module's usage). -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Failsafe runs the *IT.java classes in the integration-test phase,
+			     which is AFTER pre-integration-test (where the parent pom's
+			     docker-compose plugin brings the cluster up). -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

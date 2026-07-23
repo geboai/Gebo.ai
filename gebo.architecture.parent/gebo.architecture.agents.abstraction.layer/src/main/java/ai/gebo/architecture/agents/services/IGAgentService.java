@@ -9,11 +9,11 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
-public interface IGAgentService<RequestType, ResponseType, NotificationObject> extends IGGenericAgentService {
+public interface IGAgentService<RequestType, ResponseType> extends IGGenericAgentService {
 	
 
 	public ResponseType execute(IChatRequestContext chatRequestContext, GAgentConfig agentConfig,
-			RequestType request, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink, AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException;
+			RequestType request, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink, AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException;
 
 	
 

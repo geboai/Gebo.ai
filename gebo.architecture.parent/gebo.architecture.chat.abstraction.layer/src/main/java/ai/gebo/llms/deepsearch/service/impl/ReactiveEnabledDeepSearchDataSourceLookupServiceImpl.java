@@ -32,7 +32,7 @@ public class ReactiveEnabledDeepSearchDataSourceLookupServiceImpl implements IGR
 		List<IGReactiveDeepSearchDataSourceService> out = new ArrayList<IGReactiveDeepSearchDataSourceService>();
 		for (IGReactiveDeepSearchDataSourceService service : allServices) {
 			try {
-				if (service.isEnabled(deepSearchConfig)) {
+				if (service.isEnabled()) {
 					out.add(service);
 				}
 			} catch (SearchServiceException e) {

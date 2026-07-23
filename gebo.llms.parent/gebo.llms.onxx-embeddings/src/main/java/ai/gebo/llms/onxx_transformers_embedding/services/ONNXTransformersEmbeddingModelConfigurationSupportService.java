@@ -30,6 +30,7 @@ import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbedding
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -67,6 +68,7 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 	 */
 	final IGeboSecretsAccessService secretService;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ObservationRegistry observationRegistry;
 
 	/**
 	 * Inner class that implements the configurable embedding model for ONNX
@@ -79,7 +81,8 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 		 * Constructor that initializes the model with a vector store factory provider
 		 */
 		public OllamaConfigurableEmbeddingModel() {
-			super(storeFactoryProvider);
+			super(storeFactoryProvider,
+					ONNXTransformersEmbeddingModelConfigurationSupportService.this.observationRegistry);
 		}
 
 		/**

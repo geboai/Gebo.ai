@@ -9,8 +9,8 @@ import java.util.UUID;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
@@ -68,7 +68,7 @@ public class GBackendOauth2LoginSPASupportServiceImpl implements IGBackendOauth2
 			_data.setData(crypted);
 			oauth2DeliveryDataRepository.save(_data);
 			return _data.getNextUri();
-		} catch (GeboCryptSecretException | JsonProcessingException e) {
+		} catch (GeboCryptSecretException | JacksonException e) {
 
 			throw new BackendOauth2LoginSPASupportException("Exception crypting", e);
 

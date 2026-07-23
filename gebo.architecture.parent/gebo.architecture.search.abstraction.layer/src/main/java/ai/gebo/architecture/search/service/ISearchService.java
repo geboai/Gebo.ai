@@ -1,6 +1,7 @@
 package ai.gebo.architecture.search.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,6 +114,40 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	}
 
 	public List<CatalogueSample> getCataloguesListSample(String configurationCode) throws SearchServiceException;
+
+	/**
+	 * Returns the catalogues of a single configured system, preferring a cached
+	 * snapshot over live sampling. The default implementation has no cache and simply
+	 * delegates to the live {@link #getCataloguesListSample(String)}; search services
+	 * whose catalogues are worth caching (e.g. the content/virtual-filesystem ones)
+	 * override this to serve a persisted, periodically refreshed snapshot and avoid
+	 * remote sampling on every call.
+	 *
+	 * @param systemConfigurationCode the configured system whose catalogues are wanted
+	 */
+	public default List<CatalogueSample> getCachedCatalogues(String systemConfigurationCode)
+			throws SearchServiceException {
+		return getCataloguesListSample(systemConfigurationCode);
+	}
+
+	/**
+	 * Returns the cached catalogues of <em>all</em> the systems this service exposes,
+	 * by composing {@link #getCachedCatalogues(String)} over {@link #getSearchableSystems()}.
+	 * Because it builds on the per-system method, a service that overrides only that
+	 * primitive to add caching automatically gets a cached global listing too.
+	 */
+	public default List<CatalogueSample> getCachedCatalogues() throws SearchServiceException {
+		List<CatalogueSample> all = new ArrayList<>();
+		List<SearchableSystemMetaData> systems = getSearchableSystems();
+		if (systems != null) {
+			for (SearchableSystemMetaData system : systems) {
+				if (system != null) {
+					all.addAll(getCachedCatalogues(system.getCode()));
+				}
+			}
+		}
+		return all;
+	}
 
 	public default void setOriginOn(List<SearchResult> sr) {
 		if (sr != null) {

@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GLocalEndpointMirror;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.LocalEndpointMirrorRepository;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -61,9 +60,9 @@ public class GLocalPersistentFolderDiscoveryServiceImpl implements IGLocalPersis
      * @throws GeboContentHandlerSystemException if the working directory is invalid.
      */
     @Override
-    public String getLocalPersistentFolder(GContentManagementSystem contentSystem, GProjectEndpoint projectEndpoint)
-            throws GeboContentHandlerSystemException {
-        
+    public String getLocalPersistentFolder(GContentManagementSystem contentSystem, String endpointClassName,
+            String endpointCode) throws GeboContentHandlerSystemException {
+
         // Retrieve the working directory path from the configuration.
         String workingDirectory = geboConfig.getGeboWorkDirectory();
 
@@ -71,22 +70,29 @@ public class GLocalPersistentFolderDiscoveryServiceImpl implements IGLocalPersis
         if (!new File(workingDirectory).exists() || !new File(workingDirectory).isDirectory())
             throw new GeboContentHandlerSystemException("The configurated work directory " + geboConfig.getGeboWorkDirectory()
                     + " does not exists or is not a directory");
-        
+
         // Create a unique folder code based on the project endpoint class and code.
-        String uniqueConfiguredFolderCode = projectEndpoint.getClass().getName() + "[" + projectEndpoint.getCode() + "]";
-        
+        String uniqueConfiguredFolderCode = endpointClassName + "[" + endpointCode + "]";
+
         // Find an existing local endpoint mirror or create a new one if not found.
         Optional<GLocalEndpointMirror> entry = repository.findById(uniqueConfiguredFolderCode);
         GLocalEndpointMirror configuredEndpointMirror = null;
         if (entry.isEmpty()) {
+            // A new mirror can only be created when the content management system is known. Callers
+            // resolving the folder of an already-ingested endpoint (e.g. resource disposal) always
+            // hit an existing mirror; a missing mirror with no system is therefore unexpected.
+            if (contentSystem == null)
+                throw new GeboContentHandlerSystemException(
+                        "No local endpoint mirror found for " + uniqueConfiguredFolderCode
+                                + " and no content management system provided to create one");
             configuredEndpointMirror = new GLocalEndpointMirror();
             configuredEndpointMirror.setCode(uniqueConfiguredFolderCode);
             configuredEndpointMirror.setDescription("Deployment folder for endpoint of type "
-                    + projectEndpoint.getClass().getSimpleName() + " with code " + projectEndpoint.getCode());
-            configuredEndpointMirror.setEndPointCode(projectEndpoint.getCode());
+                    + endpointClassName + " with code " + endpointCode);
+            configuredEndpointMirror.setEndPointCode(endpointCode);
             configuredEndpointMirror.setSystemCode(contentSystem.getCode());
             configuredEndpointMirror.setLocalGeboAIWorkDirectoryRelativeMirrorFolder(
-                    contentSystem.getContentManagementSystemType() + "/" + projectEndpoint.getCode());
+                    contentSystem.getContentManagementSystemType() + "/" + endpointCode);
             repository.insert(configuredEndpointMirror); // Insert new configuration into the repository.
         } else {
             configuredEndpointMirror = entry.get(); // Retrieve existing configuration.

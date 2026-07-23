@@ -3,7 +3,20 @@
   <parent>
     <groupId>ai.gebo.architecture</groupId>
     <artifactId>gebo.architecture.parent</artifactId>
-    <version>1.0.1.0-BETA</version>
+    <version>1.0.2.1</version>
   </parent>
   <artifactId>gebo.architecture.hazelcast</artifactId>
+  <dependencies>
+    <!-- Spring context + Boot auto-configuration conditions/properties binding.
+         Version is managed by the spring-boot-starter-parent BOM. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <!-- Hazelcast IMDG embedded member. Version is managed by the Spring Boot BOM. -->
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+    </dependency>
+  </dependencies>
 </project>

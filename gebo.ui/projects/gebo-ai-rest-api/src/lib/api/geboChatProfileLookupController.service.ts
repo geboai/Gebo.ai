@@ -20,7 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { ChatProfileConfigurationLookupByQbeParam } from '../model/chatProfileConfigurationLookupByQbeParam';
 import { DataPage } from '../model/dataPage';
 import { GChatProfileConfiguration } from '../model/gChatProfileConfiguration';
-import { PageGLookupEntry } from '../model/pageGLookupEntry';
+import { PagedModelGLookupEntry } from '../model/pagedModelGLookupEntry';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboChatProfileLookupControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -112,9 +112,9 @@ export class GeboChatProfileLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllChatProfileConfigurationLoookup(body: DataPage, observe?: 'body', reportProgress?: boolean): Observable<PageGLookupEntry>;
-    public getAllChatProfileConfigurationLoookup(body: DataPage, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGLookupEntry>>;
-    public getAllChatProfileConfigurationLoookup(body: DataPage, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGLookupEntry>>;
+    public getAllChatProfileConfigurationLoookup(body: DataPage, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGLookupEntry>;
+    public getAllChatProfileConfigurationLoookup(body: DataPage, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGLookupEntry>>;
+    public getAllChatProfileConfigurationLoookup(body: DataPage, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGLookupEntry>>;
     public getAllChatProfileConfigurationLoookup(body: DataPage, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -141,7 +141,7 @@ export class GeboChatProfileLookupControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGLookupEntry>('post',`${this.basePath}/api/users/GeboChatProfileLookupController/getAllChatProfileConfigurationLoookup`,
+        return this.httpClient.request<PagedModelGLookupEntry>('post',`${this.basePath}/api/users/GeboChatProfileLookupController/getAllChatProfileConfigurationLoookup`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -159,9 +159,9 @@ export class GeboChatProfileLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatProfileConfigurationLookupByQbe(body: ChatProfileConfigurationLookupByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PageGLookupEntry>;
-    public getChatProfileConfigurationLookupByQbe(body: ChatProfileConfigurationLookupByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGLookupEntry>>;
-    public getChatProfileConfigurationLookupByQbe(body: ChatProfileConfigurationLookupByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGLookupEntry>>;
+    public getChatProfileConfigurationLookupByQbe(body: ChatProfileConfigurationLookupByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PagedModelGLookupEntry>;
+    public getChatProfileConfigurationLookupByQbe(body: ChatProfileConfigurationLookupByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelGLookupEntry>>;
+    public getChatProfileConfigurationLookupByQbe(body: ChatProfileConfigurationLookupByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelGLookupEntry>>;
     public getChatProfileConfigurationLookupByQbe(body: ChatProfileConfigurationLookupByQbeParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -188,7 +188,7 @@ export class GeboChatProfileLookupControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageGLookupEntry>('post',`${this.basePath}/api/users/GeboChatProfileLookupController/getChatProfileConfigurationLookupByQbe`,
+        return this.httpClient.request<PagedModelGLookupEntry>('post',`${this.basePath}/api/users/GeboChatProfileLookupController/getChatProfileConfigurationLookupByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

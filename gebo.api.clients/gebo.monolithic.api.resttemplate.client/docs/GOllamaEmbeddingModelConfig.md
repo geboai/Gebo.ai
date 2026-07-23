@@ -14,4 +14,5 @@ Name | Type | Description | Notes
 **apiSecretCode** | **String** |  |  [optional]
 **choosedModel** | [**GOllamaEmbeddingModelChoice**](GOllamaEmbeddingModelChoice.md) |  |  [optional]
 **baseUrl** | **String** |  |  [optional]
+**contextLength** | **Integer** |  |  [optional]
 **tokenizationThreshold** | **Integer** |  |  [optional]

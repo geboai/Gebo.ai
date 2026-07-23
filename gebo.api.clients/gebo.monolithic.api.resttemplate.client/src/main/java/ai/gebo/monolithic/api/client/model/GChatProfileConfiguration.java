@@ -27,7 +27,7 @@ import java.util.List;
  * GChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GChatProfileConfiguration {
   @JsonProperty("code")
@@ -47,9 +47,6 @@ public class GChatProfileConfiguration {
 
   @JsonProperty("dateCreated")
   private Date dateCreated = null;
-
-  @JsonProperty("prompt")
-  private String prompt = null;
 
   @JsonProperty("embeddingModelReference")
   private GObjectRefGBaseEmbeddingModelConfig embeddingModelReference = null;
@@ -95,6 +92,9 @@ public class GChatProfileConfiguration {
 
   @JsonProperty("manualThreasholdsConfiguration")
   private Boolean manualThreasholdsConfiguration = null;
+
+  @JsonProperty("useAlsoKeywordSearch")
+  private Boolean useAlsoKeywordSearch = null;
 
   public GChatProfileConfiguration code(String code) {
     this.code = code;
@@ -202,24 +202,6 @@ public class GChatProfileConfiguration {
 
   public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
-  }
-
-  public GChatProfileConfiguration prompt(String prompt) {
-    this.prompt = prompt;
-    return this;
-  }
-
-   /**
-   * Get prompt
-   * @return prompt
-  **/
-  @Schema(description = "")
-  public String getPrompt() {
-    return prompt;
-  }
-
-  public void setPrompt(String prompt) {
-    this.prompt = prompt;
   }
 
   public GChatProfileConfiguration embeddingModelReference(GObjectRefGBaseEmbeddingModelConfig embeddingModelReference) {
@@ -532,6 +514,24 @@ public class GChatProfileConfiguration {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
   }
 
+  public GChatProfileConfiguration useAlsoKeywordSearch(Boolean useAlsoKeywordSearch) {
+    this.useAlsoKeywordSearch = useAlsoKeywordSearch;
+    return this;
+  }
+
+   /**
+   * Get useAlsoKeywordSearch
+   * @return useAlsoKeywordSearch
+  **/
+  @Schema(description = "")
+  public Boolean isUseAlsoKeywordSearch() {
+    return useAlsoKeywordSearch;
+  }
+
+  public void setUseAlsoKeywordSearch(Boolean useAlsoKeywordSearch) {
+    this.useAlsoKeywordSearch = useAlsoKeywordSearch;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -548,7 +548,6 @@ public class GChatProfileConfiguration {
         Objects.equals(this.userCreated, gchatProfileConfiguration.userCreated) &&
         Objects.equals(this.dateModified, gchatProfileConfiguration.dateModified) &&
         Objects.equals(this.dateCreated, gchatProfileConfiguration.dateCreated) &&
-        Objects.equals(this.prompt, gchatProfileConfiguration.prompt) &&
         Objects.equals(this.embeddingModelReference, gchatProfileConfiguration.embeddingModelReference) &&
         Objects.equals(this.chatModelReference, gchatProfileConfiguration.chatModelReference) &&
         Objects.equals(this.enabledFunctions, gchatProfileConfiguration.enabledFunctions) &&
@@ -563,12 +562,13 @@ public class GChatProfileConfiguration {
         Objects.equals(this.forcedRequestDocumentsReadonly, gchatProfileConfiguration.forcedRequestDocumentsReadonly) &&
         Objects.equals(this.disableMultiHopRag, gchatProfileConfiguration.disableMultiHopRag) &&
         Objects.equals(this.otherSearchSimilarityThreshold, gchatProfileConfiguration.otherSearchSimilarityThreshold) &&
-        Objects.equals(this.manualThreasholdsConfiguration, gchatProfileConfiguration.manualThreasholdsConfiguration);
+        Objects.equals(this.manualThreasholdsConfiguration, gchatProfileConfiguration.manualThreasholdsConfiguration) &&
+        Objects.equals(this.useAlsoKeywordSearch, gchatProfileConfiguration.useAlsoKeywordSearch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, prompt, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration, useAlsoKeywordSearch);
   }
 
 
@@ -583,7 +583,6 @@ public class GChatProfileConfiguration {
     sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
-    sb.append("    prompt: ").append(toIndentedString(prompt)).append("\n");
     sb.append("    embeddingModelReference: ").append(toIndentedString(embeddingModelReference)).append("\n");
     sb.append("    chatModelReference: ").append(toIndentedString(chatModelReference)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
@@ -599,6 +598,7 @@ public class GChatProfileConfiguration {
     sb.append("    disableMultiHopRag: ").append(toIndentedString(disableMultiHopRag)).append("\n");
     sb.append("    otherSearchSimilarityThreshold: ").append(toIndentedString(otherSearchSimilarityThreshold)).append("\n");
     sb.append("    manualThreasholdsConfiguration: ").append(toIndentedString(manualThreasholdsConfiguration)).append("\n");
+    sb.append("    useAlsoKeywordSearch: ").append(toIndentedString(useAlsoKeywordSearch)).append("\n");
     sb.append("}");
     return sb.toString();
   }

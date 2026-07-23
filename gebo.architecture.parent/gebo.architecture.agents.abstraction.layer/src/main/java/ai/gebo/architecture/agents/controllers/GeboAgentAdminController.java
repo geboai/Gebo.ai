@@ -2,6 +2,8 @@ package ai.gebo.architecture.agents.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +19,7 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.Valid;
@@ -28,9 +31,10 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "api/admin/GeboAgentAdminController")
 @AllArgsConstructor
 public class GeboAgentAdminController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboAgentAdminController.class);
 	private final IAgentConfigDao agentsConfigDao;
 	private final IGPromptConfigDao promptsDao;
-	private final IGAgentServiceRuntimeDao agentsRepositoryPattern;
+	private final IGRuntimeBinder runtimeBinder;
 
 	@GetMapping(value = "getPromptTemplateByAgentId", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GPromptTemplateConfig> getPromptTemplatesByAgentId(@RequestParam("agentId") String agentId) {
@@ -40,7 +44,8 @@ public class GeboAgentAdminController {
 
 	@GetMapping(value = "getAgentsChoices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getAgentsChoices() {
-		return agentsRepositoryPattern.getConfigurations().stream().map(x -> {
+		IGAgentServiceRuntimeDao dao=runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		return dao.getConfigurations().stream().map(x -> {
 			GBaseObject object = new GBaseObject();
 			object.setCode(x.getId());
 			object.setDescription(x.getDescription());
@@ -55,16 +60,25 @@ public class GeboAgentAdminController {
 
 	@PostMapping(value = "updateAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentConfig updateAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST updateAgent code:" + (config != null ? config.getCode() : null));
+		}
 		return this.agentsConfigDao.update(config);
 	}
 
 	@PostMapping(value = "insertAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentConfig insertAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST insertAgent code:" + (config != null ? config.getCode() : null));
+		}
 		return this.agentsConfigDao.insert(config);
 	}
 
 	@DeleteMapping(value = "deleteAgent", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST deleteAgent code:" + (config != null ? config.getCode() : null));
+		}
 		this.agentsConfigDao.delete(config);
 	}
 

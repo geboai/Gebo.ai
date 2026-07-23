@@ -14,3 +14,4 @@ cd "$REPO_DIR"
 echo ">> Run mvn install..."
 mvn -Dmaven.repo.local=/build-area/repository clean install -P bootables,angular-ui,package-unix-deb -DskipTests
 cp /build-area/Gebo.ai/gebo.apps.parent/gebo.ai.app/target/installer/* /build-area/delivery
+cp /build-area/Gebo.ai/gebo.apps.parent/gebo.ai.app/target/*bootable.jar /build-area/delivery

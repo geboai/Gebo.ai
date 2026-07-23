@@ -25,8 +25,10 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
@@ -95,9 +97,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final IGPersistentObjectManager persistentManager;
 	private final IGPromptConfigDao promptsDao;
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
+	private final GeboPromptsParametersCacheConfig promptsParamsCacheConfig;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final DefaultPipelineSharedPromptParamsManager paramsManager;
 	private final DefaultPipelineStreamingDelegatedStepServiceImpl chatAgentService;
+	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
 	public static final String INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID = "IKB_SYSTEM";
@@ -168,6 +172,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				}
 			}
 		}
+		if (userIntent == DeliverableIntent.IMAGE_GENERATION && !isImageGenerationAvailable()) {
+			// no image model configured: image generation is not a routable service level
+			userIntent = DeliverableIntent.QA;
+		}
 		notifyUser(emitter, "SERVICE_LEVEL_DETECTED", "Service level is: " + userIntent.name(), null, 1000l,
 				NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {
@@ -236,7 +244,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			final Map<String, Object> cachedParams = this.promptsParamsCacheService.lookupCache(
 					GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
 					runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),
-					DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
+					DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP,
+					promptsParamsCacheConfig.getParametersTtlMillis(), paramsProvider);
 			params.putAll(cachedParams);
 			int usedTokens = tokensLength(latestInteractions, params.toString(), rewrited_query)
 					+ _prompt.getTokensSize();
@@ -258,6 +267,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		} else {
 			// GO ON WITH INTELLIGENT ROUTER
 			decision = RespondingWith.DELEGATED_AGENT;
+		}
+		if (decision == RespondingWith.IMAGE_GENERATION_RESPONSE && !isImageGenerationAvailable()) {
+			// safety net: never route to image generation when no image model is configured
+			decision = RespondingWith.PURE_LLM_RESPONSE;
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing decision object:" + decision + " decisionMap:" + decisionMap);
@@ -305,7 +318,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			List<String> cleanedList = new ArrayList<>();
 			List<String> choosen = decisionMap.get(DEEP_SEARCHED_SYSTEMS);
 			for (String ds : choosen) {
-				if (validSystems.containsValue(ds)) {
+				if (validSystems.containsKey(ds)) {
 					cleanedList.add(ds);
 				}
 			}
@@ -328,12 +341,27 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		orderedIntents.addAll(ordered.values());
 	}
 
+	/**
+	 * @return true when image generation is routable, i.e. at least one image model
+	 *         is configured through the runtime image models DAO. When false the
+	 *         IMAGE_GENERATION deliverable/route is neither advertised to the LLM nor
+	 *         selectable.
+	 */
+	protected boolean isImageGenerationAvailable() {
+		return DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.isImageGenerationAvailable(imageModelsDao);
+	}
+
 	private String createDeliverableTypesList() {
 		StringBuffer buffer = new StringBuffer();
+		boolean imageGenerationAvailable = isImageGenerationAvailable();
 
 		buffer.append(DELIVERABLE_TYPES_CATALOG);
 		buffer.append(NEWLINE);
 		for (DeliverableIntent intent : orderedIntents) {
+			if (intent == DeliverableIntent.IMAGE_GENERATION && !imageGenerationAvailable) {
+				// image generation not configured: do not advertise it as a deliverable
+				continue;
+			}
 			buffer.append(INTENT_TYPE);
 			buffer.append(intent.name());
 			buffer.append(NEWLINE);
@@ -566,6 +594,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		}
 		case DELEGATED_AGENT: {
 			return List.of(DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE);
+		}
+		case IMAGE_GENERATION_RESPONSE: {
+			return List.of(DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.IMAGE_GENERATION_STREAMING_SERVICE);
 		}
 		case PURE_LLM_RESPONSE:
 		default:

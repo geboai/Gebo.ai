@@ -155,6 +155,9 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
                     this.listedDocuments = docs;
 
                 },
+                error: () => {
+                    this.loadingDocuments = false;
+                },
                 complete: () => {
                     this.loadingDocuments = false;
                 }

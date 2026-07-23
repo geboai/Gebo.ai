@@ -12,7 +12,7 @@
 
 package ai.gebo.monolithic.api.client.api;
 
-import ai.gebo.monolithic.api.client.model.GPromptConfig;
+import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
 import ai.gebo.monolithic.api.client.model.PromptFilter;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -40,7 +40,7 @@ public class GeboAdminPromptsControllerApiTest {
      */
     @Test
     public void deletePromptConfigTest() {
-        GPromptConfig body = null;
+        GPromptTemplateConfig body = null;
         api.deletePromptConfig(body);
 
         // TODO: test validations
@@ -56,7 +56,7 @@ public class GeboAdminPromptsControllerApiTest {
     @Test
     public void findPromptConfigByCodeTest() {
         String code = null;
-        GPromptConfig response = api.findPromptConfigByCode(code);
+        GPromptTemplateConfig response = api.findPromptConfigByCode(code);
 
         // TODO: test validations
     }
@@ -85,7 +85,7 @@ public class GeboAdminPromptsControllerApiTest {
     @Test
     public void getPromptConfigByFilterTest() {
         PromptFilter body = null;
-        GPromptConfig response = api.getPromptConfigByFilter(body);
+        GPromptTemplateConfig response = api.getPromptConfigByFilter(body);
 
         // TODO: test validations
     }
@@ -99,8 +99,8 @@ public class GeboAdminPromptsControllerApiTest {
      */
     @Test
     public void insertPromptConfigTest() {
-        GPromptConfig body = null;
-        GPromptConfig response = api.insertPromptConfig(body);
+        GPromptTemplateConfig body = null;
+        GPromptTemplateConfig response = api.insertPromptConfig(body);
 
         // TODO: test validations
     }
@@ -114,8 +114,8 @@ public class GeboAdminPromptsControllerApiTest {
      */
     @Test
     public void updatePromptConfigTest() {
-        GPromptConfig body = null;
-        GPromptConfig response = api.updatePromptConfig(body);
+        GPromptTemplateConfig body = null;
+        GPromptTemplateConfig response = api.updatePromptConfig(body);
 
         // TODO: test validations
     }

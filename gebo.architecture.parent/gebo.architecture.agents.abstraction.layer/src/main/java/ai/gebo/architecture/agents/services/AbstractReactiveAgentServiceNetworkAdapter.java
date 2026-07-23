@@ -2,6 +2,10 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
@@ -10,6 +14,7 @@ import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
+import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -18,9 +23,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
 @AllArgsConstructor
-public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType, NotificationObject>
+public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType>
 		implements IGNetworkAgentService<RequestType, ResponseType> {
-	private final IGReactiveAgentService<RequestType, ResponseType, NotificationObject> service;
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactiveAgentServiceNetworkAdapter.class);
+	private final IGReactiveAgentService<RequestType, ResponseType> service;
 	private final Class<RequestType> inputType;
 	private final Class<ResponseType> outputType;
 
@@ -45,6 +51,12 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	}
 
 	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+
+		return service.getAgentCapabilities(agentConfig);
+	}
+
+	@Override
 	public Class<RequestType> getInputType() {
 
 		return inputType;
@@ -57,11 +69,16 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 
 	@Override
 	public List<AgentsExchangeMessage<ResponseType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, int actualContributionNr,
+			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
-			throws LLMConfigException, AgentException {
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin onMessage(...) reactive agent network adapter id:" + getId() + " fromAgent:"
+					+ msg.getFromAgent());
+		}
+		
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, msg.getPayload(),
 				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs);
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
@@ -69,9 +86,16 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			return x;
 		});
 		List<IGPartialOperation<ResponseType>> buffered = duplicatedFlux.collectList().block();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reactive agent adapter id:" + getId() + " buffered "
+					+ (buffered != null ? buffered.size() : 0) + " partial operation(s)");
+		}
 		ResponseType response = extractResponse(buffered);
 		AgentsExchangeMessage<ResponseType> outMessage = AgentsExchangeMessage.of(session, msg.getFromAgent(), response,
 				MessageSemantic.RESPONSE);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End onMessage(...) reactive agent network adapter id:" + getId());
+		}
 		return List.of(outMessage);
 	}
 

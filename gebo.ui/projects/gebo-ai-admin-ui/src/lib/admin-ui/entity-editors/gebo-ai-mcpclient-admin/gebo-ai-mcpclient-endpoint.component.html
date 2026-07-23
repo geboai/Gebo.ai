@@ -1,0 +1,119 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+<p-blockUI id="BlockUI"  [target]="endPointUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #endPointUI header="Editing MCP server data source" [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-3">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+            severity="success" styleClass="w-full"
+          [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!"
+            title="Saves and let these contents being available in knowledge base to LLm's" severity="success"
+            styleClass="w-full" icon="pi pi-microchip-ai" (onClick)="doPublish()"
+            [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" />
+          </div>
+          <div class="col-3">
+            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+              (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+            </div>
+            <div class="col-3">
+              <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash"
+                (onClick)="doDelete()" [disabled]="canDelete===false || relatedBackendProcessingRunning===true"
+                styleClass="w-full" />
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="geboDialogContent">
+          <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+          <p-tabs [value]="0" id="TabView" class="standardTabDialogueHeight">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-text>Settings</p-tab>
+              <p-tab [value]="1" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+            <p-tabpanel [value]="0">
+              <div class="grid">
+
+                <div class="col-6">
+                  <gebo-ai-field id="description" label="Description" [required]="true"
+                    help="Enter a description for this MCP server data source.">
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                      gebo-ai-field-element />
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the data source.">
+                      <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="parentProjectCode" label="Project" [required]="true" help="Parent project reference.">
+                      <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project"
+                        [optionsObservable]="projectsObservable" gebo-ai-field-element>
+                      </geboai-editable-listbox-component>
+                    </gebo-ai-field>
+                  </div>
+                  <div class="col-6">
+                    <gebo-ai-field id="mcpClientConfigCode" label="MCP server" [required]="true"
+                      help="Choose the configured MCP client (transport, endpoint and credentials) whose resources this virtual drive integrates.">
+                      <geboai-editable-listbox-component formControlName="mcpClientConfigCode" placeholder="Select an MCP server"
+                        [optionsObservable]="mcpConfigsObservable" gebo-ai-field-element>
+                      </geboai-editable-listbox-component>
+                    </gebo-ai-field>
+                  </div>
+
+                  @if (selectedConfigCode) {
+                    <div class="col-12">
+                      <gebo-ai-field id="tree" label="Choosed MCP resources" [required]="true"
+                        help="Resources exposed by the MCP server. Pick the whole server to ingest every resource, or select individual resources.">
+                        <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
+                          [readonly]="mode==='EDIT'" formControlName="paths" selectionMode="multiple"
+                          [browsePathObservable]="browsePathObservable"
+                          [reconstructNavigationCallback]="reconstructNavigationObservableCallback" [canChooseFolders]="true"
+                        [canChooseFiles]="true" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
+                      </gebo-ai-field>
+                    </div>
+                  }
+                  @if (!selectedConfigCode) {
+                    <div class="col-12">
+                      <small><i class="pi pi-info-circle"></i> Select an MCP server above to browse and choose its
+                    resources.</small>
+                  </div>
+                }
+
+                <div class="col-12">
+                  <gebo-ai-field id="programmedTables" label="Contents updates checks schedule"
+                    help="Configure the scheduling of changed contents to maintain the retrieve augmented generation system updated">
+                    <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables"
+                    gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
+                  </gebo-ai-field>
+                </div>
+              </div>
+            </p-tabpanel>
+            <p-tabpanel [value]="1">
+              <gebo-ai-log-table-component id="LogTableComponent" gebo-ai-label [jobType]="'CONTENTS_READING_VECTORIZING'"
+                [endPointReference]="objectReference"
+              title="This MCP server data source ingestion log"></gebo-ai-log-table-component>
+            </p-tabpanel>
+          </p-tabpanels>
+          </p-tabs>
+        </div>
+      </p-panel>

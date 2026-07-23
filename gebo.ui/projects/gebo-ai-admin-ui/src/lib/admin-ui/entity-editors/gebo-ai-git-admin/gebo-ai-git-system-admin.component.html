@@ -1,100 +1,111 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="gitSystemCtrl" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+
+
+
+<p-blockUI id="BlockUI"  [target]="gitSystemCtrl" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #gitSystemCtrl header="Editing git compatible system (bitbucket/github/gitlab)" [formGroup]="formGroup">
-    <div class="geboDialogContent">
-        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-        <p-tabView id="TabView" gebo-ai-label>
-            <p-tabPanel id="GeneralTab" gebo-ai-label header="General settings">
-                <div class="grid">
-                    
-                    <div class="col-6">
-                        <gebo-ai-field id="description" label="Description" help="Enter the description of the git compatible system." [required]="true">
-                            <input pInputText id="description" formControlName="description" maxlength="120"
-                                [required]="true" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the git compatible system.">
-                            <input pInputText id="code" formControlName="code" readonly="true"
-                                gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
-                        <gebo-ai-field id="contentManagementSystemType" label="Git driver" help="Git driver for cloning/pull of repos" [required]="true">
-                            <geboai-editable-listbox-component id="contentManagementSystemType"
-                                formControlName="contentManagementSystemType"
-                                [readonly]="cantModifyGitSystemReference" placeholder="Select a Git driver"
-                                class="col-12 required"
-                                [optionsObservable]="contentManagementSystemTypeObservable"
-                                gebo-ai-field-element>
-                            </geboai-editable-listbox-component>
-                        </gebo-ai-field>
-                    </div>
-
-                    <div class="col-12">
-                        <gebo-ai-field id="baseUri" label="Base internet address" help="Complete url of the repository" [required]="true">
-                            <input type="text" id="baseUri" pInputText formControlName="baseUri" [required]="true"
-                                class="col-12 required" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                </div>
-            </p-tabPanel>
-            <p-tabPanel id="SecurityTab" gebo-ai-label header="Security settings" [disabled]="mode!=='EDIT'">
-                <div class="grid">
-                    <div class="col-6">
-                        <gebo-ai-field id="publicAccess" label="Public access" help="If true the system gives public access to everyone">
-                            <p-checkbox id="publicAccess" formControlName="publicAccess" [binary]="true"
-                                inputId="binary" gebo-ai-field-element />
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-6" *ngIf="publicAccess===false && mode==='EDIT'">
-                        <gebo-ai-field id="defaultIdentityCode" label="Default identity used" help="Select the default identity to do clone/checkout on the system" [required]="publicAccess===false  && mode==='EDIT'">
-                            <geboai-editable-listbox-component formControlName="defaultIdentityCode"
-                                id="defaultIdentityCode" placeholder="Select an identity"
-                                [optionsObservable]="identitiesObservable"
-                                gebo-ai-field-element>
-                            </geboai-editable-listbox-component>
-                        </gebo-ai-field>
-                    </div>
-                </div>
-                <gebo-ai-secrets-admin-list-component *ngIf="publicAccess===false && mode==='EDIT'"
-                    [contextCode]="secretContextCode"
-                    (secretsListChange)="refreshIdentitiesObservable();"></gebo-ai-secrets-admin-list-component>
-            </p-tabPanel>
-        </p-tabView>
-    </div>
-
-
-    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
-        <div class="grid">
-            <div class="col-4">
-                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false"></p-button>
-            </div>
-            <div class="col-4">
-                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
-            </div>
-            <div class="col-4">
-                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                    [disabled]="canDelete===false" />
-            </div>
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-4">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+          [disabled]="this.formGroup.invalid || canSave===false"></p-button>
         </div>
-    </div>
-</p-panel>
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+        <div class="col-4">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+        </div>
+        <div class="col-4">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            [disabled]="canDelete===false" />
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="geboDialogContent">
+      <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+      <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-text>General settings</p-tab>
+              <p-tab [value]="1" gebo-ai-text [disabled]="mode!=='EDIT'">Security settings</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <div class="grid">
+
+            <div class="col-6">
+              <gebo-ai-field id="description" label="Description" help="Enter the description of the git compatible system." [required]="true">
+                <input pInputText id="description" formControlName="description" maxlength="120"
+                  [required]="true" gebo-ai-field-element />
+                </gebo-ai-field>
+              </div>
+              <div class="col-6">
+                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the git compatible system.">
+                  <input pInputText id="code" formControlName="code" readonly="true"
+                    gebo-ai-field-element />
+                  </gebo-ai-field>
+                </div>
+                <div class="col-6">
+                  <gebo-ai-field id="contentManagementSystemType" label="Git driver" help="Git driver for cloning/pull of repos" [required]="true">
+                    <geboai-editable-listbox-component id="contentManagementSystemType"
+                      formControlName="contentManagementSystemType"
+                      [readonly]="cantModifyGitSystemReference" placeholder="Select a Git driver"
+                      class="col-12 required"
+                      [optionsObservable]="contentManagementSystemTypeObservable"
+                      gebo-ai-field-element>
+                    </geboai-editable-listbox-component>
+                  </gebo-ai-field>
+                </div>
+
+                <div class="col-12">
+                  <gebo-ai-field id="baseUri" label="Base internet address" help="Complete url of the repository" [required]="true">
+                    <input type="text" id="baseUri" pInputText formControlName="baseUri" [required]="true"
+                      class="col-12 required" gebo-ai-field-element />
+                    </gebo-ai-field>
+                  </div>
+                </div>
+              </p-tabpanel>
+              <p-tabpanel [value]="1">
+                <div class="grid">
+                  <div class="col-6">
+                    <gebo-ai-field id="publicAccess" label="Public access" help="If true the system gives public access to everyone">
+                      <p-checkbox id="publicAccess" formControlName="publicAccess" [binary]="true"
+                        inputId="binary" gebo-ai-field-element />
+                      </gebo-ai-field>
+                    </div>
+                    @if (publicAccess===false && mode==='EDIT') {
+                      <div class="col-6">
+                        <gebo-ai-field id="defaultIdentityCode" label="Default identity used" help="Select the default identity to do clone/checkout on the system" [required]="publicAccess===false  && mode==='EDIT'">
+                          <geboai-editable-listbox-component formControlName="defaultIdentityCode"
+                            id="defaultIdentityCode" placeholder="Select an identity"
+                            [optionsObservable]="identitiesObservable"
+                            gebo-ai-field-element>
+                          </geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                      </div>
+                    }
+                  </div>
+                  @if (publicAccess===false && mode==='EDIT') {
+                    <gebo-ai-secrets-admin-list-component
+                      [contextCode]="secretContextCode"
+                    (secretsListChange)="refreshIdentitiesObservable();"></gebo-ai-secrets-admin-list-component>
+                  }
+                </p-tabpanel>
+              </p-tabpanels>
+          </p-tabs>
+            </div>
+          </p-panel>
+          <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+          <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

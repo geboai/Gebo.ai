@@ -3,6 +3,8 @@ package ai.gebo.systems.abstraction.layer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
@@ -25,11 +28,11 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.model.virtualfs.GVirtualFilesystemRoot;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.systems.abstraction.layer.impl.repository.SampledSystemCataloguesRepository;
 import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 import ai.gebo.systems.abstraction.layer.model.AbstractNavigationCoordinates;
-import lombok.AllArgsConstructor;
+import ai.gebo.systems.abstraction.layer.model.SampledSystemCatalogues;
 
-@AllArgsConstructor
 public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionResultDataType extends BaseSearchResultsExtractionDataType, SystemType extends GContentManagementSystem, EndpointType extends GVirtualFilesystemProjectEndpoint, ImplementativePositionObjectType extends AbstractNativePositionObject, PositionsCoordinateType extends AbstractNavigationCoordinates, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ResourceReferenceType>, BrowsingContext extends IGVirtualFileSystemContext>
 		implements ISearchService<ExtractionResultDataType> {
 
@@ -37,6 +40,24 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 	protected final GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemType, EndpointType, ResourceReferenceType, ConsumingServiceType> contentManagementSystemHandler;
 	protected final IGVirtualFilesystemBrowsingService<BrowsingContext> browsingService;
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+	/**
+	 * Cache store for sampled catalogues. Injected by field (best-effort) so the
+	 * existing 3-argument constructor — and therefore every connector subclass'
+	 * {@code super(...)} call — stays unchanged. When absent, {@link #getCachedCatalogues(String)}
+	 * transparently falls back to live sampling.
+	 */
+	@Autowired(required = false)
+	protected SampledSystemCataloguesRepository sampledCataloguesRepo;
+
+	protected GAbstractRemoteVirtualFilesystemSearchService(
+			GAbstractRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ImplementativePositionObjectType, PositionsCoordinateType, ResourceReferenceType> virtualFileSystemConsumingService,
+			GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemType, EndpointType, ResourceReferenceType, ConsumingServiceType> contentManagementSystemHandler,
+			IGVirtualFilesystemBrowsingService<BrowsingContext> browsingService) {
+		this.virtualFileSystemConsumingService = virtualFileSystemConsumingService;
+		this.contentManagementSystemHandler = contentManagementSystemHandler;
+		this.browsingService = browsingService;
+	}
 
 	@Override
 	public SearchableSystemMetaData findSystemById(String systemId) {
@@ -180,6 +201,72 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 			throw new SearchServiceException("Problems browsing system:" + configurationCode, e);
 		}
 
+	}
+
+	/**
+	 * Serves the configured system's catalogues from the persisted cache, sampling
+	 * live and refreshing the cache on a miss or when the snapshot is older than a
+	 * day. Falls back to live sampling when no cache store is wired.
+	 */
+	@Override
+	public List<CatalogueSample> getCachedCatalogues(String systemConfigurationCode) throws SearchServiceException {
+		if (sampledCataloguesRepo == null) {
+			return getCataloguesListSample(systemConfigurationCode);
+		}
+		final String messagingModuleId = getMessagingModuleId();
+		final String messagingSystemId = getMessagingSystemId();
+		List<SampledSystemCatalogues> cached = sampledCataloguesRepo
+				.findByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(messagingModuleId,
+						messagingSystemId, systemConfigurationCode);
+		if (!isStale(cached)) {
+			List<CatalogueSample> out = new ArrayList<>();
+			for (SampledSystemCatalogues entry : cached) {
+				if (entry.getCatalogs() != null) {
+					out.addAll(entry.getCatalogs());
+				}
+			}
+			return out;
+		}
+		List<CatalogueSample> sampled = getCataloguesListSample(systemConfigurationCode);
+		try {
+			persistSampledCatalogues(messagingModuleId, messagingSystemId, systemConfigurationCode, sampled, cached);
+		} catch (Throwable th) {
+			LOGGER.error("Cannot persist sampled catalogues for " + messagingModuleId + "." + messagingSystemId + "."
+					+ systemConfigurationCode, th);
+		}
+		return sampled;
+	}
+
+	private boolean isStale(List<SampledSystemCatalogues> cached) {
+		if (cached == null || cached.isEmpty()) {
+			return true;
+		}
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+		Date threshold = calendar.getTime();
+		return cached.stream().noneMatch(x -> x.getDateModified() != null && x.getDateModified().after(threshold));
+	}
+
+	private void persistSampledCatalogues(String messagingModuleId, String messagingSystemId,
+			String systemConfigurationCode, List<CatalogueSample> sampled, List<SampledSystemCatalogues> existing) {
+		if (sampled == null || sampled.isEmpty()) {
+			return;
+		}
+		SampledSystemCatalogues entry = (existing != null && !existing.isEmpty()) ? existing.get(0)
+				: new SampledSystemCatalogues();
+		entry.setMessagingModuleId(messagingModuleId);
+		entry.setMessagingSystemId(messagingSystemId);
+		entry.setSystemConfigurationCode(systemConfigurationCode);
+		entry.setHandlerId(getId());
+		entry.setDescription(getDescription());
+		entry.recalculateCode();
+		entry.setCatalogs(sampled);
+		Date now = new Date();
+		if (entry.getDateCreated() == null) {
+			entry.setDateCreated(now);
+		}
+		entry.setDateModified(now);
+		sampledCataloguesRepo.save(entry);
 	}
 
 	protected abstract BrowsingContext createBrowsingContext(SystemType systemType);

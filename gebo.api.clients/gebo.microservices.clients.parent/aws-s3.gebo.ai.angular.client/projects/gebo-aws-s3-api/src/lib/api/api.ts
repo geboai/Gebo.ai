@@ -1,0 +1,17 @@
+export * from './awsS3BrowsingController.service';
+import { AwsS3BrowsingControllerService } from './awsS3BrowsingController.service';
+export * from './awsS3SystemsController.service';
+import { AwsS3SystemsControllerService } from './awsS3SystemsController.service';
+export * from './contentsResetController.service';
+import { ContentsResetControllerService } from './contentsResetController.service';
+export * from './documentContentStreamerController.service';
+import { DocumentContentStreamerControllerService } from './documentContentStreamerController.service';
+export * from './genericalPublisherController.service';
+import { GenericalPublisherControllerService } from './genericalPublisherController.service';
+export * from './ingestionFileTypesLibraryController.service';
+import { IngestionFileTypesLibraryControllerService } from './ingestionFileTypesLibraryController.service';
+export * from './internalMessagingTopologyController.service';
+import { InternalMessagingTopologyControllerService } from './internalMessagingTopologyController.service';
+export * from './jobLauncherController.service';
+import { JobLauncherControllerService } from './jobLauncherController.service';
+export const APIS = [AwsS3BrowsingControllerService, AwsS3SystemsControllerService, ContentsResetControllerService, DocumentContentStreamerControllerService, GenericalPublisherControllerService, IngestionFileTypesLibraryControllerService, InternalMessagingTopologyControllerService, JobLauncherControllerService];

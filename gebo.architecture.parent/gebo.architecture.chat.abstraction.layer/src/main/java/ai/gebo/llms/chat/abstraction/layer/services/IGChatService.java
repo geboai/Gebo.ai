@@ -9,8 +9,6 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
@@ -21,10 +19,11 @@ import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 /**
  * Gebo.ai comment agent
  * 
- * The IGChatService interface defines the operations for managing chat models
- * and handling speech-related functionalities. It extends the
- * IGGenericalChatService interface, enriching it with specific methods for chat
- * model configurations and speech processing.
+ * The IGChatService interface defines the operations for managing chat models.
+ * It extends the IGGenericalChatService interface, enriching it with specific
+ * methods for chat model configurations. Speech and transcript
+ * functionalities have been moved to dedicated {@link IGTextToSpeechService}
+ * and {@link IGTranscriptService} interfaces.
  */
 public interface IGChatService extends IGGenericalChatService {
 
@@ -55,34 +54,6 @@ public interface IGChatService extends IGGenericalChatService {
 	 *         the model provider.
 	 */
 	public ModelProviderCapabilities getProviderCapabilities(String modelCode);
-
-	/**
-	 * Transcribes speech from an InputStream using a specific model identified by
-	 * its code. It may throw a configuration exception if the model configuration
-	 * is invalid.
-	 *
-	 * @param is        an InputStream containing the audio to transcribe.
-	 * @param modelCode a unique code identifying the model to use for
-	 *                  transcription.
-	 * @throws LLMConfigException if there is an issue with the model configuration.
-	 * @return a String containing the transcribed text.
-	 * @throws IOException
-	 */
-	public String transcript(InputStream is, String modelCode) throws LLMConfigException, IOException;
-
-	/**
-	 * Converts text to speech using a specific model identified by its code. It may
-	 * throw a configuration exception if the model configuration is invalid.
-	 *
-	 * @param text      the text to be converted to speech.
-	 * @param modelCode a unique code identifying the model to use for speech
-	 *                  synthesis.
-	 * @throws LLMConfigException if there is an issue with the model configuration.
-	 * @return an InputStream with the resulting audio.
-	 */
-	public InputStream speech(String text, String modelCode) throws LLMConfigException;
-
-	
 
 	public List<GKnowledgeBase> getVisibleKnowledgeBases();
 }

@@ -23,12 +23,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.cluster.GAbstractClusteredModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterCategory;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
@@ -45,11 +46,16 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Component
 @Scope("singleton")
 public class GTranscriptModelRuntimeConfigurationDaoimpl
-		extends GAbstractRuntimeConfigurationDao<IGConfigurableTranscriptModel>
+		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableTranscriptModel, GBaseTranscriptModelConfig>
 		implements IGTranscriptModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
-	
+
+	@Override
+	protected GLlmModelClusterCategory getClusterCategory() {
+		return GLlmModelClusterCategory.TRANSCRIPT;
+	}
+
 	// Logger for logging runtime information and errors
-	static Logger LOGGER = LoggerFactory.getLogger(GEmbeddingModelRuntimeConfigurationDaoImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(GTranscriptModelRuntimeConfigurationDaoimpl.class);
 	
 	// JSON object mapper for processing configurations
 	static ObjectMapper mapper = new ObjectMapper();
@@ -91,13 +97,13 @@ public class GTranscriptModelRuntimeConfigurationDaoimpl
 			return x.getType().getCode().equals(config.getModelTypeCode());
 		});
 		if (handler == null) {
-			LOGGER.error("Received in configuration an embedding model with type=>" + config.getModelTypeCode()
+			LOGGER.error("Received in configuration a transcript model with type=>" + config.getModelTypeCode()
 					+ " that is not found");
-			throw new LLMConfigException("Cannot find embedding model with type=>" + config.getModelTypeCode());
+			throw new LLMConfigException("Cannot find transcript model with type=>" + config.getModelTypeCode());
 		}
 		try {
-			LOGGER.info("Initializing embedding model with configuration:" + mapper.writeValueAsString(config));
-		} catch (JsonProcessingException e) {
+			LOGGER.info("Initializing transcript model with configuration:" + mapper.writeValueAsString(config));
+		} catch (JacksonException e) {
 			// No action needed for this catch
 		}
 		IGConfigurableTranscriptModel model = handler.create(config);
@@ -140,12 +146,17 @@ public class GTranscriptModelRuntimeConfigurationDaoimpl
 			List<GBaseTranscriptModelConfig> configs = persistentObjectManager
 					.findAllExtendingType(GBaseTranscriptModelConfig.class);
 			for (GBaseTranscriptModelConfig config : configs) {
-				addRuntimeByConfig(config);
+				try {
+					addRuntimeByConfig(config);
+				} catch (Throwable e) {
+					// A single model that cannot be allocated (revoked key, provider down, stale
+					// configuration) must never keep the whole application from starting: report
+					// it and carry on with the remaining models.
+					LOGGER.error("Cannot initialize the transcript model with code=>" + config.getCode(), e);
+				}
 			}
-		} catch (GeboPersistenceException | LLMConfigException e) {
-			String msg = "FATAL EMBEDDING MODELS INITIALIZATION EXCEPTION";
-			LOGGER.error(msg, e);
-			throw new RuntimeException(msg, e);
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Cannot read the transcript models configuration", e);
 		}
 		LOGGER.info("End initalizing transcript  models dinamically");
 	}

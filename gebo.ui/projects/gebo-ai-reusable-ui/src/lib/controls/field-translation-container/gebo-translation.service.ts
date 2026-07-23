@@ -388,7 +388,7 @@ export class GeboAITranslationService {
         }));
     }
     public getActualLanguage(): string {
-        return this.translateService.getCurrentLang();
+        return this.translateService.getCurrentLang() ?? "en";
     }
     public download(): Observable<Blob> {
         return this.uiTextResourcesService.getI18n();

@@ -25,7 +25,7 @@ import java.util.List;
  * LLMSSetupConfigurationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class LLMSSetupConfigurationData {
   @JsonProperty("configurations")
@@ -42,6 +42,18 @@ public class LLMSSetupConfigurationData {
 
   @JsonProperty("internalServicesChatModelExists")
   private Boolean internalServicesChatModelExists = null;
+
+  @JsonProperty("rankerModelExists")
+  private Boolean rankerModelExists = null;
+
+  @JsonProperty("imagesModelExists")
+  private Boolean imagesModelExists = null;
+
+  @JsonProperty("ttsModelExists")
+  private Boolean ttsModelExists = null;
+
+  @JsonProperty("transcriptModelExists")
+  private Boolean transcriptModelExists = null;
 
   public LLMSSetupConfigurationData configurations(List<LLMSSetupConfiguration> configurations) {
     this.configurations = configurations;
@@ -141,6 +153,78 @@ public class LLMSSetupConfigurationData {
     this.internalServicesChatModelExists = internalServicesChatModelExists;
   }
 
+  public LLMSSetupConfigurationData rankerModelExists(Boolean rankerModelExists) {
+    this.rankerModelExists = rankerModelExists;
+    return this;
+  }
+
+   /**
+   * Get rankerModelExists
+   * @return rankerModelExists
+  **/
+  @Schema(description = "")
+  public Boolean isRankerModelExists() {
+    return rankerModelExists;
+  }
+
+  public void setRankerModelExists(Boolean rankerModelExists) {
+    this.rankerModelExists = rankerModelExists;
+  }
+
+  public LLMSSetupConfigurationData imagesModelExists(Boolean imagesModelExists) {
+    this.imagesModelExists = imagesModelExists;
+    return this;
+  }
+
+   /**
+   * Get imagesModelExists
+   * @return imagesModelExists
+  **/
+  @Schema(description = "")
+  public Boolean isImagesModelExists() {
+    return imagesModelExists;
+  }
+
+  public void setImagesModelExists(Boolean imagesModelExists) {
+    this.imagesModelExists = imagesModelExists;
+  }
+
+  public LLMSSetupConfigurationData ttsModelExists(Boolean ttsModelExists) {
+    this.ttsModelExists = ttsModelExists;
+    return this;
+  }
+
+   /**
+   * Get ttsModelExists
+   * @return ttsModelExists
+  **/
+  @Schema(description = "")
+  public Boolean isTtsModelExists() {
+    return ttsModelExists;
+  }
+
+  public void setTtsModelExists(Boolean ttsModelExists) {
+    this.ttsModelExists = ttsModelExists;
+  }
+
+  public LLMSSetupConfigurationData transcriptModelExists(Boolean transcriptModelExists) {
+    this.transcriptModelExists = transcriptModelExists;
+    return this;
+  }
+
+   /**
+   * Get transcriptModelExists
+   * @return transcriptModelExists
+  **/
+  @Schema(description = "")
+  public Boolean isTranscriptModelExists() {
+    return transcriptModelExists;
+  }
+
+  public void setTranscriptModelExists(Boolean transcriptModelExists) {
+    this.transcriptModelExists = transcriptModelExists;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -155,12 +239,16 @@ public class LLMSSetupConfigurationData {
         Objects.equals(this.canRunAutoconfigure, llMSSetupConfigurationData.canRunAutoconfigure) &&
         Objects.equals(this.embeddingModelExists, llMSSetupConfigurationData.embeddingModelExists) &&
         Objects.equals(this.defaultChatModelExists, llMSSetupConfigurationData.defaultChatModelExists) &&
-        Objects.equals(this.internalServicesChatModelExists, llMSSetupConfigurationData.internalServicesChatModelExists);
+        Objects.equals(this.internalServicesChatModelExists, llMSSetupConfigurationData.internalServicesChatModelExists) &&
+        Objects.equals(this.rankerModelExists, llMSSetupConfigurationData.rankerModelExists) &&
+        Objects.equals(this.imagesModelExists, llMSSetupConfigurationData.imagesModelExists) &&
+        Objects.equals(this.ttsModelExists, llMSSetupConfigurationData.ttsModelExists) &&
+        Objects.equals(this.transcriptModelExists, llMSSetupConfigurationData.transcriptModelExists);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(configurations, canRunAutoconfigure, embeddingModelExists, defaultChatModelExists, internalServicesChatModelExists);
+    return Objects.hash(configurations, canRunAutoconfigure, embeddingModelExists, defaultChatModelExists, internalServicesChatModelExists, rankerModelExists, imagesModelExists, ttsModelExists, transcriptModelExists);
   }
 
 
@@ -174,6 +262,10 @@ public class LLMSSetupConfigurationData {
     sb.append("    embeddingModelExists: ").append(toIndentedString(embeddingModelExists)).append("\n");
     sb.append("    defaultChatModelExists: ").append(toIndentedString(defaultChatModelExists)).append("\n");
     sb.append("    internalServicesChatModelExists: ").append(toIndentedString(internalServicesChatModelExists)).append("\n");
+    sb.append("    rankerModelExists: ").append(toIndentedString(rankerModelExists)).append("\n");
+    sb.append("    imagesModelExists: ").append(toIndentedString(imagesModelExists)).append("\n");
+    sb.append("    ttsModelExists: ").append(toIndentedString(ttsModelExists)).append("\n");
+    sb.append("    transcriptModelExists: ").append(toIndentedString(transcriptModelExists)).append("\n");
     sb.append("}");
     return sb.toString();
   }

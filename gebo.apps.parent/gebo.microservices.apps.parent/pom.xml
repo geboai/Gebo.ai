@@ -1,0 +1,186 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.apps</groupId>
+		<artifactId>gebo.apps.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<groupId>ai.gebo.apps.microservices</groupId>
+	<artifactId>gebo.microservices.apps.parent</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+		<jib.version>3.4.4</jib.version>
+		<!-- Base image for the per-microservice Jib images (docker profile). The
+		     docker:// prefix makes Jib read it from the LOCAL Docker daemon (that is
+		     where dockers/gebo.ai.platform/create-image builds it); drop the prefix
+		     once geboai/platform is published to a registry. -->
+		<gebo.docker.from>docker://geboai/platform:2.5</gebo.docker.from>
+	</properties>
+
+	<modules>
+		<module>eureka.gebo.ai</module>
+		<module>gateway.gebo.ai</module>
+		<!-- The security service: keeper of the secrets (and, next, of AuthN/AuthZ). -->
+		<module>heimdall.gebo.ai</module>
+		<module>brain.gebo.ai</module>
+		<module>vectorizator.gebo.ai</module>
+		<module>graphicator.gebo.ai</module>
+		<module>chunker.gebo.ai</module>
+		<!-- Content-handler microservices (one per gebo.systems.parent handler). -->
+		<module>git.gebo.ai</module>
+		<module>filesystem.gebo.ai</module>
+		<module>uploads.gebo.ai</module>
+		<module>userspace.gebo.ai</module>
+		<module>sharepoint.gebo.ai</module>
+		<module>confluence.gebo.ai</module>
+		<module>jira.gebo.ai</module>
+		<module>aws-s3.gebo.ai</module>
+		<module>googledrive.gebo.ai</module>
+		<module>mcpclient.gebo.ai</module>
+		<module>integration.gebo.ai</module>
+		<module>fulltextor.gebo.ai</module>
+		<module>tyr.gebo.ai</module>
+	</modules>
+
+	<!--
+	  Every Gebo microservice app (gateway + backends) is a Spring Cloud discovery
+	  client: it registers with the Eureka server (eureka.gebo.ai) under its
+	  application name - the canonical underscore microservice id (e.g. brain_gebo_ai)
+	  - so client-side load balancing (@LoadBalanced RestTemplate/WebClient, Feign)
+	  and the gateway's lb:// routes resolve to live instances. The eureka.gebo.ai
+	  server module brings the Eureka server starter (which supersedes this client)
+	  and runs standalone.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<!-- Shared by every microservice's <Service>ContextTest (see heimdall.gebo.ai's
+		     HeimdallContextTest for the pattern): boots the real Application class against
+		     a Mongo testcontainer with a stubbed DiscoveryClient, in place of Eureka. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-mongodb</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<!-- Generates a CycloneDX SBOM per microservice at
+			     target/classes/META-INF/sbom/application.cdx.json, the same
+			     location the monolith (gebo.ai.app) uses. Inherited by every
+			     child microservice module. The plugin version and default
+			     execution (makeAggregateBom, generate-resources phase) come
+			     from spring-boot-starter-parent's pluginManagement. -->
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<!--
+		  Docker image build (DISABLED by default). Activate with `-P docker` to
+		  containerise every microservice app with Jib during the `package` phase:
+
+		      mvn -P docker package            (build all images to the local daemon)
+		      mvn -P docker -pl <app> package  (build a single service image)
+
+		  Each app produces geboai/<artifactId>:<version> (e.g. geboai/git.gebo.ai)
+		  layered on the shared geboai/platform base, with GEBO_HOME/GEBO_WORK_DIRECTORY
+		  and the standard JVM flags preset. Jib auto-detects the single Spring Boot
+		  main class and auto-skips pom-packaging modules (this aggregator), so no
+		  per-app configuration is needed. Runtime config (Mongo/RabbitMQ/Eureka/
+		  OpenSearch/security) is expected to be mounted at /opt/gebo.ai/config, not
+		  baked into the images.
+		-->
+		<profile>
+			<id>docker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<version>${jib.version}</version>
+						<configuration>
+							<from>
+								<image>${gebo.docker.from}</image>
+							</from>
+							<to>
+								<image>geboai/${project.artifactId}:${project.version}</image>
+								<tags>
+									<tag>latest</tag>
+								</tags>
+							</to>
+							<container>
+								<appRoot>/opt/gebo.ai</appRoot>
+								<workingDirectory>/opt/gebo.ai</workingDirectory>
+								<ports>
+									<port>8080</port>
+								</ports>
+								<environment>
+									<GEBO_HOME>/opt/gebo.ai/home</GEBO_HOME>
+									<GEBO_WORK_DIRECTORY>/opt/gebo.ai/work</GEBO_WORK_DIRECTORY>
+								</environment>
+								<jvmFlags>
+									<jvmFlag>-Dsun.jnu.encoding=UTF-8</jvmFlag>
+									<jvmFlag>-Dfile.encoding=UTF-8</jvmFlag>
+									<jvmFlag>-Djava.net.preferIPv4Stack=true</jvmFlag>
+									<jvmFlag>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmFlag>
+									<jvmFlag>--enable-native-access=ALL-UNNAMED</jvmFlag>
+								</jvmFlags>
+								<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+								<labels>
+									<org.opencontainers.image.vendor>Gebo.ai</org.opencontainers.image.vendor>
+									<org.opencontainers.image.source>https://github.com/geboai/Gebo.ai</org.opencontainers.image.source>
+									<org.opencontainers.image.licenses>MPL-2.0</org.opencontainers.image.licenses>
+								</labels>
+							</container>
+						</configuration>
+						<executions>
+							<execution>
+								<id>build-microservice-image</id>
+								<phase>package</phase>
+								<goals>
+									<goal>dockerBuild</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

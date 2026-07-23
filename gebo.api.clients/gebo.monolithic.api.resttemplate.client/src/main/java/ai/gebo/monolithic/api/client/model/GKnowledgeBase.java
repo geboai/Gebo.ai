@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GAclEntry;
 import ai.gebo.monolithic.api.client.model.GObjectRef;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -26,7 +27,7 @@ import java.util.List;
  * GKnowledgeBase
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GKnowledgeBase {
   @JsonProperty("code")
@@ -104,6 +105,12 @@ public class GKnowledgeBase {
 
   }  @JsonProperty("objectSpaceType")
   private ObjectSpaceTypeEnum objectSpaceType = null;
+
+  @JsonProperty("acl")
+  private List<GAclEntry> acl = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   public GKnowledgeBase code(String code) {
     this.code = code;
@@ -415,6 +422,58 @@ public class GKnowledgeBase {
     this.objectSpaceType = objectSpaceType;
   }
 
+  public GKnowledgeBase acl(List<GAclEntry> acl) {
+    this.acl = acl;
+    return this;
+  }
+
+  public GKnowledgeBase addAclItem(GAclEntry aclItem) {
+    if (this.acl == null) {
+      this.acl = new ArrayList<>();
+    }
+    this.acl.add(aclItem);
+    return this;
+  }
+
+   /**
+   * Get acl
+   * @return acl
+  **/
+  @Schema(description = "")
+  public List<GAclEntry> getAcl() {
+    return acl;
+  }
+
+  public void setAcl(List<GAclEntry> acl) {
+    this.acl = acl;
+  }
+
+  public GKnowledgeBase aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GKnowledgeBase addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -439,12 +498,14 @@ public class GKnowledgeBase {
         Objects.equals(this.embeddingModelReferences, gknowledgeBase.embeddingModelReferences) &&
         Objects.equals(this.username, gknowledgeBase.username) &&
         Objects.equals(this.parentKnowledgebaseCode, gknowledgeBase.parentKnowledgebaseCode) &&
-        Objects.equals(this.objectSpaceType, gknowledgeBase.objectSpaceType);
+        Objects.equals(this.objectSpaceType, gknowledgeBase.objectSpaceType) &&
+        Objects.equals(this.acl, gknowledgeBase.acl) &&
+        Objects.equals(this.aclAliases, gknowledgeBase.aclAliases);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, accessibleGroups, accessibleUsers, accessibleToAll, knowledgeBaseReferences, projectsReferences, embeddingModelReferences, username, parentKnowledgebaseCode, objectSpaceType);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, accessibleGroups, accessibleUsers, accessibleToAll, knowledgeBaseReferences, projectsReferences, embeddingModelReferences, username, parentKnowledgebaseCode, objectSpaceType, acl, aclAliases);
   }
 
 
@@ -468,6 +529,8 @@ public class GKnowledgeBase {
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    parentKnowledgebaseCode: ").append(toIndentedString(parentKnowledgebaseCode)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
+    sb.append("    acl: ").append(toIndentedString(acl)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("}");
     return sb.toString();
   }

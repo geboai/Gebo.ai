@@ -130,7 +130,7 @@ public class Oauth2ClientRegistration {
 		case JWT_BEARER:
 			return AuthorizationGrantType.JWT_BEARER;
 		case PASSWORD:
-			return AuthorizationGrantType.PASSWORD;
+			return new AuthorizationGrantType("password");
 		case REFRESH_TOKEN:
 			return AuthorizationGrantType.REFRESH_TOKEN;
 		case TOKEN_EXCHANGE:

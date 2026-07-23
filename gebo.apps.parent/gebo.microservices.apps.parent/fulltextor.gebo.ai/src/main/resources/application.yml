@@ -1,0 +1,57 @@
+spring:
+  application:
+    # Canonical microservice id (underscore form): matches the shared topology
+    # entry and the Eureka service-id that @LoadBalanced / lb:// lookups resolve.
+    name: fulltextor_gebo_ai
+
+# Dedicated HTTP port, from the 13000-13017 block every Gebo microservice draws
+# from (gateway 13000 ... eureka 13017). Each service owns one, so the whole
+# deployment runs side by side on one host and each container publishes it.
+server:
+  port: 13016
+  servlet:
+    # Context name = GeboMicroservice.getContextName() (discovery id minus
+    # "-gebo-ai"). This is what the gateway's topology route matches on
+    # (/fulltextor/** -> lb://fulltextor-gebo-ai, no StripPrefix) and what
+    # GeboMicroserviceUrlResolver appends to every base url it builds for
+    # this service - keep the three in lockstep.
+    context-path: /fulltextor
+
+# Eureka discovery client: registers this content microservice under its
+# application name so client-side load balancing resolves it to a live instance.
+# Points at the eureka.gebo.ai registry; override
+# EUREKA_CLIENT_SERVICEURL_DEFAULTZONE for a distributed deployment.
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:13017/eureka/}
+  instance:
+    # Registered under the DNS-safe id: a URI host cannot contain '_', so
+    # lb://fulltextor_gebo_ai is unroutable ("Invalid host"). virtual-host-name is
+    # the key Spring Cloud actually resolves instances BY, so appname alone is not
+    # enough. spring.application.name keeps the canonical id for topology/queues.
+    appname: fulltextor-gebo-ai
+    virtual-host-name: fulltextor-gebo-ai
+    secure-virtual-host-name: fulltextor-gebo-ai
+    prefer-ip-address: true
+
+# gebo.architecture.security's WebMvcConfig is on every microservice's classpath
+# (pulled in transitively for IGeboSystemUserService/crypting), so this property
+# must resolve even though this service has no AuthController of its own. In the
+# docker stack the shared config overlay supplies the real value; this is the
+# standalone default.
+ai:
+  gebo:
+    security:
+      cors:
+        allowedOrigins: ${GEBO_CORS_ALLOWED_ORIGINS:http://localhost:13000,http://localhost:4200}
+
+
+# ---------------------------------------------------------------------------
+# MongoDB database. The SERVER (host, credentials) comes from the shared config;
+# the DATABASE is chosen here, per service.
+# This service owns its own database. The shared config deliberately does NOT set
+# databaseName - it is an additional-location and would override this line.
+# ---------------------------------------------------------------------------
+ai.gebo.mongodb:
+  databaseName: fulltextor-gebo

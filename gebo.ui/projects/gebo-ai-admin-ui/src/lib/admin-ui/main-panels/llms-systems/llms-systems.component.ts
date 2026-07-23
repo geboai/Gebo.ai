@@ -12,7 +12,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GenericOpenAIAPIRankerModelConfig, GenericOpenAiRankerModelsConfigurationControllerService, GenericOpenAIRankerModelTypeConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -33,13 +33,19 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     }]
 })
 export class LlmsSystemsComponent extends AncestorPanelComponent implements OnInit {
-    chatModels: ConfigurationEntry[] = [];
-    embeddingModels: ConfigurationEntry[] = [];
-    rerankerModels: GenericOpenAIAPIRankerModelConfig[] = [];
+    chatModels: ConfigurationEntryGBaseChatModelConfig[] = [];
+    embeddingModels: ConfigurationEntryGBaseEmbeddingModelConfig[] = [];
+    rerankerModels: ConfigurationEntryGBaseRankerModelConfig[] = [];
+    textToSpeechModels: ConfigurationEntryGBaseTextToSpeachModelConfig[] = [];
+    transcriptModels: ConfigurationEntryGBaseTranscriptModelConfig[] = [];
+    imageModels: ConfigurationEntryGBaseImageModelConfig[] = [];
     chatModelsTypes: GChatModelType[] = [];
 
     embeddingModelsTypes: GEmbeddingModelType[] = [];
-    rerankerModelsTypes: GenericOpenAIRankerModelTypeConfig[] = [];
+    rerankerModelsTypes: GRankerModelType[] = [];
+    textToSpeechModelsTypes: GTextToSpeechModelType[] = [];
+    transcriptModelsTypes: GTranscriptModelType[] = [];
+    imageModelsTypes: GImageModelType[] = [];
     /**
      * Overrides the parent method to reload data when the panel needs to refresh
      */
@@ -58,7 +64,10 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
     createChoices: FormGroup = new FormGroup({
         chat: new FormControl(),
         embed: new FormControl(),
-        rerank:new FormControl()
+        rerank: new FormControl(),
+        tts: new FormControl(),
+        transcript: new FormControl(),
+        image: new FormControl()
     });
 
     /**
@@ -70,7 +79,10 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      */
     constructor(private chatModelsControllerService: ChatModelsControllerService,
         private embeddingModelsControllerService: EmbeddingModelsControllersService,
-        private genericOpenAIRerankerService: GenericOpenAiRankerModelsConfigurationControllerService,
+        private rankerModelsControllerService: RankerModelsControllerService,
+        private textToSpeechModelsControllerService: TextToSpeechModelsControllerService,
+        private transcriptModelsControllerService: TranscriptModelsControllerService,
+        private imageModelsControllerService: ImageModelsControllerService,
         private geboUIActionRouter: GeboUIActionRoutingService) {
         super()
     }
@@ -129,15 +141,10 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
     }
    protected configureRerankerModel() {
         const formValue = this.createChoices.value;
-        const rerank=formValue.rerank;
-        const found=this.rerankerModelsTypes.find(x=>x.code===rerank);
-         if (found) {
-            let config:GenericOpenAIAPIRankerModelConfig= {
-                description: found.description,
-                baseUrl:found.baseUrl,
-                modelTypeCode: found.code
-            };
-            const entityName = "GenericOpenAIAPIRankerModelConfig";
+        const choosedType = this.rerankerModelsTypes.find(x => x.code === formValue.rerank);
+        if (choosedType) {
+            const config: any = { modelTypeCode: choosedType.code };
+            const entityName = choosedType.modelConfigurationClass;
             const action: GeboUIActionRequest = {
                 actionType: GeboActionType.NEW,
                 context: {},
@@ -156,7 +163,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * 
      * @param model The model configuration entry to edit
      */
-    protected editModel(model: ConfigurationEntry) {
+    protected editModel(model: ConfigurationEntryGBaseChatModelConfig) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {
@@ -178,7 +185,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * 
      * @param model The model configuration entry to edit
      */
-    protected editEmbeddingModel(model: ConfigurationEntry) {
+    protected editEmbeddingModel(model: ConfigurationEntryGBaseEmbeddingModelConfig) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {
@@ -194,19 +201,126 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
             this.geboUIActionRouter.routeEvent(action);
         }
     }
-    protected editRerankerModel(model:GenericOpenAIAPIRankerModelConfig) {
-        const entityName = "GenericOpenAIAPIRankerModelConfig";
+    protected editRerankerModel(model: ConfigurationEntryGBaseRankerModelConfig) {
+        if (model.configuration && model.objectReference) {
+            const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {
                 actionType: GeboActionType.OPEN,
                 context: {},
                 contextType: "LLMPage",
-                target: model,
+                target: model.configuration,
                 targetType: entityName ? entityName : "",
                 onActionPerformed: (event: GeboActionPerformedEvent) => {
                     this.loadData();
                 }
             };
             this.geboUIActionRouter.routeEvent(action);
+        }
+    }
+    protected configureTextToSpeechModel() {
+        const formValue = this.createChoices.value;
+        const choosedType = this.textToSpeechModelsTypes.find(x => x.code === formValue.tts);
+        if (choosedType) {
+            const config: any = { modelTypeCode: choosedType.code };
+            const entityName = choosedType.modelConfigurationClass;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.NEW,
+                context: {},
+                contextType: "LLMPage",
+                target: config,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
+    protected configureTranscriptModel() {
+        const formValue = this.createChoices.value;
+        const choosedType = this.transcriptModelsTypes.find(x => x.code === formValue.transcript);
+        if (choosedType) {
+            const config: any = { modelTypeCode: choosedType.code };
+            const entityName = choosedType.modelConfigurationClass;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.NEW,
+                context: {},
+                contextType: "LLMPage",
+                target: config,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
+    protected configureImageModel() {
+        const formValue = this.createChoices.value;
+        const choosedType = this.imageModelsTypes.find(x => x.code === formValue.image);
+        if (choosedType) {
+            const config: any = { modelTypeCode: choosedType.code };
+            const entityName = choosedType.modelConfigurationClass;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.NEW,
+                context: {},
+                contextType: "LLMPage",
+                target: config,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
+    protected editTextToSpeechModel(model: ConfigurationEntryGBaseTextToSpeachModelConfig) {
+        if (model.configuration && model.objectReference) {
+            const entityName = model.objectReference?.className;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.OPEN,
+                context: {},
+                contextType: "LLMPage",
+                target: model.configuration,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
+    protected editTranscriptModel(model: ConfigurationEntryGBaseTranscriptModelConfig) {
+        if (model.configuration && model.objectReference) {
+            const entityName = model.objectReference?.className;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.OPEN,
+                context: {},
+                contextType: "LLMPage",
+                target: model.configuration,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
+    protected editImageModel(model: ConfigurationEntryGBaseImageModelConfig) {
+        if (model.configuration && model.objectReference) {
+            const entityName = model.objectReference?.className;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.OPEN,
+                context: {},
+                contextType: "LLMPage",
+                target: model.configuration,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
     }
     /**
      * Loads all required data from the API services using forkJoin to combine multiple requests
@@ -214,14 +328,33 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      */
     protected loadData(): void {
         this.loading = true;
-        forkJoin([this.chatModelsControllerService.getRuntimeConfiguredChatModels(), this.embeddingModelsControllerService.getRuntimeConfiguredEmbeddingModels(), this.chatModelsControllerService.getChatModelTypes(), this.embeddingModelsControllerService.getEmbeddingModelTypes(), this.genericOpenAIRerankerService.getGenericOpenAIRankerModelTypes(),this.genericOpenAIRerankerService.getGenericOpenAIRankerModelConfigs()]).subscribe({
+        forkJoin([
+            this.chatModelsControllerService.getRuntimeConfiguredChatModels(),
+            this.embeddingModelsControllerService.getRuntimeConfiguredEmbeddingModels(),
+            this.chatModelsControllerService.getChatModelTypes(),
+            this.embeddingModelsControllerService.getEmbeddingModelTypes(),
+            this.rankerModelsControllerService.getRankerModelTypes(),
+            this.rankerModelsControllerService.getRuntimeConfiguredRankerModels(),
+            this.textToSpeechModelsControllerService.getTextToSpeechModelTypes(),
+            this.textToSpeechModelsControllerService.getRuntimeConfiguredTextToSpeechModels(),
+            this.transcriptModelsControllerService.getTranscriptModelTypes(),
+            this.transcriptModelsControllerService.getRuntimeConfiguredTranscriptModels(),
+            this.imageModelsControllerService.getImageModelTypes(),
+            this.imageModelsControllerService.getRuntimeConfiguredImageModels()
+        ]).subscribe({
             next: (cfgs) => {
                 this.chatModels = cfgs[0];
                 this.embeddingModels = cfgs[1];
                 this.chatModelsTypes = cfgs[2];
                 this.embeddingModelsTypes = cfgs[3];
                 this.rerankerModelsTypes = cfgs[4];
-                this.rerankerModels=cfgs[5];
+                this.rerankerModels = cfgs[5];
+                this.textToSpeechModelsTypes = cfgs[6];
+                this.textToSpeechModels = cfgs[7];
+                this.transcriptModelsTypes = cfgs[8];
+                this.transcriptModels = cfgs[9];
+                this.imageModelsTypes = cfgs[10];
+                this.imageModels = cfgs[11];
             },
             complete: () => {
                 this.loading = false;

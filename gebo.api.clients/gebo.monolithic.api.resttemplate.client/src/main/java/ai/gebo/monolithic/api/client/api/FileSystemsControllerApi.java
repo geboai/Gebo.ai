@@ -5,6 +5,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.GContentManagementSystemType;
 import ai.gebo.monolithic.api.client.model.GFilesystemContentManagementSystem;
 import ai.gebo.monolithic.api.client.model.GFilesystemProjectEndpoint;
+import ai.gebo.monolithic.api.client.model.OperationStatusGJobStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class FileSystemsControllerApi {
     private ApiClient apiClient;
@@ -301,6 +302,52 @@ public class FileSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GFilesystemProjectEndpoint> returnType = new ParameterizedTypeReference<GFilesystemProjectEndpoint>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return OperationStatusGJobStatus
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGJobStatus publishFilesystemEndpoint(GFilesystemProjectEndpoint body) throws RestClientException {
+        return publishFilesystemEndpointWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;OperationStatusGJobStatus&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGJobStatus> publishFilesystemEndpointWithHttpInfo(GFilesystemProjectEndpoint body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishFilesystemEndpoint");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemsController/publishFilesystemEndpoint").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

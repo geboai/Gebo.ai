@@ -23,7 +23,7 @@ import { MegaMenuModule } from 'primeng/megamenu';
 import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService, GeboUIEntityFormsLauncherService, GeboUIEntityFormsLauncherByInjectionService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
-import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
+import { GeboAIUserProfileModule, GeboAIUserIntegrationsModule } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { GeboAiAdminModule, GeboAICommonModulesInjectionsModule, GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
@@ -36,7 +36,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
 import { CookieService } from 'ngx-cookie-service';
 import { AppMenuProviderService } from './app-menu-provider.service';
-import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { TranslateLoader, provideTranslateService } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PopoverModule } from 'primeng/popover';
 
@@ -77,9 +77,10 @@ const GeboAIPreset = definePreset(Aura, {
       800: '{blue.800}',
       900: '{blue.900}',
       950: '{blue.950}'
-    },
+    }
+  },
+  extend: {
     success: {
-
       50: '{teal.50}',
       100: '{teal.100}',
       200: '{teal.200}',
@@ -107,16 +108,11 @@ const GeboAIPreset = definePreset(Aura, {
     GeboUIArchitectureModule,
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
+    GeboAIUserIntegrationsModule,
     ConfirmDialogModule,
     GeboAiAdminModule.forRoot(),
     MonacoEditorModule.forRoot(),
     GeboAINotificationsModule.forRoot(),
-    TranslateModule.forRoot({
-      lang: "en",
-      fallbackLang: "en",
-      loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
-    }),
-
     GeboSetupWizardsModule,
     GeboAICommonModulesInjectionsModule.forRoot(),
     GeboAIModulesModule.forRoot(),
@@ -125,6 +121,11 @@ const GeboAIPreset = definePreset(Aura, {
     GeboAIFieldTranslationContainerModule.forRoot(), PopoverModule],
 
   providers: [
+    provideTranslateService({
+      lang: "en",
+      fallbackLang: "en",
+      loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
+    }),
     GeboBackendListService,
     CookieService,
     provideAnimationsAsync(),

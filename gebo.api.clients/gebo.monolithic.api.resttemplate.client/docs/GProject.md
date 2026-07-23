@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **accessibleToAll** | **Boolean** |  |  [optional]
 **rootKnowledgeBaseCode** | **String** |  |  [optional]
 **objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **parentProjectCode** | **String** |  |  [optional]
 
 <a name="ObjectSpaceTypeEnum"></a>

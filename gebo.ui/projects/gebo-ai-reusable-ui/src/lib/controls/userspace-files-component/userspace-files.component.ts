@@ -105,6 +105,8 @@ export class GeboAIUserpaceFilesComponent implements OnInit, OnChanges, ControlV
                     if (list) {
                         this.codesList = list.map(x => x.code) as string[];
                     }
+                }, error: () => {
+                    this.loading = false;
                 }, complete: () => {
                     this.loading = false;
                 }

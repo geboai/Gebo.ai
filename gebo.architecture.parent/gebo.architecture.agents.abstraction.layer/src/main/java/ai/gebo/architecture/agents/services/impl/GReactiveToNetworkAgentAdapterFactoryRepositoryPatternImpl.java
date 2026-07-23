@@ -27,8 +27,8 @@ public class GReactiveToNetworkAgentAdapterFactoryRepositoryPatternImpl
 	}
 
 	@Override
-	public <RequestType, ResponseType, NotificationObject> IGReactiveToNetworkAgentAdapterFactory<RequestType, ResponseType, NotificationObject> getFactory(
-			IGReactiveAgentService<RequestType, ResponseType, NotificationObject> service) {
+	public <RequestType, ResponseType, NotificationObject> IGReactiveToNetworkAgentAdapterFactory<RequestType, ResponseType> getFactory(
+			IGReactiveAgentService<RequestType, ResponseType> service) {
 		return findImplementation(x -> x.canBeAdapted(service));
 	}
 

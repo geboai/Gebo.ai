@@ -19,12 +19,16 @@ export interface GAgentConfig {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
+    agentType?: GAgentConfig.AgentTypeEnum;
+    adaptedAgentNetworkCode?: string;
+    agentNetworkServiceCode?: string;
     agentServiceId: string;
     mainLoopPromptUseCode?: string;
     customLoopPrompt?: GPromptTemplateConfig;
     subscribeAllTools?: boolean;
     agentRoleCode: string;
     useDefaultChatModel?: boolean;
+    useChatModelWithUse?: GAgentConfig.UseChatModelWithUseEnum;
     chatModelReference?: GObjectRefGBaseChatModelConfig;
     maxLoopIterations: number;
     aclAliases?: Array<number>;
@@ -39,6 +43,16 @@ export interface GAgentConfig {
     enabledFunctions?: Array<string>;
 }
 export namespace GAgentConfig {
+    export type AgentTypeEnum = 'AGENT' | 'AGENTS_NETWORK';
+    export const AgentTypeEnum = {
+        AGENT: 'AGENT' as AgentTypeEnum,
+        AGENTSNETWORK: 'AGENTS_NETWORK' as AgentTypeEnum
+    };
+    export type UseChatModelWithUseEnum = 'CHAT' | 'INTERNAL_SERVICES';
+    export const UseChatModelWithUseEnum = {
+        CHAT: 'CHAT' as UseChatModelWithUseEnum,
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as UseChatModelWithUseEnum
+    };
     export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
     export const ThinkingEnum = {
         NOTHINKING: 'NO_THINKING' as ThinkingEnum,

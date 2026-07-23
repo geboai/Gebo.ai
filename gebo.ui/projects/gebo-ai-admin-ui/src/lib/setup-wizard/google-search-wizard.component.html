@@ -1,8 +1,7 @@
-<p-blockUI id="BlockUILock" gebo-ai-label [target]="googleSearchSetupUI" [blocked]="loading">
+<p-blockUI id="BlockUILock"  [target]="googleSearchSetupUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #googleSearchSetupUI header="Setup google search api">
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class="grid geboLargeButtonsBar">
 
         <div class="col-6">
@@ -11,6 +10,7 @@
                 [disabled]="googleSearchCredentials && googleSearchCredentials.length>0"></p-button>
         </div>
     </div>
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class=" grid">
 
         <div class="col-12"><p-table id="Table" gebo-ai-label [value]="googleSearchCredentials"
@@ -41,11 +41,26 @@
 </p-panel>
 <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="googleSearchConfig?true:false" [modal]="true"
     (visibleChange)="googleSearchConfig=undefined">
-    <p-blockUI id="BlockUILock" gebo-ai-label [target]="createCredentialsUI" [blocked]="loading">
+    <p-blockUI id="BlockUILock"  [target]="createCredentialsUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <p-panel id="CreateCredentialsPanel" gebo-ai-label #createCredentialsUI header="Create google search credentials"
         [formGroup]="formGroup">
+        <div class="geboButtonsBar" style="vertical-align: baseline;">
+            <div class="grid">
+                <div class="col-4">
+                    <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create"
+                        (onClick)="saveGoogleSearchCredentials()" icon="pi pi-save" severity="success"
+                        styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
+                </div>
+                <div class="col-4">
+                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                        (onClick)="doCancel()" styleClass="w-full" />
+                </div>
+
+            </div>
+        </div>
+
         <div class="grid">
             <div class="col-4">
                 <gebo-ai-field id="customSearchEngineId" label="Search engine id"
@@ -61,20 +76,6 @@
                     [required]="true">
                     <input pInputText id="apiKey" formControlName="apiKey" [required]="true" gebo-ai-field-element />
                 </gebo-ai-field>
-            </div>
-        </div>
-        <div class="geboButtonsBar" style="vertical-align: baseline;">
-            <div class="grid">
-                <div class="col-4">
-                    <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create"
-                        (onClick)="saveGoogleSearchCredentials()" icon="pi pi-save" severity="success"
-                        styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
-                </div>
-                <div class="col-4">
-                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
-                        (onClick)="doCancel()" styleClass="w-full" />
-                </div>
-
             </div>
         </div>
     </p-panel>

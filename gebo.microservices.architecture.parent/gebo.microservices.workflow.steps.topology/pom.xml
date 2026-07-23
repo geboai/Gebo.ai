@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.microservices.workflow.steps.topology</artifactId>
+
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!--
+		Topology-driven packaging of the standard INGESTION workflow's optional
+		step-enablement policy for the MICROSERVICES distribution. Holds the
+		IWorkflowStepEnabledHandler beans for the non-mandatory steps (EMBEDDING,
+		GRAPHEXTRACTION, FULLTEXT_INDEXING); their isEnabled delegates to an
+		IWorkflowParticipantsEnablementResolver that answers from the deployment
+		topology rather than from local config (which the non-performer services
+		that run the workflow logic - tyr, chunker - do not have).
+
+		tyr is the single authority: it resolves enablement directly from the
+		topology and exposes it over REST. Every other service that runs the
+		workflow logic (the chunker, which performs the tokenization fan-out) gets
+		the tyr-backed client resolver, which asks tyr once per run and caches the
+		answer, so per-message isEnabled() is a local map hit rather than a REST
+		call. Selection between the two is by spring.application.name.
+
+		The monolith counterpart is gebo.architecture.workflow.steps (config-driven).
+		Exactly one of the two is present per distribution.
+	-->
+	<dependencies>
+		<!-- IWorkflowStepEnabledHandler base + GStandardWorkflowStep + WorkflowContext. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.application.messaging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- GeboMicroservicesTopology (module -> microservice presence), the URL
+		     resolver and the current-service identity used to select the resolver. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Caller-token propagator + TTL cache, shared with every cluster client. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- WebClient. spring-webflux (not the starter) so the servlet services this
+		     lib lands on do not pull a reactive web server in with it. -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor.netty</groupId>
+			<artifactId>reactor-netty-http</artifactId>
+		</dependency>
+		<!-- @LoadBalanced: the client addresses the topology's discovery service-id
+		     for tyr (e.g. tyr_gebo_ai), which the load balancer resolves. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
+		</dependency>
+		<!-- @RestController on tyr for the enabled-steps endpoint (servlet server is
+		     provided by the host app; spring-webmvc, not the full starter). -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<!-- @PreAuthorize on the endpoint. -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>

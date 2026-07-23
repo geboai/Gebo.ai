@@ -25,7 +25,7 @@ import java.util.List;
  * GProject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GProject {
   @JsonProperty("code")
@@ -100,6 +100,9 @@ public class GProject {
 
   }  @JsonProperty("objectSpaceType")
   private ObjectSpaceTypeEnum objectSpaceType = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("parentProjectCode")
   private String parentProjectCode = null;
@@ -372,6 +375,32 @@ public class GProject {
     this.objectSpaceType = objectSpaceType;
   }
 
+  public GProject aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GProject addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GProject parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
@@ -414,12 +443,13 @@ public class GProject {
         Objects.equals(this.accessibleToAll, gproject.accessibleToAll) &&
         Objects.equals(this.rootKnowledgeBaseCode, gproject.rootKnowledgeBaseCode) &&
         Objects.equals(this.objectSpaceType, gproject.objectSpaceType) &&
+        Objects.equals(this.aclAliases, gproject.aclAliases) &&
         Objects.equals(this.parentProjectCode, gproject.parentProjectCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, accessibleGroups, accessibleUsers, accessibleToAll, rootKnowledgeBaseCode, objectSpaceType, parentProjectCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, accessibleGroups, accessibleUsers, accessibleToAll, rootKnowledgeBaseCode, objectSpaceType, aclAliases, parentProjectCode);
   }
 
 
@@ -442,6 +472,7 @@ public class GProject {
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    rootKnowledgeBaseCode: ").append(toIndentedString(rootKnowledgeBaseCode)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
     sb.append("}");
     return sb.toString();

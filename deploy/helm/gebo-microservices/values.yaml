@@ -1,0 +1,201 @@
+# ===========================================================================
+# Gebo.ai microservices — Helm values.
+#
+# The headline is `backends.<svc>.enabled`: mandatory services are always
+# rendered (a template guard fails the install if you try to disable one);
+# optional services are gated. Whatever you enable also defines the declared
+# messaging topology (see templates/configmap-shared.yaml), so the topology can
+# never drift from what is actually deployed.
+#
+# Mirrors dockers/gebo.microservices/docker-compose.yml + its config/application.yml.
+# CHANGE EVERY SECRET before any non-dev use (see `secrets:` below).
+# ===========================================================================
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  # Optional registry prefix, WITH trailing slash, e.g. "myregistry.example.com/".
+  # Empty => Docker Hub. Combined as: {{ registry }}{{ namespace }}/<svc>.gebo.ai:{{ tag }}
+  registry: ""
+  namespace: geboai
+  tag: "1.0.2.0-SNAPSHOT"
+  pullPolicy: IfNotPresent
+imagePullSecrets: []          # e.g. [{ name: regcred }]
+
+# Applied to every backend (mirrors the compose x-microservice env).
+common:
+  javaToolOptions: "-Xms256m -Xmx1g"
+  managementExposure: "health,prometheus,metrics"
+  # OTLP traces endpoint; empty disables trace export.
+  otlpTracingEndpoint: ""
+  tracingSamplingProbability: "1.0"
+  # extra env applied to every backend: [{name: X, value: "y"}]
+  extraEnv: []
+
+# Default compute resources for every backend (override per service under backends.<svc>.resources).
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 1536Mi
+
+# --- Service registry (Eureka) --------------------------------------------
+eureka:
+  port: 13017
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { memory: 768Mi }
+
+# --- API gateway (the edge) -----------------------------------------------
+gateway:
+  port: 13000
+  service:
+    type: ClusterIP           # LoadBalancer/NodePort to expose without an Ingress
+  ingress:
+    enabled: false
+    className: ""
+    host: gebo.local
+    annotations: {}
+    tls:
+      enabled: false
+      secretName: ""
+  resources:
+    requests: { cpu: 200m, memory: 384Mi }
+    limits: { memory: 1024Mi }
+
+# --- Backends -------------------------------------------------------------
+# mandatory: true  -> always installed; `enabled:false` on it FAILS the install.
+# enabled (optional ones): default true; set false to leave the service out.
+# The messaging topology ConfigMap is rendered from exactly the enabled set.
+backends:
+  # ---- Mandatory core ----
+  heimdall:     { port: 13018, mandatory: true }
+  brain:        { port: 13001, mandatory: true }
+  tyr:          { port: 13019, mandatory: true }
+  chunker:      { port: 13004, mandatory: true }
+  vectorizator: { port: 13002, mandatory: true }
+  # ---- Optional workflow performers ----
+  graphicator:  { port: 13003, enabled: true }   # graphrag; needs neo4j
+  fulltextor:   { port: 13016, enabled: true }   # full-text; needs opensearch
+  # ---- Optional per-connector content handlers ----
+  git:          { port: 13005, enabled: true }
+  filesystem:   { port: 13006, enabled: true }
+  uploads:      { port: 13007, enabled: true }
+  userspace:    { port: 13008, enabled: true }
+  sharepoint:   { port: 13009, enabled: true }
+  confluence:   { port: 13010, enabled: true }
+  jira:         { port: 13011, enabled: true }
+  aws-s3:       { port: 13012, enabled: true }
+  googledrive:  { port: 13013, enabled: true }
+  mcpclient:    { port: 13014, enabled: true }
+  integration:  { port: 13015, enabled: true }
+
+# --- Stateful dependencies -------------------------------------------------
+# enabled:true  -> deployed in-cluster (StatefulSet + PVC + Service).
+# enabled:false -> not deployed; the app points at `external.*` instead.
+infra:
+  mongodb:
+    enabled: true
+    image: mongo:7
+    rootUsername: mongoroot         # password from secrets.mongoPassword
+    storage: 10Gi
+    storageClassName: ""
+    external:
+      # used when enabled:false. Placeholders ${...} resolve from the Secret.
+      connectionString: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/?authSource=admin"
+  rabbitmq:
+    enabled: true
+    image: rabbitmq:3-management
+    username: guest                 # password from secrets.rabbitPassword
+    external:
+      host: rabbit
+      port: 5672
+  qdrant:
+    enabled: true
+    image: qdrant/qdrant
+    storage: 10Gi
+    storageClassName: ""
+    external:
+      host: qdrant
+      port: 6334
+      tls: false
+  neo4j:
+    enabled: true
+    image: neo4j:5
+    username: neo4j                 # password from secrets.neo4jPassword
+    storage: 10Gi
+    storageClassName: ""
+    external:
+      uri: "bolt://neo4j:7687"
+  opensearch:
+    enabled: true
+    image: opensearchproject/opensearch:latest
+    storage: 10Gi
+    storageClassName: ""
+    javaOpts: "-Xms1g -Xmx1g"
+    external:
+      protocol: https
+      host: opensearch
+      port: 9200
+      username: admin              # password from secrets.opensearchPassword
+
+# --- Security (CORS / OAuth2 redirect) -------------------------------------
+security:
+  # Browser origins allowed to call the API (the gateway edge + any dev server).
+  corsAllowedOrigins: "http://localhost:13000,http://localhost:4200"
+
+# --- LLM providers (non-secret flags; keys live in secrets) ----------------
+llm:
+  openAIEnabled: true
+  anthropicEnabled: true
+  ollamaEnabled: true
+  openaiEmbeddingModel: text-embedding-3-large
+  openaiChatModel: gpt-3.5-turbo-16k
+
+# --- Secrets ---------------------------------------------------------------
+# DEV DEFAULTS — override for production, or set existingSecret to bring your own.
+# When existingSecret is set, it must provide the same KEYS this chart's Secret does
+# (see templates/secret.yaml): GEBO_TOKEN_SECRET, MONGO_USERNAME, MONGO_PASSWORD,
+# RABBITMQ_PASSWORD, QDRANT_API_KEY, NEO4J_PASSWORD, OPENSEARCH_PASSWORD,
+# OPENAI_API_KEY, ANTHROPIC_API_KEY.
+secrets:
+  existingSecret: ""
+  tokenSecret: "04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1"
+  mongoUsername: "mongoroot"
+  mongoPassword: "mongopwd"
+  rabbitPassword: "guest"
+  qdrantApiKey: "ce7c85bc-f037-4c64-91d8-70335638329d"
+  neo4jPassword: "neo4jmaster"
+  opensearchPassword: "dothesearch1973-Advanced"
+  openaiApiKey: "DUMMYKEY"
+  anthropicApiKey: "DUMMYKEY"
+
+# --- Observability stack (otel-collector + Prometheus + Tempo + Grafana) ---
+# Off by default. When enabled, backends export traces to the in-cluster collector
+# (overrides common.otlpTracingEndpoint), Tempo stores them, Prometheus scrapes the
+# enabled backends' /actuator/prometheus, and Grafana ships with both datasources +
+# a starter dashboard. Mirrors dockers/gebo.microservices observability config.
+observability:
+  enabled: false
+  otelCollector:
+    image: otel/opentelemetry-collector-contrib:latest
+  tempo:
+    image: grafana/tempo
+    storage: 5Gi
+    storageClassName: ""
+  prometheus:
+    image: prom/prometheus
+    scrapeInterval: 15s
+    storage: 5Gi
+    storageClassName: ""
+  grafana:
+    image: grafana/grafana
+    service:
+      type: ClusterIP        # LoadBalancer/NodePort to expose the UI
+    anonymousViewer: true
+
+# --- Extra shared application.yml -----------------------------------------
+# Verbatim YAML appended to the shared config additional-location (advanced).
+extraSharedConfig: ""

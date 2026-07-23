@@ -17,7 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { ConfigurationEntry } from '../model/configurationEntry';
+import { ConfigurationEntryGBaseChatModelConfig } from '../model/configurationEntryGBaseChatModelConfig';
 import { GChatModelType } from '../model/gChatModelType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ChatModelsControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -99,9 +99,9 @@ export class ChatModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntry>>;
-    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntry>>>;
-    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntry>>>;
+    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntryGBaseChatModelConfig>>;
+    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntryGBaseChatModelConfig>>>;
+    public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntryGBaseChatModelConfig>>>;
     public getRuntimeConfiguredChatModels(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -125,7 +125,7 @@ export class ChatModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<ConfigurationEntry>>('get',`${this.basePath}/api/admin/ChatModelsController/getRuntimeConfiguredChatModels`,
+        return this.httpClient.request<Array<ConfigurationEntryGBaseChatModelConfig>>('get',`${this.basePath}/api/admin/ChatModelsController/getRuntimeConfiguredChatModels`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

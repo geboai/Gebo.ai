@@ -27,7 +27,7 @@ import java.util.List;
  * GGitProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GGitProjectEndpoint {
   @JsonProperty("code")
@@ -142,6 +142,9 @@ public class GGitProjectEndpoint {
 
   }  @JsonProperty("objectSpaceType")
   private ObjectSpaceTypeEnum objectSpaceType = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("repositoryUri")
   private String repositoryUri = null;
@@ -491,6 +494,32 @@ public class GGitProjectEndpoint {
     this.objectSpaceType = objectSpaceType;
   }
 
+  public GGitProjectEndpoint aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GGitProjectEndpoint addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GGitProjectEndpoint repositoryUri(String repositoryUri) {
     this.repositoryUri = repositoryUri;
     return this;
@@ -626,6 +655,7 @@ public class GGitProjectEndpoint {
         Objects.equals(this.vectorizeOnlyExtensions, ggitProjectEndpoint.vectorizeOnlyExtensions) &&
         Objects.equals(this.synchroStrategy, ggitProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, ggitProjectEndpoint.objectSpaceType) &&
+        Objects.equals(this.aclAliases, ggitProjectEndpoint.aclAliases) &&
         Objects.equals(this.repositoryUri, ggitProjectEndpoint.repositoryUri) &&
         Objects.equals(this.branch, ggitProjectEndpoint.branch) &&
         Objects.equals(this.identityCode, ggitProjectEndpoint.identityCode) &&
@@ -636,7 +666,7 @@ public class GGitProjectEndpoint {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, repositoryUri, branch, identityCode, alwaysClone, publicAccess, contentManagementSystem);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, repositoryUri, branch, identityCode, alwaysClone, publicAccess, contentManagementSystem);
   }
 
 
@@ -662,6 +692,7 @@ public class GGitProjectEndpoint {
     sb.append("    vectorizeOnlyExtensions: ").append(toIndentedString(vectorizeOnlyExtensions)).append("\n");
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    repositoryUri: ").append(toIndentedString(repositoryUri)).append("\n");
     sb.append("    branch: ").append(toIndentedString(branch)).append("\n");
     sb.append("    identityCode: ").append(toIndentedString(identityCode)).append("\n");

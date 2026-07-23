@@ -20,7 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { ContentMetaInfo } from '../model/contentMetaInfo';
 import { ContentObject } from '../model/contentObject';
 import { DocumentReferenceView } from '../model/documentReferenceView';
-import { PageDocumentReferenceView } from '../model/pageDocumentReferenceView';
+import { PagedModelDocumentReferenceView } from '../model/pagedModelDocumentReferenceView';
 import { SearchDocumentByNamePagedParam } from '../model/searchDocumentByNamePagedParam';
 import { SearchDocumentByNameParam } from '../model/searchDocumentByNameParam';
 
@@ -31,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ContentMetaInfosControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -255,9 +255,9 @@ export class ContentMetaInfosControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchByDocumentNamePaged(body: SearchDocumentByNamePagedParam, observe?: 'body', reportProgress?: boolean): Observable<PageDocumentReferenceView>;
-    public searchByDocumentNamePaged(body: SearchDocumentByNamePagedParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageDocumentReferenceView>>;
-    public searchByDocumentNamePaged(body: SearchDocumentByNamePagedParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageDocumentReferenceView>>;
+    public searchByDocumentNamePaged(body: SearchDocumentByNamePagedParam, observe?: 'body', reportProgress?: boolean): Observable<PagedModelDocumentReferenceView>;
+    public searchByDocumentNamePaged(body: SearchDocumentByNamePagedParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedModelDocumentReferenceView>>;
+    public searchByDocumentNamePaged(body: SearchDocumentByNamePagedParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PagedModelDocumentReferenceView>>;
     public searchByDocumentNamePaged(body: SearchDocumentByNamePagedParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -284,7 +284,7 @@ export class ContentMetaInfosControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<PageDocumentReferenceView>('post',`${this.basePath}/api/users/ContentMetaInfosController/searchByDocumentNamePaged`,
+        return this.httpClient.request<PagedModelDocumentReferenceView>('post',`${this.basePath}/api/users/ContentMetaInfosController/searchByDocumentNamePaged`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

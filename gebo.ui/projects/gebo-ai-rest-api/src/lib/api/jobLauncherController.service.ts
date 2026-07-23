@@ -17,10 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GJobStatus } from '../model/gJobStatus';
 import { GObjectRefGProjectEndpoint } from '../model/gObjectRefGProjectEndpoint';
 import { HasRunningJobs } from '../model/hasRunningJobs';
-import { JobSummary } from '../model/jobSummary';
 import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -30,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class JobLauncherControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -191,100 +189,6 @@ export class JobLauncherControllerService {
         return this.httpClient.request<HasRunningJobs>('post',`${this.basePath}/api/admin/JobLauncherController/getHasRunningJobs`,
             {
                 body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param jobCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getJobStatus(jobCode: string, observe?: 'body', reportProgress?: boolean): Observable<GJobStatus>;
-    public getJobStatus(jobCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GJobStatus>>;
-    public getJobStatus(jobCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GJobStatus>>;
-    public getJobStatus(jobCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (jobCode === null || jobCode === undefined) {
-            throw new Error('Required parameter jobCode was null or undefined when calling getJobStatus.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (jobCode !== undefined && jobCode !== null) {
-            queryParameters = queryParameters.set('jobCode', <any>jobCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<GJobStatus>('get',`${this.basePath}/api/admin/JobLauncherController/getJobStatus`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param jobCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getJobSummary(jobCode: string, observe?: 'body', reportProgress?: boolean): Observable<JobSummary>;
-    public getJobSummary(jobCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobSummary>>;
-    public getJobSummary(jobCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobSummary>>;
-    public getJobSummary(jobCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (jobCode === null || jobCode === undefined) {
-            throw new Error('Required parameter jobCode was null or undefined when calling getJobSummary.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (jobCode !== undefined && jobCode !== null) {
-            queryParameters = queryParameters.set('jobCode', <any>jobCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<JobSummary>('get',`${this.basePath}/api/admin/JobLauncherController/getJobSummary`,
-            {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

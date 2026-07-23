@@ -27,6 +27,7 @@ export const GOOGLEDRIVE_MODULE = "google-drive-module";
 export const CONFLUENCE_MODULE = "confluence-module";
 export const JIRA_MODULE = "jira-module";
 export const SHAREPOINT_MODULE = "sharepoint-module";
+export const AWS_S3_MODULE = "aws-s3-module";
 
 /**
  * Interface representing the enabled/disabled state of all Gebo.ai modules.

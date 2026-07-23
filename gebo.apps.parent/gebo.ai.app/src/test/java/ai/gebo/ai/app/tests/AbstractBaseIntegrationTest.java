@@ -15,7 +15,13 @@ package ai.gebo.ai.app.tests;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.monolithic.app.Main;
@@ -27,7 +33,7 @@ import ai.gebo.monolithic.app.Main;
  */
 @SpringBootTest(classes = Main.class)
 public abstract class AbstractBaseIntegrationTest extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
-	
+
 	// Paths to various test files used in the integration tests
 	public static final String TEST_001_PDF_FILE = "TEST-CONTENTS-001/v4man.pdf";
 	public static final String TEST_001_DOCX_FILE = "TEST-CONTENTS-001/demo.docx";
@@ -37,9 +43,29 @@ public abstract class AbstractBaseIntegrationTest extends AbstractGeboMonolithic
 	public static final String TEST_001_XLSX_FILE = "TEST-CONTENTS-001/file_example_XLSX_5000.xlsx";
 	public static final String TEST_001_ZIP_FILE = "TEST-CONTENTS-001/TEST-CONTENTS-001.zip";
 	public static final String TEST_001_WRONG_FILE_FORMAT = "TEST-CONTENTS-001/wrong-file-format.pdf";
-	
+
 	// A list of all test files utilized in the integration testing scenarios
 	public static final List<String> ALL_DATA_FILES = List.of(TEST_001_DOC_FILE, TEST_001_DOCX_FILE, TEST_001_ODT_FILE,
 			TEST_001_PDF_FILE, TEST_001_WRONG_FILE_FORMAT, TEST_001_XLS_FILE, TEST_001_XLSX_FILE);
-	
+
+	/**
+	 * Impersonates the platform admin user (inserted into the users Mongo
+	 * collection by {@code createDefaultUser()} in the parent's
+	 * {@code prepareEnvironment()}) for the duration of each test, so every
+	 * gebo.ai.app test runs with an authenticated ADMIN+USER Spring Security
+	 * context instead of an anonymous one.
+	 */
+	@BeforeEach
+	public void impersonateAdminUser() {
+		List<SimpleGrantedAuthority> authorities = ALL_ROLES.stream().map(SimpleGrantedAuthority::new).toList();
+		Authentication authentication = new UsernamePasswordAuthenticationToken(DEFAULT_ALL_ROLES_USER, "NOPASSWORD",
+				authorities);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	@AfterEach
+	public void clearImpersonatedAdminUser() {
+		SecurityContextHolder.clearContext();
+	}
+
 }

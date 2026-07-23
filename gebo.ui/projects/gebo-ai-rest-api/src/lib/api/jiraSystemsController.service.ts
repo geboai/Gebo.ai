@@ -22,6 +22,7 @@ import { GContentManagementSystemType } from '../model/gContentManagementSystemT
 import { GJiraProjectEndpoint } from '../model/gJiraProjectEndpoint';
 import { GJiraSystem } from '../model/gJiraSystem';
 import { OperationStatusGJiraSystem } from '../model/operationStatusGJiraSystem';
+import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -30,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class JiraSystemsControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -542,6 +543,53 @@ export class JiraSystemsControllerService {
         }
 
         return this.httpClient.request<OperationStatusGJiraSystem>('post',`${this.basePath}/api/admin/JiraSystemsController/insertJiraSystem`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public publishJiraEndpoint(body: GJiraProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGJobStatus>;
+    public publishJiraEndpoint(body: GJiraProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGJobStatus>>;
+    public publishJiraEndpoint(body: GJiraProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGJobStatus>>;
+    public publishJiraEndpoint(body: GJiraProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling publishJiraEndpoint.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGJobStatus>('post',`${this.basePath}/api/admin/JiraSystemsController/publishJiraEndpoint`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

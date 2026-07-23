@@ -39,6 +39,8 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
 import ai.gebo.model.GUserMessage;
@@ -54,6 +56,7 @@ import ai.gebo.sharepoint.handler.IGSharepointContentManagementSystemHandler;
 import ai.gebo.sharepoint.handler.SharepointVersion;
 import ai.gebo.sharepoint.handler.impl.SharepointSystemsTestService;
 import ai.gebo.sharepoint.handler.repositories.SharepointProjectEndpointRepository;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -111,9 +114,11 @@ public class SharepointSystemsController
 			IGSharepointContentManagementSystemHandler handler, SharepointProjectEndpointRepository endpointRepository,
 			IGeboSecretsAccessService secretAccessService, IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			RestTemplateWrapperService restTemplateWrapper, SharepointSystemsTestService SharepointTestService) {
+			RestTemplateWrapperService restTemplateWrapper, SharepointSystemsTestService SharepointTestService,
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 		this.endpointRepository = endpointRepository;
 		this.secretAccessService = secretAccessService;
@@ -294,6 +299,17 @@ public class SharepointSystemsController
 	public void deleteSharepointEndpoint(@RequestBody GSharepointProjectEndpoint endpoint)
 			throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes a SharePoint project endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint The SharePoint endpoint to publish
+	 * @return Operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishSharepointEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishSharepointEndpoint(@RequestBody GSharepointProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 
 	/**

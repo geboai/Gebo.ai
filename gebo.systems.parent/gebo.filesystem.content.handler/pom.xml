@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.systems</groupId>
 		<artifactId>gebo.systems.parent</artifactId>
-		<version>1.0.1.0-BETA</version>
+		<version>1.0.2.1</version>
 	</parent>
 	<artifactId>gebo.filesystem.content.handler</artifactId>
 	<dependencies>
@@ -33,8 +33,8 @@
 
 		</dependency>
 		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.jobs.services</artifactId>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

@@ -26,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboUserChatUploadsControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -123,18 +123,13 @@ export class GeboUserChatUploadsControllerService {
     /**
      * 
      * 
-     * @param userSessionCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteSessionUploads(userSessionCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListUserUploadedContent>;
-    public deleteSessionUploads(userSessionCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListUserUploadedContent>>;
-    public deleteSessionUploads(userSessionCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListUserUploadedContent>>;
-    public deleteSessionUploads(userSessionCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (userSessionCode === null || userSessionCode === undefined) {
-            throw new Error('Required parameter userSessionCode was null or undefined when calling deleteSessionUploads.');
-        }
+    public deleteSessionUploads(observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListUserUploadedContent>;
+    public deleteSessionUploads(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListUserUploadedContent>>;
+    public deleteSessionUploads(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListUserUploadedContent>>;
+    public deleteSessionUploads(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 

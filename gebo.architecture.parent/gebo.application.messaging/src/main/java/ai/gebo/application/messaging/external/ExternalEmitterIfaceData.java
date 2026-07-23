@@ -26,6 +26,10 @@ public class ExternalEmitterIfaceData extends AbstractExternalMessageSystemData 
     // A list to store the types of payloads emitted by the external emitter
     private List<String> emittedPayloadTypes = new ArrayList<String>();
 
+    // Flag to indicate this external emitter may emit any payload type,
+    // bypassing the emittedPayloadTypes allow-list (see IGMessageEmitter).
+    private boolean emitEveryPayloadType = false;
+
     /**
      * Gets the list of types of payloads that have been emitted.
      * 
@@ -42,5 +46,21 @@ public class ExternalEmitterIfaceData extends AbstractExternalMessageSystemData 
      */
     public void setEmittedPayloadTypes(List<String> emittedPayloadTypes) {
         this.emittedPayloadTypes = emittedPayloadTypes;
+    }
+
+    /**
+     * @return {@code true} if this external emitter may emit any payload type,
+     *         bypassing {@link #getEmittedPayloadTypes()}.
+     */
+    public boolean isEmitEveryPayloadType() {
+        return emitEveryPayloadType;
+    }
+
+    /**
+     * @param emitEveryPayloadType whether this external emitter may emit any
+     *            payload type regardless of {@link #getEmittedPayloadTypes()}.
+     */
+    public void setEmitEveryPayloadType(boolean emitEveryPayloadType) {
+        this.emitEveryPayloadType = emitEveryPayloadType;
     }
 }

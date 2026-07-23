@@ -18,6 +18,7 @@ Method | HTTP request | Description
 [**newUserKnowledgebase**](UserspaceControllerApi.md#newUserKnowledgebase) | **POST** /api/user/UserspaceController/newUserKnowledgebase | 
 [**newUserspaceFolder**](UserspaceControllerApi.md#newUserspaceFolder) | **POST** /api/user/UserspaceController/newUserspaceFolder | 
 [**publishFolder**](UserspaceControllerApi.md#publishFolder) | **POST** /api/user/UserspaceController/publishFolder | 
+[**publishUserspaceProjectEndpoint**](UserspaceControllerApi.md#publishUserspaceProjectEndpoint) | **POST** /api/user/UserspaceController/publishUserspaceProjectEndpoint | 
 [**transferUploadsToUserSpaceAndPublish**](UserspaceControllerApi.md#transferUploadsToUserSpaceAndPublish) | **POST** /api/user/UserspaceController/transferUploadsToUserSpaceAndPublish | 
 [**updateUserKnowledgebase**](UserspaceControllerApi.md#updateUserKnowledgebase) | **POST** /api/user/UserspaceController/updateUserKnowledgebase | 
 [**updateUserspaceFolder**](UserspaceControllerApi.md#updateUserspaceFolder) | **POST** /api/user/UserspaceController/updateUserspaceFolder | 
@@ -607,6 +608,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OperationStatusPublishingStatus**](OperationStatusPublishingStatus.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="publishUserspaceProjectEndpoint"></a>
+# **publishUserspaceProjectEndpoint**
+> OperationStatusGJobStatus publishUserspaceProjectEndpoint(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.UserspaceControllerApi;
+
+
+UserspaceControllerApi apiInstance = new UserspaceControllerApi();
+GUserspaceProjectEndpoint body = new GUserspaceProjectEndpoint(); // GUserspaceProjectEndpoint | 
+try {
+    OperationStatusGJobStatus result = apiInstance.publishUserspaceProjectEndpoint(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling UserspaceControllerApi#publishUserspaceProjectEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GUserspaceProjectEndpoint**](GUserspaceProjectEndpoint.md)|  |
+
+### Return type
+
+[**OperationStatusGJobStatus**](OperationStatusGJobStatus.md)
 
 ### Authorization
 

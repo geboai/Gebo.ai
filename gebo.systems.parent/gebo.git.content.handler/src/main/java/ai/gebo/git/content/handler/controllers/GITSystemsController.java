@@ -47,9 +47,12 @@ import ai.gebo.git.content.handler.IGBaseGitContentManagementSystemHandler;
 import ai.gebo.git.content.handler.impl.GitClientService;
 import ai.gebo.git.content.handler.impl.GitSystemsRuntimeConfiguratoinDao;
 import ai.gebo.git.content.handler.repositories.GitEndpointRepository;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 
 @RestController
@@ -103,9 +106,11 @@ public class GITSystemsController
 	public GITSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			GitControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory) {
+			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 	}
 
 	/**
@@ -259,5 +264,28 @@ public class GITSystemsController
 	@PostMapping(value = "deleteGitEndpoint", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGitEndpoint(@RequestBody GGitProjectEndpoint endpoint) throws GeboPersistenceException {
 		deleteEndpoint(endpoint);
+	}
+
+	/**
+	 * Publishes a Git project endpoint, triggering an asynchronous ingestion job.
+	 *
+	 * @param endpoint The Git endpoint to publish
+	 * @return Operation status containing the launched job status
+	 */
+	@PostMapping(value = "publishGitEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishGitEndpoint(@RequestBody GGitProjectEndpoint endpoint) {
+		return publish(endpoint);
+	}
+
+	/**
+	 * Resolves the content management system code from the Git endpoint so disposal can locate the
+	 * originating system after the concrete endpoint has been removed from persistence.
+	 *
+	 * @param endpoint the Git endpoint being deleted.
+	 * @return the referenced content management system code.
+	 */
+	@Override
+	protected String resolveContentManagementSystemCode(GGitProjectEndpoint endpoint) {
+		return endpoint != null ? endpoint.getContentManagementSystem() : null;
 	}
 }

@@ -1,13 +1,13 @@
 <!--
 /**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
 
 <p-blockUI [target]="jobStatusView" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -43,15 +43,18 @@
           help="Status of the task, still running, finished or finished with errors.">
           <div id="actualStatus" gebo-ai-field-element>
 
-            <span *ngIf="this.jobSummary?.workflowStatus?.finished!==true" style="color: orange;">
-              <i class="pi pi-spin pi-cog"></i>
-              <span id="NotProcessedCompletely" gebo-ai-text>Not processed completely</span>
-              
-            </span>
-            <span *ngIf="this.jobSummary?.workflowStatus?.finished===true" style="color: green;">
-              <i class="pi pi-check"></i>
-              <span id="ProcessedCompletely" gebo-ai-text>Processed completely</span>
-            </span>
+            @if (this.jobSummary?.workflowStatus?.finished!==true) {
+              <span style="color: orange;">
+                <i class="pi pi-spin pi-cog"></i>
+                <span id="NotProcessedCompletely" gebo-ai-text>Not processed completely</span>
+              </span>
+            }
+            @if (this.jobSummary?.workflowStatus?.finished===true) {
+              <span style="color: green;">
+                <i class="pi pi-check"></i>
+                <span id="ProcessedCompletely" gebo-ai-text>Processed completely</span>
+              </span>
+            }
 
           </div>
         </gebo-ai-field>
@@ -59,9 +62,9 @@
       <div class="col-2">
         <div class="grid">
           <div class="col-4"><p-button id="CloseBtn" gebo-ai-label (onClick)="cancelAction.emit(true)"
-              icon="pi pi-times" [outlined]="true" label="Close" severity="contrast"></p-button></div>
+          icon="pi pi-times" [outlined]="true" label="Close" severity="contrast"></p-button></div>
           <div class="col-4"><p-button id="DeleteBtn" gebo-ai-label icon="pi pi-trash" severity="danger" label="Delete"
-              [outlined]="true" (onClick)="doDelete()"></p-button></div>
+          [outlined]="true" (onClick)="doDelete()"></p-button></div>
           <div class="col-4"></div>
         </div>
 
@@ -73,24 +76,31 @@
 
     </div>
     <div class="col-12">
-      <p-tabView>
+      <p-tabs [value]="0">
+            <p-tablist>
+              <p-tab [value]="0" gebo-ai-text>Processes stats</p-tab>
+              <p-tab [value]="1" gebo-ai-text>Publication log</p-tab>
+            </p-tablist>
+            <p-tabpanels>
 
-        <p-tabPanel id="ProcessesStatsTab" gebo-ai-label header="Processes stats">
-          <div class="grid" *ngIf="rootGraphicData">
-            <div class="col-12">
-              <gebo-ai-jobsummary-graphic-visualizer
+        <p-tabpanel [value]="0">
+          @if (rootGraphicData) {
+            <div class="grid">
+              <div class="col-12">
+                <gebo-ai-jobsummary-graphic-visualizer
                 [rendered]="rootGraphicData"></gebo-ai-jobsummary-graphic-visualizer>
-
+              </div>
             </div>
-          </div>
-        </p-tabPanel>
-        <p-tabPanel id="PublicationLogTab" gebo-ai-label header="Publication log">
+          }
+        </p-tabpanel>
+        <p-tabpanel [value]="1">
           <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
           <p-paginator id="PaginatorComponent" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0"
-            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.totalElements"
-            [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
-        </p-tabPanel>
-      </p-tabView>
+            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.page?.totalElements"
+          [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        </p-tabpanel>
+      </p-tabpanels>
+          </p-tabs>
     </div>
   </div>
 

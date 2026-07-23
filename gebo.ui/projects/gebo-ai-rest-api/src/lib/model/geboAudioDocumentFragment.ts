@@ -11,6 +11,7 @@
  */
 
 export interface GeboAudioDocumentFragment { 
+    customMetaData?: { [key: string]: any; };
     fragmentType?: GeboAudioDocumentFragment.FragmentTypeEnum;
     contentType?: string;
     characterEncoding?: string;

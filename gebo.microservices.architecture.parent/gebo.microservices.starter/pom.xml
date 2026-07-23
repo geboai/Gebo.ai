@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.1</version>
+	</parent>
+	<artifactId>gebo.microservices.starter</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.environment.microservices</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.messages.rabbitmq</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.telemetry</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Exposes this backend's local messaging topology (InternalMessagingTopologyController).
+		     On every real backend built on this starter; gateway/eureka are not. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.internal-topology.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!--
+			springdoc OpenAPI/Swagger. OFF by default, and that is the point.
+
+			It used to be a plain dependency here, which meant EVERY service built on this
+			starter published /v3/api-docs unconditionally - in production images too. The
+			API surface of every microservice was readable by anything that could reach the
+			port, without anyone choosing it. springdoc is classpath-activated, so the only
+			way to not have it is to not ship it.
+
+			Nothing is lost: each app already declares gebo.architecture.swagger inside its
+			OWN swagger-on profile, which is what a stub-regeneration build activates. So:
+
+			    mvn -P swagger-on ...     -> springdoc present, /v3/api-docs served,
+			                                 client stubs can be generated from the live spec
+			    (default)                 -> no springdoc, no spec endpoint, nothing to leak
+
+			Note the consequence: an image built WITHOUT swagger-on serves no /v3/api-docs,
+			so regenerating the stubs against a running container requires building that
+			container with -P swagger-on.
+		-->
+		<profile>
+			<id>swagger-on</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+</project>

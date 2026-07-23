@@ -22,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
 /**
@@ -36,6 +37,7 @@ import lombok.AllArgsConstructor;
  * @param <ModelChoice>              The type of the model choice.
  */
 @AllArgsConstructor
+@Observed(name = "gebo.llms.config.crud")
 public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<EmbeddingModelConfigType extends GBaseEmbeddingModelConfig, ModelChoice extends GBaseEmbeddingModelChoice> {
 	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -63,7 +65,7 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 			return OperationStatus.<EmbeddingModelConfigType>of(e);
 		}
 		try {
-			this.modelRuntimeConfigurationDao.addRuntimeByConfig(config);
+			this.modelRuntimeConfigurationDao.addRuntimeByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while configuring new chat model ", e);
 			try {
@@ -85,8 +87,7 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 	 */
 	protected OperationStatus<EmbeddingModelConfigType> update(EmbeddingModelConfigType config) {
 		try {
-			IGConfigurableEmbeddingModel handler = this.modelRuntimeConfigurationDao.findByCode(config.getCode());
-			handler.reconfigure(config);
+			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception reconfiguring model", e);
 			return OperationStatus.<EmbeddingModelConfigType>of(e);
@@ -110,7 +111,7 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 	 */
 	protected OperationStatus<Boolean> delete(EmbeddingModelConfigType type) {
 		try {
-			this.modelRuntimeConfigurationDao.deleteByCode(type.getCode());
+			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);
 		} catch (Throwable e) {
 			LOGGER.error("Exception deleting model", e);

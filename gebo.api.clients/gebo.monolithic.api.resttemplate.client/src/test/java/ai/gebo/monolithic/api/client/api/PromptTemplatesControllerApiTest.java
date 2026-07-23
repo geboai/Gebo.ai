@@ -14,7 +14,7 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.DefaultPromptForChatModelParam;
 import ai.gebo.monolithic.api.client.model.DefaultPromptForChatModelReferenceParam;
-import ai.gebo.monolithic.api.client.model.GPromptConfig;
+import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -42,7 +42,7 @@ public class PromptTemplatesControllerApiTest {
     @Test
     public void getDefaultPromptTest() {
         Boolean ragPrompt = null;
-        GPromptConfig response = api.getDefaultPrompt(ragPrompt);
+        GPromptTemplateConfig response = api.getDefaultPrompt(ragPrompt);
 
         // TODO: test validations
     }
@@ -57,7 +57,7 @@ public class PromptTemplatesControllerApiTest {
     @Test
     public void getDefaultPromptForChatModelTest() {
         DefaultPromptForChatModelParam body = null;
-        GPromptConfig response = api.getDefaultPromptForChatModel(body);
+        GPromptTemplateConfig response = api.getDefaultPromptForChatModel(body);
 
         // TODO: test validations
     }
@@ -72,7 +72,7 @@ public class PromptTemplatesControllerApiTest {
     @Test
     public void getDefaultPromptForChatModelReferenceTest() {
         DefaultPromptForChatModelReferenceParam body = null;
-        GPromptConfig response = api.getDefaultPromptForChatModelReference(body);
+        GPromptTemplateConfig response = api.getDefaultPromptForChatModelReference(body);
 
         // TODO: test validations
     }

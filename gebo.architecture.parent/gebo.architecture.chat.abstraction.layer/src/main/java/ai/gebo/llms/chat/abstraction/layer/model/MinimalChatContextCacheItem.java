@@ -2,7 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.model;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

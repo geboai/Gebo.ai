@@ -4,8 +4,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **offset** | **Long** |  |  [optional]
-**sort** | [**SortObject**](SortObject.md) |  |  [optional]
 **paged** | **Boolean** |  |  [optional]
+**sort** | [**SortObject**](SortObject.md) |  |  [optional]
 **unpaged** | **Boolean** |  |  [optional]
 **pageSize** | **Integer** |  |  [optional]
 **pageNumber** | **Integer** |  |  [optional]

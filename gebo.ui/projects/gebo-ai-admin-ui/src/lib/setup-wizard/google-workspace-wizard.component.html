@@ -12,11 +12,10 @@
  
  
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="instModeUI" [blocked]="loading">
+<p-blockUI id="BlockUI"  [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Google Drive/Workspaces systems">
-    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class="grid geboLargeButtonsBar">
 
         <div class="col-6">
@@ -24,6 +23,7 @@
                 (onClick)="createSystem()"></p-button>
         </div>
     </div>
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class=" grid">
 
         <div class="col-12"><p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">

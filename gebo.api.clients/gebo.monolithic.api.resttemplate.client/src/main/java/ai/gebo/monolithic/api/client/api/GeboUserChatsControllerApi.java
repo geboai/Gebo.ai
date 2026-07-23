@@ -3,9 +3,10 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.ChatInfosByQbeParam;
+import ai.gebo.monolithic.api.client.model.ChatUIOptions;
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
-import ai.gebo.monolithic.api.client.model.PageGUserChatInfo;
+import ai.gebo.monolithic.api.client.model.PagedModelGUserChatInfo;
 import ai.gebo.monolithic.api.client.model.UserChatHistory;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
 
 public class GeboUserChatsControllerApi {
     private ApiClient apiClient;
@@ -228,6 +229,62 @@ public class GeboUserChatsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
+     * @param userContextCode  (required)
+     * @param responseId  (required)
+     * @param format  (required)
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public void exportResponse2file(String userContextCode, String responseId, String format) throws RestClientException {
+        exportResponse2fileWithHttpInfo(userContextCode, responseId, format);
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param userContextCode  (required)
+     * @param responseId  (required)
+     * @param format  (required)
+     * @return ResponseEntity&lt;Void&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<Void> exportResponse2fileWithHttpInfo(String userContextCode, String responseId, String format) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'userContextCode' is set
+        if (userContextCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userContextCode' when calling exportResponse2file");
+        }
+        // verify the required parameter 'responseId' is set
+        if (responseId == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'responseId' when calling exportResponse2file");
+        }
+        // verify the required parameter 'format' is set
+        if (format == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'format' when calling exportResponse2file");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/exportResponse2file").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "userContextCode", userContextCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "responseId", responseId));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "format", format));
+
+        final String[] accepts = {  };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
      * @param code  (required)
      * @return UserChatHistory
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -319,10 +376,10 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return PageGUserChatInfo
+     * @return PagedModelGUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGUserChatInfo getChatInfosByQbe(ChatInfosByQbeParam body) throws RestClientException {
+    public PagedModelGUserChatInfo getChatInfosByQbe(ChatInfosByQbeParam body) throws RestClientException {
         return getChatInfosByQbeWithHttpInfo(body).getBody();
     }
 
@@ -331,10 +388,10 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;PageGUserChatInfo&gt;
+     * @return ResponseEntity&lt;PagedModelGUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGUserChatInfo> getChatInfosByQbeWithHttpInfo(ChatInfosByQbeParam body) throws RestClientException {
+    public ResponseEntity<PagedModelGUserChatInfo> getChatInfosByQbeWithHttpInfo(ChatInfosByQbeParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -357,7 +414,7 @@ public class GeboUserChatsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGUserChatInfo> returnType = new ParameterizedTypeReference<PageGUserChatInfo>() {};
+        ParameterizedTypeReference<PagedModelGUserChatInfo> returnType = new ParameterizedTypeReference<PagedModelGUserChatInfo>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -404,10 +461,10 @@ public class GeboUserChatsControllerApi {
      * <p><b>200</b> - OK
      * @param page  (required)
      * @param pageSize  (required)
-     * @return PageGUserChatInfo
+     * @return PagedModelGUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGUserChatInfo getMyChatsPaged(Integer page, Integer pageSize) throws RestClientException {
+    public PagedModelGUserChatInfo getMyChatsPaged(Integer page, Integer pageSize) throws RestClientException {
         return getMyChatsPagedWithHttpInfo(page, pageSize).getBody();
     }
 
@@ -417,10 +474,10 @@ public class GeboUserChatsControllerApi {
      * <p><b>200</b> - OK
      * @param page  (required)
      * @param pageSize  (required)
-     * @return ResponseEntity&lt;PageGUserChatInfo&gt;
+     * @return ResponseEntity&lt;PagedModelGUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGUserChatInfo> getMyChatsPagedWithHttpInfo(Integer page, Integer pageSize) throws RestClientException {
+    public ResponseEntity<PagedModelGUserChatInfo> getMyChatsPagedWithHttpInfo(Integer page, Integer pageSize) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'page' is set
         if (page == null) {
@@ -447,7 +504,45 @@ public class GeboUserChatsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<PageGUserChatInfo> returnType = new ParameterizedTypeReference<PageGUserChatInfo>() {};
+        ParameterizedTypeReference<PagedModelGUserChatInfo> returnType = new ParameterizedTypeReference<PagedModelGUserChatInfo>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ChatUIOptions
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ChatUIOptions getUIConfig() throws RestClientException {
+        return getUIConfigWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;ChatUIOptions&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<ChatUIOptions> getUIConfigWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getUIConfig").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<ChatUIOptions> returnType = new ParameterizedTypeReference<ChatUIOptions>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

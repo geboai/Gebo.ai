@@ -9,7 +9,14 @@
 
 package ai.gebo.architecture.ai.model;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,6 +34,8 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 	public static final String DEFAULT_LANGUAGE = "en";
 	private static final String SEPARATOR = "-";
 	private static final String FIELD_PLACEHOLDER = "-|-";
+	/** Matches template placeholders in the {placeholder} form. */
+	private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{([^{}]+)\\}");
 	@Id
 	private String code = null;
 	private String description = null;
@@ -55,6 +64,14 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 	private Boolean configDeclarated;
 	private Boolean agentPrompt = null;
 	private String agentId = null;
+	/**
+	 * Placeholders ({placeholder} tokens) discovered in the system/user prompt
+	 * templates. Derived and runtime-maintained: it is (re)computed from the
+	 * templates and never persisted nor settable from the calling code.
+	 */
+	@Transient
+	@ToString.Exclude
+	private transient Map<String, Boolean> placeholders = null;
 	private void regenerateCode() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(value(promptUse));
@@ -186,6 +203,7 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 
 	public void setSystemPromptTemplate(String systemPromptTemplate) {
 		this.systemPromptTemplate = systemPromptTemplate;
+		invalidatePlaceholders();
 	}
 
 	public String getUserPromptTemplate() {
@@ -194,6 +212,47 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 
 	public void setUserPromptTemplate(String userPromptTemplate) {
 		this.userPromptTemplate = userPromptTemplate;
+		invalidatePlaceholders();
+	}
+
+	/**
+	 * Returns the placeholders ({placeholder} tokens) contained in the system and
+	 * user prompt templates. The map is lazily (re)computed from the current
+	 * template contents and returned as an unmodifiable view, so it is maintained
+	 * by this object at runtime but cannot be mutated by the calling code.
+	 *
+	 * @return an unmodifiable map keyed by placeholder name, each mapped to
+	 *         {@code Boolean.TRUE}.
+	 */
+	public Map<String, Boolean> getPlaceholders() {
+		if (placeholders == null) {
+			placeholders = computePlaceholders();
+		}
+		return Collections.unmodifiableMap(placeholders);
+	}
+
+	private void invalidatePlaceholders() {
+		this.placeholders = null;
+	}
+
+	private Map<String, Boolean> computePlaceholders() {
+		Map<String, Boolean> found = new LinkedHashMap<>();
+		collectPlaceholders(systemPromptTemplate, found);
+		collectPlaceholders(userPromptTemplate, found);
+		return found;
+	}
+
+	private static void collectPlaceholders(String template, Map<String, Boolean> sink) {
+		if (template == null || template.isEmpty()) {
+			return;
+		}
+		Matcher matcher = PLACEHOLDER_PATTERN.matcher(template);
+		while (matcher.find()) {
+			String name = matcher.group(1).trim();
+			if (!name.isEmpty()) {
+				sink.put(name, Boolean.TRUE);
+			}
+		}
 	}
 
 	public ContextContentRequired getChatHistory() {

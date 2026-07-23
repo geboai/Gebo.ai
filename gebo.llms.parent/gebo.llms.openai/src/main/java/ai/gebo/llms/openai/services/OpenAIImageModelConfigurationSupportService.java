@@ -1,13 +1,11 @@
 package ai.gebo.llms.openai.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiImageApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -21,9 +19,12 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAIImageModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIImageModelConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
+import ai.gebo.openai.integration.client.model.OpenAIModel;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
@@ -68,24 +69,16 @@ public class OpenAIImageModelConfigurationSupportService
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("OpenAI api  key configuration gone wrong ", e);
 			}
-			org.springframework.ai.openai.api.OpenAiApi.Builder apiBuilder = OpenAiApi.builder();
-			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
-			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
-			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
-					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			apiBuilder.restClientBuilder(restClient);
-			apiBuilder.webClientBuilder(webClient);
-			org.springframework.ai.openai.OpenAiImageOptions.Builder imageOptionsBuilder = OpenAiImageOptions.builder();
+			org.springframework.ai.openai.OpenAiImageOptions.Builder imageOptionsBuilder = OpenAiImageOptions.builder()
+					.apiKey(apiKey);
 			if (config.getChoosedModel() != null) {
 				imageOptionsBuilder.model(config.getChoosedModel().getCode());
 			}
-			org.springframework.ai.openai.api.OpenAiImageApi.Builder builder = OpenAiImageApi.builder();
-			builder.apiKey(apiKey);
-			builder.restClientBuilder(restClient);
-			OpenAiImageApi built = builder.build();
 			OpenAiImageOptions options = imageOptionsBuilder.build();
-			OpenAiImageModel model = new OpenAiImageModel(built, options, retryTemplate);
+			OpenAiImageModel model = OpenAiImageModel.builder()
+					.options(options)
+					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))
+					.build();
 			return model;
 		}
 
@@ -99,8 +92,58 @@ public class OpenAIImageModelConfigurationSupportService
 
 	@Override
 	public OperationStatus<List<GOpenAIImageModelChoice>> getModelChoices(GOpenAIImageModelConfig config) {
+		try {
+			OpenAIApiConfig apiconfig = new OpenAIApiConfig();
+			apiconfig.setProviderId("openai");
+			apiconfig.setApiKey(readApiKey(config));
+			if (config.getBaseUrl() != null) {
+				apiconfig.setBasePath(config.getBaseUrl());
+			}
+			List<GOpenAIImageModelChoice> choices = new ArrayList<GOpenAIImageModelChoice>();
+			for (OpenAIModel model : openaiApiUtil.getModels(apiconfig)) {
+				if (!isImageModel(model.getId())) {
+					continue;
+				}
+				GOpenAIImageModelChoice choice = new GOpenAIImageModelChoice();
+				choice.setCode(model.getId());
+				choice.setDescription(model.getId());
+				choices.add(choice);
+			}
+			return OperationStatus.of(choices);
+		} catch (Throwable e) {
+			return OperationStatus.of(e);
+		}
+	}
 
-		return null;
+	/**
+	 * Reads the api key the configuration points at, the same way the live model does.
+	 */
+	private String readApiKey(GOpenAIImageModelConfig config) throws LLMConfigException {
+		if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0) {
+			throw new LLMConfigException("OpenAI api cannot work without needed api key configuration");
+		}
+		try {
+			AbstractGeboSecretContent secret = secretService.getSecretContentById(config.getApiSecretCode());
+			if (secret.type() != GeboSecretType.TOKEN) {
+				throw new LLMConfigException("OpenAI api can work only with an api key of type TOKEN");
+			}
+			return ((GeboTokenContent) secret).getToken();
+		} catch (GeboCryptSecretException e) {
+			throw new LLMConfigException("OpenAI api  key configuration gone wrong ", e);
+		}
+	}
+
+	/**
+	 * The OpenAI models listing carries no capability metadata, so the image generation
+	 * models are recognised by the identifiers OpenAI publishes for them (gpt-image-1,
+	 * dall-e-3, dall-e-2, ...).
+	 */
+	private static boolean isImageModel(String modelId) {
+		if (modelId == null) {
+			return false;
+		}
+		String id = modelId.toLowerCase();
+		return id.startsWith("dall-e") || id.contains("image");
 	}
 
 	@Override

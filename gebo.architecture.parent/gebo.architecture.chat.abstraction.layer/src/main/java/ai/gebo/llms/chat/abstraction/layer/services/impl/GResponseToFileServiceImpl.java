@@ -10,7 +10,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatRe
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGResponseToFileService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import io.github.twwch.markdown2office.Markdown2Office;
 import io.github.twwch.markdown2office.model.FileType;

@@ -26,11 +26,13 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import ai.gebo.userspace.handler.GUserspaceContentManagementSystem;
@@ -40,6 +42,7 @@ import ai.gebo.userspace.handler.dto.UserspaceFolderDto;
 import ai.gebo.userspace.handler.dto.UserspaceKnowledgebaseDto;
 import ai.gebo.userspace.handler.model.PublishingStatus;
 import ai.gebo.userspace.handler.model.UserUploadToUserSpaceParam;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.userspace.handler.service.UserspaceService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -59,9 +62,10 @@ public class UserspaceController
 			UserspaceControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
-			UserspaceService userspaceService) {
+			UserspaceService userspaceService, IGGeboIngestionJobQueueService jobQueueService,
+			IEntityReplicationService replicationService) {
 		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory);
+				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.userspaceService = userspaceService;
 
 	}
@@ -310,5 +314,10 @@ public class UserspaceController
 	public OperationStatus<PublishingStatus> transferUploadsToUserSpaceAndPublish(
 			@Valid @NotNull @RequestBody UserUploadToUserSpaceParam param) {
 		return userspaceService.transferUploadsToUserSpaceAndPublish(param);
+	}
+
+	@PostMapping(value = "publishUserspaceProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GJobStatus> publishUserspaceProjectEndpoint(@RequestBody GUserspaceProjectEndpoint endpoint) {
+		return publish(endpoint);
 	}
 }
