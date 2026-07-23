@@ -6,8 +6,8 @@
 # then builds the all-in-one image (MongoDB, Qdrant, Neo4j, OpenSearch + the
 # Gebo.ai app) locally and loads into the Docker daemon (single-platform).
 # The SBOM is COPY'd into the image at /opt/gebo.ai/sbom.cdx.json.
-# The BuildKit SBOM attestation (--sbom) is only generated on push
-# (push-sbom-images.sh).
+# The BuildKit SBOM attestation (--sbom) is only generated on publish
+# (build-multiplatform.sh + publish-multiplatform.sh).
 #
 # Prerequisites:
 #   mvn -f gebo.apps.parent/gebo.ai.app/pom.xml -P bootables package -DskipTests

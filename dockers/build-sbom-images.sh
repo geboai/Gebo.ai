@@ -6,7 +6,8 @@
 # daemon (single-platform linux/amd64). The Maven SBOM is COPY'd into each
 # image. The BuildKit SBOM attestation (--sbom) is NOT used here because the
 # local Docker exporter cannot load manifest-list attestations — use
-# push-sbom-images.sh for that (it pushes to a registry with --sbom=true).
+# build-multiplatform.sh + publish-multiplatform.sh for that (multi-platform,
+# --sbom=true).
 #
 # Usage:
 #   ./dockers/build-sbom-images.sh                    # build all 3 images
