@@ -55,6 +55,7 @@ an enterprise version with more feature and support is also available.
  - Create knowledge bases collectioning documents from the previus mentioned system.  
  - Schedule document updates for AI reindexing (embedding) on updates.
  - Monitor embedding batch job.
+ - Monitor **LLM usage** with built-in dashboards (admin: every user; user: own usage only) — drill down by provider, model, model type (chat/embedding/image/reranking/TTS/transcription), user and month to track calls/tokens over time.
  - Configure company users and groups.      
  - Organize multiple specific Retrieve augmented generation chats for specific company tasks:
     - Examples:
@@ -87,7 +88,9 @@ The docker-compose file installs the required
 - MongoDB
 - Qdrant Vector Database
 - Neo4J Graph Database 
+- OpenSearch
 - geboai/gebo.ai open source version software https://hub.docker.com/r/geboai/gebo.ai  
+- An **observability stack** — OpenTelemetry Collector, Prometheus, Tempo and Grafana (pre-provisioned with datasources and a starter dashboard) — see [Observability & monitoring](#observability--monitoring) below
 
 ## For devs/software architects/software companies 
 
@@ -119,6 +122,18 @@ helm install gebo deploy/helm/gebo-microservices \
   --set image.registry=myregistry.example.com/ \
   --set image.tag=1.0.2.1-SNAPSHOT
 ```
+
+### Observability & monitoring
+
+Every service (the monolith and each microservice) ships with **Micrometer** + **Spring Boot Actuator**, built once in the shared `gebo.architecture.telemetry` module and pulled in by every starter (`gebo.apps.monolithic.starter`, `gebo.microservices.starter`, `gateway.gebo.ai`):
+- `micrometer-registry-prometheus` exposes `/actuator/prometheus` metrics (JVM, HTTP, message-broker routing rate/latency).
+- `micrometer-tracing-bridge-otel` + `opentelemetry-exporter-otlp` export distributed traces (including message-broker hops) over OTLP.
+
+**Docker Compose** — both `dockers/gebo.ai/docker-compose.yml` (monolith) and `dockers/gebo.microservices/docker-compose.yml` bundle the full stack out of the box: an `otel-collector`, `prometheus` (scraping every service's `/actuator/prometheus`), `tempo` (trace storage) and `grafana` — provisioned with Prometheus/Tempo datasources and a starter "Gebo overview" dashboard (services up, HTTP request rate/latency, message-broker throughput, JVM memory). Reach it at `http://<host>:3000` after `docker compose up`.
+
+**Kubernetes / Helm** — the same stack is available as an opt-in add-on (`observability.enabled: true`), see [deploy/helm/gebo-microservices/README.md](./deploy/helm/gebo-microservices/README.md#observability-optional).
+
+**LLM usage dashboards** — independent of the infra metrics above, Gebo.ai also tracks per-call LLM usage (tokens, provider, model, model type, calling module, user) and exposes it through dedicated admin/user REST APIs and Angular dashboards — see [Administrative features](#geboai-features) above.
 
 ### How to build the software:
 
