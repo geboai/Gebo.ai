@@ -22,7 +22,7 @@ import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, 
 import { FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BrowseParam, DocumentReferenceView, SearchDocumentByNameParam, SemanticQueryParam, UserKnowledgeBaseBrowsingControllerService, VFilesystemReference, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
 
-import { of } from "rxjs";
+import { finalize, of } from "rxjs";
 import { EnrichedDocumentReferenceView, EnrichedDocumentReferenceViewRetrieveService } from "../content-viewer/enriched-document-reference-view.service";
 import { browsePathObservableCallback, loadRootsObservableCallback, reconstructNavigationObservableCallback } from "../vfilesystem-selector/vfilesystem-types";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
@@ -166,13 +166,12 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAI
     private retrieveMainPanelDocsMetaData(): void {
         if (this.internalValue && this.internalValue.length) {
             this.loadingDocuments = true;
-            this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(this.internalValue).subscribe({
+            this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(this.internalValue).pipe(
+                finalize(() => { this.loadingDocuments = false; })
+            ).subscribe({
                 next: (docs) => {
                     this.outputDocuments = docs;
                     this.addSourceDocuments(docs);
-                },
-                complete: () => {
-                    this.loadingDocuments = false;
                 }
             });
         } else {
@@ -244,13 +243,12 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAI
                         return outValue;
                     }).filter(x => x);
                     this.loadingDocuments = true;
-                    this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(filesList).subscribe({
+                    this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(filesList).pipe(
+                        finalize(() => { this.loadingDocuments = false; })
+                    ).subscribe({
                         next: (documentList) => {
                             this.browsingResultsDocuments = documentList;
                             this.addSourceDocuments(this.browsingResultsDocuments);
-                        },
-                        complete: () => {
-                            this.loadingDocuments = false;
                         }
                     });
                 }
@@ -261,13 +259,12 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAI
             {
                 next: (filesList: string[]) => {
                     this.loadingDocuments = true;
-                    this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(filesList).subscribe({
+                    this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(filesList).pipe(
+                        finalize(() => { this.loadingDocuments = false; })
+                    ).subscribe({
                         next: (documentList) => {
                             this.userspaceResultsDocuments = documentList;
                             this.addSourceDocuments(this.userspaceResultsDocuments);
-                        },
-                        complete: () => {
-                            this.loadingDocuments = false;
                         }
                     });
                 }
@@ -306,23 +303,19 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAI
         const fgValue: SemanticQueryParam = this.semanticSearchFormGroup.value;
         if (fgValue.query && fgValue.knowledgeBaseCodes) {
             this.runningSemanticSearch = true;
-            this.enrichedDocumentsMetaInfosService.semanticSearch(fgValue).subscribe({
+            this.enrichedDocumentsMetaInfosService.semanticSearch(fgValue).pipe(
+                finalize(() => { this.runningSemanticSearch = false; })
+            ).subscribe({
                 next: (values) => {
                     this.loadingDocuments = true;
-                    this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(values).subscribe({
+                    this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(values).pipe(
+                        finalize(() => { this.loadingDocuments = false; })
+                    ).subscribe({
                         next: (documentList) => {
                             this.semanticSearchResultsDocuments = documentList;
                             this.addSourceDocuments(this.semanticSearchResultsDocuments);
-                        },
-                        complete: () => {
-                            this.loadingDocuments = false;
                         }
                     });
-
-
-                },
-                complete: () => {
-                    this.runningSemanticSearch = false;
                 }
             });
         }
@@ -345,14 +338,13 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAI
     doSearchByFileName() {
         const param: SearchDocumentByNameParam = this.fileNameSearchFormGroup.value;
         this.runningFileNameSearch = true;
-        this.enrichedDocumentsMetaInfosService.searchByDocumentName(param).subscribe(
+        this.enrichedDocumentsMetaInfosService.searchByDocumentName(param).pipe(
+            finalize(() => { this.runningFileNameSearch = false; })
+        ).subscribe(
             {
                 next: (values) => {
                     this.searchByFileNameResultsDocuments = values ? values : [];
                     this.addSourceDocuments(this.searchByFileNameResultsDocuments);
-                },
-                complete: () => {
-                    this.runningSemanticSearch = false;
                 }
             }
         );
