@@ -132,7 +132,8 @@ label {
 .pi.pi-google-workspace,
 .pi.pi-google-drive,
 .pi.pi-confluence,
-.pi.pi-jira {
+.pi.pi-jira,
+.pi.pi-aws-s3 {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
@@ -169,6 +170,10 @@ label {
 
 .pi.pi-git {
   background-image: url("assets/3rdparty/git-svgrepo-com.svg");
+}
+
+.pi.pi-aws-s3 {
+  background-image: url("assets/oauth2/aws-svgrepo-com.svg");
 }
 
 .pi.pi-deep-search {

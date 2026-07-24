@@ -26,11 +26,11 @@ ai.gebo.oauth2.library:
       userNameAttribute: id
 
     - provider: microsoft_multitenant
-      authorizationUri: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
-      tokenUri: "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+      authorizationUri: "https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/authorize"
+      tokenUri: "https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token"
       userInfoUri: "https://graph.microsoft.com/oidc/userinfo"
-      issuerUri: "https://login.microsoftonline.com/{tenant-id}/v2.0"
-      jwkSetUri: "https://login.microsoftonline.com/{tenant-id}/discovery/v2.0/keys"
+      issuerUri: "https://login.microsoftonline.com/{tenantId}/v2.0"
+      jwkSetUri: "https://login.microsoftonline.com/{tenantId}/discovery/v2.0/keys"
       userNameAttribute: id
 
   #- provider: facebook
