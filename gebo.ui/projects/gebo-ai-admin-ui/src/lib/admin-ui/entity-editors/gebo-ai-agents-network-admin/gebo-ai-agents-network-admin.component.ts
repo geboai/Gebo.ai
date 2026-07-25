@@ -1,10 +1,10 @@
-import { Component, forwardRef, Injector, OnInit, runInInjectionContext } from "@angular/core";
+import { afterNextRender, Component, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
-import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram } from "ng-diagram";
+import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
 import { AgentNodeComponent } from "./agent-node.component";
 
 @Component({
@@ -46,6 +46,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     public readonly: boolean = false;
     protected diagramModel: any;
+    private lastLayoutNodes: { id: string; position: { x: number; y: number } }[] = [];
+    @ViewChild("diagramHost", { read: ElementRef }) private diagramHostRef?: ElementRef<HTMLElement>;
     protected nodeTemplateMap = new NgDiagramNodeTemplateMap([
         ["agent", AgentNodeComponent]
     ]);
@@ -96,7 +98,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         protected actionsRouter: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
         private service: GeboAgentsNetworkAdminControllerService,
-        private agentsService: GeboAgentAdminControllerService
+        private agentsService: GeboAgentAdminControllerService,
+        private viewportService: NgDiagramViewportService
     ) {
         super(injector, geboFormGroupsService, myConfirmationService, actionsRouter, outputForwardingService);
         this.myInjector = injector;
@@ -287,7 +290,63 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             });
 
             this.diagramModel = initializeModel({ nodes, edges });
+            this.lastLayoutNodes = nodes;
+
+            // The Graph tab panel is display:none until selected, so <ng-diagram>
+            // initializes against a zero-size viewport and its internal viewport
+            // metadata cache never recovers once real data arrives (a measured
+            // library quirk, not just a render-timing race: zoomToFit() keeps
+            // computing against that stale zero/near-zero size even long after
+            // the container is visible). Compute the fit ourselves from real DOM
+            // measurements instead of trusting the library's cached viewport size.
+            afterNextRender(() => {
+                this.fitDiagramToViewport();
+            }, { injector: this.myInjector });
         });
+    }
+
+    protected onTabChange(value: string | number | undefined): void {
+        if (value === 1 && this.diagramModel) {
+            afterNextRender(() => {
+                this.fitDiagramToViewport();
+            }, { injector: this.myInjector });
+        }
+    }
+
+    private fitDiagramToViewport(): void {
+        const hostEl = this.diagramHostRef?.nativeElement;
+        if (!hostEl || this.lastLayoutNodes.length === 0) {
+            return;
+        }
+        const padding = 40;
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        for (const node of this.lastLayoutNodes) {
+            const nodeEl = hostEl.querySelector<HTMLElement>(`[data-node-id="${node.id}"]`);
+            const width = nodeEl?.offsetWidth || 220;
+            const height = nodeEl?.offsetHeight || 100;
+            minX = Math.min(minX, node.position.x);
+            minY = Math.min(minY, node.position.y);
+            maxX = Math.max(maxX, node.position.x + width);
+            maxY = Math.max(maxY, node.position.y + height);
+        }
+        const boundsWidth = maxX - minX;
+        const boundsHeight = maxY - minY;
+        const viewportWidth = hostEl.clientWidth;
+        const viewportHeight = hostEl.clientHeight;
+        if (boundsWidth <= 0 || boundsHeight <= 0 || viewportWidth <= 0 || viewportHeight <= 0) {
+            return;
+        }
+        const scale = Math.min(
+            (viewportWidth - 2 * padding) / boundsWidth,
+            (viewportHeight - 2 * padding) / boundsHeight,
+            1
+        );
+        const x = (viewportWidth - boundsWidth * scale) / 2 - minX * scale;
+        // ng-diagram-canvas is positioned with its own vertical origin one full
+        // viewport-height below the host element (verified empirically), so the
+        // Y translate has to compensate for that fixed offset; X has no such offset.
+        const y = (viewportHeight - boundsHeight * scale) / 2 - minY * scale - viewportHeight;
+        this.viewportService.setViewport(x, y, scale);
     }
 
     public editAgentConfig(code: string | null | undefined): void {

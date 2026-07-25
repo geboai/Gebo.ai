@@ -26,7 +26,7 @@
 
       <div class="grid geboDialogContent standardTabDialogueHeight">
         <div class="col-12 standardTabDialogueHeight">
-          <p-tabs [value]="0" id="TabView">
+          <p-tabs [value]="0" (valueChange)="onTabChange($event)" id="TabView">
             <p-tablist>
               <p-tab [value]="0" gebo-ai-text>General infos</p-tab>
               <p-tab [value]="1" gebo-ai-text>Agents Network Graph</p-tab>
@@ -100,7 +100,7 @@
                     <div class="w-full overflow-auto p-4 border-round border-1 surface-border bg-card shadow-1"
                       [class.readonly-diagram]="readonly"
                       style="min-height: 500px; height: 600px; position: relative;">
-                      <ng-diagram [model]="diagramModel" [config]="diagramConfig" [nodeTemplateMap]="nodeTemplateMap" style="width: 100%; height: 100%; display: block;">
+                      <ng-diagram #diagramHost [model]="diagramModel" [config]="diagramConfig" [nodeTemplateMap]="nodeTemplateMap" style="width: 100%; height: 100%; display: block;">
                         <ng-diagram-background></ng-diagram-background>
                       </ng-diagram>
                     </div>
