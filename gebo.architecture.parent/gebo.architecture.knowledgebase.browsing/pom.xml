@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.2.2-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.architecture.knowledgebase.browsing</artifactId>
+
+	<!--
+		IGKnowledgeBaseBrowsingService: browses the GKnowledgeBase -> GProject ->
+		GProjectEndpoint hierarchy as a virtual filesystem. Its only caller is
+		gebo.core's UserKnowledgeBaseBrowsingController, which itself only ever runs
+		on brain.gebo.ai and the monolith - the two services that own that hierarchy.
+
+		Split out of gebo.architecture.contentsystems.abstraction.layer (which is on
+		EVERY content-handler microservice's classpath, since that is where
+		GeboIngestionManager/JobLauncherController live) so this browsing service is
+		not instantiated, unused, on filesystem/git/jira/confluence/sharepoint/
+		googledrive/aws-s3/uploads/mcpclient/userspace too. Because it only ever runs
+		where the GProject/GKnowledgeBase store is local, it reads
+		IGPersistentObjectManager directly - unlike GeboIngestionManager and
+		GAbstractContentManagementSystemHandler (which stayed in the shared module),
+		it has no need for IGKnowledgeBaseHierarchyLookupService's remote client half.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

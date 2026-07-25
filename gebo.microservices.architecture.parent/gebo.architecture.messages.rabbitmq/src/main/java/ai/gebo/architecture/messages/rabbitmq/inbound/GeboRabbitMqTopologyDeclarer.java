@@ -52,8 +52,13 @@ public class GeboRabbitMqTopologyDeclarer {
 
 	/**
 	 * Declares the exchange and this microservice's inbound queue and binding.
+	 *
+	 * @param microserviceId this microservice's own id, already resolved (see
+	 *                       {@code RabbitMqTopologyBridgeSupport#resolveLocalMicroserviceId})
+	 * @param queueName      the inbound queue name to declare (see
+	 *                       {@link GeboRabbitMqMessagingProperties#effectiveInboundQueue(String)})
 	 */
-	public void declareIfEnabled() {
+	public void declareIfEnabled(String microserviceId, String queueName) {
 		if (!properties.isDeclareTopology()) {
 			LOGGER.info("RabbitMQ topology declaration disabled (declareTopology=false)");
 			return;
@@ -62,8 +67,6 @@ public class GeboRabbitMqTopologyDeclarer {
 		rabbitAdmin.declareExchange(exchange);
 		LOGGER.info("Declared RabbitMQ exchange '" + exchange.getName() + "' of type '" + exchange.getType() + "'");
 
-		String microserviceId = properties.getLocalMicroserviceId();
-		String queueName = properties.effectiveInboundQueue();
 		if (queueName == null || queueName.isBlank() || microserviceId == null || microserviceId.isBlank()) {
 			LOGGER.warn("localMicroserviceId is unset; skipping inbound queue declaration");
 			return;

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGGeboIngestionJobService;
@@ -49,6 +50,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	private final JobStatusRepository statusRepository;
 	private final IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
 	private final JobStatusEmitter statusEmitter;
+	/** Replicates the freshly-created GJobStatus to tyr; a no-op in the monolith. */
+	private final IEntityReplicationService entityReplicationService;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobQueueServiceImpl.class);
 
@@ -70,6 +73,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
 					workflowId);
 			statusEmitter.broadcastStarted(status);
+			entityReplicationService.replicate(status);
 			synchronized (statusMap) {
 				statusMap.put(status.getCode(), status);
 				readingService.completeAsyncJob(status, sessionParam);

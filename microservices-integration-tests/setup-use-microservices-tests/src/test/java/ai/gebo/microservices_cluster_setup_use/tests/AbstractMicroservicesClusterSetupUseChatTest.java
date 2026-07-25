@@ -401,7 +401,6 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 					"The job launch cannot return errors");
 			renew(header);
 
-			JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(tyrClient(header));
 			final long sleepTime = 10000;
 			final long maxIterationTime = 10 * 60 * 1000;
 			long initialTime = System.currentTimeMillis();
@@ -410,6 +409,12 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 			ComputedWorkflowResult workflowStatus;
 			do {
 				Thread.sleep(sleepTime);
+				// Rebuilt every iteration: the token is short-lived and renewed at the end of
+				// each loop below, but renew() only updates `header` - an already-built
+				// ApiClient has its bearer token baked in at construction time and never
+				// re-reads `header`, so reusing one across iterations means every call after
+				// the first token expiry fails with 401 regardless of the renewal.
+				JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(tyrClient(header));
 				summary = jobStatusApi.getJobSummary(launchedJob.getResult().getCode());
 				assertNotNull(summary, "Job summary cannot be null");
 				assertNotNull(summary.getWorkflowStatus(), "Job workflow status cannot be null");
@@ -425,7 +430,6 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 
 			RegisteredInteractionTestSession registeredTestSession = loadJsonDataModel(registeredSessionResource,
 					RegisteredInteractionTestSession.class);
-			GeboChatPipelinesControllerApi pipelinesApi = new GeboChatPipelinesControllerApi(brainClient(header));
 
 			int index = 1;
 			String userChatContext = null;
@@ -436,6 +440,9 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 				requestBody.setEnvironment(getEnvironment(model));
 				requestBody.getRequest().setChatProfileCode(firstChatProfileCode);
 				requestBody.getRequest().setUserChatContextCode(userChatContext);
+				// Rebuilt every iteration - see the identical note on jobStatusApi above: an
+				// already-built ApiClient never picks up a later renew(header).
+				GeboChatPipelinesControllerApi pipelinesApi = new GeboChatPipelinesControllerApi(brainClient(header));
 				GeboChatResponse response = pipelinesApi.executeDefaultChatPipeline(requestBody);
 				assertNotNull(response, "The response cannot be null");
 				assertNotNull(response.getQueryResponse(), "response text cannot be null");

@@ -23,6 +23,13 @@
 			<artifactId>gebo.microservices.acl.client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- This service does not own the GProject/GKnowledgeBase store either:
+		     IGKnowledgeBaseHierarchyLookupService is a REST client onto brain. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.knowledgebase.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- This service does not host the secrets either: IGeboSecretsAccessService is
 		     a REST client onto heimdall. (Not inheritable from gebo.microservices.starter
 		     - heimdall is built on that too, and it owns the real implementation.) -->

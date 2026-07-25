@@ -104,6 +104,17 @@
 			<artifactId>gebo.core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- brain OWNS the GProject/GKnowledgeBase store (gebo.core, above, brings
+		     GeboIngestionManager and friends onto this classpath transitively via
+		     gebo.architecture.contentsystems.abstraction.layer), so it needs the
+		     LOCAL, Mongo-backed IGKnowledgeBaseHierarchyLookupService, not the REST
+		     client every other content-handler microservice takes - it would be
+		     asking itself over the network for data it already has. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.knowledgebase.hierarchy.local</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Topology-aware REST clients for the per-connector search services
 		     (jira/confluence/sharepoint/googledrive), so brain's deep-search reaches
 		     them on their own microservices. -->

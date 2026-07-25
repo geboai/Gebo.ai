@@ -127,16 +127,24 @@ public class GeboRabbitMqMessagingProperties {
 	private List<RemoteEndpoint> remoteReceivers = new ArrayList<>();
 
 	/**
-	 * Effective inbound queue name (falls back to {@link #localMicroserviceId}).
+	 * Effective inbound queue name (falls back to the caller-resolved local
+	 * microservice id - {@link #localMicroserviceId} itself is rarely set; see
+	 * {@code RabbitMqTopologyBridgeSupport#resolveLocalMicroserviceId}, which every
+	 * caller of this method uses to resolve it first).
 	 *
+	 * @param resolvedLocalMicroserviceId this microservice's own id, already
+	 *                                    resolved (falling back to
+	 *                                    {@code spring.application.name} when
+	 *                                    {@link #localMicroserviceId} itself is
+	 *                                    unset)
 	 * @return the queue this microservice consumes, or {@code null} if no identity
 	 *         is configured
 	 */
-	public String effectiveInboundQueue() {
+	public String effectiveInboundQueue(String resolvedLocalMicroserviceId) {
 		if (inboundQueue != null && !inboundQueue.isBlank()) {
 			return inboundQueue;
 		}
-		return localMicroserviceId;
+		return resolvedLocalMicroserviceId;
 	}
 
 	/**

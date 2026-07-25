@@ -70,10 +70,17 @@ public final class GeboStandardMicroservices {
 					.module("tokenizer-module", "tokenizer-component", "dispose-chunking-session-for-jobs")
 					.build(),
 
+			// rag-threashold-autotune-module.rag-threashold-autotune-component is NOT
+			// implemented by vectorizator - it's RagThreasholdAutotuneFinishedWorkflowReceiver
+			// (gebo.architecture.rag-threasholds-autotune, pulled in transitively via
+			// gebo.architecture.chat.abstraction.layer/gebo.architecture.agents.standard),
+			// which only brain.gebo.ai has on its classpath among microservices. It reacts
+			// to a same-service GFinishedWorkflowPayload broadcast, never a cross-service
+			// target, so it must stay out of the topology entirely - same reasoning as
+			// tyr_gebo_ai's dropped identities above.
 			GeboMicroservice.named("vectorizator_gebo_ai")
 					.module("vectorizator-module", "vectorization-component", "vectorization-emitter-component",
 							"vectorization-dispose-component")
-					.module("rag-threashold-autotune-module", "rag-threashold-autotune-component")
 					.build(),
 
 			// fulltextor is the renamed textsearch microservice (full-text host).
@@ -86,70 +93,111 @@ public final class GeboStandardMicroservices {
 					.module("knowledge-graph-module", "knowledge-graph-component")
 					.build(),
 
-			// tyr is the workflows/usage/jobs-tracking microservice - the home for the
-			// dormant scheduler-module and async-publishing-job-module roles (previously
-			// separate, never-built placeholder entries scheduler_gebo_ai/jobs_gebo_ai),
-			// consolidated under one deployable.
+			// tyr is the workflows/usage/jobs-tracking microservice. It does NOT depend on
+			// gebo.architecture.scheduling or gebo.architecture.contentsystems.abstraction.layer,
+			// so it never implements scheduler-module.scheduler-component,
+			// async-publishing-job-module.async-publishing-job-component, or
+			// async-publishing-job-module.job-status-notifier - those three identities are
+			// pure same-service local self-loops that each content-handler runs against its
+			// own local GSchedulingTimeServiceImpl/JobLaunchManagerImpl/JobStatusEmitter beans
+			// (gebo.architecture.scheduling and gebo.architecture.contentsystems.abstraction.layer
+			// are on every content-handler's classpath), never routed cross-service - so they must
+			// stay out of the topology entirely (GeboMicroservicesTopology requires exactly one
+			// owner per module, and declaring tyr as that owner here was never accurate: it
+			// caused RabbitMqExternalMessage{Emitter,Receiver}ProviderSource, once RabbitMQ was
+			// enabled, to build a remote proxy for these on every content-handler that collided
+			// with its own local bean under the identical identity in GBaseMessageBroker).
+			// job-status-replication-receiver is tyr's one genuine local component under this
+			// module (GJobStatusReplicatorReceiverService, gebo.architecture.compute.workflow).
+			//
+			// jobs-master-module is the OTHER genuine cross-service target tyr hosts:
+			// GWorkflowsConcentratorMessagesReceiverFactory's user-messages-concentrator-component
+			// is where every content-processing microservice (vectorizator, fulltextor,
+			// graphicator, every content-handler via GIOCModuleContentsDispatcher, ...) sends
+			// GContentsProcessingStatusUpdatePayload, which feeds ContentsBatchProcessedRepository
+			// - the data AbstractWorkflowStatusHandler.computeWorkflowStatus() aggregates to decide
+			// a job is finished. Without this module declared, none of those senders could ever
+			// build a remote proxy for it, so tyr's own copy of ContentsBatchProcessedRepository
+			// stayed permanently empty and GWorkflowStatusDeamonServiceImpl could never observe a
+			// completed batch. end-of-workflow-compute-service is that same concentrator's own
+			// same-service loopback (GWorkflowsConcentratorMessagesEmitterImpl emits
+			// ComputeWorkflowEndPayload to it, entirely within tyr) - harmless to also expose,
+			// nothing elsewhere implements this identity.
 			GeboMicroservice.named("tyr_gebo_ai")
-					.module("scheduler-module", "scheduler-component")
-					.module("async-publishing-job-module", "async-publishing-job-component", "job-status-notifier")
+					.module("async-publishing-job-module", "job-status-replication-receiver")
+					.module("jobs-master-module", "user-messages-concentrator-component",
+							"end-of-workflow-compute-service")
 					.build(),
 
 			// --- Content services (one per gebo.systems.parent handler) ------
 			// Each hosts the shared content-infrastructure systems; some also a static default Content.Handler.<code>.
+			// Each also hosts GJobStatusReplicatorService (gebo.architecture.contentsystems.abstraction.layer
+			// is on every one of their classpaths). A messaging module belongs to
+			// exactly one microservice (GeboMicroservicesTopology enforces it), so
+			// its systemId - job-status-replicator - is declared under each
+			// service's OWN already-owned module, not a shared one; each service's
+			// own application.yml points GJobStatusReplicatorService at that same
+			// module id (ai.gebo.jobs.replicator.module-id). That's what lets
+			// RabbitMqExternalMessageEmitterProviderSource register it as a known
+			// emitter on every OTHER microservice (concretely, tyr, which needs to
+			// recognise the sender of a replicated GJobStatus).
 			GeboMicroservice.named("git_gebo_ai")
 					.module("git-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "Content.Handler.DEFAULT.GIT.CONTENT.HANDLER")
+							"system-settings-controller-component", "Content.Handler.DEFAULT.GIT.CONTENT.HANDLER",
+							"job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("filesystem_gebo_ai")
 					.module("shared-filesystem-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "Content.Handler.DEFAULT.FILESYSTEM.CONTENT.HANDLER")
+							"system-settings-controller-component", "Content.Handler.DEFAULT.FILESYSTEM.CONTENT.HANDLER",
+							"job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("uploads_gebo_ai")
 					.module("uploads-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "Content.Handler.DEFAULT.UPLOADS.CONTENT.HANDLER")
+							"system-settings-controller-component", "Content.Handler.DEFAULT.UPLOADS.CONTENT.HANDLER",
+							"job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("userspace_gebo_ai")
 					.module("userspace-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "Content.Handler.USERSPACE-CONTENTSYSTEM")
+							"system-settings-controller-component", "Content.Handler.USERSPACE-CONTENTSYSTEM",
+							"job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("sharepoint_gebo_ai")
 					.module("sharepoint-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component")
+							"system-settings-controller-component", "job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("confluence_gebo_ai")
 					.module("confluence-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component")
+							"system-settings-controller-component", "job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("jira_gebo_ai")
 					.module("jira-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component")
+							"system-settings-controller-component", "job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("aws_s3_gebo_ai")
 					.module("aws-s3-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component")
+							"system-settings-controller-component", "job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("googledrive_gebo_ai")
 					.module("google-drive-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component")
+							"system-settings-controller-component", "job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("mcpclient_gebo_ai")
 					.module("mcp-client-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component")
+							"system-settings-controller-component", "job-status-replicator")
 					.build(),
 
 			GeboMicroservice.named("integration_gebo_ai")
 					.module("integration-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component")
+							"system-settings-controller-component", "job-status-replicator")
 					.build());
 
 	/**

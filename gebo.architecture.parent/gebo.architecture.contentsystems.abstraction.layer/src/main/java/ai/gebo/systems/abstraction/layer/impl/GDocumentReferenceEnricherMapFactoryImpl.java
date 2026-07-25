@@ -12,7 +12,6 @@
 
 package ai.gebo.systems.abstraction.layer.impl;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -21,17 +20,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
-import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
-import ai.gebo.knowledgebase.repositories.ProjectRepository;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.IGKnowledgeBaseHierarchyLookupService;
 
 /**
  * Service implementation of the {@link IGDocumentReferenceEnricherMapFactory} interface.
@@ -44,10 +43,7 @@ public class GDocumentReferenceEnricherMapFactoryImpl implements IGDocumentRefer
     private final static Logger LOGGER = LoggerFactory.getLogger(GDocumentReferenceEnricherMapFactoryImpl.class);
 
     @Autowired
-    KnowledgeBaseRepository kbRepo; // Repository for accessing Knowledge Base information
-
-    @Autowired
-    ProjectRepository pjRepo; // Repository for accessing Project information
+    IGKnowledgeBaseHierarchyLookupService knowledgeBaseHierarchyLookupService;
 
     /**
      * Function implementation to enrich a GBaseVersionableObject with hierarchy information.
@@ -133,23 +129,27 @@ public class GDocumentReferenceEnricherMapFactoryImpl implements IGDocumentRefer
      */
     @Override
     public EnricherMappers mappers(GProjectEndpoint endpoint) throws GeboContentHandlerSystemException {
-        Optional<GProject> parentProject = pjRepo.findById(endpoint.getParentProjectCode());
-        if (parentProject.isPresent()) {
-            GProject project = parentProject.get();
-            Optional<GKnowledgeBase> rootKb = kbRepo.findById(project.getRootKnowledgeBaseCode());
-            if (rootKb.isPresent()) {
-                GKnowledgeBase kb = rootKb.get();
-                EnricherMappers mappers = new EnricherMappers(
-                        new EnrichWithHierarchyInfos(project, kb, endpoint), 
-                        new EnrichPayloadsMapper(project, kb, endpoint));
-                return mappers;
+        try {
+            GProject project = knowledgeBaseHierarchyLookupService.findProjectByCode(endpoint.getParentProjectCode());
+            if (project != null) {
+                GKnowledgeBase kb = knowledgeBaseHierarchyLookupService
+                        .findKnowledgeBaseByCode(project.getRootKnowledgeBaseCode());
+                if (kb != null) {
+                    return new EnricherMappers(new EnrichWithHierarchyInfos(project, kb, endpoint),
+                            new EnrichPayloadsMapper(project, kb, endpoint));
+                } else {
+                    throw new GeboContentHandlerSystemException(
+                            "The knowledge base with code :" + project.getRootKnowledgeBaseCode() + " does not exist");
+                }
             } else {
                 throw new GeboContentHandlerSystemException(
-                    "The knowledge base with code :" + project.getRootKnowledgeBaseCode() + " does not exist");
+                        "The project with code :" + endpoint.getParentProjectCode() + " does not exist");
             }
-        } else {
+        } catch (GeboPersistenceException e) {
             throw new GeboContentHandlerSystemException(
-                "The project with code :" + endpoint.getParentProjectCode() + " does not exist");
+                    "Exception looking up the project/knowledge base hierarchy for endpoint with code :"
+                            + endpoint.getCode(),
+                    e);
         }
     }
 }

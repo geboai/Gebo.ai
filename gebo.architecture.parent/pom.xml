@@ -30,6 +30,7 @@
   	<module>gebo.architecture.chat.abstraction.layer</module>
   	<module>gebo.architecture.contenthandling.interfaces</module>
   	<module>gebo.architecture.contentsystems.abstraction.layer</module>
+  	<module>gebo.architecture.knowledgebase.browsing</module>
   	<module>gebo.architecture.buildsystems.abstraction.layer</module>
   	<module>gebo.restintegration.abstraction.layer</module>
   	<module>gebo.architecture.crypting</module>
@@ -64,6 +65,7 @@
 
   	<module>gebo.secrets.impl</module>
   	<module>gebo.security.directory.mongo</module>
+  	<module>gebo.knowledgebase.hierarchy.local</module>
    	<module>gebo.architecture.security.apikey</module>
    	<module>gebo.architecture.fastsetup</module>
    	<module>gebo.architecture.fastsetup.rag</module>

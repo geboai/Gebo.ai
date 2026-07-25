@@ -18,6 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -64,6 +65,11 @@ public class MessageBrokeringAssembler implements ApplicationListener<ContextRef
 	// Repository pattern to manage external message receiver sources
 	IGExternalMessageReceiverProviderSourceRepositoryPattern externalMessageReceiverProviderSourceRepositoryPattern = null;
 
+	// This bean's own application context, so onApplicationEvent can ignore a
+	// ContextRefreshedEvent bubbling up from an unrelated descendant context (see
+	// below).
+	private final ApplicationContext applicationContext;
+
     /**
      * Constructs a new MessageBrokeringAssembler with the specified dependencies.
      *
@@ -73,29 +79,46 @@ public class MessageBrokeringAssembler implements ApplicationListener<ContextRef
      * @param threadOrchestrator the orchestrator for threaded message operations
      * @param externalMessageEmitterSourceRepositoryPattern repository for external message emitter sources
      * @param externalMessageReceiverSourceRepositoryPattern repository for external message receiver sources
+     * @param applicationContext this bean's own application context
      */
 	public MessageBrokeringAssembler(@Autowired IGMessageBroker broker,
 			@Autowired(required = false) List<IGMessageReceiver> receivers,
 			@Autowired(required = false) List<IGMessageEmitter> emitters,
 			MultiThreadedMessagesOrchestrator threadOrchestrator,
 			IGExternalMessageEmitterSourceProviderRepositoryPattern externalMessageEmitterSourceRepositoryPattern,
-			IGExternalMessageReceiverProviderSourceRepositoryPattern externalMessageReceiverSourceRepositoryPattern) {
+			IGExternalMessageReceiverProviderSourceRepositoryPattern externalMessageReceiverSourceRepositoryPattern,
+			ApplicationContext applicationContext) {
 		this.broker = broker;
 		this.receivers = receivers != null ? receivers : new ArrayList<IGMessageReceiver>();
 		this.emitters = emitters != null ? emitters : new ArrayList<IGMessageEmitter>();
 		this.threadOrchestrator = threadOrchestrator;
 		this.externalMessageEmitterProviderSourceRepositoryPattern = externalMessageEmitterSourceRepositoryPattern;
 		this.externalMessageReceiverProviderSourceRepositoryPattern = externalMessageReceiverSourceRepositoryPattern;
+		this.applicationContext = applicationContext;
 	}
 
     /**
      * Handles the ContextRefreshedEvent to initialize the message brokering process.
      * It adds both internal and external message emitters and receivers to the broker.
      *
+     * <p>
+     * {@link ContextRefreshedEvent} bubbles up to this listener from every
+     * descendant context too - including the short-lived per-service child
+     * contexts Spring Cloud LoadBalancer and the RabbitMQ external bridge create
+     * lazily. Re-running this method for one of those would try to register the
+     * same components a second time - {@code addSystemComponent} rejects a
+     * second, distinct instance under an identity already taken, and the
+     * external providers mint a new instance per call - so only the event for
+     * this bean's own context may proceed.
+     * </p>
+     *
      * @param event the context refreshed event
      */
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
+		if (event.getApplicationContext() != applicationContext) {
+			return;
+		}
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("Begin initializing message brokering");
 		}

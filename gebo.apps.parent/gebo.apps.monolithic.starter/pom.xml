@@ -33,6 +33,15 @@
 			<artifactId>gebo.security.directory.mongo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The monolith OWNS the GProject/GKnowledgeBase store: it reads it via
+		     IGPersistentObjectManager directly. (A microservice that does not own it
+		     takes gebo.microservices.knowledgebase.client instead - a service depends
+		     on exactly one of the two.) -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.knowledgebase.hierarchy.local</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.ragsystem</groupId>
 			<artifactId>gebo.ragsystem.starter</artifactId>
