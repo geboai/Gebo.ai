@@ -19,9 +19,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import tools.jackson.core.JacksonException;
@@ -49,7 +47,7 @@ import ai.gebo.llms.abstraction.layer.vectorstores.model.EmbeddingTrafficInfo;
 @Scope("singleton")
 public class GEmbeddingModelRuntimeConfigurationDaoImpl
         extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableEmbeddingModel, GBaseEmbeddingModelConfig>
-        implements IGEmbeddingModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+        implements IGEmbeddingModelRuntimeConfigurationDao {
 
     @Override
     protected GLlmModelClusterCategory getClusterCategory() {
@@ -92,12 +90,11 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
     }
 
     /**
-     * Handles the application event of context refresh to initialize embedding models dynamically.
-     *
-     * @param event the context refreshed event
+     * Initializes embedding models dynamically. Invoked once this DAO's own
+     * application context finishes refreshing.
      */
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    protected void initializeRuntimeModels() {
         LOGGER.info("Begin initializing embedding models dynamically");
         try {
             // Retrieve and iterate over configurable embedding model configurations

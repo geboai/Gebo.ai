@@ -183,6 +183,24 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- gebo.architecture.llms.abstraction.layer pins okhttp:4.12.0, which pulls
+			     okio-jvm:3.6.0; the OpenTelemetry okhttp sender (auto-configured on every
+			     microservice via tracing) pulls okhttp-jvm:5.3.2, which requires
+			     okio-jvm:3.16.4. Without this override, Maven's nearest-wins mediation
+			     keeps the older 3.6.0 on the runtime classpath alongside okhttp-jvm 5.3.2,
+			     which is missing the Socket-based Okio.socket(Socket) overload that
+			     version calls, failing with NoSuchMethodError at embedding-model/vector
+			     store initialization. 3.16.4 satisfies both okhttp consumers. -->
+			<dependency>
+				<groupId>com.squareup.okio</groupId>
+				<artifactId>okio</artifactId>
+				<version>3.16.4</version>
+			</dependency>
+			<dependency>
+				<groupId>com.squareup.okio</groupId>
+				<artifactId>okio-jvm</artifactId>
+				<version>3.16.4</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>

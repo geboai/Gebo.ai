@@ -18,9 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import tools.jackson.core.JacksonException;
@@ -47,7 +45,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Scope("singleton")
 public class GTranscriptModelRuntimeConfigurationDaoimpl
 		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableTranscriptModel, GBaseTranscriptModelConfig>
-		implements IGTranscriptModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+		implements IGTranscriptModelRuntimeConfigurationDao {
 
 	@Override
 	protected GLlmModelClusterCategory getClusterCategory() {
@@ -134,13 +132,11 @@ public class GTranscriptModelRuntimeConfigurationDaoimpl
 	}
 
 	/**
-	 * Handles ContextRefreshedEvent, initializing transcript models dynamically
-	 * based on stored configurations.
-	 * 
-	 * @param event the application event signaling context refresh
+	 * Initializes transcript models dynamically. Invoked once this DAO's own
+	 * application context finishes refreshing.
 	 */
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	protected void initializeRuntimeModels() {
 		LOGGER.info("Begin initalizing transcript  models dinamically");
 		try {
 			List<GBaseTranscriptModelConfig> configs = persistentObjectManager

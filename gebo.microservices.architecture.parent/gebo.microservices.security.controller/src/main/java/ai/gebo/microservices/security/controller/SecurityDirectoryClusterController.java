@@ -11,18 +11,22 @@ package ai.gebo.microservices.security.controller;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.microservices.cluster.ClusterParticipantsGuard;
+import ai.gebo.microservices.cluster.GeboClusterParticipants;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityDirectory;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -40,29 +44,33 @@ import jakarta.validation.constraints.NotNull;
  * </p>
  *
  * <p>
- * Reachable only from a microservice currently registered in service discovery
- * ({@link ai.gebo.microservices.cluster.ClusterParticipantsOnlyInterceptor}), never
- * from the edge.
+ * Reachable only from a microservice currently registered in service discovery -
+ * every method checks {@link ClusterParticipantsGuard#check}, explicitly, first
+ * line - never from the edge.
  * </p>
  *
  * <p>
- * <b>Deliberately not a {@code @RestController}</b> - see
- * {@link ai.gebo.microservices.security.config.GeboSecurityClusterControllerAutoConfiguration}.
- * Every Gebo app component-scans {@code ai.gebo}, and a {@code @Component} here
- * would be published by that scan <i>without</i> the guard, which only the
- * auto-configuration installs.
+ * A plain {@code @RestController}: this module is only ever a dependency of the
+ * service that owns the directory (heimdall), so component-scan discovery is
+ * already scoped correctly by Maven, and there is no separate guard bean whose
+ * presence needs to stay atomic with this one's - the guard is inline, in every
+ * method body, below.
  * </p>
  *
  * Gebo.ai comment agent
  */
-@ResponseBody
+@RestController
+@ConditionalOnProperty(prefix = "ai.gebo.security.cluster", name = "enabled", havingValue = "true",
+		matchIfMissing = true)
 @RequestMapping("${ai.gebo.security.cluster.base-path:api/cluster/SecurityController}")
 public class SecurityDirectoryClusterController {
 
 	private final IGSecurityDirectory directory;
+	private final GeboClusterParticipants participants;
 
-	public SecurityDirectoryClusterController(IGSecurityDirectory directory) {
+	public SecurityDirectoryClusterController(IGSecurityDirectory directory, GeboClusterParticipants participants) {
 		this.directory = directory;
+		this.participants = participants;
 	}
 
 	/**
@@ -71,19 +79,22 @@ public class SecurityDirectoryClusterController {
 	 *         contract the local directory has
 	 */
 	@GetMapping(value = "findUserByUsername", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserInfosImpl findUserByUsername(@RequestParam("username") String username) {
+	public UserInfosImpl findUserByUsername(@RequestParam("username") String username, HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		UserInfos user = directory.findUserByUsername(username);
 		// UserInfos is an interface; the wire needs the concrete carrier.
 		return user == null ? null : toImpl(user);
 	}
 
 	@GetMapping(value = "findGroupsOfUser", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<UsersGroup> findGroupsOfUser(@RequestParam("username") String username) {
+	public List<UsersGroup> findGroupsOfUser(@RequestParam("username") String username, HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return directory.findGroupsOfUser(username);
 	}
 
 	@GetMapping(value = "findAllGroups", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<UsersGroup> findAllGroups() {
+	public List<UsersGroup> findAllGroups(HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return directory.findAllGroups();
 	}
 
@@ -96,13 +107,14 @@ public class SecurityDirectoryClusterController {
 	 * belongs in a body, not in a query string that lands in access logs.
 	 * </p>
 	 *
-	 * @param request the username and the presented plaintext password
+	 * @param checkRequest the username and the presented plaintext password
 	 * @return whether it matches
 	 */
 	@PostMapping(value = "checkPassword", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public boolean checkPassword(@RequestBody @NotNull CheckPasswordRequest request) {
-		return directory.checkPassword(request.getUsername(), request.getPassword());
+	public boolean checkPassword(@RequestBody @NotNull CheckPasswordRequest checkRequest, HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
+		return directory.checkPassword(checkRequest.getUsername(), checkRequest.getPassword());
 	}
 
 	private static UserInfosImpl toImpl(UserInfos user) {

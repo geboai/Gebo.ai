@@ -124,11 +124,20 @@ public class GFilesystemChangesHandlingService
 	/**
 	 * Initializes the service when the application context is ready.
 	 * Loads all project endpoints from the repository and starts monitoring them.
-	 * 
+	 * <p>
+	 * {@link ContextRefreshedEvent} bubbles up to this listener from every
+	 * descendant context too - including the short-lived per-service child
+	 * contexts Spring Cloud LoadBalancer creates the first time a
+	 * {@code @LoadBalanced} client is used. {@link #started} guards against
+	 * running this initialization more than once for those spurious re-fires.
+	 *
 	 * @param event The context refreshed event
 	 */
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
+		if (started) {
+			return;
+		}
 		FilesystemProjectEndpointRepository repo = runtimeBinder
 				.getImplementationOf(FilesystemProjectEndpointRepository.class);
 		Stream<GFilesystemProjectEndpoint> stream = repo.findAll().stream();
@@ -136,11 +145,8 @@ public class GFilesystemChangesHandlingService
 			addHandling(x);
 		});
 		watcher.addListener(this);
-		if (!started) {
-			watcher.start();
-			started = true;
-		}
-
+		watcher.start();
+		started = true;
 	}
 
 	/**

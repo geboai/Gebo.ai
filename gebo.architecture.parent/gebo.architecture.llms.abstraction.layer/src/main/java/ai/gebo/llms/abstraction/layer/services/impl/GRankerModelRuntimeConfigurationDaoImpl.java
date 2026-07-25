@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
 import tools.jackson.core.JacksonException;
@@ -25,7 +23,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Service
 public class GRankerModelRuntimeConfigurationDaoImpl
 		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableRankerModel, GBaseRankerModelConfig>
-		implements IGRankerModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+		implements IGRankerModelRuntimeConfigurationDao {
 
 	@Override
 	protected GLlmModelClusterCategory getClusterCategory() {
@@ -102,7 +100,7 @@ public class GRankerModelRuntimeConfigurationDaoImpl
 	}
 
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	protected void initializeRuntimeModels() {
 		LOGGER.info("Begin initializing image models dinamically");
 		try {
 			// Retrieve all configurations extending GBaseChatModelConfig

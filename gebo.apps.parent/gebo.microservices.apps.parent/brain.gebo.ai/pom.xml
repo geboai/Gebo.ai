@@ -10,6 +10,18 @@
 	<artifactId>brain.gebo.ai</artifactId>
 
 	<dependencies>
+		<!-- The Spring Security filter chain + LOCAL_JWT provider (GeboAISecurityConfig,
+		     LocalJwtTokenProvider, GSecurityServiceImpl, AclGrantedAccessorServiceImpl).
+		     Deliberately WITHOUT gebo.security.directory.mongo: the
+		     gebo.microservices.security.client already on this classpath (transitively,
+		     via gebo.microservices.llms.starter) supplies the IGSecurityDirectory bean
+		     via a REST call to heimdall instead, so no local Mongo-backed user store is
+		     created here - only the filter chain that validates tokens heimdall issued. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Full LLMs microservice stack: LLM abstraction layer, microservices
 		     environment, RabbitMQ bridge, models-replication cache and shared
 		     topology. -->

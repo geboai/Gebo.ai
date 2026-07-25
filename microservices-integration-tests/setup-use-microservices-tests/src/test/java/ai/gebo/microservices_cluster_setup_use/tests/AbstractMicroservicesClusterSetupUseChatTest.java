@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import tools.jackson.databind.ObjectMapper;
@@ -125,10 +125,10 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 
 	@BeforeAll
 	protected static void resolveClusterUrls() {
-		heimdallUrl = System.getProperty("gebo.cluster.heimdall.url", "http://localhost:13018");
-		brainUrl = System.getProperty("gebo.cluster.brain.url", "http://localhost:13001");
-		filesystemUrl = System.getProperty("gebo.cluster.filesystem.url", "http://localhost:13006");
-		tyrUrl = System.getProperty("gebo.cluster.tyr.url", "http://localhost:13019");
+		heimdallUrl = System.getProperty("gebo.cluster.heimdall.url", "http://localhost:13018/heimdall");
+		brainUrl = System.getProperty("gebo.cluster.brain.url", "http://localhost:13001/brain");
+		filesystemUrl = System.getProperty("gebo.cluster.filesystem.url", "http://localhost:13006/filesystem");
+		tyrUrl = System.getProperty("gebo.cluster.tyr.url", "http://localhost:13019/tyr");
 	}
 
 	@Data
@@ -143,8 +143,8 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 		RestTemplate rt = new RestTemplate();
 		List<org.springframework.http.converter.HttpMessageConverter<?>> converters = new ArrayList<>(
 				rt.getMessageConverters());
-		converters.removeIf(c -> c instanceof org.springframework.http.converter.json.MappingJackson2HttpMessageConverter);
-		org.springframework.http.converter.json.MappingJackson2HttpMessageConverter jackson = new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter();
+		converters.removeIf(c -> c instanceof org.springframework.http.converter.json.JacksonJsonHttpMessageConverter);
+		org.springframework.http.converter.json.JacksonJsonHttpMessageConverter jackson = new org.springframework.http.converter.json.JacksonJsonHttpMessageConverter();
 		List<MediaType> mediaTypes = new ArrayList<>(jackson.getSupportedMediaTypes());
 		mediaTypes.add(MediaType.TEXT_PLAIN);
 		jackson.setSupportedMediaTypes(mediaTypes);
@@ -392,7 +392,10 @@ public abstract class AbstractMicroservicesClusterSetupUseChatTest {
 			JobLauncherControllerApi jobLauncherApi = new JobLauncherControllerApi(filesystemClient(header));
 			GObjectRefGProjectEndpoint ref = new GObjectRefGProjectEndpoint();
 			ref.setCode(updated.getCode());
-			ref.setClassName(GFilesystemProjectEndpoint.class.getName());
+			// The className the filesystem service resolves via Class.forName is its OWN
+			// server-side domain type, not this generated client stub's model class (a
+			// different class in a different package/module) - the two only share a name.
+			ref.setClassName("ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint");
 			OperationStatusGJobStatus launchedJob = jobLauncherApi.createJob(ref);
 			assertFalse(Boolean.TRUE.equals(launchedJob.getHasErrorMessages()),
 					"The job launch cannot return errors");

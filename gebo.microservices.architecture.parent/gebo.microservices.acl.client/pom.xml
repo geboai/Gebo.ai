@@ -9,6 +9,22 @@
 	</parent>
 	<artifactId>gebo.microservices.acl.client</artifactId>
 
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<!--
 		The IAclAliasesDao of every microservice that does NOT own the ACL store: a
 		REST client onto the owner, with a local TTL cache.
@@ -39,6 +55,15 @@
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.cluster.commons</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<!-- The @LoadBalanced WebClient.Builder's actual filter function: resolves the
+		     topology's discovery service-id (e.g. heimdall-gebo-ai) to a live instance
+		     via Eureka instead of a literal (and non-existent) DNS lookup. Declared
+		     directly rather than relied on transitively, so every consumer of this
+		     module gets it regardless of what else is on its classpath. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -53,7 +54,23 @@ import tools.jackson.databind.ObjectMapper;
 @EnableConfigurationProperties(GeboSecretsClientProperties.class)
 public class GeboSecretsMicroserviceClientAutoConfiguration {
 
+	static final String WEB_CLIENT_BUILDER_BEAN = "geboSecretsClientLbWebClientBuilder";
 	static final String WEB_CLIENT_BEAN = "geboSecretsClientWebClient";
+
+	/**
+	 * A dedicated {@link LoadBalanced @LoadBalanced} builder so calls to heimdall's
+	 * secrets surface go through Spring Cloud LoadBalancer (resolving the topology's
+	 * discovery service-id, e.g. {@code heimdall-gebo-ai}, to a live instance)
+	 * instead of a literal DNS lookup, which fails: that hostname is a Eureka
+	 * service-id, not a real one. Mirrors the same fix already applied in
+	 * {@code GeboSecurityMicroserviceClientAutoConfiguration}.
+	 */
+	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
+	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
+	@LoadBalanced
+	public WebClient.Builder geboSecretsClientLbWebClientBuilder() {
+		return WebClient.builder();
+	}
 
 	/**
 	 * Dedicated {@link WebClient} for the secrets calls. The bearer token is not set
@@ -62,9 +79,9 @@ public class GeboSecretsMicroserviceClientAutoConfiguration {
 	 */
 	@Bean(name = WEB_CLIENT_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
-	public WebClient geboSecretsClientWebClient(GeboSecretsClientProperties properties) {
-		WebClient.Builder builder = WebClient.builder()
-				.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(properties.getMaxInMemorySizeBytes()));
+	public WebClient geboSecretsClientWebClient(@Qualifier(WEB_CLIENT_BUILDER_BEAN) WebClient.Builder builder,
+			GeboSecretsClientProperties properties) {
+		builder.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(properties.getMaxInMemorySizeBytes()));
 		if (properties.getHeaders() != null) {
 			properties.getHeaders().forEach(builder::defaultHeader);
 		}
