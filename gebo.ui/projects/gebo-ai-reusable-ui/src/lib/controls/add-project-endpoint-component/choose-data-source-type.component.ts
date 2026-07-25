@@ -118,8 +118,8 @@ export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingCompon
                         this.subscription.unsubscribe();
                         this.subscription=undefined;
                     }
-                    this.items = this.kbTreeSearchService.generateAddToProjectMenuEnglish(false, this.project, actionConsumer, actionsCallback);
-                    this.subscription=this.kbTreeSearchService.generateAddToProjectMenu(false, this.project, actionConsumer, actionsCallback).subscribe({
+                    this.items = this.kbTreeSearchService.generateAddToProjectMenuEnglish(false, this.project, actionConsumer, actionsCallback, this.wizardStepsConfigurations, this.actualWizardStepConfigrationId);
+                    this.subscription=this.kbTreeSearchService.generateAddToProjectMenu(false, this.project, actionConsumer, actionsCallback, this.wizardStepsConfigurations, this.actualWizardStepConfigrationId).subscribe({
                         next:(menuItems)=>{
                             if (menuItems) {
                                 this.items=menuItems;
