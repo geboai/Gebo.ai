@@ -23,7 +23,7 @@ import ai.gebo.monolithic.app.Main;
  *
  * @see FullSetupUseAndAgenticChatTest for the network-of-agents counterpart
  */
-@SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = "ai.gebo.agents.standard.enabled=false")
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class FullSetupUseAndPipelineTest extends AbstractFullSetupUseChatTest {
