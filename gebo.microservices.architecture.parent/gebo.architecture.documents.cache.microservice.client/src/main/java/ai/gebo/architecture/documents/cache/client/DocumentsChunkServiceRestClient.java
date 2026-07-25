@@ -49,7 +49,7 @@ public class DocumentsChunkServiceRestClient implements IDocumentsChunkService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DocumentsChunkServiceRestClient.class);
 
-	static final String BASE_PATH = "api/DocumentsChunkServiceController/";
+	static final String BASE_PATH = "/api/DocumentsChunkServiceController/";
 
 	private final WebClient webClient;
 

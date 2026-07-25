@@ -12,8 +12,11 @@ package ai.gebo.architecture.documents.cache.client.config;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.codec.json.JacksonJsonDecoder;
+import org.springframework.http.codec.json.JacksonJsonEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -24,21 +27,26 @@ import ai.gebo.architecture.documents.cache.client.DocumentsChunkServiceRestClie
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Wires the documents-cache microservice REST client.
  *
  * <p>
- * Builds a dedicated {@link WebClient} pointed at the configured chunker base
- * URL and pre-loaded with the api-key header and any extra headers, then
- * publishes {@link IDocumentsCacheService}, {@link IDocumentsChunkService} and
- * {@link IGDocumentContentStreamer} beans backed by it (the streamer targets the
- * chunker resolved by the {@link GeboMicroserviceUrlResolver} rather than the
- * configured base url). The service beans are
- * {@link ConditionalOnMissingBean @ConditionalOnMissingBean}, so a service that
- * already hosts the real implementation (e.g. the chunker microservice itself)
- * keeps its local beans while a consumer that does not (e.g. brain.gebo.ai)
- * transparently gets the remote client.
+ * Builds a dedicated {@link WebClient} pointed at the chunker resolved by
+ * {@link GeboMicroserviceUrlResolver} (from
+ * {@link DocumentsCacheClientProperties#getMicroserviceId()}) and pre-loaded
+ * with the api-key header and any extra headers, then publishes
+ * {@link IDocumentsCacheService}, {@link IDocumentsChunkService} and
+ * {@link IGDocumentContentStreamer} beans backed by it. This whole
+ * configuration only ever activates where chunker is a REMOTE microservice
+ * (every bean here is {@link ConditionalOnMissingBean @ConditionalOnMissingBean}
+ * and backs off wherever chunker's own local implementation is already
+ * present, e.g. on the chunker microservice itself or the monolith), so
+ * resolving through the topology - not a statically configured
+ * {@link DocumentsCacheClientProperties#getBaseUrl() base-url} - is always the
+ * right address: a fixed {@code http://localhost:13004} default (this
+ * property's own fallback) is unreachable from another container.
  *
  * <p>
  * Picked up by the standard {@code ai.gebo} component scan of the hosting app.
@@ -47,17 +55,49 @@ import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 @EnableConfigurationProperties(DocumentsCacheClientProperties.class)
 public class DocumentsCacheMicroserviceClientConfiguration {
 
+	static final String WEB_CLIENT_BUILDER_BEAN = "documentsCacheClientLbWebClientBuilder";
 	static final String WEB_CLIENT_BEAN = "documentsCacheClientWebClient";
 
 	/**
-	 * Dedicated {@link WebClient} carrying the base URL, api-key header and extra
-	 * headers for every call to the documents-cache controllers.
+	 * A dedicated {@link LoadBalanced @LoadBalanced} builder so calls resolved by
+	 * {@link GeboMicroserviceUrlResolver} (host = chunker's Eureka discovery
+	 * service-id, e.g. {@code chunker-gebo-ai}) go through Spring Cloud
+	 * LoadBalancer instead of a literal DNS lookup, which fails: that hostname is
+	 * a Eureka service-id, not a real one. Mirrors the same fix already applied in
+	 * {@code MicroserviceDocumentsAccessClientConfiguration} and others.
+	 */
+	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
+	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
+	@LoadBalanced
+	public WebClient.Builder documentsCacheClientLbWebClientBuilder() {
+		return WebClient.builder();
+	}
+
+	/**
+	 * Dedicated {@link WebClient} carrying the api-key header and extra headers for
+	 * every call to the documents-cache controllers.
+	 *
+	 * <p>
+	 * Explicitly wires the app's own {@code ai.gebo.webconfig.JacksonConfig}
+	 * {@link JsonMapper} into this WebClient's JSON codecs, same reasoning (and
+	 * same fix) as {@code MicroserviceDocumentsAccessClientConfiguration}: request
+	 * and response bodies here carry {@code java.util.Date} fields (e.g.
+	 * {@code GDocumentReference}), and a bare {@code WebClient.builder()}'s
+	 * default-settings mapper does not produce or accept the exact shape the
+	 * cluster's {@code MultiFormatDateDeserializer} does.
 	 */
 	@Bean(name = WEB_CLIENT_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
-	public WebClient documentsCacheClientWebClient(DocumentsCacheClientProperties properties) {
-		WebClient.Builder builder = WebClient.builder().baseUrl(properties.getBaseUrl())
-				.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(properties.getMaxInMemorySizeBytes()));
+	public WebClient documentsCacheClientWebClient(@Qualifier(WEB_CLIENT_BUILDER_BEAN) WebClient.Builder lbBuilder,
+			GeboMicroserviceUrlResolver urlResolver, DocumentsCacheClientProperties properties,
+			JsonMapper objectMapper) {
+		String baseUrl = urlResolver.baseUrlForMicroserviceId(properties.getMicroserviceId())
+				.orElse(properties.getBaseUrl());
+		WebClient.Builder builder = lbBuilder.baseUrl(baseUrl).codecs(codecs -> {
+			codecs.defaultCodecs().maxInMemorySize(properties.getMaxInMemorySizeBytes());
+			codecs.defaultCodecs().jacksonJsonEncoder(new JacksonJsonEncoder(objectMapper));
+			codecs.defaultCodecs().jacksonJsonDecoder(new JacksonJsonDecoder(objectMapper));
+		});
 		if (StringUtils.hasText(properties.getApiKey())) {
 			builder.defaultHeader(properties.getApiKeyHeader(), properties.getApiKey());
 		}

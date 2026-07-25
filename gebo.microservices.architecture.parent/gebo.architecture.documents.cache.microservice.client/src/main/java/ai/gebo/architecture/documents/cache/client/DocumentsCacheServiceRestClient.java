@@ -42,7 +42,7 @@ public class DocumentsCacheServiceRestClient implements IDocumentsCacheService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DocumentsCacheServiceRestClient.class);
 
-	static final String BASE_PATH = "api/DocumentsCacheServiceController/";
+	static final String BASE_PATH = "/api/DocumentsCacheServiceController/";
 	static final String EXTENSION_HEADER = "X-Gebo-Content-Extension";
 
 	private final WebClient webClient;
