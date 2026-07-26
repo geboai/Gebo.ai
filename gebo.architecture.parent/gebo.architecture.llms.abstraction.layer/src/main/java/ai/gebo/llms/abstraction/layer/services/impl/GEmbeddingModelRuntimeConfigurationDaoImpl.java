@@ -15,6 +15,7 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +88,68 @@ public class GEmbeddingModelRuntimeConfigurationDaoImpl
         return this.findByPredicate(x -> {
             return x.getCode() != null && code != null && x.getCode().equals(code);
         });
+    }
+
+    /**
+     * A model created on another instance after this DAO's own one-shot
+     * {@link #initializeRuntimeModels()} normally reaches this instance's
+     * {@link #staticConfigs} through the cluster synchronizer's Hazelcast
+     * broadcast - but that cluster can end up split (see
+     * {@code DiscoveryClientClusterTopologyProvider}: Hazelcast reads its member
+     * list once, before every participant has necessarily registered with Eureka
+     * yet, so an isolated member never receives later broadcasts at all). Rather
+     * than depend on that broadcast always arriving, a predicate lookup that finds
+     * nothing falls back to the database - the same source
+     * {@link #initializeRuntimeModels()} itself reads from - once, and adopts any
+     * model not yet in {@link #staticConfigs} before giving up.
+     */
+    @Override
+    public IGConfigurableEmbeddingModel findByPredicate(Predicate<IGConfigurableEmbeddingModel> predicate) {
+        IGConfigurableEmbeddingModel found = IGEmbeddingModelRuntimeConfigurationDao.super.findByPredicate(predicate);
+        if (found != null) {
+            return found;
+        }
+        syncMissingFromPersistence();
+        return IGEmbeddingModelRuntimeConfigurationDao.super.findByPredicate(predicate);
+    }
+
+    /** @see #findByPredicate(Predicate) */
+    @Override
+    public List<IGConfigurableEmbeddingModel> findListByPredicate(Predicate<IGConfigurableEmbeddingModel> predicate) {
+        List<IGConfigurableEmbeddingModel> found = IGEmbeddingModelRuntimeConfigurationDao.super
+                .findListByPredicate(predicate);
+        if (!found.isEmpty()) {
+            return found;
+        }
+        syncMissingFromPersistence();
+        return IGEmbeddingModelRuntimeConfigurationDao.super.findListByPredicate(predicate);
+    }
+
+    /**
+     * Adopts any persisted embedding model config not already represented in
+     * {@link #staticConfigs}, by code. Safe to call repeatedly: already-adopted
+     * codes are skipped.
+     */
+    private void syncMissingFromPersistence() {
+        try {
+            List<GBaseEmbeddingModelConfig> configs = persistentObjectManager
+                    .findAllExtendingType(GBaseEmbeddingModelConfig.class);
+            for (GBaseEmbeddingModelConfig config : configs) {
+                boolean alreadyPresent = staticConfigs.stream()
+                        .anyMatch(existing -> existing.getCode() != null && existing.getCode().equals(config.getCode()));
+                if (alreadyPresent) {
+                    continue;
+                }
+                try {
+                    LOGGER.info("Adopting embedding model missed by cluster replication, code=>" + config.getCode());
+                    addRuntimeByConfig(config);
+                } catch (Throwable e) {
+                    LOGGER.error("Cannot initialize the embedding model with code=>" + config.getCode(), e);
+                }
+            }
+        } catch (GeboPersistenceException e) {
+            LOGGER.error("Cannot read the embedding models configuration", e);
+        }
     }
 
     /**
