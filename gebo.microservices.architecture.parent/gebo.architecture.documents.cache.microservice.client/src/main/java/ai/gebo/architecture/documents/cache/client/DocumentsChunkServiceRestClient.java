@@ -16,7 +16,9 @@ import java.util.List;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -31,6 +33,7 @@ import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.ParallelFlux;
@@ -52,9 +55,11 @@ public class DocumentsChunkServiceRestClient implements IDocumentsChunkService {
 	static final String BASE_PATH = "/api/DocumentsChunkServiceController/";
 
 	private final WebClient webClient;
+	private final IGeboCallerTokenPropagator tokenPropagator;
 
-	public DocumentsChunkServiceRestClient(WebClient webClient) {
+	public DocumentsChunkServiceRestClient(WebClient webClient, IGeboCallerTokenPropagator tokenPropagator) {
 		this.webClient = webClient;
+		this.tokenPropagator = tokenPropagator;
 	}
 
 	// ---------------------------------------------------------------------
@@ -106,7 +111,8 @@ public class DocumentsChunkServiceRestClient implements IDocumentsChunkService {
 		return webClient.post()
 				.uri(builder -> builder.path(BASE_PATH + "createChunkingSession").queryParam("reference", reference)
 						.build())
-				.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(String.class).block();
+				.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
+				.bodyToMono(String.class).block();
 	}
 
 	@Override
@@ -114,13 +120,15 @@ public class DocumentsChunkServiceRestClient implements IDocumentsChunkService {
 		return webClient.get()
 				.uri(builder -> builder.path(BASE_PATH + "retrieveChunkingSession").queryParam("reference", reference)
 						.build())
-				.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(String.class).block();
+				.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).retrieve()
+				.bodyToMono(String.class).block();
 	}
 
 	@Override
 	public void disposeChunkingSession(String chunkSessionId) {
 		webClient.post().uri(builder -> builder.path(BASE_PATH + "disposeChunkingSession")
-				.queryParam("chunkSessionId", chunkSessionId).build()).retrieve().toBodilessEntity().block();
+				.queryParam("chunkSessionId", chunkSessionId).build()).headers(this::applyCallerToken).retrieve()
+				.toBodilessEntity().block();
 	}
 
 	// ---------------------------------------------------------------------
@@ -178,7 +186,8 @@ public class DocumentsChunkServiceRestClient implements IDocumentsChunkService {
 	private <T> T postForObject(String path, Object body, Class<T> responseType) throws DocumentCacheAccessException {
 		try {
 			return webClient.post().uri(BASE_PATH + path).contentType(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON).bodyValue(body).retrieve().bodyToMono(responseType).block();
+					.headers(this::applyCallerToken).accept(MediaType.APPLICATION_JSON).bodyValue(body).retrieve()
+					.bodyToMono(responseType).block();
 		} catch (WebClientResponseException ex) {
 			throw new DocumentCacheAccessException(
 					"Remote " + path + " failed: " + ex.getStatusCode() + " " + ex.getResponseBodyAsString(), ex);
@@ -192,8 +201,18 @@ public class DocumentsChunkServiceRestClient implements IDocumentsChunkService {
 			LOGGER.debug("REST streaming " + path);
 		}
 		return webClient.post().uri(BASE_PATH + path).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_NDJSON).bodyValue(body).retrieve()
+				.headers(this::applyCallerToken).accept(MediaType.APPLICATION_NDJSON).bodyValue(body).retrieve()
 				.bodyToFlux(RemoteDocumentChunkWithRef.class).cast(IDocumentChunkWithRef.class);
+	}
+
+	/** Adds the caller's (or, off a request thread, a system-identity) bearer token. */
+	private void applyCallerToken(HttpHeaders headers) {
+		String token = tokenPropagator.currentToken();
+		if (StringUtils.hasText(token)) {
+			headers.setBearerAuth(token);
+		} else {
+			LOGGER.debug("No caller token to forward to the chunker microservice; the call goes out unauthenticated");
+		}
 	}
 
 	// ---------------------------------------------------------------------

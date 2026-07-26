@@ -15,9 +15,11 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -26,6 +28,7 @@ import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.model.base.TypedInputStream;
@@ -65,6 +68,7 @@ public class DocumentContentStreamerWithCacheRestClient implements IGDocumentCon
 	private final WebClient webClient;
 	private final GeboMicroserviceUrlResolver urlResolver;
 	private final String microserviceId;
+	private final IGeboCallerTokenPropagator tokenPropagator;
 
 	/**
 	 * @param webClient the WebClient carrying the api-key / extra headers; its base
@@ -72,12 +76,15 @@ public class DocumentContentStreamerWithCacheRestClient implements IGDocumentCon
 	 * @param urlResolver resolves the caching microservice's base url
 	 * @param microserviceId id of the microservice hosting the cache controller
 	 *            (the chunker)
+	 * @param tokenPropagator forwards the caller's (or a system-identity) bearer
+	 *            token, required by the cache controller's own security config
 	 */
 	public DocumentContentStreamerWithCacheRestClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
-			String microserviceId) {
+			String microserviceId, IGeboCallerTokenPropagator tokenPropagator) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
 		this.microserviceId = microserviceId;
+		this.tokenPropagator = tokenPropagator;
 	}
 
 	@Override
@@ -115,8 +122,8 @@ public class DocumentContentStreamerWithCacheRestClient implements IGDocumentCon
 		}
 		try {
 			ResponseEntity<byte[]> response = webClient.post().uri(uri).contentType(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_OCTET_STREAM).bodyValue(requestBody).retrieve().toEntity(byte[].class)
-					.block();
+					.headers(this::applyCallerToken).accept(MediaType.APPLICATION_OCTET_STREAM).bodyValue(requestBody)
+					.retrieve().toEntity(byte[].class).block();
 			if (response == null || response.getStatusCode() == HttpStatus.NO_CONTENT || response.getBody() == null) {
 				return null;
 			}
@@ -129,6 +136,16 @@ public class DocumentContentStreamerWithCacheRestClient implements IGDocumentCon
 					"Remote cached streamContent failed: " + ex.getStatusCode() + " " + ex.getResponseBodyAsString(), ex);
 		} catch (RuntimeException ex) {
 			throw new DocumentContentStreamerException("Remote cached streamContent failed", ex);
+		}
+	}
+
+	/** Adds the caller's (or, off a request thread, a system-identity) bearer token. */
+	private void applyCallerToken(HttpHeaders headers) {
+		String token = tokenPropagator.currentToken();
+		if (StringUtils.hasText(token)) {
+			headers.setBearerAuth(token);
+		} else {
+			LOGGER.debug("No caller token to forward to the chunker microservice; the call goes out unauthenticated");
 		}
 	}
 

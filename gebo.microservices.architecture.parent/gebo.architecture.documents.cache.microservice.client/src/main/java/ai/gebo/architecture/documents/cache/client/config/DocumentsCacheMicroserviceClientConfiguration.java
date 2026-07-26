@@ -26,6 +26,7 @@ import ai.gebo.architecture.documents.cache.client.DocumentsCacheServiceRestClie
 import ai.gebo.architecture.documents.cache.client.DocumentsChunkServiceRestClient;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -110,15 +111,17 @@ public class DocumentsCacheMicroserviceClientConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(IDocumentsCacheService.class)
 	public IDocumentsCacheService documentsCacheServiceRestClient(
-			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsCacheClientWebClient) {
-		return new DocumentsCacheServiceRestClient(documentsCacheClientWebClient);
+			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsCacheClientWebClient,
+			IGeboCallerTokenPropagator tokenPropagator) {
+		return new DocumentsCacheServiceRestClient(documentsCacheClientWebClient, tokenPropagator);
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(IDocumentsChunkService.class)
 	public IDocumentsChunkService documentsChunkServiceRestClient(
-			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsCacheClientWebClient) {
-		return new DocumentsChunkServiceRestClient(documentsCacheClientWebClient);
+			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsCacheClientWebClient,
+			IGeboCallerTokenPropagator tokenPropagator) {
+		return new DocumentsChunkServiceRestClient(documentsCacheClientWebClient, tokenPropagator);
 	}
 
 	/**
@@ -134,8 +137,9 @@ public class DocumentsCacheMicroserviceClientConfiguration {
 	@ConditionalOnMissingBean(IGDocumentContentStreamer.class)
 	public IGDocumentContentStreamer documentContentStreamerWithCacheRestClient(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsCacheClientWebClient,
-			GeboMicroserviceUrlResolver urlResolver, DocumentsCacheClientProperties properties) {
+			GeboMicroserviceUrlResolver urlResolver, DocumentsCacheClientProperties properties,
+			IGeboCallerTokenPropagator tokenPropagator) {
 		return new DocumentContentStreamerWithCacheRestClient(documentsCacheClientWebClient, urlResolver,
-				properties.getMicroserviceId());
+				properties.getMicroserviceId(), tokenPropagator);
 	}
 }

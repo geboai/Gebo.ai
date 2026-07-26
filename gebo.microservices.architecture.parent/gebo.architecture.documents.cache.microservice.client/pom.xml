@@ -43,6 +43,13 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
 		</dependency>
+		<!-- IGeboCallerTokenPropagator: the chunker's controllers require an
+		     authenticated caller, so every call needs a bearer token. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Brings the two service interfaces + all model types (ChunkingParams,
 		     DocumentChunkingResponse, IDocumentChunkWithRef, DocumentChunk,
 		     StreamingPurpose, TypedInputStream, GDocumentReference, SearchResult, ...)
