@@ -282,8 +282,15 @@ public class DocumentsChunkServiceImpl
 									metaDataHeader = this.metaDataEnricher.createMetaDataHeader(List.of(doc), dr,
 											knowledgeBase, project, endpoint);
 								} catch (GeboPersistenceException e) {
-									exceptions.add(e);
-									return;
+									// Metadata enrichment is best-effort flavor on top of the chunk (its own text
+									// content is already resolved by this point) - a failure here, e.g. resolving
+									// a content-handler-specific GProjectEndpoint subtype's class on a
+									// content-handler-agnostic service like chunker (which does not and should
+									// not carry every content-handler's model classes on its classpath), must not
+									// abort the whole batch. metaDataHeader stays null, which the caller already
+									// treats as "nothing to enrich with".
+									LOGGER.warn("Could not resolve metadata enrichment context for document "
+											+ dr.getCode() + "; proceeding without it", e);
 								}
 							}
 							// discard zero length contents

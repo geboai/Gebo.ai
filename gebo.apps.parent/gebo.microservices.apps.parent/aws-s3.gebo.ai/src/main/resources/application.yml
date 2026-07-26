@@ -55,3 +55,9 @@ ai:
 # ---------------------------------------------------------------------------
 ai.gebo.mongodb:
   databaseName: aws-s3-gebo
+
+# GJobStatusReplicatorService's own identity: must match the systemId
+# job-status-replicator declared under this module in GeboStandardMicroservices,
+# since a messaging module belongs to exactly one microservice.
+ai.gebo.jobs.replicator:
+  module-id: aws-s3-module

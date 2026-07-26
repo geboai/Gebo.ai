@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
@@ -38,6 +39,7 @@ import lombok.AllArgsConstructor;
  * maintains job statuses in the system.
  */
 
+@Component
 @Scope("singleton")
 @AllArgsConstructor
 public class GWorkflowStatusDeamonServiceImpl {
@@ -54,8 +56,14 @@ public class GWorkflowStatusDeamonServiceImpl {
 		Stream<GJobStatusItem> processingStream = jobStatusRepository.findByProcessingTrue();
 		processingStream.forEach(status -> {
 			long now = System.currentTimeMillis();
-			if (status.getStartDateTime() != null
-					&& (status.getStartDateTime().getTime() + CHECK_JOB_STATUS_PERIOD) > now) {
+			// Every still-processing job is re-evaluated on every scheduled run, not just
+			// ones started within the last CHECK_JOB_STATUS_PERIOD - that used to gate
+			// entry into this block, but the batch-finished / timeout-passed checks below
+			// need to keep running for as long as a job stays in "processing" state
+			// (ingestion routinely takes longer than one CHECK_JOB_STATUS_PERIOD), and
+			// timeoutPassed - checked against the much longer EXECUTION_TIMEOUT - could
+			// never fire while gated behind the short recency window anyway.
+			if (status.getStartDateTime() != null) {
 				GWorkflowType wType = GWorkflowType.STANDARD;
 				try {
 					wType = GWorkflowType.valueOf(status.getWorkflowType());

@@ -12,6 +12,9 @@ package ai.gebo.llms.abstraction.layer.cluster;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
@@ -46,10 +49,13 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
  */
 public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype extends IGConfigurableModel, ModelConfig extends GBaseModelConfig>
 		extends GAbstractRuntimeConfigurationDao<IFacetype>
-		implements IGRuntimeModelConfigurationDao<IFacetype, ModelConfig> {
+		implements IGRuntimeModelConfigurationDao<IFacetype, ModelConfig>, ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired(required = false)
 	protected GLlmModelClusterSynchronizer clusterSynchronizer;
+
+	@Autowired
+	protected ApplicationContext applicationContext;
 
 	protected GAbstractClusteredModelRuntimeConfigurationDao(List<IFacetype> staticConfigs,
 			IGDynamicConfigurationSource<IFacetype> dynamic) {
@@ -61,6 +67,32 @@ public abstract class GAbstractClusteredModelRuntimeConfigurationDao<IFacetype e
 	 *         back to the right DAO on remote instances.
 	 */
 	protected abstract GLlmModelClusterCategory getClusterCategory();
+
+	/**
+	 * Loads every persisted model of this family and brings each up at runtime.
+	 * Invoked once, when {@link #applicationContext} itself finishes refreshing.
+	 */
+	protected abstract void initializeRuntimeModels();
+
+	/**
+	 * {@link ContextRefreshedEvent} bubbles up from every ancestor-to-descendant
+	 * context in the hierarchy to every context's listeners - including the
+	 * short-lived per-service child contexts Spring Cloud LoadBalancer creates on
+	 * the first call to a {@code @LoadBalanced} client. Since model
+	 * initialization itself calls out to load-balanced cluster clients (e.g. to
+	 * fetch a secret), reacting unconditionally here would recurse: initializing
+	 * a model triggers the client's first-ever call, which creates its
+	 * LoadBalancer child context, whose own refresh republishes this same event
+	 * up to this listener - forever, until the stack overflows. Only the
+	 * event for this DAO's own context may proceed.
+	 */
+	@Override
+	public final void onApplicationEvent(ContextRefreshedEvent event) {
+		if (event.getApplicationContext() != applicationContext) {
+			return;
+		}
+		initializeRuntimeModels();
+	}
 
 	@Override
 	public void addRuntimeByConfigClustered(ModelConfig config) throws LLMConfigException {

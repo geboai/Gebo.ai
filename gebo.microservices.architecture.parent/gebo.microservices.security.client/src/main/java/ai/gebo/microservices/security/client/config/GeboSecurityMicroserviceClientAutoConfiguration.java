@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -49,12 +50,28 @@ import ai.gebo.security.services.IGSecurityDirectory;
 @EnableConfigurationProperties(GeboSecurityClientProperties.class)
 public class GeboSecurityMicroserviceClientAutoConfiguration {
 
+	static final String WEB_CLIENT_BUILDER_BEAN = "geboSecurityClientLbWebClientBuilder";
 	static final String WEB_CLIENT_BEAN = "geboSecurityClientWebClient";
+
+	/**
+	 * A dedicated {@link LoadBalanced @LoadBalanced} builder so calls to heimdall's
+	 * cluster surface go through Spring Cloud LoadBalancer (resolving the topology's
+	 * discovery service-id, e.g. {@code heimdall-gebo-ai}, to a live instance)
+	 * instead of a literal DNS lookup, which fails: that hostname is a Eureka
+	 * service-id, not a real one. Mirrors the same fix already applied in
+	 * {@code GeboSearchServicesClientsAutoConfiguration}.
+	 */
+	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
+	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
+	@LoadBalanced
+	public WebClient.Builder geboSecurityClientLbWebClientBuilder() {
+		return WebClient.builder();
+	}
 
 	@Bean(name = WEB_CLIENT_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
-	public WebClient geboSecurityClientWebClient(GeboSecurityClientProperties properties) {
-		WebClient.Builder builder = WebClient.builder();
+	public WebClient geboSecurityClientWebClient(@Qualifier(WEB_CLIENT_BUILDER_BEAN) WebClient.Builder builder,
+			GeboSecurityClientProperties properties) {
 		if (properties.getHeaders() != null) {
 			properties.getHeaders().forEach(builder::defaultHeader);
 		}

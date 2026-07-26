@@ -73,6 +73,14 @@ public class GStandardModulesConstraints {
 	public static final String USER_MESSAGES_CONCENTRATOR_COMPONENT = "user-messages-concentrator-component";
 	public static final String END_OF_WORKFLOW_COMPUTE_SERVICE = "end-of-workflow-compute-service";
 	/**
+	 * The GJobStatus entity-replication receiver hosted on tyr
+	 * (gebo.architecture.replicator's {@code GAbstractReplicatorReceiverService}):
+	 * the launching content-handler microservice writes a GJobStatus into its OWN
+	 * Mongo, so tyr's JobStatusController/GeboWorkflowsStatsServiceImpl - reading
+	 * from tyr's separate Mongo - would otherwise never see it.
+	 */
+	public static final String JOB_STATUS_REPLICATION_RECEIVER = "job-status-replication-receiver";
+	/**
 	 * The LLM usage-tracking concentrator: hosts the receiver in
 	 * {@code gebo.architecture.compute.workflow} (module {@code ai.gebo.architecture.llms.usage})
 	 * that persists {@code LLMUsageDetail} on behalf of every LLM-hosting

@@ -212,4 +212,40 @@ ai.gebo.secrets.client:
   cache-ttl: 60s
   cache-max-entries: 2000
 
+# ---------------------------------------------------------------------------
+# Entity replication routing (gebo.architecture.replicator). GAbstractReplicatorService
+# is a no-op with no routing entry for an entity's class, so this is safe to share
+# across every service even though only the content-handler microservices actually
+# have a sender bean (GJobStatusReplicatorService) that consults it.
+#
+# GJobStatus: the launching content-handler microservice (filesystem, git, jira, ...)
+# persists it into its OWN Mongo; tyr's JobStatusController reads from tyr's own,
+# separate Mongo and would otherwise never see a job created elsewhere. The receiver
+# (GJobStatusReplicatorReceiverService) lives on tyr.
+# ---------------------------------------------------------------------------
+gebo.replicator:
+  routing:
+    ai.gebo.knlowledgebase.model.jobs.GJobStatus:
+      - messaging-module-id: async-publishing-job-module
+        messaging-system-id: job-status-replication-receiver
+
+# ---------------------------------------------------------------------------
+# Cross-service messaging bridge (gebo.architecture.messages.rabbitmq). Off by
+# default (every bean in that module is gated on 'enabled'), so entity
+# replication (above) - and anything else built on IGMessageBroker targeting a
+# remote module/component - silently never left the local, in-process broker.
+#
+# Deliberately its OWN connection block, independent of Spring Boot's native
+# spring.rabbitmq.* (GeboRabbitMqConnectionConfig does not reuse it), so it is
+# repeated here even though the values are identical to the ones under spring:
+# above.
+# ---------------------------------------------------------------------------
+ai.gebo.messaging.rabbitmq:
+  enabled: true
+  connection:
+    host: rabbit
+    port: 5672
+    username: guest
+    password: guest
+
 reactor.schedulers.defaultPoolSize: 16

@@ -76,6 +76,26 @@ public class UserPrincipal implements UserDetails {
         return userPrincipal;
     }
 
+    /**
+     * Creates a UserPrincipal from a directory-sourced {@link UserInfos} view of a
+     * user, with no password: {@link IGSecurityDirectory} never hands one back (see
+     * its javadoc - a password hash never leaves the owning service), and none of
+     * this principal's token-based authentication callers (LOCAL_JWT, OAuth2
+     * JWT/opaque) compare a password - the token itself is the credential.
+     *
+     * @param userInfos the directory's view of the user.
+     * @return a UserPrincipal instance with roles converted to authorities.
+     */
+    public static UserPrincipal create(UserInfos userInfos) {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        if (userInfos.getRoles() != null) {
+            for (String role : userInfos.getRoles()) {
+                authorities.add(new SimpleGrantedAuthority(role));
+            }
+        }
+        return new UserPrincipal(userInfos.getUsername(), null, authorities);
+    }
+
     @Override
     public String getPassword() {
         return password;

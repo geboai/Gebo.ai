@@ -47,8 +47,16 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		IWorkflowStepEnabledHandler handler = stepEnabledHandlerRepositoryPattern
 				.findByWorkflowsTypeAndWorkflowIdAndWorkflowStepId(GWorkflowType.valueOf(rootStep.getWorkflowType()),
 						rootStep.getWorkflowId(), rootStep.getWorkflowStepId());
+		// A missing handler means the step is never gated (mandatory steps, e.g. -
+		// GStandardWorkflowStep.verifyEnabledModules already bypasses the enablement
+		// check the same way for them), not that it should be disabled: some
+		// deployments (e.g. tyr) only register handlers for the optional steps
+		// (embedding/graphextraction/fulltext_indexing), so a mandatory step with no
+		// handler must default to enabled or the whole tree is disabled from its root
+		// down, the aggregated per-step data is never populated, and the job can only
+		// ever finish via the EXECUTION_TIMEOUT fallback.
 		rootStep.setEnabledStep(
-				handler != null && handler.isEnabled(rootStep.getWorkflowId(), rootStep.getWorkflowStepId(),context));
+				handler == null || handler.isEnabled(rootStep.getWorkflowId(), rootStep.getWorkflowStepId(), context));
 		if (rootStep.isEnabledStep()) {
 			rootStep.getChilds().forEach(childStep -> {
 				checkEnabledNodes(childStep,context);

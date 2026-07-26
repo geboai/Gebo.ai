@@ -31,6 +31,7 @@ import java.util.zip.ZipFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
@@ -96,6 +97,13 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 
 	// Manager for persistent objects
 	protected IGPersistentObjectManager persistentObjectManager = null;
+
+	// Looks up the GProject/GKnowledgeBase hierarchy a project endpoint hangs off of.
+	// Field-injected (unlike the constructor-injected fields above) so adding it does
+	// not ripple through every concrete subclass's constructor across every
+	// content-handler module.
+	@Autowired
+	protected IGKnowledgeBaseHierarchyLookupService knowledgeBaseHierarchyLookupService;
 
 	// Message broker for system messaging
 	protected IGMessageBroker messageBroker = null;
@@ -457,7 +465,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			throws GeboContentHandlerSystemException {
 		GVirtualFolder rootItem = new GVirtualFolder();
 		try {
-			GProject project = persistentObjectManager.findById(GProject.class, endpoint.getParentProjectCode());
+			GProject project = knowledgeBaseHierarchyLookupService.findProjectByCode(endpoint.getParentProjectCode());
 			rootItem.setCode(project.getRootKnowledgeBaseCode() + "/" + project.getCode() + "/" + endpoint.getCode());
 			rootItem.setDescription(endpoint.getDescription());
 			rootItem.setRootKnowledgebaseCode(project.getRootKnowledgeBaseCode());

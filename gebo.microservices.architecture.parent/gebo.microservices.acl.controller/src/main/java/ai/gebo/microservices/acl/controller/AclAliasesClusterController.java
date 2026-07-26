@@ -11,6 +11,7 @@ package ai.gebo.microservices.acl.controller;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclAliasesDao;
+import ai.gebo.microservices.cluster.ClusterParticipantsGuard;
+import ai.gebo.microservices.cluster.GeboClusterParticipants;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The ACL alias store exposed to the other microservices of the cluster - the
@@ -44,34 +48,48 @@ import ai.gebo.acl.IAclAliasesDao;
  * </p>
  *
  * <p>
- * <b>Deliberately not a {@code @RestController}</b>: every Gebo app component-scans
- * {@code ai.gebo}, and a {@code @Component} would be published by that scan without
- * the participants guard, which only the auto-configuration installs alongside it.
+ * Reachable only from a microservice currently registered in service discovery -
+ * every method checks {@link ClusterParticipantsGuard#check}, explicitly, first
+ * line.
+ * </p>
+ *
+ * <p>
+ * A plain {@code @RestController}: this module is only ever a dependency of the
+ * service that owns the ACL store (heimdall), so component-scan discovery is
+ * already scoped correctly by Maven, and there is no separate guard bean whose
+ * presence needs to stay atomic with this one's.
  * </p>
  *
  * Gebo.ai comment agent
  */
-@ResponseBody
+@RestController
+@ConditionalOnProperty(prefix = "ai.gebo.acl.cluster", name = "enabled", havingValue = "true", matchIfMissing = true)
 @RequestMapping("${ai.gebo.acl.cluster.base-path:api/cluster/AclController}")
 public class AclAliasesClusterController {
 
 	private final IAclAliasesDao aliasesDao;
+	private final GeboClusterParticipants participants;
 
-	public AclAliasesClusterController(IAclAliasesDao aliasesDao) {
+	public AclAliasesClusterController(IAclAliasesDao aliasesDao, GeboClusterParticipants participants) {
 		this.aliasesDao = aliasesDao;
+		this.participants = participants;
 	}
 
 	// --- Reads --------------------------------------------------------------
 
 	@GetMapping(value = "findAliasesByAclGrantedUniqueId", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Integer> findAliasesByAclGrantedUniqueId(@RequestParam("uniqueId") String aclGrantedUniqueId) {
+	public List<Integer> findAliasesByAclGrantedUniqueId(@RequestParam("uniqueId") String aclGrantedUniqueId,
+			HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAliasesByAclGrantedUniqueId(aclGrantedUniqueId);
 	}
 
 	@GetMapping(value = "findAliasesByAclGrantedUniqueIdAndAclGrantType",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Integer> findAliasesByAclGrantedUniqueIdAndAclGrantType(
-			@RequestParam("uniqueId") String aclGrantedUniqueId, @RequestParam("grantType") AclGrantType grantType) {
+			@RequestParam("uniqueId") String aclGrantedUniqueId, @RequestParam("grantType") AclGrantType grantType,
+			HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAliasesByAclGrantedUniqueIdAndAclGrantType(aclGrantedUniqueId, grantType);
 	}
 
@@ -81,25 +99,31 @@ public class AclAliasesClusterController {
 	 */
 	@PostMapping(value = "findAliasesByAclGrantedUniqueIdIn", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Integer> findAliasesByAclGrantedUniqueIdIn(@RequestBody List<String> aclGrantedUniqueIds) {
+	public List<Integer> findAliasesByAclGrantedUniqueIdIn(@RequestBody List<String> aclGrantedUniqueIds,
+			HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAliasesByAclGrantedUniqueIdIn(aclGrantedUniqueIds);
 	}
 
 	@PostMapping(value = "findAliasesByAclGrantedUniqueIdInAndAclGrantType",
 			consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Integer> findAliasesByAclGrantedUniqueIdInAndAclGrantType(
-			@RequestParam("grantType") AclGrantType grantType, @RequestBody List<String> aclGrantedUniqueIds) {
+			@RequestParam("grantType") AclGrantType grantType, @RequestBody List<String> aclGrantedUniqueIds,
+			HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(aclGrantedUniqueIds, grantType);
 	}
 
 	@GetMapping(value = "findAcl", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GAclEntry findAcl(@RequestParam("alias") int alias) {
+	public GAclEntry findAcl(@RequestParam("alias") int alias, HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAcl(alias);
 	}
 
 	@PostMapping(value = "findAlias", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Integer findAlias(@RequestBody GAclEntry entry) {
+	public Integer findAlias(@RequestBody GAclEntry entry, HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.findAlias(entry);
 	}
 
@@ -111,12 +135,14 @@ public class AclAliasesClusterController {
 	 */
 	@PostMapping(value = "addAcl", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public int addAcl(@RequestBody GAclEntry entry) {
+	public int addAcl(@RequestBody GAclEntry entry, HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return aliasesDao.addAcl(entry);
 	}
 
 	@DeleteMapping("removeAcl")
-	public void removeAcl(@RequestParam("alias") int alias) {
+	public void removeAcl(@RequestParam("alias") int alias, HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		aliasesDao.removeAcl(alias);
 	}
 }

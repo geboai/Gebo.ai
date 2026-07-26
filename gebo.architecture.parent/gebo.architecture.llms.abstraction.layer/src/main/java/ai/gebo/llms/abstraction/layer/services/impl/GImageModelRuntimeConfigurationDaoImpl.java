@@ -15,9 +15,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import tools.jackson.core.JacksonException;
@@ -49,7 +47,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Scope("singleton")
 public class GImageModelRuntimeConfigurationDaoImpl
 		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableImageModel, GBaseImageModelConfig>
-		implements IGImageModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+		implements IGImageModelRuntimeConfigurationDao {
 
 	@Override
 	protected GLlmModelClusterCategory getClusterCategory() {
@@ -89,12 +87,11 @@ public class GImageModelRuntimeConfigurationDaoImpl
 	}
 
 	/**
-	 * Reacts to the ContextRefreshedEvent by initializing chat models dynamically.
-	 * 
-	 * @param event The context refreshed event from the Spring framework.
+	 * Initializes image models dynamically. Invoked once this DAO's own
+	 * application context finishes refreshing.
 	 */
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	protected void initializeRuntimeModels() {
 		LOGGER.info("Begin initializing image models dinamically");
 		try {
 			// Retrieve all configurations extending GBaseChatModelConfig

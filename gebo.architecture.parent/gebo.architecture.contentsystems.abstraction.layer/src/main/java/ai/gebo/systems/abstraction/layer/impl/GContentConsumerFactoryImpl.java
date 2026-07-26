@@ -12,13 +12,14 @@
 
 package ai.gebo.systems.abstraction.layer.impl;
 
-import java.util.Optional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -29,11 +30,10 @@ import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.DependencyTreeRepository;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
-import ai.gebo.knowledgebase.repositories.ProjectRepository;
 import ai.gebo.knowledgebase.repositories.SoftwareArtifactsRepository;
 import ai.gebo.knowledgebase.repositories.VirtualFolderRepository;
 import ai.gebo.model.base.GBaseVersionableObject;
+import ai.gebo.systems.abstraction.layer.IGKnowledgeBaseHierarchyLookupService;
 
 /**
  * AI generated comments
@@ -41,7 +41,9 @@ import ai.gebo.model.base.GBaseVersionableObject;
  */
 @Service
 public class GContentConsumerFactoryImpl implements IGContentConsumerFactory {
-	
+
+	private final static Logger LOGGER = LoggerFactory.getLogger(GContentConsumerFactoryImpl.class);
+
 	// Automatically injects the required dependencies using Spring's @Autowired annotation
 	@Autowired
 	IGPersistentObjectManager persistenceManager;
@@ -54,9 +56,7 @@ public class GContentConsumerFactoryImpl implements IGContentConsumerFactory {
 	@Autowired
 	DependencyTreeRepository dependencyTreeRepository;
 	@Autowired
-	ProjectRepository projectsRepo;
-	@Autowired
-	KnowledgeBaseRepository kRepo;
+	IGKnowledgeBaseHierarchyLookupService knowledgeBaseHierarchyLookupService;
 
 	/**
 	 * Inner class implementing IGContentConsumer, which consumes different types of contents.
@@ -116,17 +116,17 @@ public class GContentConsumerFactoryImpl implements IGContentConsumerFactory {
 	public IGContentConsumer create(GProjectEndpoint endpoint) {
 		GProject project = null;
 		GKnowledgeBase knowledgeBase = null;
-		if (endpoint.getParentProjectCode() != null) {
-			Optional<GProject> entry = projectsRepo.findById(endpoint.getParentProjectCode());
-			if (entry.isPresent()) {
-				project = entry.get();
+		try {
+			if (endpoint.getParentProjectCode() != null) {
+				project = knowledgeBaseHierarchyLookupService.findProjectByCode(endpoint.getParentProjectCode());
 			}
-		}
-		if (project != null && project.getRootKnowledgeBaseCode() != null) {
-			Optional<GKnowledgeBase> entry = kRepo.findById(project.getRootKnowledgeBaseCode());
-			if (entry.isPresent()) {
-				knowledgeBase = entry.get();
+			if (project != null && project.getRootKnowledgeBaseCode() != null) {
+				knowledgeBase = knowledgeBaseHierarchyLookupService
+						.findKnowledgeBaseByCode(project.getRootKnowledgeBaseCode());
 			}
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Exception looking up the project/knowledge base hierarchy for endpoint with code :"
+					+ endpoint.getCode(), e);
 		}
 		ContextawareContentConsumer consumer = new ContextawareContentConsumer();
 		consumer.endpoint = endpoint;

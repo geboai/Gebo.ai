@@ -36,6 +36,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.knowledgebase.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>

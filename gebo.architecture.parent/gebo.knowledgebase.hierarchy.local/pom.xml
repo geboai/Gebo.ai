@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.2.2-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.knowledgebase.hierarchy.local</artifactId>
+
+	<!--
+		The IGKnowledgeBaseHierarchyLookupService of a service that OWNS the
+		GProject/GKnowledgeBase store: it reads Mongo directly, through the same
+		IGPersistentObjectManager the rest of the service uses.
+
+		This is one half of a pair, and the pair is the point:
+
+		    owns the store  ->  gebo.knowledgebase.hierarchy.local        (brain, monolith)
+		    does not own it ->  gebo.microservices.knowledgebase.client   (every other content
+		                                                                   handler)
+
+		A service depends on exactly one of them, so which implementation it uses is
+		decided by what it PACKAGES - stated in its pom, not toggled by a property that
+		can be set wrong.
+	-->
+	<dependencies>
+		<!-- IGKnowledgeBaseHierarchyLookupService, GProject, GKnowledgeBase,
+		     IGPersistentObjectManager, GeboPersistenceException. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>

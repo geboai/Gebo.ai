@@ -66,18 +66,20 @@ public abstract class GAbstractReplicatorReceiverService implements IGMessageRec
         boolean deleted = replicationPayload.isDeleted();
 
         try {
-            GBaseObject existing = persistentObjectManager.findById(entity.getClass(), entity.getCode());
-
             if (deleted) {
+                GBaseObject existing = persistentObjectManager.findById(entity.getClass(), entity.getCode());
                 if (existing != null) {
                     persistentObjectManager.delete(entity, false);
                 }
             } else {
-                if (existing != null) {
-                    persistentObjectManager.update(entity);
-                } else {
-                    persistentObjectManager.insert(entity);
-                }
+                // A replicated entity always arrives with its code already set (assigned by
+                // the originating microservice, which the receiver must preserve so
+                // cross-service lookups keep working) - update() is the correct call
+                // regardless of whether this is the first time this code is seen here:
+                // it requires a pre-set code and performs a Mongo save() (upsert). insert()
+                // is for the opposite case - a fresh entity that still needs a generated
+                // code - and rejects one that already has it.
+                persistentObjectManager.update(entity);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to process replication message for entity: " + entity.getCode(), e);

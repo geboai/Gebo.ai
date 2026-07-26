@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +22,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.microservices.cluster.ClusterParticipantsGuard;
+import ai.gebo.microservices.cluster.GeboClusterParticipants;
 import ai.gebo.secrets.model.GeboSecret;
 import ai.gebo.secrets.model.GeboSecretContentEnvelope;
 import ai.gebo.secrets.model.GeboSecretStoreRequest;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -63,28 +67,34 @@ import jakarta.validation.constraints.NotNull;
  * <p>
  * The counterpart of - not a replacement for - {@code api/admin/SecretsController},
  * which stays the ADMIN/UI surface. Reachable only from a microservice currently
- * registered in the cluster registry
- * ({@link ai.gebo.microservices.cluster.ClusterParticipantsOnlyInterceptor}).
+ * registered in the cluster registry - every method checks
+ * {@link ClusterParticipantsGuard#check}, explicitly, first line.
  * </p>
  *
  * <p>
- * <b>Deliberately not a {@code @RestController}</b>: every Gebo app component-scans
- * {@code ai.gebo}, and a {@code @Component} would be published by that scan without
- * the participants guard, which only the auto-configuration installs alongside it.
+ * A plain {@code @RestController}: this module is only ever a dependency of the
+ * service that owns the secrets store (heimdall), so component-scan discovery is
+ * already scoped correctly by Maven, and there is no separate guard bean whose
+ * presence needs to stay atomic with this one's.
  * </p>
  *
  * Gebo.ai comment agent
  */
-@ResponseBody
+@RestController
+@ConditionalOnProperty(prefix = "ai.gebo.secrets.cluster", name = "enabled", havingValue = "true",
+		matchIfMissing = true)
 @RequestMapping("${ai.gebo.secrets.cluster.base-path:api/cluster/SecretsController}")
 public class SecretsClusterController {
 
 	private final GeboSecretRepository repository;
 	private final IGeboSecretsAccessService secretsService;
+	private final GeboClusterParticipants participants;
 
-	public SecretsClusterController(GeboSecretRepository repository, IGeboSecretsAccessService secretsService) {
+	public SecretsClusterController(GeboSecretRepository repository, IGeboSecretsAccessService secretsService,
+			GeboClusterParticipants participants) {
 		this.repository = repository;
 		this.secretsService = secretsService;
+		this.participants = participants;
 	}
 
 	/**
@@ -95,8 +105,9 @@ public class SecretsClusterController {
 	 * @throws GeboCryptSecretException if there is no such secret
 	 */
 	@GetMapping(value = "getSecretContentById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GeboSecretContentEnvelope getSecretContentById(@RequestParam("id") String id)
+	public GeboSecretContentEnvelope getSecretContentById(@RequestParam("id") String id, HttpServletRequest request)
 			throws GeboCryptSecretException {
+		ClusterParticipantsGuard.check(participants, request);
 		GeboSecret secret = repository.findById(id).orElse(null);
 		if (secret == null) {
 			// Same contract as the local implementation: an unknown id is an error here.
@@ -110,13 +121,16 @@ public class SecretsClusterController {
 	 * @return the secret's metadata, or {@code null} if there is no such secret
 	 */
 	@GetMapping(value = "getSecretInfoById", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SecretInfo getSecretInfoById(@RequestParam("code") String code) throws GeboCryptSecretException {
+	public SecretInfo getSecretInfoById(@RequestParam("code") String code, HttpServletRequest request)
+			throws GeboCryptSecretException {
+		ClusterParticipantsGuard.check(participants, request);
 		return secretsService.getSecretInfoById(code);
 	}
 
 	@GetMapping(value = "getSecretInfoByContextCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<SecretInfo> getSecretInfoByContextCode(@RequestParam("contextCode") String contextCode)
-			throws GeboCryptSecretException {
+	public List<SecretInfo> getSecretInfoByContextCode(@RequestParam("contextCode") String contextCode,
+			HttpServletRequest request) throws GeboCryptSecretException {
+		ClusterParticipantsGuard.check(participants, request);
 		return secretsService.getSecretInfoByContextCode(contextCode);
 	}
 
@@ -131,22 +145,24 @@ public class SecretsClusterController {
 	 * this service has no business unsealing it.
 	 * </p>
 	 *
-	 * @param request the encrypted content and its metadata
+	 * @param storeRequest the encrypted content and its metadata
 	 * @return the id the secret is stored under
 	 */
 	@PostMapping(value = "storeSecret", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
-	public String storeSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest request) {
-		String secretId = request.getSecretId();
+	public String storeSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
+			HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
+		String secretId = storeRequest.getSecretId();
 		if (secretId == null || secretId.isBlank()) {
 			secretId = UUID.randomUUID().toString();
 		}
 		GeboSecret secret = new GeboSecret();
 		secret.setCode(secretId);
-		secret.setContextCode(request.getContextCode());
-		secret.setDescription(request.getDescription());
-		secret.setSecretType(request.getSecretType());
-		secret.setSecretContent(request.getCryptedContent());
+		secret.setContextCode(storeRequest.getContextCode());
+		secret.setDescription(storeRequest.getDescription());
+		secret.setSecretType(storeRequest.getSecretType());
+		secret.setSecretContent(storeRequest.getCryptedContent());
 		secret.setCreationDate(new Date());
 		repository.insert(secret);
 		return secretId;
@@ -157,27 +173,31 @@ public class SecretsClusterController {
 	 * {@code secretId} is the code of the secret to update.
 	 */
 	@PostMapping(value = "updateSecret", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void updateSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest request)
-			throws GeboCryptSecretException {
-		Optional<GeboSecret> found = repository.findById(request.getSecretId());
+	public void updateSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
+			HttpServletRequest request) throws GeboCryptSecretException {
+		ClusterParticipantsGuard.check(participants, request);
+		Optional<GeboSecret> found = repository.findById(storeRequest.getSecretId());
 		if (found.isEmpty()) {
-			throw new GeboCryptSecretException("Secret with code=>" + request.getSecretId() + " not found");
+			throw new GeboCryptSecretException("Secret with code=>" + storeRequest.getSecretId() + " not found");
 		}
 		GeboSecret secret = found.get();
-		secret.setSecretContent(request.getCryptedContent());
-		secret.setDescription(request.getDescription());
-		secret.setContextCode(request.getContextCode());
-		secret.setSecretType(request.getSecretType());
+		secret.setSecretContent(storeRequest.getCryptedContent());
+		secret.setDescription(storeRequest.getDescription());
+		secret.setContextCode(storeRequest.getContextCode());
+		secret.setSecretType(storeRequest.getSecretType());
 		repository.save(secret);
 	}
 
 	@DeleteMapping("deleteSecret")
-	public void deleteSecret(@RequestParam("code") String code) throws GeboCryptSecretException {
+	public void deleteSecret(@RequestParam("code") String code, HttpServletRequest request)
+			throws GeboCryptSecretException {
+		ClusterParticipantsGuard.check(participants, request);
 		secretsService.deleteSecret(code);
 	}
 
 	@GetMapping(value = "getAllSecretsId", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAllSecretsId() {
+	public List<String> getAllSecretsId(HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
 		return repository.findAll().stream().map(GeboSecret::getCode).toList();
 	}
 }
