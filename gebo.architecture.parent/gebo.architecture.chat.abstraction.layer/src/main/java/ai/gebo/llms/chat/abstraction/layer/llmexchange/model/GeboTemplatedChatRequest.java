@@ -42,8 +42,17 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	/** Code representing the chat model being used */
 	private String chatModelCode = null;
 
-	/** Flag to determine whether responses should be streamed */
-	private boolean streamResponse = false;
+	/**
+	 * Flag to determine whether responses should be streamed.
+	 *
+	 * <p>
+	 * Wrapper, not primitive: the generated OpenAPI clients type this field
+	 * untyped/nullable and serialize an unset value as an explicit JSON
+	 * {@code null} - which a primitive {@code boolean} field rejects outright
+	 * (Jackson: "Cannot map `null` into type `boolean`"), turning every request
+	 * that doesn't set it into a 400 before this object is even built.
+	 */
+	private Boolean streamResponse = Boolean.FALSE;
 
 	/** The chat query, parameterized by RequestType */
 	private RequestType query = null;
