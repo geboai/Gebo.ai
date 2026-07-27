@@ -29,6 +29,7 @@
   	<module>gebo.architecture.llms.abstraction.layer.controllers</module>
   	<module>gebo.architecture.chat.abstraction.layer</module>
   	<module>gebo.architecture.contenthandling.interfaces</module>
+  	<module>gebo.architecture.virtual-browsing</module>
   	<module>gebo.architecture.contentsystems.abstraction.layer</module>
   	<module>gebo.architecture.knowledgebase.browsing</module>
   	<module>gebo.architecture.buildsystems.abstraction.layer</module>
