@@ -60,7 +60,14 @@ public final class GeboStandardMicroservices {
 			GeboMicroservice.named("brain_gebo_ai")
 					.module("core-module", "user-messages-concentrator-component", "mongo-dispose-documents-component",
 							"session-shrinker", "sessionLifeCycleService")
-					.module("brain-module")
+					// async-publishing-job-component/job-status-notifier: brain isn't a content
+					// handler, but gebo.core (added to brain so it can host the KB/project admin
+					// controllers under microservices) pulls gebo.architecture.contentsystems.abstraction.layer
+					// onto brain's classpath transitively, and with it GGeboIngestionJobQueueServiceImpl,
+					// which requires a concrete AbstractJobLaunchManager/AbstractJobStatusEmitter bean
+					// regardless of whether brain ever actually owns a published endpoint - see
+					// BrainJobLaunchManager/BrainJobStatusEmitter in brain.gebo.ai.
+					.module("brain-module", "async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			// AuthN/AuthZ, OAuth2 integration. Owns no messaging module (REST-only edge).
