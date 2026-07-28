@@ -34,7 +34,6 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.filesystem.content.handler.GFilesystemContentManagementSystem;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
 import ai.gebo.filesystem.content.handler.IGFilesystemContentManagementSystemHandler;
@@ -107,17 +106,14 @@ public class FileSystemsController
 	 * @param messageBroker Broker for handling messages
 	 * @param securityService Service for security operations
 	 * @param controllerEmitter Emitter for controller events
-	 * @param schedulingService Service for scheduling operations
 	 * @param entityProcessingRunnableFactory Factory for creating entity processing runnables
 	 */
 	public FileSystemsController(IGPersistentObjectManager persistenceManager, IGMessageBroker messageBroker,
 			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter,
-			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistenceManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistenceManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 	}
 
 	/**

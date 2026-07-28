@@ -48,6 +48,13 @@ public class GStandardModulesConstraints {
 	public static final String AWS_S3_MODULE = "aws-s3-module";
 	public static final String ASYNC_PUBLISHING_JOB_MODULE = "async-publishing-job-module";
 	public static final String ASYNC_PUBLISHING_JOB_COMPONENT = "async-publishing-job-component";
+	/**
+	 * The job-status broadcast system-id hosted alongside
+	 * {@link #ASYNC_PUBLISHING_JOB_COMPONENT} under whichever module id a given
+	 * deployment assigns (the shared constant above on the monolith, each
+	 * content-handler's own module id under microservices).
+	 */
+	public static final String JOB_STATUS_NOTIFIER = "job-status-notifier";
 	public static final String SCHEDULER_MODULE = "scheduler-module";
 	public static final String INTEGRATION_MODULE = "integration-module";
 	public static final String SCHEDULER_COMPONENT = "scheduler-component";

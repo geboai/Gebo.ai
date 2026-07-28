@@ -37,7 +37,6 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.atlassian.jira.handler.GJiraProjectEndpoint;
 import ai.gebo.atlassian.jira.handler.GJiraSystem;
 import ai.gebo.atlassian.jira.handler.IGJiraContentManagementHandler;
@@ -95,7 +94,6 @@ public class JiraSystemsController extends GAbstractSystemsArchitectureControlle
      * @param handler Handler for Jira content management operations
      * @param endpointRepository Repository for accessing Jira project endpoints
      * @param secretAccessService Service for accessing secrets
-     * @param schedulingService Service for scheduling operations
      * @param entityProcessingRunnableFactory Factory for entity processing runnables
      * @param restTemplateWrapper Wrapper for REST template operations
      * @param JiraTestService Service for testing Jira systems
@@ -103,13 +101,11 @@ public class JiraSystemsController extends GAbstractSystemsArchitectureControlle
 	public JiraSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			JiraControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGJiraContentManagementHandler handler, JiraProjectEndpointRepository endpointRepository,
-			IGeboSecretsAccessService secretAccessService, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGeboSecretsAccessService secretAccessService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			RestTemplateWrapperService restTemplateWrapper, JiraSystemsTestService JiraTestService,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 		this.endpointRepository = endpointRepository;
 		this.secretAccessService = secretAccessService;

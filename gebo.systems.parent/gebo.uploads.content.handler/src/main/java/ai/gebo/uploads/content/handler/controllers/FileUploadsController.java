@@ -35,7 +35,6 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
@@ -112,13 +111,12 @@ public class FileUploadsController
 	 * @param messageBroker for handling messaging between components
 	 * @param securityService for security-related operations
 	 * @param controllerEmitter emitter for messaging events
-	 * @param schedulingService service for scheduling tasks
 	 * @param entityProcessingRunnableFactory factory for creating entity processing runnables
 	 */
 	public FileUploadsController(IGPersistentObjectManager persistenceManager, IGMessageBroker messageBroker,
-			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter, IGSchedulingTimeService schedulingService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory, IGGeboIngestionJobQueueService jobQueueService,
+			IGSecurityService securityService, FilesystemsControllerEmitter controllerEmitter, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory, IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistenceManager, messageBroker, controllerEmitter, securityService,schedulingService,entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistenceManager, messageBroker, controllerEmitter, securityService,entityProcessingRunnableFactory, jobQueueService, replicationService);
 	}
 
 	/**

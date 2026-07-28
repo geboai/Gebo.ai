@@ -2,9 +2,6 @@ package ai.gebo.jobs.services.impl;
 
 import java.util.List;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IMessageEnvelopeFactory;
@@ -16,25 +13,39 @@ import ai.gebo.core.messages.GBaseWorkflowStatusPayload;
 import ai.gebo.core.messages.GFinishedWorkflowPayload;
 import ai.gebo.core.messages.GStartedWorkflowPayload;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
-import lombok.AllArgsConstructor;
 
-@Component
-@Scope("singleton")
-@AllArgsConstructor
-public class JobStatusEmitter implements IGMessageEmitter {
-	private static final String JOB_STATUS_NOTIFIER = "job-status-notifier";
+/**
+ * Base implementation broadcasting job start/finish notifications.
+ *
+ * <p>
+ * {@code messagingSystemId} is fixed
+ * ({@link GStandardModulesConstraints#JOB_STATUS_NOTIFIER}) while
+ * {@code messagingModuleId} is assignable per concrete subclass - see
+ * {@link AbstractJobLaunchManager} for the full rationale, which applies here
+ * identically.
+ * </p>
+ */
+public abstract class AbstractJobStatusEmitter implements IGMessageEmitter {
 	private final IGRuntimeBinder runtimeBinder;
 	private final IMessageEnvelopeFactory envelopeFactory;
+	protected final String messagingModuleId;
+
+	protected AbstractJobStatusEmitter(IGRuntimeBinder runtimeBinder, IMessageEnvelopeFactory envelopeFactory,
+			String messagingModuleId) {
+		this.runtimeBinder = runtimeBinder;
+		this.envelopeFactory = envelopeFactory;
+		this.messagingModuleId = messagingModuleId;
+	}
 
 	@Override
 	public String getMessagingModuleId() {
 
-		return GStandardModulesConstraints.ASYNC_PUBLISHING_JOB_MODULE;
+		return messagingModuleId;
 	}
 
 	@Override
 	public String getMessagingSystemId() {
-		return JOB_STATUS_NOTIFIER;
+		return GStandardModulesConstraints.JOB_STATUS_NOTIFIER;
 	}
 
 	@Override

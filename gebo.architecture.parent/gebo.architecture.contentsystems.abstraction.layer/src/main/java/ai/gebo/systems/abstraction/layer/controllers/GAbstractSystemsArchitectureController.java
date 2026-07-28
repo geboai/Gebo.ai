@@ -27,9 +27,10 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.replicator.service.IEntityReplicationService;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.core.messages.GDeletedProjectEndpointPayload;
+import ai.gebo.core.messages.GRescheduleProjectEndpointMessagePayload;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.jobs.services.impl.AbstractJobLaunchManager;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
@@ -59,8 +60,6 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	protected final ControllerNestedEmitter controllerEmitter;
 	// Service for handling security checks
 	protected final IGSecurityService securityService;
-	// Service for handling scheduling
-	protected final IGSchedulingTimeService schedulingService;
 	// Factory for runnable processing of entities
 	protected final IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory;
 	protected final IGGeboIngestionJobQueueService jobQueueService;
@@ -71,6 +70,18 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	// Spring-managed @RestController.
 	@Autowired
 	protected IMessageEnvelopeFactory envelopeFactory;
+	// Used as the "from" emitter when requesting a reschedule (see
+	// processReschedule): exactly one AbstractJobLaunchManager subclass is
+	// active per JVM (@ConditionalOnMonolithic/@ConditionalOnMicroservices), so
+	// its own getMessagingModuleId() is always wherever this deployment's
+	// publish-job receiver actually lives - unlike controllerEmitter, which
+	// stays per-handler-scoped even on the monolith, where the publish-job
+	// receiver is registered under the single shared ASYNC_PUBLISHING_JOB_MODULE
+	// constant instead. Using it as the emitter makes the resulting envelope's
+	// sourceModule the correct address for the central scheduler to target when
+	// the run comes due.
+	@Autowired
+	protected AbstractJobLaunchManager jobLaunchManager;
 
 	/**
 	 * Nested emitter class for handling messaging from the controller.
@@ -99,12 +110,10 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	 * @param messageBroker                   Broker for messaging.
 	 * @param controllerEmitter               Emitter for controller messages.
 	 * @param securityService                 Service for security operations.
-	 * @param schedulingService               Service for scheduling operations.
 	 * @param entityProcessingRunnableFactory Factory for processing entities.
 	 */
 public GAbstractSystemsArchitectureController(IGPersistentObjectManager persistentObjectManager,
 			IGMessageBroker messageBroker, ControllerNestedEmitter controllerEmitter, IGSecurityService securityService,
-			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
@@ -112,7 +121,6 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 		this.messageBroker = messageBroker;
 		this.controllerEmitter = controllerEmitter;
 		this.securityService = securityService;
-		this.schedulingService = schedulingService;
 		this.entityProcessingRunnableFactory = entityProcessingRunnableFactory;
 		this.jobQueueService = jobQueueService;
 		this.replicationService = replicationService;
@@ -207,19 +215,28 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 			endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
 		EndpointType outdata = persistentObjectManager.insert(endpoint);
-		processReschedule(endpoint);
 		GCentralizedProjectEndpoint centralized = GCentralizedProjectEndpoint.of(outdata);
+		processReschedule(centralized);
 		replicationService.replicate(centralized);
 		return outdata;
 	}
 
 	/**
-	 * Processes the rescheduling of jobs related to the given endpoint.
-	 * 
-	 * @param endpoint The endpoint whose scheduling needs to be managed.
+	 * Sends a reschedule request for the given endpoint to the central scheduler
+	 * (scheduler-module.scheduler-component, hosted by the monolith or by tyr
+	 * under microservices), carrying the flattened endpoint so the scheduler
+	 * doesn't need to reach back into this service's own persistence.
+	 *
+	 * @param centralized The flattened view of the endpoint to (re)schedule.
 	 */
-	private void processReschedule(EndpointType endpoint) {
-		schedulingService.managePublishScheduling(endpoint);
+	private void processReschedule(GCentralizedProjectEndpoint centralized) {
+		GRescheduleProjectEndpointMessagePayload payload = new GRescheduleProjectEndpointMessagePayload();
+		payload.setCentralizedProjectEndpoint(centralized);
+		GMessageEnvelope<GRescheduleProjectEndpointMessagePayload> envelope = envelopeFactory
+				.newMessageFrom(jobLaunchManager, payload);
+		envelope.setTargetModule(GStandardModulesConstraints.SCHEDULER_MODULE);
+		envelope.setTargetComponent(GStandardModulesConstraints.SCHEDULER_COMPONENT);
+		messageBroker.accept(envelope);
 	}
 
 	/**
@@ -235,8 +252,8 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 			endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
 		EndpointType outdata = persistentObjectManager.update(endpoint);
-		processReschedule(endpoint);
 		GCentralizedProjectEndpoint centralized = GCentralizedProjectEndpoint.of(outdata);
+		processReschedule(centralized);
 		replicationService.replicate(centralized);
 		return outdata;
 	}
@@ -301,7 +318,7 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 				endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 			}
 			EndpointType outdata = persistentObjectManager.update(endpoint);
-			processReschedule(endpoint);
+			processReschedule(GCentralizedProjectEndpoint.of(outdata));
 			GJobStatus job = jobQueueService.createNewAsyncJob(outdata, new NoContentConsumingSessionParam(),
 					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
 			return OperationStatus.of(job);

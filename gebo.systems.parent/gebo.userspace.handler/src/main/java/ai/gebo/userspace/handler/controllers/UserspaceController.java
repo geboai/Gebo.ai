@@ -25,7 +25,6 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
@@ -60,12 +59,10 @@ public class UserspaceController
 
 	public UserspaceController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			UserspaceControllerEmitter controllerEmitter, IGSecurityService securityService,
-			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			UserspaceService userspaceService, IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.userspaceService = userspaceService;
 
 	}

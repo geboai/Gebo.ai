@@ -38,7 +38,6 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceConnection;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceSpaceApi;
 import ai.gebo.atlassian.confluence.handler.ConfluenceVersion;
@@ -104,7 +103,6 @@ public class ConfluenceSystemsController
 	 * @param handler Confluence content management handler
 	 * @param endpointRepository Repository for Confluence endpoints
 	 * @param secretAccessService Service for managing credentials
-	 * @param schedulingService Service for scheduling operations
 	 * @param entityProcessingRunnableFactory Factory for processing runnables
 	 * @param restTemplateWrapper HTTP client wrapper
 	 * @param confluenceTestService Service for testing Confluence connections
@@ -112,13 +110,11 @@ public class ConfluenceSystemsController
 	public ConfluenceSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			ConfluenceControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGConfluenceContentManagementHandler handler, ConfluenceProjectEndpointRepository endpointRepository,
-			IGeboSecretsAccessService secretAccessService, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGeboSecretsAccessService secretAccessService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			RestTemplateWrapperService restTemplateWrapper, ConfluenceSystemsTestService confluenceTestService,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 		this.endpointRepository = endpointRepository;
 		this.secretAccessService = secretAccessService;

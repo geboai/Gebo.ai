@@ -20,14 +20,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
+import ai.gebo.application.messaging.model.GMessageEnvelope;
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.core.messages.GRescheduleProjectEndpointMessagePayload;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.jobs.services.impl.AbstractJobLaunchManager;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
@@ -52,11 +58,15 @@ public class JobLauncherController {
  
 	private final IGGeboIngestionJobQueueService jobQueueService;
 	/** Manager for persistent objects */
-	
+
 	private final IGPersistentObjectManager persistentObjectManager;
-	/** Service for scheduling operations */
-	private final IGSchedulingTimeService schedulingService;
-	
+	private final IGMessageBroker messageBroker;
+	private final IMessageEnvelopeFactory envelopeFactory;
+	// See GAbstractSystemsArchitectureController.jobLaunchManager for why this
+	// bean (rather than a dedicated emitter) is used as the reschedule request's
+	// "from" identity.
+	private final AbstractJobLaunchManager jobLaunchManager;
+
 
 	/**
 	 * Creates a new job for a project endpoint. If the endpoint is not published,
@@ -77,8 +87,8 @@ public class JobLauncherController {
 		GProjectEndpoint endpointObject = persistentObjectManager.findByReference(endpoint, GProjectEndpoint.class);
 		if (endpointObject.getPublished() == null || !endpointObject.getPublished()) {
 			endpointObject.setPublished(true);
-			persistentObjectManager.update(endpointObject);
-			schedulingService.managePublishScheduling(endpointObject);
+			GProjectEndpoint updated = persistentObjectManager.update(endpointObject);
+			requestReschedule(GCentralizedProjectEndpoint.of(updated));
 		}
 		if (jobQueueService.isRunningSyncJob(endpointObject)) {
 			OperationStatus<GJobStatus> status = new OperationStatus<GJobStatus>();
@@ -93,6 +103,21 @@ public class JobLauncherController {
 	}
 
 	
+
+	/**
+	 * Sends a reschedule request for the given endpoint to the central scheduler.
+	 *
+	 * @param centralized The flattened view of the endpoint to (re)schedule.
+	 */
+	private void requestReschedule(GCentralizedProjectEndpoint centralized) {
+		GRescheduleProjectEndpointMessagePayload payload = new GRescheduleProjectEndpointMessagePayload();
+		payload.setCentralizedProjectEndpoint(centralized);
+		GMessageEnvelope<GRescheduleProjectEndpointMessagePayload> envelope = envelopeFactory
+				.newMessageFrom(jobLaunchManager, payload);
+		envelope.setTargetModule(GStandardModulesConstraints.SCHEDULER_MODULE);
+		envelope.setTargetComponent(GStandardModulesConstraints.SCHEDULER_COMPONENT);
+		messageBroker.accept(envelope);
+	}
 
 	/**
 	 * Aborts a running job.

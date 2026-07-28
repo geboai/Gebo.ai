@@ -93,22 +93,22 @@ public final class GeboStandardMicroservices {
 					.module("knowledge-graph-module", "knowledge-graph-component")
 					.build(),
 
-			// tyr is the workflows/usage/jobs-tracking microservice. It does NOT depend on
-			// gebo.architecture.scheduling or gebo.architecture.contentsystems.abstraction.layer,
-			// so it never implements scheduler-module.scheduler-component,
-			// async-publishing-job-module.async-publishing-job-component, or
-			// async-publishing-job-module.job-status-notifier - those three identities are
-			// pure same-service local self-loops that each content-handler runs against its
-			// own local GSchedulingTimeServiceImpl/JobLaunchManagerImpl/JobStatusEmitter beans
-			// (gebo.architecture.scheduling and gebo.architecture.contentsystems.abstraction.layer
-			// are on every content-handler's classpath), never routed cross-service - so they must
-			// stay out of the topology entirely (GeboMicroservicesTopology requires exactly one
-			// owner per module, and declaring tyr as that owner here was never accurate: it
-			// caused RabbitMqExternalMessage{Emitter,Receiver}ProviderSource, once RabbitMQ was
-			// enabled, to build a remote proxy for these on every content-handler that collided
-			// with its own local bean under the identical identity in GBaseMessageBroker).
-			// job-status-replication-receiver is tyr's one genuine local component under this
-			// module (GJobStatusReplicatorReceiverService, gebo.architecture.compute.workflow).
+			// tyr is the workflows/usage/jobs-tracking microservice, and now also hosts the
+			// CENTRAL publish scheduler (gebo.architecture.scheduling's
+			// AbstractCentralSchedulingService / ClusteredCentralSchedulingService): every
+			// content-handler sends its reschedule requests to scheduler-module.scheduler-component
+			// here instead of running its own local scheduler, and tyr dispatches
+			// PublishProjectEndpointMessagePayload back to each handler's own
+			// <handler>-module.async-publishing-job-component when a run is due (see each
+			// content-handler's own AbstractJobLaunchManager/AbstractJobStatusEmitter
+			// subclass below, registered under that handler's own module id -
+			// ai.gebo.jobs.services.impl.AbstractJobLaunchManager/AbstractJobStatusEmitter).
+			//
+			// async-publishing-job-module.job-status-replication-receiver remains tyr's one
+			// genuine local component under that shared constant (GJobStatusReplicatorReceiverService,
+			// gebo.architecture.compute.workflow) - async-publishing-job-component/job-status-notifier
+			// are NOT declared here: they are per-handler identities now (each content-handler's
+			// own module below), never tyr's.
 			//
 			// jobs-master-module is the OTHER genuine cross-service target tyr hosts:
 			// GWorkflowsConcentratorMessagesReceiverFactory's user-messages-concentrator-component
@@ -127,6 +127,7 @@ public final class GeboStandardMicroservices {
 					.module("async-publishing-job-module", "job-status-replication-receiver")
 					.module("jobs-master-module", "user-messages-concentrator-component",
 							"end-of-workflow-compute-service")
+					.module("scheduler-module", "scheduler-component")
 					.build(),
 
 			// --- Content services (one per gebo.systems.parent handler) ------
@@ -141,63 +142,78 @@ public final class GeboStandardMicroservices {
 			// RabbitMqExternalMessageEmitterProviderSource register it as a known
 			// emitter on every OTHER microservice (concretely, tyr, which needs to
 			// recognise the sender of a replicated GJobStatus).
+			//
+			// async-publishing-job-component/job-status-notifier follow the identical
+			// pattern, now for the job-launch/job-status pair: each handler's own
+			// <Handler>JobLaunchManager/<Handler>JobStatusEmitter (in that handler's own
+			// module, @ConditionalOnMicroservices) registers under its own already-owned
+			// module id instead of the shared monolithic constant, so tyr's central
+			// scheduler (scheduler-module.scheduler-component, above) can address each
+			// handler's job launcher as a real, unique, topology-routable target.
 			GeboMicroservice.named("git_gebo_ai")
 					.module("git-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component", "Content.Handler.DEFAULT.GIT.CONTENT.HANDLER",
-							"job-status-replicator")
+							"job-status-replicator", "async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("filesystem_gebo_ai")
 					.module("shared-filesystem-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component", "Content.Handler.DEFAULT.FILESYSTEM.CONTENT.HANDLER",
-							"job-status-replicator")
+							"job-status-replicator", "async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("uploads_gebo_ai")
 					.module("uploads-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component", "Content.Handler.DEFAULT.UPLOADS.CONTENT.HANDLER",
-							"job-status-replicator")
+							"job-status-replicator", "async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("userspace_gebo_ai")
 					.module("userspace-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component", "Content.Handler.USERSPACE-CONTENTSYSTEM",
-							"job-status-replicator")
+							"job-status-replicator", "async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("sharepoint_gebo_ai")
 					.module("sharepoint-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "job-status-replicator")
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("confluence_gebo_ai")
 					.module("confluence-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "job-status-replicator")
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("jira_gebo_ai")
 					.module("jira-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "job-status-replicator")
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("aws_s3_gebo_ai")
 					.module("aws-s3-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "job-status-replicator")
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("googledrive_gebo_ai")
 					.module("google-drive-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "job-status-replicator")
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("mcpclient_gebo_ai")
 					.module("mcp-client-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "job-status-replicator")
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
 			GeboMicroservice.named("integration_gebo_ai")
 					.module("integration-module", "module-ioc-dispatcher-component", "resources-dispose-component",
-							"system-settings-controller-component", "job-status-replicator")
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
 					.build());
 
 	/**

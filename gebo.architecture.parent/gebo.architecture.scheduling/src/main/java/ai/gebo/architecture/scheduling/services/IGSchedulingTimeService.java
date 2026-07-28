@@ -12,37 +12,26 @@
 
 package ai.gebo.architecture.scheduling.services;
 
-import java.util.Date;
 import java.util.List;
 
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingProgrammedTable;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Gebo.ai comment agent
- * 
- * Interface for managing scheduling services related to time management.
+ * Pure calendar-math display helper, unconditionally available on every
+ * deployment (no Mongo/messaging involved) - unlike the actual publish
+ * scheduling engine, which is centralized (see
+ * {@code ai.gebo.architecture.scheduling.services.impl.AbstractCentralSchedulingService}
+ * and its {@code @ConditionalOnMonolithic}/{@code @ConditionalOnMicroservices}
+ * subclasses) and reached only via the messaging system, never a direct call.
  */
 public interface IGSchedulingTimeService {
-    
+
     /**
      * Retrieves a list of display time values based on the supplied list of `ReindexingProgrammedTable`.
-     * 
+     *
      * @param programmedTable a list of `ReindexingProgrammedTable` objects, cannot be null
      * @return a list of display time values as strings
      */
     public List<String> getDisplayTimeValues(@NotNull List<ReindexingProgrammedTable> programmedTable);
-
-    /**
-     * Manages the publish scheduling for the given project endpoint.
-     * 
-     * @param endpoint the project endpoint that needs scheduling management
-     */
-    public void managePublishScheduling(GProjectEndpoint endpoint);
-
-    /**
-     * Executes a scheduled tick which could be used to trigger periodic actions.
-     */
-    public void scheduleTick();
 }

@@ -49,7 +49,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	/** Repository for persisting job status information */
 	private final JobStatusRepository statusRepository;
 	private final IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
-	private final JobStatusEmitter statusEmitter;
+	private final AbstractJobStatusEmitter statusEmitter;
 	/** Replicates the freshly-created GJobStatus to tyr; a no-op in the monolith. */
 	private final IEntityReplicationService entityReplicationService;
 

@@ -13,8 +13,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
@@ -22,6 +20,7 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.core.messages.GRescheduleProjectEndpointMessagePayload;
 import ai.gebo.core.messages.PublishProjectEndpointAckMessagePayload;
 import ai.gebo.core.messages.PublishProjectEndpointMessagePayload;
 import ai.gebo.jobs.services.GeboJobServiceException;
@@ -33,15 +32,24 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 
 /**
- * AI generated comments Implementation of the Job Launch Manager that handles
- * asynchronous job launching operations. This class is responsible for
- * processing project endpoint publishing requests and creating corresponding
- * jobs.
+ * Base implementation of the Job Launch Manager that handles asynchronous job
+ * launching operations. Processes project endpoint publishing requests and
+ * creates corresponding jobs.
+ *
+ * <p>
+ * {@code messagingSystemId} is fixed ({@link GStandardModulesConstraints#ASYNC_PUBLISHING_JOB_COMPONENT})
+ * while {@code messagingModuleId} is assignable per concrete subclass: the
+ * monolith registers one instance under the shared
+ * {@link GStandardModulesConstraints#ASYNC_PUBLISHING_JOB_MODULE} constant,
+ * while under microservices each content-handler registers its own instance
+ * under its own already-owned module id (mirroring the
+ * {@code GJobStatusReplicatorService} precedent), so
+ * {@link ai.gebo.microservices.topology.GeboMicroservicesTopology}'s
+ * one-owner-per-module rule is never violated.
+ * </p>
  */
-@Component
-@Scope("singleton")
-public class JobLaunchManagerImpl implements IGJobLaunchManager {
-	private final static Logger LOGGER = LoggerFactory.getLogger(JobLaunchManagerImpl.class);
+public abstract class AbstractJobLaunchManager implements IGJobLaunchManager {
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractJobLaunchManager.class);
 
 	/**
 	 * Service for handling ingestion job queues
@@ -60,44 +68,63 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 
 	private final JobStatusRepository jobStatusRepositoy;
 
+	protected final String messagingModuleId;
+
 	/**
 	 * Constructor initializing the Job Launch Manager with required dependencies
-	 * 
+	 *
 	 * @param jobLauncherController   Service for handling ingestion job queues
 	 * @param persistentObjectManager Manager for persistent object operations
 	 * @param broker                  Message broker for inter-component
 	 *                                communication
+	 * @param messagingModuleId       The messaging module id this instance
+	 *                                registers under.
 	 */
-	public JobLaunchManagerImpl(IGGeboIngestionJobQueueService jobLauncherController,
+	protected AbstractJobLaunchManager(IGGeboIngestionJobQueueService jobLauncherController,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker broker,
-			JobStatusRepository jobStatusRepositoy) {
+			JobStatusRepository jobStatusRepositoy, String messagingModuleId) {
 		this.jobLauncherController = jobLauncherController;
 		this.persistentObjectManager = persistentObjectManager;
 		this.broker = broker;
 		this.jobStatusRepositoy = jobStatusRepositoy;
+		this.messagingModuleId = messagingModuleId;
 
 	}
 
 	/**
-	 * Returns the list of payload types that this component can emit
-	 * 
+	 * Returns the list of payload types that this component can emit.
+	 *
+	 * <p>
+	 * {@code GRescheduleProjectEndpointMessagePayload} is included so
+	 * {@code GAbstractSystemsArchitectureController} (and the other reschedule
+	 * call sites) can use this bean itself as the "from" emitter when requesting
+	 * a reschedule: since {@link #getMessagingModuleId()} is exactly wherever
+	 * this bean is registered as a {@code PublishProjectEndpointMessagePayload}
+	 * receiver, the resulting envelope's {@code sourceModule} is automatically
+	 * the correct target for the central scheduler to dispatch the eventual
+	 * publish message back to - unlike a per-handler controller emitter, which
+	 * stays per-handler-scoped even on the monolith where this bean's own module
+	 * id is the single shared constant.
+	 * </p>
+	 *
 	 * @return List of emitted payload types
 	 */
 	@Override
 	public List<String> getEmittedPayloadTypes() {
 
-		return List.of(PublishProjectEndpointAckMessagePayload.class.getName());
+		return List.of(PublishProjectEndpointAckMessagePayload.class.getName(),
+				GRescheduleProjectEndpointMessagePayload.class.getName());
 	}
 
 	/**
 	 * Returns the module ID for messaging
-	 * 
+	 *
 	 * @return The module ID for this component
 	 */
 	@Override
 	public String getMessagingModuleId() {
 
-		return GStandardModulesConstraints.ASYNC_PUBLISHING_JOB_MODULE;
+		return messagingModuleId;
 	}
 
 	/**

@@ -38,7 +38,6 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
@@ -104,7 +103,6 @@ public class SharepointSystemsController
 	 * @param handler Handler for SharePoint CMS interactions
 	 * @param endpointRepository Repository for SharePoint project endpoints
 	 * @param secretAccessService Service for accessing secrets
-	 * @param schedulingService Service for scheduling operations
 	 * @param entityProcessingRunnableFactory Factory for entity processing threads
 	 * @param restTemplateWrapper Wrapper for REST template operations
 	 * @param SharepointTestService Service for testing SharePoint connections
@@ -112,13 +110,11 @@ public class SharepointSystemsController
 	public SharepointSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			SharepointControllerEmitter controllerEmitter, IGSecurityService securityService,
 			IGSharepointContentManagementSystemHandler handler, SharepointProjectEndpointRepository endpointRepository,
-			IGeboSecretsAccessService secretAccessService, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGeboSecretsAccessService secretAccessService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			RestTemplateWrapperService restTemplateWrapper, SharepointSystemsTestService SharepointTestService,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 		this.endpointRepository = endpointRepository;
 		this.secretAccessService = secretAccessService;

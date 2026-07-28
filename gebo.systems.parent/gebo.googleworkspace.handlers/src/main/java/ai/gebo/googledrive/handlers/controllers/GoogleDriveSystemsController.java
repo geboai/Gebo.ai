@@ -27,7 +27,6 @@ import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
 import ai.gebo.googledrive.handlers.GGoogleDriveSystem;
@@ -92,7 +91,6 @@ public class GoogleDriveSystemsController
 	 * @param securityService Security service for authentication/authorization
 	 * @param googleDriveHandler Handler for Google Drive operations
 	 * @param endpointRepository Repository for project endpoints
-	 * @param schedulingService Service for scheduling operations
 	 * @param entityProcessingRunnableFactory Factory for entity processing runnables
 	 * @param testService Service for testing configurations
 	 * @param secretAccessService Service for accessing secrets
@@ -100,13 +98,11 @@ public class GoogleDriveSystemsController
 	public GoogleDriveSystemsController(IGPersistentObjectManager persistentObjectManager,
 			IGMessageBroker messageBroker, GoogleDriveSystemsNestedEmitter controllerEmitter,
 			IGSecurityService securityService, IGGoogleDriveSystemContentHandler googleDriveHandler,
-			GoogleDriveProjectEndpointRepository endpointRepository, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			GoogleDriveProjectEndpointRepository endpointRepository, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			GoogleDriveTestService testService, IGeboSecretsAccessService secretAccessService,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.googleDriveHandler = googleDriveHandler;
 		this.endpointRepository = endpointRepository;
 		this.testService = testService;
