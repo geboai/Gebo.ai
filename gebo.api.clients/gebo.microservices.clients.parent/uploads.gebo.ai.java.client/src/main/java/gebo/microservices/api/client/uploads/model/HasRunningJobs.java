@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * HasRunningJobs
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:49.920533026+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T15:05:50.751911222+02:00[Europe/Rome]")
 
 public class HasRunningJobs {
   @JsonProperty("endpoint")

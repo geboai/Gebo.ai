@@ -50,7 +50,7 @@ import gebo.microservices.api.client.googledrive.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.googledrive.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.googledrive.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:52.744613801+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T15:04:55.947353420+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {

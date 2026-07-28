@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageMCPClientConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:53.247041545+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T15:05:33.531902040+02:00[Europe/Rome]")
 
 public class PageMCPClientConfig {
   @JsonProperty("totalPages")
@@ -33,14 +33,14 @@ public class PageMCPClientConfig {
   @JsonProperty("totalElements")
   private Object totalElements = null;
 
-  @JsonProperty("pageable")
-  private PageableObject pageable = null;
-
   @JsonProperty("first")
   private Object first = null;
 
   @JsonProperty("last")
   private Object last = null;
+
+  @JsonProperty("pageable")
+  private PageableObject pageable = null;
 
   @JsonProperty("size")
   private Object size = null;
@@ -96,24 +96,6 @@ public class PageMCPClientConfig {
     this.totalElements = totalElements;
   }
 
-  public PageMCPClientConfig pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
   public PageMCPClientConfig first(Object first) {
     this.first = first;
     return this;
@@ -148,6 +130,24 @@ public class PageMCPClientConfig {
 
   public void setLast(Object last) {
     this.last = last;
+  }
+
+  public PageMCPClientConfig pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
   }
 
   public PageMCPClientConfig size(Object size) {
@@ -270,9 +270,9 @@ public class PageMCPClientConfig {
     PageMCPClientConfig pageMCPClientConfig = (PageMCPClientConfig) o;
     return Objects.equals(this.totalPages, pageMCPClientConfig.totalPages) &&
         Objects.equals(this.totalElements, pageMCPClientConfig.totalElements) &&
-        Objects.equals(this.pageable, pageMCPClientConfig.pageable) &&
         Objects.equals(this.first, pageMCPClientConfig.first) &&
         Objects.equals(this.last, pageMCPClientConfig.last) &&
+        Objects.equals(this.pageable, pageMCPClientConfig.pageable) &&
         Objects.equals(this.size, pageMCPClientConfig.size) &&
         Objects.equals(this.content, pageMCPClientConfig.content) &&
         Objects.equals(this.number, pageMCPClientConfig.number) &&
@@ -283,7 +283,7 @@ public class PageMCPClientConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, first, last, pageable, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -294,9 +294,9 @@ public class PageMCPClientConfig {
     
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
-    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");

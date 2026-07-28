@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:54.334477201+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T15:05:45.129676632+02:00[Europe/Rome]")
 
 public class ComponentMetaInfo {
   @JsonProperty("messagingSystemId")

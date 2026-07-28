@@ -121,9 +121,9 @@ public class UsersAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findUserByUsernameTest() {
+    public void findUserByUsername1Test() {
         Object email = null;
-        EditableUser response = api.findUserByUsername(email);
+        EditableUser response = api.findUserByUsername1(email);
 
         // TODO: test validations
     }

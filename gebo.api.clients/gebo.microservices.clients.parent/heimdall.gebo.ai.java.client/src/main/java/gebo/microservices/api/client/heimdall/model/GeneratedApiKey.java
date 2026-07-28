@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeneratedApiKey
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:42.706770550+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T15:05:08.262555371+02:00[Europe/Rome]")
 
 public class GeneratedApiKey {
   @JsonProperty("code")

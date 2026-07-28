@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:42.706770550+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T15:05:08.262555371+02:00[Europe/Rome]")
 
 public class SecretsControllerApi {
     private ApiClient apiClient;
@@ -425,8 +425,8 @@ public class SecretsControllerApi {
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteSecret(SecretInfo body) throws RestClientException {
-        deleteSecretWithHttpInfo(body);
+    public void deleteSecret1(SecretInfo body) throws RestClientException {
+        deleteSecret1WithHttpInfo(body);
     }
 
     /**
@@ -437,11 +437,11 @@ public class SecretsControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteSecretWithHttpInfo(SecretInfo body) throws RestClientException {
+    public ResponseEntity<Void> deleteSecret1WithHttpInfo(SecretInfo body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteSecret");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteSecret1");
         }
         String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/deleteSecret").build().toUriString();
         

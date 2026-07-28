@@ -22,14 +22,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:42.706770550+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T15:05:08.262555371+02:00[Europe/Rome]")
 
 public class UserInfos {
-  @JsonProperty("name")
-  private Object name = null;
-
   @JsonProperty("username")
   private Object username = null;
+
+  @JsonProperty("name")
+  private Object name = null;
 
   @JsonProperty("roles")
   private Object roles = null;
@@ -39,24 +39,6 @@ public class UserInfos {
 
   @JsonProperty("sourname")
   private Object sourname = null;
-
-  public UserInfos name(Object name) {
-    this.name = name;
-    return this;
-  }
-
-   /**
-   * Get name
-   * @return name
-  **/
-  @Schema(description = "")
-  public Object getName() {
-    return name;
-  }
-
-  public void setName(Object name) {
-    this.name = name;
-  }
 
   public UserInfos username(Object username) {
     this.username = username;
@@ -74,6 +56,24 @@ public class UserInfos {
 
   public void setUsername(Object username) {
     this.username = username;
+  }
+
+  public UserInfos name(Object name) {
+    this.name = name;
+    return this;
+  }
+
+   /**
+   * Get name
+   * @return name
+  **/
+  @Schema(description = "")
+  public Object getName() {
+    return name;
+  }
+
+  public void setName(Object name) {
+    this.name = name;
   }
 
   public UserInfos roles(Object roles) {
@@ -140,8 +140,8 @@ public class UserInfos {
       return false;
     }
     UserInfos userInfos = (UserInfos) o;
-    return Objects.equals(this.name, userInfos.name) &&
-        Objects.equals(this.username, userInfos.username) &&
+    return Objects.equals(this.username, userInfos.username) &&
+        Objects.equals(this.name, userInfos.name) &&
         Objects.equals(this.roles, userInfos.roles) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
         Objects.equals(this.sourname, userInfos.sourname);
@@ -149,7 +149,7 @@ public class UserInfos {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, username, roles, disabled, sourname);
+    return Objects.hash(username, name, roles, disabled, sourname);
   }
 
 
@@ -158,8 +158,8 @@ public class UserInfos {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserInfos {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
     sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
