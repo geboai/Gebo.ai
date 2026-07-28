@@ -130,11 +130,21 @@ public final class GeboStandardMicroservices {
 			// same-service loopback (GWorkflowsConcentratorMessagesEmitterImpl emits
 			// ComputeWorkflowEndPayload to it, entirely within tyr) - harmless to also expose,
 			// nothing elsewhere implements this identity.
+			// LLMS-USAGE-MONITOR.USAGE-CONCENTRATOR (LLMUsageConcentratorReceiverFactory) is
+			// tyr's LLM-usage-tracking aggregator by design: brain/vectorizator/graphicator's
+			// LLMSUsageCrudServiceImpl each send here via a TARGETED
+			// envelope.setTargetModule(...), not a broadcast, so without this declared the
+			// senders' RabbitMQ bridge could never build a remote proxy for it and
+			// cross-service usage events would silently fail to route. Found undeclared
+			// during a messaging-topology audit (docs/MICROSERVICES-MESSAGING-TOPOLOGY.md);
+			// tyr ownership itself was confirmed intentional, only the topology entry was
+			// missing.
 			GeboMicroservice.named("tyr_gebo_ai")
 					.module("async-publishing-job-module", "job-status-replication-receiver")
 					.module("jobs-master-module", "user-messages-concentrator-component",
 							"end-of-workflow-compute-service")
 					.module("scheduler-module", "scheduler-component")
+					.module("LLMS-USAGE-MONITOR", "USAGE-CONCENTRATOR")
 					.build(),
 
 			// --- Content services (one per gebo.systems.parent handler) ------
