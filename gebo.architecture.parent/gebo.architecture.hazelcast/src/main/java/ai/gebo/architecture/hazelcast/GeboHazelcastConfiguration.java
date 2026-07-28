@@ -95,15 +95,28 @@ public class GeboHazelcastConfiguration {
 		JoinConfig join = network.getJoin();
 		// Multicast is never used: participation is explicit via the provided topology.
 		join.getMulticastConfig().setEnabled(false);
+		// TCP/IP join stays enabled even with an empty member list (unlike disabling
+		// it outright, which was the previous behaviour here): Hazelcast requires
+		// some join mechanism enabled, and disabling both multicast and TCP/IP makes
+		// it silently fall back to its own default (multicast). A member whose own
+		// discovery snapshot came back empty - because its peers hadn't registered
+		// with Eureka yet, see DiscoveryClientClusterTopologyProvider's retry-budget
+		// comment - would then be multicast-only forever, while a peer that started
+		// later and DID see a full member list stays on TCP/IP and gets permanently
+		// rejected trying to join it ("Incompatible joiners! expected: multicast,
+		// found: tcp-ip"), crash-looping that later instance's whole Spring context.
+		// Leaving TCP/IP enabled with no configured members doesn't make this node
+		// dial out to anyone, but it keeps it listening for and accepting incoming
+		// TCP/IP join requests from exactly such a later-arriving, fully-informed peer.
+		join.getTcpIpConfig().setEnabled(true);
 		if (topology.getMembers() != null && !topology.getMembers().isEmpty()) {
-			join.getTcpIpConfig().setEnabled(true);
 			topology.getMembers().forEach(join.getTcpIpConfig()::addMember);
 			LOGGER.info("Models replication Hazelcast member '{}' on cluster '{}' with TCP/IP members {}",
 					config.getInstanceName(), config.getClusterName(), topology.getMembers());
 		} else {
-			join.getTcpIpConfig().setEnabled(false);
 			LOGGER.warn("Models replication topology declared no members for cluster '{}': "
-					+ "the member will run isolated (single-member cache)", config.getClusterName());
+					+ "the member will listen for TCP/IP joins but won't dial out to anyone until it "
+					+ "discovers peers on a later attempt", config.getClusterName());
 		}
 
 		return Hazelcast.getOrCreateHazelcastInstance(config);
