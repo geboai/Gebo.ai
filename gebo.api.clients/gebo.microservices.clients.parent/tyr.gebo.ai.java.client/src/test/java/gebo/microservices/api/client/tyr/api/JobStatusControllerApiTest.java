@@ -14,6 +14,8 @@ package gebo.microservices.api.client.tyr.api;
 
 import gebo.microservices.api.client.tyr.model.GJobStatus;
 import gebo.microservices.api.client.tyr.model.JobSummary;
+import gebo.microservices.api.client.tyr.model.JobsEntriesForProjectEndpointFilter;
+import gebo.microservices.api.client.tyr.model.PageGJobStatusItem;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -57,6 +59,21 @@ public class JobStatusControllerApiTest {
     public void getJobSummaryTest() {
         Object jobCode = null;
         JobSummary response = api.getJobSummary(jobCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getJobsEntriesForProjectEndpointTest() {
+        JobsEntriesForProjectEndpointFilter body = null;
+        PageGJobStatusItem response = api.getJobsEntriesForProjectEndpoint(body);
 
         // TODO: test validations
     }

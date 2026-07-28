@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**getMyChats**](GeboUserChatsControllerApi.md#getMyChats) | **GET** /api/users/GeboUserChatsController/getMyChats | 
 [**getMyChatsPaged**](GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
 [**getUIConfig**](GeboUserChatsControllerApi.md#getUIConfig) | **GET** /api/users/GeboUserChatsController/getUIConfig | 
+[**isMinimalLLMSSetupDone**](GeboUserChatsControllerApi.md#isMinimalLLMSSetupDone) | **GET** /api/users/GeboUserChatsController/isMinimalLLMSSetupDone | 
 [**suggestChatDescription**](GeboUserChatsControllerApi.md#suggestChatDescription) | **GET** /api/users/GeboUserChatsController/suggestChatDescription | 
 
 <a name="changeChatDescription"></a>
@@ -476,6 +477,45 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**ChatUIOptions**](ChatUIOptions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="isMinimalLLMSSetupDone"></a>
+# **isMinimalLLMSSetupDone**
+> Object isMinimalLLMSSetupDone()
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+try {
+    Object result = apiInstance.isMinimalLLMSSetupDone();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#isMinimalLLMSSetupDone");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**Object**
 
 ### Authorization
 

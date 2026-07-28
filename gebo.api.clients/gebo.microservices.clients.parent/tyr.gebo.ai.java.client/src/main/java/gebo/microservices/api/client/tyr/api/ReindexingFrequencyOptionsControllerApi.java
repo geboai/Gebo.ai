@@ -1,8 +1,8 @@
-package gebo.microservices.api.client.brain.api;
+package gebo.microservices.api.client.tyr.api;
 
-import gebo.microservices.api.client.brain.invoker.ApiClient;
+import gebo.microservices.api.client.tyr.invoker.ApiClient;
 
-import gebo.microservices.api.client.brain.model.ReindexTimeStructureMetaInfo;
+import gebo.microservices.api.client.tyr.model.ReindexTimeStructureMetaInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T18:11:41.737866346+02:00[Europe/Rome]")
 
 public class ReindexingFrequencyOptionsControllerApi {
     private ApiClient apiClient;

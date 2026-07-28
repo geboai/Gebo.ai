@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T18:11:29.053036006+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -31,14 +31,17 @@ public class DocumentReferenceView {
   @JsonProperty("extension")
   private Object extension = null;
 
+  @JsonProperty("contentType")
+  private Object contentType = null;
+
   @JsonProperty("description")
   private Object description = null;
 
-  @JsonProperty("messagingModuleId")
-  private Object messagingModuleId = null;
-
   @JsonProperty("code")
   private Object code = null;
+
+  @JsonProperty("messagingModuleId")
+  private Object messagingModuleId = null;
 
   @JsonProperty("modificationDate")
   private Object modificationDate = null;
@@ -60,9 +63,6 @@ public class DocumentReferenceView {
 
   @JsonProperty("creationDate")
   private Object creationDate = null;
-
-  @JsonProperty("contentType")
-  private Object contentType = null;
 
   public DocumentReferenceView name(Object name) {
     this.name = name;
@@ -100,6 +100,24 @@ public class DocumentReferenceView {
     this.extension = extension;
   }
 
+  public DocumentReferenceView contentType(Object contentType) {
+    this.contentType = contentType;
+    return this;
+  }
+
+   /**
+   * Get contentType
+   * @return contentType
+  **/
+  @Schema(description = "")
+  public Object getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(Object contentType) {
+    this.contentType = contentType;
+  }
+
   public DocumentReferenceView description(Object description) {
     this.description = description;
     return this;
@@ -118,24 +136,6 @@ public class DocumentReferenceView {
     this.description = description;
   }
 
-  public DocumentReferenceView messagingModuleId(Object messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
-    return this;
-  }
-
-   /**
-   * Get messagingModuleId
-   * @return messagingModuleId
-  **/
-  @Schema(description = "")
-  public Object getMessagingModuleId() {
-    return messagingModuleId;
-  }
-
-  public void setMessagingModuleId(Object messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
-  }
-
   public DocumentReferenceView code(Object code) {
     this.code = code;
     return this;
@@ -152,6 +152,24 @@ public class DocumentReferenceView {
 
   public void setCode(Object code) {
     this.code = code;
+  }
+
+  public DocumentReferenceView messagingModuleId(Object messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
+    return this;
+  }
+
+   /**
+   * Get messagingModuleId
+   * @return messagingModuleId
+  **/
+  @Schema(description = "")
+  public Object getMessagingModuleId() {
+    return messagingModuleId;
+  }
+
+  public void setMessagingModuleId(Object messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
   }
 
   public DocumentReferenceView modificationDate(Object modificationDate) {
@@ -280,24 +298,6 @@ public class DocumentReferenceView {
     this.creationDate = creationDate;
   }
 
-  public DocumentReferenceView contentType(Object contentType) {
-    this.contentType = contentType;
-    return this;
-  }
-
-   /**
-   * Get contentType
-   * @return contentType
-  **/
-  @Schema(description = "")
-  public Object getContentType() {
-    return contentType;
-  }
-
-  public void setContentType(Object contentType) {
-    this.contentType = contentType;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -310,22 +310,22 @@ public class DocumentReferenceView {
     DocumentReferenceView documentReferenceView = (DocumentReferenceView) o;
     return Objects.equals(this.name, documentReferenceView.name) &&
         Objects.equals(this.extension, documentReferenceView.extension) &&
+        Objects.equals(this.contentType, documentReferenceView.contentType) &&
         Objects.equals(this.description, documentReferenceView.description) &&
-        Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.code, documentReferenceView.code) &&
+        Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
         Objects.equals(this.relativePath, documentReferenceView.relativePath) &&
         Objects.equals(this.parentVirtualFolderCode, documentReferenceView.parentVirtualFolderCode) &&
         Objects.equals(this.deleted, documentReferenceView.deleted) &&
-        Objects.equals(this.creationDate, documentReferenceView.creationDate) &&
-        Objects.equals(this.contentType, documentReferenceView.contentType);
+        Objects.equals(this.creationDate, documentReferenceView.creationDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, description, messagingModuleId, code, modificationDate, rootKnowledgebaseCode, parentProjectCode, relativePath, parentVirtualFolderCode, deleted, creationDate, contentType);
+    return Objects.hash(name, extension, contentType, description, code, messagingModuleId, modificationDate, rootKnowledgebaseCode, parentProjectCode, relativePath, parentVirtualFolderCode, deleted, creationDate);
   }
 
 
@@ -336,9 +336,10 @@ public class DocumentReferenceView {
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
+    sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
@@ -346,7 +347,6 @@ public class DocumentReferenceView {
     sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
     sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
-    sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -10,9 +10,9 @@
  * Do not edit the class manually.
  */
 
-package gebo.microservices.api.client.brain.api;
+package gebo.microservices.api.client.tyr.api;
 
-import gebo.microservices.api.client.brain.model.ReindexTimeStructureMetaInfo;
+import gebo.microservices.api.client.tyr.model.ReindexTimeStructureMetaInfo;
 import org.junit.Test;
 import org.junit.Ignore;
 

@@ -1,6 +1,6 @@
 # ReindexingFrequencyOptionsControllerApi
 
-All URIs are relative to *http://localhost:13001/brain*
+All URIs are relative to *http://localhost:13019/tyr*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -17,8 +17,8 @@ Method | HTTP request | Description
 ### Example
 ```java
 // Import classes:
-//import gebo.microservices.api.client.brain.invoker.ApiException;
-//import gebo.microservices.api.client.brain.api.ReindexingFrequencyOptionsControllerApi;
+//import gebo.microservices.api.client.tyr.invoker.ApiException;
+//import gebo.microservices.api.client.tyr.api.ReindexingFrequencyOptionsControllerApi;
 
 
 ReindexingFrequencyOptionsControllerApi apiInstance = new ReindexingFrequencyOptionsControllerApi();
@@ -60,8 +60,8 @@ No authorization required
 ### Example
 ```java
 // Import classes:
-//import gebo.microservices.api.client.brain.invoker.ApiException;
-//import gebo.microservices.api.client.brain.api.ReindexingFrequencyOptionsControllerApi;
+//import gebo.microservices.api.client.tyr.invoker.ApiException;
+//import gebo.microservices.api.client.tyr.api.ReindexingFrequencyOptionsControllerApi;
 
 
 ReindexingFrequencyOptionsControllerApi apiInstance = new ReindexingFrequencyOptionsControllerApi();
@@ -99,8 +99,8 @@ No authorization required
 ### Example
 ```java
 // Import classes:
-//import gebo.microservices.api.client.brain.invoker.ApiException;
-//import gebo.microservices.api.client.brain.api.ReindexingFrequencyOptionsControllerApi;
+//import gebo.microservices.api.client.tyr.invoker.ApiException;
+//import gebo.microservices.api.client.tyr.api.ReindexingFrequencyOptionsControllerApi;
 
 
 ReindexingFrequencyOptionsControllerApi apiInstance = new ReindexingFrequencyOptionsControllerApi();

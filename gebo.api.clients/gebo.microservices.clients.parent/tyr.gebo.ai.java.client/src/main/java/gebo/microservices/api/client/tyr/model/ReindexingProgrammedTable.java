@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-package gebo.microservices.api.client.brain.model;
+package gebo.microservices.api.client.tyr.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -19,19 +19,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
- * ReindexTimeStructureMetaInfo
+ * ReindexingProgrammedTable
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T18:11:41.737866346+02:00[Europe/Rome]")
 
-public class ReindexTimeStructureMetaInfo {
+public class ReindexingProgrammedTable {
   @JsonProperty("frequency")
   private Object frequency = null;
 
-  @JsonProperty("periodComponents")
-  private Object periodComponents = null;
+  @JsonProperty("times")
+  private Object times = null;
 
-  public ReindexTimeStructureMetaInfo frequency(Object frequency) {
+  public ReindexingProgrammedTable frequency(Object frequency) {
     this.frequency = frequency;
     return this;
   }
@@ -40,7 +40,7 @@ public class ReindexTimeStructureMetaInfo {
    * Get frequency
    * @return frequency
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public Object getFrequency() {
     return frequency;
   }
@@ -49,22 +49,22 @@ public class ReindexTimeStructureMetaInfo {
     this.frequency = frequency;
   }
 
-  public ReindexTimeStructureMetaInfo periodComponents(Object periodComponents) {
-    this.periodComponents = periodComponents;
+  public ReindexingProgrammedTable times(Object times) {
+    this.times = times;
     return this;
   }
 
    /**
-   * Get periodComponents
-   * @return periodComponents
+   * Get times
+   * @return times
   **/
   @Schema(description = "")
-  public Object getPeriodComponents() {
-    return periodComponents;
+  public Object getTimes() {
+    return times;
   }
 
-  public void setPeriodComponents(Object periodComponents) {
-    this.periodComponents = periodComponents;
+  public void setTimes(Object times) {
+    this.times = times;
   }
 
 
@@ -76,24 +76,24 @@ public class ReindexTimeStructureMetaInfo {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ReindexTimeStructureMetaInfo reindexTimeStructureMetaInfo = (ReindexTimeStructureMetaInfo) o;
-    return Objects.equals(this.frequency, reindexTimeStructureMetaInfo.frequency) &&
-        Objects.equals(this.periodComponents, reindexTimeStructureMetaInfo.periodComponents);
+    ReindexingProgrammedTable reindexingProgrammedTable = (ReindexingProgrammedTable) o;
+    return Objects.equals(this.frequency, reindexingProgrammedTable.frequency) &&
+        Objects.equals(this.times, reindexingProgrammedTable.times);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(frequency, periodComponents);
+    return Objects.hash(frequency, times);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ReindexTimeStructureMetaInfo {\n");
+    sb.append("class ReindexingProgrammedTable {\n");
     
     sb.append("    frequency: ").append(toIndentedString(frequency)).append("\n");
-    sb.append("    periodComponents: ").append(toIndentedString(periodComponents)).append("\n");
+    sb.append("    times: ").append(toIndentedString(times)).append("\n");
     sb.append("}");
     return sb.toString();
   }

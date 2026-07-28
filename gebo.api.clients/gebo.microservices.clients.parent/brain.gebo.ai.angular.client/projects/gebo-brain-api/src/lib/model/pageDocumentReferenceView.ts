@@ -15,6 +15,7 @@ import { SortObject } from './sortObject';
 export interface PageDocumentReferenceView { 
     totalPages?: any;
     totalElements?: any;
+    pageable?: PageableObject;
     first?: any;
     last?: any;
     size?: any;
@@ -22,6 +23,5 @@ export interface PageDocumentReferenceView {
     number?: any;
     sort?: SortObject;
     numberOfElements?: any;
-    pageable?: PageableObject;
     empty?: any;
 }

@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-package gebo.microservices.api.client.brain.model;
+package gebo.microservices.api.client.tyr.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ReindexTimeComponentMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T18:11:41.737866346+02:00[Europe/Rome]")
 
 public class ReindexTimeComponentMetaInfo {
   @JsonProperty("timeUnity")

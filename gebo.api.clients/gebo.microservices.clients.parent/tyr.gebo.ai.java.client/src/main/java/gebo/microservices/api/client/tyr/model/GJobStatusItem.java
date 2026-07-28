@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T16:59:07.468834507+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T18:11:41.737866346+02:00[Europe/Rome]")
 
 public class GJobStatusItem {
   @JsonProperty("description")
@@ -31,9 +31,6 @@ public class GJobStatusItem {
 
   @JsonProperty("code")
   private Object code = null;
-
-  @JsonProperty("error")
-  private Object error = null;
 
   @JsonProperty("workflowId")
   private Object workflowId = null;
@@ -46,6 +43,9 @@ public class GJobStatusItem {
 
   @JsonProperty("startDateTime")
   private Object startDateTime = null;
+
+  @JsonProperty("error")
+  private Object error = null;
 
   @JsonProperty("processing")
   private Object processing = null;
@@ -93,24 +93,6 @@ public class GJobStatusItem {
 
   public void setCode(Object code) {
     this.code = code;
-  }
-
-  public GJobStatusItem error(Object error) {
-    this.error = error;
-    return this;
-  }
-
-   /**
-   * Get error
-   * @return error
-  **/
-  @Schema(description = "")
-  public Object getError() {
-    return error;
-  }
-
-  public void setError(Object error) {
-    this.error = error;
   }
 
   public GJobStatusItem workflowId(Object workflowId) {
@@ -183,6 +165,24 @@ public class GJobStatusItem {
 
   public void setStartDateTime(Object startDateTime) {
     this.startDateTime = startDateTime;
+  }
+
+  public GJobStatusItem error(Object error) {
+    this.error = error;
+    return this;
+  }
+
+   /**
+   * Get error
+   * @return error
+  **/
+  @Schema(description = "")
+  public Object getError() {
+    return error;
+  }
+
+  public void setError(Object error) {
+    this.error = error;
   }
 
   public GJobStatusItem processing(Object processing) {
@@ -269,11 +269,11 @@ public class GJobStatusItem {
     GJobStatusItem gjobStatusItem = (GJobStatusItem) o;
     return Objects.equals(this.description, gjobStatusItem.description) &&
         Objects.equals(this.code, gjobStatusItem.code) &&
-        Objects.equals(this.error, gjobStatusItem.error) &&
         Objects.equals(this.workflowId, gjobStatusItem.workflowId) &&
         Objects.equals(this.workflowType, gjobStatusItem.workflowType) &&
         Objects.equals(this.projectEndpointReference, gjobStatusItem.projectEndpointReference) &&
         Objects.equals(this.startDateTime, gjobStatusItem.startDateTime) &&
+        Objects.equals(this.error, gjobStatusItem.error) &&
         Objects.equals(this.processing, gjobStatusItem.processing) &&
         Objects.equals(this.finished, gjobStatusItem.finished) &&
         Objects.equals(this.jobType, gjobStatusItem.jobType) &&
@@ -282,7 +282,7 @@ public class GJobStatusItem {
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, code, error, workflowId, workflowType, projectEndpointReference, startDateTime, processing, finished, jobType, endDateTime);
+    return Objects.hash(description, code, workflowId, workflowType, projectEndpointReference, startDateTime, error, processing, finished, jobType, endDateTime);
   }
 
 
@@ -293,11 +293,11 @@ public class GJobStatusItem {
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    workflowId: ").append(toIndentedString(workflowId)).append("\n");
     sb.append("    workflowType: ").append(toIndentedString(workflowType)).append("\n");
     sb.append("    projectEndpointReference: ").append(toIndentedString(projectEndpointReference)).append("\n");
     sb.append("    startDateTime: ").append(toIndentedString(startDateTime)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    processing: ").append(toIndentedString(processing)).append("\n");
     sb.append("    finished: ").append(toIndentedString(finished)).append("\n");
     sb.append("    jobType: ").append(toIndentedString(jobType)).append("\n");

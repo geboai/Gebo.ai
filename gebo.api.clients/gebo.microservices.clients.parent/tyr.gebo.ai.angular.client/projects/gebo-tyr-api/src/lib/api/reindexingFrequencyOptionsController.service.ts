@@ -26,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ReindexingFrequencyOptionsControllerService {
 
-    protected basePath = 'http://localhost:13001/brain';
+    protected basePath = 'http://localhost:13019/tyr';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
