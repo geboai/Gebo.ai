@@ -86,7 +86,13 @@ poll_until_200() {
       return 0
     fi
     sleep "$interval"
-    ((attempt++))
+    # NOT ((attempt++)): under `set -e`, that arithmetic command's exit status
+    # is the truthiness of its pre-increment value, so it's 1 (failure) the
+    # very first time attempt goes 0->1 - killing the whole script right after
+    # the first unsuccessful poll of the first service, silently (no error
+    # message: `set -e` just exits, and the docker-compose-down in the EXIT
+    # trap makes the containers vanish with it, looking exactly like a hang).
+    attempt=$((attempt + 1))
   done
   red "    $svc ($port) did not answer 200 within $((max_attempts * interval))s — skipping"
   return 0
