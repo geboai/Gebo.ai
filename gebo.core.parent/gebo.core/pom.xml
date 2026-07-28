@@ -48,11 +48,6 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.scheduling</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.security</artifactId>
 			<version>${project.version}</version>
 		</dependency>

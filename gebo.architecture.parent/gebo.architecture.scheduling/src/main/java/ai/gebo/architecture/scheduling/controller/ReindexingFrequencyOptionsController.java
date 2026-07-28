@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.core.controllers;
+package ai.gebo.architecture.scheduling.controller;
 
 import java.util.List;
 
