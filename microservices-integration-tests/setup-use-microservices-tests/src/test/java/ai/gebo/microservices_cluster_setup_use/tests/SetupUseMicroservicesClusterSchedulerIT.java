@@ -12,11 +12,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import gebo.microservices.api.client.brain.api.LogViewControllerApi;
-import gebo.microservices.api.client.brain.model.DataPage;
-import gebo.microservices.api.client.brain.model.GObjectRefGProjectEndpoint;
-import gebo.microservices.api.client.brain.model.JobsEntriesForProjectEndpointFilter;
-import gebo.microservices.api.client.brain.model.PageGJobStatusItem;
 import gebo.microservices.api.client.filesystem.api.FileSystemSharesSettingControllerApi;
 import gebo.microservices.api.client.filesystem.api.FileSystemsControllerApi;
 import gebo.microservices.api.client.filesystem.model.GFileSystemShareReference;
@@ -27,6 +22,11 @@ import gebo.microservices.api.client.filesystem.model.ReindexingProgrammedTable;
 import gebo.microservices.api.client.filesystem.model.ReindexingTime;
 import gebo.microservices.api.client.filesystem.model.VFilesystemReference;
 import gebo.microservices.api.client.heimdall.model.SecurityHeaderData;
+import gebo.microservices.api.client.tyr.api.JobStatusControllerApi;
+import gebo.microservices.api.client.tyr.model.DataPage;
+import gebo.microservices.api.client.tyr.model.GObjectRefGProjectEndpoint;
+import gebo.microservices.api.client.tyr.model.JobsEntriesForProjectEndpointFilter;
+import gebo.microservices.api.client.tyr.model.PageGJobStatusItem;
 
 /**
  * Cluster counterpart of {@code SchedulerIntegrationTests} in the monolith
@@ -41,10 +41,13 @@ import gebo.microservices.api.client.heimdall.model.SecurityHeaderData;
  * when the run comes due.
  * <p>
  * A project endpoint is programmed with a single one-shot run ~2 minutes in
- * the future (never launched directly), then the test polls
- * gebo.core's {@code LogViewController} - exposed on <b>brain</b>, since
- * gebo.core is a brain dependency - for a job entry to appear against that
- * endpoint, which can only happen if tyr's scheduler tick actually fired it.
+ * the future (never launched directly), then the test polls tyr's own
+ * {@code JobStatusController#getJobsEntriesForProjectEndpoint} for a job
+ * entry to appear against that endpoint. tyr is queried directly - not
+ * brain - because job status only reaches tyr's Mongo via the existing
+ * {@code GJobStatusReplicatorService}/{@code job-status-replication-receiver}
+ * mechanism; brain has no such replication, so a job launched on filesystem
+ * would never become visible there.
  */
 public class SetupUseMicroservicesClusterSchedulerIT extends AbstractMicroservicesClusterSetupUseChatTest {
 
@@ -123,14 +126,22 @@ public class SetupUseMicroservicesClusterSchedulerIT extends AbstractMicroservic
 			do {
 				JobsEntriesForProjectEndpointFilter filter = new JobsEntriesForProjectEndpointFilter();
 				filter.setEndpointRef(ref);
+				// The repository's derived query treats a null jobType as "match
+				// documents where jobType is null", not "any type" - so it must be set
+				// explicitly to the type the ingestion job-launch manager actually uses.
+				filter.setJobType("CONTENTS_READING_VECTORIZING");
 				DataPage page = new DataPage();
 				page.setPage(0);
 				page.setPageSize(10);
+				// The server's DataPage.toPageable() calls Sort.by(sort) unconditionally
+				// once sort is non-null-but-not-checked-empty; a null sort (the default,
+				// unset here) reaches that branch and throws "Orders must not be null".
+				page.setSort(List.of());
 				filter.setPage(page);
 				// Rebuilt every iteration - see the identical note in the chat pipeline
 				// driver: an already-built ApiClient never picks up a later renew(header).
-				LogViewControllerApi logViewApi = new LogViewControllerApi(brainClient(header));
-				PageGJobStatusItem result = logViewApi.getJobsEntriesForProjectEndpoint(filter);
+				JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(tyrClient(header));
+				PageGJobStatusItem result = jobStatusApi.getJobsEntriesForProjectEndpoint(filter);
 				List<Map<String, Object>> content = objectMapper.convertValue(result.getContent(),
 						objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
 				LOGGER.info("On cycle=>" + nCycles + " jobs launched for endpoint so far:"

@@ -55,5 +55,11 @@
 			<artifactId>gebo.architecture.security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- DataPage, for the JobStatusController by-endpoint query filter. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

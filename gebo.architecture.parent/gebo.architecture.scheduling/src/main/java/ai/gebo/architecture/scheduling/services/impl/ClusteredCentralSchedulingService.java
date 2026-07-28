@@ -10,6 +10,7 @@
 package ai.gebo.architecture.scheduling.services.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -24,10 +25,21 @@ import ai.gebo.architecture.scheduling.repository.ProjectEndpointScheduledTaskRe
  * (Hazelcast in this codebase is scoped only to the unrelated LLM
  * models-replication cache), so the tick only actually executes while this
  * instance holds {@link SchedulerLeaderLeaseService}'s Mongo-backed lease.
+ *
+ * <p>
+ * {@code @ConditionalOnMicroservices} alone is not enough: this module isn't
+ * exclusive to tyr's classpath (brain gets it transitively via
+ * {@code gebo.core}), so {@link SchedulingAuthorityCondition} additionally
+ * restricts instantiation to the one service actually meant to be the
+ * central scheduler - every other microservice must not register its own
+ * copy under the shared {@code scheduler-module.scheduler-component}
+ * identity.
+ * </p>
  */
 @Component
 @Scope("singleton")
 @ConditionalOnMicroservices
+@Conditional(SchedulingAuthorityCondition.class)
 public class ClusteredCentralSchedulingService extends AbstractCentralSchedulingService {
 
 	private final SchedulerLeaderLeaseService leaseService;

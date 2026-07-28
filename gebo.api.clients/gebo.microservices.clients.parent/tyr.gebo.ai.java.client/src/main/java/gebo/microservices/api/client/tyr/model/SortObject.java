@@ -19,73 +19,73 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
- * GObjectRefGProject
+ * SortObject
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T16:59:07.468834507+02:00[Europe/Rome]")
 
-public class GObjectRefGProject {
-  @JsonProperty("className")
-  private Object className = null;
+public class SortObject {
+  @JsonProperty("sorted")
+  private Object sorted = null;
 
-  @JsonProperty("code")
-  private Object code = null;
+  @JsonProperty("empty")
+  private Object empty = null;
 
-  @JsonProperty("description")
-  private Object description = null;
+  @JsonProperty("unsorted")
+  private Object unsorted = null;
 
-  public GObjectRefGProject className(Object className) {
-    this.className = className;
+  public SortObject sorted(Object sorted) {
+    this.sorted = sorted;
     return this;
   }
 
    /**
-   * Get className
-   * @return className
+   * Get sorted
+   * @return sorted
   **/
   @Schema(description = "")
-  public Object getClassName() {
-    return className;
+  public Object getSorted() {
+    return sorted;
   }
 
-  public void setClassName(Object className) {
-    this.className = className;
+  public void setSorted(Object sorted) {
+    this.sorted = sorted;
   }
 
-  public GObjectRefGProject code(Object code) {
-    this.code = code;
+  public SortObject empty(Object empty) {
+    this.empty = empty;
     return this;
   }
 
    /**
-   * Get code
-   * @return code
+   * Get empty
+   * @return empty
   **/
   @Schema(description = "")
-  public Object getCode() {
-    return code;
+  public Object getEmpty() {
+    return empty;
   }
 
-  public void setCode(Object code) {
-    this.code = code;
+  public void setEmpty(Object empty) {
+    this.empty = empty;
   }
 
-  public GObjectRefGProject description(Object description) {
-    this.description = description;
+  public SortObject unsorted(Object unsorted) {
+    this.unsorted = unsorted;
     return this;
   }
 
    /**
-   * Get description
-   * @return description
+   * Get unsorted
+   * @return unsorted
   **/
   @Schema(description = "")
-  public Object getDescription() {
-    return description;
+  public Object getUnsorted() {
+    return unsorted;
   }
 
-  public void setDescription(Object description) {
-    this.description = description;
+  public void setUnsorted(Object unsorted) {
+    this.unsorted = unsorted;
   }
 
 
@@ -97,26 +97,26 @@ public class GObjectRefGProject {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GObjectRefGProject gobjectRefGProject = (GObjectRefGProject) o;
-    return Objects.equals(this.className, gobjectRefGProject.className) &&
-        Objects.equals(this.code, gobjectRefGProject.code) &&
-        Objects.equals(this.description, gobjectRefGProject.description);
+    SortObject sortObject = (SortObject) o;
+    return Objects.equals(this.sorted, sortObject.sorted) &&
+        Objects.equals(this.empty, sortObject.empty) &&
+        Objects.equals(this.unsorted, sortObject.unsorted);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(className, code, description);
+    return Objects.hash(sorted, empty, unsorted);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GObjectRefGProject {\n");
+    sb.append("class SortObject {\n");
     
-    sb.append("    className: ").append(toIndentedString(className)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    sorted: ").append(toIndentedString(sorted)).append("\n");
+    sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
+    sb.append("    unsorted: ").append(toIndentedString(unsorted)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -40,6 +41,7 @@ import ai.gebo.architecture.scheduling.model.GSchedulerLeaderLease;
  */
 @Component
 @ConditionalOnMicroservices
+@Conditional(SchedulingAuthorityCondition.class)
 public class SchedulerLeaderLeaseService {
 
 	private static final String LEASE_ID = "central-scheduler";

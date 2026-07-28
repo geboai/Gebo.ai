@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComputedWorkflowStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:54.334477201+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T16:59:07.468834507+02:00[Europe/Rome]")
 
 public class ComputedWorkflowStatus {
   @JsonProperty("jobId")
