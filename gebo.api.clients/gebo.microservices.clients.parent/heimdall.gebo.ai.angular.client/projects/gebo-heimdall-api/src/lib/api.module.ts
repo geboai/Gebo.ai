@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { AclAliasesClusterControllerService } from './api/aclAliasesClusterController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
 import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
@@ -13,7 +14,9 @@ import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyC
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
+import { SecretsClusterControllerService } from './api/secretsClusterController.service';
 import { SecretsControllerService } from './api/secretsController.service';
+import { SecurityDirectoryClusterControllerService } from './api/securityDirectoryClusterController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
@@ -24,6 +27,7 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
   declarations: [],
   exports:      [],
   providers: [
+    AclAliasesClusterControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
     GeboAdvancedSetupStatusControllerService,
@@ -34,7 +38,9 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     InternalMessagingTopologyControllerService,
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
+    SecretsClusterControllerService,
     SecretsControllerService,
+    SecurityDirectoryClusterControllerService,
     TokenRenewControllerService,
     UserControllerService,
     UserWorkflowsControllerService,

@@ -15,8 +15,8 @@ export interface DocumentReferenceView {
     extension?: any;
     contentType?: any;
     description?: any;
-    code?: any;
     messagingModuleId?: any;
+    code?: any;
     modificationDate?: any;
     rootKnowledgebaseCode?: any;
     parentProjectCode?: any;

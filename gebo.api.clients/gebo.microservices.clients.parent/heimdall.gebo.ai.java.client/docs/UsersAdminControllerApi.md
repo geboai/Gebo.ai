@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**deleteUser**](UsersAdminControllerApi.md#deleteUser) | **POST** /api/admin/UsersAdminController/deleteUser | 
 [**findGroupByCode**](UsersAdminControllerApi.md#findGroupByCode) | **GET** /api/admin/UsersAdminController/findGroupByCode | 
 [**findUserByQbe**](UsersAdminControllerApi.md#findUserByQbe) | **POST** /api/admin/UsersAdminController/findUserByQbe | 
-[**findUserByUsername**](UsersAdminControllerApi.md#findUserByUsername) | **GET** /api/admin/UsersAdminController/findUserByUsername | 
+[**findUserByUsername1**](UsersAdminControllerApi.md#findUserByUsername1) | **GET** /api/admin/UsersAdminController/findUserByUsername | 
 [**findUsersGroupByQbe**](UsersAdminControllerApi.md#findUsersGroupByQbe) | **POST** /api/admin/UsersAdminController/findUsersGroupByQbe | 
 [**getAllGroups**](UsersAdminControllerApi.md#getAllGroups) | **GET** /api/admin/UsersAdminController/getAllGroups | 
 [**getAllUsers**](UsersAdminControllerApi.md#getAllUsers) | **GET** /api/admin/UsersAdminController/getAllUsers | 
@@ -231,9 +231,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findUserByUsername"></a>
-# **findUserByUsername**
-> EditableUser findUserByUsername(email)
+<a name="findUserByUsername1"></a>
+# **findUserByUsername1**
+> EditableUser findUserByUsername1(email)
 
 
 
@@ -247,10 +247,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 Object email = null; // Object | 
 try {
-    EditableUser result = apiInstance.findUserByUsername(email);
+    EditableUser result = apiInstance.findUserByUsername1(email);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#findUserByUsername");
+    System.err.println("Exception when calling UsersAdminControllerApi#findUserByUsername1");
     e.printStackTrace();
 }
 ```

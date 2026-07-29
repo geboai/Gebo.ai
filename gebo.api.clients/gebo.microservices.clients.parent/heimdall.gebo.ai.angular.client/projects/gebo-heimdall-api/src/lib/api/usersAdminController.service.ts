@@ -303,13 +303,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserByUsername(email: any, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
-    public findUserByUsername(email: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
-    public findUserByUsername(email: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
-    public findUserByUsername(email: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserByUsername1(email: any, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
+    public findUserByUsername1(email: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
+    public findUserByUsername1(email: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
+    public findUserByUsername1(email: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (email === null || email === undefined) {
-            throw new Error('Required parameter email was null or undefined when calling findUserByUsername.');
+            throw new Error('Required parameter email was null or undefined when calling findUserByUsername1.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
