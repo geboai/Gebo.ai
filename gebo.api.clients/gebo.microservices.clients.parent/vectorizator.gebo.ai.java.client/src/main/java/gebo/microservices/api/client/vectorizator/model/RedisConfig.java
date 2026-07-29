@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * RedisConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:48.212377166+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:05.740376061+02:00[Europe/Rome]")
 
 public class RedisConfig {
   @JsonProperty("code")
