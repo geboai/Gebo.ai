@@ -40,7 +40,6 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.git.content.handler.GGitContentManagementSystem;
 import ai.gebo.git.content.handler.GGitProjectEndpoint;
 import ai.gebo.git.content.handler.IGBaseGitContentManagementSystemHandler;
@@ -100,17 +99,14 @@ public class GITSystemsController
 	 * @param messageBroker Broker for message communication
 	 * @param controllerEmitter Emitter for controller events
 	 * @param securityService Service for security operations
-	 * @param schedulingService Service for scheduling operations
 	 * @param entityProcessingRunnableFactory Factory for entity processing runnables
 	 */
 	public GITSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			GitControllerEmitter controllerEmitter, IGSecurityService securityService,
-			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 	}
 
 	/**

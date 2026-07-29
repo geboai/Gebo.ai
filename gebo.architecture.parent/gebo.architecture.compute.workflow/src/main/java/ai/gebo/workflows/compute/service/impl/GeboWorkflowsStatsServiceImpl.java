@@ -242,8 +242,21 @@ public class GeboWorkflowsStatsServiceImpl implements IGeboWorkflowsStatsService
 		String workflowId = job.getWorkflowId();
 		summary.setWorkflowType(workflowType);
 		summary.setWorkflowId(workflowId);
-		List<IWorkflowStatusHandler> handler = workflowHandlersRepositoryPattern
-				.findByWorkflowsTypeAndWorkflowId(GWorkflowType.valueOf(workflowType), workflowId);
+		// workflowType/workflowId can be null or an unrecognized value for a
+		// malformed/legacy GJobStatus (GWorkflowType.valueOf(null/unknown) throws) -
+		// degrade to "no handler found" (the same branch an empty lookup result
+		// already takes below) rather than 500 the whole request.
+		GWorkflowType parsedWorkflowType = null;
+		if (workflowType != null) {
+			try {
+				parsedWorkflowType = GWorkflowType.valueOf(workflowType);
+			} catch (IllegalArgumentException e) {
+				LOGGER.warn("Job {} has an unrecognized workflowType '{}' - returning a partial summary", jobId,
+						workflowType);
+			}
+		}
+		List<IWorkflowStatusHandler> handler = parsedWorkflowType == null ? List.of()
+				: workflowHandlersRepositoryPattern.findByWorkflowsTypeAndWorkflowId(parsedWorkflowType, workflowId);
 		if (!handler.isEmpty()) {
 			ComputedWorkflowResult status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
 			summary.setWorkflowStatus(status);

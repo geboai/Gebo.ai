@@ -1,0 +1,51 @@
+# ===========================================================================
+# Testcontainers override file, layered on top of
+# dockers/gebo.microservices/docker-compose.yml by ArchitecturalComposeTest.
+#
+# ComposeContainer's own .withEnv(...) only substitutes ${VARIABLE} references
+# INSIDE the compose file text (e.g. GEBO_VERSION) - it does not inject
+# arbitrary environment variables into each container's own runtime
+# environment. Docker Compose does support that via a bare-key
+# "environment: [SOME_VAR]" passthrough entry, but the base compose file's
+# x-microservice-env anchor uses map form throughout, and this override
+# exists specifically so the base file's default behaviour (used by
+# setup-use-microservices-tests, manual bring-up, CI, ...) stays unaffected -
+# only THIS module's ComposeContainer includes this file.
+#
+# Enables DEBUG for the two packages that already log every message envelope
+# (GBaseMessageBroker.accept() - inbound routing, fed by both local and
+# RabbitMqInboundBridge-delivered messages - and RabbitMqExternalMessageReceiver
+# - outbound publish), so the test's per-service Slf4jLogConsumer actually
+# surfaces RabbitMQ traffic instead of it being silently gated at INFO.
+#
+# brain/vectorizator also get gebo.microservices.topology.models-replication-participants
+# narrowed to just the two of them (graphicator is out of scope for this test),
+# so their Hazelcast discovery-convergence loop
+# (DiscoveryClientClusterTopologyProvider) can succeed on its first stable read
+# instead of exhausting its ~240s retry budget every run.
+# ===========================================================================
+services:
+  heimdall:
+    environment:
+      LOGGING_LEVEL_AI_GEBO_APPLICATION_MESSAGING: DEBUG
+      LOGGING_LEVEL_AI_GEBO_ARCHITECTURE_MESSAGES_RABBITMQ: DEBUG
+  brain:
+    environment:
+      LOGGING_LEVEL_AI_GEBO_APPLICATION_MESSAGING: DEBUG
+      LOGGING_LEVEL_AI_GEBO_ARCHITECTURE_MESSAGES_RABBITMQ: DEBUG
+      GEBO_MICROSERVICES_TOPOLOGY_MODELS_REPLICATION_PARTICIPANTS_0: brain_gebo_ai
+      GEBO_MICROSERVICES_TOPOLOGY_MODELS_REPLICATION_PARTICIPANTS_1: vectorizator_gebo_ai
+  filesystem:
+    environment:
+      LOGGING_LEVEL_AI_GEBO_APPLICATION_MESSAGING: DEBUG
+      LOGGING_LEVEL_AI_GEBO_ARCHITECTURE_MESSAGES_RABBITMQ: DEBUG
+  tyr:
+    environment:
+      LOGGING_LEVEL_AI_GEBO_APPLICATION_MESSAGING: DEBUG
+      LOGGING_LEVEL_AI_GEBO_ARCHITECTURE_MESSAGES_RABBITMQ: DEBUG
+  vectorizator:
+    environment:
+      LOGGING_LEVEL_AI_GEBO_APPLICATION_MESSAGING: DEBUG
+      LOGGING_LEVEL_AI_GEBO_ARCHITECTURE_MESSAGES_RABBITMQ: DEBUG
+      GEBO_MICROSERVICES_TOPOLOGY_MODELS_REPLICATION_PARTICIPANTS_0: brain_gebo_ai
+      GEBO_MICROSERVICES_TOPOLOGY_MODELS_REPLICATION_PARTICIPANTS_1: vectorizator_gebo_ai

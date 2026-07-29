@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageMCPClientConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-28T18:11:29.053036006+02:00[Europe/Rome]")
 
 public class PageMCPClientConfig {
   @JsonProperty("totalPages")
@@ -32,6 +32,9 @@ public class PageMCPClientConfig {
 
   @JsonProperty("totalElements")
   private Object totalElements = null;
+
+  @JsonProperty("pageable")
+  private PageableObject pageable = null;
 
   @JsonProperty("first")
   private Object first = null;
@@ -53,9 +56,6 @@ public class PageMCPClientConfig {
 
   @JsonProperty("numberOfElements")
   private Object numberOfElements = null;
-
-  @JsonProperty("pageable")
-  private PageableObject pageable = null;
 
   @JsonProperty("empty")
   private Object empty = null;
@@ -94,6 +94,24 @@ public class PageMCPClientConfig {
 
   public void setTotalElements(Object totalElements) {
     this.totalElements = totalElements;
+  }
+
+  public PageMCPClientConfig pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
   }
 
   public PageMCPClientConfig first(Object first) {
@@ -222,24 +240,6 @@ public class PageMCPClientConfig {
     this.numberOfElements = numberOfElements;
   }
 
-  public PageMCPClientConfig pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
   public PageMCPClientConfig empty(Object empty) {
     this.empty = empty;
     return this;
@@ -270,6 +270,7 @@ public class PageMCPClientConfig {
     PageMCPClientConfig pageMCPClientConfig = (PageMCPClientConfig) o;
     return Objects.equals(this.totalPages, pageMCPClientConfig.totalPages) &&
         Objects.equals(this.totalElements, pageMCPClientConfig.totalElements) &&
+        Objects.equals(this.pageable, pageMCPClientConfig.pageable) &&
         Objects.equals(this.first, pageMCPClientConfig.first) &&
         Objects.equals(this.last, pageMCPClientConfig.last) &&
         Objects.equals(this.size, pageMCPClientConfig.size) &&
@@ -277,13 +278,12 @@ public class PageMCPClientConfig {
         Objects.equals(this.number, pageMCPClientConfig.number) &&
         Objects.equals(this.sort, pageMCPClientConfig.sort) &&
         Objects.equals(this.numberOfElements, pageMCPClientConfig.numberOfElements) &&
-        Objects.equals(this.pageable, pageMCPClientConfig.pageable) &&
         Objects.equals(this.empty, pageMCPClientConfig.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, first, last, size, content, number, sort, numberOfElements, pageable, empty);
+    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -294,6 +294,7 @@ public class PageMCPClientConfig {
     
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
@@ -301,7 +302,6 @@ public class PageMCPClientConfig {
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
-    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

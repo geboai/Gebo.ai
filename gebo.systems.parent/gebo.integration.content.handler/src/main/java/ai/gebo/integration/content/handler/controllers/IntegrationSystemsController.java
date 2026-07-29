@@ -17,7 +17,6 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.integration.content.handler.GIntegrationContentSystem;
 import ai.gebo.integration.content.handler.GIntegrationProjectEndpoint;
 import ai.gebo.integration.content.handler.repositories.IntegrationProjectEndpointRepository;
@@ -54,13 +53,11 @@ public class IntegrationSystemsController
 
 	public IntegrationSystemsController(IGPersistentObjectManager persistentObjectManager,
 			IGMessageBroker messageBroker, IntegrationSystemsNestedEmitter controllerEmitter,
-			IGSecurityService securityService, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGSecurityService securityService, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			IntegrationProjectEndpointRepository endpointRepository,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.endpointRepository = endpointRepository;
 	}
 

@@ -23,23 +23,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.multithreading.IGRunnableFactory;
 import ai.gebo.architecture.scheduling.model.ReindexTimeComponent;
 import ai.gebo.architecture.scheduling.model.ReindexTimeComponentMetaInfo;
 import ai.gebo.architecture.scheduling.model.ReindexTimeStructureMetaInfo;
 import ai.gebo.architecture.scheduling.services.IGReindexTimeStructureMetaInfoDao;
+import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingFrequency;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingProgrammedTable;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingTime;
-import jakarta.validation.constraints.NotNull;
 
 /**
- * AI generated comments
- * Service class responsible for calculating run times based on scheduling data.
+ * Service class responsible for calculating run times based on scheduling
+ * data, and the sole (unconditional) implementer of
+ * {@link IGSchedulingTimeService}'s pure display-string helper. The actual
+ * next-run/last-run computations below remain package-visible, used only by
+ * the central scheduling engine (see
+ * {@link ai.gebo.architecture.scheduling.services.impl.AbstractCentralSchedulingService}).
  */
 @Service
-class TimesCalculatorService {
+public class TimesCalculatorService implements IGSchedulingTimeService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TimesCalculatorService.class);
 
 	@Autowired
@@ -384,7 +387,8 @@ class TimesCalculatorService {
 	 * @param programmedTable The list of scheduled tables.
 	 * @return A list of formatted display time strings.
 	 */
-	List<String> getDisplayTimeValues(List<ReindexingProgrammedTable> programmedTable) {
+	@Override
+	public List<String> getDisplayTimeValues(List<ReindexingProgrammedTable> programmedTable) {
 
 		List<String> outValues = new ArrayList<String>();
 		for (ReindexingProgrammedTable pt : programmedTable) {

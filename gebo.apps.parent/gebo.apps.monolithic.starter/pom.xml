@@ -214,6 +214,16 @@
 			<artifactId>gebo.architecture.compute.workflow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- MonolithicCentralSchedulingService/MonolithicJobLaunchManager/etc. -
+		     gebo.core only ever carried this transitively for ReindexingFrequencyOptionsController,
+		     which has since moved into this module itself (tyr is its sole owner
+		     under microservices), so the monolith needs it as a direct, explicit
+		     dependency for the scheduler engine to keep running here. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.scheduling</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Config-driven standard-workflow step enablement (monolith variant of the
 		     enablement policy extracted from the perform-modules). -->
 		<dependency>

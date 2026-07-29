@@ -5,6 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **totalPages** | **Object** |  |  [optional]
 **totalElements** | **Object** |  |  [optional]
+**pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **first** | **Object** |  |  [optional]
 **last** | **Object** |  |  [optional]
 **size** | **Object** |  |  [optional]
@@ -12,5 +13,4 @@ Name | Type | Description | Notes
 **number** | **Object** |  |  [optional]
 **sort** | [**SortObject**](SortObject.md) |  |  [optional]
 **numberOfElements** | **Object** |  |  [optional]
-**pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **empty** | **Object** |  |  [optional]

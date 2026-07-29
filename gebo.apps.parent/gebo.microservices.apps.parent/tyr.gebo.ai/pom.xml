@@ -11,12 +11,15 @@
 
 	<!--
 	  Workflows/usage/jobs-tracking microservice. Home for the receivers and
-	  admin/reporting controllers that today live under the JOBS_MASTER messaging
-	  module (see gebo.architecture.workflows-concentrator) plus the dormant
-	  scheduler-module/async-publishing-job-module roles - not yet wired in.
-	  Deliberately built on the bare gebo.microservices.starter (environment +
-	  RabbitMQ bridge + topology + Eureka, no content-handler business logic) so it
-	  stays minimal until that work lands.
+	  admin/reporting controllers that live under the JOBS_MASTER messaging
+	  module (see gebo.architecture.workflows-concentrator), plus the central
+	  publish scheduler (scheduler-module.scheduler-component, see
+	  gebo.architecture.scheduling's ClusteredCentralSchedulingService below -
+	  every content-handler's own async-publishing-job-component is what it
+	  dispatches PublishProjectEndpointMessagePayload back to). Deliberately
+	  built on the bare gebo.microservices.starter (environment + RabbitMQ
+	  bridge + topology + Eureka, no content-handler business logic) plus this
+	  one addition, so it stays minimal otherwise.
 	-->
 	<dependencies>
 		<dependency>
@@ -72,6 +75,18 @@
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.global-internal-topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  The central publish scheduler (scheduler-module.scheduler-component,
+		  see GeboStandardMicroservices' tyr_gebo_ai entry): every content-handler
+		  sends its reschedule requests here instead of running its own local
+		  scheduler. @ConditionalOnMicroservices picks the leader-lease-gated
+		  ClusteredCentralSchedulingService over the monolith's variant.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.scheduling</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

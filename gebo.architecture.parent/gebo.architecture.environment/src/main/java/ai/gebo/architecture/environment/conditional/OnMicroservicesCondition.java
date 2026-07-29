@@ -1,21 +1,21 @@
 package ai.gebo.architecture.environment.conditional;
 
-import java.util.Map;
-
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.util.ClassUtils;
 
-import ai.gebo.architecture.environment.GeboApplicationArchitecture;
-import ai.gebo.architecture.environment.GeboApplicationArchitecture.ArchitectureType;
-
+/**
+ * Matches on the microservices distribution. See {@link OnMonolithicCondition}
+ * for why this checks classpath presence of the declaration class rather than
+ * bean-factory contents.
+ */
 public class OnMicroservicesCondition implements Condition {
+
+	private static final String MICROSERVICES_DECLARATION_CLASS = "ai.gebo.architecture.environment.microservices.MicroservicesArchitectureDeclaration";
 
 	@Override
 	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-		Map<String, GeboApplicationArchitecture> beans =
-				context.getBeanFactory().getBeansOfType(GeboApplicationArchitecture.class);
-		return beans.values().stream()
-				.anyMatch(a -> a.getArchitecture() == ArchitectureType.MICROSERVICES);
+		return ClassUtils.isPresent(MICROSERVICES_DECLARATION_CLASS, context.getClassLoader());
 	}
 }

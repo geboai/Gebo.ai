@@ -242,8 +242,6 @@ export * from './promptFilter';
 export * from './qdrantConfig';
 export * from './ragQueryOptions';
 export * from './redisConfig';
-export * from './reindexTimeComponentMetaInfo';
-export * from './reindexTimeStructureMetaInfo';
 export * from './reindexingProgrammedTable';
 export * from './reindexingTime';
 export * from './resetContentRequest';
