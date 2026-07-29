@@ -11,14 +11,9 @@ package ai.gebo.jobs.services.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
-import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.environment.GeboApplicationArchitecture;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.replicator.model.IGReplicationsMap;
@@ -36,38 +31,33 @@ import ai.gebo.model.base.GBaseObject;
  *
  * <p>
  * A no-op outside {@code ArchitectureType.MICROSERVICES} (see
- * {@link GAbstractReplicatorService#replicate}) and outside a deployment whose
- * routing config doesn't mention {@link GJobStatus} - so this is harmless to
- * have on every content-handler's classpath, including the monolith's.
+ * {@link GAbstractReplicatorService#replicate}) - so this is harmless to have
+ * on every content-handler's classpath, including the monolith's.
  * </p>
  *
  * <p>
- * <b>Why the module id is a property, not a constant.</b>
+ * {@code messagingSystemId} is fixed ({@code job-status-replicator}) while
+ * {@code messagingModuleId} is assignable per concrete subclass - mirroring
+ * {@link AbstractJobLaunchManager}/{@link AbstractJobStatusEmitter}:
  * {@link ai.gebo.microservices.topology.GeboMicroservicesTopology} requires
- * every messaging module to belong to exactly one microservice, so this bean -
- * identically present on every content-handler - cannot register under one
- * shared module id (nothing but the launching service's own already-owned
- * module, e.g. {@code git-module}, {@code shared-filesystem-module}, is valid
- * here). Each content-handler's own {@code application.yml} sets
- * {@code ai.gebo.jobs.replicator.module-id} to that same value declared for it
- * in {@code GeboStandardMicroservices}.
+ * every messaging module to belong to exactly one microservice, so this bean
+ * cannot register identically on every content-handler under one shared
+ * module id. The monolith registers one instance under the shared
+ * {@code async-publishing-job-module} constant, while under microservices
+ * each content-handler registers its own instance under its own
+ * already-owned module id (e.g. {@code git-module}, {@code shared-filesystem-module}).
  * </p>
  *
  * Gebo.ai comment agent
  */
-@Component
-@Scope("singleton")
-public class GJobStatusReplicatorService extends GAbstractReplicatorService {
+public abstract class AbstractJobStatusReplicatorService extends GAbstractReplicatorService {
 
 	private static final String JOB_STATUS_REPLICATOR = "job-status-replicator";
 
 	private final IGRuntimeBinder runtimeBinder;
 
-	public GJobStatusReplicatorService(
-			@Value("${ai.gebo.jobs.replicator.module-id:" + GStandardModulesConstraints.ASYNC_PUBLISHING_JOB_MODULE
-					+ "}") String messagingModuleId,
-			GeboApplicationArchitecture architecture, IGReplicationsMap replicationsMap,
-			IMessageEnvelopeFactory envelopeFactory, IGRuntimeBinder runtimeBinder) {
+	protected AbstractJobStatusReplicatorService(String messagingModuleId, GeboApplicationArchitecture architecture,
+			IGReplicationsMap replicationsMap, IMessageEnvelopeFactory envelopeFactory, IGRuntimeBinder runtimeBinder) {
 		super(messagingModuleId, JOB_STATUS_REPLICATOR, architecture, replicationsMap, envelopeFactory);
 		this.runtimeBinder = runtimeBinder;
 	}
@@ -87,7 +77,7 @@ public class GJobStatusReplicatorService extends GAbstractReplicatorService {
 			return (GAbstractEntityReplicationPayload<EntityType>) payload;
 		}
 		throw new IllegalArgumentException(
-				"GJobStatusReplicatorService cannot replicate an entity of type " + entity.getClass().getName());
+				getClass().getSimpleName() + " cannot replicate an entity of type " + entity.getClass().getName());
 	}
 
 	@Override

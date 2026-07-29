@@ -67,7 +67,12 @@ public final class GeboStandardMicroservices {
 					// which requires a concrete AbstractJobLaunchManager/AbstractJobStatusEmitter bean
 					// regardless of whether brain ever actually owns a published endpoint - see
 					// BrainJobLaunchManager/BrainJobStatusEmitter in brain.gebo.ai.
-					.module("brain-module", "async-publishing-job-component", "job-status-notifier")
+					// USAGE-CONCENTRATOR: brain's own instance of the LLM-usage emitter
+					// (BrainLLMSUsageCrudService) - registered under brain's own module, never
+					// the shared LLMS-USAGE-MONITOR target constant (tyr's, declared below),
+					// to avoid colliding with the RabbitMQ bridge's remote proxy for it.
+					.module("brain-module", "async-publishing-job-component", "job-status-notifier",
+							"USAGE-CONCENTRATOR")
 					.build(),
 
 			// AuthN/AuthZ, OAuth2 integration. Owns no messaging module (REST-only edge).
@@ -85,9 +90,12 @@ public final class GeboStandardMicroservices {
 			// to a same-service GFinishedWorkflowPayload broadcast, never a cross-service
 			// target, so it must stay out of the topology entirely - same reasoning as
 			// tyr_gebo_ai's dropped identities above.
+			// USAGE-CONCENTRATOR: vectorizator's own instance of the LLM-usage emitter
+			// (VectorizatorLLMSUsageCrudService) - see the identical note under
+			// brain-module above.
 			GeboMicroservice.named("vectorizator_gebo_ai")
 					.module("vectorizator-module", "vectorization-component", "vectorization-emitter-component",
-							"vectorization-dispose-component")
+							"vectorization-dispose-component", "USAGE-CONCENTRATOR")
 					.build(),
 
 			// fulltextor is the renamed textsearch microservice (full-text host).
@@ -96,8 +104,11 @@ public final class GeboStandardMicroservices {
 					.build(),
 
 			// graphicator is the renamed graphsearch microservice (knowledge-graph host).
+			// USAGE-CONCENTRATOR: graphicator's own instance of the LLM-usage emitter
+			// (GraphicatorLLMSUsageCrudService) - see the identical note under
+			// brain-module above.
 			GeboMicroservice.named("graphicator_gebo_ai")
-					.module("knowledge-graph-module", "knowledge-graph-component")
+					.module("knowledge-graph-module", "knowledge-graph-component", "USAGE-CONCENTRATOR")
 					.build(),
 
 			// tyr is the workflows/usage/jobs-tracking microservice, and now also hosts the
@@ -149,13 +160,15 @@ public final class GeboStandardMicroservices {
 
 			// --- Content services (one per gebo.systems.parent handler) ------
 			// Each hosts the shared content-infrastructure systems; some also a static default Content.Handler.<code>.
-			// Each also hosts GJobStatusReplicatorService (gebo.architecture.contentsystems.abstraction.layer
-			// is on every one of their classpaths). A messaging module belongs to
-			// exactly one microservice (GeboMicroservicesTopology enforces it), so
-			// its systemId - job-status-replicator - is declared under each
-			// service's OWN already-owned module, not a shared one; each service's
-			// own application.yml points GJobStatusReplicatorService at that same
-			// module id (ai.gebo.jobs.replicator.module-id). That's what lets
+			// Each also hosts its own <Handler>JobStatusReplicatorService subclass
+			// (AbstractJobStatusReplicatorService, gebo.architecture.contentsystems.abstraction.layer)
+			// - one per handler module, @ConditionalOnMicroservices, each hardcoding
+			// its own already-owned module id in its constructor (mirroring
+			// AbstractJobLaunchManager's subclasses below - no @Value, no
+			// application.yml override). A messaging module belongs to exactly one
+			// microservice (GeboMicroservicesTopology enforces it), so its systemId -
+			// job-status-replicator - is declared under each service's OWN
+			// already-owned module, not a shared one. That's what lets
 			// RabbitMqExternalMessageEmitterProviderSource register it as a known
 			// emitter on every OTHER microservice (concretely, tyr, which needs to
 			// recognise the sender of a replicated GJobStatus).

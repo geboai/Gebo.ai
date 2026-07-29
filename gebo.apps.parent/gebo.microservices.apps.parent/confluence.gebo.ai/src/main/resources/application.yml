@@ -56,8 +56,3 @@ ai:
 ai.gebo.mongodb:
   databaseName: confluence-gebo
 
-# GJobStatusReplicatorService's own identity: must match the systemId
-# job-status-replicator declared under this module in GeboStandardMicroservices,
-# since a messaging module belongs to exactly one microservice.
-ai.gebo.jobs.replicator:
-  module-id: confluence-module
