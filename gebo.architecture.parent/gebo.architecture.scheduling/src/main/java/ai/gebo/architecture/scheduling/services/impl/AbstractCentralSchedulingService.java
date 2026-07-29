@@ -30,6 +30,8 @@ import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.scheduling.model.ProjectEndpointScheduledTask;
 import ai.gebo.architecture.scheduling.repository.ProjectEndpointScheduledTaskRepository;
 import ai.gebo.core.messages.GRescheduleProjectEndpointMessagePayload;
@@ -273,6 +275,17 @@ public abstract class AbstractCentralSchedulingService implements IGMessageEmitt
 		GMessageEnvelope<PublishProjectEndpointMessagePayload> envelope = envelopeFactory.newMessageFrom(this, payload);
 		envelope.setTargetModule(task.getSourceModule());
 		envelope.setTargetComponent(GStandardModulesConstraints.ASYNC_PUBLISHING_JOB_COMPONENT);
+		// A scheduled publish is the same kind of job as one launched directly via
+		// JobLauncherController.createJob (which hardcodes these same two values) -
+		// AbstractJobLaunchManager.accept() reads them straight off the envelope and
+		// persists them onto the resulting GJobStatus verbatim, including null if
+		// unset. Left unset here, every scheduler-dispatched job's workflowType was
+		// silently persisted as null, which GeboWorkflowsStatsServiceImpl.getJobSummary()
+		// then NPEs on (GWorkflowType.valueOf(null)) - found via a full end-to-end
+		// architectural test that, unlike the existing tests, actually calls
+		// getJobSummary on a scheduler-dispatched job.
+		envelope.setWorkflowType(GWorkflowType.STANDARD);
+		envelope.setWorkflowId(GStandardWorkflow.INGESTION.name());
 		this.broker.accept(envelope);
 	}
 
