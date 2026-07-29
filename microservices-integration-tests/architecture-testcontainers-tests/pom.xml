@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ===========================================================================
+    architecture-testcontainers-tests
+
+    Testcontainers-managed counterpart of setup-use-microservices-tests: instead
+    of an operator (or the parent's manage-cluster profile) bringing the FULL
+    ~20-service stack up/down around the test run by hand, this module owns its
+    own container lifecycle via org.testcontainers.containers.ComposeContainer,
+    scoped to a deliberately narrow 5-service slice - heimdall (authn/secrets),
+    brain (core orchestration/KB), filesystem (a content handler), tyr (central
+    scheduler + job/usage tracking), vectorizator (the embedding pipeline) - plus
+    the infra those 5 depend on (eureka, rabbit, mongo, qdrant). It wraps the
+    SAME dockers/gebo.microservices/docker-compose.yml the rest of the cluster
+    uses - no duplicate compose file.
+
+    Deliberately does NOT inherit the parent's manage-cluster profile behaviour
+    (see the profile override below): that profile brings up the FULL stack via
+    exec-maven-plugin, which would be redundant with - and roughly 4x heavier
+    than - this module's own Testcontainers-managed subset. Run this module with
+    a plain `mvn test`; JUnit ties container start/stop to the test lifecycle, so
+    teardown happens automatically even on failure - no docker compose down to
+    remember.
+
+    Precondition (not automated by this module, same as setup-use-microservices-tests
+    and the document-microservices-controllers skill): the 5 service images (+
+    infra) must already be built with -P docker,swagger-on and docker load-ed
+    before running these tests.
+    ===========================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices-integration-tests</groupId>
+		<artifactId>microservices-integration-tests.parent</artifactId>
+		<version>1.0.2.2-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>architecture-testcontainers-tests</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- The 5 in-scope microservices' generated java stub clients. -->
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>heimdall.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>brain.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>filesystem.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>tyr.gebo.ai.java.client</artifactId>
+			<version>${gebo.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- vectorizator is a required CONTAINER in the compose subset (it does the
+		     real embedding work the test observes indirectly via tyr's job status),
+		     but nothing in the test calls its REST API directly - no client stub
+		     dependency needed. -->
+	</dependencies>
+
+	<profiles>
+		<!-- Override: neutralize the parent's manage-cluster profile for this
+		     module only. That profile's exec-maven-plugin executions bind to
+		     pre/post-integration-test and would otherwise be inherited here too,
+		     bringing up the FULL ~20-service stack redundantly alongside this
+		     module's own Testcontainers-managed 5-service subset. Setting each
+		     execution's phase to "none" is the standard Maven idiom for disabling
+		     an inherited execution without needing -Dskip-cluster=true to be
+		     remembered on every invocation. -->
+		<profile>
+			<id>manage-cluster</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>compose-up</id>
+								<phase>none</phase>
+							</execution>
+							<execution>
+								<id>compose-down</id>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
