@@ -19,7 +19,7 @@
     [disabled]="disabled || playMode"
     (onClick)="startRecording()"
     icon="pi pi-microphone"
-    title="Start recording an audio track and send it"
+    [title]="errorMessage || 'Start recording an audio track and send it'"
     [text]="viewLabels"
     rounded="true"
     class="custom-blue-btn"
