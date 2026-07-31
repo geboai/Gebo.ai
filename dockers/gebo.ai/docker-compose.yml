@@ -71,6 +71,7 @@ services:
   opensearch:
     image: opensearchproject/opensearch:latest
     container_name: opensearch
+    restart: always
     environment:
       - discovery.type=single-node
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
