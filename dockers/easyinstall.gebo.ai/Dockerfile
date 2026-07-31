@@ -63,10 +63,25 @@ RUN mkdir -p ${MONGO_DATA} /var/log/mongodb
 COPY mongod.conf /etc/mongod.conf                 
 COPY mongo-init.sh /bin/mongo-init.sh   
 
-RUN curl -L -o /tmp/qdrant.deb "https://github.com/qdrant/qdrant/releases/download/v1.15.3/qdrant_1.15.3-1_${TARGETARCH}.deb"
-RUN apt-get update
-RUN apt-get install -y  /tmp/qdrant.deb
-RUN rm -rf /var/lib/apt/lists/* /tmp/qdrant.deb && mkdir -p ${QDRANT_DIR} /var/log/qdrant
+# Qdrant upstream only publishes an amd64 .deb; arm64 ships as a musl tarball
+# containing a single `qdrant` binary, so install that straight to /usr/bin.
+RUN set -eux; \
+    case "$TARGETARCH" in \
+      amd64) \
+        curl -L -o /tmp/qdrant.deb "https://github.com/qdrant/qdrant/releases/download/v${QDRANT_VERSION}/qdrant_${QDRANT_VERSION}-1_amd64.deb"; \
+        apt-get update; \
+        apt-get install -y /tmp/qdrant.deb; \
+        rm -f /tmp/qdrant.deb; \
+        ;; \
+      arm64) \
+        curl -L -o /tmp/qdrant.tar.gz "https://github.com/qdrant/qdrant/releases/download/v${QDRANT_VERSION}/qdrant-aarch64-unknown-linux-musl.tar.gz"; \
+        tar -xzf /tmp/qdrant.tar.gz -C /usr/bin; \
+        chmod +x /usr/bin/qdrant; \
+        rm -f /tmp/qdrant.tar.gz; \
+        ;; \
+      *) echo "Unsupported TARGETARCH: $TARGETARCH" >&2; exit 1 ;; \
+    esac
+RUN rm -rf /var/lib/apt/lists/* && mkdir -p ${QDRANT_DIR} /var/log/qdrant
 RUN mkdir -p /etc/qdrant
 COPY qdrant-config.yaml ${QDRANT_CONFIG}
 
