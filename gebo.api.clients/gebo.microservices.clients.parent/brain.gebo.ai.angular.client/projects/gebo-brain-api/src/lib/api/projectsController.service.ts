@@ -185,7 +185,7 @@ export class ProjectsControllerService {
             queryParameters = queryParameters.set('knowledgeBaseCode', <any>knowledgeBaseCode);
         }
         if (actualSelectedProjects !== undefined && actualSelectedProjects !== null) {
-            queryParameters = queryParameters.set('actualSelectedProjects', <any>actualSelectedProjects);
+            queryParameters = queryParameters.set('actualSelectedProjects', JSON.stringify(actualSelectedProjects));
         }
 
         let headers = this.defaultHeaders;

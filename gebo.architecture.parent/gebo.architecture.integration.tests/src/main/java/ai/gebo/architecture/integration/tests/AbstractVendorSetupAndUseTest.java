@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -117,6 +118,18 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 	protected GeboVectorStoreConfigurationService vectorStoreConfigurationService;
 	@Autowired
 	protected Environment environment;
+	/**
+	 * Port the in-process Gebo.ai web server actually bound to. Populated by
+	 * Spring Boot when the test context boots with {@code WebEnvironment.RANDOM_PORT}
+	 * (or {@code DEFINED_PORT}); remains {@code 0} for non-web contexts. When set,
+	 * it overrides the {@code host}/{@code port} declared in the
+	 * {@code FullSetupSecret} setup so that every API client built from
+	 * {@link #executeSystemSetupBySecret()} points at the in-process server instead
+	 * of a fixed port (e.g. 12999), preventing collisions with any other Gebo.ai
+	 * instance already running on that fixed port.
+	 */
+	@Value("${local.server.port:0}")
+	protected int localServerPort = 0;
 
 	protected ApiClient createApiClient(String host, int port, SecurityHeaderData header) {
 		RestTemplate restTemplate = createRestTemplate();
@@ -436,6 +449,12 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				+ FULL_SETUP_ENVIRONMENT_JSON_STRING + " must contain a valid json setup configuration");
 		ObjectMapper objectMapper = new ObjectMapper();
 		IntegrationTestSetup setup = objectMapper.readValue(jsonSetup, IntegrationTestSetup.class);
+		// Redirect every client at the in-process server's actual port so the suite
+		// never competes with another Gebo.ai instance bound to the fixed 12999 port.
+		if (localServerPort > 0 && setup.getSystemSetup() != null) {
+			setup.getSystemSetup().setHost("localhost");
+			setup.getSystemSetup().setPort(localServerPort);
+		}
 		return executingSystemSetup(setup);
 	}
 

@@ -18,9 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import tools.jackson.core.JacksonException;
@@ -41,7 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 @Scope("singleton")
 public class GTextToSpeechModelRuntimeConfigurationDaoimpl
 		extends GAbstractClusteredModelRuntimeConfigurationDao<IGConfigurableTextToSpeechModel, GBaseTextToSpeachModelConfig>
-		implements IGTextToSpeechModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
+		implements IGTextToSpeechModelRuntimeConfigurationDao {
 
 	@Override
 	protected GLlmModelClusterCategory getClusterCategory() {
@@ -133,12 +131,12 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
 		return findByPredicate(x -> x.getCode() != null && x.getCode().equals(code));
 	}
 
-	/** 
-     * Event handler that initializes models when the application context is refreshed
-     * @param event The context refreshed event
+	/**
+     * Initializes text-to-speech models dynamically. Invoked once this DAO's
+     * own application context finishes refreshing.
      */
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	protected void initializeRuntimeModels() {
 		LOGGER.info("Begin initalizing text to speech  models dinamically");
 		try {
 			List<GBaseTextToSpeachModelConfig> configs = persistentObjectManager

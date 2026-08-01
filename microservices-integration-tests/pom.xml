@@ -23,14 +23,18 @@
         tests against the live microservices java client stubs, then tears the
         cluster down. Nothing of this touches the root reactor.
 
-      * `mvn -f microservices-integration-tests/pom.xml verify -Pskip-cluster`
+      * `mvn -f microservices-integration-tests/pom.xml verify -Dskip-cluster=true`
         assumes the cluster is ALREADY running on the host (operator started it
         by hand with `docker compose -f dockers/gebo.microservices/docker-compose.yml up -d`)
         and just runs the tests. Useful while iterating on the test code.
 
     The concrete integration-test module(s) hang off this parent as
-    <modules>. Today only setup-use-microservices-tests is here; more can be
-    added following the same pattern (one module per scenario/family).
+    <modules>. setup-use-microservices-tests drives the full stack via this
+    parent's own manage-cluster profile (exec-maven-plugin docker-compose
+    up/down); architecture-testcontainers-tests instead owns a narrower,
+    self-contained lifecycle via Testcontainers' ComposeContainer and
+    explicitly opts out of manage-cluster (see its own pom.xml). More modules
+    can be added following either pattern.
     ===========================================================================
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -52,7 +56,7 @@
 
 	<groupId>ai.gebo.microservices-integration-tests</groupId>
 	<artifactId>microservices-integration-tests.parent</artifactId>
-	<version>1.0.2.1</version>
+	<version>1.0.2.2</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -63,7 +67,7 @@
 		<!-- Gebo version the cluster is expected to be running. Matches the
 		     SNAPSHOT checked in under dockers/gebo.microservices/.env as
 		     GEBO_VERSION. -->
-		<gebo.version>1.0.2.1</gebo.version>
+		<gebo.version>1.0.2.2</gebo.version>
 		<!-- Path to the canonical microservices docker-compose, relative to the
 		     reactor basedir (this directory). Overridable from the command line
 		     with -Dgebo.microservices.compose.file=/abs/path/to/docker-compose.yml -->
@@ -80,13 +84,20 @@
 		<gebo.cluster.gateway.url>http://localhost:13000</gebo.cluster.gateway.url>
 		<!-- Failsafe: include/exclude patterns for *IT.java. -->
 		<it.includes>**/*IT.java</it.includes>
-		<!-- Docker compose CLI binary. `docker compose` (v2 plugin) is the
-		     default; override to `docker-compose` on older hosts. -->
-		<docker.compose.cmd>docker compose</docker.compose.cmd>
+		<!-- Docker compose CLI. exec-maven-plugin's <executable> must be a single
+		     program path - it is never tokenized - so the v2 plugin form ("docker"
+		     + "compose" subcommand) is split into two properties instead of one
+		     "docker compose" string (which fails: there is no program literally
+		     named "docker compose"). On older hosts with the standalone
+		     docker-compose (v1) binary, override with
+		     -Ddocker.compose.executable=docker-compose -Ddocker.compose.subcommand= -->
+		<docker.compose.executable>docker</docker.compose.executable>
+		<docker.compose.subcommand>compose</docker.compose.subcommand>
 	</properties>
 
 	<modules>
 		<module>setup-use-microservices-tests</module>
+		<module>architecture-testcontainers-tests</module>
 	</modules>
 
 	<build>
@@ -128,10 +139,10 @@
 							     The java stub clients were generated pointing at localhost:<port>,
 							     so tests reach every microservice straight through its published
 							     host port - no need to round-trip via the gateway. -->
-							<gebo.cluster.heimdall.url>http://localhost:13018</gebo.cluster.heimdall.url>
-							<gebo.cluster.brain.url>http://localhost:13001</gebo.cluster.brain.url>
-							<gebo.cluster.filesystem.url>http://localhost:13006</gebo.cluster.filesystem.url>
-							<gebo.cluster.tyr.url>http://localhost:13019</gebo.cluster.tyr.url>
+							<gebo.cluster.heimdall.url>http://localhost:13018/heimdall</gebo.cluster.heimdall.url>
+							<gebo.cluster.brain.url>http://localhost:13001/brain</gebo.cluster.brain.url>
+							<gebo.cluster.filesystem.url>http://localhost:13006/filesystem</gebo.cluster.filesystem.url>
+							<gebo.cluster.tyr.url>http://localhost:13019/tyr</gebo.cluster.tyr.url>
 							<gebo.cluster.gateway.wait.seconds>${gebo.cluster.gateway.wait.seconds}</gebo.cluster.gateway.wait.seconds>
 						</systemPropertyVariables>
 					</configuration>
@@ -159,12 +170,16 @@
 
 		      mvn -f microservices-integration-tests/pom.xml verify
 		  does the whole lifecycle. To skip it (cluster already up) pass
-		  -Pskip-cluster.
+		  -Dskip-cluster=true (NOT -Pskip-cluster: that only activates the inert
+		  "skip-cluster" profile below by id, it does not set the property this
+		  profile's activation actually keys off - activeByDefault is deliberately
+		  NOT used here since mixing it with a <property> activation makes Maven
+		  ignore the "no other profile explicitly activated" rule and evaluate the
+		  property alone, so -Pskip-cluster would leave this profile active anyway).
 		-->
 		<profile>
 			<id>manage-cluster</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
 				<property>
 					<name>skip-cluster</name>
 					<value>!true</value>
@@ -183,8 +198,8 @@
 								<phase>pre-integration-test</phase>
 								<goals><goal>exec</goal></goals>
 								<configuration>
-									<executable>${docker.compose.cmd}</executable>
-									<commandlineArgs>-f ${gebo.microservices.compose.file} -p ${gebo.microservices.compose.project} up -d --wait</commandlineArgs>
+									<executable>${docker.compose.executable}</executable>
+									<commandlineArgs>${docker.compose.subcommand} -f ${gebo.microservices.compose.file} -p ${gebo.microservices.compose.project} up -d --wait</commandlineArgs>
 								</configuration>
 							</execution>
 							<!-- post-integration-test: docker compose down -v (removes
@@ -194,8 +209,8 @@
 								<phase>post-integration-test</phase>
 								<goals><goal>exec</goal></goals>
 								<configuration>
-									<executable>${docker.compose.cmd}</executable>
-									<commandlineArgs>-f ${gebo.microservices.compose.file} -p ${gebo.microservices.compose.project} down -v</commandlineArgs>
+									<executable>${docker.compose.executable}</executable>
+									<commandlineArgs>${docker.compose.subcommand} -f ${gebo.microservices.compose.file} -p ${gebo.microservices.compose.project} down -v</commandlineArgs>
 								</configuration>
 							</execution>
 						</executions>
@@ -209,7 +224,7 @@
 		  hand). Only run the *IT tests, do NOT touch docker-compose. Handy while
 		  iterating on test code - the cluster boot is the slow part.
 
-		      mvn -f microservices-integration-tests/pom.xml verify -Pskip-cluster
+		      mvn -f microservices-integration-tests/pom.xml verify -Dskip-cluster=true
 		-->
 		<profile>
 			<id>skip-cluster</id>

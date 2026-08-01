@@ -25,7 +25,7 @@
  * The module imports numerous Angular and PrimeNG modules for UI components and
  * declares all the admin components needed for the Gebo.ai administrative interface.
  */
-import { BrowseContentModule, EditableListboxModule, GeboAIContentReindexModule, GeboAIFileTypesModule, GeboAiRelationListModule, GeboAIReusableChatModule, GeboOauth2SecretModule, GeboUIArchitectureModule, ProjectAddContextMenuModule, GeboAIContentSelectionFilterModule, GeboAIFieldTranslationContainerModule, GEBO_AI_MODULE, GeboAINotificationsModule, GeboAIChatModelUseModule, GEBO_UI_ENTITY_FORM_TOKEN, GeboUIEntityFormConfig, GeboAILLMSUsageDashboardModule, GeboAIWorkflowStatsDashboardModule, GeboBlockableContainerDirective } from "@Gebo.ai/reusable-ui";
+import { BrowseContentModule, EditableListboxModule, GeboAIContentReindexModule, GeboAIFileTypesModule, GeboAiRelationListModule, GeboAIReusableChatModule, GeboOauth2SecretModule, GeboUIArchitectureModule, ProjectAddContextMenuModule, GeboAIContentSelectionFilterModule, GeboAIFieldTranslationContainerModule, GEBO_AI_MODULE, GeboAINotificationsModule, GeboAIChatModelUseModule, GEBO_UI_ENTITY_FORM_TOKEN, GeboUIEntityFormConfig, GeboAILLMSUsageDashboardModule, GeboAIWorkflowStatsDashboardModule, GeboBlockableContainerDirective, GeboAIChooseDataSourceTypeComponent } from "@Gebo.ai/reusable-ui";
 import { CommonModule } from "@angular/common";
 import { NgModule, ModuleWithProviders } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -262,6 +262,8 @@ export class GeboAiAdminModule {
           { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOllamaEmbeddingModelConfig', entityAliases: ['ai.gebo.llms.ollama.model.GOllamaEmbeddingModelConfig'], entityUI: GeboAIOllamaEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
 
           { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GProject', entityAliases: ['ai.gebo.knlowledgebase.model.projects.GProject'], entityUI: GeboAiProjectAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'ChooseDataSourceType', entityUI: GeboAIChooseDataSourceTypeComponent } as GeboUIEntityFormConfig, multi: true },
 
           { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOpenAIChatModelConfig', entityAliases: ['ai.gebo.llms.openai.model.GOpenAIChatModelConfig'], entityUI: GeboAIOpenAIChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
 

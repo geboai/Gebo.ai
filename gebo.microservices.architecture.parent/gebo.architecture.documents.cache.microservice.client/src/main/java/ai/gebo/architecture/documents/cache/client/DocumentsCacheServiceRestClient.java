@@ -14,9 +14,11 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -28,6 +30,7 @@ import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.model.base.TypedInputStream;
 
@@ -42,13 +45,15 @@ public class DocumentsCacheServiceRestClient implements IDocumentsCacheService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DocumentsCacheServiceRestClient.class);
 
-	static final String BASE_PATH = "api/DocumentsCacheServiceController/";
+	static final String BASE_PATH = "/api/DocumentsCacheServiceController/";
 	static final String EXTENSION_HEADER = "X-Gebo-Content-Extension";
 
 	private final WebClient webClient;
+	private final IGeboCallerTokenPropagator tokenPropagator;
 
-	public DocumentsCacheServiceRestClient(WebClient webClient) {
+	public DocumentsCacheServiceRestClient(WebClient webClient, IGeboCallerTokenPropagator tokenPropagator) {
 		this.webClient = webClient;
+		this.tokenPropagator = tokenPropagator;
 	}
 
 	@Override
@@ -62,8 +67,9 @@ public class DocumentsCacheServiceRestClient implements IDocumentsCacheService {
 		}
 		try {
 			ResponseEntity<byte[]> response = webClient.post().uri(BASE_PATH + "streamDocument")
-					.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_OCTET_STREAM)
-					.bodyValue(request).retrieve().toEntity(byte[].class).block();
+					.contentType(MediaType.APPLICATION_JSON).headers(this::applyCallerToken)
+					.accept(MediaType.APPLICATION_OCTET_STREAM).bodyValue(request).retrieve().toEntity(byte[].class)
+					.block();
 			if (response == null || response.getStatusCode() == HttpStatus.NO_CONTENT || response.getBody() == null) {
 				return null;
 			}
@@ -76,6 +82,16 @@ public class DocumentsCacheServiceRestClient implements IDocumentsCacheService {
 					"Remote streamDocument failed: " + ex.getStatusCode() + " " + ex.getResponseBodyAsString(), ex);
 		} catch (RuntimeException ex) {
 			throw new DocumentCacheAccessException("Remote streamDocument failed", ex);
+		}
+	}
+
+	/** Adds the caller's (or, off a request thread, a system-identity) bearer token. */
+	private void applyCallerToken(HttpHeaders headers) {
+		String token = tokenPropagator.currentToken();
+		if (StringUtils.hasText(token)) {
+			headers.setBearerAuth(token);
+		} else {
+			LOGGER.debug("No caller token to forward to the chunker microservice; the call goes out unauthenticated");
 		}
 	}
 

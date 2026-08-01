@@ -15,6 +15,7 @@ import { SortObject } from './sortObject';
 export interface PageMCPClientConfig { 
     totalPages?: any;
     totalElements?: any;
+    pageable?: PageableObject;
     first?: any;
     last?: any;
     size?: any;
@@ -22,6 +23,5 @@ export interface PageMCPClientConfig {
     number?: any;
     sort?: SortObject;
     numberOfElements?: any;
-    pageable?: PageableObject;
     empty?: any;
 }

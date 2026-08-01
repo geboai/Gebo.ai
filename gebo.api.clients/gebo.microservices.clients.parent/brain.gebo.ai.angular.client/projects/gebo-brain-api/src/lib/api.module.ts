@@ -66,7 +66,6 @@ import { OpenAiTranscriptModelsConfigurationControllerService } from './api/open
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
-import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
@@ -139,7 +138,6 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     ProjectsControllerService,
     PromptTemplatesControllerService,
     RankerModelsControllerService,
-    ReindexingFrequencyOptionsControllerService,
     TextToSpeechModelsControllerService,
     TranscriptModelsControllerService,
     UserKnowledgeBaseBrowsingControllerService ]

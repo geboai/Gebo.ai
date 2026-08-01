@@ -18,11 +18,15 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
+import ai.gebo.application.messaging.model.GMessageEnvelope;
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
+import ai.gebo.core.messages.GRescheduleProjectEndpointMessagePayload;
 import ai.gebo.jobs.services.IGGeboScheduledSyncronizationService;
+import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
-import ai.gebo.model.base.GObjectRef;
 import lombok.AllArgsConstructor;
 
 /**
@@ -40,8 +44,13 @@ public class GGeboScheduledSyncronizationServiceImpl
 		implements IGGeboScheduledSyncronizationService, ApplicationListener<ContextRefreshedEvent> {
 	static Logger LOGGER = LoggerFactory.getLogger(GGeboScheduledSyncronizationServiceImpl.class);
 	private final IGPersistentObjectManager persistenceManager;
-	private final IGSchedulingTimeService publicationSchedulingService;
-	
+	private final IGMessageBroker messageBroker;
+	private final IMessageEnvelopeFactory envelopeFactory;
+	// See GAbstractSystemsArchitectureController.jobLaunchManager for why this
+	// bean (rather than a dedicated emitter) is used as the reschedule request's
+	// "from" identity.
+	private final AbstractJobLaunchManager jobLaunchManager;
+
 	
 	
 
@@ -58,8 +67,13 @@ public class GGeboScheduledSyncronizationServiceImpl
 		try {
 			List<GProjectEndpoint> endpoints = persistenceManager.findAllExtendingType(GProjectEndpoint.class);
 			for (GProjectEndpoint gProjectEndpoint : endpoints) {
-				final GObjectRef<GProjectEndpoint> ref = GObjectRef.of(gProjectEndpoint);
-				publicationSchedulingService.managePublishScheduling(gProjectEndpoint);
+				GRescheduleProjectEndpointMessagePayload payload = new GRescheduleProjectEndpointMessagePayload();
+				payload.setCentralizedProjectEndpoint(GCentralizedProjectEndpoint.of(gProjectEndpoint));
+				GMessageEnvelope<GRescheduleProjectEndpointMessagePayload> envelope = envelopeFactory
+						.newMessageFrom(jobLaunchManager, payload);
+				envelope.setTargetModule(GStandardModulesConstraints.SCHEDULER_MODULE);
+				envelope.setTargetComponent(GStandardModulesConstraints.SCHEDULER_COMPONENT);
+				messageBroker.accept(envelope);
 			}
 		} catch (Throwable e) {
 			LOGGER.error("Main cycle of runContentsReadingAndVectorizing() fails ", e);

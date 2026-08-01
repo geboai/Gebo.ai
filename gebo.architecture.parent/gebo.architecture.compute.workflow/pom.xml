@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.2.1</version>
+		<version>1.0.2.2</version>
 	</parent>
 	<artifactId>gebo.architecture.compute.workflow</artifactId>
 	<dependencies>
@@ -34,6 +34,14 @@
 			<artifactId>gebo.architecture.persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- GAbstractReplicatorReceiverService, for GJobStatusReplicatorReceiverService.
+		     Brings gebo.architecture.environment (GeboApplicationArchitecture)
+		     transitively. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.replicator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -45,6 +53,12 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- DataPage, for the JobStatusController by-endpoint query filter. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -11,6 +11,7 @@ package ai.gebo.security.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -45,6 +46,7 @@ import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
+import ai.gebo.security.services.impl.DirectoryBackedUserDetailsService;
 import ai.gebo.security.services.impl.GHttpRequestAuthenticationManagerResolverImpl;
 import ai.gebo.security.services.impl.GOAuth2AuthenticationSuccessHandler;
 import ai.gebo.security.services.impl.GOAuth2UserService;
@@ -238,6 +240,7 @@ public class GeboAISecurityConfig {
 	private final OAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
 	private final IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao;
 	private final UserDetailsService userDetailsService;
+	private final UserDetailsService directoryBackedUserDetailsService;
 	private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
 	/**************************************************************************************************
@@ -252,10 +255,13 @@ public class GeboAISecurityConfig {
 			IGeboSecretsAccessService secretsService, IGUsersAdminService userAdminService,
 			GeboSecurityConfig securityProperties, GPasswordEncoder passwordEncoder,
 			IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao, LocalJwtTokenProvider tokenProvider,
-			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService, UserDetailsService userDetailsService,
+			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService,
+			@Qualifier("customUserDetailsService") UserDetailsService userDetailsService,
+			DirectoryBackedUserDetailsService directoryBackedUserDetailsService,
 			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
+		this.directoryBackedUserDetailsService = directoryBackedUserDetailsService;
 		Oauth2DynamicClientRegistrationRepository dynamicClient = new Oauth2DynamicClientRegistrationRepository(
 				oauth2ConfigurationService);
 		this.clientRegistrationRepository = dynamicClient;
@@ -420,7 +426,7 @@ public class GeboAISecurityConfig {
 	@Bean
 	public IGHttpRequestAuthenticationManagerResolver authenticationManagerResolver() {
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
-				oauth2RuntimeConfigurationDao, tokenProvider, userDetailsService);
+				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService);
 	}
 
 }

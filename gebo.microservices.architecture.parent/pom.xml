@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.2.1</version>
+		<version>1.0.2.2</version>
 	</parent>
 	<groupId>ai.gebo.microservices.architecture</groupId>
 	<artifactId>gebo.microservices.architecture.parent</artifactId>
@@ -34,6 +34,7 @@
 		<module>gebo.microservices.security.client</module>
 		<module>gebo.microservices.acl.controller</module>
 		<module>gebo.microservices.acl.client</module>
+		<module>gebo.microservices.knowledgebase.client</module>
 		<module>gebo.microservices.internal-topology.controllers</module>
 		<module>gebo.microservices.global-internal-topology</module>
 		<module>gebo.microservices.global-internal-topology.client</module>

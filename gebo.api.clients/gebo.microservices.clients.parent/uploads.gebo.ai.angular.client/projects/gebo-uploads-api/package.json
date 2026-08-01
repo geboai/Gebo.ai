@@ -1,6 +1,6 @@
 ﻿{
   "name": "@Gebo.ai/uploads",
-  "version": "1.0.2.1",
+  "version": "1.0.2.2",
   "peerDependencies": {
     "@angular/common": "^21.2.18",
     "@angular/core": "^21.2.18"

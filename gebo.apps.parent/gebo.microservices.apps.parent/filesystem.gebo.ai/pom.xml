@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps.microservices</groupId>
 		<artifactId>gebo.microservices.apps.parent</artifactId>
-		<version>1.0.2.1</version>
+		<version>1.0.2.2</version>
 	</parent>
 	<artifactId>filesystem.gebo.ai</artifactId>
 
@@ -16,6 +16,15 @@
 	  hosted content system.
 	-->
 	<dependencies>
+		<!-- The Spring Security filter chain + LOCAL_JWT provider. Deliberately WITHOUT
+		     gebo.security.directory.mongo: gebo.microservices.security.client (already
+		     on this classpath transitively via the content-handler starter) supplies the
+		     IGSecurityDirectory bean via a REST call to heimdall instead. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.content-handler.starter</artifactId>

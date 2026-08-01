@@ -37,16 +37,19 @@
 name: gebo-microservices
 
 # Common definition shared by every backend microservice.
+x-microservice-env: &microservice-env
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
+  SPRING_CONFIG_ADDITIONAL_LOCATION: file:/opt/gebo.ai/config/
+  JAVA_TOOL_OPTIONS: "-Xms256m -Xmx1g"
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,prometheus,metrics
+  MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
+  MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
+
 x-microservice: &microservice
   restart: unless-stopped
   depends_on: [eureka, rabbit, mongo]
   environment:
-    EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
-    SPRING_CONFIG_ADDITIONAL_LOCATION: file:/opt/gebo.ai/config/
-    JAVA_TOOL_OPTIONS: "-Xms256m -Xmx1g"
-    MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,prometheus,metrics
-    MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
-    MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
+    <<: *microservice-env
   volumes:
     - ./config:/opt/gebo.ai/config:ro
     - /opt/gebo.ai/home          # per-container anonymous volume
@@ -92,6 +95,7 @@ services:
 
   opensearch:
     image: opensearchproject/opensearch:latest
+    restart: always
     environment:
       - discovery.type=single-node
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
@@ -239,6 +243,23 @@ services:
   filesystem:
     <<: *microservice
     image: geboai/filesystem.gebo.ai:${GEBO_VERSION:-1.0.2.0-SNAPSHOT}
+    environment:
+      <<: *microservice-env
+      # Off by default (GeboAiFilesystemsConfig) since it lets an admin point a
+      # share at any path the container can see; the test cluster exercises the
+      # file-share admin flow (FileSystemSharesSettingController), so opt in here
+      # rather than flipping the shared, security-relevant default for every
+      # deployment.
+      AI_GEBO_FILESYSTEM_ALLOWFILESYSTEMSHARESUI: "true"
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - /opt/gebo.ai/home          # per-container anonymous volume
+      - /opt/gebo.ai/work
+      # microservices-integration-tests creates its shared test folder under the
+      # HOST's system temp dir and hands this service that same absolute path -
+      # a container with its own filesystem can't see it otherwise. Local test
+      # cluster only; do not carry this into a real deployment's compose file.
+      - /tmp:/tmp
     ports:
       - "13006:13006"
   uploads:

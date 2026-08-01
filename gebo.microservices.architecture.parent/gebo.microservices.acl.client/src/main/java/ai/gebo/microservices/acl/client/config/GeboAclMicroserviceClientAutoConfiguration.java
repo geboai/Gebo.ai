@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -41,12 +42,28 @@ import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfig
 @EnableConfigurationProperties(GeboAclClientProperties.class)
 public class GeboAclMicroserviceClientAutoConfiguration {
 
+	static final String WEB_CLIENT_BUILDER_BEAN = "geboAclClientLbWebClientBuilder";
 	static final String WEB_CLIENT_BEAN = "geboAclClientWebClient";
+
+	/**
+	 * A dedicated {@link LoadBalanced @LoadBalanced} builder so calls to heimdall's
+	 * ACL surface go through Spring Cloud LoadBalancer (resolving the topology's
+	 * discovery service-id, e.g. {@code heimdall-gebo-ai}, to a live instance)
+	 * instead of a literal DNS lookup, which fails: that hostname is a Eureka
+	 * service-id, not a real one. Mirrors the same fix already applied in
+	 * {@code GeboSecurityMicroserviceClientAutoConfiguration}.
+	 */
+	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
+	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
+	@LoadBalanced
+	public WebClient.Builder geboAclClientLbWebClientBuilder() {
+		return WebClient.builder();
+	}
 
 	@Bean(name = WEB_CLIENT_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
-	public WebClient geboAclClientWebClient() {
-		return WebClient.builder().build();
+	public WebClient geboAclClientWebClient(@Qualifier(WEB_CLIENT_BUILDER_BEAN) WebClient.Builder builder) {
+		return builder.build();
 	}
 
 	@Bean

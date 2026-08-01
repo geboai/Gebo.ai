@@ -289,13 +289,20 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		String extension = getExtension(media);
 		resource.setExtension(extension);
 		Path path = getSessionPath(userSessionCode);
-		Path out = Path.of(path.toString(), resource.getCode());
+		Path out = Path.of(path.toString(), getGeneratedResourceRelativeFilePath(resource));
 		try (OutputStream os = Files.newOutputStream(out)) {
 			IOUtils.write(media.getDataAsByteArray(), os);
 			os.flush();
 		}
 		resource = llmGeneratedResourceRepository.insert(resource);
 		return resource;
+	}
+
+	// LLMGeneratedResource is stored on disk with its extension so that it can
+	// later be re-read as a properly typed file (content-type probing, ingestion) -
+	// mirroring UserUploadContentServerSide.getRelativeFilePath().
+	private String getGeneratedResourceRelativeFilePath(LLMGeneratedResource resource) {
+		return resource.getCode() + (resource.getExtension() != null ? resource.getExtension() : "");
 	}
 
 	private String getExtension(Media media) {
@@ -324,22 +331,33 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	@Override
 	public InputStream streamContent(LLMGeneratedResource generated) throws IOException {
 		this.checkBeingOwnerAndExists(generated.getUserContextCode());
-		Path path = getSessionPath(generated.getUserContextCode());
-		Path outPath = Path.of(path.toString(), generated.getCode());
+		Path outPath = getGeneratedResourceFilePath(generated);
 		return Files.newInputStream(outPath);
+	}
+
+	private Path getGeneratedResourceFilePath(LLMGeneratedResource generated) throws IOException {
+		Path path = getSessionPath(generated.getUserContextCode());
+		return Path.of(path.toString(), getGeneratedResourceRelativeFilePath(generated));
 	}
 
 	@Override
 	public List<Document> getIngestedContentsOf(LLMGeneratedResource generated)
 			throws IOException, GeboContentHandlerSystemException, GeboIngestionException {
-		InputStream is = streamContent(generated);
-		if (is == null)
+		Path filePath = getGeneratedResourceFilePath(generated);
+		if (!Files.exists(filePath))
 			return List.of();
-		GDocumentReference doc = documentReferenceFactory.createReference(Path.of(generated.getFileName()));
-		IngestionHandlerData ingested = ingestionHandler.handleContent(doc, is);
-		if (ingested.isUnmanagedContent())
-			return List.of();
-		return ingested.getStream().toList();
+		// The reference must be built from the real on-disk path (with its
+		// extension) so createReference() can stat the file and probe its
+		// content type - generated.getFileName() is only a display label, not
+		// a resolvable path, and was previously (wrongly) passed here directly,
+		// which is what threw NoSuchFileException for generated images.
+		GDocumentReference doc = documentReferenceFactory.createReference(filePath);
+		try (InputStream is = Files.newInputStream(filePath)) {
+			IngestionHandlerData ingested = ingestionHandler.handleContent(doc, is);
+			if (ingested.isUnmanagedContent())
+				return List.of();
+			return ingested.getStream().toList();
+		}
 	}
 
 }

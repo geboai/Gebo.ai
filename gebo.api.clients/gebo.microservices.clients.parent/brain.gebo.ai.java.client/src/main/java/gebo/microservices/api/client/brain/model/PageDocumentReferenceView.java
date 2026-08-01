@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageDocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:44.660306383+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
 
 public class PageDocumentReferenceView {
   @JsonProperty("totalPages")
@@ -32,6 +32,9 @@ public class PageDocumentReferenceView {
 
   @JsonProperty("totalElements")
   private Object totalElements = null;
+
+  @JsonProperty("pageable")
+  private PageableObject pageable = null;
 
   @JsonProperty("first")
   private Object first = null;
@@ -53,9 +56,6 @@ public class PageDocumentReferenceView {
 
   @JsonProperty("numberOfElements")
   private Object numberOfElements = null;
-
-  @JsonProperty("pageable")
-  private PageableObject pageable = null;
 
   @JsonProperty("empty")
   private Object empty = null;
@@ -94,6 +94,24 @@ public class PageDocumentReferenceView {
 
   public void setTotalElements(Object totalElements) {
     this.totalElements = totalElements;
+  }
+
+  public PageDocumentReferenceView pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
   }
 
   public PageDocumentReferenceView first(Object first) {
@@ -222,24 +240,6 @@ public class PageDocumentReferenceView {
     this.numberOfElements = numberOfElements;
   }
 
-  public PageDocumentReferenceView pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
   public PageDocumentReferenceView empty(Object empty) {
     this.empty = empty;
     return this;
@@ -270,6 +270,7 @@ public class PageDocumentReferenceView {
     PageDocumentReferenceView pageDocumentReferenceView = (PageDocumentReferenceView) o;
     return Objects.equals(this.totalPages, pageDocumentReferenceView.totalPages) &&
         Objects.equals(this.totalElements, pageDocumentReferenceView.totalElements) &&
+        Objects.equals(this.pageable, pageDocumentReferenceView.pageable) &&
         Objects.equals(this.first, pageDocumentReferenceView.first) &&
         Objects.equals(this.last, pageDocumentReferenceView.last) &&
         Objects.equals(this.size, pageDocumentReferenceView.size) &&
@@ -277,13 +278,12 @@ public class PageDocumentReferenceView {
         Objects.equals(this.number, pageDocumentReferenceView.number) &&
         Objects.equals(this.sort, pageDocumentReferenceView.sort) &&
         Objects.equals(this.numberOfElements, pageDocumentReferenceView.numberOfElements) &&
-        Objects.equals(this.pageable, pageDocumentReferenceView.pageable) &&
         Objects.equals(this.empty, pageDocumentReferenceView.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, first, last, size, content, number, sort, numberOfElements, pageable, empty);
+    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -294,6 +294,7 @@ public class PageDocumentReferenceView {
     
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
@@ -301,7 +302,6 @@ public class PageDocumentReferenceView {
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
-    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

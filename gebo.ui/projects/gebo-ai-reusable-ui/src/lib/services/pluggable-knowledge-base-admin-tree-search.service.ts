@@ -245,7 +245,7 @@ export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
         if (options) {
             options.forEach(option => {
                 items.push({
-                    id: option.projecteEndpointClassName.replaceAll(".", "_"),
+                    id: option.projecteEndpointClassName,
                     icon: option.addProjectEndpointicon,
                     label: option.addProjectEndpointLabel,
                     title: option.addProjectEndpointTitle,

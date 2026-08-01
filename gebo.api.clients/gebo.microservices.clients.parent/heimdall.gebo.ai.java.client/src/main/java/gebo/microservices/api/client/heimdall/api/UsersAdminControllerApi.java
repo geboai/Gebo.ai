@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:42.706770550+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
 
 public class UsersAdminControllerApi {
     private ApiClient apiClient;
@@ -281,8 +281,8 @@ public class UsersAdminControllerApi {
      * @return EditableUser
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public EditableUser findUserByUsername(Object email) throws RestClientException {
-        return findUserByUsernameWithHttpInfo(email).getBody();
+    public EditableUser findUserByUsername1(Object email) throws RestClientException {
+        return findUserByUsername1WithHttpInfo(email).getBody();
     }
 
     /**
@@ -293,11 +293,11 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;EditableUser&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<EditableUser> findUserByUsernameWithHttpInfo(Object email) throws RestClientException {
+    public ResponseEntity<EditableUser> findUserByUsername1WithHttpInfo(Object email) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'email' is set
         if (email == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'email' when calling findUserByUsername");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'email' when calling findUserByUsername1");
         }
         String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUserByUsername").build().toUriString();
         

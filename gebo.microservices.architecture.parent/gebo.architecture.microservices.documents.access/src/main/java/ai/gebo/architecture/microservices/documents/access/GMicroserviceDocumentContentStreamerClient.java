@@ -15,9 +15,11 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -26,6 +28,7 @@ import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.documents.access.StreamingPurpose;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
@@ -44,6 +47,16 @@ import ai.gebo.model.base.TypedInputStream;
  * for a {@link GDocumentReference}, {@code streamSearchResult} for a
  * {@link SearchResult}. The octet-stream response body (plus its content type and
  * {@code X-Gebo-Content-Extension}) is returned as a {@link TypedInputStream}.
+ *
+ * <p>
+ * {@code DocumentContentStreamerController} requires an authenticated caller
+ * ({@code hasAnyRole('ADMIN','USER','APPLICATION')}), so every call carries a
+ * bearer token from {@link IGeboCallerTokenPropagator} - the caller's own token
+ * when one is forwardable, otherwise a freshly minted system-identity token
+ * (this streamer commonly runs off a batch/message-receiver thread with no
+ * caller token to forward at all), mirroring every other cluster client (e.g.
+ * {@code GeboSecretsAccessServiceRestClient}).
+ * </p>
  */
 public class GMicroserviceDocumentContentStreamerClient implements IGDocumentContentStreamer {
 
@@ -56,10 +69,13 @@ public class GMicroserviceDocumentContentStreamerClient implements IGDocumentCon
 
 	private final WebClient webClient;
 	private final GeboMicroserviceUrlResolver urlResolver;
+	private final IGeboCallerTokenPropagator tokenPropagator;
 
-	public GMicroserviceDocumentContentStreamerClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver) {
+	public GMicroserviceDocumentContentStreamerClient(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
+			IGeboCallerTokenPropagator tokenPropagator) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
+		this.tokenPropagator = tokenPropagator;
 	}
 
 	@Override
@@ -98,8 +114,8 @@ public class GMicroserviceDocumentContentStreamerClient implements IGDocumentCon
 		}
 		try {
 			ResponseEntity<byte[]> response = webClient.post().uri(uri).contentType(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_OCTET_STREAM).bodyValue(requestBody).retrieve().toEntity(byte[].class)
-					.block();
+					.accept(MediaType.APPLICATION_OCTET_STREAM).headers(this::applyCallerToken).bodyValue(requestBody)
+					.retrieve().toEntity(byte[].class).block();
 			if (response == null || response.getStatusCode() == HttpStatus.NO_CONTENT || response.getBody() == null) {
 				return null;
 			}
@@ -112,6 +128,16 @@ public class GMicroserviceDocumentContentStreamerClient implements IGDocumentCon
 					"Remote streamContent failed: " + ex.getStatusCode() + " " + ex.getResponseBodyAsString(), ex);
 		} catch (RuntimeException ex) {
 			throw new DocumentContentStreamerException("Remote streamContent failed", ex);
+		}
+	}
+
+	/** Adds the caller's (or, off a request thread, a system-identity) bearer token. */
+	private void applyCallerToken(HttpHeaders headers) {
+		String token = tokenPropagator.currentToken();
+		if (StringUtils.hasText(token)) {
+			headers.setBearerAuth(token);
+		} else {
+			LOGGER.debug("No caller token to forward to the content-handler microservice; the call goes out unauthenticated");
 		}
 	}
 

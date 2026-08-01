@@ -14,19 +14,29 @@ import ai.gebo.microservices.topology.GeboCurrentMicroservice;
 import ai.gebo.microservices.topology.GeboMicroservice;
 
 /**
- * Shared helper for the topology-driven external emitter/receiver sources.
+ * Shared helper for resolving this microservice's own identity for the RabbitMQ
+ * bridge - used both by the topology-driven external emitter/receiver sources
+ * (this package) and by the inbound side ({@code
+ * ai.gebo.architecture.messages.rabbitmq.inbound}), which otherwise has no way to
+ * learn its own id: {@code ai.gebo.messaging.rabbitmq.local-microservice-id} is
+ * never actually set in any deployment (every microservice already has a unique
+ * {@code spring.application.name}, so setting it redundantly per-service was
+ * never done) - without this fallback,
+ * {@code GeboRabbitMqTopologyDeclarer}/{@code RabbitMqInboundBridge} calling
+ * {@link GeboRabbitMqMessagingProperties#getLocalMicroserviceId()} directly get
+ * {@code null} and silently never declare an inbound queue, so the microservice
+ * can never receive anything over RabbitMQ.
  *
  * Gebo.ai comment agent
  */
-final class RabbitMqTopologyBridgeSupport {
+public final class RabbitMqTopologyBridgeSupport {
 
 	private RabbitMqTopologyBridgeSupport() {
 		// utility
 	}
 
 	/**
-	 * Resolves the normalised id of the <b>local</b> microservice, so it can be
-	 * excluded when deducing remote endpoints from the topology.
+	 * Resolves the normalised id of the <b>local</b> microservice.
 	 *
 	 * <p>
 	 * Prefers the explicit {@code ai.gebo.messaging.rabbitmq.local-microservice-id}
@@ -39,7 +49,7 @@ final class RabbitMqTopologyBridgeSupport {
 	 * @param current    the running service identity
 	 * @return the normalised local microservice id, or {@code null} if none is set
 	 */
-	static String resolveLocalMicroserviceId(GeboRabbitMqMessagingProperties properties,
+	public static String resolveLocalMicroserviceId(GeboRabbitMqMessagingProperties properties,
 			GeboCurrentMicroservice current) {
 		String configured = properties.getLocalMicroserviceId();
 		if (configured != null && !configured.isBlank()) {

@@ -26,7 +26,6 @@ import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepo
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.replicator.service.IEntityReplicationService;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
@@ -61,17 +60,15 @@ public class GBaseExposedSystemsArchitectureController<SystemType extends GConte
 	 * @param messageBroker                   the message broker
 	 * @param controllerEmitter               controller emitter
 	 * @param securityService                 the security service
-	 * @param schedulingService               the scheduling service
 	 * @param entityProcessingRunnableFactory the entity processing runnable factory
 	 */
 	public GBaseExposedSystemsArchitectureController(Class<SystemType> systemType, Class<EndpointType> endpointType,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			ControllerNestedEmitter controllerEmitter, IGSecurityService securityService,
-			IGSchedulingTimeService schedulingService,
 			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService,
 				entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.systemType = systemType;
 		this.endpointType = endpointType;

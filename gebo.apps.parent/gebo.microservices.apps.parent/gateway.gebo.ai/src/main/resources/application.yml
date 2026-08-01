@@ -183,13 +183,15 @@ gebo:
           tokenizer-module:
             - tokenizer-component
             - dispose-chunking-session-for-jobs
+        # rag-threashold-autotune-module.rag-threashold-autotune-component is not
+        # implemented by vectorizator - see GeboStandardMicroservices for why it must
+        # stay out of this map (only brain has that local component, and it's a
+        # same-service broadcast receiver, never a cross-service target).
         vectorizator_gebo_ai:
           vectorizator-module:
             - vectorization-component
             - vectorization-emitter-component
             - vectorization-dispose-component
-          rag-threashold-autotune-module:
-            - rag-threashold-autotune-component
         # fulltextor is the renamed textsearch microservice (full-text host).
         fulltextor_gebo_ai:
           fulltext-module:
@@ -198,15 +200,21 @@ gebo:
         graphicator_gebo_ai:
           knowledge-graph-module:
             - knowledge-graph-component
-        # tyr is the workflows/usage/jobs-tracking microservice - consolidates the
-        # dormant scheduler-module and async-publishing-job-module roles (formerly
-        # separate, never-built placeholder entries scheduler_gebo_ai/jobs_gebo_ai).
+        # tyr is the workflows/usage/jobs-tracking microservice. It does not implement
+        # scheduler-module.scheduler-component or async-publishing-job-module's
+        # async-publishing-job-component/job-status-notifier - those are pure
+        # same-service local self-loops on every content-handler (see
+        # GeboStandardMicroservices for the full explanation) - so they must stay out
+        # of this map. job-status-replication-receiver is one genuine component;
+        # jobs-master-module/user-messages-concentrator-component is the other - every
+        # content-processing microservice sends GContentsProcessingStatusUpdatePayload
+        # there to feed ContentsBatchProcessedRepository (see GeboStandardMicroservices).
         tyr_gebo_ai:
-          scheduler-module:
-            - scheduler-component
           async-publishing-job-module:
-            - async-publishing-job-component
-            - job-status-notifier
+            - job-status-replication-receiver
+          jobs-master-module:
+            - user-messages-concentrator-component
+            - end-of-workflow-compute-service
 
         # --- Content services (one per gebo.systems.parent handler) ---
         # Each hosts the shared content-infrastructure systems; some also a

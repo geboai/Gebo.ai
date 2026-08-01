@@ -62,10 +62,10 @@ public class ModelsReplicationClusterAutoConfiguration {
 	@ConditionalOnBean(DiscoveryClient.class)
 	@ConditionalOnMissingBean(IGModelsReplicationClusterTopologyProvider.class)
 	public IGModelsReplicationClusterTopologyProvider discoveryClientClusterTopologyProvider(
-			DiscoveryClient discoveryClient, GeboMicroservicesTopology topology,
+			DiscoveryClient discoveryClient, GeboModelsReplicationParticipants participants,
 			ModelsReplicationClusterProperties properties,
 			@Value("${spring.application.name:}") String applicationName) {
-		return new DiscoveryClientClusterTopologyProvider(discoveryClient, topology, properties, applicationName);
+		return new DiscoveryClientClusterTopologyProvider(discoveryClient, participants, properties, applicationName);
 	}
 
 	/**

@@ -13,6 +13,7 @@
 package ai.gebo.security.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +31,7 @@ import ai.gebo.security.services.IGeboSystemUserService;
  * Implements UserDetailsService to provide user details to the Spring Security framework.
  */
 @Service
+@Primary
 public class CustomUserDetailsService implements UserDetailsService {
 
 	// Dependency injection of UserRepository to perform database operations on User entities.

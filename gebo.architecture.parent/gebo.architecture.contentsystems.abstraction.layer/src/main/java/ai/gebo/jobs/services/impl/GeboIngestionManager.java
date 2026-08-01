@@ -37,6 +37,7 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.systems.abstraction.layer.IGIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.IGIOCModuleContentsDispatcherRepositoryPattern;
+import ai.gebo.systems.abstraction.layer.IGKnowledgeBaseHierarchyLookupService;
 
 /**
  * AI generated comments
@@ -70,6 +71,10 @@ class GeboIngestionManager {
 	@Autowired
 	IGPersistentObjectManager persistentObjectManager;
 
+	/** Looks up the GProject/GKnowledgeBase hierarchy a project endpoint hangs off of. */
+	@Autowired
+	IGKnowledgeBaseHierarchyLookupService knowledgeBaseHierarchyLookupService;
+
 	/** Maximum number of messages to save in a single batch */
 	public static final int BATCH_MESSAGES_SAVING = 1000;
 
@@ -95,7 +100,7 @@ class GeboIngestionManager {
 				+ item.getCode() + "]");
 		status.setProjectEndpointReference(GObjectRef.of(item));
 		status.setProjectCode(item.getParentProjectCode());
-		GProject project = persistentObjectManager.findById(GProject.class, item.getParentProjectCode());
+		GProject project = knowledgeBaseHierarchyLookupService.findProjectByCode(item.getParentProjectCode());
 		status.setKnowledgeBaseCode(project.getRootKnowledgeBaseCode());
 		status.setStartDateTime(new Date());
 		status.setWorkflowType(workflowType);

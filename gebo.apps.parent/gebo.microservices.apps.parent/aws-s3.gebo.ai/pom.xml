@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps.microservices</groupId>
 		<artifactId>gebo.microservices.apps.parent</artifactId>
-		<version>1.0.2.1</version>
+		<version>1.0.2.2</version>
 	</parent>
 	<artifactId>aws-s3.gebo.ai</artifactId>
 
@@ -21,6 +21,13 @@
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
 			<artifactId>gebo.microservices.acl.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- This service does not own the GProject/GKnowledgeBase store either:
+		     IGKnowledgeBaseHierarchyLookupService is a REST client onto brain. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.knowledgebase.client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- This service does not host the secrets either: IGeboSecretsAccessService is

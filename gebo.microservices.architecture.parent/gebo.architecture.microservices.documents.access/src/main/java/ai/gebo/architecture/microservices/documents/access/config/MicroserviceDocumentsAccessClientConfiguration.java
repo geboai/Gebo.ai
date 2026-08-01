@@ -12,14 +12,19 @@ package ai.gebo.architecture.microservices.documents.access.config;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.codec.json.JacksonJsonDecoder;
+import org.springframework.http.codec.json.JacksonJsonEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.architecture.microservices.documents.access.GMicroserviceDocumentContentStreamerClient;
+import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Wires the microservices document-content-streamer client.
@@ -41,17 +46,50 @@ import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 @EnableConfigurationProperties(DocumentsAccessClientProperties.class)
 public class MicroserviceDocumentsAccessClientConfiguration {
 
+	static final String WEB_CLIENT_BUILDER_BEAN = "documentsAccessClientLbWebClientBuilder";
 	static final String WEB_CLIENT_BEAN = "documentsAccessClientWebClient";
+
+	/**
+	 * A dedicated {@link LoadBalanced @LoadBalanced} builder so calls resolved by
+	 * {@link GeboMicroserviceUrlResolver} (host = the target's Eureka discovery
+	 * service-id, e.g. {@code filesystem-gebo-ai}) go through Spring Cloud
+	 * LoadBalancer instead of a literal DNS lookup, which fails: that hostname is
+	 * a Eureka service-id, not a real one. Mirrors the same fix already applied in
+	 * {@code GeboSecretsMicroserviceClientAutoConfiguration} and
+	 * {@code GeboKnowledgeBaseMicroserviceClientAutoConfiguration}.
+	 */
+	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
+	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
+	@LoadBalanced
+	public WebClient.Builder documentsAccessClientLbWebClientBuilder() {
+		return WebClient.builder();
+	}
 
 	/**
 	 * Dedicated {@link WebClient} carrying the api-key header and extra headers for
 	 * every call to a content-handler's {@code DocumentContentStreamerController}.
+	 *
+	 * <p>
+	 * Explicitly wires the app's own {@code ai.gebo.webconfig.JacksonConfig}
+	 * {@link JsonMapper} into this WebClient's JSON codecs. A bare
+	 * {@code WebClient.builder()} falls back to a default-settings mapper that
+	 * serializes {@code java.util.Date} as strict ISO-8601 with milliseconds (e.g.
+	 * {@code 2026-07-25T22:28:21.000Z}) - the request body's
+	 * {@code GDocumentReference} carries such fields - but the target's own request
+	 * deserialization uses the cluster's {@code MultiFormatDateDeserializer}, which
+	 * doesn't accept that exact shape and rejects the call with 400 Bad Request.
+	 * Mirrors the same fix already applied in
+	 * {@code GeboKnowledgeBaseMicroserviceClientAutoConfiguration}.
 	 */
 	@Bean(name = WEB_CLIENT_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
-	public WebClient documentsAccessClientWebClient(DocumentsAccessClientProperties properties) {
-		WebClient.Builder builder = WebClient.builder()
-				.codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(properties.getMaxInMemorySizeBytes()));
+	public WebClient documentsAccessClientWebClient(@Qualifier(WEB_CLIENT_BUILDER_BEAN) WebClient.Builder lbBuilder,
+			DocumentsAccessClientProperties properties, JsonMapper objectMapper) {
+		WebClient.Builder builder = lbBuilder.codecs(codecs -> {
+			codecs.defaultCodecs().maxInMemorySize(properties.getMaxInMemorySizeBytes());
+			codecs.defaultCodecs().jacksonJsonEncoder(new JacksonJsonEncoder(objectMapper));
+			codecs.defaultCodecs().jacksonJsonDecoder(new JacksonJsonDecoder(objectMapper));
+		});
 		if (StringUtils.hasText(properties.getApiKey())) {
 			builder.defaultHeader(properties.getApiKeyHeader(), properties.getApiKey());
 		}
@@ -65,7 +103,8 @@ public class MicroserviceDocumentsAccessClientConfiguration {
 	@ConditionalOnMissingBean(IGDocumentContentStreamer.class)
 	public IGDocumentContentStreamer microserviceDocumentContentStreamer(
 			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsAccessClientWebClient,
-			GeboMicroserviceUrlResolver urlResolver) {
-		return new GMicroserviceDocumentContentStreamerClient(documentsAccessClientWebClient, urlResolver);
+			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator) {
+		return new GMicroserviceDocumentContentStreamerClient(documentsAccessClientWebClient, urlResolver,
+				tokenPropagator);
 	}
 }

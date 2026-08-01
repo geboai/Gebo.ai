@@ -48,6 +48,13 @@ public class GStandardModulesConstraints {
 	public static final String AWS_S3_MODULE = "aws-s3-module";
 	public static final String ASYNC_PUBLISHING_JOB_MODULE = "async-publishing-job-module";
 	public static final String ASYNC_PUBLISHING_JOB_COMPONENT = "async-publishing-job-component";
+	/**
+	 * The job-status broadcast system-id hosted alongside
+	 * {@link #ASYNC_PUBLISHING_JOB_COMPONENT} under whichever module id a given
+	 * deployment assigns (the shared constant above on the monolith, each
+	 * content-handler's own module id under microservices).
+	 */
+	public static final String JOB_STATUS_NOTIFIER = "job-status-notifier";
 	public static final String SCHEDULER_MODULE = "scheduler-module";
 	public static final String INTEGRATION_MODULE = "integration-module";
 	public static final String SCHEDULER_COMPONENT = "scheduler-component";
@@ -72,6 +79,14 @@ public class GStandardModulesConstraints {
 	public static final String SYSTEM_SETTINGS_CONTROLLER_COMPONENT = "system-settings-controller-component";
 	public static final String USER_MESSAGES_CONCENTRATOR_COMPONENT = "user-messages-concentrator-component";
 	public static final String END_OF_WORKFLOW_COMPUTE_SERVICE = "end-of-workflow-compute-service";
+	/**
+	 * The GJobStatus entity-replication receiver hosted on tyr
+	 * (gebo.architecture.replicator's {@code GAbstractReplicatorReceiverService}):
+	 * the launching content-handler microservice writes a GJobStatus into its OWN
+	 * Mongo, so tyr's JobStatusController/GeboWorkflowsStatsServiceImpl - reading
+	 * from tyr's separate Mongo - would otherwise never see it.
+	 */
+	public static final String JOB_STATUS_REPLICATION_RECEIVER = "job-status-replication-receiver";
 	/**
 	 * The LLM usage-tracking concentrator: hosts the receiver in
 	 * {@code gebo.architecture.compute.workflow} (module {@code ai.gebo.architecture.llms.usage})

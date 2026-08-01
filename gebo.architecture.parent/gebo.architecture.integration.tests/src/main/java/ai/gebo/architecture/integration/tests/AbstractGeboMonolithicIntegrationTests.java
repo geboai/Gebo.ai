@@ -214,8 +214,14 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 		mongoDBContainer.start();
 		neo4jContainer.start();
 		opensearch.start();
-		registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
-		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+		// Spring Boot 4.x moved the MongoDB connection properties from spring.data.mongodb.*
+		// to spring.mongodb.* (DataMongoProperties no longer carries host/port/uri; they
+		// now live on MongoProperties bound to "spring.mongodb"). The app's real Mongo
+		// client is built by MongoConfig from ai.gebo.mongodb.connectionString below, but
+		// we keep the Spring Boot keys on the new prefix so any auto-configured Mongo
+		// points at the testcontainer and PropertiesMigrationListener stays quiet.
+		registry.add("spring.mongodb.host", mongoDBContainer::getHost);
+		registry.add("spring.mongodb.port", mongoDBContainer::getFirstMappedPort);
 		// ai.gebo.mongodb.enabled: true
 		// databaseName: gebo-ai-tests
 		// connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin

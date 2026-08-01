@@ -3,7 +3,7 @@
   <parent>
    <groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-    <version>1.0.2.1</version>
+    <version>1.0.2.2</version>
   </parent>
   <groupId>ai.gebo.architecture</groupId>
   <artifactId>gebo.architecture.parent</artifactId>
@@ -29,7 +29,9 @@
   	<module>gebo.architecture.llms.abstraction.layer.controllers</module>
   	<module>gebo.architecture.chat.abstraction.layer</module>
   	<module>gebo.architecture.contenthandling.interfaces</module>
+  	<module>gebo.architecture.virtual-browsing</module>
   	<module>gebo.architecture.contentsystems.abstraction.layer</module>
+  	<module>gebo.architecture.knowledgebase.browsing</module>
   	<module>gebo.architecture.buildsystems.abstraction.layer</module>
   	<module>gebo.restintegration.abstraction.layer</module>
   	<module>gebo.architecture.crypting</module>
@@ -64,6 +66,7 @@
 
   	<module>gebo.secrets.impl</module>
   	<module>gebo.security.directory.mongo</module>
+  	<module>gebo.knowledgebase.hierarchy.local</module>
    	<module>gebo.architecture.security.apikey</module>
    	<module>gebo.architecture.fastsetup</module>
    	<module>gebo.architecture.fastsetup.rag</module>

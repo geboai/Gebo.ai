@@ -28,8 +28,8 @@ export interface GResponseDocumentRef {
     nestedSearchResult?: SearchResult;
     loadPercentage?: any;
     references?: any;
+    ntokensRelevant?: any;
     ntotalContentTokens?: any;
     nbytesRelevant?: any;
-    ntokensRelevant?: any;
     shortCode?: any;
 }

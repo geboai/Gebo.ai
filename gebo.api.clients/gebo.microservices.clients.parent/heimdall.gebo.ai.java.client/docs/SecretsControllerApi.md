@@ -12,7 +12,7 @@ Method | HTTP request | Description
 [**createSshKeySecret**](SecretsControllerApi.md#createSshKeySecret) | **POST** /api/admin/SecretsController/createSshKeySecret | 
 [**createTokenSecret**](SecretsControllerApi.md#createTokenSecret) | **POST** /api/admin/SecretsController/createTokenSecret | 
 [**createUsernamePasswordSecret**](SecretsControllerApi.md#createUsernamePasswordSecret) | **POST** /api/admin/SecretsController/createUsernamePasswordSecret | 
-[**deleteSecret**](SecretsControllerApi.md#deleteSecret) | **DELETE** /api/admin/SecretsController/deleteSecret | 
+[**deleteSecret1**](SecretsControllerApi.md#deleteSecret1) | **DELETE** /api/admin/SecretsController/deleteSecret | 
 [**getSecretsByContextCode**](SecretsControllerApi.md#getSecretsByContextCode) | **GET** /api/admin/SecretsController/getSecretsByContextCode | 
 
 <a name="createAWSConnectionSecret"></a>
@@ -359,9 +359,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="deleteSecret"></a>
-# **deleteSecret**
-> deleteSecret(body)
+<a name="deleteSecret1"></a>
+# **deleteSecret1**
+> deleteSecret1(body)
 
 
 
@@ -375,9 +375,9 @@ No authorization required
 SecretsControllerApi apiInstance = new SecretsControllerApi();
 SecretInfo body = new SecretInfo(); // SecretInfo | 
 try {
-    apiInstance.deleteSecret(body);
+    apiInstance.deleteSecret1(body);
 } catch (ApiException e) {
-    System.err.println("Exception when calling SecretsControllerApi#deleteSecret");
+    System.err.println("Exception when calling SecretsControllerApi#deleteSecret1");
     e.printStackTrace();
 }
 ```

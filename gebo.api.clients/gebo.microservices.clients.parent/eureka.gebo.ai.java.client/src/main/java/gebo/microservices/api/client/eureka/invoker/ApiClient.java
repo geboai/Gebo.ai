@@ -50,7 +50,7 @@ import gebo.microservices.api.client.eureka.invoker.auth.HttpBasicAuth;
 import gebo.microservices.api.client.eureka.invoker.auth.ApiKeyAuth;
 import gebo.microservices.api.client.eureka.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-22T11:47:42.152186816+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:53.801188927+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {

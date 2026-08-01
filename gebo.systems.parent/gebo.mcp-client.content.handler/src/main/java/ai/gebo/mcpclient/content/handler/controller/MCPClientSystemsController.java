@@ -26,7 +26,6 @@ import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
@@ -72,12 +71,10 @@ public class MCPClientSystemsController
 
 	public MCPClientSystemsController(IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			MCPClientControllerEmitter controllerEmitter, IGSecurityService securityService,
-			IGMCPClientContentManagementHandler handler, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			IGMCPClientContentManagementHandler handler, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.handler = handler;
 	}
 

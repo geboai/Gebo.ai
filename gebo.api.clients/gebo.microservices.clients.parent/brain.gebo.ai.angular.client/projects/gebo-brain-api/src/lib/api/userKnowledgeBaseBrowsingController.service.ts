@@ -175,7 +175,7 @@ export class UserKnowledgeBaseBrowsingControllerService {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (codes !== undefined && codes !== null) {
-            queryParameters = queryParameters.set('codes', <any>codes);
+            queryParameters = queryParameters.set('codes', JSON.stringify(codes));
         }
 
         let headers = this.defaultHeaders;

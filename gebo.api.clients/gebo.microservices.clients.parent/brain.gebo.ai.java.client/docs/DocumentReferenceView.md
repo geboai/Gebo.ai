@@ -5,6 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **Object** |  |  [optional]
 **extension** | **Object** |  |  [optional]
+**contentType** | **Object** |  |  [optional]
 **description** | **Object** |  |  [optional]
 **messagingModuleId** | **Object** |  |  [optional]
 **code** | **Object** |  |  [optional]
@@ -15,4 +16,3 @@ Name | Type | Description | Notes
 **parentVirtualFolderCode** | **Object** |  |  [optional]
 **deleted** | **Object** |  |  [optional]
 **creationDate** | **Object** |  |  [optional]
-**contentType** | **Object** |  |  [optional]

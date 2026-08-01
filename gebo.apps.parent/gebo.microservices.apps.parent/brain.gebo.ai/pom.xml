@@ -5,11 +5,23 @@
 	<parent>
 		<groupId>ai.gebo.apps.microservices</groupId>
 		<artifactId>gebo.microservices.apps.parent</artifactId>
-		<version>1.0.2.1</version>
+		<version>1.0.2.2</version>
 	</parent>
 	<artifactId>brain.gebo.ai</artifactId>
 
 	<dependencies>
+		<!-- The Spring Security filter chain + LOCAL_JWT provider (GeboAISecurityConfig,
+		     LocalJwtTokenProvider, GSecurityServiceImpl, AclGrantedAccessorServiceImpl).
+		     Deliberately WITHOUT gebo.security.directory.mongo: the
+		     gebo.microservices.security.client already on this classpath (transitively,
+		     via gebo.microservices.llms.starter) supplies the IGSecurityDirectory bean
+		     via a REST call to heimdall instead, so no local Mongo-backed user store is
+		     created here - only the filter chain that validates tokens heimdall issued. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Full LLMs microservice stack: LLM abstraction layer, microservices
 		     environment, RabbitMQ bridge, models-replication cache and shared
 		     topology. -->
@@ -90,6 +102,17 @@
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- brain OWNS the GProject/GKnowledgeBase store (gebo.core, above, brings
+		     GeboIngestionManager and friends onto this classpath transitively via
+		     gebo.architecture.contentsystems.abstraction.layer), so it needs the
+		     LOCAL, Mongo-backed IGKnowledgeBaseHierarchyLookupService, not the REST
+		     client every other content-handler microservice takes - it would be
+		     asking itself over the network for data it already has. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.knowledgebase.hierarchy.local</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Topology-aware REST clients for the per-connector search services

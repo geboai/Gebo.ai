@@ -13,6 +13,7 @@
 export interface DocumentReferenceView { 
     name?: any;
     extension?: any;
+    contentType?: any;
     description?: any;
     messagingModuleId?: any;
     code?: any;
@@ -23,5 +24,4 @@ export interface DocumentReferenceView {
     parentVirtualFolderCode?: any;
     deleted?: any;
     creationDate?: any;
-    contentType?: any;
 }

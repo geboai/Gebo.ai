@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @RestController
-@PreAuthorize("hasRole('ADMIN','USER','APPLICATION')")
+@PreAuthorize("hasAnyRole('ADMIN','USER','APPLICATION')")
 @RequestMapping("api/users/DocumentContentStreamerController")
 @AllArgsConstructor
 public class DocumentContentStreamerController {

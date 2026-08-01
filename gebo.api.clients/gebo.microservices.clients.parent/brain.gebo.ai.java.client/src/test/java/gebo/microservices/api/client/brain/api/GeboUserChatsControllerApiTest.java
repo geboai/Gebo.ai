@@ -209,6 +209,20 @@ public class GeboUserChatsControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void isMinimalLLMSSetupDoneTest() {
+        Object response = api.isMinimalLLMSSetupDone();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void suggestChatDescriptionTest() {
         Object userChatContextCode = null;
         GUserChatInfo response = api.suggestChatDescription(userChatContextCode);

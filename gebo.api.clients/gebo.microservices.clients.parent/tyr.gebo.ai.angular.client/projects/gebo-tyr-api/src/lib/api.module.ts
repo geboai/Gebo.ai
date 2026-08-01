@@ -8,6 +8,7 @@ import { InternalMessagingTopologyControllerService } from './api/internalMessag
 import { JobStatusControllerService } from './api/jobStatusController.service';
 import { LlmsUsageAdminLevelControllerService } from './api/llmsUsageAdminLevelController.service';
 import { LlmsUsageUserLevelControllerService } from './api/llmsUsageUserLevelController.service';
+import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { WorkflowParticipantsEnablementControllerService } from './api/workflowParticipantsEnablementController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
@@ -21,6 +22,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     JobStatusControllerService,
     LlmsUsageAdminLevelControllerService,
     LlmsUsageUserLevelControllerService,
+    ReindexingFrequencyOptionsControllerService,
     WorkflowParticipantsEnablementControllerService,
     WorkflowStatsAdminLevelControllerService ]
 })

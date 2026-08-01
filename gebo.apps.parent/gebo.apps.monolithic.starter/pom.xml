@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.2.1</version>
+		<version>1.0.2.2</version>
 	</parent>
 	<artifactId>gebo.apps.monolithic.starter</artifactId>
 	<dependencies>
@@ -31,6 +31,15 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.security.directory.mongo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The monolith OWNS the GProject/GKnowledgeBase store: it reads it via
+		     IGPersistentObjectManager directly. (A microservice that does not own it
+		     takes gebo.microservices.knowledgebase.client instead - a service depends
+		     on exactly one of the two.) -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.knowledgebase.hierarchy.local</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -203,6 +212,16 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.compute.workflow</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- MonolithicCentralSchedulingService/MonolithicJobLaunchManager/etc. -
+		     gebo.core only ever carried this transitively for ReindexingFrequencyOptionsController,
+		     which has since moved into this module itself (tyr is its sole owner
+		     under microservices), so the monolith needs it as a direct, explicit
+		     dependency for the scheduler engine to keep running here. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.scheduling</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Config-driven standard-workflow step enablement (monolith variant of the

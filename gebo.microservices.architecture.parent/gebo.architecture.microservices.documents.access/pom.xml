@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.microservices.architecture</groupId>
 		<artifactId>gebo.microservices.architecture.parent</artifactId>
-		<version>1.0.2.1</version>
+		<version>1.0.2.2</version>
 	</parent>
 	<artifactId>gebo.architecture.microservices.documents.access</artifactId>
 
@@ -17,7 +17,38 @@
 		messagingModuleId via the GeboMicroserviceUrlResolver. The api-key header
 		and any extra headers are configurable under ai.gebo.documents.access.client.*.
 	-->
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
+		<!-- @LoadBalanced WebClient.Builder support - GeboMicroserviceUrlResolver's
+		     LOAD_BALANCER strategy resolves to a Eureka discovery service-id, which
+		     only Spring Cloud LoadBalancer (not literal DNS) can turn into a real
+		     address. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
+		</dependency>
+		<!-- IGeboCallerTokenPropagator: DocumentContentStreamerController requires an
+		     authenticated caller, so every call needs a bearer token. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- IGDocumentContentStreamer, StreamingPurpose, DocumentContentStreamerException
 		     + (transitively) base.model: IGComponentOriginatedDocument, GeboComponentInfo,
 		     TypedInputStream. -->

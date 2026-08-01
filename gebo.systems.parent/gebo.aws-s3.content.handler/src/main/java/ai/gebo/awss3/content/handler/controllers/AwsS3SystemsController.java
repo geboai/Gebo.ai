@@ -25,7 +25,6 @@ import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.awss3.content.handler.GAwsS3ProjectEndpoint;
 import ai.gebo.awss3.content.handler.GAwsS3System;
 import ai.gebo.awss3.content.handler.IGAwsS3SystemContentHandler;
@@ -61,13 +60,11 @@ public class AwsS3SystemsController
 	public AwsS3SystemsController(IGPersistentObjectManager persistentObjectManager,
 			IGMessageBroker messageBroker, AwsS3SystemsNestedEmitter controllerEmitter,
 			IGSecurityService securityService, IGAwsS3SystemContentHandler awsS3Handler,
-			AwsS3ProjectEndpointRepository endpointRepository, IGSchedulingTimeService schedulingService,
-			IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
+			AwsS3ProjectEndpointRepository endpointRepository, IGEntityProcessingRunnableFactoryRepositoryPattern entityProcessingRunnableFactory,
 			AwsS3TestService testService, IGeboSecretsAccessService secretAccessService,
 			IGGeboIngestionJobQueueService jobQueueService,
 			IEntityReplicationService replicationService) {
-		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, schedulingService,
-				entityProcessingRunnableFactory, jobQueueService, replicationService);
+		super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService);
 		this.awsS3Handler = awsS3Handler;
 		this.endpointRepository = endpointRepository;
 		this.testService = testService;

@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.microservices.architecture</groupId>
+		<artifactId>gebo.microservices.architecture.parent</artifactId>
+		<version>1.0.2.2</version>
+	</parent>
+	<artifactId>gebo.microservices.knowledgebase.client</artifactId>
+
+	<!--
+		IGKnowledgeBaseHierarchyLookupService of every microservice that does NOT own
+		the GProject/GKnowledgeBase store: a REST client onto brain's own
+		KnowledgeBaseController/ProjectsController (gebo.core), with a local TTL cache.
+
+		Unlike the security/secrets/acl cluster clients, there is no dedicated cluster
+		controller on the owning side: brain already exposes these as ordinary admin
+		endpoints (api/admin/ProjectsController, api/admin/KnowledgeBaseController),
+		so this client calls those directly.
+
+		A service depends on this OR on gebo.knowledgebase.hierarchy.local, never both.
+	-->
+	<properties>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- IGKnowledgeBaseHierarchyLookupService, GProject, GKnowledgeBase,
+		     GeboPersistenceException. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.cluster.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The @LoadBalanced WebClient.Builder's actual filter function: resolves the
+		     topology's discovery service-id (e.g. brain-gebo-ai) to a live instance via
+		     Eureka instead of a literal (and non-existent) DNS lookup. Declared directly
+		     rather than relied on transitively, so every consumer of this module gets it
+		     regardless of what else is on its classpath. -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor.netty</groupId>
+			<artifactId>reactor-netty-http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
+	</dependencies>
+</project>

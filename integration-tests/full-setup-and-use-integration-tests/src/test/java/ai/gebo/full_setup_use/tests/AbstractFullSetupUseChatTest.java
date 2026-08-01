@@ -27,6 +27,7 @@ import ai.gebo.monolithic.api.client.api.FileSystemSharesSettingControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboRagChatControllerApi;
 import ai.gebo.monolithic.api.client.api.JobLauncherControllerApi;
+import ai.gebo.monolithic.api.client.api.JobStatusControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.GFileSystemShareReference;
 import ai.gebo.monolithic.api.client.model.GObjectRefGProjectEndpoint;
@@ -137,6 +138,7 @@ public abstract class AbstractFullSetupUseChatTest extends AbstractVendorSetupAn
 			endpoint = persistentObjectManager.update(endpoint);
 			renew(apiClient);
 			JobLauncherControllerApi jobLauncherApi = new JobLauncherControllerApi(apiClient);
+			JobStatusControllerApi jobStatusApi = new JobStatusControllerApi(apiClient);
 			GObjectRefGProjectEndpoint ref = new GObjectRefGProjectEndpoint();
 			ref.setCode(endpoint.getCode());
 			ref.setClassName(endpoint.getClass().getName());
@@ -151,12 +153,12 @@ public abstract class AbstractFullSetupUseChatTest extends AbstractVendorSetupAn
 			long currentTime = System.currentTimeMillis();
 			do {
 				Thread.currentThread().sleep(sleepTime);
-				summary = jobLauncherApi.getJobSummary(launchedJob.getResult().getCode());
+				summary = jobStatusApi.getJobSummary(launchedJob.getResult().getCode());
 				printSummary(summary);
 				renew(apiClient);
 				currentTime = System.currentTimeMillis();
 			} while (!summary.getWorkflowStatus().isFinished() && ((currentTime - initialTime) <= maxIterationTime));
-			summary = jobLauncherApi.getJobSummary(launchedJob.getResult().getCode());
+			summary = jobStatusApi.getJobSummary(launchedJob.getResult().getCode());
 			assertTrue(summary.getWorkflowStatus().isFinished(), "The pubblication job has to be finished");
 			ThreasholdAutotuneProcessResultRepository autotuneRepository = runtimeBinder
 					.getImplementationOf(ThreasholdAutotuneProcessResultRepository.class);

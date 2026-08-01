@@ -28,7 +28,7 @@ import ai.gebo.monolithic.api.client.model.PageGLookupEntry;
 import ai.gebo.monolithic.api.client.model.PipelineRequestBody;
 import ai.gebo.monolithic.app.Main;
 
-@SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 	@Autowired
 	IGRuntimeBinder runtimeBinder;

@@ -22,6 +22,8 @@ import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.architecture.messages.rabbitmq.codec.GMessageEnvelopeCodec;
 import ai.gebo.architecture.messages.rabbitmq.config.GeboRabbitMqMessagingProperties;
+import ai.gebo.architecture.messages.rabbitmq.external.RabbitMqTopologyBridgeSupport;
+import ai.gebo.microservices.topology.GeboCurrentMicroservice;
 import jakarta.annotation.PreDestroy;
 
 /**
@@ -30,7 +32,7 @@ import jakarta.annotation.PreDestroy;
  * <p>
  * A single {@link SimpleMessageListenerContainer} consumes this microservice's
  * own inbound queue (see
- * {@link GeboRabbitMqMessagingProperties#effectiveInboundQueue()}). Every
+ * {@link GeboRabbitMqMessagingProperties#effectiveInboundQueue(String)}). Every
  * message is deserialized into a {@link GMessageEnvelope} and injected into the
  * local {@link IGMessageBroker} <b>exactly as it arrived</b>: the envelope
  * already carries its {@code sourceModule}/{@code sourceComponent} (a remote
@@ -59,16 +61,19 @@ public class RabbitMqInboundBridge {
 	private final IGMessageBroker broker;
 	private final GMessageEnvelopeCodec codec;
 	private final GeboRabbitMqTopologyDeclarer topologyDeclarer;
+	private final GeboCurrentMicroservice currentMicroservice;
 
 	private SimpleMessageListenerContainer container;
 
 	public RabbitMqInboundBridge(GeboRabbitMqMessagingProperties properties, ConnectionFactory connectionFactory,
-			IGMessageBroker broker, GMessageEnvelopeCodec codec, GeboRabbitMqTopologyDeclarer topologyDeclarer) {
+			IGMessageBroker broker, GMessageEnvelopeCodec codec, GeboRabbitMqTopologyDeclarer topologyDeclarer,
+			GeboCurrentMicroservice currentMicroservice) {
 		this.properties = properties;
 		this.connectionFactory = connectionFactory;
 		this.broker = broker;
 		this.codec = codec;
 		this.topologyDeclarer = topologyDeclarer;
+		this.currentMicroservice = currentMicroservice;
 	}
 
 	/**
@@ -77,8 +82,10 @@ public class RabbitMqInboundBridge {
 	 */
 	@EventListener(ApplicationReadyEvent.class)
 	public void start() {
-		topologyDeclarer.declareIfEnabled();
-		String queue = properties.effectiveInboundQueue();
+		String microserviceId = RabbitMqTopologyBridgeSupport.resolveLocalMicroserviceId(properties,
+				currentMicroservice);
+		String queue = properties.effectiveInboundQueue(microserviceId);
+		topologyDeclarer.declareIfEnabled(microserviceId, queue);
 		if (queue == null || queue.isBlank()) {
 			LOGGER.warn("No inbound queue configured (localMicroserviceId is unset); RabbitMQ inbound bridge disabled");
 			return;

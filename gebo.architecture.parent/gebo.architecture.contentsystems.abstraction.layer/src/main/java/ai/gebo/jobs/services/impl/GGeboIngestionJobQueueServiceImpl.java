@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.replicator.service.IEntityReplicationService;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGGeboIngestionJobService;
@@ -48,7 +49,9 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	/** Repository for persisting job status information */
 	private final JobStatusRepository statusRepository;
 	private final IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
-	private final JobStatusEmitter statusEmitter;
+	private final AbstractJobStatusEmitter statusEmitter;
+	/** Replicates the freshly-created GJobStatus to tyr; a no-op in the monolith. */
+	private final IEntityReplicationService entityReplicationService;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobQueueServiceImpl.class);
 
@@ -69,7 +72,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		try {
 			status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
 					workflowId);
-			statusEmitter.broadcastStarted(status);
+			entityReplicationService.replicate(status);
+			statusEmitter.broadcastStarted(status);			
 			synchronized (statusMap) {
 				statusMap.put(status.getCode(), status);
 				readingService.completeAsyncJob(status, sessionParam);
@@ -108,6 +112,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		try {
 			GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item,
 					workflowType, workflowId);
+			entityReplicationService.replicate(status);
 			statusEmitter.broadcastStarted(status);
 			return ingestionManager.internalReadAndVectorizeContents(status, sessionParam);
 		} catch (GeboPersistenceException e) {
@@ -157,6 +162,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			throw new GeboJobServiceException("Already running sync on " + endpoint.getCode());
 		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
 				workflowType, workflowId);
+		entityReplicationService.replicate(status);
 		statusEmitter.broadcastStarted(status);
 		synchronized (statusMap) {
 			statusMap.put(status.getCode(), status);
