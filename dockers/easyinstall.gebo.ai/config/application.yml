@@ -274,6 +274,8 @@ ai.gebo.core.config:
     useSenderThread: true
     flushThreshold: 10
     timeout: 10000
+
+ai.gebo.agents.standard.enabled: false
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true
