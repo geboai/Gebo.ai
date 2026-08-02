@@ -1,6 +1,6 @@
 ﻿{
   "name": "gebo-ai-chunker-client",
-  "version": "1.0.2.2",
+  "version": "1.0.2.3-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-chunker-api",
