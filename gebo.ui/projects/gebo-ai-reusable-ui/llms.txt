@@ -1,0 +1,26 @@
+# @Gebo.ai/reusable-ui
+
+> Angular 21 (module-based, PrimeNG-based) UI component library for Gebo.ai: chat widget,
+> knowledge-base browsing/ingestion controls, admin entity-editing forms, login/setup, and usage
+> dashboards. Consumed both internally (by `@Gebo.ai/gebo-ai-chat-ui` and `@Gebo.ai/gebo-ai-admin-ui`)
+> and by third-party apps embedding Gebo.ai UI. This file, and the docs it links to, are written for
+> a coding assistant wiring up or extending this library — they give real selectors, `@Input`/`@Output`
+> names, and wiring copied from this repo's own usage, not idealized snippets.
+
+Start with `docs/00-overview.md` for install + minimal app wiring, then `docs/01-architecture.md`
+before anything else — almost every editing/modal feature in this library depends on the
+action-routing/entity-form pipeline explained there.
+
+## Docs
+
+- [docs/00-overview.md](./docs/00-overview.md): Install, peer dependencies, minimal `NgModule` wiring (real example from this repo's `app.module.ts`), and a list of known incomplete/WIP components worth checking before you rely on them.
+- [docs/01-architecture.md](./docs/01-architecture.md): The `GeboUIActionRequest` → `GeboUIActionRoutingService` → modal → `BaseEntityEditingComponent` pipeline; how to register and write entity editors; the setup-wizard framework; generic modals; the base-URL validator.
+- [docs/02-chat-and-knowledge-base.md](./docs/02-chat-and-knowledge-base.md): `<gebo-ai-reusable-chat-component>`, deep search, document viewer, document/userspace-file pickers, virtual-filesystem tree browser, audio recorder, "add data source" menu.
+- [docs/03-forms-and-fields.md](./docs/03-forms-and-fields.md): `ControlValueAccessor` form widgets (editable listbox, relation list, API-key/OAuth2-secret pickers, content-selection filter, prompt editor, reindex schedule) and the `<gebo-ai-field>` i18n/translation wrapper system.
+- [docs/04-infrastructure-and-auth.md](./docs/04-infrastructure-and-auth.md): Login, first-run fast-setup, `AuthInterceptor`/`GeboBackendListService` auth wiring, user profile, self-service activation/forgot-password workflows, user-managed API keys/MCP access, the app shell (`<gebo-ai-desktop>`).
+- [docs/05-dashboards-and-notifications.md](./docs/05-dashboards-and-notifications.md): Toast notification system (`GeboAINotificationsModule`), LLM-usage dashboards (admin vs. user scoped), workflow-stats dashboard.
+
+## Optional
+
+- [README.md](./README.md): Angular CLI scaffolding boilerplate (build/publish/test commands) — not feature documentation.
+- [package.json](./package.json): Peer dependency versions.

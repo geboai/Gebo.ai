@@ -7,6 +7,8 @@
   "assets": [
     "./src/assets",
     "./src/styles",
-    "./src/styles.scss"
+    "./src/styles.scss",
+    "./docs",
+    "./llms.txt"
   ]
 }
