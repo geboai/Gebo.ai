@@ -49,6 +49,7 @@ import { PaginatorModule } from "primeng/paginator";
 import { UsersWizardComponent } from "./users-wizard.component";
 import { ConfluenceInstalledModuleService, ConfluenceWizardComponent, ConfuenceStatusService } from "./confluence-wizard.component";
 import { SharepointInstalledModuleService, SharepointStatusService, SharepointWizardComponent } from "./sharepoint-wizard.component";
+import { WebdavInstalledModuleService, WebdavStatusService, WebdavWizardComponent } from "./webdav-wizard.component";
 import { AwsS3InstalledModuleService, AwsS3StatusService, AwsS3WizardComponent } from "./aws-s3-wizard.component";
 import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, GoogleWorkspacesWizardComponent } from "./google-workspace-wizard.component";
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
@@ -262,6 +263,18 @@ const googleDriveWorkspacesSystemSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+const webdavSystemSetupSection: SetupWizardsSection = {
+    orderEntry: 12.5,
+    label: "WebDAV integration",
+    description: "WebDAV compatible servers: Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server ...",
+    installedModule: WebdavInstalledModuleService,
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: WebdavStatusService,
+    wizardComponent: WebdavWizardComponent,
+    wizardSectionId: "webdavSystemSetupSection",
+    mandatory: false
+};
+
 /**
  * Setup section for knowledge base configuration.
  * This optional section requires work directory, vector store, and LLMs to be configured first.
@@ -389,7 +402,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -405,10 +418,12 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         GeboSetupWizardService,
         ChatProfileStatusService,
         SharepointStatusService,
+        WebdavStatusService,
         AwsS3StatusService,
         GoogleWorkspacesStatusService,
         ConfluenceInstalledModuleService,
         SharepointInstalledModuleService,
+        WebdavInstalledModuleService,
         AwsS3InstalledModuleService,
         GoogleWorkspacesInstalledModuleService,
         JiraInstalledModuleService,
@@ -433,6 +448,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: microsoftSharepointSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: awsS3SystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: googleDriveWorkspacesSystemSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: webdavSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: ragAutotuneSetupSection, multi: true },
