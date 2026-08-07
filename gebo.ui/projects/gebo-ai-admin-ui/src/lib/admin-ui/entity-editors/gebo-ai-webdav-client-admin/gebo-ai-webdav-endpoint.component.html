@@ -1,0 +1,90 @@
+<p-panel id="MainPanel" gebo-ai-label #endPointUI header="Sharing WebDAV contents" [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-3">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!"
+            title="Saves and let these contents be available in knowledge base for LLMs" severity="success"
+            icon="pi pi-microchip-ai" (onClick)="doPublish()"
+            [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
+            styleClass="w-full" />
+        </div>
+        <div class="col-3">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+            styleClass="w-full" />
+        </div>
+        <div class="col-3">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
+        </div>
+      </div>
+    </div>
+  }
+
+  <p-blockUI id="LockBlockUI" [target]="endPointUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  </p-blockUI>
+  <div class="geboDialogContent">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+    <p-tabs [value]="0" id="TabView" class="standardTabDialogueHeight">
+      <p-tablist>
+        <p-tab [value]="0" gebo-ai-text>Settings</p-tab>
+        <p-tab [value]="1" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <div class="grid">
+            <div class="col-6">
+              <gebo-ai-field id="description" label="Description" help="Enter the description of WebDAV data source." [required]="true">
+                <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the contents.">
+                <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
+                <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project" [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
+                </geboai-editable-listbox-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="webdavSystemCode" label="WebDAV system" help="Already configured WebDAV system reference." [required]="true">
+                <geboai-editable-listbox-component formControlName="webdavSystemCode" [required]="true" placeholder="Select a WebDAV server" [data]="webdavServersData" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newWebdavServerRequest" gebo-ai-field-element>
+                </geboai-editable-listbox-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-12">
+              <gebo-ai-field id="tree" label="Selected WebDAV folders/files" help="Shared WebDAV contents" [required]="true">
+                <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable" [readonly]="mode==='EDIT'" formControlName="paths" selectionMode="multiple" [browsePathObservable]="browsePathObservable" class="col-12" [required]="true" gebo-ai-field-element>
+                </gebo-ai-vfilesystem-selector-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-12">
+              <gebo-ai-field id="catalogingCriteria" label="Folders and files organization criteria" help="Please explain here how folders and files are organized in the WebDAV contents shared with Gebo.ai">
+                <textarea formControlName="catalogingCriteria" id="catalogingCriteria" cols="200" rows="2" gebo-ai-field-element></textarea>
+              </gebo-ai-field>
+            </div>
+            <div class="col-12">
+              <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to keep the RAG system updated">
+                <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables" gebo-ai-field-element>
+                </gebo-ai-content-reindex-scheduler-component>
+              </gebo-ai-field>
+            </div>
+          </div>
+        </p-tabpanel>
+        <p-tabpanel [value]="1">
+          <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference" title="This WebDAV configuration ingestion log"></gebo-ai-log-table-component>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
