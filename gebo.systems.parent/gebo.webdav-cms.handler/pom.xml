@@ -14,5 +14,10 @@
 			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.lookfirst</groupId>
+			<artifactId>sardine</artifactId>
+			<version>5.13</version>
+		</dependency>
 	</dependencies>
 </project>
