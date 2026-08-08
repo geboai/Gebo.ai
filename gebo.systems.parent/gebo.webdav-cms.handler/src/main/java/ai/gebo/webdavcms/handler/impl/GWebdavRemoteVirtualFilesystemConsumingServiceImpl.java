@@ -233,11 +233,22 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 		try {
 			Sardine sardine = getSardine(environment);
 			String href = last.getCode();
+			LOGGER.debug("retrieveChilds listing href={} isFolder={} isResource={}", href, last.isFolder(), last.isResource());
 			List<DavResource> resources = sardine.list(href, 1);
+			LOGGER.debug("retrieveChilds got {} resources from href={}", resources.size(), href);
 			for (DavResource res : resources) {
 				String name = res.getName();
-				if (name == null || name.trim().isEmpty() || ".".equals(name.trim())
-						|| "..".equals(name.trim())) {
+				String resHref = res.getHref().toString();
+				LOGGER.debug("retrieveChilds item: name='{}' href={} isDir={} isSelf={}", name, resHref, res.isDirectory(),
+						href != null && (href.equals(resHref) || (href + "/").equals(resHref) || href.equals(resHref + "/")));
+				if (name == null || name.trim().isEmpty()) {
+					continue;
+				}
+				if (".".equals(name.trim()) || "..".equals(name.trim())) {
+					continue;
+				}
+				if (href != null && (href.equals(resHref) || (href + "/").equals(resHref)
+						|| href.equals(resHref + "/"))) {
 					continue;
 				}
 				NativeCoordinatePointer pointer = new NativeCoordinatePointer();
