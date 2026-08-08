@@ -1,12 +1,8 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { FastWebdavSystemInsertRequest, GWebdavContentManagementSystem, SecretInfo, SecretsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FastWebdavSystemInsertRequest, GWebdavContentManagementSystem, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
-import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
-import { Observable } from "rxjs";
-
-const webdavCode: string = "webdab-cms-module";
 
 @Component({
     selector: "gebo-ai-webdav-system-fast-component",
@@ -24,7 +20,9 @@ export class GeboAIWebdavSystemFastComponent {
         description: new FormControl("WebDAV system"),
         baseUri: new FormControl("", [Validators.required]),
         authType: new FormControl(null, [Validators.required]),
-        secretCode: new FormControl()
+        username: new FormControl(),
+        password: new FormControl(),
+        token: new FormControl()
     });
 
     userMessages: ToastMessageOptions[] = [];
@@ -38,13 +36,11 @@ export class GeboAIWebdavSystemFastComponent {
     ];
 
     public currentAuthType?: GWebdavContentManagementSystem.WebdavAuthTypeEnum = "BASIC";
-    public identitiesObservable: Observable<SecretInfo[]> = this.secretControllerService.getSecretsByContextCode(webdavCode);
 
     @Output() newWebdavSystemEvent: EventEmitter<GWebdavContentManagementSystem> = new EventEmitter();
     @Output() cancelAction: EventEmitter<boolean> = new EventEmitter();
 
-    constructor(private webdavSystemsService: WebdavSystemsControllerService,
-        private secretControllerService: SecretsControllerService) {
+    constructor(private webdavSystemsService: WebdavSystemsControllerService) {
         this.formGroup.controls["authType"].setValue(this.currentAuthType);
     }
 
@@ -53,20 +49,12 @@ export class GeboAIWebdavSystemFastComponent {
         return type && type !== "NONE";
     }
 
-    get newSecretAction() {
-        const type = this.formGroup.controls["authType"].value;
-        if (type === "BEARER_TOKEN") {
-            return newSecretActionRequest(webdavCode, "GWebdavContentManagementSystem", undefined, [SecretInfo.SecretTypeEnum.TOKEN]);
-        }
-        return newSecretActionRequest(webdavCode, "GWebdavContentManagementSystem", undefined, [SecretInfo.SecretTypeEnum.USERNAMEPASSWORD]);
+    get isBearerToken(): boolean {
+        return this.formGroup.controls["authType"].value === "BEARER_TOKEN";
     }
 
     doInsert(): void {
-        const data: FastWebdavSystemInsertRequest = {
-            baseUri: this.formGroup.controls["baseUri"].value,
-            description: this.formGroup.controls["description"].value,
-            authType: this.formGroup.controls["authType"].value
-        };
+        const data: FastWebdavSystemInsertRequest = this.formGroup.value;
         this.loading = true;
         this.webdavSystemsService.fastWebdavConfig(data).subscribe({
             next: (result) => {

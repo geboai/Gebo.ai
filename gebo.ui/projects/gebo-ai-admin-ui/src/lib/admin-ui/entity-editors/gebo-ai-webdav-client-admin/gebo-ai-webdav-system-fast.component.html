@@ -37,11 +37,27 @@
         </gebo-ai-field>
       </div>
 
-      @if (showCredentials) {
+      @if (showCredentials && !isBearerToken) {
         <div class="col-6">
-          <gebo-ai-field id="secretCode" label="Identity used" help="Select or create the identity to access the WebDAV system" [required]="true">
-            <geboai-editable-listbox-component id="secretCode" formControlName="secretCode" placeholder="Select an identity" [optionsObservable]="identitiesObservable" [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
-            </geboai-editable-listbox-component>
+          <gebo-ai-field id="username" label="User name" help="User name to access the WebDAV system" [required]="true">
+            <input pInputText id="username" formControlName="username" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+        <div class="col-6">
+          <gebo-ai-field id="password" label="Password" help="Password to access the WebDAV system" [required]="true">
+            <input type="password" pInputText id="password" formControlName="password" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+      }
+      @if (isBearerToken) {
+        <div class="col-6">
+          <gebo-ai-field id="tokenUsername" label="User" help="User associated with the bearer token">
+            <input pInputText id="tokenUsername" formControlName="username" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+        <div class="col-6">
+          <gebo-ai-field id="token" label="Bearer token" help="Bearer token to access the WebDAV system" [required]="true">
+            <input type="password" pInputText id="token" formControlName="token" class="col-12 required" [required]="true" gebo-ai-field-element />
           </gebo-ai-field>
         </div>
       }

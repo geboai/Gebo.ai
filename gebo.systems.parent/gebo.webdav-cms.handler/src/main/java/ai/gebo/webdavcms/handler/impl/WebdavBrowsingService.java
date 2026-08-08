@@ -53,17 +53,15 @@ public class WebdavBrowsingService implements IGVirtualFilesystemBrowsingService
 		List<GVirtualFilesystemRoot> contents = new ArrayList<GVirtualFilesystemRoot>();
 		try {
 			GWebdavContentManagementSystem system = get(systemCode);
-			Sardine sardine = connectionFactory.getConnection(system);
 			String baseUri = system.getBaseUri();
 			if (baseUri != null && !baseUri.isEmpty()) {
-				List<DavResource> resources = sardine.list(baseUri, 0);
-				for (DavResource res : resources) {
-					if (!isSelfOrParent(res)) {
-						GVirtualFilesystemRoot item = WebdavNavigationUtil.encodeRoot(res.getHref().toString(),
-								res.getName());
-						contents.add(item);
-					}
-				}
+				Sardine sardine = connectionFactory.getConnection(system);
+				// The WebDAV "root" is simply the configured base URI: a depth-0
+				// PROPFIND on it only returns the collection's own DavResource, which
+				// isSelfOrParent always filters out, so listing can never surface it.
+				// Probe connectivity/credentials, then hand back the base URI itself.
+				sardine.exists(baseUri);
+				contents.add(WebdavNavigationUtil.encodeRoot(baseUri, system.getDescription()));
 			}
 		} catch (GeboCryptSecretException e) {
 			throw new VirtualFilesystemBrowsingException("Cryptation problem", e);

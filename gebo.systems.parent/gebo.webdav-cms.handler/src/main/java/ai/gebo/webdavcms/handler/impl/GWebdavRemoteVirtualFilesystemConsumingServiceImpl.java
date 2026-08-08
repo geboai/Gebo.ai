@@ -233,11 +233,22 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 		try {
 			Sardine sardine = getSardine(environment);
 			String href = last.getCode();
+			LOGGER.debug("retrieveChilds listing href={} isFolder={} isResource={}", href, last.isFolder(), last.isResource());
 			List<DavResource> resources = sardine.list(href, 1);
+			LOGGER.debug("retrieveChilds got {} resources from href={}", resources.size(), href);
 			for (DavResource res : resources) {
 				String name = res.getName();
-				if (name == null || name.trim().isEmpty() || ".".equals(name.trim())
-						|| "..".equals(name.trim())) {
+				String resHref = res.getHref().toString();
+				LOGGER.debug("retrieveChilds item: name='{}' href={} isDir={} isSelf={}", name, resHref, res.isDirectory(),
+						href != null && (href.equals(resHref) || (href + "/").equals(resHref) || href.equals(resHref + "/")));
+				if (name == null || name.trim().isEmpty()) {
+					continue;
+				}
+				if (".".equals(name.trim()) || "..".equals(name.trim())) {
+					continue;
+				}
+				if (href != null && (href.equals(resHref) || (href + "/").equals(resHref)
+						|| href.equals(resHref + "/"))) {
 					continue;
 				}
 				NativeCoordinatePointer pointer = new NativeCoordinatePointer();
@@ -310,7 +321,7 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 		}
 		Sardine sardine = getSardine(cache);
 		if (reference.href != null) {
-			return sardine.get(reference.href);
+			return sardine.get(resolveHref(reference.href, system.getBaseUri()));
 		}
 		return InputStream.nullInputStream();
 	}
@@ -326,12 +337,24 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 			}
 			Sardine sardine = getSardine(cache);
 			if (reference.href != null) {
-				return sardine.get(reference.href);
+				return sardine.get(resolveHref(reference.href, system.getBaseUri()));
 			}
 		} catch (IOException e) {
 			throw new GeboContentHandlerSystemException("Cannot stream resource: " + reference.href, e);
 		}
 		return InputStream.nullInputStream();
+	}
+
+	private String resolveHref(String href, String baseUri) {
+		if (href == null)
+			return null;
+		if (href.startsWith("http://") || href.startsWith("https://"))
+			return href;
+		if (baseUri == null)
+			return href;
+		String base = baseUri.endsWith("/") ? baseUri : baseUri + "/";
+		String path = href.startsWith("/") ? href.substring(1) : href;
+		return base + path;
 	}
 
 	@Override
