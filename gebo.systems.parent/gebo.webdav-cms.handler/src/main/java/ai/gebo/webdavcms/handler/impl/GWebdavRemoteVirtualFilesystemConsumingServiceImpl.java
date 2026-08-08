@@ -310,7 +310,7 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 		}
 		Sardine sardine = getSardine(cache);
 		if (reference.href != null) {
-			return sardine.get(reference.href);
+			return sardine.get(resolveHref(reference.href, system.getBaseUri()));
 		}
 		return InputStream.nullInputStream();
 	}
@@ -326,12 +326,24 @@ public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 			}
 			Sardine sardine = getSardine(cache);
 			if (reference.href != null) {
-				return sardine.get(reference.href);
+				return sardine.get(resolveHref(reference.href, system.getBaseUri()));
 			}
 		} catch (IOException e) {
 			throw new GeboContentHandlerSystemException("Cannot stream resource: " + reference.href, e);
 		}
 		return InputStream.nullInputStream();
+	}
+
+	private String resolveHref(String href, String baseUri) {
+		if (href == null)
+			return null;
+		if (href.startsWith("http://") || href.startsWith("https://"))
+			return href;
+		if (baseUri == null)
+			return href;
+		String base = baseUri.endsWith("/") ? baseUri : baseUri + "/";
+		String path = href.startsWith("/") ? href.substring(1) : href;
+		return base + path;
 	}
 
 	@Override
