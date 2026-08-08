@@ -10,9 +10,11 @@
  * Do not edit the class manually.
  */
 
+/**
+ * Arbitrary environment entries
+ */
 export interface PipelineEnvironment { 
-    /**
-     * Arbitrary environment entries
-     */
-    values?: { [key: string]: any; };
+  [key: string]: any;
+
+
 }

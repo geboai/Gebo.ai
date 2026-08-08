@@ -40,5 +40,6 @@
 		<module>gebo.bingsearch.handler</module>
 		<module>gebo.mcp-client.content.handler</module>
 		<module>gebo.aws-s3.content.handler</module>
+		<module>gebo.webdav-cms.handler</module>
 	</modules>
 </project>

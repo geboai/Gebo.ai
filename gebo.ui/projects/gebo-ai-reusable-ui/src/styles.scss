@@ -133,7 +133,8 @@ label {
 .pi.pi-google-drive,
 .pi.pi-confluence,
 .pi.pi-jira,
-.pi.pi-aws-s3 {
+.pi.pi-aws-s3,
+.pi.pi-webdav {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
@@ -174,6 +175,10 @@ label {
 
 .pi.pi-aws-s3 {
   background-image: url("assets/oauth2/aws-svgrepo-com.svg");
+}
+
+.pi.pi-webdav {
+  background-image: url("assets/3rdparty/webdav-folder-svgrepo-com.svg");
 }
 
 .pi.pi-deep-search {

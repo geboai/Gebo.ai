@@ -130,6 +130,8 @@ import { UserWorkflowsControllerService } from './api/userWorkflowsController.se
 import { UsersAdminControllerService } from './api/usersAdminController.service';
 import { UserspaceControllerService } from './api/userspaceController.service';
 import { UserspaceUploadControllerService } from './api/userspaceUploadController.service';
+import { WebdavBrowsingControllerService } from './api/webdavBrowsingController.service';
+import { WebdavSystemsControllerService } from './api/webdavSystemsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
 
 @NgModule({
@@ -264,6 +266,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     UsersAdminControllerService,
     UserspaceControllerService,
     UserspaceUploadControllerService,
+    WebdavBrowsingControllerService,
+    WebdavSystemsControllerService,
     WorkflowStatsAdminLevelControllerService ]
 })
 export class ApiModule {

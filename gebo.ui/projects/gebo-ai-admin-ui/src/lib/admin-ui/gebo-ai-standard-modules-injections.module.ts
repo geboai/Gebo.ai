@@ -15,7 +15,7 @@
  * Exports constants representing different module identifiers used throughout the application.
  * These constants are used to identify various modules that can be plugged into the system.
  */
-import { AwsS3SystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AwsS3SystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, GWebdavProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, SharepointSystemsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAIPluggableProjectEndpointModuleService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { Observable } from "rxjs";
 import { EnvironmentProviders, Injectable, ModuleWithProviders, NgModule, Provider, Type } from "@angular/core";
@@ -30,6 +30,7 @@ export const JIRA_MODULE = "jira-module";
 export const SHAREPOINT_MODULE = "sharepoint-module";
 export const MCP_CLIENT_MODULE = "mcp-client-module";
 export const AWS_S3_MODULE = "aws-s3-module";
+export const WEBDAB_CMS_MODULE = "webdab-cms-module";
 
 /**
  * Injectable service responsible for managing shared filesystem project endpoints.
@@ -685,6 +686,63 @@ const awsS3ModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
 };
 
 /**
+ * Injectable service responsible for managing WebDAV project endpoints.
+ * Implements GeboAIPluggableProjectEndpointModuleService to provide functionality
+ * for connecting to WebDAV compatible server data sources.
+ */
+@Injectable({
+    providedIn: "root"
+})
+export class GeboAIWebdavModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService {
+    constructor(private webdavService: WebdavSystemsControllerService) {
+    }
+
+    findByProjectEndpoints(code: string): Observable<{
+        code?: string; description?: string; parentProjectCode?: string;
+    }[]> {
+        return this.webdavService.findWebdavEndpointsByProject(code);
+    }
+
+    byProjectCreateAction(project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): GeboUIActionRequest {
+        let nextStepsParams: any = undefined;
+        let outAction: GeboUIActionRequest;
+        if (wizardStepsConfigurations && actualWizardStepConfigrationId) {
+            nextStepsParams = {
+                wizardStepsConfigurations: wizardStepsConfigurations,
+                actualWizardStepConfigrationId: actualWizardStepConfigrationId
+            };
+        }
+
+        const target: GWebdavProjectEndpoint = {
+            parentProjectCode: project.code
+        };
+        outAction = {
+            actionType: GeboActionType.NEW,
+            context: project,
+            contextType: "GProject",
+            target: target,
+            targetType: "GWebdavProjectEndpoint",
+            targetFormInputs: nextStepsParams
+        };
+
+        return outAction;
+    }
+}
+
+/**
+ * Configuration object for the WebDAV module.
+ * Defines UI elements, labels, icons and service to be used for WebDAV connections.
+ */
+const webdavModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
+    moduleId: WEBDAB_CMS_MODULE,
+    addProjectEndpointicon: "pi pi-webdav",
+    addProjectEndpointLabel: "+webdav",
+    addProjectEndpointTitle: "add a WebDAV compatible server data source (Nextcloud, ownCloud, OpenCloud...)",
+    projecteEndpointClassName: "ai.gebo.webdavcms.handler.GWebdavProjectEndpoint",
+    service: GeboAIWebdavModuleProjectEndpointService
+};
+
+/**
  * NgModule that handles the registration of all module services and configurations.
  * This module is responsible for injecting all the pluggable modules into the application
  * by providing their services and configuration blocks to the dependency injection system.
@@ -701,6 +759,7 @@ const awsS3ModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
         GeboAIGoogleDriveModuleProjectEndpointService,
         GeboAIMCPClientModuleProjectEndpointService,
         GeboAIAwsS3ModuleProjectEndpointService,
+        GeboAIWebdavModuleProjectEndpointService,
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
@@ -709,7 +768,8 @@ const awsS3ModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: jiraModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true },
-        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true }]
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true },
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: webdavModuleConfigurationBlock, multi: true }]
 })
 export class GeboAICommonModulesInjectionsModule {
 
@@ -734,7 +794,8 @@ export class GeboAICommonModulesInjectionsModule {
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: jiraModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true },
-                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true }]
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true },
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: webdavModuleConfigurationBlock, multi: true }]
         }
         return moduleWithProv;
 
