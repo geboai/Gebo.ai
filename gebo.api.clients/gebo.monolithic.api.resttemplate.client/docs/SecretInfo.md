@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 **code** | **String** |  |  [optional]
 **description** | **String** |  |  [optional]
 **secretType** | [**SecretTypeEnum**](#SecretTypeEnum) |  |  [optional]
+**contextCode** | **String** |  |  [optional]
 
 <a name="SecretTypeEnum"></a>
 ## Enum: SecretTypeEnum

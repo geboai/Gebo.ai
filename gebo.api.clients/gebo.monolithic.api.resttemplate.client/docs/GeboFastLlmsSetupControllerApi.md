@@ -100,7 +100,7 @@ No authorization required
 
 <a name="createLLMS"></a>
 # **createLLMS**
-> OperationStatusListGBaseModelConfig createLLMS(body)
+> OperationStatusLLMSModelsCreationResult createLLMS(body)
 
 
 
@@ -114,7 +114,7 @@ No authorization required
 GeboFastLlmsSetupControllerApi apiInstance = new GeboFastLlmsSetupControllerApi();
 List<LLMCreateModelData> body = Arrays.asList(new LLMCreateModelData()); // List<LLMCreateModelData> | 
 try {
-    OperationStatusListGBaseModelConfig result = apiInstance.createLLMS(body);
+    OperationStatusLLMSModelsCreationResult result = apiInstance.createLLMS(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboFastLlmsSetupControllerApi#createLLMS");
@@ -130,7 +130,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**OperationStatusListGBaseModelConfig**](OperationStatusListGBaseModelConfig.md)
+[**OperationStatusLLMSModelsCreationResult**](OperationStatusLLMSModelsCreationResult.md)
 
 ### Authorization
 

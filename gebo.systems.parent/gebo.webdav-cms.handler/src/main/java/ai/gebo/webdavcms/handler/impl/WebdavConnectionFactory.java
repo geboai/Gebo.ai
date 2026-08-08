@@ -1,5 +1,8 @@
 package ai.gebo.webdavcms.handler.impl;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
 
@@ -38,7 +41,12 @@ class WebdavConnectionFactory {
 		case DIGEST:
 		case NTLM: {
 			GeboUsernamePasswordContent credentials = (GeboUsernamePasswordContent) secret;
-			return SardineFactory.begin(credentials.getUsername(), credentials.getPassword());
+			Sardine sardine = SardineFactory.begin(credentials.getUsername(), credentials.getPassword());
+			// PROPFIND carries a request body, so Apache HttpClient cannot transparently
+			// replay it once challenged with a 401 - preemptively send the Basic header
+			// or every server that rejects anonymous PROPFIND outright fails to connect.
+			enablePreemptiveAuthentication(sardine, system.getBaseUri());
+			return sardine;
 		}
 		case BEARER_TOKEN: {
 			GeboTokenContent token = (GeboTokenContent) secret;
@@ -48,6 +56,16 @@ class WebdavConnectionFactory {
 		}
 		default:
 			return SardineFactory.begin();
+		}
+	}
+
+	private void enablePreemptiveAuthentication(Sardine sardine, String baseUri) {
+		if (baseUri == null || baseUri.trim().isEmpty())
+			return;
+		try {
+			sardine.enablePreemptiveAuthentication(new URL(baseUri));
+		} catch (MalformedURLException e) {
+			// Fall back to reactive challenge/response authentication.
 		}
 	}
 }
