@@ -215,15 +215,39 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
      * @throws GeboIngestionException If there's an error during ingestion
      * @throws IOException If there's an error reading the input stream
      */
+	private static final String DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	private static final String DOC_CONTENT_TYPE = "application/msword";
+
+	/**
+	 * Documents from remote/web content systems (WebDAV, MCP, Git, ...) are built
+	 * via {@code createWebDocumentReference}, which never populates the file
+	 * extension - only the content type is reliably known there. Dispatch to this
+	 * handler already happened by content-type match, so fall back to it whenever
+	 * the extension is unavailable instead of silently dropping the document.
+	 */
+	private static boolean isDocx(GDocumentReference reference) {
+		if (reference.getExtension() != null) {
+			return reference.getExtension().equalsIgnoreCase(".docx");
+		}
+		return DOCX_CONTENT_TYPE.equalsIgnoreCase(reference.getContentType());
+	}
+
+	private static boolean isDoc(GDocumentReference reference) {
+		if (reference.getExtension() != null) {
+			return reference.getExtension().equalsIgnoreCase(".doc");
+		}
+		return DOC_CONTENT_TYPE.equalsIgnoreCase(reference.getContentType());
+	}
+
 	@Override
 	public Stream<Document> handleContent(GDocumentReference reference, InputStream is, Map<String, Object> metadata)
 			throws GeboIngestionException, IOException {
 		List<Document> outlist = new ArrayList<Document>();
 		enrichMetaData(reference, metadata);
-		if (reference.getExtension() != null && reference.getExtension().equalsIgnoreCase(".docx")) {
+		if (isDocx(reference)) {
 			// Process DOCX document
 			return streamDOCXContent(is, metadata);
-		} else if (reference.getExtension() != null && reference.getExtension().equalsIgnoreCase(".doc")) {
+		} else if (isDoc(reference)) {
 			// Process DOC document
 			return streamDOCContent(is, metadata);
 		}
