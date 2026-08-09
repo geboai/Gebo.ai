@@ -1,6 +1,6 @@
 ﻿{
   "name": "gebo-ai-googledrive-client",
-  "version": "1.0.2.3-SNAPSHOT",
+  "version": "1.0.2.3",
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-googledrive-api",

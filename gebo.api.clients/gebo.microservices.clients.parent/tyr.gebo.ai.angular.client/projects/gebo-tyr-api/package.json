@@ -1,6 +1,6 @@
 ﻿{
   "name": "@Gebo.ai/tyr",
-  "version": "1.0.2.3-SNAPSHOT",
+  "version": "1.0.2.3",
   "peerDependencies": {
     "@angular/common": "^21.2.18",
     "@angular/core": "^21.2.18"
