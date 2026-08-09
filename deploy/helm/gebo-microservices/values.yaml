@@ -91,6 +91,7 @@ backends:
   googledrive:  { port: 13013, enabled: true }
   mcpclient:    { port: 13014, enabled: true }
   integration:  { port: 13015, enabled: true }
+  webdav:       { port: 13020, enabled: true }
 
 # --- Stateful dependencies -------------------------------------------------
 # enabled:true  -> deployed in-cluster (StatefulSet + PVC + Service).
