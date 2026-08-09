@@ -25,10 +25,20 @@
         </gebo-ai-field>
       </div>
       <div class="col-6">
-        <gebo-ai-field id="authType" label="Authentication method" [required]="true" help="Select the authentication method used by the WebDAV server">
+        <gebo-ai-field id="authType" label="Authentication method" [required]="true" help="Select the authentication method used by the WebDAV server. See known compatible systems below.">
           <geboai-editable-listbox-component id="authType" formControlName="authType" [required]="true" placeholder="Select authentication method" class="col-12 required" [data]="authTypes" gebo-ai-field-element>
           </geboai-editable-listbox-component>
         </gebo-ai-field>
+      </div>
+
+      <div class="col-12">
+        <p-fieldset id="AuthTypeSystemsLegendFieldset" gebo-ai-label legend="Authentication type legenda">
+          <small class="geboAuthTypeSystemsLegend">
+            @for (t of authTypes; track t.code) {
+              <div><strong>{{ t.description }}:</strong> {{ t.systems }}</div>
+            }
+          </small>
+        </p-fieldset>
       </div>
 
       <div class="col-12">

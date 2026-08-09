@@ -14,7 +14,14 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="1.0.2.2"
+# Read the project's own <version> from the root pom.xml header, stopping at
+# <parent> so we don't accidentally match spring-boot-starter-parent's version
+# instead. Keeps this script aligned with whatever the actual build produces.
+VERSION="$(sed -n '/<parent>/q;p' "$REPO_ROOT/pom.xml" | grep -oP '(?<=<version>)[^<]+(?=</version>)' | head -1)"
+if [ -z "$VERSION" ]; then
+  echo "ERROR: Could not read project version from $REPO_ROOT/pom.xml"
+  exit 1
+fi
 PLATFORMS="${PLATFORMS:-linux/amd64,linux/arm64}"
 JAR="$REPO_ROOT/gebo.apps.parent/gebo.ai.app/target/gebo.ai.app-${VERSION}-bootable.jar"
 SBOM="$REPO_ROOT/gebo.apps.parent/gebo.ai.app/target/classes/META-INF/sbom/application.cdx.json"
