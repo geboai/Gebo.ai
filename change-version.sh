@@ -25,6 +25,7 @@ echo "Changing from version $1 to $2"
 find . -name pom.xml | xargs sed -i s/"$1"/"$2"/ 
 sed -i s/"$1"/"$2"/ dockers/gebo.ai/Dockerfile
 sed -i s/"$1"/"$2"/ dockers/gebo.ai/create-image.bat
+sed -i s/"$1"/"$2"/ dockers/gebo.ai/*.sh
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/Dockerfile
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/create-image.bat
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/*.sh
@@ -42,7 +43,7 @@ find ./gebo.api.clients/gebo.microservices.clients.parent -maxdepth 4 -path "*/p
 find ./gebo.api.clients/gebo.microservices.clients.parent -maxdepth 4 -path "*/projects/*/package.json" | xargs git stage
 sed -i s/"$1"/"$2"/ run.bat
 git stage run.bat 
-git stage dockers/gebo.ai/Dockerfile dockers/gebo.ai/create-image.bat
+git stage dockers/gebo.ai/Dockerfile dockers/gebo.ai/create-image.bat dockers/gebo.ai/*.sh
 git stage dockers/easyinstall.gebo.ai/Dockerfile dockers/easyinstall.gebo.ai/create-image.bat dockers/easyinstall.gebo.ai/*.sh
 git commit -m"Changed version from $1 to $2"
 
