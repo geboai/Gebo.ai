@@ -37,7 +37,7 @@ SERVICE_PORTS=(
   [uploads]=13007      [userspace]=13008   [sharepoint]=13009
   [confluence]=13010   [jira]=13011        [aws-s3]=13012
   [googledrive]=13013  [mcpclient]=13014   [integration]=13015
-  [fulltextor]=13016   [tyr]=13019
+  [fulltextor]=13016   [tyr]=13019         [webdav]=13020
 )
 
 # ---- helpers ---------------------------------------------------------------

@@ -240,6 +240,15 @@ public final class GeboStandardMicroservices {
 							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
+			// webdav-cms.handler's own module id kept the pre-existing "webdab" spelling
+			// (GStandardModulesConstraints.WEBDAB_CMS_MODULE / the WEBDAB-CMS system-type
+			// code) - not a typo introduced here, matching what the handler already emits.
+			GeboMicroservice.named("webdav_gebo_ai")
+					.module("webdab-cms-module", "module-ioc-dispatcher-component", "resources-dispose-component",
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
+					.build(),
+
 			GeboMicroservice.named("integration_gebo_ai")
 					.module("integration-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component", "job-status-replicator",

@@ -274,6 +274,13 @@ gebo:
             - module-ioc-dispatcher-component
             - resources-dispose-component
             - system-settings-controller-component
+        # webdav-cms.handler's own module id kept the pre-existing "webdab" spelling
+        # (GStandardModulesConstraints.WEBDAB_CMS_MODULE) - not a typo introduced here.
+        webdav_gebo_ai:
+          webdab-cms-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
         integration_gebo_ai:
           integration-module:
             - module-ioc-dispatcher-component

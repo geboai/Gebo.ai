@@ -41,6 +41,7 @@
 		<module>aws-s3.gebo.ai</module>
 		<module>googledrive.gebo.ai</module>
 		<module>mcpclient.gebo.ai</module>
+		<module>webdav.gebo.ai</module>
 		<module>integration.gebo.ai</module>
 		<module>fulltextor.gebo.ai</module>
 		<module>tyr.gebo.ai</module>
