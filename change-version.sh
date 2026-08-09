@@ -29,6 +29,12 @@ sed -i s/"$1"/"$2"/ dockers/gebo.ai/*.sh
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/Dockerfile
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/create-image.bat
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/*.sh
+# Microservices stack: .env pins the image tag compose resolves for every
+# geboai/*.gebo.ai service, and the compose file repeats it as the per-service
+# fallback - both must track the bump or the stack silently runs the previous
+# release's images.
+sed -i s/"$1"/"$2"/ dockers/gebo.microservices/.env
+sed -i s/"$1"/"$2"/ dockers/gebo.microservices/docker-compose.yml
 
 find . -name pom.xml | xargs git stage 
 sed -i s/"$1"/"$2"/ ./gebo.ui/package.json
@@ -45,5 +51,6 @@ sed -i s/"$1"/"$2"/ run.bat
 git stage run.bat 
 git stage dockers/gebo.ai/Dockerfile dockers/gebo.ai/create-image.bat dockers/gebo.ai/*.sh
 git stage dockers/easyinstall.gebo.ai/Dockerfile dockers/easyinstall.gebo.ai/create-image.bat dockers/easyinstall.gebo.ai/*.sh
+git stage dockers/gebo.microservices/.env dockers/gebo.microservices/docker-compose.yml
 git commit -m"Changed version from $1 to $2"
 
