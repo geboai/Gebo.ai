@@ -61,3 +61,5 @@ scrape_configs:
         labels: { service: heimdall, __meta_context_path: /heimdall }
       - targets: ["tyr:13019"]
         labels: { service: tyr, __meta_context_path: /tyr }
+      - targets: ["webdav:13020"]
+        labels: { service: webdav, __meta_context_path: /webdav }

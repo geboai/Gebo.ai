@@ -44,9 +44,9 @@ Browser ── HTTP :12999 ──→ gebo.ai.app
 
 **Docker Compose:** `dockers/gebo.ai/docker-compose.yml`
 
-### Microservices (19 distinct services)
+### Microservices (20 distinct services)
 
-Each module runs as its own Spring Boot service on a dedicated port (13000–13019).
+Each module runs as its own Spring Boot service on a dedicated port (13000–13020).
 The **gateway** (port 13000) is the single entry point for browsers. All internal
 service-to-service calls resolve through **Eureka** (service registry, port 13017) with
 client-side load balancing.
@@ -228,7 +228,7 @@ The application is now reachable at `https://gebo.example.com:12999`.
 
 ### 2.2 Microservices Deployment
 
-The microservices stack has **19 services** listening on ports 13000–13019. The
+The microservices stack has **20 services** listening on ports 13000–13020. The
 **gateway** (port 13000) is the only browser-facing service. The recommended approach
 is **TLS termination at the gateway only**, with internal service-to-service
 communication staying on HTTP inside the Docker network.
@@ -281,7 +281,7 @@ server:
 
 > ⚠️ **Do NOT put `server.ssl` settings into the shared config file**
 > (`dockers/gebo.microservices/config/application.yml`). That file is mounted at
-> `/opt/gebo.ai/config` and loaded as an additional location by **all 19 services**.
+> `/opt/gebo.ai/config` and loaded as an additional location by **all 20 services**.
 > Adding `server.ssl` there would apply TLS to every microservice and break
 > internal service-to-service communication, because Eureka registration and
 > `lb://` load-balanced calls would switch to HTTPS without corresponding
@@ -313,7 +313,7 @@ For high-security environments where every service-to-service call must be encry
 
 1. Generate a **CA certificate** and import it into a **truststore**.
 2. Generate a **unique server certificate** (signed by the CA) for **each** of the
-   19 services.
+   20 services.
 3. Add `server.ssl.*` to **each service's own** `application.yml` (not the shared one).
 4. Register each service in Eureka with `secure-virtual-host-name`:
 
@@ -706,7 +706,7 @@ Qdrant currently has `tls: false`. To enable it in production:
 | Monolith (HTTP) | 12999 | Yes (if hardened with HTTPS) | Allow only from trusted networks |
 | Gateway (HTTP) | 13000 | Yes (if hardened with HTTPS) | Allow only from trusted networks |
 | Eureka | 13017 | No | Block at firewall; internal only |
-| All other microservices | 13001–13019 | No | Block at firewall; internal only |
+| All other microservices | 13001–13020 | No | Block at firewall; internal only |
 | MongoDB | 27017 | No | Block at firewall |
 | Qdrant | 6333, 6334 | No | Block at firewall |
 | Neo4j | 7474, 7687 | No | Block at firewall |
