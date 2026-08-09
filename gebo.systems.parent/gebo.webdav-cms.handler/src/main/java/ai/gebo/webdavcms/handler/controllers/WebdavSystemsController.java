@@ -186,6 +186,7 @@ public class WebdavSystemsController
 	@PostMapping(value = "fastWebdavConfig", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<GWebdavContentManagementSystem> fastWebdavConfig(
 			@Valid @RequestBody FastWebdavSystemInsertRequest data) {
+		String secretId = null;
 		try {
 			AbstractGeboSecretContent secret = null;
 			GWebdavContentManagementSystem system = new GWebdavContentManagementSystem();
@@ -216,7 +217,7 @@ public class WebdavSystemsController
 
 			if (secret != null) {
 				String secretDescription = data.authType.name() + " WebDAV system secret";
-				String secretId = secretAccessService.storeSecret(secret, secretDescription,
+				secretId = secretAccessService.storeSecret(secret, secretDescription,
 						WebdavContentManagementHandlerImpl.WEBDAB_CMS);
 				system.setSecretCode(secretId);
 			}
@@ -228,14 +229,24 @@ public class WebdavSystemsController
 
 			OperationStatus<GWebdavContentManagementSystem> status = webdavTestService.testWebdavSystem(system);
 			if (status.isHasErrorMessages()) {
+				if (secretId != null) {
+					secretAccessService.deleteSecret(secretId);
+				}
 				return status;
 			}
 			system = persistentObjectManager.insert(system);
 			return OperationStatus.of(system);
 		} catch (Throwable th) {
 			LOGGER.error("Error trying inserting WebDAV system configuration", th);
+			if (secretId != null) {
+				try {
+					secretAccessService.deleteSecret(secretId);
+				} catch (Throwable deleteError) {
+					LOGGER.error("Failed to roll back WebDAV secret {} after insert error", secretId, deleteError);
+				}
+			}
 			OperationStatus<GWebdavContentManagementSystem> os = new OperationStatus<GWebdavContentManagementSystem>();
-			os.getMessages().add(GUserMessage.errorMessage("Cannot access WebDAV", ""));
+			os.getMessages().add(GUserMessage.errorMessage("Cannot access WebDAV", th));
 			return os;
 		}
 	}
