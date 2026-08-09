@@ -49,11 +49,22 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 	 * @return the file extension as a string, or null if no extension is found.
 	 */
 	protected String getExtension(Path file) {
-		String name = file.getFileName().toString();
+		return getExtension(file.getFileName().toString());
+	}
+
+	/**
+	 * Extracts and returns the file extension from the given file name.
+	 *
+	 * @param name the file name whose extension is to be retrieved.
+	 * @return the file extension as a string, or null if no extension is found.
+	 */
+	protected String getExtension(String name) {
 		String extension = null;
-		int lastPointPosition = name.lastIndexOf(".");
-		if (lastPointPosition >= 0) {
-			extension = name.substring(lastPointPosition).toLowerCase();
+		if (name != null) {
+			int lastPointPosition = name.lastIndexOf(".");
+			if (lastPointPosition >= 0) {
+				extension = name.substring(lastPointPosition).toLowerCase();
+			}
 		}
 		return extension;
 	}
@@ -277,7 +288,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 		reference.setAbsolutePath(null);
 		reference.setCode(spaceFolder.getCode() + "/" + code);
 		reference.setContentType(contentType);
-		reference.setExtension(null);
+		reference.setExtension(getExtension(name));
 		reference.setFileSize(0l);
 		reference.setName(name);
 		reference.setRelativePath(spaceFolder.getRelativePath() + "/" + name);
