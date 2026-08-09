@@ -32,11 +32,13 @@
       </div>
 
       <div class="col-12">
-        <small class="geboAuthTypeSystemsLegend">
-          @for (t of authTypes; track t.code) {
-            <div><strong>{{ t.description }}:</strong> {{ t.systems }}</div>
-          }
-        </small>
+        <p-fieldset id="AuthTypeSystemsLegendFieldset" gebo-ai-label legend="Authentication type legenda">
+          <small class="geboAuthTypeSystemsLegend">
+            @for (t of authTypes; track t.code) {
+              <div><strong>{{ t.description }}:</strong> {{ t.systems }}</div>
+            }
+          </small>
+        </p-fieldset>
       </div>
 
       <div class="col-12">
