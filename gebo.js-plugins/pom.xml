@@ -10,6 +10,10 @@
 	<artifactId>gebo.js-plugins</artifactId>
 	<packaging>pom</packaging>
 
+	<modules>
+		<module>brain</module>
+	</modules>
+
 	<properties>
 		<swagger.file>http://localhost:12999/v3/api-docs</swagger.file>
 		<generated-sources-path>
