@@ -37,6 +37,7 @@ SERVICES = [
     ("eureka", 13017, None),
     ("heimdall", 13018, "heimdall-gebo-ai"),
     ("tyr", 13019, "tyr-gebo-ai"),
+    ("webdav", 13020, "webdav-gebo-ai"),
 ]
 NO_CONTROLLER_SERVICES = {"gateway", "eureka", "fulltextor"}
 NOTES_NO_CONTROLLERS = {

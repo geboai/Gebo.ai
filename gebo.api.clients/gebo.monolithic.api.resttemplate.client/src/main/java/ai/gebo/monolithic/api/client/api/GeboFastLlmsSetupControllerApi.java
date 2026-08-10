@@ -9,6 +9,7 @@ import ai.gebo.monolithic.api.client.model.LLMCredentialsCreationData;
 import ai.gebo.monolithic.api.client.model.LLMCredentialsVerificationData;
 import ai.gebo.monolithic.api.client.model.LLMModelsLookupParameter;
 import ai.gebo.monolithic.api.client.model.LLMSSetupConfigurationData;
+import ai.gebo.monolithic.api.client.model.OperationStatusLLMSModelsCreationResult;
 import ai.gebo.monolithic.api.client.model.OperationStatusListGBaseModelChoice;
 import ai.gebo.monolithic.api.client.model.OperationStatusListGBaseModelConfig;
 import ai.gebo.monolithic.api.client.model.OperationStatusSecretInfo;
@@ -31,7 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
 
 public class GeboFastLlmsSetupControllerApi {
     private ApiClient apiClient;
@@ -148,10 +149,10 @@ public class GeboFastLlmsSetupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return OperationStatusListGBaseModelConfig
+     * @return OperationStatusLLMSModelsCreationResult
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGBaseModelConfig createLLMS(List<LLMCreateModelData> body) throws RestClientException {
+    public OperationStatusLLMSModelsCreationResult createLLMS(List<LLMCreateModelData> body) throws RestClientException {
         return createLLMSWithHttpInfo(body).getBody();
     }
 
@@ -160,10 +161,10 @@ public class GeboFastLlmsSetupControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;OperationStatusListGBaseModelConfig&gt;
+     * @return ResponseEntity&lt;OperationStatusLLMSModelsCreationResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGBaseModelConfig> createLLMSWithHttpInfo(List<LLMCreateModelData> body) throws RestClientException {
+    public ResponseEntity<OperationStatusLLMSModelsCreationResult> createLLMSWithHttpInfo(List<LLMCreateModelData> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -186,7 +187,7 @@ public class GeboFastLlmsSetupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<OperationStatusListGBaseModelConfig> returnType = new ParameterizedTypeReference<OperationStatusListGBaseModelConfig>() {};
+        ParameterizedTypeReference<OperationStatusLLMSModelsCreationResult> returnType = new ParameterizedTypeReference<OperationStatusLLMSModelsCreationResult>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

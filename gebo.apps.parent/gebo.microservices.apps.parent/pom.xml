@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.2.2</version>
+		<version>1.0.2.3</version>
 	</parent>
 	<groupId>ai.gebo.apps.microservices</groupId>
 	<artifactId>gebo.microservices.apps.parent</artifactId>
@@ -41,6 +41,7 @@
 		<module>aws-s3.gebo.ai</module>
 		<module>googledrive.gebo.ai</module>
 		<module>mcpclient.gebo.ai</module>
+		<module>webdav.gebo.ai</module>
 		<module>integration.gebo.ai</module>
 		<module>fulltextor.gebo.ai</module>
 		<module>tyr.gebo.ai</module>

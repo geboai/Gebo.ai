@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.2.2</version>
+		<version>1.0.2.3</version>
 	</parent>
 	<groupId>ai.gebo.systems</groupId>
 	<artifactId>gebo.systems.parent</artifactId>
@@ -40,5 +40,6 @@
 		<module>gebo.bingsearch.handler</module>
 		<module>gebo.mcp-client.content.handler</module>
 		<module>gebo.aws-s3.content.handler</module>
+		<module>gebo.webdav-cms.handler</module>
 	</modules>
 </project>

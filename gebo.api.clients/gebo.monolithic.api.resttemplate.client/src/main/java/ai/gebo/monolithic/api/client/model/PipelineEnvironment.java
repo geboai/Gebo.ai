@@ -14,49 +14,16 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 /**
- * PipelineEnvironment
+ * Arbitrary environment entries
  */
+@Schema(description = "Arbitrary environment entries")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-11T10:08:29.678188200+02:00[Europe/Rome]")
-
-public class PipelineEnvironment {
-  @JsonProperty("values")
-  private Map<String, Object> values = null;
-
-  public PipelineEnvironment values(Map<String, Object> values) {
-    this.values = values;
-    return this;
-  }
-
-  public PipelineEnvironment putValuesItem(String key, Object valuesItem) {
-    if (this.values == null) {
-      this.values = new HashMap<>();
-    }
-    this.values.put(key, valuesItem);
-    return this;
-  }
-
-   /**
-   * Arbitrary environment entries
-   * @return values
-  **/
-  @Schema(description = "Arbitrary environment entries")
-  public Map<String, Object> getValues() {
-    return values;
-  }
-
-  public void setValues(Map<String, Object> values) {
-    this.values = values;
-  }
-
+public class PipelineEnvironment extends HashMap<String, Object> {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -66,13 +33,12 @@ public class PipelineEnvironment {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PipelineEnvironment pipelineEnvironment = (PipelineEnvironment) o;
-    return Objects.equals(this.values, pipelineEnvironment.values);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(values);
+    return Objects.hash(super.hashCode());
   }
 
 
@@ -80,8 +46,7 @@ public class PipelineEnvironment {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PipelineEnvironment {\n");
-    
-    sb.append("    values: ").append(toIndentedString(values)).append("\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
   }

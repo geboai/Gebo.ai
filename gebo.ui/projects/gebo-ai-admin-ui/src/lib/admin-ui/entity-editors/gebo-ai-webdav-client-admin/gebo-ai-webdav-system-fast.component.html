@@ -1,0 +1,78 @@
+<p-blockUI id="BlockUI" [target]="webdavSystemCtrl" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #webdavSystemCtrl header="Create WebDAV system configuration" [formGroup]="formGroup">
+  <div class="geboButtonsBar" style="vertical-align: baseline;">
+    <div class="grid">
+      <div class="col-4">
+        <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"
+          styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
+      </div>
+      <div class="col-4">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+          styleClass="w-full" />
+      </div>
+    </div>
+  </div>
+
+  <div class="geboDialogContent">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+    <div class="grid">
+      <div class="col-6">
+        <gebo-ai-field id="description" label="Description" help="Enter the description of the WebDAV system.">
+          <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="authType" label="Authentication method" [required]="true" help="Select the authentication method used by the WebDAV server. See known compatible systems below.">
+          <geboai-editable-listbox-component id="authType" formControlName="authType" [required]="true" placeholder="Select authentication method" class="col-12 required" [data]="authTypes" gebo-ai-field-element>
+          </geboai-editable-listbox-component>
+        </gebo-ai-field>
+      </div>
+
+      <div class="col-12">
+        <p-fieldset id="AuthTypeSystemsLegendFieldset" gebo-ai-label legend="Authentication type legenda">
+          <small class="geboAuthTypeSystemsLegend">
+            @for (t of authTypes; track t.code) {
+              <div><strong>{{ t.description }}:</strong> {{ t.systems }}</div>
+            }
+          </small>
+        </p-fieldset>
+      </div>
+
+      <div class="col-12">
+        <gebo-ai-field id="baseUri" label="Base internet address" help="Base URL for the WebDAV server (e.g. https://webdav.example.com/remote.php/dav/)" [required]="true">
+          <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12 required" [required]="true" gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+
+      @if (showCredentials && !isBearerToken) {
+        <div class="col-6">
+          <gebo-ai-field id="username" label="User name" help="User name to access the WebDAV system" [required]="true">
+            <input pInputText id="username" formControlName="username" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+        <div class="col-6">
+          <gebo-ai-field id="password" label="Password" help="Password to access the WebDAV system" [required]="true">
+            <input type="password" pInputText id="password" formControlName="password" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+      }
+      @if (isBearerToken) {
+        <div class="col-6">
+          <gebo-ai-field id="tokenUsername" label="User" help="User associated with the bearer token">
+            <input pInputText id="tokenUsername" formControlName="username" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+        <div class="col-6">
+          <gebo-ai-field id="token" label="Bearer token" help="Bearer token to access the WebDAV system" [required]="true">
+            <input type="password" pInputText id="token" formControlName="token" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+      }
+    </div>
+  </div>
+</p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

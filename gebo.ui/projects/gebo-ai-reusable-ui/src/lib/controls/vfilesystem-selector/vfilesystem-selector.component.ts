@@ -360,6 +360,14 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * Opens the edit dialog with the current selection
      */
     openEditMode() {
+        if (!this.roots || this.roots.length === 0) {
+            // ngOnChanges only reloads roots when the loadRootsObservable input
+            // reference itself changes; if that happened before this component
+            // was first rendered (e.g. an already-selected parent system), the
+            // initial load can silently run against a stale/no-op callback.
+            // Refreshing on open guarantees the currently bound loader is used.
+            this.loadRoots();
+        }
         this.editingNodeValues = [...this.internalValue];
         let boundToChoosedControl: string[] | string | undefined;
         boundToChoosedControl = undefined;
