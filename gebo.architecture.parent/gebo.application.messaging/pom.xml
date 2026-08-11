@@ -24,10 +24,5 @@
 			<artifactId>gebo.architecture.multithreading</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.multithreading</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 </project>
