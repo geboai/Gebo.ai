@@ -64,3 +64,27 @@ exporting an `ApiClient` plus one `*ControllerApi` class per backend
 controller and one model class per schema — plain ES modules, no framework
 dependency, usable from any Node/browser/bundler setup. `docs/` and `test/`
 folders alongside `src/` are also swagger-codegen output.
+
+## Compiling
+
+`src/` is `import`/`export` ES module syntax (see `package.json`'s
+`"main": "src/index.js"`), which plain `require()` cannot load directly —
+`node -e "require('./src/index.js')"` fails with "Cannot use import
+statement outside a module". Two ways to actually consume it, in each
+generated client's own folder (`gebo-ai-js-client/` or
+`brain-ai-js-client/`):
+
+- **As-is, via a bundler or native ESM** — anything that understands ES
+  modules (webpack/rollup/vite, or Node with `"type": "module"`) can import
+  `src/index.js` directly. No build step.
+- **Compile to CommonJS** — the codegen template pulls in `@babel/cli` as a
+  dependency and ships a matching `.babelrc`, but doesn't wire up an npm
+  `build` script for it, so run it directly:
+  ```
+  npm install
+  npx babel src --out-dir dist
+  ```
+  This produces a `dist/` of plain `require()`-able CommonJS (verified:
+  `require('./dist/index.js')` works with no `@babel/register` or other
+  runtime hook needed). `dist/` is gitignored (repo-wide `**/dist/` rule) —
+  it's a build artifact, regenerate it whenever you regenerate the client.
