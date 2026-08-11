@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps.microservices</groupId>
 		<artifactId>gebo.microservices.apps.parent</artifactId>
-		<version>1.0.2.3</version>
+		<version>1.0.2.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>vectorizator.gebo.ai</artifactId>
 

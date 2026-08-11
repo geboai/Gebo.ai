@@ -19,4 +19,4 @@ wait_for 127.0.0.1 6333  90 QDrant  || { echo "Qdrant not ready"; exit 1; }
 wait_for 127.0.0.1 7687  90 Neo4j   || { echo "Neo4j (bolt) not ready"; exit 1; }
 wait_for 127.0.0.1 9200  120 OpenSearch || { echo "OpenSearch (http) not ready"; exit 1; }
 
-exec java $JAVA_TOOL_OPTIONS -jar /opt/gebo.ai/gebo.ai.app-1.0.2.3-bootable.jar
+exec java $JAVA_TOOL_OPTIONS -jar /opt/gebo.ai/gebo.ai.app-1.0.2.4-SNAPSHOT-bootable.jar
