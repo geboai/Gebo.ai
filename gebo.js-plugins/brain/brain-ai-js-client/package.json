@@ -1,6 +1,6 @@
 {
   "name": "gebo.brain.client.js",
-  "version": "v0",
+  "version": "1.0.2.4-SNAPSHOT",
   "description": "Object",
   "license": "Unlicense",
   "main": "src/index.js",
