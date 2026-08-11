@@ -101,11 +101,20 @@ Same mechanism as the ONLYOFFICE sandbox: `auth.js` does a same-origin
 `GET /oauth2/auth` and reads the access token back from oauth2-proxy's
 `X-Auth-Request-Access-Token` response header (`oauth2-proxy.cfg` here sets
 `set_xauthrequest=true` + `pass_access_token=true` for exactly this). No
-separate login step inside the plugin - see the ONLYOFFICE sandbox's README
-for the real-deployment assumption this relies on (the sandbox's Keycloak
-realm needs to be, or be federated with, whatever issuer Gebo.ai's own
-`ai.gebo.security.oauth2configs` trusts). This sandbox ships its own
-standalone realm (`euro-office-dev`) for local plugin development only.
+separate login step inside the plugin. `app.js` also sends
+`X-AuthType: OAUTH2` alongside the bearer token — Gebo's shared security
+dispatch defaults to treating a bearer token as its own LOCAL_JWT when that
+header is absent, which 401s a Keycloak token.
+
+This sandbox ships its own standalone realm (`euro-office-dev`) for local
+plugin development only. The "point this at a real Gebo.ai installation"
+mechanism was verified live end-to-end against the **monolith**
+(`gebo.apps.parent/gebo.ai.app`) using the *sibling* ONLYOFFICE sandbox's
+`onlyoffice-dev` realm (not re-run separately against this realm, but the
+same code path) — see `dockers/onlyoffice/README.md`'s "Verified: pointing
+this at the monolith" section for the exact resource-server configuration,
+the issuer-hostname-consistency requirement, and the no-auto-provisioning
+caveat (a Keycloak user's email must already match an existing Gebo user).
 
 ### Building and pointing it at a real Gebo.ai / brain
 

@@ -113,14 +113,15 @@ it reads the **same Keycloak session that already gates this sandbox**
 `set_xauthrequest=true` + `pass_access_token=true` for exactly this). No
 separate login step inside the plugin.
 
-**Assumption for real deployments**: this only lets the plugin call the real
-Gebo.ai installation's API as the logged-in user if that installation trusts
-the *same* Keycloak realm/issuer this sandbox's Keycloak represents - i.e.
-the sandbox's realm needs to be (or be federated with) whatever
-Keycloak/OIDC issuer Gebo.ai's own `ai.gebo.security.oauth2configs` is
-configured to accept (see the `keycloakClient`/`MainRealm` test config in
-`gebo.apps.parent/gebo.ai.app`'s `application.yml`). This sandbox ships its
-own standalone realm (`onlyoffice-dev`) for local plugin development only.
+**For real deployments**, this only lets the plugin call the real Gebo.ai
+installation's API as the logged-in user if that installation trusts the
+*same* Keycloak realm/issuer this sandbox's Keycloak represents. This was
+verified live end-to-end (not just theorized) against the **monolith**
+(`gebo.apps.parent/gebo.ai.app`) configured as an OAuth2 resource server —
+see "Verified: pointing this at the monolith" below for the exact
+configuration and two non-obvious requirements it surfaced. This sandbox
+ships its own standalone realm (`onlyoffice-dev`) for local plugin
+development only.
 
 ### Building and pointing it at a real Gebo.ai / brain
 
@@ -139,6 +140,66 @@ microservice's own local dev address - this sandbox does **not** run brain
 itself, only the document-server/Keycloak/oauth2-proxy pieces). Point it at
 a different installation with a `?geboBaseUrl=` query param on however this
 plugin's URL is reached by the browser, or edit the default in `app.js`.
+
+### Verified: pointing this at the monolith instead of standalone brain
+
+The generated `brain-ai-js-client` stub, completely unmodified, works
+against the **monolith** too — same controllers, just without the `/brain`
+prefix (`geboBaseUrl` = the monolith's root, e.g. `http://localhost:12999`,
+instead of `.../brain`). Confirmed live: built `gebo.ai.app` with
+`-Pswagger-on`, ran it against a throwaway Mongo DB, and called
+`GeboChatProfileLookupControllerApi`/`GeboChatControllerApi` from
+`brain-ai-js-client` directly — no wrapper, no modification — against
+`http://localhost:12999` using a real Keycloak-issued access token. Getting
+there needs two things the plugin code alone doesn't handle for you:
+
+1. **The monolith must be configured as an OAuth2 resource server trusting
+   this realm.** `ai.gebo.security.oauth2ResourceServerEnabled` already
+   defaults to `true` in Gebo's shared security module
+   (`gebo.architecture.security`'s `GeboSecurityConfig`/`GeboAISecurityConfig`)
+   — nothing to flip there. What's missing by default is an
+   `ai.gebo.security.oauth2configs` entry pointing at this sandbox's realm:
+   ```yaml
+   ai.gebo.security:
+     oauth2configs:
+       - registrationId: keycloakBearer
+         provider: oauth2_generic
+         configurationType: AUTHENTICATION   # singular field name - "configurationTypes" (plural) silently binds to null and gets excluded
+         client:
+           clientId: onlyoffice-plugin-dev
+           secret: 42f277af-7919-4edb-a686-a2f40ec4dc87   # this sandbox's dev secret, see keycloak/realm-export.json
+         providerConfig:
+           provider: oauth2_generic
+           authorizationUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/auth
+           tokenUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/token
+           userInfoUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/userinfo
+           issuerUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev
+           userNameAttribute: email
+   ```
+   The token must be requested from the **same hostname** as `issuerUri`
+   (`keycloak.localtest.me`, not `localhost`) — Keycloak stamps the `iss`
+   claim from whatever Host header the token request used, and a mismatch
+   against the configured `issuerUri` fails validation even though it's the
+   same server.
+
+2. **Every request needs an `X-AuthType: OAUTH2` header alongside the bearer
+   token** (already added in `app.js`'s `initClients()`). Gebo's shared
+   security dispatch (`SecurityHeaderUtil`/
+   `GHttpRequestAuthenticationManagerResolverImpl`) decides LOCAL_JWT vs
+   external-OAuth2 validation from this header, defaulting to `LOCAL_JWT`
+   when it's absent — a Keycloak token with no `X-AuthType` header 401s as
+   if it were a malformed Gebo token, not a "wrong provider" error.
+
+3. **No auto-provisioning on this path.** The resource-server flow resolves
+   the token's `email` claim (fallback `sub`) to an existing Gebo user via a
+   plain lookup (`DirectoryBackedUserDetailsService` →
+   `IGSecurityDirectory.findUserByUsername`) — unlike the interactive OAuth2
+   *login* redirect flow, it never creates one. A Keycloak user has to
+   already exist as a matching Gebo user (same username/email) before its
+   token will authenticate, e.g. via
+   `POST /api/admin/UsersAdminController/insertUser` with
+   `user.authProvider: "oauth2_generic"` and `user.username` equal to the
+   token's `email` claim.
 
 ## Cleanup
 

@@ -76,6 +76,12 @@ async function initClients() {
   state.apiClient = new ApiClient();
   state.apiClient.basePath = baseUrl.replace(/\/+$/, "");
   state.apiClient.defaultHeaders["Authorization"] = "Bearer " + token;
+  // Gebo's shared security architecture (gebo.architecture.security, used by every
+  // Gebo service including this one) dispatches Authorization: Bearer tokens by the
+  // X-AuthType header, defaulting to LOCAL_JWT (Gebo's own HMAC token) when absent -
+  // a Keycloak-issued bearer token without this header 401s. Verified live against
+  // the monolith configured as an OAuth2 resource server: see README.md.
+  state.apiClient.defaultHeaders["X-AuthType"] = "OAUTH2";
 
   state.profilesApi = new window.BrainClient.GeboChatProfileLookupControllerApi(state.apiClient);
   state.pipelinesApi = new window.BrainClient.GeboChatPipelinesControllerApi(state.apiClient);
