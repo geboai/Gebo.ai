@@ -1,0 +1,17 @@
+{
+  "name": "Gebo AI Assistant",
+  "guid": "asc.{DA59DE4C-62E7-4E18-934B-05DCBD704262}",
+  "version": "1.0.0",
+  "variations": [
+    {
+      "description": "Search and chat with your Gebo.ai knowledge base, in and out of the current document",
+      "url": "index.html",
+      "isViewer": false,
+      "isVisual": true,
+      "isModal": false,
+      "isSystem": false,
+      "EditorsSupport": ["word", "cell", "slide"],
+      "buttons": []
+    }
+  ]
+}

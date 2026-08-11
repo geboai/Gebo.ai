@@ -1,0 +1,109 @@
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  padding: 10px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+h1 {
+  font-size: 15px;
+  margin: 0 0 4px 0;
+}
+.profile-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.profile-row select {
+  flex: 1;
+  padding: 4px;
+}
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+.tab {
+  padding: 6px 10px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: #666;
+}
+.tab.active {
+  color: #FF6F3D;
+  border-bottom-color: #FF6F3D;
+  font-weight: 600;
+}
+.panel { display: none; flex-direction: column; gap: 8px; }
+.panel.active { display: flex; }
+textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  resize: vertical;
+}
+button {
+  background: #FF6F3D;
+  color: white;
+  border: none;
+  padding: 7px 12px;
+  font-size: 13px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+button:hover { background: #E55A2B; }
+button.secondary {
+  background: #eee;
+  color: #333;
+}
+button.secondary:hover { background: #ddd; }
+.row { display: flex; gap: 6px; }
+.muted { color: #999; font-style: italic; }
+.status {
+  min-height: 16px;
+  font-size: 12px;
+  color: #666;
+}
+.status.error { color: #c0392b; }
+body.busy { cursor: progress; }
+body.busy button { opacity: 0.6; pointer-events: none; }
+
+#searchResults { display: flex; flex-direction: column; gap: 6px; }
+.result-row { border: 1px solid #eee; border-radius: 3px; padding: 6px; }
+.result-title { font-weight: 600; }
+.result-meta { color: #888; font-size: 11px; }
+
+#elaborateResult {
+  display: none;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 6px;
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#elaborateResult.visible { display: block; }
+
+#kbMessages {
+  flex: 1;
+  min-height: 200px;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.message-role { font-size: 11px; color: #888; font-weight: 600; }
+.message.user .message-body { color: #333; }
+.message.assistant .message-body { color: #444; white-space: pre-wrap; }
+.kb-input-row { display: flex; gap: 6px; }
+.kb-input-row textarea { flex: 1; height: 40px; }

@@ -72,6 +72,74 @@ would obscure the server's own built-in plugins that already live there.
 Plugin structure/config.json reference:
 https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/
 
+## gebo-ai-assistant: the real plugin, built on the brain JS stub
+
+`plugin/gebo-ai-assistant/` is a working plugin - not just a scaffold - built
+directly on the generated `brain-ai-js-client` stub (see
+`gebo.js-plugins/brain/`), reproducing what
+`gebo.ui/projects/gebo-ai-reusable-ui/src/lib/controls/chat-control`
+(`gebo-ai-reusable-chat.component.ts`) does, adapted to the plugin sandbox:
+
+- **This document** tab (in document context): reads the current selection
+  via `Asc.plugin.executeMethod("GetSelectedText", ...)`, semantically
+  searches the knowledge base for related content
+  (`GeboUserKnowledgeBaseSemanticSearchController.semanticSearch`), or asks
+  the model to elaborate/rewrite it (`GeboDirectModelChatController.chat`)
+  and pastes the result back in via `PasteText`.
+- **Knowledge base** tab (out of document context): an ordinary chat against
+  the document-sharing system, independent of what's open in the editor.
+  Routed through `GeboChatPipelinesController.executeDefaultChatPipeline`
+  (not the simpler `GeboChatController.ragChat`) - matching how
+  `gebo-ai-reusable-chat.component.ts`'s `callReactiveChat()` actually
+  behaves: it calls `streamAgenticChat` (→ `streamChatPipeline`) for
+  `ragsystem` chat, with `streamRagChat` (→ `streamRagResponse`) present in
+  the file but explicitly left unused.
+
+It uses the non-streaming `chat`/`executeDefaultChatPipeline`/
+`semanticSearch` methods rather than their `stream*` counterparts: the
+generated stub's `ApiClient` buffers the whole `superagent` response before
+resolving (no incremental SSE chunk parsing the way the Angular reference
+control's `reactive-chat.service.ts` does with a hand-rolled
+`fetch`+`ReadableStream` reader), so the tradeoff is no token-by-token
+streaming display - functionally equivalent, just not incremental.
+
+### The current user's token, via the SSO gate already in place
+
+Rather than asking the plugin's own UI to manage a login or a pasted token,
+it reads the **same Keycloak session that already gates this sandbox**
+(see the top of this README) - `auth.js` does a same-origin
+`GET /oauth2/auth` and reads the access token back from oauth2-proxy's
+`X-Auth-Request-Access-Token` response header (`oauth2-proxy.cfg` sets
+`set_xauthrequest=true` + `pass_access_token=true` for exactly this). No
+separate login step inside the plugin.
+
+**Assumption for real deployments**: this only lets the plugin call the real
+Gebo.ai installation's API as the logged-in user if that installation trusts
+the *same* Keycloak realm/issuer this sandbox's Keycloak represents - i.e.
+the sandbox's realm needs to be (or be federated with) whatever
+Keycloak/OIDC issuer Gebo.ai's own `ai.gebo.security.oauth2configs` is
+configured to accept (see the `keycloakClient`/`MainRealm` test config in
+`gebo.apps.parent/gebo.ai.app`'s `application.yml`). This sandbox ships its
+own standalone realm (`onlyoffice-dev`) for local plugin development only.
+
+### Building and pointing it at a real Gebo.ai / brain
+
+```
+cd plugin/gebo-ai-assistant
+npm install
+npm run build          # bundles brain-ai-js-client into vendor/brain-client.bundle.js
+```
+
+`gebo.js-plugins/brain/brain-ai-js-client` must already be generated (see
+`gebo.js-plugins/README.md`) - the build step bundles directly from that
+generated source, it doesn't vendor a copy.
+
+By default the plugin calls `http://localhost:13001/brain` (the brain
+microservice's own local dev address - this sandbox does **not** run brain
+itself, only the document-server/Keycloak/oauth2-proxy pieces). Point it at
+a different installation with a `?geboBaseUrl=` query param on however this
+plugin's URL is reached by the browser, or edit the default in `app.js`.
+
 ## Cleanup
 
 ```

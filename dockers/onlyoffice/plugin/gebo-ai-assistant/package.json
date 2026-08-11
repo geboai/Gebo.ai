@@ -1,0 +1,12 @@
+{
+  "name": "gebo-ai-assistant-onlyoffice-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build step for the Gebo AI Assistant ONLYOFFICE plugin: bundles the generated brain-ai-js-client stub into a browser-loadable script.",
+  "scripts": {
+    "build": "esbuild ../../../../gebo.js-plugins/brain/brain-ai-js-client/src/index.js --bundle --format=iife --global-name=BrainClient --outfile=vendor/brain-client.bundle.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

@@ -72,6 +72,11 @@ services:
       # bind-mounting sdkjs-plugins directly would obscure the server's
       # built-in plugins that already live there.
       - ./plugin/hello-world:/var/www/onlyoffice/documentserver/sdkjs-plugins/hello-world:ro
+      # RAG chat + semantic search + "elaborate the selection" against Gebo.ai,
+      # in and out of document context - see plugin/gebo-ai-assistant/README.md.
+      # Run `npm install && npm run build` in that folder first (bundles the
+      # generated brain-ai-js-client stub); it's a build artifact, not checked in.
+      - ./plugin/gebo-ai-assistant:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant:ro
     networks:
       default: {}
 

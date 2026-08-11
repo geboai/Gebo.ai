@@ -82,6 +82,49 @@ expect it to appear — Docker bind-mounts are per-path. Give it its own
 Never bind-mount `sdkjs-plugins` itself (rather than a subfolder of it) — that
 would obscure the server's own built-in plugins that already live there.
 
+## gebo-ai-assistant: the real plugin, built on the brain JS stub
+
+`plugin/gebo-ai-assistant/` is a working plugin - not just a scaffold - built
+directly on the generated `brain-ai-js-client` stub (see
+`gebo.js-plugins/brain/`), reproducing what
+`gebo.ui/projects/gebo-ai-reusable-ui/src/lib/controls/chat-control`
+(`gebo-ai-reusable-chat.component.ts`) does, adapted to the plugin sandbox.
+It's identical to `dockers/onlyoffice/plugin/gebo-ai-assistant` (same brain
+backend either way) - see that folder's README for the full breakdown of
+both tabs, why the non-streaming API methods are used, and the pipeline
+entry point (`GeboChatPipelinesController.executeDefaultChatPipeline`)
+matching the real reference control's actual behavior.
+
+### The current user's token, via the SSO gate already in place
+
+Same mechanism as the ONLYOFFICE sandbox: `auth.js` does a same-origin
+`GET /oauth2/auth` and reads the access token back from oauth2-proxy's
+`X-Auth-Request-Access-Token` response header (`oauth2-proxy.cfg` here sets
+`set_xauthrequest=true` + `pass_access_token=true` for exactly this). No
+separate login step inside the plugin - see the ONLYOFFICE sandbox's README
+for the real-deployment assumption this relies on (the sandbox's Keycloak
+realm needs to be, or be federated with, whatever issuer Gebo.ai's own
+`ai.gebo.security.oauth2configs` trusts). This sandbox ships its own
+standalone realm (`euro-office-dev`) for local plugin development only.
+
+### Building and pointing it at a real Gebo.ai / brain
+
+```
+cd plugin/gebo-ai-assistant
+npm install
+npm run build          # bundles brain-ai-js-client into vendor/brain-client.bundle.js
+```
+
+`gebo.js-plugins/brain/brain-ai-js-client` must already be generated (see
+`gebo.js-plugins/README.md`) - the build step bundles directly from that
+generated source, it doesn't vendor a copy.
+
+By default the plugin calls `http://localhost:13001/brain` (the brain
+microservice's own local dev address - this sandbox does **not** run brain
+itself, only the document-server/Keycloak/oauth2-proxy pieces). Point it at
+a different installation with a `?geboBaseUrl=` query param on however this
+plugin's URL is reached by the browser, or edit the default in `app.js`.
+
 ## Cleanup
 
 ```

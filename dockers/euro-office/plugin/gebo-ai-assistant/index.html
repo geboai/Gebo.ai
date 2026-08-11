@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gebo AI Assistant</title>
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Gebo AI Assistant</h1>
+
+    <div class="profile-row">
+        <label for="profileSelect">Chat profile</label>
+        <select id="profileSelect"></select>
+    </div>
+
+    <div class="tabs">
+        <div id="tab-doc" class="tab active">This document</div>
+        <div id="tab-kb" class="tab">Knowledge base</div>
+    </div>
+
+    <!-- In-document context: search related content / elaborate the current selection -->
+    <div id="panel-doc" class="panel active">
+        <div class="row">
+            <button id="useSelectionBtn">Read selection</button>
+        </div>
+        <textarea id="docText" rows="4" placeholder="Selected document text appears here (or type/paste text directly)"></textarea>
+
+        <div class="row">
+            <button id="searchBtn">Search related content</button>
+        </div>
+        <div id="searchResults"></div>
+
+        <textarea id="instructions" rows="2" placeholder="Elaboration instructions (optional), e.g. &quot;make this more formal&quot; or &quot;summarize&quot;"></textarea>
+        <div class="row">
+            <button id="elaborateBtn">Elaborate</button>
+            <button id="insertBtn" class="secondary">Insert into document</button>
+        </div>
+        <div id="elaborateResult"></div>
+    </div>
+
+    <!-- Out-of-document context: chat with the knowledge base / document sharing system -->
+    <div id="panel-kb" class="panel">
+        <div id="kbMessages"></div>
+        <div class="kb-input-row">
+            <textarea id="kbInput" placeholder="Ask about your documents..."></textarea>
+            <button id="kbSendBtn">Send</button>
+        </div>
+        <div class="row">
+            <button id="kbNewChatBtn" class="secondary">New chat</button>
+        </div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <script src="vendor/brain-client.bundle.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
