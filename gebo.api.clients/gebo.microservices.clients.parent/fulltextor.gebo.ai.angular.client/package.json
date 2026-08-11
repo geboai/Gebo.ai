@@ -1,6 +1,6 @@
 ﻿{
   "name": "gebo-ai-fulltextor-client",
-  "version": "1.0.2.3",
+  "version": "1.0.2.4-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "build": "ng build gebo-fulltextor-api",
