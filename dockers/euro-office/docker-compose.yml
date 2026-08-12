@@ -66,17 +66,25 @@ services:
       JWT_SECRET: 232dfab767ecb811e9009b4256cf80c2b10526c65e7e7d82
       JWT_HEADER: Authorization
     volumes:
-      - documentserver-data:/var/www/onlyoffice/Data
-      - documentserver-log:/var/log/onlyoffice
+      - documentserver-data:/var/www/euro-office/Data
+      - documentserver-log:/var/log/euro-office
       # Mount ONLY a subfolder of sdkjs-plugins, never the directory itself -
       # bind-mounting sdkjs-plugins directly would obscure the server's
       # built-in plugins that already live there.
-      - ./plugin/hello-world:/var/www/onlyoffice/documentserver/sdkjs-plugins/hello-world:ro
+      #
+      # NOTE: unlike the onlyoffice/documentserver image, this Euro-Office fork
+      # serves its web root from /var/www/euro-office/documentserver (not
+      # .../onlyoffice/...) - verified via `docker exec ... nginx` config, whose
+      # sdkjs-plugins location block aliases to /var/www/euro-office/documentserver/$2$3.
+      # Mounting under .../onlyoffice/... (as the sibling dockers/onlyoffice sandbox
+      # does) lands the files somewhere nginx never serves from - a 404 on every
+      # plugin asset that's easy to miss since the container still starts cleanly.
+      - ./plugin/hello-world:/var/www/euro-office/documentserver/sdkjs-plugins/hello-world:ro
       # RAG chat + semantic search + "elaborate the selection" against Gebo.ai,
       # in and out of document context - see plugin/gebo-ai-assistant/README.md.
       # Run `npm install && npm run build` in that folder first (bundles the
       # generated brain-ai-js-client stub); it's a build artifact, not checked in.
-      - ./plugin/gebo-ai-assistant:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant:ro
+      - ./plugin/gebo-ai-assistant:/var/www/euro-office/documentserver/sdkjs-plugins/gebo-ai-assistant:ro
     networks:
       default: {}
 
