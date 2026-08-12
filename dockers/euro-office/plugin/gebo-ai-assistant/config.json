@@ -6,6 +6,7 @@
     {
       "description": "Search and chat with your Gebo.ai knowledge base, in and out of the current document",
       "url": "index.html",
+      "icons": ["resources/icon.png", "resources/icon@2x.png"],
       "isViewer": false,
       "isVisual": true,
       "isModal": false,

@@ -71,6 +71,14 @@ button.secondary:hover { background: #ddd; }
   color: #666;
 }
 .status.error { color: #c0392b; }
+.llms-warning {
+  background: #fff8e1;
+  border: 1px solid #ffca28;
+  color: #7a5b00;
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-size: 12px;
+}
 body.busy { cursor: progress; }
 body.busy button { opacity: 0.6; pointer-events: none; }
 

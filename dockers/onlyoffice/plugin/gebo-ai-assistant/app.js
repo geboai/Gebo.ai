@@ -30,14 +30,15 @@
 
 var state = {
   apiClient: null,
-  profilesApi: null,
   pipelinesApi: null,
   ragChatApi: null,
   directChatApi: null,
   searchApi: null,
+  userChatsApi: null,
   currentProfileCode: null,
   currentKnowledgeBaseCodes: [],
-  userChatContextCode: null
+  userChatContextCode: null,
+  llmsSetupDone: true
 };
 
 function $(id) {
@@ -83,27 +84,43 @@ async function initClients() {
   // the monolith configured as an OAuth2 resource server: see README.md.
   state.apiClient.defaultHeaders["X-AuthType"] = "OAUTH2";
 
-  state.profilesApi = new window.BrainClient.GeboChatProfileLookupControllerApi(state.apiClient);
   state.pipelinesApi = new window.BrainClient.GeboChatPipelinesControllerApi(state.apiClient);
   state.ragChatApi = new window.BrainClient.GeboRagChatControllerApi(state.apiClient);
   state.directChatApi = new window.BrainClient.GeboChatControllerApi(state.apiClient);
   state.searchApi = new window.BrainClient.GeboUserKnowledgeBaseSemanticSearchControllerApi(state.apiClient);
+  state.userChatsApi = new window.BrainClient.GeboUserChatsControllerApi(state.apiClient);
+}
+
+/**
+ * Mirrors gebo-ai-rag-chat-section.component.ts's llmsSetupDone check
+ * (GeboUserChatsController/isMinimalLLMSSetupDone): warns instead of letting
+ * every chat/search/elaborate call fail one at a time when the administrator
+ * hasn't configured at least one chat model and one embedding model yet.
+ */
+async function checkLlmsSetup() {
+  var done = true;
+  try {
+    done = await state.userChatsApi.isMinimalLLMSSetupDone();
+  } catch (e) {
+    // Can't determine setup state (e.g. transient network error) - don't block
+    // usage on that, the calls themselves will surface their own errors.
+    done = true;
+  }
+  state.llmsSetupDone = done !== false;
+  $("llmsWarning").style.display = state.llmsSetupDone ? "none" : "block";
+  [$("searchBtn"), $("elaborateBtn"), $("kbSendBtn")].forEach(function (btn) {
+    btn.disabled = !state.llmsSetupDone;
+  });
 }
 
 async function loadProfiles() {
-  var page;
-  try {
-    page = await state.profilesApi.getAllChatProfileConfigurationLoookup({ page: 0, pageSize: 50 });
-  } catch (e) {
-    // A brand-new Gebo.ai installation with zero chat profiles configured hits a
-    // real backend bug here (GeboChatProfileLookupController.getAllChatProfileConfigurationLoookup
-    // 500s serializing an empty page - a pre-existing issue, not specific to this
-    // plugin). Degrade to "no profiles" rather than surfacing the raw 500 - from
-    // the plugin's point of view the two cases look the same to the user anyway.
-    setStatus("No chat profiles are configured on this Gebo.ai installation yet.", true);
-    return false;
-  }
-  var entries = (page && page.content) || [];
+  // Same endpoint gebo-ai-rag-chat-section.component.ts uses
+  // (geboRagChatControllerService.getChatProfiles() -> GET .../profiles), not the
+  // paginated GeboChatProfileLookupController lookup: that one wraps results in a
+  // Page and 500s serializing an empty page on a fresh installation. This endpoint
+  // returns a plain List<GChatProfileConfiguration> with no Page involved, so an
+  // empty result just comes back as [].
+  var entries = (await state.ragChatApi.getChatProfiles()) || [];
   var select = $("profileSelect");
   select.innerHTML = "";
   entries.forEach(function (entry) {
@@ -170,6 +187,7 @@ async function onUseSelection() {
 }
 
 async function onSearchRelated() {
+  if (!state.llmsSetupDone) return;
   var text = $("docText").value.trim();
   if (!text) {
     setStatus("Use “Read selection” first, or type text to search for.", true);
@@ -221,6 +239,7 @@ function renderSearchResults(results) {
 }
 
 async function onElaborate() {
+  if (!state.llmsSetupDone) return;
   var text = $("docText").value.trim();
   var instructions = $("instructions").value.trim();
   if (!text) {
@@ -279,6 +298,7 @@ function appendKbMessage(role, text) {
 }
 
 async function onSendKbMessage() {
+  if (!state.llmsSetupDone) return;
   var input = $("kbInput");
   var text = input.value.trim();
   if (!text || !state.currentProfileCode) return;
@@ -342,6 +362,7 @@ async function main() {
   setStatus("Connecting...");
   try {
     await initClients();
+    await checkLlmsSetup();
     var profilesLoaded = await loadProfiles();
     if (profilesLoaded) {
       setStatus("");
