@@ -38,7 +38,8 @@ var state = {
   currentProfileCode: null,
   currentKnowledgeBaseCodes: [],
   userChatContextCode: null,
-  llmsSetupDone: true
+  llmsSetupDone: true,
+  lastElaborationMarkdown: null
 };
 
 function $(id) {
@@ -58,6 +59,29 @@ function setBusy(busy) {
 /** Renders text safely (no HTML injection) into a container. */
 function renderText(container, text) {
   container.textContent = text || "";
+}
+
+/**
+ * Renders a model response's Markdown as real formatting (headings, bold/italic,
+ * lists, etc.) instead of showing the raw "**"/"#" source - there's no dedicated
+ * Markdown viewer in this panel otherwise, so without this the model's own
+ * formatting just reads as noise. Goes through the same sanitized
+ * GeboMarkdown.renderSafeHtml() used for document insertion (see pasteIntoDocument),
+ * so a prompt-injected <script>/onerror= payload from a RAG-retrieved document
+ * can't execute here either. Falls back to plain text if the bundle didn't load.
+ * Links open in a new tab so clicking one doesn't navigate the plugin panel away.
+ */
+function renderMarkdown(container, text) {
+  if (!(window.GeboMarkdown && typeof window.GeboMarkdown.renderSafeHtml === "function")) {
+    renderText(container, text);
+    return;
+  }
+  container.classList.add("md-content");
+  container.innerHTML = window.GeboMarkdown.renderSafeHtml(text);
+  container.querySelectorAll("a[href]").forEach(function (a) {
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+  });
 }
 
 function switchTab(tab) {
@@ -168,8 +192,25 @@ function getSelectedText() {
   });
 }
 
-function pasteIntoDocument(text) {
-  window.Asc.plugin.executeMethod("PasteText", [text]);
+/**
+ * Inserts a chat/elaboration response into the document, rendering its Markdown
+ * (the model always answers in Markdown - headings, bold/italic, lists) into real
+ * document-model formatting rather than dumping literal "**"/"#" characters.
+ * PasteHtml (used the same way by ONLYOFFICE's own built-in plugins, e.g.
+ * Highlight Code's syntax-highlighted paste) parses HTML into actual paragraphs/
+ * runs/styles; PasteText would just insert the raw Markdown source as plain text.
+ * Sanitized via the same GeboMarkdown.renderSafeHtml() the on-screen renderer uses
+ * (see renderMarkdown) - a prompt-injected <script>/onerror= payload shouldn't be
+ * pasted into the document any more than it should render on screen. Falls back to
+ * PasteText only if the bundle somehow failed to load, so a result is still
+ * insertable either way.
+ */
+function pasteIntoDocument(markdownText) {
+  if (window.GeboMarkdown && typeof window.GeboMarkdown.renderSafeHtml === "function") {
+    window.Asc.plugin.executeMethod("PasteHtml", [window.GeboMarkdown.renderSafeHtml(markdownText)]);
+  } else {
+    window.Asc.plugin.executeMethod("PasteText", [markdownText]);
+  }
 }
 
 async function onUseSelection() {
@@ -262,7 +303,12 @@ async function onElaborate() {
       streamResponse: false
     };
     var response = await state.directChatApi.chat(request);
-    renderText($("elaborateResult"), response.queryResponse || "");
+    // Keep the raw Markdown around separately from the rendered HTML: once
+    // renderMarkdown() replaces elaborateResult's content with rendered nodes,
+    // reading .textContent back out would give the flattened *visible* text
+    // ("bold" instead of "**bold**"), which is the wrong input for PasteHtml.
+    state.lastElaborationMarkdown = response.queryResponse || "";
+    renderMarkdown($("elaborateResult"), state.lastElaborationMarkdown);
     $("elaborateResult").classList.add("visible");
     setStatus("");
   } catch (e) {
@@ -273,9 +319,8 @@ async function onElaborate() {
 }
 
 function onInsertElaboration() {
-  var text = $("elaborateResult").textContent;
-  if (text) {
-    pasteIntoDocument(text);
+  if (state.lastElaborationMarkdown) {
+    pasteIntoDocument(state.lastElaborationMarkdown);
     setStatus("Inserted into the document.");
   }
 }
@@ -321,7 +366,7 @@ async function onSendKbMessage() {
     var pipelineBody = { request: request };
     var response = await state.pipelinesApi.executeDefaultChatPipeline(pipelineBody);
     state.userChatContextCode = response.userChatContextCode || state.userChatContextCode;
-    renderText(responseBody, response.queryResponse || "(empty response)");
+    renderMarkdown(responseBody, response.queryResponse || "(empty response)");
     setStatus("");
   } catch (e) {
     renderText(responseBody, "Error: " + (e.message || String(e)));

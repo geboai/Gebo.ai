@@ -2,11 +2,17 @@
   "name": "gebo-ai-assistant-onlyoffice-plugin",
   "version": "1.0.0",
   "private": true,
-  "description": "Build step for the Gebo AI Assistant ONLYOFFICE plugin: bundles the generated brain-ai-js-client stub into a browser-loadable script.",
+  "description": "Build step for the Gebo AI Assistant ONLYOFFICE plugin: bundles the generated brain-ai-js-client stub and the marked+DOMPurify Markdown renderer into browser-loadable scripts.",
   "scripts": {
-    "build": "esbuild ../../../../gebo.js-plugins/brain/brain-ai-js-client/src/index.js --bundle --format=iife --global-name=BrainClient --outfile=vendor/brain-client.bundle.js"
+    "build": "npm run build:brain-client && npm run build:markdown",
+    "build:brain-client": "esbuild ../../../../gebo.js-plugins/brain/brain-ai-js-client/src/index.js --bundle --format=iife --global-name=BrainClient --outfile=vendor/brain-client.bundle.js",
+    "build:markdown": "esbuild --bundle --format=iife --global-name=GeboMarkdown --outfile=vendor/markdown.bundle.js markdown-entry.js"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"
+  },
+  "dependencies": {
+    "marked": "^12.0.2",
+    "dompurify": "^3.1.0"
   }
 }
