@@ -44,6 +44,7 @@ import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
 import ai.gebo.security.services.impl.DirectoryBackedUserDetailsService;
@@ -242,6 +243,7 @@ public class GeboAISecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final UserDetailsService directoryBackedUserDetailsService;
 	private final AuthenticationSuccessHandler authenticationSuccessHandler;
+	private final IGSecurityDirectory securityDirectory;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -258,10 +260,12 @@ public class GeboAISecurityConfig {
 			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService,
 			@Qualifier("customUserDetailsService") UserDetailsService userDetailsService,
 			DirectoryBackedUserDetailsService directoryBackedUserDetailsService,
-			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
+			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
+			IGSecurityDirectory securityDirectory) {
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		this.directoryBackedUserDetailsService = directoryBackedUserDetailsService;
+		this.securityDirectory = securityDirectory;
 		Oauth2DynamicClientRegistrationRepository dynamicClient = new Oauth2DynamicClientRegistrationRepository(
 				oauth2ConfigurationService);
 		this.clientRegistrationRepository = dynamicClient;
@@ -426,7 +430,8 @@ public class GeboAISecurityConfig {
 	@Bean
 	public IGHttpRequestAuthenticationManagerResolver authenticationManagerResolver() {
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
-				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService);
+				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService, securityConfig,
+				securityDirectory);
 	}
 
 }

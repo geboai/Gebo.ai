@@ -30,6 +30,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.model.UserInfos;
@@ -153,6 +154,42 @@ public class RestSecurityDirectory implements IGSecurityDirectory {
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 						.bodyValue(request).retrieve().bodyToMono(Boolean.class).block());
 		return Boolean.TRUE.equals(matches);
+	}
+
+	@Override
+	public UserInfos createUserIfNotExists(String username, Map<String, Object> attributes,
+			AuthProvider authProvider) {
+		// A write, so - per GeboTtlCache's own documented convention - clear L2 after it,
+		// and drop this user's L1 (request-scope) entry too: the typical caller shape is
+		// "findUserByUsername -> null -> createUserIfNotExists -> findUserByUsername
+		// again" within ONE request (see GJwtAuthenticationConverter), and without
+		// clearing L1 that retry would replay the request-scoped negative result cached
+		// by the first call instead of actually asking again.
+		clearCachedLookup(username);
+		Map<String, Object> request = new LinkedHashMap<>();
+		request.put("username", username);
+		request.put("attributes", attributes);
+		request.put("authProvider", authProvider);
+		UserInfos created = call("createUserIfNotExists",
+				() -> webClient.post().uri(uri("createUserIfNotExists")).headers(this::applyCallerToken)
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+						.bodyValue(request).retrieve().bodyToMono(UserInfosImpl.class).block());
+		clearCachedLookup(username);
+		return created;
+	}
+
+	/** Drops this user's L1 entry and clears L2 entirely (its only invalidation op). */
+	private void clearCachedLookup(String username) {
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		if (requestAttributes != null) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> requestCache = (Map<String, Object>) requestAttributes.getAttribute(CACHE_ATTRIBUTE,
+					RequestAttributes.SCOPE_REQUEST);
+			if (requestCache != null) {
+				requestCache.remove("user:" + username);
+			}
+		}
+		cache.clear();
 	}
 
 	// --- Internals ----------------------------------------------------------

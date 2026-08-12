@@ -9,6 +9,7 @@
 
 package ai.gebo.security.directory.mongo.config;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.IGeboSystemUserService;
 
 /**
@@ -53,8 +55,13 @@ public class GeboMongoSecurityDirectoryAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(IGSecurityDirectory.class)
 	public MongoSecurityDirectory mongoSecurityDirectory(UserRepository usersRepo, UsersGroupRepository groupsRepo,
-			PasswordEncoder passwordEncoder, IGeboSystemUserService systemUserService) {
-		return new MongoSecurityDirectory(usersRepo, groupsRepo, passwordEncoder, systemUserService);
+			PasswordEncoder passwordEncoder, IGeboSystemUserService systemUserService,
+			// ObjectProvider, not IGUsersAdminService directly: that bean depends (through
+			// AclGrantedAccessorServiceImpl) on IGSecurityDirectory itself, so a direct
+			// dependency here is circular. See MongoSecurityDirectory's own field comment.
+			ObjectProvider<IGUsersAdminService> userAdminService) {
+		return new MongoSecurityDirectory(usersRepo, groupsRepo, passwordEncoder, systemUserService,
+				userAdminService);
 	}
 
 	/**

@@ -10,7 +10,9 @@
 package ai.gebo.security.services;
 
 import java.util.List;
+import java.util.Map;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.model.UserInfos;
 
@@ -96,4 +98,26 @@ public interface IGSecurityDirectory {
 	 * @return {@code true} if it matches
 	 */
 	boolean checkPassword(String username, String rawPassword);
+
+	/**
+	 * Creates the user if it does not already exist, then returns it either way -
+	 * the auto-provisioning counterpart of {@link #findUserByUsername} for the
+	 * OAuth2 bearer-token (resource-server) authentication path, mirroring what
+	 * {@code GOAuth2UserService}/{@code ReactiveGOAuth2UserService} already do for
+	 * the interactive {@code oauth2Login} redirect flow via
+	 * {@code IGUsersAdminService.createUserIfNotExists} - except that flow only ever
+	 * runs on a service that owns the user store (heimdall/monolith), while a bearer
+	 * token is validated on every microservice. This method is the seam that lets
+	 * the decision ("should this identity be auto-created?", governed by
+	 * {@code ai.gebo.security.loginPolicy == TRUST_EVERY_OAUTH_IDENTITY}) stay with
+	 * the caller while the actual write always lands on the one real user store,
+	 * exactly like every other method here.
+	 *
+	 * @param username     the username (the user's email / id)
+	 * @param attributes   claims/attributes from the token or OAuth2 userinfo
+	 *                     response, stored as the new user's custom info
+	 * @param authProvider which provider this identity is being provisioned for
+	 * @return the existing or newly created user; never {@code null}
+	 */
+	UserInfos createUserIfNotExists(String username, Map<String, Object> attributes, AuthProvider authProvider);
 }

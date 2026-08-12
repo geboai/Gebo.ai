@@ -15,8 +15,16 @@ public class SecurityHeaderUtil {
 	public static final String AUTHORIZATION_TENANT_ID = "X-tenant-id";
 	public static final String AUTHORIZATION = "Authorization";
 
+	/**
+	 * {@link #AUTO} is not a real caller-declared type: it is the sentinel used when
+	 * {@code X-AuthType} is absent from the request, telling the resolver to sniff the
+	 * token itself (structure + claims) rather than assume {@link #LOCAL_JWT} as it
+	 * used to unconditionally. A caller that sends the header explicitly still gets
+	 * exactly the behavior it asks for - {@code AUTO} is only ever produced here, never
+	 * accepted as an incoming header value (see {@link #getSecurityHeaderData}).
+	 */
 	public static enum XAuthType {
-		OAUTH2, LOCAL_JWT
+		OAUTH2, LOCAL_JWT, AUTO
 	};
 
 	public static final String DEFAULT_TENANT = "default-tenant";
@@ -33,7 +41,11 @@ public class SecurityHeaderUtil {
 			LOGGER.debug("Logged received header");
 		}
 		String token = getTokenFromRequest(request);
-		String authType = getHeaderOrDefault(request, AUTHORIZATION_TYPE, XAuthType.LOCAL_JWT.name());
+		// Absent header -> AUTO (sniff the token), not an assumed LOCAL_JWT. A caller
+		// that sends an explicit, valid value (LOCAL_JWT/OAUTH2) is still honored as-is;
+		// AUTO can only be produced here, it is never a value a caller can request that
+		// then skips sniffing.
+		String authType = getHeaderOrDefault(request, AUTHORIZATION_TYPE, XAuthType.AUTO.name());
 		String authProviderId = getHeaderOrDefault(request, AUTHORIZATION_PROVIDER_ID, DEFAULT_PROVIDER_ID);
 		String authTenantId = getHeaderOrDefault(request, AUTHORIZATION_TENANT_ID, DEFAULT_TENANT);
 		return new SecurityHeaderData(token, XAuthType.valueOf(authType), authProviderId, authTenantId,

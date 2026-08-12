@@ -10,6 +10,7 @@
 package ai.gebo.microservices.security.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.microservices.cluster.ClusterParticipantsGuard;
 import ai.gebo.microservices.cluster.GeboClusterParticipants;
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.model.UserInfos;
@@ -117,6 +119,25 @@ public class SecurityDirectoryClusterController {
 		return directory.checkPassword(checkRequest.getUsername(), checkRequest.getPassword());
 	}
 
+	/**
+	 * Auto-provisioning for the OAuth2 bearer-token authentication path (see
+	 * {@code GJwtAuthenticationConverter} in {@code gebo.architecture.security}),
+	 * which - unlike the interactive {@code oauth2Login} redirect flow - runs on
+	 * every microservice, not only heimdall/monolith. The decision to call this at
+	 * all (governed by {@code ai.gebo.security.loginPolicy}) is made by the caller;
+	 * this endpoint performs the write unconditionally, exactly like the local
+	 * {@link IGSecurityDirectory#createUserIfNotExists} it delegates to.
+	 */
+	@PostMapping(value = "createUserIfNotExists", consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public UserInfosImpl createUserIfNotExists(@RequestBody @NotNull CreateUserIfNotExistsRequest createRequest,
+			HttpServletRequest request) {
+		ClusterParticipantsGuard.check(participants, request);
+		UserInfos user = directory.createUserIfNotExists(createRequest.getUsername(), createRequest.getAttributes(),
+				createRequest.getAuthProvider());
+		return user == null ? null : toImpl(user);
+	}
+
 	private static UserInfosImpl toImpl(UserInfos user) {
 		if (user instanceof UserInfosImpl impl) {
 			return impl;
@@ -149,6 +170,37 @@ public class SecurityDirectoryClusterController {
 
 		public void setPassword(String password) {
 			this.password = password;
+		}
+	}
+
+	/** Body of {@code createUserIfNotExists}. */
+	public static class CreateUserIfNotExistsRequest {
+		private String username;
+		private Map<String, Object> attributes;
+		private AuthProvider authProvider;
+
+		public String getUsername() {
+			return username;
+		}
+
+		public void setUsername(String username) {
+			this.username = username;
+		}
+
+		public Map<String, Object> getAttributes() {
+			return attributes;
+		}
+
+		public void setAttributes(Map<String, Object> attributes) {
+			this.attributes = attributes;
+		}
+
+		public AuthProvider getAuthProvider() {
+			return authProvider;
+		}
+
+		public void setAuthProvider(AuthProvider authProvider) {
+			this.authProvider = authProvider;
 		}
 	}
 }
