@@ -91,7 +91,18 @@ async function initClients() {
 }
 
 async function loadProfiles() {
-  var page = await state.profilesApi.getAllChatProfileConfigurationLoookup({ page: 0, pageSize: 50 });
+  var page;
+  try {
+    page = await state.profilesApi.getAllChatProfileConfigurationLoookup({ page: 0, pageSize: 50 });
+  } catch (e) {
+    // A brand-new Gebo.ai installation with zero chat profiles configured hits a
+    // real backend bug here (GeboChatProfileLookupController.getAllChatProfileConfigurationLoookup
+    // 500s serializing an empty page - a pre-existing issue, not specific to this
+    // plugin). Degrade to "no profiles" rather than surfacing the raw 500 - from
+    // the plugin's point of view the two cases look the same to the user anyway.
+    setStatus("No chat profiles are configured on this Gebo.ai installation yet.", true);
+    return false;
+  }
   var entries = (page && page.content) || [];
   var select = $("profileSelect");
   select.innerHTML = "";
@@ -104,9 +115,10 @@ async function loadProfiles() {
   if (entries.length > 0) {
     state.currentProfileCode = entries[0].code;
     await loadKnowledgeBases(state.currentProfileCode);
-  } else {
-    setStatus("No chat profiles visible to this user.", true);
+    return true;
   }
+  setStatus("No chat profiles visible to this user.", true);
+  return false;
 }
 
 async function loadKnowledgeBases(profileCode) {
@@ -330,8 +342,10 @@ async function main() {
   setStatus("Connecting...");
   try {
     await initClients();
-    await loadProfiles();
-    setStatus("");
+    var profilesLoaded = await loadProfiles();
+    if (profilesLoaded) {
+      setStatus("");
+    }
   } catch (e) {
     setStatus(e.message || String(e), true);
   } finally {
