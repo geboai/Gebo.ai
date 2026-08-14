@@ -26,6 +26,12 @@
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
+		<!-- Bouncy Castle expects its bc* artifacts to move as a matched set; see the
+		     dependencyManagement entries below. bcprov ships an extra patch release
+		     (1.85.2) that the other artifacts don't, so the provider carries its own
+		     property — that pairing is the combination BC itself publishes. -->
+		<bouncycastle.version>1.85</bouncycastle.version>
+		<bouncycastle.prov.version>1.85.2</bouncycastle.prov.version>
 		<maven.compiler.release></maven.compiler.release>
 	</properties>
 	<modules>
@@ -201,6 +207,38 @@
 				<groupId>com.squareup.okio</groupId>
 				<artifactId>okio-jvm</artifactId>
 				<version>3.16.4</version>
+			</dependency>
+			<!-- gebo.architecture.crypting, gebo.secrets.services and gebo.secrets.impl
+			     each hardcoded their own bcprov/bcpkix version (1.84 vs 1.78.1), so
+			     nearest-wins mediation put bcprov 1.78.1 on the assembled app's runtime
+			     classpath next to bcpkix 1.81.1 and bcpg 1.84 — an unsupported mix, and
+			     an outdated provider the module poms gave no hint of. Managing all five
+			     bc* artifacts here pins the transitive ones (bcutil, bcjmail) too, so
+			     the set can only move together. -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk18on</artifactId>
+				<version>${bouncycastle.prov.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpkix-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpg-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcutil-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcjmail-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
