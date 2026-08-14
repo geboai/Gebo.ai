@@ -16,14 +16,14 @@
 	-->
 	<appender name="SecurityLog"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS}/security-log.json</file>
+		<file>${LOGS}/security-log.jsonl</file>
 		<append>true</append>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%msg%n</Pattern>
 		</encoder>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOGS}/archived/security-log-%d{yyyy-MM-dd}.%i.json.gz
+			<fileNamePattern>${LOGS}/archived/security-log-%d{yyyy-MM-dd}.%i.jsonl.gz
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
