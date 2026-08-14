@@ -29,6 +29,7 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockRankerModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockRankerModelConfig;
 import ai.gebo.llms.aws_bedrock.services.BedrockRankerModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Admin controller for AWS Bedrock reranking model configurations.
@@ -42,8 +43,10 @@ public class BedrockRankerModelsConfigurationController extends
 
 	public BedrockRankerModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGRankerModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			BedrockRankerModelConfigurationSupportService supportService) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockRankerModelConfig.class, supportService);
+			BedrockRankerModelConfigurationSupportService supportService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockRankerModelConfig.class, supportService,
+				securityAuditLoggerService);
 	}
 
 	@PostMapping(value = "insertBedrockRankerModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

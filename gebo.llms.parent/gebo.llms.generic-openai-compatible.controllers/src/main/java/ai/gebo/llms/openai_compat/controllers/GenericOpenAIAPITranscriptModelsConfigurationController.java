@@ -31,6 +31,7 @@ import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -52,8 +53,9 @@ public class GenericOpenAIAPITranscriptModelsConfigurationController extends
 	public GenericOpenAIAPITranscriptModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGTranscriptModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
 			IGTranscriptModelConfigurationSupportServiceRepositoryPattern supportServiceRepoPattern,
-			GenericOpenAICompatibleProvidersConfig config) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPITranscriptModelConfig.class);
+			GenericOpenAICompatibleProvidersConfig config,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPITranscriptModelConfig.class, securityAuditLoggerService);
 		this.supportServiceRepoPattern = supportServiceRepoPattern;
 		this.config = config;
 	}

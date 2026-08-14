@@ -26,6 +26,7 @@ import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIRankerModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -38,8 +39,9 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 	public GenericOpenAIRankerModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGRankerModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
 			IGRankerModelConfigurationSupportServiceRepositoryPattern supportServiceRepoPattern,
-			GenericOpenAICompatibleProvidersConfig config) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIRankerModelConfig.class);
+			GenericOpenAICompatibleProvidersConfig config,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIRankerModelConfig.class, securityAuditLoggerService);
 		this.supportServiceRepoPattern = supportServiceRepoPattern;
 		this.config = config;
 	}

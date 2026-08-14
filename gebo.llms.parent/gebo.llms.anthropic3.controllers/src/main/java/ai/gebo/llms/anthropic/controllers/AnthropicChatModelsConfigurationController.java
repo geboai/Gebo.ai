@@ -29,6 +29,7 @@ import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
 import ai.gebo.llms.anthropic.services.AnthropicChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -48,8 +49,10 @@ public class AnthropicChatModelsConfigurationController extends
 
 	public AnthropicChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			AnthropicChatModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GAnthropicChatModelConfig.class, ifaceType);
+			AnthropicChatModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GAnthropicChatModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 		// TODO Auto-generated constructor stub
 	}
 

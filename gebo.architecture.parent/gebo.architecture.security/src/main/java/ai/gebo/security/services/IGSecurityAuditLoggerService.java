@@ -23,13 +23,16 @@ public interface IGSecurityAuditLoggerService {
 		private final String correlationId;
 		private final String timestamp;
 		private final String stackPoint;
+		private final String httpMethod;
+		private final String requestUri;
 	}
 
 	@Data
 	public static class SecurityEvent extends BasicSecurityEvent {
 		public SecurityEvent(ArchitectureType architectureType, String userId, String sourceIp, String application,
-				String correlationId, String timestamp, String stackPoint) {
-			super(architectureType, userId, sourceIp, application, correlationId, timestamp, stackPoint);
+				String correlationId, String timestamp, String stackPoint, String httpMethod, String requestUri) {
+			super(architectureType, userId, sourceIp, application, correlationId, timestamp, stackPoint, httpMethod,
+					requestUri);
 
 		}
 

@@ -29,6 +29,7 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockTextToSpeechModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockTextToSpeechModelConfig;
 import ai.gebo.llms.aws_bedrock.services.BedrockTextToSpeechModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Admin controller for AWS (Amazon Polly) text-to-speech model configurations.
@@ -42,8 +43,10 @@ public class BedrockTextToSpeechModelsConfigurationController extends
 
 	public BedrockTextToSpeechModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGTextToSpeechModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			BedrockTextToSpeechModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockTextToSpeechModelConfig.class, ifaceType);
+			BedrockTextToSpeechModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockTextToSpeechModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 	}
 
 	@PostMapping(value = "insertBedrockTextToSpeechModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

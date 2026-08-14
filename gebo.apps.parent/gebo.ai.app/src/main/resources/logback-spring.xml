@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<property name="LOGS" value="${GEBO_LOG_BASE:-logs}" />
+	<property name="SECURITY_LOG_RETENTION_DAYS" value="${SECURITY_LOG_RETENTION_DAYS:-365}" />
+	<property name="SECURITY_LOG_TOTAL_SIZE_CAP" value="${SECURITY_LOG_TOTAL_SIZE_CAP:-10GB}" />
+	<!--
+		Dedicated, append-only, rotating sink for the "security-log" logger
+		(ai.gebo.security.services.SecurityAuditConstraints.SECURITY_LOG),
+		fed exclusively by IGSecurityAuditLoggerService. Each log line is
+		already a complete JSON object (GSecurityAuditLoggerServiceImpl
+		serializes the SecurityEvent with Jackson before logging), so the
+		encoder here emits nothing but that message - no timestamp/level
+		prefix - keeping every line valid standalone JSON for Wazuh's
+		json log_format decoder. additivity="false" on the logger below
+		keeps these events out of the main application log/console.
+	-->
+	<appender name="SecurityLog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS}/security-log.json</file>
+		<append>true</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%msg%n</Pattern>
+		</encoder>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS}/archived/security-log-%d{yyyy-MM-dd}.%i.json.gz
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>${SECURITY_LOG_RETENTION_DAYS}</maxHistory>
+			<totalSizeCap>${SECURITY_LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+		</rollingPolicy>
+	</appender>
 	<appender name="Console"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
@@ -85,6 +117,9 @@
 	<logger name="ai.gebo.security" level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
+	</logger>
+	<logger name="security-log" level="INFO" additivity="false">
+		<appender-ref ref="SecurityLog" />
 	</logger>
 	<logger name="ai.gebo.llms" level="DEBUG"
 		additivity="false">

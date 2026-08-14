@@ -29,6 +29,7 @@ import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelConfig;
 import ai.gebo.llms.google_vertex.services.GoogleVertexChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments REST controller for managing Google Vertex AI chat
@@ -46,8 +47,10 @@ public class GoogleVertexChatModelsConfigurationController extends
 
 	public GoogleVertexChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			GoogleVertexChatModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GGoogleVertexChatModelConfig.class, ifaceType);
+			GoogleVertexChatModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GGoogleVertexChatModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 
 	}
 

@@ -48,6 +48,7 @@ public class GSecurityAuditLoggerServiceImpl implements IGSecurityAuditLoggerSer
 
 		return new SecurityEvent(applicationArchitecture.getArchitecture(), MDC.get(SecurityAuditConstraints.USERID),
 				MDC.get(SecurityAuditConstraints.CLIENT_IP), applicationName,
-				MDC.get(SecurityAuditConstraints.CORRELATION_ID), Instant.now().toString(), getCallers());
+				MDC.get(SecurityAuditConstraints.CORRELATION_ID), Instant.now().toString(), getCallers(),
+				MDC.get(SecurityAuditConstraints.HTTP_METHOD), MDC.get(SecurityAuditConstraints.REQUEST_URI));
 	}
 }

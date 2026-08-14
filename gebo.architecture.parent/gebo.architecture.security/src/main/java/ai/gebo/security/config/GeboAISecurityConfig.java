@@ -31,6 +31,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.util.ClassUtils;
@@ -50,6 +51,8 @@ import ai.gebo.security.services.JwtAuthenticationEntryPoint;
 import ai.gebo.security.services.RequestAuditFilter;
 import ai.gebo.security.services.impl.DirectoryBackedUserDetailsService;
 import ai.gebo.security.services.impl.GHttpRequestAuthenticationManagerResolverImpl;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.impl.GOAuth2AuthenticationFailureHandler;
 import ai.gebo.security.services.impl.GOAuth2AuthenticationSuccessHandler;
 import ai.gebo.security.services.impl.GOAuth2UserService;
 import ai.gebo.security.services.impl.GOauth2AuthorizedClientService;
@@ -189,6 +192,7 @@ public class GeboAISecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final UserDetailsService directoryBackedUserDetailsService;
 	private final AuthenticationSuccessHandler authenticationSuccessHandler;
+	private final AuthenticationFailureHandler authenticationFailureHandler;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -205,7 +209,8 @@ public class GeboAISecurityConfig {
 			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService,
 			@Qualifier("customUserDetailsService") UserDetailsService userDetailsService,
 			DirectoryBackedUserDetailsService directoryBackedUserDetailsService,
-			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
+			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		this.directoryBackedUserDetailsService = directoryBackedUserDetailsService;
@@ -233,7 +238,8 @@ public class GeboAISecurityConfig {
 		this.point = point;
 		this.cryptService = cryptService;
 		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler(
-				backendOauth2LoginSPASupportService);
+				backendOauth2LoginSPASupportService, securityAuditLoggerService);
+		this.authenticationFailureHandler = new GOAuth2AuthenticationFailureHandler(securityAuditLoggerService);
 
 	}
 
@@ -355,6 +361,7 @@ public class GeboAISecurityConfig {
 			configBuilder = configBuilder.oauth2Login(oauth2 -> oauth2
 					.clientRegistrationRepository(clientRegistrationRepository)
 					.authorizedClientService(oauth2AuthorizedClientService).successHandler(authenticationSuccessHandler)
+					.failureHandler(authenticationFailureHandler)
 					.authorizationEndpoint(
 							auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
 					.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))

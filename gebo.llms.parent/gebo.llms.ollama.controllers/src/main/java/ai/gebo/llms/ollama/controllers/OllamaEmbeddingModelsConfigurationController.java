@@ -29,6 +29,7 @@ import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelConfig;
 import ai.gebo.llms.ollama.services.OllamaEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments Controller for managing Ollama embedding model
@@ -46,9 +47,11 @@ public class OllamaEmbeddingModelsConfigurationController extends
 
 	public OllamaEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			OllamaEmbeddingModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GOllamaEmbeddingModelConfig.class, ifaceType);
-		 
+			OllamaEmbeddingModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOllamaEmbeddingModelConfig.class, ifaceType,
+				securityAuditLoggerService);
+
 	}
 
 	/**

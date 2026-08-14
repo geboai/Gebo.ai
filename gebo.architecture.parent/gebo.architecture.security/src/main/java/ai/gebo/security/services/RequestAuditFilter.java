@@ -11,6 +11,15 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
 import org.springframework.boot.web.servlet.FilterRegistration;
+import org.springframework.stereotype.Component;
+
+// @FilterRegistration only customizes registration metadata for a bean that
+// already exists - it has no @Component meta-annotation, so without an
+// explicit @Component here this class is never picked up by component
+// scanning and GeboAISecurityConfig.securityFilterChain(..., RequestAuditFilter)
+// fails to autowire (verified: app context refused to start with
+// "No qualifying bean of type 'ai.gebo.security.services.RequestAuditFilter'").
+@Component
 @FilterRegistration
 public class RequestAuditFilter implements Filter {
 

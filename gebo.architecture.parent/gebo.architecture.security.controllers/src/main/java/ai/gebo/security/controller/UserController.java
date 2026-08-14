@@ -32,7 +32,10 @@ import ai.gebo.security.model.UserInfo;
 import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -52,6 +55,8 @@ public class UserController {
 	private PasswordEncoder passwordEncoder; // Password encoder for handling password encryption
 	@Autowired
 	private IGSecurityService securityService; // Security service for accessing additional security features
+	@Autowired
+	private IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	/**
 	 * Retrieves the current user's information based on the provided credentials.
@@ -124,25 +129,38 @@ public class UserController {
 	@PostMapping(value = "changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ChangePasswordResponse changePassword(@Valid @RequestBody ChangePasswordParam param,
 			@CurrentUser UserPrincipal userPrincipal) {
-
-		if (param.username != null && userPrincipal != null && param.username.equals(userPrincipal.getUsername())) {
-			Optional<User> userOpt = userRepository.findById(userPrincipal.getUsername());
-			if (userOpt.isEmpty())
-				throw new RuntimeException();
-			else {
-				ChangePasswordResponse response = new ChangePasswordResponse();
-				User user = userOpt.get();
-				String encodeOld = passwordEncoder.encode(param.oldPassword);
-				response.wrongPassword = !encodeOld.equals(user.getPassword());
-				response.newPasswordNeverMatch = !param.newPassword.equals(param.newPassword1);
-				if ((!response.wrongPassword) && (!response.newPasswordNeverMatch)) {
-					user.setPassword(passwordEncoder.encode(param.newPassword));
-					userRepository.save(user);
-					response.ok = true;
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(SecurityAuditTaxonomy.Action.PASSWORD_CHANGE_SELF);
+		event.setResourceId(param != null ? param.username : null);
+		try {
+			if (param.username != null && userPrincipal != null && param.username.equals(userPrincipal.getUsername())) {
+				Optional<User> userOpt = userRepository.findById(userPrincipal.getUsername());
+				if (userOpt.isEmpty())
+					throw new RuntimeException();
+				else {
+					ChangePasswordResponse response = new ChangePasswordResponse();
+					User user = userOpt.get();
+					String encodeOld = passwordEncoder.encode(param.oldPassword);
+					response.wrongPassword = !encodeOld.equals(user.getPassword());
+					response.newPasswordNeverMatch = !param.newPassword.equals(param.newPassword1);
+					if ((!response.wrongPassword) && (!response.newPasswordNeverMatch)) {
+						user.setPassword(passwordEncoder.encode(param.newPassword));
+						userRepository.save(user);
+						response.ok = true;
+					}
+					event.setOutcome(
+							response.ok ? SecurityAuditTaxonomy.Outcome.SUCCESS : SecurityAuditTaxonomy.Outcome.FAILURE);
+					securityAuditLoggerService.log(event);
+					return response;
 				}
-				return response;
-			}
-		} else
-			throw new RuntimeException();
+			} else
+				throw new RuntimeException();
+		} catch (RuntimeException e) {
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			securityAuditLoggerService.log(event);
+			throw e;
+		}
 	}
 }
