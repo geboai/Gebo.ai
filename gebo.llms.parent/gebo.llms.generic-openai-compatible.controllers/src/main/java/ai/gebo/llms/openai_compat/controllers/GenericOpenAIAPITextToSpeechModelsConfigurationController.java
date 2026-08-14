@@ -31,6 +31,7 @@ import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -52,8 +53,9 @@ public class GenericOpenAIAPITextToSpeechModelsConfigurationController extends
 	public GenericOpenAIAPITextToSpeechModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGTextToSpeechModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
 			IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern supportServiceRepoPattern,
-			GenericOpenAICompatibleProvidersConfig config) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPITextToSpeechModelConfig.class);
+			GenericOpenAICompatibleProvidersConfig config,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPITextToSpeechModelConfig.class, securityAuditLoggerService);
 		this.supportServiceRepoPattern = supportServiceRepoPattern;
 		this.config = config;
 	}

@@ -23,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import lombok.AllArgsConstructor;
 
 /**
@@ -40,8 +41,9 @@ public class BaseRankerModelsConfigurationCRUDController<RankerModelType extends
 		extends AbstractRankerModelsConfigurationCRUDController<RankerModelType, ModelChoice> {
 	public BaseRankerModelsConfigurationCRUDController(IGPersistentObjectManager persistentObjectManager,
 			IGRankerModelRuntimeConfigurationDao modelRuntimeConfigurationDao, Class<RankerModelType> type,
-			IGRankerModelConfigurationSupportService<ModelChoice, RankerModelType> rankerModelConfigurationSupportService) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, type);
+			IGRankerModelConfigurationSupportService<ModelChoice, RankerModelType> rankerModelConfigurationSupportService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, type, securityAuditLoggerService);
 		this.rankerModelConfigurationSupportService = rankerModelConfigurationSupportService;
 
 	}

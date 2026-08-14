@@ -24,6 +24,9 @@ import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.secrets.services.IGeboSecretsExternalStorageService;
 import ai.gebo.secrets.services.IGeboSecretsStorageManagementService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
@@ -36,7 +39,20 @@ public class GeboSecretsStorageManagementServiceImpl implements IGeboSecretsStor
 	private final IGeboSecretsAccessService secretsAccessService;
 	private final GeboSecretRepository repository;
 	private final GeboCryptingServiceImpl cryptService;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 	private static final ObjectMapper mapper = new ObjectMapper();
+
+	// Takes an already-created SecurityEvent - see logSecretEvent's note in
+	// GeboSecretsAccessServiceImpl for why this helper never calls
+	// newSecurityEvent() itself.
+	private void logMigrationEvent(SecurityEvent event, String direction, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.SECRET_MANAGEMENT);
+		event.setCategory(SecurityAuditTaxonomy.Category.SECRET_MANAGEMENT);
+		event.setAction(SecurityAuditTaxonomy.Action.SECRET_STORAGE_MIGRATE);
+		event.setResourceId(direction);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
 
 	@Override
 	public boolean isMigrationToExternalPossible() {
@@ -52,47 +68,61 @@ public class GeboSecretsStorageManagementServiceImpl implements IGeboSecretsStor
 
 	@Override
 	public void migrateToExternalStorage() throws GeboCryptSecretException {
-		if (!isMigrationToExternalPossible())
-			throw new IllegalStateException("Migration to external storage is not currently possible");
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			if (!isMigrationToExternalPossible())
+				throw new IllegalStateException("Migration to external storage is not currently possible");
 
-		IGeboSecretsExternalStorageService ext = externalStorage.get();
-		List<String> allIds = secretsAccessService.getAllSecretsId();
+			IGeboSecretsExternalStorageService ext = externalStorage.get();
+			List<String> allIds = secretsAccessService.getAllSecretsId();
 
-		for (String id : allIds) {
-			AbstractGeboSecretContent content = secretsAccessService.getSecretContentById(id);
-			SecretInfo info = secretsAccessService.getSecretInfoById(id);
-			ext.storeSecret(content, info.getDescription(), info.getContextCode(), id);
+			for (String id : allIds) {
+				AbstractGeboSecretContent content = secretsAccessService.getSecretContentById(id);
+				SecretInfo info = secretsAccessService.getSecretInfoById(id);
+				ext.storeSecret(content, info.getDescription(), info.getContextCode(), id);
+			}
+
+			ext.switchToActiveStorage();
+			logMigrationEvent(event, "toExternal", SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			logMigrationEvent(event, "toExternal", SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
-
-		ext.switchToActiveStorage();
 	}
 
 	@Override
 	public void migrateFromExternalStorage() throws GeboCryptSecretException {
-		if (!isMigrationToExternalDone())
-			throw new IllegalStateException("Migration from external storage is not currently possible");
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			if (!isMigrationToExternalDone())
+				throw new IllegalStateException("Migration from external storage is not currently possible");
 
-		IGeboSecretsExternalStorageService ext = externalStorage.get();
-		List<String> allIds = ext.getAllSecretsId();
+			IGeboSecretsExternalStorageService ext = externalStorage.get();
+			List<String> allIds = ext.getAllSecretsId();
 
-		for (String id : allIds) {
-			AbstractGeboSecretContent content = ext.getSecretContentById(id);
-			SecretInfo info = ext.getSecretInfoById(id);
-			String serialized;
-			try {
-				serialized = mapper.writeValueAsString(content);
-			} catch (JacksonException e) {
-				throw new GeboCryptSecretException("exception while serializing secret for migration", e);
+			for (String id : allIds) {
+				AbstractGeboSecretContent content = ext.getSecretContentById(id);
+				SecretInfo info = ext.getSecretInfoById(id);
+				String serialized;
+				try {
+					serialized = mapper.writeValueAsString(content);
+				} catch (JacksonException e) {
+					throw new GeboCryptSecretException("exception while serializing secret for migration", e);
+				}
+				String encrypted = cryptService.crypt(serialized);
+				GeboSecret secret = new GeboSecret();
+				secret.setCode(id);
+				secret.setDescription(info.getDescription());
+				secret.setSecretType(info.getSecretType());
+				secret.setContextCode(info.getContextCode());
+				secret.setSecretContent(encrypted);
+				secret.setCreationDate(new Date());
+				repository.save(secret);
 			}
-			String encrypted = cryptService.crypt(serialized);
-			GeboSecret secret = new GeboSecret();
-			secret.setCode(id);
-			secret.setDescription(info.getDescription());
-			secret.setSecretType(info.getSecretType());
-			secret.setContextCode(info.getContextCode());
-			secret.setSecretContent(encrypted);
-			secret.setCreationDate(new Date());
-			repository.save(secret);
+			logMigrationEvent(event, "fromExternal", SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			logMigrationEvent(event, "fromExternal", SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
 	}
 }

@@ -29,6 +29,7 @@ import ai.gebo.llms.openai.model.GOpenAIImageModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIImageModelConfig;
 import ai.gebo.llms.openai.services.OpenAIImageModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -47,8 +48,10 @@ public class OpenAIImageModelsConfigurationController extends
 
 	public OpenAIImageModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGImageModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			OpenAIImageModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIImageModelConfig.class, ifaceType);
+			OpenAIImageModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIImageModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 
 	}
 

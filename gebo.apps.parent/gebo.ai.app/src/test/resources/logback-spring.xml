@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<property name="LOGS" value="logs" />
+	<!--
+		Dedicated, append-only sink for the "security-log" logger, mirroring
+		the production logback config in every executable module (see
+		gebo.ai.app/src/main/resources/logback-spring.xml). Kept minimal here
+		(no rotation/retention needed for a test run) - it just keeps
+		IGSecurityAuditLoggerService's JSON events out of the main test
+		console/file log.
+	-->
+	<appender name="SecurityLog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS}/security-log.jsonl</file>
+		<append>true</append>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%msg%n</Pattern>
+		</encoder>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS}/archived/security-log-%d{yyyy-MM-dd}.%i.jsonl.gz
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
 	<appender name="Console"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
@@ -38,7 +63,10 @@
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
-	
+	<logger name="security-log" level="INFO" additivity="false">
+		<appender-ref ref="SecurityLog" />
+	</logger>
+
 	
 	<logger name="ai.gebo.systems.abstraction.layer.impl" level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />

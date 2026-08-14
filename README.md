@@ -57,6 +57,7 @@ an enterprise version with more feature and support is also available.
  - Schedule document updates for AI reindexing (embedding) on updates.
  - Monitor embedding batch job.
  - Monitor **LLM usage** with built-in dashboards (admin: every user; user: own usage only) — drill down by provider, model, model type (chat/embedding/image/reranking/TTS/transcription), user and month to track calls/tokens over time.
+ - **NIS2-oriented security audit logging**: login/logout, LLM configuration changes, LLM invocations, secrets/API-key/3rd-party-integration changes and user administration are all traced to a dedicated, append-only, **Wazuh-compatible JSON** audit trail — see [Security & compliance](#security--compliance) below.
  - Configure company users and groups.      
  - Organize multiple specific Retrieve augmented generation chats for specific company tasks:
     - Examples:
@@ -135,6 +136,15 @@ Every service (the monolith and each microservice) ships with **Micrometer** + *
 **Kubernetes / Helm** — the same stack is available as an opt-in add-on (`observability.enabled: true`), see [deploy/helm/gebo-microservices/README.md](./deploy/helm/gebo-microservices/README.md#observability-optional).
 
 **LLM usage dashboards** — independent of the infra metrics above, Gebo.ai also tracks per-call LLM usage (tokens, provider, model, model type, calling module, user) and exposes it through dedicated admin/user REST APIs and Angular dashboards — see [Administrative features](#geboai-features) above.
+
+### Security & compliance
+
+Gebo.ai ships with built-in **security audit logging**, oriented toward **NIS2** traceability requirements. Every security-relevant action is captured as a structured event: local & SSO login/logout attempts (success and failure), LLM configuration changes (all providers), LLM invocations (metadata only — model, provider, outcome, latency; **never** prompt or response content), secret and API-key creation/rotation/deletion, 3rd-party integration (SharePoint, Confluence, Jira, GitHub/GIT, Google Drive, AWS S3, WebDAV, MCP servers...) configuration and data access, and password/user/group administration.
+
+- **Dedicated, append-only audit trail** — every executable module (the monolith and each of the 20+ microservices) routes these events through their own `security-log` logger, isolated from the general application log (`additivity=false`), so audit events can't be silently lost in application noise or rotated away with it.
+- **Wazuh-compatible JSON Lines format** — each log line is a single, complete JSON object with no timestamp/level prefix (JSON Lines / NDJSON — the file itself is not one parseable JSON document), ready for Wazuh's (or any SIEM's) `json` log_format decoder: point your agent at `security-log.jsonl` and start ingesting.
+- **Rotation & archiving** — daily and 100MB size-triggered rotation with gzip-compressed archives; retention defaults to 365 days / 10GB total, both overridable via the `SECURITY_LOG_RETENTION_DAYS` / `SECURITY_LOG_TOTAL_SIZE_CAP` environment variables.
+- **Correlated & forensic-ready** — every event carries `correlationId`, `sourceIp`, `userId`, `httpMethod` and `requestUri` from the originating request, plus a caller-trace (`stackPoint`) for drill-down.
 
 ### How to build the software:
 

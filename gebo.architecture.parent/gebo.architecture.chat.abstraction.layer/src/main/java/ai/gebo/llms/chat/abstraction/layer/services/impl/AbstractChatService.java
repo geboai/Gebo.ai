@@ -64,7 +64,10 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -94,7 +97,27 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected IGChatSessionLifeCycleService chatSessionLifecycleService;
 	final protected IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao;
 	final protected IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao;
+	final protected IGSecurityAuditLoggerService securityAuditLoggerService;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
+
+	// Metadata-only by design: model/provider/outcome/latency, never prompt or
+	// response content - logging chat bodies would be a PII/secret-leak surface.
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at the real
+	// invocation entry point, not at this shared helper.
+	private void logChatInvocationEvent(SecurityEvent event, IGConfigurableChatModel configurableChatModel,
+			long startMillis, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_INVOCATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_INVOCATION);
+		event.setAction(SecurityAuditTaxonomy.Action.LLM_INVOKE_CHAT);
+		event.setResourceId(configurableChatModel != null ? configurableChatModel.getCode() : null);
+		event.setOutcome(outcome);
+		if (configurableChatModel != null && configurableChatModel.getType() != null) {
+			event.getDetails().put("provider", configurableChatModel.getType().getCode());
+		}
+		event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
+		securityAuditLoggerService.log(event);
+	}
 
 	/**
 	 * Retrieves chat model user information based on the provided model code.
@@ -154,15 +177,22 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GPromptTemplateConfig prompt, final KBContext context, final GeboChatRequest request,
 			final GeboChatResponse response, IChatRequestContext chatRequestContext, AIDocumentsSet showedDocuments)
 			throws LLMConfigException {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		long startMillis = System.currentTimeMillis();
+		try {
+			ChatResponse chatresponse = configurableChatModel.response(prompt, Map.of(), chatRequestContext);
+			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
+			String responseText = callResponseObject.getText();
+			response.setQueryResponse(responseText);
+			response.setCalledFunctions(context.getCalledFunctions());
 
-		ChatResponse chatresponse = configurableChatModel.response(prompt, Map.of(), chatRequestContext);
-		AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
-		String responseText = callResponseObject.getText();
-		response.setQueryResponse(responseText);
-		response.setCalledFunctions(context.getCalledFunctions());
-
-		response.setDocumentsRef(showedDocuments != null ? GResponseDocumentRef.from(showedDocuments) : List.of());
-		return response;
+			response.setDocumentsRef(showedDocuments != null ? GResponseDocumentRef.from(showedDocuments) : List.of());
+			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return response;
+		} catch (RuntimeException | LLMConfigException e) {
+			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -187,13 +217,23 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GeboChatRequest request, final GeboChatResponse response, IChatRequestContext chatRequestContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, AIDocumentsSet showedDocuments)
 			throws LLMConfigException {
-
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		long startMillis = System.currentTimeMillis();
 		try {
 			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, params, chatRequestContext);
-			return composeFlux(res, context, request, response, chatRequestContext.getToolsContext(),
-					chatHistoryConsolidation, historySizeTarget, configurableChatModel, showedDocuments);
+			Flux<GeboChatMessageEnvelope> composed = composeFlux(res, context, request, response,
+					chatRequestContext.getToolsContext(), chatHistoryConsolidation, historySizeTarget,
+					configurableChatModel, showedDocuments);
+			// Logged once at stream completion/error (not per chunk) to avoid flooding
+			// the audit log with one event per streamed token.
+			return composed
+					.doOnComplete(() -> logChatInvocationEvent(event, configurableChatModel, startMillis,
+							SecurityAuditTaxonomy.Outcome.SUCCESS))
+					.doOnError(err -> logChatInvocationEvent(event, configurableChatModel, startMillis,
+							SecurityAuditTaxonomy.Outcome.FAILURE));
 		} catch (Throwable th) {
 			LOGGER.error("Error while streaming chat respose", th);
+			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
 			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", th);
 			return Flux.just(new GeboChatMessageEnvelope(userMessage))
 					.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);

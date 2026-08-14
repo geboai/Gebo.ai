@@ -29,6 +29,7 @@ import ai.gebo.llms.openai.model.GOpenAITranscriptModelChoice;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
 import ai.gebo.llms.openai.services.OpenAITranscriptModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -47,8 +48,10 @@ public class OpenAITranscriptModelsConfigurationController extends
 
 	public OpenAITranscriptModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGTranscriptModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			OpenAITranscriptModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAITranscriptModelConfig.class, ifaceType);
+			OpenAITranscriptModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAITranscriptModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 
 	}
 

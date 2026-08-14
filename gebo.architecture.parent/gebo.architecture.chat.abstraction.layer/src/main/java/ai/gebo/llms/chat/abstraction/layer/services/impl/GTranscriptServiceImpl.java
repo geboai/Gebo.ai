@@ -18,11 +18,14 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGTranscriptService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 
 /**
  * Gebo.ai comment agent
- * 
+ *
  * Default implementation of {@link IGTranscriptService}. It resolves the
  * default transcript model via the runtime configuration DAO and delegates the
  * call to it.
@@ -32,6 +35,7 @@ import lombok.AllArgsConstructor;
 public class GTranscriptServiceImpl implements IGTranscriptService {
 
 	final IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao;
+	final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@Override
 	public boolean isEnabled() {
@@ -40,10 +44,32 @@ public class GTranscriptServiceImpl implements IGTranscriptService {
 
 	@Override
 	public String transcript(InputStream is) throws LLMConfigException, IOException {
-		IGConfigurableTranscriptModel model = transcriptModelsDao.defaultHandler();
-		if (model != null) {
-			return model.call(is);
+		// Metadata-only: model/provider/outcome/latency, never the audio or the
+		// transcribed text.
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		long startMillis = System.currentTimeMillis();
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_INVOCATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_INVOCATION);
+		event.setAction(SecurityAuditTaxonomy.Action.LLM_INVOKE_TRANSCRIPT);
+		try {
+			IGConfigurableTranscriptModel model = transcriptModelsDao.defaultHandler();
+			if (model == null) {
+				throw new LLMConfigException("No default transcript model configured");
+			}
+			event.setResourceId(model.getCode());
+			if (model.getType() != null) {
+				event.getDetails().put("provider", model.getType().getCode());
+			}
+			String result = model.call(is);
+			event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.SUCCESS);
+			securityAuditLoggerService.log(event);
+			return result;
+		} catch (RuntimeException | LLMConfigException | IOException e) {
+			event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			securityAuditLoggerService.log(event);
+			throw e;
 		}
-		throw new LLMConfigException("No default transcript model configured");
 	}
 }

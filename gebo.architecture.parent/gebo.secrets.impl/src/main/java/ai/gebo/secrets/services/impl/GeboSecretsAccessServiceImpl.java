@@ -33,6 +33,9 @@ import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.secrets.services.IGeboSecretsExternalStorageService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
@@ -49,6 +52,20 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	private final GeboSecretRepository repository;
 	private final GeboCryptingServiceImpl cryptService;
 	private final Optional<IGeboSecretsExternalStorageService> externalStorage;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// NOTE: takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so the caller-stack metadata newSecurityEvent() captures points at
+	// the actual storeSecret/updateSecret/deleteSecret call site, not at this
+	// shared helper.
+	private void logSecretEvent(SecurityEvent event, String action, String secretId, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.SECRET_MANAGEMENT);
+		event.setCategory(SecurityAuditTaxonomy.Category.SECRET_MANAGEMENT);
+		event.setAction(action);
+		event.setResourceId(secretId);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
 
 	private boolean isExternalStorageActive() {
 		return externalStorage.isPresent() && externalStorage.get().isConfigured()
@@ -156,8 +173,19 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> String storeSecret(SecretType secret, String description,
 			String contextCode) throws GeboCryptSecretException {
-		if (isExternalStorageActive())
-			return externalStorage.get().storeSecret(secret, description, contextCode);
+		if (isExternalStorageActive()) {
+			SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+			try {
+				String code = externalStorage.get().storeSecret(secret, description, contextCode);
+				logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_CREATE, code,
+						SecurityAuditTaxonomy.Outcome.SUCCESS);
+				return code;
+			} catch (RuntimeException e) {
+				logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_CREATE, null,
+						SecurityAuditTaxonomy.Outcome.FAILURE);
+				throw e;
+			}
+		}
 		String code = UUID.randomUUID().toString();
 		this.storeSecret(secret, description, contextCode, code); // Use detailed store method
 		return code;
@@ -175,20 +203,27 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> void updateSecret(SecretType secret, String description,
 			String contextCode, String code) throws GeboCryptSecretException {
-		if (isExternalStorageActive()) {
-			externalStorage.get().updateSecret(secret, description, contextCode, code);
-			return;
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			if (isExternalStorageActive()) {
+				externalStorage.get().updateSecret(secret, description, contextCode, code);
+			} else {
+				GeboSecret _secret;
+				Optional<GeboSecret> foundSecret = repository.findById(code);
+				if (foundSecret.isEmpty())
+					throw new GeboCryptSecretException("Secret with code=>" + code + " not found");
+				_secret = foundSecret.get();
+				_secret.setSecretContent(cryptContent(secret)); // Update encrypted content
+				_secret.setDescription(description);
+				_secret.setContextCode(contextCode);
+				_secret.setSecretType(secret.type());
+				repository.save(_secret); // Save updated secret
+			}
+			logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_UPDATE, code, SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_UPDATE, code, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
-		GeboSecret _secret;
-		Optional<GeboSecret> foundSecret = repository.findById(code);
-		if (foundSecret.isEmpty())
-			throw new GeboCryptSecretException("Secret with code=>" + code + " not found");
-		_secret = foundSecret.get();
-		_secret.setSecretContent(cryptContent(secret)); // Update encrypted content
-		_secret.setDescription(description);
-		_secret.setContextCode(contextCode);
-		_secret.setSecretType(secret.type());
-		repository.save(_secret); // Save updated secret
 	}
 
 	/**
@@ -199,12 +234,18 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	 */
 	@Override
 	public void deleteSecret(String code) throws GeboCryptSecretException {
-		if (isExternalStorageActive()) {
-			externalStorage.get().deleteSecret(code);
-			return;
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			if (isExternalStorageActive()) {
+				externalStorage.get().deleteSecret(code);
+			} else {
+				repository.deleteById(code);
+			}
+			logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_DELETE, code, SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_DELETE, code, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
-		repository.deleteById(code);
-
 	}
 
 	/**
@@ -252,18 +293,25 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> void storeSecret(SecretType secret, String description,
 			String contextCode, String secretId) throws GeboCryptSecretException {
-		if (isExternalStorageActive()) {
-			externalStorage.get().storeSecret(secret, description, contextCode, secretId);
-			return;
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			if (isExternalStorageActive()) {
+				externalStorage.get().storeSecret(secret, description, contextCode, secretId);
+			} else {
+				GeboSecret _secret = new GeboSecret();
+				_secret.setSecretContent(cryptContent(secret)); // Store the encrypted content
+				_secret.setDescription(description);
+				_secret.setContextCode(contextCode);
+				_secret.setSecretType(secret.type());
+				_secret.setCreationDate(new Date()); // Set creation date
+				_secret.setCode(secretId);
+				_secret = repository.insert(_secret); // Insert into repository
+			}
+			logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_CREATE, secretId, SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			logSecretEvent(event, SecurityAuditTaxonomy.Action.SECRET_CREATE, secretId, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
-		GeboSecret _secret = new GeboSecret();
-		_secret.setSecretContent(cryptContent(secret)); // Store the encrypted content
-		_secret.setDescription(description);
-		_secret.setContextCode(contextCode);
-		_secret.setSecretType(secret.type());
-		_secret.setCreationDate(new Date()); // Set creation date
-		_secret.setCode(secretId);
-		_secret = repository.insert(_secret); // Insert into repository
 	}
 
 	@Override

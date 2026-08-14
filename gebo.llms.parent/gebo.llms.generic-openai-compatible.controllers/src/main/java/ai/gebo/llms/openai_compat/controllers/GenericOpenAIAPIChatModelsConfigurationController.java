@@ -36,6 +36,7 @@ import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -61,12 +62,13 @@ public class GenericOpenAIAPIChatModelsConfigurationController extends
 	private final IGChatModelConfigurationSupportServiceRepositoryPattern modelsRepoPattern;
 
 	public GenericOpenAIAPIChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
-			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao, IGChatModelConfigurationSupportServiceRepositoryPattern modelsRepoPattern, GenericOpenAICompatibleProvidersConfig config) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIChatModelConfig.class);
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao, IGChatModelConfigurationSupportServiceRepositoryPattern modelsRepoPattern, GenericOpenAICompatibleProvidersConfig config,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIChatModelConfig.class, securityAuditLoggerService);
 		this.config = config;
 		this.modelsRepoPattern = modelsRepoPattern;
-		
-		
+
+
 	}
 
 	

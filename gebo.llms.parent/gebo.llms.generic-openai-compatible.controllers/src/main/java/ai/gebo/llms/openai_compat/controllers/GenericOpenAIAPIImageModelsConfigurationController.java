@@ -31,6 +31,7 @@ import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -52,8 +53,9 @@ public class GenericOpenAIAPIImageModelsConfigurationController extends
 	public GenericOpenAIAPIImageModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGImageModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
 			IGImageModelConfigurationSupportServiceRepositoryPattern supportServiceRepoPattern,
-			GenericOpenAICompatibleProvidersConfig config) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIImageModelConfig.class);
+			GenericOpenAICompatibleProvidersConfig config,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIImageModelConfig.class, securityAuditLoggerService);
 		this.supportServiceRepoPattern = supportServiceRepoPattern;
 		this.config = config;
 	}

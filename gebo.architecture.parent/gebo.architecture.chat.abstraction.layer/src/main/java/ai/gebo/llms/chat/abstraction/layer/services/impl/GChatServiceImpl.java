@@ -47,6 +47,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.model.UserInfos;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
 
@@ -66,10 +67,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
 			IGChatSessionLifeCycleService chatSessionLifecycleService,
 			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
-			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao) {
+			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
-				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao);
+				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
+				securityAuditLoggerService);
 
 	}
 

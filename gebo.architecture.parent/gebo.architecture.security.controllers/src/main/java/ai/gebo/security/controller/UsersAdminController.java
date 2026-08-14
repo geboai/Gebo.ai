@@ -32,8 +32,11 @@ import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.model.UserInfos;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IGUsersAdminService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -51,6 +54,19 @@ public class UsersAdminController {
 
 	private final IGUsersAdminService userAdminService;
 	private final IGSecurityService securityService;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at the real
+	// endpoint method, not at this shared helper.
+	private void logUserAdminEvent(SecurityEvent event, String action, String resourceId, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(action);
+		event.setResourceId(resourceId);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
 
 	/**
 	 * DTO for inserting a user with mandatory fields.
@@ -70,8 +86,17 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "insertUser", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public EditableUser insertUser(@Valid @RequestBody InsertUserParam p) {
-
-		return userAdminService.insertUser(p.user, p.password);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			EditableUser inserted = userAdminService.insertUser(p.user, p.password);
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_INSERT,
+					p.user != null ? p.user.getUsername() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return inserted;
+		} catch (RuntimeException e) {
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_INSERT,
+					p.user != null ? p.user.getUsername() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -82,8 +107,17 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "updateUser", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public EditableUser updateUser(@Valid @RequestBody EditableUser user) {
-
-		return userAdminService.updateUser(user);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			EditableUser updated = userAdminService.updateUser(user);
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_UPDATE,
+					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return updated;
+		} catch (RuntimeException e) {
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_UPDATE,
+					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -93,8 +127,16 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "deleteUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUser(@Valid @RequestBody EditableUser user) {
-		userAdminService.deleteUser(user);
-
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			userAdminService.deleteUser(user);
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_DELETE,
+					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException e) {
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_DELETE,
+					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -105,8 +147,17 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "insertGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public UsersGroup insertGroup(@Valid @RequestBody UsersGroup group) {
-
-		return userAdminService.insertGroup(group);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			UsersGroup inserted = userAdminService.insertGroup(group);
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_INSERT,
+					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return inserted;
+		} catch (RuntimeException e) {
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_INSERT,
+					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -117,7 +168,17 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "updateGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public UsersGroup updateGroup(@Valid @RequestBody UsersGroup group) {
-		return userAdminService.updateGroup(group);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			UsersGroup updated = userAdminService.updateGroup(group);
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_UPDATE,
+					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return updated;
+		} catch (RuntimeException e) {
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_UPDATE,
+					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -127,8 +188,16 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "deleteGroup", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGroup(@Valid @RequestBody UsersGroup group) {
-		userAdminService.deleteGroup(group);
-
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			userAdminService.deleteGroup(group);
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_DELETE,
+					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException e) {
+			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_DELETE,
+					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -231,17 +300,35 @@ public class UsersAdminController {
 	@PostMapping(value = "changeUserPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GUserMessage changeUserPassword(@Valid @RequestBody ChangeUsernamePasswordData changePwdData)
 			throws GeboCryptSecretException {
-		boolean pwdOk = this.securityService.checkActualUserPassword(changePwdData.getCurrentUserPassword());
-		if (pwdOk) {
-			if (changePwdData.getPassword().equals(changePwdData.getConfirmpassword())) {
-				userAdminService.changePassword(changePwdData.getUsername(), changePwdData.getPassword());
-				return GUserMessage.successMessage("Password changed with success", "New password set");
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(SecurityAuditTaxonomy.Action.PASSWORD_CHANGE_ADMIN);
+		event.setResourceId(changePwdData != null ? changePwdData.getUsername() : null);
+		try {
+			boolean pwdOk = this.securityService.checkActualUserPassword(changePwdData.getCurrentUserPassword());
+			GUserMessage result;
+			if (pwdOk) {
+				if (changePwdData.getPassword().equals(changePwdData.getConfirmpassword())) {
+					userAdminService.changePassword(changePwdData.getUsername(), changePwdData.getPassword());
+					result = GUserMessage.successMessage("Password changed with success", "New password set");
+					event.setOutcome(SecurityAuditTaxonomy.Outcome.SUCCESS);
+				} else {
+					result = GUserMessage.errorMessage("Password and confirm password problem",
+							"New password and confirm password for the user are not equal");
+					event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+				}
 			} else {
-				return GUserMessage.errorMessage("Password and confirm password problem",
-						"New password and confirm password for the user are not equal");
+				result = GUserMessage.errorMessage("Your password is incorrect",
+						"Let's try again digitating your password");
+				event.setOutcome(SecurityAuditTaxonomy.Outcome.DENIED);
 			}
-		} else {
-			return GUserMessage.errorMessage("Your password is incorrect", "Let's try again digitating your password");
+			securityAuditLoggerService.log(event);
+			return result;
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			securityAuditLoggerService.log(event);
+			throw e;
 		}
 	}
 }
