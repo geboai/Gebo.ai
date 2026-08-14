@@ -29,6 +29,7 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockImageModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockImageModelConfig;
 import ai.gebo.llms.aws_bedrock.services.BedrockImageModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Admin controller for AWS Bedrock image model configurations.
@@ -42,8 +43,10 @@ public class BedrockImageModelsConfigurationController extends
 
 	public BedrockImageModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGImageModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			BedrockImageModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockImageModelConfig.class, ifaceType);
+			BedrockImageModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockImageModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 	}
 
 	@PostMapping(value = "insertBedrockImageModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

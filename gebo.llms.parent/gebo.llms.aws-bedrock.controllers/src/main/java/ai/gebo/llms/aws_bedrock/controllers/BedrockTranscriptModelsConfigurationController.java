@@ -29,6 +29,7 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockTranscriptModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockTranscriptModelConfig;
 import ai.gebo.llms.aws_bedrock.services.BedrockTranscriptModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Admin controller for AWS (Amazon Transcribe) transcript model configurations.
@@ -42,8 +43,10 @@ public class BedrockTranscriptModelsConfigurationController extends
 
 	public BedrockTranscriptModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGTranscriptModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			BedrockTranscriptModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockTranscriptModelConfig.class, ifaceType);
+			BedrockTranscriptModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockTranscriptModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 	}
 
 	@PostMapping(value = "insertBedrockTranscriptModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -22,6 +22,9 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
@@ -47,6 +50,21 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 
 	protected final Class<EmbeddingModelConfigType> type;
 
+	protected final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at insert/
+	// update/delete - the real API entry point - not at this shared helper.
+	private void logConfigEvent(SecurityEvent event, String action, String resourceId, OperationStatus<?> status) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_CONFIGURATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_CONFIGURATION);
+		event.setAction(action);
+		event.setResourceId(resourceId);
+		event.setOutcome(status.isHasErrorMessages() ? SecurityAuditTaxonomy.Outcome.FAILURE
+				: SecurityAuditTaxonomy.Outcome.SUCCESS);
+		securityAuditLoggerService.log(event);
+	}
+
 	/**
 	 * Inserts a new embedding model configuration. Handles default model setting
 	 * and adds runtime configuration.
@@ -55,6 +73,14 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 	 * @return OperationStatus indicating the result of the insertion.
 	 */
 	protected OperationStatus<EmbeddingModelConfigType> insert(EmbeddingModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<EmbeddingModelConfigType> status = insertInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_INSERT, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<EmbeddingModelConfigType> insertInternal(EmbeddingModelConfigType config) {
 		EmbeddingModelConfigType out = null;
 		LOGGER.info("Begin chat model configuration insert");
 		try {
@@ -86,6 +112,14 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 	 * @return OperationStatus indicating the result of the update.
 	 */
 	protected OperationStatus<EmbeddingModelConfigType> update(EmbeddingModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<EmbeddingModelConfigType> status = updateInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_UPDATE, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<EmbeddingModelConfigType> updateInternal(EmbeddingModelConfigType config) {
 		try {
 			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
@@ -110,6 +144,14 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 	 * @return OperationStatus indicating the result of the deletion.
 	 */
 	protected OperationStatus<Boolean> delete(EmbeddingModelConfigType type) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<Boolean> status = deleteInternal(type);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_DELETE, type != null ? type.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<Boolean> deleteInternal(EmbeddingModelConfigType type) {
 		try {
 			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);

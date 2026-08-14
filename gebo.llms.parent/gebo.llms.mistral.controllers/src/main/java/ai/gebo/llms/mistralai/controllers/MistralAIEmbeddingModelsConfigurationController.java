@@ -29,6 +29,7 @@ import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelConfig;
 import ai.gebo.llms.mistralai.services.MistralEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments Controller responsible for managing MistralAI embedding
@@ -46,8 +47,10 @@ public class MistralAIEmbeddingModelsConfigurationController extends
 
 	public MistralAIEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			MistralEmbeddingModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GMistralEmbeddingModelConfig.class, ifaceType);
+			MistralEmbeddingModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GMistralEmbeddingModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 	}
 
 	/**

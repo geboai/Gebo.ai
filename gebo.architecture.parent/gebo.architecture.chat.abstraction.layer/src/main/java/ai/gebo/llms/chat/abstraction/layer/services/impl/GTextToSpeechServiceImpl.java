@@ -17,11 +17,14 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGTextToSpeechService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 
 /**
  * Gebo.ai comment agent
- * 
+ *
  * Default implementation of {@link IGTextToSpeechService}. It resolves the
  * default text to speech model via the runtime configuration DAO and delegates
  * the call to it.
@@ -31,6 +34,7 @@ import lombok.AllArgsConstructor;
 public class GTextToSpeechServiceImpl implements IGTextToSpeechService {
 
 	final IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao;
+	final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@Override
 	public boolean isEnabled() {
@@ -39,10 +43,32 @@ public class GTextToSpeechServiceImpl implements IGTextToSpeechService {
 
 	@Override
 	public InputStream speech(String text) throws LLMConfigException {
-		IGConfigurableTextToSpeechModel model = ttsModelsDao.defaultHandler();
-		if (model != null) {
-			return model.call(text);
+		// Metadata-only: model/provider/outcome/latency, never the text being
+		// synthesized.
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		long startMillis = System.currentTimeMillis();
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_INVOCATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_INVOCATION);
+		event.setAction(SecurityAuditTaxonomy.Action.LLM_INVOKE_TTS);
+		try {
+			IGConfigurableTextToSpeechModel model = ttsModelsDao.defaultHandler();
+			if (model == null) {
+				throw new LLMConfigException("No default text to speech model configured");
+			}
+			event.setResourceId(model.getCode());
+			if (model.getType() != null) {
+				event.getDetails().put("provider", model.getType().getCode());
+			}
+			InputStream result = model.call(text);
+			event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.SUCCESS);
+			securityAuditLoggerService.log(event);
+			return result;
+		} catch (RuntimeException | LLMConfigException e) {
+			event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			securityAuditLoggerService.log(event);
+			throw e;
 		}
-		throw new LLMConfigException("No default text to speech model configured");
 	}
 }

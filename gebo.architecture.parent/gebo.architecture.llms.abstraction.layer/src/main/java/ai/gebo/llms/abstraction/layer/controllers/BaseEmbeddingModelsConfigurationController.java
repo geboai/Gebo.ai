@@ -19,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Gebo.ai comment agent
@@ -39,8 +40,9 @@ public class BaseEmbeddingModelsConfigurationController<EmbeddingModelConfigType
 	protected final IfaceType ifaceType;
 	public BaseEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			Class<EmbeddingModelConfigType> type, IfaceType ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, type);
+			Class<EmbeddingModelConfigType> type, IfaceType ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, type, securityAuditLoggerService);
 		this.ifaceType = ifaceType;
 	}
 

@@ -13,12 +13,35 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.ranker.model.RankingInput;
 import ai.gebo.ranker.model.RankingOutput;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class GRankerServiceImpl implements IGRankerService {
 	private final IGRankerModelRuntimeConfigurationDao rankerModelDao;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at the two
+	// call(...) overloads - the real invocation entry points - not at this
+	// shared helper. Metadata-only: model/provider/outcome/latency, never the
+	// documents or query text being ranked.
+	private void logRankerEvent(SecurityEvent event, IGConfigurableRankerModel rankerModel, long startMillis,
+			String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_INVOCATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_INVOCATION);
+		event.setAction(SecurityAuditTaxonomy.Action.LLM_INVOKE_RANK);
+		event.setResourceId(rankerModel != null ? rankerModel.getCode() : null);
+		if (rankerModel != null && rankerModel.getType() != null) {
+			event.getDetails().put("provider", rankerModel.getType().getCode());
+		}
+		event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
 
 	@Override
 	public AIDocumentsSet call(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
@@ -26,14 +49,22 @@ public class GRankerServiceImpl implements IGRankerService {
 		if (nFragments <= 0)
 			return input;
 
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		long startMillis = System.currentTimeMillis();
 		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
-		if (rankerModel == null)
-			throw new LLMConfigException(
-					"No ranker model configured, call first isRankerConfigured() to check if there is one");
-		RankingInput _input = new RankingInput(query, input.aiDocumentsList(), topK);
-		RankingOutput out = rankerModel.getRankerModel().call(_input);
-		List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
-		return AIDocumentsSet.from(documents);
+		try {
+			if (rankerModel == null)
+				throw new LLMConfigException(
+						"No ranker model configured, call first isRankerConfigured() to check if there is one");
+			RankingInput _input = new RankingInput(query, input.aiDocumentsList(), topK);
+			RankingOutput out = rankerModel.getRankerModel().call(_input);
+			List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
+			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return AIDocumentsSet.from(documents);
+		} catch (RuntimeException | LLMConfigException e) {
+			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	@Override
@@ -48,14 +79,22 @@ public class GRankerServiceImpl implements IGRankerService {
 		if (nFragments <= 0)
 			return input;
 
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		long startMillis = System.currentTimeMillis();
 		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
-		if (rankerModel == null)
-			throw new LLMConfigException(
-					"No ranker model configured, call first isRankerConfigured() to check if there is one");
-		RankingInput _input = new RankingInput(query, input, topK);
-		RankingOutput out = rankerModel.getRankerModel().call(_input);
-		List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
-		return documents;
+		try {
+			if (rankerModel == null)
+				throw new LLMConfigException(
+						"No ranker model configured, call first isRankerConfigured() to check if there is one");
+			RankingInput _input = new RankingInput(query, input, topK);
+			RankingOutput out = rankerModel.getRankerModel().call(_input);
+			List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
+			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return documents;
+		} catch (RuntimeException | LLMConfigException e) {
+			logRankerEvent(event, rankerModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	@Override

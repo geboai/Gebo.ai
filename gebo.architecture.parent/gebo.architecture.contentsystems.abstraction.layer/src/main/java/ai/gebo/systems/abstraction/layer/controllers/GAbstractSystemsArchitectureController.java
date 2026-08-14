@@ -37,7 +37,11 @@ import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.model.base.GBaseObject;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import io.micrometer.observation.annotation.Observed;
 
@@ -82,6 +86,21 @@ public class GAbstractSystemsArchitectureController<SystemType extends GContentM
 	// the run comes due.
 	@Autowired
 	protected AbstractJobLaunchManager jobLaunchManager;
+	// Same field-injection rationale as envelopeFactory/jobLaunchManager above.
+	@Autowired
+	protected IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at the real
+	// public API method (insertEndpoint/deleteSystem/...), not at this helper.
+	private void logIntegrationEvent(SecurityEvent event, String action, GBaseObject resource, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.INTEGRATION_CONFIGURATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.INTEGRATION_CONFIGURATION);
+		event.setAction(action);
+		event.setResourceId(resource != null ? resource.getCode() : null);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
 
 	/**
 	 * Nested emitter class for handling messaging from the controller.
@@ -134,6 +153,19 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	 *                                  deletion fails.
 	 */
 	protected void deleteEndpoint(EndpointType endpoint) throws GeboPersistenceException {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			deleteEndpointInternal(endpoint);
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_ENDPOINT_DELETE, endpoint,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboPersistenceException e) {
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_ENDPOINT_DELETE, endpoint,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	private void deleteEndpointInternal(EndpointType endpoint) throws GeboPersistenceException {
 		if (!securityService.isCurrentUserAdmin())
 			throw new GeboPersistenceException("User without ADMIN role cannot delete contents and endpoints");
 		String userid = securityService.getCurrentUser().getUsername();
@@ -211,6 +243,20 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	 * @throws GeboPersistenceException If insertion fails.
 	 */
 	protected EndpointType insertEndpoint(EndpointType endpoint) throws GeboPersistenceException {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			EndpointType outdata = insertEndpointInternal(endpoint);
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_ENDPOINT_INSERT, outdata,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return outdata;
+		} catch (RuntimeException | GeboPersistenceException e) {
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_ENDPOINT_INSERT, endpoint,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	private EndpointType insertEndpointInternal(EndpointType endpoint) throws GeboPersistenceException {
 		if (endpoint.getObjectSpaceType() == null) {
 			endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
@@ -248,6 +294,20 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	 * @throws GeboPersistenceException If update fails.
 	 */
 	protected EndpointType updateEndpoint(EndpointType endpoint) throws GeboPersistenceException {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			EndpointType outdata = updateEndpointInternal(endpoint);
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_ENDPOINT_UPDATE, outdata,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return outdata;
+		} catch (RuntimeException | GeboPersistenceException e) {
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_ENDPOINT_UPDATE, endpoint,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	private EndpointType updateEndpointInternal(EndpointType endpoint) throws GeboPersistenceException {
 		if (endpoint.getObjectSpaceType() == null) {
 			endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
@@ -265,7 +325,16 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	 * @throws GeboPersistenceException If deletion fails.
 	 */
 	protected void deleteSystem(SystemType system) throws GeboPersistenceException {
-		persistentObjectManager.delete(system);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			persistentObjectManager.delete(system);
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_DELETE, system,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboPersistenceException e) {
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_DELETE, system,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -276,7 +345,17 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	 * @throws GeboPersistenceException If insertion fails.
 	 */
 	protected SystemType insertSystem(SystemType endpoint) throws GeboPersistenceException {
-		return persistentObjectManager.insert(endpoint);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			SystemType outdata = persistentObjectManager.insert(endpoint);
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_INSERT, outdata,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return outdata;
+		} catch (RuntimeException | GeboPersistenceException e) {
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_INSERT, endpoint,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**
@@ -287,7 +366,17 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	 * @throws GeboPersistenceException If update fails.
 	 */
 	protected SystemType updateSystem(SystemType endpoint) throws GeboPersistenceException {
-		return persistentObjectManager.update(endpoint);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			SystemType outdata = persistentObjectManager.update(endpoint);
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_UPDATE, outdata,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return outdata;
+		} catch (RuntimeException | GeboPersistenceException e) {
+			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_UPDATE, endpoint,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 	/**

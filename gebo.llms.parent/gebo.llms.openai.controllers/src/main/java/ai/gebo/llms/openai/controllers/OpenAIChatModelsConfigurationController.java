@@ -29,6 +29,7 @@ import ai.gebo.llms.openai.model.GOpenAIChatModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
 import ai.gebo.llms.openai.services.OpenAIChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -47,9 +48,11 @@ public class OpenAIChatModelsConfigurationController extends
 
 	public OpenAIChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			OpenAIChatModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIChatModelConfig.class, ifaceType);
-		
+			OpenAIChatModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIChatModelConfig.class, ifaceType,
+				securityAuditLoggerService);
+
 	}
 
 	/**

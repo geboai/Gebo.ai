@@ -33,6 +33,9 @@ import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2ProvidersLibraryDao;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -47,6 +50,21 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 
 	@Autowired
 	IGOauth2ProvidersLibraryDao providersLibraryDao;
+
+	@Autowired
+	IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at the real
+	// public API method, not at this shared helper.
+	private void logOauth2ConfigEvent(SecurityEvent event, String action, String resourceId, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.INTEGRATION_CONFIGURATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.INTEGRATION_CONFIGURATION);
+		event.setAction(action);
+		event.setResourceId(resourceId);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
 
 	/**
 	 * Default constructor
@@ -70,6 +88,24 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	public String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
 			Oauth2AuthorizationGrantType authGrantType, @NotNull Oauth2ConfigurationType configurationType,
+			String description) throws GeboOauth2Exception {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			String id = insertOauth2ConfigurationInternal(providerConfiguration, oauth2ClientContent, authClientMethod,
+					authGrantType, configurationType, description);
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_INSERT, id,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return id;
+		} catch (RuntimeException | GeboOauth2Exception e) {
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_INSERT, null,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	private String insertOauth2ConfigurationInternal(Oauth2ProviderConfig providerConfiguration,
+			GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
+			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType,
 			String description) throws GeboOauth2Exception {
 		AuthProvider authProvider = AuthProvider.oauth2_generic;
 		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
@@ -97,6 +133,24 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	public String insertOauth2Configuration(AuthProvider authProvider, GeboOauth2SecretContent oauth2ClientContent,
 			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
 			Oauth2ConfigurationType configurationType, String description) throws GeboOauth2Exception {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			String id = insertOauth2ConfigurationInternal(authProvider, oauth2ClientContent, authClientMethod,
+					authGrantType, configurationType, description);
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_INSERT, id,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return id;
+		} catch (RuntimeException | GeboOauth2Exception e) {
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_INSERT, null,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	private String insertOauth2ConfigurationInternal(AuthProvider authProvider,
+			GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
+			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description)
+			throws GeboOauth2Exception {
 
 		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
 		Oauth2RuntimeConfiguration configuration = new Oauth2RuntimeConfiguration();
@@ -126,18 +180,27 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 */
 	@Override
 	public void deleteOauth2Configuration(String id) throws GeboOauth2Exception {
-		Oauth2RuntimeConfiguration data = repository.findByCode(id);
-		if (data != null) {
-			if (data.getReadOnly() != null && data.getReadOnly())
-				throw new GeboOauth2Exception("Trying to delete a readOnly oauth2 configuration " + id);
-			try {
-				// Attempt to delete the associated secret
-				secretService.deleteSecret(data.getClientSecretId());
-			} catch (GeboCryptSecretException e) {
-				// Handle any exceptions raised during the deletion of secrets
-				throw new GeboOauth2Exception("Secret layer raising an error in deletion", e);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			Oauth2RuntimeConfiguration data = repository.findByCode(id);
+			if (data != null) {
+				if (data.getReadOnly() != null && data.getReadOnly())
+					throw new GeboOauth2Exception("Trying to delete a readOnly oauth2 configuration " + id);
+				try {
+					// Attempt to delete the associated secret
+					secretService.deleteSecret(data.getClientSecretId());
+				} catch (GeboCryptSecretException e) {
+					// Handle any exceptions raised during the deletion of secrets
+					throw new GeboOauth2Exception("Secret layer raising an error in deletion", e);
+				}
+				repository.delete(data);
 			}
-			repository.delete(data);
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_DELETE, id,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboOauth2Exception e) {
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_DELETE, id,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
 	}
 
@@ -269,27 +332,35 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
 			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description)
 			throws GeboOauth2Exception {
-		Oauth2RuntimeConfiguration data = repository.findByCode(registrationId);
-		if (data == null)
-			throw new GeboOauth2Exception("Unkown registrationid:" + registrationId);
-		if (data != null && data.getReadOnly() != null && data.getReadOnly()) {
-			throw new GeboOauth2Exception("registrationid:" + registrationId + " is not modifiable");
-		}
-
-		data.setDescription(description);
-		data.setProviderConfig(providerConfiguration);
-		data.setConfigurationType(configurationType);
-		data.setClientAuthMethod(authClientMethod);
-		data.setAuthGrantType(authGrantType);
-		repository.save(data);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
-			SecretInfo info = secretService.getSecretInfoById(data.getClientSecretId());
-			secretService.updateSecret(oauth2ClientContent, info.getDescription(), registrationId,
-					data.getClientSecretId());
-		} catch (GeboCryptSecretException e) {
-			throw new GeboOauth2Exception("Cannot modify secret on registrationId:" + registrationId, e);
-		}
+			Oauth2RuntimeConfiguration data = repository.findByCode(registrationId);
+			if (data == null)
+				throw new GeboOauth2Exception("Unkown registrationid:" + registrationId);
+			if (data != null && data.getReadOnly() != null && data.getReadOnly()) {
+				throw new GeboOauth2Exception("registrationid:" + registrationId + " is not modifiable");
+			}
 
+			data.setDescription(description);
+			data.setProviderConfig(providerConfiguration);
+			data.setConfigurationType(configurationType);
+			data.setClientAuthMethod(authClientMethod);
+			data.setAuthGrantType(authGrantType);
+			repository.save(data);
+			try {
+				SecretInfo info = secretService.getSecretInfoById(data.getClientSecretId());
+				secretService.updateSecret(oauth2ClientContent, info.getDescription(), registrationId,
+						data.getClientSecretId());
+			} catch (GeboCryptSecretException e) {
+				throw new GeboOauth2Exception("Cannot modify secret on registrationId:" + registrationId, e);
+			}
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_UPDATE, registrationId,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboOauth2Exception e) {
+			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_UPDATE, registrationId,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
 	}
 
 }

@@ -19,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Gebo.ai comment agent
@@ -36,8 +37,9 @@ public class BaseChatModelsConfigurationController<ChatModelConfigType extends G
 		extends AbstractBaseChatModelsConfigurationCRUDController<ChatModelConfigType, ModelChoice> {
 	protected final HandlerIfaceType ifaceType;
 	public BaseChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
-			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao, Class<ChatModelConfigType> type, HandlerIfaceType ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, type);
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao, Class<ChatModelConfigType> type, HandlerIfaceType ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, type, securityAuditLoggerService);
 		this.ifaceType = ifaceType;
 
 	}

@@ -28,6 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig;
 import ai.gebo.llms.deepseek.services.DeepseekChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Controller for managing Deepseek chat model configurations. This controller
@@ -46,9 +47,10 @@ public class DeepseekChatModelsConfigurationController extends
 
 	public DeepseekChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			DeepseekChatModelConfigurationSupportService ifaceType) {
+			DeepseekChatModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		super(persistentObjectManager, modelRuntimeConfigurationDao,
-				ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig.class, ifaceType);
+				ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig.class, ifaceType, securityAuditLoggerService);
 		// TODO Auto-generated constructor stub
 	}
 

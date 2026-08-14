@@ -66,6 +66,9 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.model.base.TypedInputStream;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
@@ -104,6 +107,10 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	// content-handler module.
 	@Autowired
 	protected IGKnowledgeBaseHierarchyLookupService knowledgeBaseHierarchyLookupService;
+
+	// Same field-injection rationale as knowledgeBaseHierarchyLookupService above.
+	@Autowired
+	protected IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	// Message broker for system messaging
 	protected IGMessageBroker messageBroker = null;
@@ -412,6 +419,34 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	 */
 	@Override
 	public void consume(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+		// Logged once per sync run (not per document/file) to avoid flooding the
+		// audit log - consumeImplementation() below fans out to potentially
+		// thousands of per-file reads during a single ingestion crawl.
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			consumeInternal(endpoint, sessionParam, consumer, messagesConsumer, errorConsumer);
+			logDataAccessEvent(event, endpoint, SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboContentHandlerSystemException e) {
+			logDataAccessEvent(event, endpoint, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at consume()
+	// - the real API entry point - not at this shared helper.
+	private void logDataAccessEvent(SecurityEvent event, ProjectEndpointType endpoint, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.INTEGRATION_DATA_ACCESS);
+		event.setCategory(SecurityAuditTaxonomy.Category.INTEGRATION_DATA_ACCESS);
+		event.setAction(SecurityAuditTaxonomy.Action.INTEGRATION_DATA_CONSUME);
+		event.setResourceId(endpoint != null ? endpoint.getCode() : null);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
+
+	private void consumeInternal(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
 			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
 			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 

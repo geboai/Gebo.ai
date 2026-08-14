@@ -30,6 +30,8 @@ import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserSer
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.util.ClassUtils;
@@ -47,8 +49,11 @@ import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
+import ai.gebo.security.services.RequestAuditFilter;
 import ai.gebo.security.services.impl.DirectoryBackedUserDetailsService;
 import ai.gebo.security.services.impl.GHttpRequestAuthenticationManagerResolverImpl;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.impl.GOAuth2AuthenticationFailureHandler;
 import ai.gebo.security.services.impl.GOAuth2AuthenticationSuccessHandler;
 import ai.gebo.security.services.impl.GOAuth2UserService;
 import ai.gebo.security.services.impl.GOauth2AuthorizedClientService;
@@ -67,10 +72,13 @@ import ai.gebo.security.services.impl.ReactiveGOAuth2UserService;
 @EnableMethodSecurity
 public class GeboAISecurityConfig {
 	private static Logger LOGGER = LoggerFactory.getLogger(GeboAISecurityConfig.class);
-	// URLs that are allowed to be accessed without authentication 
-	/*private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
-			"/v3/**", "/media/**", "**.js", "**.ico", "*.map", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
-			"/auth/**", "/error", "/error/**", "/ui/**", "/login/**" }; */
+	// URLs that are allowed to be accessed without authentication
+	/*
+	 * private static final String[] allowedUrls = new String[] { "/",
+	 * "/index.html", "/assets/**", "/swagger-ui/**", "/v3/**", "/media/**",
+	 * "**.js", "**.ico", "*.map", "**.css", "**.ts", "/login", "/oauth2/**",
+	 * "/public/**", "/auth/**", "/error", "/error/**", "/ui/**", "/login/**" };
+	 */
 	/*
 	 * Everything the Angular SPA needs in order to boot must be reachable
 	 * ANONYMOUSLY, because the browser fetches it before there is any user to
@@ -95,85 +103,33 @@ public class GeboAISecurityConfig {
 	 * matches every path in the application that happens to end that way, API
 	 * routes included.
 	 */
-	private static final String[] allowedUrls = new String[] {
-		    "/",
-		    "/index.html",
-		    "/assets/**",
-		    "/media/**",
+	private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/media/**",
 
-		    // Scripts, stylesheets and the sources/maps served for debugging.
-		    "/**/*.js",
-		    "/**/*.mjs",
-		    "/**/*.css",
-		    "/**/*.map",
-		    "/**/*.ts",
-		    "/**/*.d.ts",
-		    "/*.js",
-		    "/*.mjs",
-		    "/*.css",
-		    "/*.map",
-		    "/*.ts",
-		    "/*.d.ts",
+			// Scripts, stylesheets and the sources/maps served for debugging.
+			"/**/*.js", "/**/*.mjs", "/**/*.css", "/**/*.map", "/**/*.ts", "/**/*.d.ts", "/*.js", "/*.mjs", "/*.css",
+			"/*.map", "/*.ts", "/*.d.ts",
 
-		    // Images and icons (favicon, logos, inline svg, raster assets).
-		    "/**/*.ico",
-		    "/**/*.png",
-		    "/**/*.jpg",
-		    "/**/*.jpeg",
-		    "/**/*.gif",
-		    "/**/*.svg",
-		    "/**/*.webp",
-		    "/**/*.avif",
-		    "/**/*.bmp",
-		    "/*.ico",
-		    "/*.png",
-		    "/*.jpg",
-		    "/*.jpeg",
-		    "/*.gif",
-		    "/*.svg",
-		    "/*.webp",
-		    "/*.avif",
-		    "/*.bmp",
+			// Images and icons (favicon, logos, inline svg, raster assets).
+			"/**/*.ico", "/**/*.png", "/**/*.jpg", "/**/*.jpeg", "/**/*.gif", "/**/*.svg", "/**/*.webp", "/**/*.avif",
+			"/**/*.bmp", "/*.ico", "/*.png", "/*.jpg", "/*.jpeg", "/*.gif", "/*.svg", "/*.webp", "/*.avif", "/*.bmp",
 
-		    // Web fonts pulled in by the stylesheets.
-		    "/**/*.woff",
-		    "/**/*.woff2",
-		    "/**/*.ttf",
-		    "/**/*.otf",
-		    "/**/*.eot",
-		    "/*.woff",
-		    "/*.woff2",
-		    "/*.ttf",
-		    "/*.otf",
-		    "/*.eot",
+			// Web fonts pulled in by the stylesheets.
+			"/**/*.woff", "/**/*.woff2", "/**/*.ttf", "/**/*.otf", "/**/*.eot", "/*.woff", "/*.woff2", "/*.ttf",
+			"/*.otf", "/*.eot",
 
-		    // Static data the shell loads: PWA manifest and friends.
-		    //
-		    // Deliberately NO blanket "*.json" / "*.html" rule here. The Angular build
-		    // keeps every json (i18n bundles, pdf.js/monaco config) and every html
-		    // fragment under assets/ - already anonymous via "/assets/**" above - and the
-		    // only html at the context root is index.html, permitted explicitly. A
-		    // blanket rule would buy nothing and would silently make any future API path
-		    // that happens to end in .json or .html (say /api/report/export.json)
-		    // anonymous. Extension rules are for the hashed bundles the build emits at
-		    // the ROOT (js/css/map/ico), which have no directory to key off.
-		    "/**/*.webmanifest",
-		    "/**/*.txt",
-		    "/**/*.wasm",
-		    "/*.webmanifest",
-		    "/*.txt",
-		    "/*.wasm",
+			// Static data the shell loads: PWA manifest and friends.
+			//
+			// Deliberately NO blanket "*.json" / "*.html" rule here. The Angular build
+			// keeps every json (i18n bundles, pdf.js/monaco config) and every html
+			// fragment under assets/ - already anonymous via "/assets/**" above - and the
+			// only html at the context root is index.html, permitted explicitly. A
+			// blanket rule would buy nothing and would silently make any future API path
+			// that happens to end in .json or .html (say /api/report/export.json)
+			// anonymous. Extension rules are for the hashed bundles the build emits at
+			// the ROOT (js/css/map/ico), which have no directory to key off.
+			"/**/*.webmanifest", "/**/*.txt", "/**/*.wasm", "/*.webmanifest", "/*.txt", "/*.wasm",
 
-		    "/login",
-		    "/oauth2/**",
-		    "/public/**",
-		    "/auth/**",
-		    "/error",
-		    "/error/**",
-		    "/ui",
-		    "/ui/**",
-		    "/login/**"
-		};
+			"/login", "/oauth2/**", "/public/**", "/auth/**", "/error", "/error/**", "/ui", "/ui/**", "/login/**" };
 
 	/*
 	 * The Swagger / OpenAPI console. Anonymous like the rest of the UI - the API
@@ -189,22 +145,16 @@ public class GeboAISecurityConfig {
 	 * gate the spec path /v3/api-docs would stay anonymous in production, where it
 	 * has no business being reachable at all.
 	 */
-	private static final String[] swaggerUrls = new String[] {
-		    "/swagger-ui.html",
-		    "/swagger-ui/**",
-		    "/v3/api-docs",
-		    "/v3/api-docs/**",
-		    "/v3/api-docs.yaml"
-		};
+	private static final String[] swaggerUrls = new String[] { "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs",
+			"/v3/api-docs/**", "/v3/api-docs.yaml" };
 
 	/**
 	 * Whether the springdoc/Swagger machinery is on the classpath, i.e. whether
 	 * this build activated the swagger-on profile. Detected rather than configured
 	 * so the security rules cannot drift from what the build actually ships.
 	 */
-	private static final boolean SWAGGER_PRESENT = ClassUtils
-			.isPresent("org.springdoc.core.configuration.SpringDocConfiguration",
-					GeboAISecurityConfig.class.getClassLoader());
+	private static final boolean SWAGGER_PRESENT = ClassUtils.isPresent(
+			"org.springdoc.core.configuration.SpringDocConfiguration", GeboAISecurityConfig.class.getClassLoader());
 
 	// URLs that forward to index.html
 	private static final String forwardToIndexHtmlUrls[] = new String[] { "/", "/ui/*", "/index.html" };
@@ -244,6 +194,7 @@ public class GeboAISecurityConfig {
 	private final UserDetailsService directoryBackedUserDetailsService;
 	private final AuthenticationSuccessHandler authenticationSuccessHandler;
 	private final IGSecurityDirectory securityDirectory;
+	private final AuthenticationFailureHandler authenticationFailureHandler;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -261,7 +212,8 @@ public class GeboAISecurityConfig {
 			@Qualifier("customUserDetailsService") UserDetailsService userDetailsService,
 			DirectoryBackedUserDetailsService directoryBackedUserDetailsService,
 			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
-			IGSecurityDirectory securityDirectory) {
+			IGSecurityDirectory securityDirectory,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		this.directoryBackedUserDetailsService = directoryBackedUserDetailsService;
@@ -290,7 +242,8 @@ public class GeboAISecurityConfig {
 		this.point = point;
 		this.cryptService = cryptService;
 		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler(
-				backendOauth2LoginSPASupportService);
+				backendOauth2LoginSPASupportService, securityAuditLoggerService);
+		this.authenticationFailureHandler = new GOAuth2AuthenticationFailureHandler(securityAuditLoggerService);
 
 	}
 
@@ -306,12 +259,13 @@ public class GeboAISecurityConfig {
 	}
 
 	/**
-	 * Uses an empty role prefix so that {@code hasRole(...)}/{@code hasAnyRole(...)}
-	 * expressions (in HTTP rules and the now-enabled {@code @PreAuthorize} method
-	 * security) match the raw authorities issued by {@code UserPrincipal.create}
-	 * (e.g. {@code ADMIN}, {@code USER}, {@code APPLICATION}), which are stored
-	 * without the default {@code ROLE_} prefix. Declared {@code static} so it is
-	 * available before the security infrastructure that consumes it is built.
+	 * Uses an empty role prefix so that
+	 * {@code hasRole(...)}/{@code hasAnyRole(...)} expressions (in HTTP rules and
+	 * the now-enabled {@code @PreAuthorize} method security) match the raw
+	 * authorities issued by {@code UserPrincipal.create} (e.g. {@code ADMIN},
+	 * {@code USER}, {@code APPLICATION}), which are stored without the default
+	 * {@code ROLE_} prefix. Declared {@code static} so it is available before the
+	 * security infrastructure that consumes it is built.
 	 *
 	 * @return the granted-authority defaults with an empty role prefix
 	 */
@@ -387,31 +341,31 @@ public class GeboAISecurityConfig {
 	 * @throws Exception If an error occurs while configuring HTTP security.
 	 */
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, RequestAuditFilter requestAuditFilter)
+			throws Exception {
 		boolean oauth2LoginEnabled = securityConfig.getOauth2LoginEnabled() != null
 				&& securityConfig.getOauth2LoginEnabled();
 		boolean oauth2ResourceServerEnabled = securityConfig.getOauth2ResourceServerEnabled() != null
 				&& securityConfig.getOauth2ResourceServerEnabled();
 		if (SWAGGER_PRESENT) {
-			LOGGER.info("Swagger is on the classpath (swagger-on build): serving {} anonymously",
-					(Object) swaggerUrls);
+			LOGGER.info("Swagger is on the classpath (swagger-on build): serving {} anonymously", (Object) swaggerUrls);
 		} else {
 			LOGGER.info("No Swagger on the classpath: the API console and /v3/api-docs stay closed");
 		}
 		HttpSecurity configBuilder = http.cors(c -> c.disable()).csrf(csrf -> csrf.disable())
-				.addFilterAfter(corsFilter, CsrfFilter.class)
-				.authorizeHttpRequests(authorizeRequests -> {
+				.addFilterAfter(corsFilter, CsrfFilter.class).authorizeHttpRequests(authorizeRequests -> {
 					authorizeRequests.requestMatchers(allowedUrls).permitAll();
 					if (SWAGGER_PRESENT) {
 						authorizeRequests.requestMatchers(swaggerUrls).permitAll();
 					}
-					authorizeRequests.requestMatchers(mcpUrls)
-							.hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE).anyRequest().authenticated();
+					authorizeRequests.requestMatchers(mcpUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
+							.anyRequest().authenticated();
 				});
 		if (oauth2LoginEnabled) {
 			configBuilder = configBuilder.oauth2Login(oauth2 -> oauth2
 					.clientRegistrationRepository(clientRegistrationRepository)
 					.authorizedClientService(oauth2AuthorizedClientService).successHandler(authenticationSuccessHandler)
+					.failureHandler(authenticationFailureHandler)
 					.authorizationEndpoint(
 							auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
 					.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
@@ -422,6 +376,8 @@ public class GeboAISecurityConfig {
 			configBuilder = configBuilder.oauth2ResourceServer(
 					oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
 		}
+		//request audit for security logging
+		configBuilder.addFilterAfter(requestAuditFilter, AnonymousAuthenticationFilter.class);
 		return configBuilder.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();

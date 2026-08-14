@@ -29,6 +29,7 @@ import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelConfig;
 import ai.gebo.llms.google_vertex.services.GoogleVertexEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments Controller responsible for managing Google Vertex
@@ -46,9 +47,10 @@ public class GoogleVertexEmbeddingModelsConfigurationController extends
 	public GoogleVertexEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
 
-			GoogleVertexEmbeddingModelConfigurationSupportService ifaceType) {
+			GoogleVertexEmbeddingModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		super(persistentObjectManager, modelRuntimeConfigurationDao, GGoogleVertexEmbeddingModelConfig.class,
-				ifaceType);
+				ifaceType, securityAuditLoggerService);
 
 	}
 

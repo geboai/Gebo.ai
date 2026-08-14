@@ -41,6 +41,12 @@ import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
 import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -59,6 +65,7 @@ public class AuthController {
 	private PasswordEncoder passwordEncoder;
 	private LocalJwtTokenProvider tokenProvider;
 	private IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService;
+	private IGSecurityAuditLoggerService securityAuditLoggerService;
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	/**
@@ -73,12 +80,14 @@ public class AuthController {
 	 */
 	public AuthController(IGHttpRequestAuthenticationManagerResolver authenticationManager,
 			UserRepository userRepository, PasswordEncoder passwordEncoder, LocalJwtTokenProvider tokenProvider,
-			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
+			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenProvider = tokenProvider;
 		this.backendOauth2LoginSPASupportService = backendOauth2LoginSPASupportService;
+		this.securityAuditLoggerService = securityAuditLoggerService;
 
 	}
 
@@ -92,6 +101,12 @@ public class AuthController {
 	 */
 	@PostMapping(value = "login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<AuthResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+		// Request is unauthenticated at this point, so the MDC-sourced userId on the
+		// event will be empty - record the attempted username explicitly instead.
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.setEventType(SecurityAuditTaxonomy.EventType.AUTHENTICATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.AUTHENTICATION);
+		event.setResourceId(loginRequest.getUsername());
 		try {
 			// Authenticate the user using the provided credentials
 			Authentication authentication = authenticationManager.authenticateByLocalJWT(
@@ -113,16 +128,26 @@ public class AuthController {
 				AuthResponse response = new AuthResponse(SecurityHeaderUtil.createSelfsignedJwtSecurityHeader(token),
 						userInfo);
 
+				event.setAction(SecurityAuditTaxonomy.Action.AUTH_LOGIN_LOCAL);
+				event.setOutcome(SecurityAuditTaxonomy.Outcome.SUCCESS);
+				securityAuditLoggerService.log(event);
+
 				// Retrieve user information and include it in the response if available
 				// Return operation status with the response
 				return OperationStatus.of(response);
 			} else {
+				event.setAction(SecurityAuditTaxonomy.Action.AUTH_LOGIN_LOCAL_FAILURE);
+				event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+				securityAuditLoggerService.log(event);
 				return OperationStatus.ofError("Cannot authenticate with supplied credentials");
 			}
 
 		} catch (Throwable th) {
 			// Log any exception that occurs during authentication
 			LOGGER.error("Authentication process exception", th);
+			event.setAction(SecurityAuditTaxonomy.Action.AUTH_LOGIN_LOCAL_FAILURE);
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			securityAuditLoggerService.log(event);
 			// Return error status if authentication fails
 			return OperationStatus.<AuthResponse>ofError("Cannot authenticate with supplied credentials");
 		}

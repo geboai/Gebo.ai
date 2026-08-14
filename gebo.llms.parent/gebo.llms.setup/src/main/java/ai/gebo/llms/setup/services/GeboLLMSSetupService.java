@@ -74,7 +74,10 @@ import ai.gebo.model.base.GObjectRef;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -109,6 +112,19 @@ public class GeboLLMSSetupService {
 	private final IGTranscriptModelConfigurationSupportServiceRepositoryPattern transcriptModelsSupportRepo;
 	private final LLMSVendorsSetupConfig vendorsSetupConfig;
 	private final IGToolCallbackSourceRepositoryPattern toolsRepo;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at the real
+	// public API method, not at this shared helper.
+	private void logLlmCredentialsEvent(SecurityEvent event, String action, String resourceId, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_CONFIGURATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_CONFIGURATION);
+		event.setAction(action);
+		event.setResourceId(resourceId);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
 	// Sample text for testing embedding model configurations.
 	private static final String embeddingText4Test = "By default, the length of the embedding vector will be 1536 for text-embedding-3-small or 3072 for text-embedding-3-large. You can reduce the dimensions of the embedding by passing in the dimensions parameter without the embedding losing its concept-representing properties. We go into more detail on embedding dimensions in the embedding use case section.";
 	// Logger instance to log messages.
@@ -492,6 +508,23 @@ public class GeboLLMSSetupService {
 
 	public OperationStatus<SecretInfo> createLLMCredentials(@Valid @NotNull LLMCredentialsCreationData apiKeyData)
 			throws GeboCryptSecretException {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			OperationStatus<SecretInfo> status = createLLMCredentialsInternal(apiKeyData);
+			logLlmCredentialsEvent(event, SecurityAuditTaxonomy.Action.LLM_CREDENTIALS_CREATE,
+					apiKeyData != null ? apiKeyData.getServiceHandler() : null,
+					status.isHasErrorMessages() ? SecurityAuditTaxonomy.Outcome.FAILURE
+							: SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return status;
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			logLlmCredentialsEvent(event, SecurityAuditTaxonomy.Action.LLM_CREDENTIALS_CREATE,
+					apiKeyData != null ? apiKeyData.getServiceHandler() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	private OperationStatus<SecretInfo> createLLMCredentialsInternal(LLMCredentialsCreationData apiKeyData)
+			throws GeboCryptSecretException {
 
 		GeboTokenContent geboToken = new GeboTokenContent();
 		geboToken.setToken(apiKeyData.getNewApiSecret());
@@ -624,6 +657,24 @@ public class GeboLLMSSetupService {
 
 	public OperationStatus<List<GBaseModelConfig>> runAutoConfigure(
 			@Valid @NotNull LLMAutoconfigureCreationData autoconfiguredata) throws GeboCryptSecretException {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			OperationStatus<List<GBaseModelConfig>> status = runAutoConfigureInternal(autoconfiguredata);
+			logLlmCredentialsEvent(event, SecurityAuditTaxonomy.Action.LLM_AUTOCONFIGURE,
+					autoconfiguredata != null ? autoconfiguredata.getVendorId() : null,
+					status.isHasErrorMessages() ? SecurityAuditTaxonomy.Outcome.FAILURE
+							: SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return status;
+		} catch (RuntimeException | GeboCryptSecretException e) {
+			logLlmCredentialsEvent(event, SecurityAuditTaxonomy.Action.LLM_AUTOCONFIGURE,
+					autoconfiguredata != null ? autoconfiguredata.getVendorId() : null,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	private OperationStatus<List<GBaseModelConfig>> runAutoConfigureInternal(
+			LLMAutoconfigureCreationData autoconfiguredata) throws GeboCryptSecretException {
 		Optional<LLMSVendor> vendor = vendorsSetupConfig.getVendors().stream()
 				.filter(x -> x.getVendorInfo().getVendorId().equals(autoconfiguredata.getVendorId())).findFirst();
 		if (vendor.isPresent()) {
