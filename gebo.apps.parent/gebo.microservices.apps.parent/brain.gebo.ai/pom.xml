@@ -9,6 +9,13 @@
 	</parent>
 	<artifactId>brain.gebo.ai</artifactId>
 
+	<properties>
+		<dependency-check.version>12.2.2</dependency-check.version>
+
+		<!-- build ordinaria: non bloccare -->
+		<dependency-check.failBuildOnCVSS>11</dependency-check.failBuildOnCVSS>
+		<dependency-check.failOnError>false</dependency-check.failOnError>
+	</properties>
 	<dependencies>
 		<!-- The Spring Security filter chain + LOCAL_JWT provider (GeboAISecurityConfig,
 		     LocalJwtTokenProvider, GSecurityServiceImpl, AclGrantedAccessorServiceImpl).
@@ -151,6 +158,36 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>${dependency-check.version}</version>
+				<!-- non eseguire questa execution nei singoli moduli -->
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>dependency-vulnerability-check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<autoUpdate>true</autoUpdate>
+					<failBuildOnCVSS>${dependency-check.failBuildOnCVSS}</failBuildOnCVSS>
+					<failOnError>${dependency-check.failOnError}</failOnError>
+					<formats>
+						<format>HTML</format>
+						<format>JSON</format>
+					</formats>
+					<outputDirectory>${project.build.directory}/dependency-check</outputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	<profiles>
 		<!-- Bootable fat jar WITH the OpenAPI/Swagger UI (classifier
 		bootable+swagger). -->
@@ -227,6 +264,15 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>production</id>
+			<properties>
+				<!-- Critical -->
+				<dependency-check.failBuildOnCVSS>9.0</dependency-check.failBuildOnCVSS>
+				<!-- se lo scanner non funziona, produzione bloccata -->
+				<dependency-check.failOnError>true</dependency-check.failOnError>
+			</properties>
 		</profile>
 	</profiles>
 </project>
