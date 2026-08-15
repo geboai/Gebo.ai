@@ -22,7 +22,17 @@
 		<apache-poi.version>5.5.1</apache-poi.version>
 		<spring.ai.version>2.0.0</spring.ai.version>
 		<springdoc.version>3.0.3</springdoc.version>
-		<spring-retry.version>2.0.12</spring-retry.version>
+		<!-- 2.0.12 is affected by CVE-2026-41710; 2.0.13 is the fix. This property
+		     is consumed by gebo.ranker.api and gebo.architecture.llms.abstraction.layer. -->
+		<spring-retry.version>2.0.13</spring-retry.version>
+		<!-- Override Spring Boot 4.1.0's managed netty.version (4.2.15.Final).
+		     spring-boot-dependencies imports io.netty:netty-bom:${netty.version},
+		     so bumping this property re-resolves the whole netty BOM. 4.2.15.Final
+		     is affected by a cluster of netty-codec-* advisories (http, http2,
+		     http3, dns, compression — CVE-2026-55831/-55833/-56745/-56746/-56816/
+		     -56819/-59898/-59899/-59900/-59901/-59921/-73508); 4.2.16.Final fixes
+		     all of them. netty is pulled in transitively; we declare none directly. -->
+		<netty.version>4.2.16.Final</netty.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
