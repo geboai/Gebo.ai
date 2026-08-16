@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
+import ai.gebo.googledrive.handlers.IGGoogleDriveSystemContentHandler;
 import ai.gebo.googledrive.handlers.repositories.GoogleDriveProjectEndpointRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
@@ -45,7 +46,7 @@ public class GGoogleDriveResourcesDisposerFactoryImpl
 	 * @param persistentObjectManager 
 	 */
 	public GGoogleDriveResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
-			GGoogleDriveSystemContentHandlerImpl moduleHandler,
+			IGGoogleDriveSystemContentHandler moduleHandler,
 			GoogleDriveProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo, IGPersistentObjectManager persistentObjectManager) {
 		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
 

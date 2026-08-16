@@ -14,7 +14,6 @@ package ai.gebo.git.content.handler.impl;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -24,6 +23,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactor
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.git.content.handler.GGitContentManagementSystem;
 import ai.gebo.git.content.handler.GGitProjectEndpoint;
+import ai.gebo.git.content.handler.IGBaseGitContentManagementSystemHandler;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
@@ -40,7 +40,6 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
  * This class handles git-based content management systems and provides 
  * functionality to manage git project endpoints.
  */
-@Service
 public class GDefaultGitContentManagementSystemHandler
 		extends GAbstractGitContentManagementSystemHandler<GGitContentManagementSystem, GGitProjectEndpoint> {
 

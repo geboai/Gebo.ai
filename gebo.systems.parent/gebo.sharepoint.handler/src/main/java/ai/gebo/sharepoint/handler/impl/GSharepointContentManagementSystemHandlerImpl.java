@@ -21,7 +21,6 @@ package ai.gebo.sharepoint.handler.impl;
  */
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -41,7 +40,6 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 
-@Service
 public class GSharepointContentManagementSystemHandlerImpl extends
 		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GSharepointContentManagementSystem, GSharepointProjectEndpoint,MicrosoftGraphResourceReference,IGMicrosoftGraphVirtualFilesystemConsumingService>
 		implements IGSharepointContentManagementSystemHandler {

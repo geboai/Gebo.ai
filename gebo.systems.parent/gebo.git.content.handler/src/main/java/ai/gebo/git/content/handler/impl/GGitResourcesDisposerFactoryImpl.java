@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.git.content.handler.GGitProjectEndpoint;
+import ai.gebo.git.content.handler.IGBaseGitContentManagementSystemHandler;
 import ai.gebo.git.content.handler.repositories.GitEndpointRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
@@ -44,7 +45,7 @@ public class GGitResourcesDisposerFactoryImpl extends GAbstractResourcesDisposer
 	 * @param persistentObjectManager 
 	 */
 	public GGitResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
-			GDefaultGitContentManagementSystemHandler moduleHandler, GitEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo, IGPersistentObjectManager persistentObjectManager) {
+			IGBaseGitContentManagementSystemHandler moduleHandler, GitEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo, IGPersistentObjectManager persistentObjectManager) {
 		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
 
 	}

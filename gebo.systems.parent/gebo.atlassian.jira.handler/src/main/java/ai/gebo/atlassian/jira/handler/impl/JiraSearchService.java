@@ -35,6 +35,8 @@ import ai.gebo.jira.cloud.client.invoker.ApiClient;
 import ai.gebo.jira.cloud.client.model.IssueBean;
 import ai.gebo.jira.cloud.client.model.SearchAndReconcileResults;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumingService;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;
@@ -58,9 +60,9 @@ public class JiraSearchService extends
 	final JiraApiClientFactory jiraConnectionFactory;
 
 	public JiraSearchService(JiraApiClientFactory jiraConnectionFactory,
-			GJiraRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			JiraContentManagementHandlerImpl contentManagementSystemHandler, JiraHandlerConfig config,
-			JiraBrowsingService browsingService) {
+			GAbstractRemoteVirtualFilesystemConsumingService<GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference> virtualFileSystemConsumingService,
+			GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GJiraSystem, GJiraProjectEndpoint, JiraResourceReference, IGJiraVirtualFilesystemConsumingService> contentManagementSystemHandler,
+			JiraHandlerConfig config, JiraBrowsingService browsingService) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.jiraConnectionFactory = jiraConnectionFactory;
 	}
