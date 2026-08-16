@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.ai.document.Document;
@@ -36,12 +38,20 @@ import ai.gebo.model.DocumentMetaInfos;
  * This class simulates a vector store by storing documents in memory with configurable response times.
  */
 public class TestVectorStore extends AbstractTestingBusinessLogic implements IGExtendedVectorStore {
+	/*
+	 * Everything here is written by the ingestion/embedding pipeline threads and
+	 * read by the test thread that asserts on the result, so the collections are
+	 * concurrent and every getter below hands out a snapshot. With plain
+	 * HashMap/ArrayList a test reading the store while a batch was still being
+	 * flushed could see a torn view (or die with ConcurrentModificationException)
+	 * - which looked like a random product failure.
+	 */
 	/** Map to store documents by their IDs */
-	private Map<String, Document> data = new HashMap<String, Document>();
+	private Map<String, Document> data = new ConcurrentHashMap<String, Document>();
 	/** Map for organizing documents by metadata attributes and their values */
-	private Map<String, Map<Object, List<Document>>> metaInfoCataloging = new HashMap<String, Map<Object, List<Document>>>();
+	private Map<String, Map<Object, List<Document>>> metaInfoCataloging = new ConcurrentHashMap<String, Map<Object, List<Document>>>();
 	/** List to track document IDs that have been deleted */
-	private List<String> deletedDocumentIds=new ArrayList<String>();
+	private List<String> deletedDocumentIds = new CopyOnWriteArrayList<String>();
 	/** Configuration for the test vector store */
 	TestVectorStoreConfig vectorStoreConfig = null;
 
@@ -50,7 +60,7 @@ public class TestVectorStore extends AbstractTestingBusinessLogic implements IGE
 	 */
 	TestVectorStore() {
 		for (String attr : DocumentMetaInfos.ALL_ATTRIBUTES) {
-			metaInfoCataloging.put(attr, new HashMap<Object, List<Document>>());
+			metaInfoCataloging.put(attr, new ConcurrentHashMap<Object, List<Document>>());
 		}
 	}
 
@@ -148,15 +158,13 @@ public class TestVectorStore extends AbstractTestingBusinessLogic implements IGE
 			}
 			Set<String> keys = meta.keySet();
 			for (String key : keys) {
-				if (!metaInfoCataloging.containsKey(key)) {
-					metaInfoCataloging.put(key, new HashMap<Object, List<Document>>());
-				}
 				Object value = meta.get(key);
 				if (value != null) {
-					if (!metaInfoCataloging.get(key).containsKey(value)) {
-						metaInfoCataloging.get(key).put(value, new ArrayList<Document>());
-					}
-					metaInfoCataloging.get(key).get(value).add(document);
+					// computeIfAbsent instead of containsKey+put: two pipeline
+					// threads flushing batches at the same time would otherwise
+					// drop one of the two freshly created lists.
+					metaInfoCataloging.computeIfAbsent(key, k -> new ConcurrentHashMap<Object, List<Document>>())
+							.computeIfAbsent(value, v -> new CopyOnWriteArrayList<Document>()).add(document);
 				}
 			}
 		}
@@ -184,8 +192,9 @@ public class TestVectorStore extends AbstractTestingBusinessLogic implements IGE
 	 * @return List of documents that match the criteria
 	 */
 	public List<Document> getStoredForMetaAttributeAndValue(String key, Object value) {
-		if (metaInfoCataloging.containsKey(key) && metaInfoCataloging.get(key).containsKey(value))
-			return metaInfoCataloging.get(key).get(value);
+		Map<Object, List<Document>> forKey = metaInfoCataloging.get(key);
+		if (forKey != null && forKey.containsKey(value))
+			return List.copyOf(forKey.get(value));
 		return List.of();
 	}
 
@@ -196,10 +205,16 @@ public class TestVectorStore extends AbstractTestingBusinessLogic implements IGE
 	 * @return Map of values to documents for the specified key
 	 */
 	public Map<Object, List<Document>> getStoredForMetaAttribute(String key) {
-		if (metaInfoCataloging.containsKey(key)) {
-			return metaInfoCataloging.get(key);
+		Map<Object, List<Document>> forKey = metaInfoCataloging.get(key);
+		Map<Object, List<Document>> out = new HashMap<Object, List<Document>>();
+		if (forKey != null) {
+			// Snapshot: callers assert on size()/contents, and the live map keeps
+			// growing while an ingestion batch is still being flushed.
+			for (Entry<Object, List<Document>> entry : forKey.entrySet()) {
+				out.put(entry.getKey(), List.copyOf(entry.getValue()));
+			}
 		}
-		return new HashMap<Object, List<Document>>();
+		return out;
 	}
 
 	/**
@@ -219,7 +234,7 @@ public class TestVectorStore extends AbstractTestingBusinessLogic implements IGE
 	 * @return List of deleted document IDs
 	 */
 	public List<String> getDeletedDocumentIds() {
-		return deletedDocumentIds;
+		return List.copyOf(deletedDocumentIds);
 	}
 
 	@Override
