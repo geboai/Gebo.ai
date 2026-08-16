@@ -11,7 +11,6 @@ package ai.gebo.mcpclient.content.handler.impl;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.architecture.buildsystems.abstraction.layer.IGBuildSystemHandlerRepositoryPattern;
@@ -37,7 +36,6 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
  * {@link GMCPClientConfigurationDao}); each endpoint references its own MCP
  * client configuration by code.
  */
-@Service
 public class GMCPClientContentManagementHandlerImpl extends
 		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GMCPClientSystem, MCPClientProjectEndpoint, ai.gebo.mcpclient.content.handler.impl.model.MCPClientResourceReference, IGMCPClientVirtualFilesystemConsumingService>
 		implements IGMCPClientContentManagementHandler {

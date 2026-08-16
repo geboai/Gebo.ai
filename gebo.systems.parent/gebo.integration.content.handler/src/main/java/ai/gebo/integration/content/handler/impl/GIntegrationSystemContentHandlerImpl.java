@@ -2,7 +2,6 @@ package ai.gebo.integration.content.handler.impl;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -27,7 +26,6 @@ import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
 import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
-@Service
 public class GIntegrationSystemContentHandlerImpl extends
 		GAbstractContentManagementSystemHandler<GIntegrationContentSystem, GIntegrationProjectEndpoint, NoContentConsumingSessionParam>
 		implements IGIntegrationSystemContentHandler {

@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -52,7 +51,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
 
-@Service
 public class JiraContentManagementHandlerImpl extends
 		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GJiraSystem, GJiraProjectEndpoint, JiraResourceReference, IGJiraVirtualFilesystemConsumingService>
 		implements IGJiraContentManagementHandler {

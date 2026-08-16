@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
+import ai.gebo.filesystem.content.handler.IGFilesystemContentManagementSystemHandler;
 import ai.gebo.filesystem.content.handler.repositories.FilesystemProjectEndpointRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
@@ -43,7 +44,7 @@ public class GFilesystemResourcesDisposerFactoryImpl
 	 * @param persistentObjectManager
 	 */
 	public GFilesystemResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
-			GFilesystemContentManagementSystemHandlerImpl moduleHandler,
+			IGFilesystemContentManagementSystemHandler moduleHandler,
 			FilesystemProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo,
 			IGPersistentObjectManager persistentObjectManager) {
 		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);

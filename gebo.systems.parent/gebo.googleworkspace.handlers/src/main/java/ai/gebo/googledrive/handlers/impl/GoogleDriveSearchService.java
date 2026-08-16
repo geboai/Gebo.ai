@@ -22,6 +22,8 @@ import ai.gebo.googledrive.handlers.impl.model.GoogleDriveNativePositionObject;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveNavigationCoordinates;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveResourceReference;
 import ai.gebo.googledrive.search.api.GoogleDriveResultsExtractionData;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumingService;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 
 @Service
@@ -32,9 +34,9 @@ public class GoogleDriveSearchService extends
 	final GoogleWorkspaceHandlerConfig config;
 
 	public GoogleDriveSearchService(GoogleDriveCredentialsFactory googleCredentialsFactory,
-			GoogleDriveVirtualFilesystemConsumingService virtualFileSystemConsumingService,
-			GGoogleDriveSystemContentHandlerImpl contentManagementSystemHandler, GoogleWorkspaceHandlerConfig config,
-			IGGoogleDriveVirtualFilesystemBrowser browsingService) {
+			GAbstractRemoteVirtualFilesystemConsumingService<GGoogleDriveSystem, GGoogleDriveProjectEndpoint, GoogleDriveNativePositionObject, GoogleDriveNavigationCoordinates, GoogleDriveResourceReference> virtualFileSystemConsumingService,
+			GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GGoogleDriveSystem, GGoogleDriveProjectEndpoint, GoogleDriveResourceReference, IGGoogleDriveVirtualFilesystemConsumingService> contentManagementSystemHandler,
+			GoogleWorkspaceHandlerConfig config, IGGoogleDriveVirtualFilesystemBrowser browsingService) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.googleCredentialsFactory = googleCredentialsFactory;
 		this.config = config;

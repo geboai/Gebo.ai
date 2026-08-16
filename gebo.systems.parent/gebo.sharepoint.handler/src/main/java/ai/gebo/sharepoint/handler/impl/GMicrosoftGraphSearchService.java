@@ -42,6 +42,8 @@ import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNavigationCoordinates
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphResourceReference;
 import ai.gebo.sharepoint.search.api.MicrosoftResultsExtractionData;
 import ai.gebo.sharepoint.search.api.SharePointSearchFilter;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumingService;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
 import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;
@@ -67,8 +69,8 @@ public class GMicrosoftGraphSearchService extends
 	final GMicrosoftGraphClientFactory msGraphConnectionFactory;
 
 	public GMicrosoftGraphSearchService(GMicrosoftGraphClientFactory msGraphConnectionFactory,
-			GMicrosoftGraphVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			GSharepointContentManagementSystemHandlerImpl contentManagementSystemHandler,
+			GAbstractRemoteVirtualFilesystemConsumingService<GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference> virtualFileSystemConsumingService,
+			GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphResourceReference, IGMicrosoftGraphVirtualFilesystemConsumingService> contentManagementSystemHandler,
 			IGMicrosoftGraphVirtualFilesystemBrowsingService browsingService) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.msGraphConnectionFactory = msGraphConnectionFactory;

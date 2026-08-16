@@ -1,6 +1,5 @@
 package ai.gebo.webdavcms.handler.impl;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -24,7 +23,6 @@ import ai.gebo.webdavcms.handler.IGWebdavVirtualFilesystemConsumingService;
 import ai.gebo.webdavcms.handler.repositories.WebdavContentManagementSystemRepository;
 import ai.gebo.webdavcms.handler.repositories.WebdavProjectEndpointRepository;
 
-@Service
 public class WebdavContentManagementHandlerImpl extends
 		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GWebdavContentManagementSystem, GWebdavProjectEndpoint, GWebdavResourceReference, IGWebdavVirtualFilesystemConsumingService>
 		implements IGWebdavContentManagementSystemHandler {

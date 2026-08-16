@@ -39,7 +39,7 @@ public class GSecurityAuditLoggerServiceImpl implements IGSecurityAuditLoggerSer
 	}
 
 	private static String getCallers() {
-		List<String> stack = StackWalker.getInstance().walk(stream -> stream.skip(1).limit(3)
+		List<String> stack = StackWalker.getInstance().walk(stream -> stream.skip(2).limit(4)
 				.map(frame -> frame.getClassName() + "#" + frame.getMethodName()).toList());
 		return stack.stream().collect(Collectors.joining(" <- "));
 	}

@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
+import ai.gebo.filesystem.content.handler.IGFilesystemContentManagementSystemHandler;
 import ai.gebo.filesystem.content.handler.repositories.FilesystemProjectEndpointRepository;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService.GConsumers;
@@ -157,8 +158,8 @@ public class GFilesystemChangesHandlingService
 	 */
 	@Override
 	public void onChange(Set<ChangedFiles> changeSet) {
-		GFilesystemContentManagementSystemHandlerImpl handler = this.runtimeBinder
-				.getImplementationOf(GFilesystemContentManagementSystemHandlerImpl.class);
+		IGFilesystemContentManagementSystemHandler handler = this.runtimeBinder
+				.getImplementationOf(IGFilesystemContentManagementSystemHandler.class);
 		IGeboInversionOfControlIngestionService iocService = this.runtimeBinder
 				.getImplementationOf(IGeboInversionOfControlIngestionService.class);
 		for (ChangedFiles changedFiles : changeSet) {

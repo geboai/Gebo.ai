@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
@@ -39,7 +38,6 @@ import ai.gebo.webdavcms.handler.model.WebdavNavigationCoordinates;
 import ai.gebo.webdavcms.handler.model.WebdavPathComponent;
 import ai.gebo.webdavcms.handler.model.WebdavPathNodeType;
 
-@Service
 public class GWebdavRemoteVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GWebdavContentManagementSystem, GWebdavProjectEndpoint, WebdavNativePositionObject, WebdavNavigationCoordinates, GWebdavResourceReference>
 		implements IGWebdavVirtualFilesystemConsumingService {

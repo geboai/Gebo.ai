@@ -21,6 +21,7 @@ import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
+import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
 import ai.gebo.uploads.content.handler.repositories.UploadsProjectEndpointRepository;
 
 /**
@@ -45,7 +46,7 @@ public class GUploadsResourcesDisposerFactoryImpl
      * @param persistentObjectManager 
      */
 	public GUploadsResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
-			GUploadsContentManagementSystemHandlerImpl moduleHandler,
+			IGUploadsContentManagementSystemHandler moduleHandler,
 			UploadsProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo, IGPersistentObjectManager persistentObjectManager) {
 		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
 
