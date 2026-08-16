@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
@@ -54,7 +53,6 @@ import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
  * service to handle specific Google Drive operations such as navigating through
  * drives, folders, and accessing files.
  */
-@Service
 public class GoogleDriveVirtualFilesystemConsumingService extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GGoogleDriveSystem, GGoogleDriveProjectEndpoint, GoogleDriveNativePositionObject, GoogleDriveNavigationCoordinates, GoogleDriveResourceReference>
 		implements IGGoogleDriveVirtualFilesystemConsumingService {

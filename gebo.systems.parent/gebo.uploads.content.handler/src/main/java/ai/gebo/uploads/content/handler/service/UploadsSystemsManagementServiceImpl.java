@@ -31,8 +31,8 @@ import ai.gebo.config.GeboConfig;
 import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
+import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
 import ai.gebo.uploads.content.handler.TmpUploadedContents;
-import ai.gebo.uploads.content.handler.impl.GUploadsContentManagementSystemHandlerImpl;
 import ai.gebo.uploads.content.handler.repositories.TmpUploadedContentsRepository;
 
 /**
@@ -53,7 +53,7 @@ public class UploadsSystemsManagementServiceImpl {
 	@Autowired
 	IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService;
 	@Autowired
-	GUploadsContentManagementSystemHandlerImpl handler;
+	IGUploadsContentManagementSystemHandler handler;
 
 	/**
 	 * Default constructor for UploadsSystemsManagementServiceImpl

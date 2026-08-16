@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -62,7 +61,6 @@ import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumingService;
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 
-@Service
 public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference>
 		implements IGJiraVirtualFilesystemConsumingService {

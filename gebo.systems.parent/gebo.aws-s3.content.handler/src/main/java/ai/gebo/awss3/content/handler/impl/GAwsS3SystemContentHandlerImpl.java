@@ -9,7 +9,6 @@
 
 package ai.gebo.awss3.content.handler.impl;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -28,7 +27,6 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 
-@Service
 public class GAwsS3SystemContentHandlerImpl extends
 		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GAwsS3System, GAwsS3ProjectEndpoint, AwsS3ResourceReference, IGAwsS3VirtualFilesystemConsumingService>
 		implements IGAwsS3SystemContentHandler {

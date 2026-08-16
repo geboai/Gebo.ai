@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.awss3.content.handler.GAwsS3ProjectEndpoint;
+import ai.gebo.awss3.content.handler.IGAwsS3SystemContentHandler;
 import ai.gebo.awss3.content.handler.repositories.AwsS3ProjectEndpointRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
@@ -25,7 +26,7 @@ import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService
 public class GAwsS3ResourcesDisposerFactoryImpl extends GAbstractResourcesDisposerFactory<GAwsS3ProjectEndpoint> {
 
 	public GAwsS3ResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
-			GAwsS3SystemContentHandlerImpl moduleHandler,
+			IGAwsS3SystemContentHandler moduleHandler,
 			AwsS3ProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo,
 			IGPersistentObjectManager persistentObjectManager) {
 		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);

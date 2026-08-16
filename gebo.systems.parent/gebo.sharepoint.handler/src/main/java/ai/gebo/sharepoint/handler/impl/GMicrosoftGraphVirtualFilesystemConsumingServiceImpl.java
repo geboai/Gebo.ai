@@ -30,7 +30,6 @@ import java.util.Optional;
 import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.microsoft.graph.drives.item.items.item.content.ContentRequestBuilder;
 import com.microsoft.graph.drives.item.root.RootRequestBuilder;
@@ -77,7 +76,6 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
  * Service implementation for accessing and managing Microsoft SharePoint and OneDrive resources 
  * through the Microsoft Graph API.
  */
-@Service
 public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference>
 		implements IGMicrosoftGraphVirtualFilesystemConsumingService {

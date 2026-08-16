@@ -52,7 +52,6 @@ import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
  * extends the abstract content management system handler and implements the
  * uploads-specific interface.
  */
-@Service
 public class GUploadsContentManagementSystemHandlerImpl extends
 		GAbstractContentManagementSystemHandler<GUploadsContentManagementSystem, GUploadsProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam>
 		implements IGUploadsContentManagementSystemHandler {
