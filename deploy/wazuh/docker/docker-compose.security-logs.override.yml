@@ -1,0 +1,115 @@
+# /**
+#  * This Source Code is subject to the terms of the
+#  * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+#  * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+#  * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+#  * and https://mozilla.org/MPL/2.0/.
+#  * Copyright (c) 2025+ Gebo.ai
+#  */
+#
+# ===========================================================================
+# Expose every microservice's security audit trail on the DOCKER HOST, so a
+# single Wazuh agent (on the host, or the sidecar in
+# docker-compose.wazuh-agent.yml) can tail all of them.
+#
+# The stock dockers/gebo.microservices/docker-compose.yml gives each service
+# only ./config, /opt/gebo.ai/home and /opt/gebo.ai/work - its logs stay inside
+# the container, where nothing can read them and where they die with it. Each
+# service writes to /opt/gebo.ai/logs/security-log.jsonl (Jib images run with
+# WORKDIR /opt/gebo.ai and logback's default GEBO_LOG_BASE=logs), so this file
+# bind-mounts that directory per service.
+#
+# Usage, from dockers/gebo.microservices/:
+#
+#   export GEBO_SECURITY_LOG_BASE=/var/log/gebo-ai-microservices   # or put it in .env
+#   sudo mkdir -p $GEBO_SECURITY_LOG_BASE
+#   docker compose -f docker-compose.yml \
+#                  -f ../../deploy/wazuh/docker/docker-compose.security-logs.override.yml \
+#                  up -d
+#
+# Then point the agent at $GEBO_SECURITY_LOG_BASE/*/security-log.jsonl
+# (block 4 of deploy/wazuh/agent/localfile-blocks.xml).
+#
+# GEBO_SECURITY_LOG_BASE defaults to ./security-logs (i.e. inside the compose
+# directory) so the file also works with no environment set up at all.
+#
+# Each service gets its own subdirectory, which is what keeps the files apart -
+# but the events themselves are already self-identifying: every audit line
+# carries architectureType=MICROSERVICES plus the service's own
+# spring.application.name in its "application" field.
+#
+# Volumes declared here are APPENDED to the ones in the base compose file
+# (compose merges volume lists by container path), so nothing is lost.
+#
+# See docs/wazuh-integration.md.
+# ===========================================================================
+services:
+
+  # ---------------- Edge, registry, security, workflows ----------------
+  eureka:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/eureka:/opt/gebo.ai/logs
+  gateway:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/gateway:/opt/gebo.ai/logs
+  heimdall:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/heimdall:/opt/gebo.ai/logs
+  tyr:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/tyr:/opt/gebo.ai/logs
+
+  # ---------------- LLM / RAG backends ----------------
+  brain:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/brain:/opt/gebo.ai/logs
+  vectorizator:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/vectorizator:/opt/gebo.ai/logs
+  graphicator:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/graphicator:/opt/gebo.ai/logs
+  chunker:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/chunker:/opt/gebo.ai/logs
+  fulltextor:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/fulltextor:/opt/gebo.ai/logs
+
+  # ---------------- Content-handler microservices ----------------
+  git:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/git:/opt/gebo.ai/logs
+  filesystem:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/filesystem:/opt/gebo.ai/logs
+  uploads:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/uploads:/opt/gebo.ai/logs
+  userspace:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/userspace:/opt/gebo.ai/logs
+  sharepoint:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/sharepoint:/opt/gebo.ai/logs
+  confluence:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/confluence:/opt/gebo.ai/logs
+  jira:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/jira:/opt/gebo.ai/logs
+  aws-s3:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/aws-s3:/opt/gebo.ai/logs
+  googledrive:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/googledrive:/opt/gebo.ai/logs
+  mcpclient:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/mcpclient:/opt/gebo.ai/logs
+  webdav:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/webdav:/opt/gebo.ai/logs
+  integration:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/integration:/opt/gebo.ai/logs

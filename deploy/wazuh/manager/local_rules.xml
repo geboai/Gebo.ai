@@ -1,0 +1,158 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+ -->
+<!--
+  Gebo.ai security audit rules for a Wazuh MANAGER.
+
+  Install as (or append to) /var/ossec/etc/rules/local_rules.xml on the manager,
+  then: /var/ossec/bin/wazuh-control restart
+  (a syntax/semantic error here stops wazuh-analysisd from starting - check
+  /var/ossec/logs/ossec.log after the restart).
+
+  NO CUSTOM DECODER IS NEEDED: Gebo.ai writes security-log.jsonl as JSON Lines,
+  so Wazuh's built-in "json" decoder already extracts every field (nested
+  objects flattened as parent.child, e.g. details.reason). These rules only add
+  classification/severity on top of it.
+
+  Rule id range 100200-100299 is inside the 100000+ user range Wazuh reserves
+  for local rules; renumber if it collides with rules you already have.
+
+  IMPORTANT - matching the "action" field: Wazuh treats `action` as one of its
+  STATIC field names, so <field name="action">...</field> makes analysisd refuse
+  to load this whole file ("Field 'action' is static"), while the static
+  <action>...</action> tag does not match the JSON-decoded value either. Key
+  your rules off eventType / category / outcome / userId / sourceIp / resourceId
+  (all verified working below) and use $(action) only to render it in the
+  description.
+
+  See docs/wazuh-integration.md for the whole setup and for how to test these
+  rules with wazuh-logtest before trusting them.
+-->
+<group name="gebo_ai,audit,nis2,">
+
+  <!--
+    Parent rule for every Gebo.ai audit event: level 0 = no alert on its own,
+    it exists so the child rules below can use <if_sid>100200</if_sid> and so
+    "rule.groups: gebo_ai" selects the whole audit trail in the dashboards.
+    architectureType is MONOLITHIC or MICROSERVICES, which also keeps this rule
+    from matching unrelated JSON logs that happen to carry an eventType.
+  -->
+  <rule id="100200" level="0">
+    <decoded_as>json</decoded_as>
+    <field name="eventType">\.+</field>
+    <field name="architectureType">^MONOLITHIC$|^MICROSERVICES$</field>
+    <description>Gebo.ai security audit event ($(eventType)/$(action)).</description>
+  </rule>
+
+  <!-- ============================ Authentication ============================ -->
+
+  <rule id="100201" level="3">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^authentication$</field>
+    <field name="outcome">^success$</field>
+    <description>Gebo.ai: successful login ($(action)) for user $(userId) from $(sourceIp).</description>
+  </rule>
+
+  <rule id="100202" level="5">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^authentication$</field>
+    <field name="outcome">^failure$</field>
+    <description>Gebo.ai: failed login attempt ($(action)) for user $(userId) from $(sourceIp).</description>
+  </rule>
+
+  <!--
+    Brute force / password spraying: 5 failed logins from the SAME sourceIp
+    within 2 minutes. same_field works on the JSON field name (sourceIp), since
+    Gebo.ai's own field is not Wazuh's static "srcip".
+  -->
+  <rule id="100203" level="10" frequency="5" timeframe="120">
+    <if_matched_sid>100202</if_matched_sid>
+    <same_field>sourceIp</same_field>
+    <description>Gebo.ai: 5 failed logins from $(sourceIp) in 120 seconds (possible brute force).</description>
+  </rule>
+
+  <!-- outcome=denied covers authUnauthorizedAccess: a caller reaching a
+       resource its roles do not allow. -->
+  <rule id="100204" level="8">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^authentication$</field>
+    <field name="outcome">^denied$</field>
+    <description>Gebo.ai: access denied on $(requestUri) for user $(userId) from $(sourceIp).</description>
+  </rule>
+
+  <!-- ======================= Sessions / secrets / keys ======================= -->
+
+  <rule id="100205" level="3">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^sessionManagement$</field>
+    <description>Gebo.ai: session event ($(action), $(outcome)) for user $(userId).</description>
+  </rule>
+
+  <!-- Creating, rotating or deleting a stored credential (LLM API keys,
+       integration tokens, Gebo API keys). Rarely legitimate outside admin
+       maintenance windows: a good candidate for an email/Slack integration. -->
+  <rule id="100210" level="7">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^secretManagement$|^apiKeyManagement$</field>
+    <description>Gebo.ai: credential store change ($(action), $(outcome)) by user $(userId).</description>
+  </rule>
+
+  <rule id="100211" level="5">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^llmConfiguration$</field>
+    <description>Gebo.ai: LLM configuration change ($(action), $(outcome)) by user $(userId).</description>
+  </rule>
+
+  <rule id="100212" level="7">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^userAdministration$</field>
+    <description>Gebo.ai: user/group administration ($(action), $(outcome)) by user $(userId).</description>
+  </rule>
+
+  <!-- ================= 3rd-party integrations and LLM traffic ================= -->
+
+  <rule id="100213" level="3">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^integrationConfiguration$</field>
+    <description>Gebo.ai: integration configuration change ($(action), $(outcome)) by user $(userId) on $(resourceId).</description>
+  </rule>
+
+  <!--
+    Data actually read from a connected system (SharePoint, Confluence, Jira,
+    GIT, Google Drive, S3, WebDAV, MCP, file shares...). High volume during
+    ingestion runs: level 0 keeps it out of the alert stream while still
+    archived. Raise it if your compliance scope needs data-access alerts.
+  -->
+  <rule id="100214" level="0">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^integrationDataAccess$</field>
+    <description>Gebo.ai: 3rd-party data access ($(action)) on $(resourceId).</description>
+  </rule>
+
+  <!--
+    LLM invocations carry metadata only (model, provider, outcome, latency) -
+    never prompt or response content. Level 0 for the same volume reason.
+  -->
+  <rule id="100215" level="0">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^llmInvocation$</field>
+    <description>Gebo.ai: LLM invocation ($(action), $(outcome)) by user $(userId).</description>
+  </rule>
+
+  <!-- Anything above that failed while talking to a 3rd-party system or an LLM
+       provider - useful to spot a revoked/expired credential early. -->
+  <rule id="100216" level="6">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^integrationDataAccess$|^llmInvocation$</field>
+    <field name="outcome">^failure$</field>
+    <description>Gebo.ai: 3rd-party/LLM operation failed ($(eventType)/$(action)) for user $(userId).</description>
+  </rule>
+
+</group>
