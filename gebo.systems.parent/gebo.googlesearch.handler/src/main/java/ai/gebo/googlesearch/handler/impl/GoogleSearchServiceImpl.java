@@ -43,7 +43,7 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
+public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSearchQueryObject> {
 	private static final String GOOGLE = "google";
 	public static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;

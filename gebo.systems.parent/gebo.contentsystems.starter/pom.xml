@@ -39,6 +39,21 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.tavilysearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.bravesearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.searxngsearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
 			<artifactId>gebo.atlassian.confluence.handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>

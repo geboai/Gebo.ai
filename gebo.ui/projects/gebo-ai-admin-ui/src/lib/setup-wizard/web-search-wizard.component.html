@@ -1,0 +1,88 @@
+<p-blockUI id="BlockUILock" [target]="webSearchSetupUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #webSearchSetupUI header="Web search provider">
+
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+    <div class="grid">
+        <div class="col-12">
+            <p gebo-ai-text>
+                Choose ONE web search provider for the AI to use. Activating a provider stores its key and
+                disables any other one, so exactly one web-search tool is exposed to the models.
+            </p>
+        </div>
+        <div class="col-12">
+            <p gebo-ai-text>
+                Currently active: <b>{{ providerLabel(activeProvider) }}</b>
+            </p>
+        </div>
+    </div>
+
+    <div class="grid geboLargeButtonsBar" *ngIf="!editing">
+        <div class="col-6">
+            <p-button id="ConfigureWebSearchBtn" gebo-ai-label icon="pi pi-pencil"
+                label="Choose / change web search provider" styleClass="w-full" [outlined]="true"
+                (onClick)="startEditing()"></p-button>
+        </div>
+        <div class="col-6">
+            <p-button id="DeactivateWebSearchBtn" gebo-ai-label icon="pi pi-times" label="Deactivate web search"
+                severity="contrast" styleClass="w-full" [outlined]="true" [disabled]="!activeProvider"
+                (onClick)="clearAll()"></p-button>
+        </div>
+    </div>
+
+    <div class="grid" *ngIf="editing" [formGroup]="formGroup">
+        <div class="col-12">
+            <div class="grid">
+                <div class="col-12 md:col-3" *ngFor="let p of providers">
+                    <p-radioButton [inputId]="p.id" name="provider" [value]="p.id" [(ngModel)]="selectedProvider"
+                        [ngModelOptions]="{ standalone: true }" (onClick)="onProviderChange()"></p-radioButton>
+                    <label [for]="p.id" gebo-ai-text style="margin-left: 0.5rem">{{ p.label }}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <small gebo-ai-text>{{ selectedMeta.hint }}</small>
+        </div>
+
+        <div class="col-12 md:col-6" *ngIf="selectedMeta.needsBaseUrl">
+            <gebo-ai-field id="baseUrl" label="SearXNG instance URL"
+                help="Base URL of your SearXNG instance, e.g. https://searx.example.org" [required]="true">
+                <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
+        </div>
+
+        <div class="col-12 md:col-6" *ngIf="selectedMeta.needsEngineId">
+            <gebo-ai-field id="customSearchEngineId" label="Programmable Search Engine id"
+                help="The Google Programmable Search Engine (cx) id." [required]="true">
+                <input pInputText id="customSearchEngineId" formControlName="customSearchEngineId" [required]="true"
+                    gebo-ai-field-element />
+            </gebo-ai-field>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <gebo-ai-field id="apiKey" [label]="selectedMeta.keyOptional ? 'API key (optional)' : 'API key'"
+                help="The provider API key / subscription token." [required]="!selectedMeta.keyOptional">
+                <input pInputText id="apiKey" formControlName="apiKey" [required]="!selectedMeta.keyOptional"
+                    gebo-ai-field-element />
+            </gebo-ai-field>
+        </div>
+
+        <div class="col-12">
+            <div class="grid">
+                <div class="col-6">
+                    <p-button id="ActivateBtn" gebo-ai-label [outlined]="true" label="Activate this provider"
+                        icon="pi pi-save" severity="success" styleClass="w-full" [disabled]="formGroup.invalid"
+                        (onClick)="save()"></p-button>
+                </div>
+                <div class="col-6">
+                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                        styleClass="w-full" (onClick)="cancel()"></p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</p-panel>

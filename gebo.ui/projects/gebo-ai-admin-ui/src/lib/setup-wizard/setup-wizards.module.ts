@@ -62,6 +62,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TabsModule } from 'primeng/tabs';
 
 import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./google-search-wizard.component";
+import { GeboAIWebSearchWizardComponent, WebSearchStatusService } from "./web-search-wizard.component";
 import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
 import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./rag-autotune-wizard.component";
 import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
@@ -321,15 +322,15 @@ const ragAutotuneSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
-const googleSearchApiSetupSection: SetupWizardsSection = {
+const webSearchApiSetupSection: SetupWizardsSection = {
     orderEntry: 16,
     requredStepsIds: [],
     enabledService: AlwaysTrueStatusService,
-    setupCompletedService: GoogleSearcStatusService,
-    label: "Configure Google search api",
-    description: "Configure Google search api credentials for AI web searches",
-    wizardComponent: GeboAIGoogleSearchWizardComponent,
-    wizardSectionId: "googleSearchApiSetupSection",
+    setupCompletedService: WebSearchStatusService,
+    label: "Configure web search",
+    description: "Choose and configure one web search provider (Google, Tavily, Brave or SearXNG) for AI web searches",
+    wizardComponent: GeboAIWebSearchWizardComponent,
+    wizardSectionId: "webSearchApiSetupSection",
     mandatory: false
 };
 const deepSearchApiSetupSection: SetupWizardsSection = {
@@ -402,7 +403,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -431,6 +432,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         GraphRagStatusService,
         Neo4jModuleEnabledService,
         GoogleSearcStatusService,
+        WebSearchStatusService,
         RagAutotuneStatusService,
         AgentStatusService,
         McpServerWizardStatusService,
@@ -452,7 +454,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: ragAutotuneSetupSection, multi: true },
-        { provide: WIZARD_SECTION, useValue: googleSearchApiSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: webSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: agentSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: mcpServerSetupSection, multi: true },
