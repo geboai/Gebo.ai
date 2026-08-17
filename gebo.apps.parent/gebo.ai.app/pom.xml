@@ -629,6 +629,43 @@
 					<forkCount>1</forkCount>
 					<reuseForks>false</reuseForks>
 				</configuration>
+				<!--
+					WazuhSecurityLogCompatibilityTest checks the security audit
+					trail (logs/security-log.jsonl) that the OTHER tests of this
+					module produce, so it has to run when they are all done.
+					Surefire has no "run this class last" option, hence two
+					executions of the same goal in the same phase: they run in
+					declaration order, so the whole suite runs first (with the
+					Wazuh-tagged test excluded) and the Wazuh test runs after it.
+					Selection is by JUnit tag, not by class name pattern,
+					because -Dtest=... overrides includes/excludes but is
+					intersected with groups/excludedGroups - so a developer
+					running -Dtest=WazuhSecurityLogCompatibilityTest still gets
+					it exactly once.
+				-->
+				<executions>
+					<execution>
+						<id>default-test</id>
+						<configuration>
+							<excludedGroups>wazuh-log-compatibility</excludedGroups>
+						</configuration>
+					</execution>
+					<execution>
+						<id>wazuh-security-log-compatibility-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<groups>wazuh-log-compatibility</groups>
+							<!--
+								With -Dtest=SomethingElse this execution matches
+								nothing: skip it instead of failing the build.
+							-->
+							<failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.cyclonedx</groupId>
