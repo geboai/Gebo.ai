@@ -24,6 +24,10 @@
 		<module>gebo.filesystem.content.handler</module>
 		<module>gebo.uploads.content.handler</module>
 		<module>gebo.googlesearch.handler</module>
+		<module>gebo.tavilysearch.handler</module>
+		<module>gebo.bravesearch.handler</module>
+		<module>gebo.searxngsearch.handler</module>
+		<module>gebo.serpapisearch.handler</module>
 		<module>gebo.sharepoint.search.api</module>
 		<module>gebo.sharepoint.handler</module>
 		<module>gebo.atlassian.confluence.search.api</module>

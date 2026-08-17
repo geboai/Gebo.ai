@@ -34,7 +34,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
+public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSearchQueryObject> {
 	private static final String BING = "bing";
 	private static final String BING_MODULE = "bing-module";
 	public static final String BING_SEARCH_SERVICE = "bing-web-search-service";

@@ -28,8 +28,18 @@ import ai.gebo.architecture.search.model.WebSearchResultsExtractionData;
 import ai.gebo.architecture.search.model.WebSearchResultsExtractionData.RelevantLink;
 import ai.gebo.model.base.TypedInputStream;
 
-public abstract class AbstractWebSearchServiceImpl implements ISearchService<WebSearchResultsExtractionData>,
-		INativeSearchService<WebSearchResultsExtractionData, WebSearchQueryObject> {
+/**
+ * Base for every web-search connector. Generic over the native query type
+ * {@code N} so a provider that exposes richer, engine-specific options (Tavily
+ * search depth, Brave freshness, SearXNG categories, ...) can declare its own
+ * {@link INativeQueryObject} subtype for the LLM to fill via structured output,
+ * while plain providers keep using {@link WebSearchQueryObject}. The default
+ * {@link #nativeSearch} treats the native object as a bag of query strings
+ * ({@link INativeQueryObject#relevantKeywords()}); providers that carry options
+ * override it to pass them through.
+ */
+public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
+		implements INativeSearchService<WebSearchResultsExtractionData, N> {
 
 	protected int SocketTimeout = 20000;
 	protected int ConnectTimeout = 10000;
@@ -159,12 +169,12 @@ public abstract class AbstractWebSearchServiceImpl implements ISearchService<Web
 	}
 
 	@Override
-	public List<SearchResult> nativeSearch(WebSearchQueryObject query, SearchableSystemMetaData system, int nEntryLimit)
+	public List<SearchResult> nativeSearch(N query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
 
 		List<SearchResult> results = new ArrayList<>();
-		if (query != null && query.getSearchedTexts() != null && !query.getSearchedTexts().isEmpty()) {
-			for (String text : query.getSearchedTexts()) {
+		if (query != null && query.relevantKeywords() != null && !query.relevantKeywords().isEmpty()) {
+			for (String text : query.relevantKeywords()) {
 				SearchQuery searchQuery = new SearchQuery();
 				searchQuery.setQueryText(text);
 				List<SearchResult> res = search(searchQuery, system, nEntryLimit);
