@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
@@ -198,6 +199,13 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	private static final String START_CHUNK_ID = "[CHUNK-ID]";
 	private static final String END_CHUNK_ID = "[/CHUNK-ID]";
 
+	/** How often the vector store is polled while waiting for it to settle. */
+	private static final long VECTOR_STORE_SETTLE_POLL_MSEC = 2000L;
+	/** How many consecutive unchanged observations count as "settled". */
+	private static final int VECTOR_STORE_SETTLE_STABLE_OBSERVATIONS = 3;
+	/** Upper bound on the whole wait, after which the assertions run anyway. */
+	private static final long VECTOR_STORE_SETTLE_TIMEOUT_MSEC = 180000L;
+
 	private LLMExtractionResult createGraphragExtractionSample(KnowledgeExtractionCallEvent event) {
 
 		List<String> documentIds = event.getMessages().stream().map(x -> {
@@ -355,12 +363,16 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 
 		TestVectorStore usedTestVectorStore = getTestVectorStore();
 
+		// The job is done, the vector store may not be: wait for it before
+		// asserting anything about its content (see awaitSettledVectorStoreContent).
+		List<Document> allData = awaitSettledVectorStoreContent(usedTestVectorStore,
+				x -> !x.isEnrichedWithMetaInfo());
+
 		Map<Object, List<Document>> splittedForCodes = usedTestVectorStore
 				.getStoredForMetaAttribute(DocumentMetaInfos.CONTENT_CODE);
 		Assertions.assertFalse(splittedForCodes.isEmpty(), "The vector store has received 0 values splitted by code");
 		Assertions.assertEquals(splittedForCodes.size(), howManyFilesWait,
 				"The number of received files must be equal to the expected value");
-		List<Document> allData = usedTestVectorStore.getAllData();
 		Assertions.assertFalse(allData.isEmpty(), "All embedded entries cannot be empty");
 		long withoutMetaData = allData.stream().map(x -> x.getMetadata() == null || x.getMetadata().isEmpty()).count();
 		Assertions.assertFalse(withoutMetaData == 0l, "AI documents without metadata cannot be present");
@@ -384,9 +396,70 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
+	 * Waits until the test vector store has settled before the caller asserts on
+	 * its content, and returns the snapshot the assertions must use.
+	 *
+	 * <p>
+	 * The workflow reporting {@code isFinished()} is NOT the point where the
+	 * vector store is complete: documents reach it asynchronously (batch
+	 * aggregators flush on their own threads), and enrichment does not mutate a
+	 * stored document - {@code GAIDocumentCatalogingEnricherImpl#enrich} builds a
+	 * NEW {@link Document} carrying the same id, which then REPLACES the previous
+	 * entry keyed by that id. So a document can legitimately be visible without
+	 * its {@code GEBO_EMBEDDING_METADATA} header for a moment, and reading the
+	 * store the instant the job status flips made the meta-header assertions fail
+	 * at random - typically on whichever document happened to be last (observed in
+	 * CI on {@code .travis.yml}, while the very same run logged the store growing
+	 * from 41 to 48 documents between two consecutive checks).
+	 * </p>
+	 *
+	 * <p>
+	 * The wait ends as soon as the store stopped changing for
+	 * {@value #VECTOR_STORE_SETTLE_STABLE_OBSERVATIONS} consecutive polls AND no
+	 * document is still missing its meta header, so a healthy run pays a couple of
+	 * seconds at most. On timeout it returns the last snapshot and lets the
+	 * caller's assertions fail on it: a document that never gets enriched is a
+	 * real defect and must still be reported - just not as a race.
+	 * </p>
+	 *
+	 * @param usedTestVectorStore    the store filled by the ingestion run
+	 * @param missingMetaHeaderCheck the same predicate the caller asserts with,
+	 *                               selecting documents that should have been
+	 *                               enriched with a meta header but were not
+	 * @return the settled snapshot of every document in the store
+	 * @throws InterruptedException if the wait is interrupted
+	 */
+	protected List<Document> awaitSettledVectorStoreContent(TestVectorStore usedTestVectorStore,
+			Predicate<ExtractedDocumentMetaData> missingMetaHeaderCheck) throws InterruptedException {
+		long deadline = System.currentTimeMillis() + VECTOR_STORE_SETTLE_TIMEOUT_MSEC;
+		List<Document> snapshot = usedTestVectorStore.getAllData();
+		int previousSize = -1;
+		int stableObservations = 0;
+		long missingMetaHeader = -1;
+		while (System.currentTimeMillis() < deadline) {
+			snapshot = usedTestVectorStore.getAllData();
+			missingMetaHeader = snapshot.stream().map(x -> ExtractedDocumentMetaData.of(x.getMetadata()))
+					.filter(missingMetaHeaderCheck).count();
+			stableObservations = (snapshot.size() == previousSize) ? stableObservations + 1 : 0;
+			previousSize = snapshot.size();
+			if (stableObservations >= VECTOR_STORE_SETTLE_STABLE_OBSERVATIONS && missingMetaHeader == 0l) {
+				LOGGER.info("Vector store settled with " + snapshot.size() + " documents, all enriched");
+				return snapshot;
+			}
+			LOGGER.info("Waiting for the vector store to settle: " + snapshot.size() + " documents, "
+					+ missingMetaHeader + " still without meta header (stable observations:" + stableObservations + ")");
+			Thread.sleep(VECTOR_STORE_SETTLE_POLL_MSEC);
+		}
+		LOGGER.warn("The vector store did not settle within " + VECTOR_STORE_SETTLE_TIMEOUT_MSEC
+				+ " msec: asserting on " + snapshot.size() + " documents, " + missingMetaHeader
+				+ " of them without meta header");
+		return snapshot;
+	}
+
+	/**
 	 * Overloaded method: runs a job and waits for it to be done, checking the
 	 * results.
-	 * 
+	 *
 	 * @param endpoint the project endpoint to execute
 	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
@@ -477,11 +550,18 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		if (checkTestVectorStore) {
 			TestVectorStore usedTestVectorStore = getTestVectorStore();
 
+			// Same reason as in the sibling method: settle first, assert after.
+			// The predicate mirrors the exemption used by the assertion below, so
+			// the wait does not spin on documents that are not expected to be
+			// enriched at all.
+			List<Document> allData = awaitSettledVectorStoreContent(usedTestVectorStore,
+					x -> !x.isEnrichedWithMetaInfo()
+							&& (!(x.getExtension() == null || x.getExtension().equalsIgnoreCase(".gitignore"))));
+
 			Map<Object, List<Document>> splittedForCodes = usedTestVectorStore
 					.getStoredForMetaAttribute(DocumentMetaInfos.CONTENT_CODE);
 			Assertions.assertFalse(splittedForCodes.isEmpty(),
 					"The vector store has received 0 values splitted by code");
-			List<Document> allData = usedTestVectorStore.getAllData();
 			List<String> vectorizedDocuments = usedTestVectorStore.getHandledGeboDocumentCodes();
 			LOGGER.info("RESULTING_VECTORIZED-DOCUMENTS:" + vectorizedDocuments);
 			Assertions.assertFalse(allData.isEmpty(), "All embedded entries cannot be empty");
