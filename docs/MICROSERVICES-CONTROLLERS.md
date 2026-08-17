@@ -4,38 +4,10 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 **Base path note:** this checkout serves backends under a `server.servlet.context-path` (e.g. `/brain`); every path below already includes it.
 
-### MCP-brain integration note
+### What changed this round
 
-This regeneration follows the addition of `gebo.architecture.mcp-clients` and
-`gebo.architecture.mcp-server` as explicit dependencies of the **brain**
-microservice (`brain.gebo.ai/pom.xml`). Brain is now the first microservice to
-host MCP surface: 3 new controller tags and 17 new endpoints appeared on its
-spec, bringing it from 51 controllers / 222 endpoints to **67 controllers /
-295 endpoints**.
-
-The new tags/controllers are:
-
-| Tag | Controller | Endpoints |
-|---|---|---|
-| `mcp-client-config-controller` | `McpClientConfigController` (from `gebo.architecture.mcp-clients`) | 7 — full CRUD on MCP client configs + `testAndDiscovery` connectivity test |
-| `gebo-mcp-server-admin-controller` | `GeboMCPServerAdminController` (from `gebo.architecture.mcp-server`) | 7 — admin CRUD on erogated MCP servers, ACL grants |
-| `gebo-mcp-server-user-controller` | `GeboMCPServerUserController` (from `gebo.architecture.mcp-server`) | 3 — user-facing list/browse of accessible MCP servers |
-
-The `mcpclient` microservice is unaffected — its MCP controllers
-(`mcp-client-browsing-controller`, `mcp-client-systems-controller`,
-`mcp-client-config-controller`) come from the `gebo.mcp-client.content.handler`
-content system module, not from `gebo.architecture.mcp-clients`. Both services
-now expose `McpClientConfigController` independently (brain as the LLM/RAG admin
-home, mcpclient as the content-handler home).
-
-**Gotcha hit during regeneration:** `dockers/gebo.microservices/docker-compose.yml`
-pins every service image to `${GEBO_VERSION:-1.0.2.0-SNAPSHOT}`. After building
-fresh `1.0.2.1-SNAPSHOT` images with Jib, the stack must be brought up with
-`GEBO_VERSION=1.0.2.1-SNAPSHOT docker compose up -d` — otherwise Docker Compose
-silently runs the stale `1.0.2.0-SNAPSHOT` images from the local daemon (built
-before the MCP dependencies were added), and brain's spec shows 0 MCP
-controllers despite the fat jar containing the jars. The `docker load` step
-succeeds either way, so this is easy to miss.
+- **Web search providers on brain.** `brain` now exposes four new web-search configuration controllers — `TavilySearchConfigurationController`, `BraveSearchConfigurationController`, `SearxngSearchConfigurationController` and `SerpapiSearchConfigurationController` (7 endpoints each) — alongside the existing `GoogleSearchConfigurationController`. These come from the new `gebo.{tavily,brave,searxng,serpapi}search.handler` modules added to `brain.gebo.ai` (each an `INativeSearchService` web-search provider). Brain went 67 → 70 controllers / 295 → 321 endpoints.
+- **`InternalMessagingTopologyController` is now on every backend.** All 19 controller-serving services expose the shared `InternalMessagingTopologyController` (`getLocalTopology`). One consequence: `fulltextor`, previously recorded here as "0 controllers by design" (a pure message-driven worker), now legitimately exposes that single topology endpoint under `/fulltextor` — so it moves from `— / 0 / 0` to `/fulltextor / 1 / 1`. The generator's hardcoded fulltextor exemption was removed accordingly; only `gateway` (pure `lb://` proxy) and `eureka` (registry, not `swagger-on`) remain at 0 by design.
 
 
 ## Summary
@@ -43,7 +15,7 @@ succeeds either way, so this is easy to miss.
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 0 | 0 |
-| brain.gebo.ai | 13001 | `/brain` | 67 | 295 |
+| brain.gebo.ai | 13001 | `/brain` | 70 | 321 |
 | vectorizator.gebo.ai | 13002 | `/vectorizator` | 3 | 5 |
 | graphicator.gebo.ai | 13003 | `/graphicator` | 3 | 6 |
 | chunker.gebo.ai | 13004 | `/chunker` | 5 | 17 |
@@ -58,10 +30,11 @@ succeeds either way, so this is easy to miss.
 | googledrive.gebo.ai | 13013 | `/googledrive` | 10 | 44 |
 | mcpclient.gebo.ai | 13014 | `/mcpclient` | 9 | 29 |
 | integration.gebo.ai | 13015 | `/integration` | 8 | 20 |
-| fulltextor.gebo.ai | 13016 | `—` | 0 | 0 |
+| fulltextor.gebo.ai | 13016 | `/fulltextor` | 1 | 1 |
 | eureka.gebo.ai | 13017 | `—` | 0 | 0 |
-| heimdall.gebo.ai | 13018 | `/heimdall` | 15 | 56 |
-| tyr.gebo.ai | 13019 | `/tyr` | 7 | 9 |
+| heimdall.gebo.ai | 13018 | `/heimdall` | 18 | 75 |
+| tyr.gebo.ai | 13019 | `/tyr` | 8 | 13 |
+| webdav.gebo.ai | 13020 | `/webdav` | 8 | 29 |
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
@@ -71,7 +44,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-67 controller(s), 295 endpoint(s):
+70 controller(s), 321 endpoint(s):
 
 
 ### `anthropic-chat-models-configuration-controller`
@@ -82,6 +55,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/getAnthropicModels` | getAnthropicChatModels |
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/insertAnthropicChatModelConfig` | insertAnthropicChatModelConfig |
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/updateAnthropicChatModelConfig` | updateAnthropicChatModelConfig |
+
+### `brave-search-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/BraveSearchConfigurationController/deleteGBraveSearchApiCredentials` | deleteGBraveSearchApiCredentials |
+| POST | `/brain/api/admin/BraveSearchConfigurationController/fastInsertBraveSearchApiCredentials` | fastInsertBraveSearchApiCredentials |
+| GET | `/brain/api/admin/BraveSearchConfigurationController/getBraveSearchApiCredentials` | getBraveSearchApiCredentials |
+| GET | `/brain/api/admin/BraveSearchConfigurationController/getBraveSearchStatus` | getBraveSearchStatus |
+| POST | `/brain/api/admin/BraveSearchConfigurationController/insertGBraveSearchApiCredentials` | insertGBraveSearchApiCredentials |
+| GET | `/brain/api/admin/BraveSearchConfigurationController/searchGBraveSearchApiCredentialsByCode` | searchGBraveSearchApiCredentialsByCode |
+| POST | `/brain/api/admin/BraveSearchConfigurationController/updateGBraveSearchApiCredentials` | updateGBraveSearchApiCredentials |
 
 ### `build-systems-controller`
 | Method | Path | Operation |
@@ -352,6 +336,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/GeboUserChatsController/getMyChats` | getMyChats |
 | GET | `/brain/api/users/GeboUserChatsController/getMyChatsPaged` | getMyChatsPaged |
 | GET | `/brain/api/users/GeboUserChatsController/getUIConfig` | getUIConfig |
+| GET | `/brain/api/users/GeboUserChatsController/isMinimalLLMSSetupDone` | isMinimalLLMSSetupDone |
 | GET | `/brain/api/users/GeboUserChatsController/suggestChatDescription` | suggestChatDescription |
 
 ### `gebo-user-knowledge-base-semantic-search-controller`
@@ -609,12 +594,38 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/admin/RankerModelsController/getRankerModelTypes` | getRankerModelTypes |
 | GET | `/brain/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels` | getRuntimeConfiguredRankerModels |
 
-### `reindexing-frequency-options-controller`
+### `searxng-search-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/brain/api/users/ReindexingFrequencyOptionsController/displayTimeValues` | displayTimeValues |
-| GET | `/brain/api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos` | getAllTimeStructureMetaInfos |
-| GET | `/brain/api/users/ReindexingFrequencyOptionsController/getTimeStructureMetaInfo` | getTimeStructureMetaInfo |
+| POST | `/brain/api/admin/SearxngSearchConfigurationController/deleteGSearxngSearchApiCredentials` | deleteGSearxngSearchApiCredentials |
+| POST | `/brain/api/admin/SearxngSearchConfigurationController/fastInsertSearxngSearchApiCredentials` | fastInsertSearxngSearchApiCredentials |
+| GET | `/brain/api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials` | getSearxngSearchApiCredentials |
+| GET | `/brain/api/admin/SearxngSearchConfigurationController/getSearxngSearchStatus` | getSearxngSearchStatus |
+| POST | `/brain/api/admin/SearxngSearchConfigurationController/insertGSearxngSearchApiCredentials` | insertGSearxngSearchApiCredentials |
+| GET | `/brain/api/admin/SearxngSearchConfigurationController/searchGSearxngSearchApiCredentialsByCode` | searchGSearxngSearchApiCredentialsByCode |
+| POST | `/brain/api/admin/SearxngSearchConfigurationController/updateGSearxngSearchApiCredentials` | updateGSearxngSearchApiCredentials |
+
+### `serpapi-search-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/SerpapiSearchConfigurationController/deleteGSerpapiSearchApiCredentials` | deleteGSerpapiSearchApiCredentials |
+| POST | `/brain/api/admin/SerpapiSearchConfigurationController/fastInsertSerpapiSearchApiCredentials` | fastInsertSerpapiSearchApiCredentials |
+| GET | `/brain/api/admin/SerpapiSearchConfigurationController/getSerpapiSearchApiCredentials` | getSerpapiSearchApiCredentials |
+| GET | `/brain/api/admin/SerpapiSearchConfigurationController/getSerpapiSearchStatus` | getSerpapiSearchStatus |
+| POST | `/brain/api/admin/SerpapiSearchConfigurationController/insertGSerpapiSearchApiCredentials` | insertGSerpapiSearchApiCredentials |
+| GET | `/brain/api/admin/SerpapiSearchConfigurationController/searchGSerpapiSearchApiCredentialsByCode` | searchGSerpapiSearchApiCredentialsByCode |
+| POST | `/brain/api/admin/SerpapiSearchConfigurationController/updateGSerpapiSearchApiCredentials` | updateGSerpapiSearchApiCredentials |
+
+### `tavily-search-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/TavilySearchConfigurationController/deleteGTavilySearchApiCredentials` | deleteGTavilySearchApiCredentials |
+| POST | `/brain/api/admin/TavilySearchConfigurationController/fastInsertTavilySearchApiCredentials` | fastInsertTavilySearchApiCredentials |
+| GET | `/brain/api/admin/TavilySearchConfigurationController/getTavilySearchApiCredentials` | getTavilySearchApiCredentials |
+| GET | `/brain/api/admin/TavilySearchConfigurationController/getTavilySearchStatus` | getTavilySearchStatus |
+| POST | `/brain/api/admin/TavilySearchConfigurationController/insertGTavilySearchApiCredentials` | insertGTavilySearchApiCredentials |
+| GET | `/brain/api/admin/TavilySearchConfigurationController/searchGTavilySearchApiCredentialsByCode` | searchGTavilySearchApiCredentialsByCode |
+| POST | `/brain/api/admin/TavilySearchConfigurationController/updateGTavilySearchApiCredentials` | updateGTavilySearchApiCredentials |
 
 ### `text-to-speech-models-controller`
 | Method | Path | Operation |
@@ -1519,10 +1530,15 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/integration/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/integration/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
 
-## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`)
+## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`) — context-path `/fulltextor`
 
-_No spec captured — service was not reachable when this doc was generated._
+1 controller(s), 1 endpoint(s):
 
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/fulltextor/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
 
 ## eureka.gebo.ai — port 13017
 
@@ -1531,8 +1547,20 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## heimdall.gebo.ai — port 13018 (`heimdall-gebo-ai`) — context-path `/heimdall`
 
-15 controller(s), 56 endpoint(s):
+18 controller(s), 75 endpoint(s):
 
+
+### `acl-aliases-cluster-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/heimdall/api/cluster/AclController/addAcl` | addAcl |
+| GET | `/heimdall/api/cluster/AclController/findAcl` | findAcl |
+| POST | `/heimdall/api/cluster/AclController/findAlias` | findAlias |
+| GET | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueId` | findAliasesByAclGrantedUniqueId |
+| GET | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdAndAclGrantType` | findAliasesByAclGrantedUniqueIdAndAclGrantType |
+| POST | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdIn` | findAliasesByAclGrantedUniqueIdIn |
+| POST | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdInAndAclGrantType` | findAliasesByAclGrantedUniqueIdInAndAclGrantType |
+| DELETE | `/heimdall/api/cluster/AclController/removeAcl` | removeAcl |
 
 ### `auth-controller`
 | Method | Path | Operation |
@@ -1600,6 +1628,17 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 |---|---|---|
 | GET | `/heimdall/api/admin/Oauth2ModuleStatusController` | getStatus |
 
+### `secrets-cluster-controller`
+| Method | Path | Operation |
+|---|---|---|
+| DELETE | `/heimdall/api/cluster/SecretsController/deleteSecret` | deleteSecret |
+| GET | `/heimdall/api/cluster/SecretsController/getAllSecretsId` | getAllSecretsId |
+| GET | `/heimdall/api/cluster/SecretsController/getSecretContentById` | getSecretContentById |
+| GET | `/heimdall/api/cluster/SecretsController/getSecretInfoByContextCode` | getSecretInfoByContextCode |
+| GET | `/heimdall/api/cluster/SecretsController/getSecretInfoById` | getSecretInfoById |
+| POST | `/heimdall/api/cluster/SecretsController/storeSecret` | storeSecret |
+| POST | `/heimdall/api/cluster/SecretsController/updateSecret` | updateSecret |
+
 ### `secrets-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1611,8 +1650,16 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/api/admin/SecretsController/createSshKeySecret` | createSshKeySecret |
 | POST | `/heimdall/api/admin/SecretsController/createTokenSecret` | createTokenSecret |
 | POST | `/heimdall/api/admin/SecretsController/createUsernamePasswordSecret` | createUsernamePasswordSecret |
-| DELETE | `/heimdall/api/admin/SecretsController/deleteSecret` | deleteSecret |
+| DELETE | `/heimdall/api/admin/SecretsController/deleteSecret` | deleteSecret_1 |
 | GET | `/heimdall/api/admin/SecretsController/getSecretsByContextCode` | getSecretsByContextCode |
+
+### `security-directory-cluster-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/heimdall/api/cluster/SecurityController/checkPassword` | checkPassword |
+| GET | `/heimdall/api/cluster/SecurityController/findAllGroups` | findAllGroups |
+| GET | `/heimdall/api/cluster/SecurityController/findGroupsOfUser` | findGroupsOfUser |
+| GET | `/heimdall/api/cluster/SecurityController/findUserByUsername` | findUserByUsername |
 
 ### `token-renew-controller`
 | Method | Path | Operation |
@@ -1641,7 +1688,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/api/admin/UsersAdminController/deleteUser` | deleteUser |
 | GET | `/heimdall/api/admin/UsersAdminController/findGroupByCode` | findGroupByCode |
 | POST | `/heimdall/api/admin/UsersAdminController/findUserByQbe` | findUserByQbe |
-| GET | `/heimdall/api/admin/UsersAdminController/findUserByUsername` | findUserByUsername |
+| GET | `/heimdall/api/admin/UsersAdminController/findUserByUsername` | findUserByUsername_1 |
 | POST | `/heimdall/api/admin/UsersAdminController/findUsersGroupByQbe` | findUsersGroupByQbe |
 | GET | `/heimdall/api/admin/UsersAdminController/getAllGroups` | getAllGroups |
 | GET | `/heimdall/api/admin/UsersAdminController/getAllUsers` | getAllUsers |
@@ -1652,7 +1699,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## tyr.gebo.ai — port 13019 (`tyr-gebo-ai`) — context-path `/tyr`
 
-7 controller(s), 9 endpoint(s):
+8 controller(s), 13 endpoint(s):
 
 
 ### `global-internal-topology-controller`
@@ -1671,6 +1718,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 |---|---|---|
 | GET | `/tyr/api/admin/JobStatusController/getJobStatus` | getJobStatus |
 | GET | `/tyr/api/admin/JobStatusController/getJobSummary` | getJobSummary |
+| POST | `/tyr/api/admin/JobStatusController/getJobsEntriesForProjectEndpoint` | getJobsEntriesForProjectEndpoint |
 
 ### `llms-usage-admin-level-controller`
 | Method | Path | Operation |
@@ -1682,6 +1730,13 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 |---|---|---|
 | POST | `/tyr/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
 
+### `reindexing-frequency-options-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/tyr/api/users/ReindexingFrequencyOptionsController/displayTimeValues` | displayTimeValues |
+| GET | `/tyr/api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos` | getAllTimeStructureMetaInfos |
+| GET | `/tyr/api/users/ReindexingFrequencyOptionsController/getTimeStructureMetaInfo` | getTimeStructureMetaInfo |
+
 ### `workflow-participants-enablement-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1691,3 +1746,69 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/tyr/api/admin/WorkflowStatsAdminLevelController/drillDown` | workflowDrillDown |
+
+## webdav.gebo.ai — port 13020 (`webdav-gebo-ai`) — context-path `/webdav`
+
+8 controller(s), 29 endpoint(s):
+
+
+### `contents-reset-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/webdav/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+
+### `document-content-streamer-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/webdav/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/webdav/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+
+### `generical-publisher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/webdav/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+
+### `ingestion-file-types-library-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/webdav/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
+| GET | `/webdav/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
+| GET | `/webdav/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/webdav/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
+### `job-launcher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/webdav/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/webdav/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/webdav/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+
+### `webdav-browsing-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/webdav/api/admin/WebdavBrowsingController/browseWebdavPath` | browseWebdavPath |
+| POST | `/webdav/api/admin/WebdavBrowsingController/getWebdavNavigationStatus` | getWebdavNavigationStatus |
+| GET | `/webdav/api/admin/WebdavBrowsingController/getWebdavRoots` | getWebdavRoots |
+
+### `webdav-systems-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/webdav/api/admin/WebdavSystemsController/deleteWebdavEndpoint` | deleteWebdavEndpoint |
+| POST | `/webdav/api/admin/WebdavSystemsController/deleteWebdavSystem` | deleteWebdavSystem |
+| POST | `/webdav/api/admin/WebdavSystemsController/fastWebdavConfig` | fastWebdavConfig |
+| GET | `/webdav/api/admin/WebdavSystemsController/findWebdavEndpointsByCode` | findWebdavEndpointsByCode |
+| GET | `/webdav/api/admin/WebdavSystemsController/findWebdavEndpointsByProject` | findWebdavEndpointsByProject |
+| POST | `/webdav/api/admin/WebdavSystemsController/findWebdavEndpointsByQbe` | findWebdavEndpointsByQbe |
+| GET | `/webdav/api/admin/WebdavSystemsController/findWebdavSystemByCode` | findWebdavSystemByCode |
+| GET | `/webdav/api/admin/WebdavSystemsController/getWebdavSystemType` | getWebdavSystemTypes |
+| GET | `/webdav/api/admin/WebdavSystemsController/getWebdavSystems` | getWebdavSystems |
+| POST | `/webdav/api/admin/WebdavSystemsController/insertWebdavEndpoint` | insertWebdavEndpoint |
+| POST | `/webdav/api/admin/WebdavSystemsController/insertWebdavSystem` | insertWebdavSystem |
+| POST | `/webdav/api/admin/WebdavSystemsController/publishWebdavEndpoint` | publishWebdavEndpoint |
+| POST | `/webdav/api/admin/WebdavSystemsController/testWebdavSystem` | testWebdavSystem |
+| POST | `/webdav/api/admin/WebdavSystemsController/updateWebdavEndpoint` | updateWebdavEndpoint |
+| POST | `/webdav/api/admin/WebdavSystemsController/updateWebdavSystem` | updateWebdavSystem |

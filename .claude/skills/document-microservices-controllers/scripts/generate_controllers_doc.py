@@ -39,7 +39,7 @@ SERVICES = [
     ("tyr", 13019, "tyr-gebo-ai"),
     ("webdav", 13020, "webdav-gebo-ai"),
 ]
-NO_CONTROLLER_SERVICES = {"gateway", "eureka", "fulltextor"}
+NO_CONTROLLER_SERVICES = {"gateway", "eureka"}
 NOTES_NO_CONTROLLERS = {
     "gateway": "Gateway routes to backends via `lb://`; it hosts no controllers of its own — "
                "its own `/v3/api-docs` is empty by design (it proxies/aggregates the backends' "
@@ -47,15 +47,6 @@ NOTES_NO_CONTROLLERS = {
     "eureka": "The Eureka **registry** itself; it is not a `swagger-on` service and exposes no "
               "`/v3/api-docs` — this is the registry dashboard/REST API (`/eureka/apps`), not a "
               "Gebo controller.",
-    "fulltextor": "A pure message-driven worker: confirmed by grepping its entire dependency "
-                  "tree for `@RestController` (none exist anywhere in it) and by its clean "
-                  "startup log, which registers `IGMessageReceiver`/`IGMessageEmitter` for "
-                  "`fulltext-module.fulltext-indexing-component` and connects to OpenSearch — "
-                  "it consumes chunk-availability messages, downloads the chunk via the "
-                  "documents-cache client, and writes it to OpenSearch, with no REST admin "
-                  "surface of its own. Its previously-shown 5 controllers were entirely the "
-                  "`contentsystems.abstraction.layer` leak (see the top-of-file note); 0 is "
-                  "the correct steady state, not a failure.",
 }
 
 
