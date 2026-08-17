@@ -54,6 +54,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.serpapisearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
 			<artifactId>gebo.atlassian.confluence.handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -157,6 +157,11 @@
 			<artifactId>gebo.searxngsearch.handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.serpapisearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- MCP integration: brain acts as MCP client (to call external MCP
 		     servers as tools during chat/agent sessions) and as MCP server
 		     (to expose gebo's own knowledge base/tools over MCP to external

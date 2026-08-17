@@ -119,6 +119,7 @@ import { RankerModelsControllerService } from './api/rankerModelsController.serv
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
 import { SecretsControllerService } from './api/secretsController.service';
+import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
@@ -258,6 +259,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     ReindexingFrequencyOptionsControllerService,
     SearxngSearchConfigurationControllerService,
     SecretsControllerService,
+    SerpapiSearchConfigurationControllerService,
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,

@@ -13,13 +13,14 @@ import {
     BraveSearchConfigurationControllerService,
     GoogleSearchConfigurationControllerService,
     SearxngSearchConfigurationControllerService,
+    SerpapiSearchConfigurationControllerService,
     TavilySearchConfigurationControllerService
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { forkJoin, map, Observable, of, switchMap } from "rxjs";
 
 /** Provider ids match each handler's getProductId() on the backend. */
-export type WebSearchProviderId = "google" | "tavily" | "brave" | "searxng";
+export type WebSearchProviderId = "google" | "tavily" | "brave" | "searxng" | "serpapi";
 
 /**
  * Setup status for the whole "web search" section: setup when ANY provider is
@@ -31,7 +32,8 @@ export class WebSearchStatusService extends AbstractStatusService {
         private google: GoogleSearchConfigurationControllerService,
         private tavily: TavilySearchConfigurationControllerService,
         private brave: BraveSearchConfigurationControllerService,
-        private searxng: SearxngSearchConfigurationControllerService) {
+        private searxng: SearxngSearchConfigurationControllerService,
+        private serpapi: SerpapiSearchConfigurationControllerService) {
         super();
     }
     public override getBooleanStatus(): Observable<boolean> {
@@ -39,7 +41,8 @@ export class WebSearchStatusService extends AbstractStatusService {
             this.google.getGoogleSearchStatus(),
             this.tavily.getTavilySearchStatus(),
             this.brave.getBraveSearchStatus(),
-            this.searxng.getSearxngSearchStatus()
+            this.searxng.getSearxngSearchStatus(),
+            this.serpapi.getSerpapiSearchStatus()
         ]).pipe(map(statuses => statuses.some(s => s?.isSetup === true)));
     }
 }
@@ -62,7 +65,8 @@ export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {
         { id: "google", label: "Google Programmable Search", needsEngineId: true, hint: "Legacy Google Custom Search JSON API (API key + Programmable Search Engine id)." },
         { id: "tavily", label: "Tavily", hint: "LLM-oriented search API returning extracted content. API key only." },
         { id: "brave", label: "Brave Search", hint: "Independent web index. Subscription token only." },
-        { id: "searxng", label: "SearXNG (self-hosted)", needsBaseUrl: true, keyOptional: true, hint: "Self-hosted meta-search. Instance URL required; API key only if your instance is protected." }
+        { id: "searxng", label: "SearXNG (self-hosted)", needsBaseUrl: true, keyOptional: true, hint: "Self-hosted meta-search. Instance URL required; API key only if your instance is protected." },
+        { id: "serpapi", label: "SerpApi", hint: "Real Google/Bing/DuckDuckGo SERP via SerpApi. API key only (paid)." }
     ];
 
     protected formGroup: FormGroup = new FormGroup({
@@ -76,7 +80,8 @@ export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {
         private google: GoogleSearchConfigurationControllerService,
         private tavily: TavilySearchConfigurationControllerService,
         private brave: BraveSearchConfigurationControllerService,
-        private searxng: SearxngSearchConfigurationControllerService) {
+        private searxng: SearxngSearchConfigurationControllerService,
+        private serpapi: SerpapiSearchConfigurationControllerService) {
         super(setupWizardComunicationService);
     }
 
@@ -94,10 +99,11 @@ export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {
             this.google.getGoogleSearchStatus(),
             this.tavily.getTavilySearchStatus(),
             this.brave.getBraveSearchStatus(),
-            this.searxng.getSearxngSearchStatus()
+            this.searxng.getSearxngSearchStatus(),
+            this.serpapi.getSerpapiSearchStatus()
         ]).subscribe({
-            next: ([g, t, b, s]) => {
-                this.activeProvider = g?.isSetup ? "google" : t?.isSetup ? "tavily" : b?.isSetup ? "brave" : s?.isSetup ? "searxng" : undefined;
+            next: ([g, t, b, s, sp]) => {
+                this.activeProvider = g?.isSetup ? "google" : t?.isSetup ? "tavily" : b?.isSetup ? "brave" : s?.isSetup ? "searxng" : sp?.isSetup ? "serpapi" : undefined;
                 if (this.activeProvider) {
                     this.selectedProvider = this.activeProvider;
                 }
@@ -140,6 +146,9 @@ export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {
             case "searxng":
                 return this.searxng.getSearxngSearchApiCredentials().pipe(switchMap(list => list.length
                     ? forkJoin(list.map(c => this.searxng.deleteGSearxngSearchApiCredentials(c))) : of([])));
+            case "serpapi":
+                return this.serpapi.getSerpapiSearchApiCredentials().pipe(switchMap(list => list.length
+                    ? forkJoin(list.map(c => this.serpapi.deleteGSerpapiSearchApiCredentials(c))) : of([])));
         }
     }
 
@@ -154,6 +163,8 @@ export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {
                 return this.brave.fastInsertBraveSearchApiCredentials({ apiKey: v.apiKey, enabled: true });
             case "searxng":
                 return this.searxng.fastInsertSearxngSearchApiCredentials({ baseUrl: v.baseUrl, apiKey: v.apiKey, enabled: true });
+            case "serpapi":
+                return this.serpapi.fastInsertSerpapiSearchApiCredentials({ apiKey: v.apiKey, enabled: true });
         }
     }
 
@@ -167,7 +178,8 @@ export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {
             this.clearProvider("google"),
             this.clearProvider("tavily"),
             this.clearProvider("brave"),
-            this.clearProvider("searxng")
+            this.clearProvider("searxng"),
+            this.clearProvider("serpapi")
         ]).pipe(switchMap(() => this.insertSelected())).subscribe({
             next: () => {
                 this.editing = false;
@@ -186,7 +198,8 @@ export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {
             this.clearProvider("google"),
             this.clearProvider("tavily"),
             this.clearProvider("brave"),
-            this.clearProvider("searxng")
+            this.clearProvider("searxng"),
+            this.clearProvider("serpapi")
         ]).subscribe({
             next: () => { this.activeProvider = undefined; this.reloadData(); },
             complete: () => { this.loading = false; }
