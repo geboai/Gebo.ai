@@ -9,13 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DataTransformationMetaInfo } from './dataTransformationMetaInfo';
 
-export interface GUserChatInfo { 
-    description?: string;
-    chatCreationDateTime?: Date;
-    code?: string;
-    username?: string;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    ragChat?: boolean;
+export interface DataTransformationInfo { 
+    id: string;
+    description: string;
+    transformationInfo: DataTransformationMetaInfo;
+    dataSourceId: string;
+    dataDestinationId: string;
 }

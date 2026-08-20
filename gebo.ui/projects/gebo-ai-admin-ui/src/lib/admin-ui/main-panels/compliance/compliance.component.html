@@ -1,0 +1,157 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<p-blockUI id="ComplianceBlockUI" [target]="compliancePanel" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+
+<p-panel id="ComplianceMainPanel" gebo-ai-label #compliancePanel header="Compliance">
+
+  @if (loadError) {
+    <p-message id="ComplianceLoadError" severity="error" styleClass="w-full mb-3">
+      <span gebo-ai-text>The data-flow register could not be read from this installation.</span>
+    </p-message>
+  }
+
+  <div class="flex flex-column gap-3">
+
+    <div class="surface-card border-round p-4 border-1 surface-border">
+      <div class="flex align-items-start justify-content-between gap-4 flex-wrap">
+        <div class="flex flex-column gap-2" style="max-width: 46rem;">
+          <span class="text-xl font-bold" gebo-ai-text>Record of processing activities and data flows</span>
+          <span class="text-muted-color" gebo-ai-text>
+            Every active element of this installation reports where it reads data from, where it
+            writes it to, which engines transform it on the way, and which component is able to
+            erase it. The register is built from the components actually running, not from a
+            declared configuration file.
+          </span>
+          <span class="text-muted-color" gebo-ai-text>
+            Endpoint locators never carry credentials: a credential is identified only by the code
+            of the secret that guards it.
+          </span>
+        </div>
+
+        <div class="flex flex-column gap-2 align-items-stretch">
+          <p-button id="OpenDataFlowRegisterBtn" gebo-ai-label
+            (onClick)="openDataFlowDialog()"
+            icon="pi pi-sitemap" severity="primary"
+            label="GDPR Art. 30 · NIS2 Art. 21 — Data Flow Register"></p-button>
+          <span class="text-xs text-muted-color text-center" gebo-ai-text>
+            Records of processing activities · Supply-chain and asset visibility
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-3 flex-wrap">
+      <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;">
+        <div class="text-2xl font-bold">{{ summary.endpoints }}</div>
+        <div class="text-sm text-muted-color" gebo-ai-text>Data endpoints</div>
+      </div>
+      <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;">
+        <div class="text-2xl font-bold">{{ summary.transformations }}</div>
+        <div class="text-sm text-muted-color" gebo-ai-text>Transformations</div>
+      </div>
+      <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;">
+        <div class="text-2xl font-bold">{{ summary.components }}</div>
+        <div class="text-sm text-muted-color" gebo-ai-text>Reporting components</div>
+      </div>
+      <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;"
+        [class.border-red-500]="summary.externalEndpoints > 0">
+        <div class="text-2xl font-bold" [class.text-red-600]="summary.externalEndpoints > 0">
+          {{ summary.externalEndpoints }}
+        </div>
+        <div class="text-sm text-muted-color" gebo-ai-text>External providers</div>
+      </div>
+      <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;"
+        [class.border-orange-500]="summary.personalDataEndpoints > 0">
+        <div class="text-2xl font-bold" [class.text-orange-600]="summary.personalDataEndpoints > 0">
+          {{ summary.personalDataEndpoints }}
+        </div>
+        <div class="text-sm text-muted-color" gebo-ai-text>Carrying personal data</div>
+      </div>
+      <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;"
+        [class.border-orange-500]="summary.retainingWithoutErasure > 0">
+        <div class="text-2xl font-bold" [class.text-orange-600]="summary.retainingWithoutErasure > 0">
+          {{ summary.retainingWithoutErasure }}
+        </div>
+        <div class="text-sm text-muted-color" gebo-ai-text>Retaining, no erasure component</div>
+      </div>
+    </div>
+
+    @if (report?.nodeId || report?.collectedAt) {
+      <span class="text-xs text-muted-color">
+        <span gebo-ai-text>Collected from node</span>
+        <b> {{ report?.nodeId || "unknown" }} </b>
+        <span gebo-ai-text>at</span>
+        {{ report?.collectedAt }}
+      </span>
+    }
+  </div>
+
+</p-panel>
+
+<p-dialog id="DataFlowRegisterDialog" [(visible)]="showDataFlowDialog" (onShow)="onDialogShow()"
+  [modal]="true" [maximizable]="true" [draggable]="false" [style]="{ width: '92vw', height: '88vh' }"
+  [contentStyle]="{ height: 'calc(88vh - 10rem)', overflow: 'hidden' }">
+
+  <ng-template pTemplate="header">
+    <div class="flex flex-column">
+      <span class="text-xl font-bold" gebo-ai-text>GDPR Art. 30 · NIS2 Art. 21 — Data Flow Register</span>
+      <span class="text-sm text-muted-color" gebo-ai-text>
+        Sources, transformation engines, retaining stores and erasure capability, as currently configured
+      </span>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-column gap-2" style="height: 100%;">
+
+    <div class="flex align-items-center gap-3 flex-wrap px-2">
+      <span class="flex align-items-center gap-2 text-sm">
+        <span style="width: 1rem; height: 0.25rem; background: var(--green-500, #22c55e); display: inline-block;"></span>
+        <span gebo-ai-text>Local deployment</span>
+      </span>
+      <span class="flex align-items-center gap-2 text-sm">
+        <span style="width: 1rem; height: 0.25rem; background: var(--orange-500, #f59e0b); display: inline-block;"></span>
+        <span gebo-ai-text>Same network</span>
+      </span>
+      <span class="flex align-items-center gap-2 text-sm">
+        <span style="width: 1rem; height: 0.25rem; background: var(--red-500, #ef4444); display: inline-block;"></span>
+        <span gebo-ai-text>External provider</span>
+      </span>
+      <span class="flex align-items-center gap-2 text-sm">
+        <span style="width: 1rem; height: 0.25rem; background: var(--surface-400, #9ca3af); display: inline-block;"></span>
+        <span gebo-ai-text>Locality undetermined</span>
+      </span>
+      <span class="flex-1"></span>
+      <p-button id="RefreshDataFlowBtn" gebo-ai-label (onClick)="refreshFromDialog()"
+        [outlined]="true" size="small" icon="pi pi-refresh" label="Refresh"></p-button>
+    </div>
+
+    @if (endpoints.length === 0 && transformations.length === 0) {
+      <div class="flex flex-column align-items-center justify-content-center gap-3 h-full text-center p-5">
+        <i class="pi pi-sitemap text-muted-color" style="font-size: 3rem"></i>
+        <span class="text-xl font-semibold" gebo-ai-text>No data flows reported yet</span>
+        <span class="text-muted-color" style="max-width: 34rem;" gebo-ai-text>
+          No component of this installation reported a data-flow configuration. This is expected
+          when no data source has been configured yet, and while components are still being
+          migrated to publish their configuration.
+        </span>
+      </div>
+    } @else {
+      <div style="flex: 1 1 auto; min-height: 0; width: 100%;">
+        <ng-diagram #dataFlowDiagramHost [model]="diagramModel" [config]="diagramConfig"
+          [nodeTemplateMap]="nodeTemplateMap" style="width: 100%; height: 100%; display: block;">
+          <ng-diagram-background></ng-diagram-background>
+        </ng-diagram>
+      </div>
+    }
+  </div>
+</p-dialog>

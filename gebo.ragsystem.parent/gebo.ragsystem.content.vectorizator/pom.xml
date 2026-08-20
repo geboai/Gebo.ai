@@ -14,6 +14,18 @@
 			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+			For the data-flow register only: the abstraction layer hands back a
+			GBaseVectorStoreConfig, which carries no host, so naming the store an
+			administrator's data actually lands in needs the concrete product
+			configs. Acyclic - gebo.ragsystem.vectorstores does not depend on this
+			module - and both already ship together in gebo.ragsystem.starter.
+		-->
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.vectorstores</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.model</artifactId>

@@ -9,19 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ComponentMetaInfo } from './componentMetaInfo';
 
-export interface DocumentReferenceView { 
-    modificationDate?: Date;
-    creationDate?: Date;
-    parentVirtualFolderCode?: string;
-    relativePath?: string;
-    contentType?: string;
-    name?: string;
-    extension?: string;
-    description?: string;
+export interface GModuleMetaInfo { 
     messagingModuleId?: string;
-    code?: string;
-    rootKnowledgebaseCode?: string;
-    parentProjectCode?: string;
-    deleted?: boolean;
+    components?: Array<ComponentMetaInfo>;
 }

@@ -24,6 +24,7 @@ import { ConfluenceSearchServiceControllerService } from './api/confluenceSearch
 import { ConfluenceSystemsControllerService } from './api/confluenceSystemsController.service';
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
+import { DataFlowMetaInfoControllerService } from './api/dataFlowMetaInfoController.service';
 import { DeepseekChatModelsConfigurationControllerService } from './api/deepseekChatModelsConfigurationController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
@@ -164,6 +165,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     ConfluenceSystemsControllerService,
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
+    DataFlowMetaInfoControllerService,
     DeepseekChatModelsConfigurationControllerService,
     DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,

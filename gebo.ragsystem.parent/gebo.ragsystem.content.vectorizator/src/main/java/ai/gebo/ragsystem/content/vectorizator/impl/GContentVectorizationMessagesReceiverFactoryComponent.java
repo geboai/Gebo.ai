@@ -9,8 +9,11 @@
 
 package ai.gebo.ragsystem.content.vectorizator.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -19,13 +22,30 @@ import ai.gebo.application.messaging.GAbstractTimedOutMessageReceiverFactory;
 import ai.gebo.application.messaging.IGBatchMessagesReceiver;
 import ai.gebo.application.messaging.IGTimedOutMessageReceiver;
 import ai.gebo.application.messaging.SystemComponentType;
+import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointLocality;
+import ai.gebo.application.messaging.model.DataTransformationInfo;
+import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
+import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.model.MetaEndpointType;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.core.messages.GRawContentMessageFragmentPayload;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreConfigurationProvider;
+import ai.gebo.llms.abstraction.layer.vectorstores.model.GBaseVectorStoreConfig;
+import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreRuntimeConfiguration;
+import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingMessageReceiver;
 import ai.gebo.ragsystem.content.vectorizator.config.GeboVectorizatorConfig;
+import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
+import ai.gebo.ragsystem.vectorstores.redis.model.RedisConfig;
 
 /**
  * AI generated comments
@@ -37,6 +57,10 @@ import ai.gebo.ragsystem.content.vectorizator.config.GeboVectorizatorConfig;
 @Component
 @Scope("singleton")
 public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbstractTimedOutMessageReceiverFactory {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GContentVectorizationMessagesReceiverFactoryComponent.class);
+
 	/** Configuration for the vectorizator component */
 	final GeboVectorizatorConfig config;
 
@@ -53,6 +77,183 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 	/** Runtime binder for dependency injection */
 	@Autowired
 	protected IGRuntimeBinder runtimeBinder;
+
+	// Field-injected, and optional, purely so adding the data-flow register does
+	// not change this component's constructor signature or make it fail to start
+	// on a node where the vector store or the embedding models are not configured
+	// yet - the register must degrade to "reports nothing", never to a boot error.
+	@Autowired(required = false)
+	protected IGVectorStoreConfigurationProvider vectorStoreConfigurationProvider;
+
+	@Autowired(required = false)
+	protected IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
+
+	/**
+	 * Reports the vectorization step: chunk text is sent to an embedding model and
+	 * the resulting vectors are retained in the configured vector store.
+	 *
+	 * <p>
+	 * This is the most consequential entry in the whole register. The embedding
+	 * model receives the <b>content of the customer's documents verbatim</b>, and
+	 * when it is a hosted provider that is a transfer to an external processor -
+	 * the thing a GDPR Art. 44 review exists to find. So each configured embedding
+	 * model is reported as its own endpoint, alongside the store the vectors land
+	 * in.
+	 * </p>
+	 */
+	@Override
+	public GDataFlowMetaInfos getDataFlowMetaInfos() {
+		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
+		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+
+		DataEndpoint vectorStore = describeVectorStore();
+		if (vectorStore != null) {
+			flow.getDataEndpoints().add(vectorStore);
+		}
+
+		for (DataEndpoint model : describeEmbeddingModels()) {
+			flow.getDataEndpoints().add(model);
+			DataTransformationMetaInfo engine = DataTransformationMetaInfo.of("embedding-" + model.getId(),
+					"Embedding model " + model.getDescription(), List.of(MetaEndpointType.CHUNK),
+					List.of(MetaEndpointType.VECTORIAL_DATABASE));
+			flow.getEngines().add(engine);
+			if (vectorStore != null) {
+				flow.getTransformations()
+						.add(DataTransformationInfo.of("vectorization-" + model.getId(),
+								"Chunk text is sent to the embedding model and the vectors are retained", engine,
+								flow.qualifiedId(model.getId()), flow.qualifiedId(vectorStore.getId())));
+			}
+			// The chunk store this component consumes from lives in the tokenizer
+			// component, so the inbound edge is named with that component's identity.
+			flow.getTransformations()
+					.add(DataTransformationInfo.of("chunk-submission-" + model.getId(),
+							"Chunk text leaves this installation for the embedding model", engine,
+							GDataFlowMetaInfos.qualifiedId(
+									new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
+											GStandardModulesConstraints.TOKENIZER_COMPONENT),
+									"chunk-cache"),
+							flow.qualifiedId(model.getId())));
+		}
+
+		return flow.getDataEndpoints().isEmpty() ? null : flow;
+	}
+
+	/**
+	 * The configured vector store, named down to host and port. Returns null when
+	 * no vector store is configured yet, or when the configured product is one
+	 * whose concrete config carries no address.
+	 */
+	private DataEndpoint describeVectorStore() {
+		if (vectorStoreConfigurationProvider == null) {
+			return null;
+		}
+		VectorStoreRuntimeConfiguration configuration;
+		try {
+			configuration = vectorStoreConfigurationProvider.get();
+		} catch (LLMConfigException | RuntimeException e) {
+			// Not configured yet is a normal state on a fresh installation.
+			LOGGER.debug("Vector store not configured, omitting it from the data-flow register", e);
+			return null;
+		}
+		if (configuration == null || configuration.getProduct() == null) {
+			return null;
+		}
+		DataEndpoint endpoint = new DataEndpoint();
+		endpoint.setId("vector-store");
+		endpoint.setDescription("Vector store of embedded chunks");
+		endpoint.setProduct(configuration.getProduct().name());
+		endpoint.setTypes(new ArrayList<MetaEndpointType>(List.of(MetaEndpointType.VECTORIAL_DATABASE)));
+		endpoint.setOutput(true);
+		// Vectors are derived from the ingested text and remain re-identifiable
+		// enough to be treated as carrying whatever the sources carried.
+		endpoint.setPersonalData(true);
+		endpoint.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.VECTORIZATOR_MODULE,
+				GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT));
+
+		GBaseVectorStoreConfig config = configuration.getConfiguration();
+		if (config instanceof QdrantConfig qdrant) {
+			endpoint.setEndpoint(qdrant.isTls() ? "https" : "http", qdrant.getHost(), qdrant.getPort(), null);
+			if (qdrant.getApiKey() != null && !qdrant.getApiKey().isEmpty()) {
+				// Named, never carried.
+				endpoint.setSecretReference("ai.gebo.vectorstore.qdrant.apiKey");
+			}
+		} else if (config instanceof RedisConfig redis) {
+			endpoint.setEndpoint("redis", redis.getHost(), redis.getPort(), null);
+			if (redis.getUsername() != null && !redis.getUsername().isEmpty()) {
+				endpoint.setSecretReference("ai.gebo.vectorstore.redis.password");
+			}
+		}
+		endpoint.setLocality(DataEndpointLocality.hintFromLocator(endpoint.getEndpoint()));
+		return endpoint;
+	}
+
+	/**
+	 * One endpoint per configured embedding model, located by the base URL the
+	 * chunk text is actually posted to.
+	 *
+	 * <p>
+	 * Locality errs deliberately towards {@link DataEndpointLocality#EXTERNAL_PROVIDER}:
+	 * only Ollama and the ONNX embeddings run inside a deployment, so an inference
+	 * endpoint that is not on a loopback or single-label host is at best
+	 * self-hosted elsewhere and at worst a third-party processor. Over-flagging a
+	 * transfer costs an administrator one review; under-flagging one is the
+	 * failure this register exists to prevent.
+	 * </p>
+	 */
+	private List<DataEndpoint> describeEmbeddingModels() {
+		List<DataEndpoint> out = new ArrayList<DataEndpoint>();
+		if (embeddingModelsDao == null) {
+			return out;
+		}
+		List<IGConfigurableEmbeddingModel> models;
+		try {
+			models = embeddingModelsDao.getConfigurations();
+		} catch (RuntimeException e) {
+			LOGGER.debug("Embedding models not readable, omitting them from the data-flow register", e);
+			return out;
+		}
+		if (models == null) {
+			return out;
+		}
+		for (IGConfigurableEmbeddingModel model : models) {
+			if (model == null || model.getConfig() == null) {
+				continue;
+			}
+			GBaseModelConfig config = model.getConfig();
+			GBaseModelChoice choosedModel = config.getChoosedModel();
+			// The model actually selected, and the provider it belongs to - the two
+			// facts an auditor needs about an inference endpoint. providerId is the
+			// same identifier LLM usage is accounted under by
+			// AbstractLLMSUsageCrudService, so the register and the usage records
+			// name the same thing.
+			String modelCode = choosedModel != null ? choosedModel.getCode() : null;
+			String providerId = choosedModel != null && choosedModel.getMetaInfos() != null
+					? choosedModel.getMetaInfos().getProviderId()
+					: null;
+
+			DataEndpoint endpoint = new DataEndpoint();
+			endpoint.setId("embedding-model-" + model.getCode());
+			endpoint.setDescription(modelCode != null
+					? (model.getDescription() != null ? model.getDescription() + " (" + modelCode + ")" : modelCode)
+					: (model.getDescription() != null ? model.getDescription() : model.getCode()));
+			endpoint.setProduct(providerId != null ? providerId
+					: (config.getModelTypeCode() != null ? config.getModelTypeCode() : "embedding model"));
+			endpoint.setEndpoint(config.getBaseUrl());
+			endpoint.setTypes(new ArrayList<MetaEndpointType>(List.of(MetaEndpointType.LLM_ENDPOINT)));
+			// Chunk text goes out; the vectors come back.
+			endpoint.setInput(true);
+			endpoint.setOutput(true);
+			endpoint.setPersonalData(true);
+			if (config.getApiSecretCode() != null && !config.getApiSecretCode().isEmpty()) {
+				endpoint.setSecretReference(config.getApiSecretCode());
+			}
+			DataEndpointLocality hint = DataEndpointLocality.hintFromLocator(endpoint.getEndpoint());
+			endpoint.setLocality(hint == DataEndpointLocality.LOCAL_DEPLOYMENT ? DataEndpointLocality.LOCAL_DEPLOYMENT
+					: DataEndpointLocality.EXTERNAL_PROVIDER);
+			out.add(endpoint);
+		}
+		return out;
+	}
 
 	/**
 	 * Specifies which payload types this factory's receivers can process.

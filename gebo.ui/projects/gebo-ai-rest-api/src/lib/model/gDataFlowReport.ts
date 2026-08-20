@@ -9,13 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModuleMetaInfo } from './gModuleMetaInfo';
 
-export interface GUserChatInfo { 
-    description?: string;
-    chatCreationDateTime?: Date;
-    code?: string;
-    username?: string;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    ragChat?: boolean;
+export interface GDataFlowReport { 
+    nodeId?: string;
+    collectedAt?: Date;
+    modules?: Array<GModuleMetaInfo>;
 }
