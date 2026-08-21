@@ -92,10 +92,12 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 
 		DataEndpoint index = new DataEndpoint();
 		index.setId("fulltext-index");
-		index.setDescription("Full-text index of ingested chunks");
+		// Name the actual index the chunks land in - the store name an auditor needs
+		// to locate the retained data (see OpenSearchFullTextChunkIndexService).
+		index.setDescription("Full-text index of ingested chunks (index 'kb_chunks')");
 		index.setProduct("OpenSearch");
 		index.setEndpoint(openSearchConfig.getProtocol() != null ? openSearchConfig.getProtocol().name() : null,
-				openSearchConfig.getHost(), openSearchConfig.getPort(), null);
+				openSearchConfig.getHost(), openSearchConfig.getPort(), "kb_chunks");
 		index.setTypes(new ArrayList<MetaEndpointType>(
 				List.of(MetaEndpointType.FULLTEXT_INDEX, MetaEndpointType.CHUNK)));
 		index.setOutput(true);

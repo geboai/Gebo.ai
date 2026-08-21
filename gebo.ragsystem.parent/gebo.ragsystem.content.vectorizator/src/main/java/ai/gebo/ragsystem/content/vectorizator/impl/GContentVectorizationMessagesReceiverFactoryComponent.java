@@ -143,6 +143,19 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 	 * no vector store is configured yet, or when the configured product is one
 	 * whose concrete config carries no address.
 	 */
+	/** The default embedding model's code, which names its Qdrant collection. */
+	private String defaultEmbeddingModelCode() {
+		if (embeddingModelsDao == null) {
+			return null;
+		}
+		try {
+			IGConfigurableEmbeddingModel model = embeddingModelsDao.defaultHandler();
+			return model != null ? model.getCode() : null;
+		} catch (RuntimeException e) {
+			return null;
+		}
+	}
+
 	private DataEndpoint describeVectorStore() {
 		if (vectorStoreConfigurationProvider == null) {
 			return null;
@@ -158,9 +171,17 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 		if (configuration == null || configuration.getProduct() == null) {
 			return null;
 		}
+		// The collection/keyspace the vectors are written to is named after the
+		// embedding model's code (QdrantVectorStoreFactory uses
+		// embeddingConfiguration.getCode()); naming it here gives an auditor the
+		// exact store location. There is one collection per embedding model - the
+		// default model's is reported as the representative collection.
+		String collection = defaultEmbeddingModelCode();
+
 		DataEndpoint endpoint = new DataEndpoint();
 		endpoint.setId("vector-store");
-		endpoint.setDescription("Vector store of embedded chunks");
+		endpoint.setDescription(collection != null ? "Vector store of embedded chunks (collection '" + collection + "')"
+				: "Vector store of embedded chunks");
 		endpoint.setProduct(configuration.getProduct().name());
 		endpoint.setTypes(new ArrayList<MetaEndpointType>(List.of(MetaEndpointType.VECTORIAL_DATABASE)));
 		endpoint.setOutput(true);
@@ -172,13 +193,13 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 
 		GBaseVectorStoreConfig config = configuration.getConfiguration();
 		if (config instanceof QdrantConfig qdrant) {
-			endpoint.setEndpoint(qdrant.isTls() ? "https" : "http", qdrant.getHost(), qdrant.getPort(), null);
+			endpoint.setEndpoint(qdrant.isTls() ? "https" : "http", qdrant.getHost(), qdrant.getPort(), collection);
 			if (qdrant.getApiKey() != null && !qdrant.getApiKey().isEmpty()) {
 				// Named, never carried.
 				endpoint.setSecretReference("ai.gebo.vectorstore.qdrant.apiKey");
 			}
 		} else if (config instanceof RedisConfig redis) {
-			endpoint.setEndpoint("redis", redis.getHost(), redis.getPort(), null);
+			endpoint.setEndpoint("redis", redis.getHost(), redis.getPort(), collection);
 			if (redis.getUsername() != null && !redis.getUsername().isEmpty()) {
 				endpoint.setSecretReference("ai.gebo.vectorstore.redis.password");
 			}

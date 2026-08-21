@@ -91,17 +91,11 @@ public class DocumentChunkingMessagesReceiverFactoryComponent extends GAbstractT
 				ChunkingSessionDisposerReceiverFactory.DISPOSE_CHUNKING_SESSION_FOR_JOBS));
 		flow.getDataEndpoints().add(chunkStore);
 
-		DataTransformationMetaInfo chunker = DataTransformationMetaInfo.of("document-chunker",
-				"Splits ingested documents into text chunks", List.of(MetaEndpointType.DOCUMENTS),
-				List.of(MetaEndpointType.CHUNK));
-		flow.getEngines().add(chunker);
-
-		// The source is another component's endpoint (whichever content handler fed
-		// this document), so it is left unqualified here: this component knows the
-		// kind of data it consumes, not which configured endpoint it came from.
-		flow.getTransformations().add(DataTransformationInfo.of("document-chunking",
-				"Ingested documents are chunked and the chunks retained", chunker, null,
-				flow.qualifiedId(chunkStore.getId())));
+		// The chunker reports the chunk-cache store it owns, but not the
+		// documents->chunk edge: that edge belongs to a specific data source and is
+		// emitted by the content handler that owns the source (via the resolved
+		// workflow structure), so the register connects the real source endpoint to
+		// this cache instead of showing a transformation with no origin.
 		return flow;
 	}
 

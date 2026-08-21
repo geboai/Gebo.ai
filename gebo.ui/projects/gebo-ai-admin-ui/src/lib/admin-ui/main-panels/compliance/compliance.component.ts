@@ -68,12 +68,11 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
     protected diagramConfig: NgDiagramConfig = {
         viewportPanningEnabled: true,
         edgeRouting: { defaultRouting: "bezier" },
+        // onInit zoomToFit is deliberately off: it fires on every model re-init
+        // (against not-yet-measured nodes) and would override applyFit(), which
+        // centres the graph from real DOM measurements a few ticks later.
         zoom: {
-            max: 3,
-            zoomToFit: {
-                onInit: true,
-                padding: 40
-            }
+            max: 3
         }
     };
 
@@ -176,13 +175,26 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
             components: components.size,
             externalEndpoints: endpoints.filter(e => e.locality === "EXTERNAL_PROVIDER").length,
             personalDataEndpoints: endpoints.filter(e => e.personalData).length,
-            retainingWithoutErasure: endpoints.filter(e => e.output && !e.disposer).length
+            // Only endpoints that actually RETAIN data (stores) count towards the
+            // erasure gap; model/web endpoints process but retain nothing, and their
+            // configs are admin-managed, so they are not an Art. 17 concern.
+            retainingWithoutErasure: endpoints.filter(e => this.isRetainingStore(e) && !e.disposer).length
         };
     }
 
     /** Mirrors the backend's GDataFlowMetaInfos.qualifiedId(...) convention. */
     private qualify(ownerComponent: string, localId: string): string {
         return ownerComponent + "<->" + localId;
+    }
+
+    /** Endpoint kinds that actually retain data - the ones erasure applies to. */
+    private static readonly STORE_TYPES = new Set<string>([
+        "DATABASE", "VECTORIAL_DATABASE", "GRAPH_DATABASE", "FULLTEXT_INDEX",
+        "CHUNK", "OBJECT_STORAGE", "LOCAL_FILESYSTEM", "CHAT_SESSION"
+    ]);
+
+    private isRetainingStore(endpoint: DataFlowEndpointNode): boolean {
+        return endpoint.output && (endpoint.types || []).some(t => ComplianceComponent.STORE_TYPES.has(t));
     }
 
     /**
@@ -202,13 +214,23 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                 return;
             }
 
-            const edgesRaw: { source: string; target: string }[] = [];
             const knownEndpoints = new Set(this.endpoints.map(e => e.qualifiedId));
 
-            for (const transformation of this.transformations) {
-                if (knownEndpoints.has(transformation.sourceId)) {
-                    edgesRaw.push({ source: transformation.sourceId, target: transformation.qualifiedId });
-                }
+            // A processing step is shown when it is REACHABLE - its source endpoint
+            // exists in the running configuration. The backend only emits a step
+            // that is enabled in the workflow AND whose component is live in the
+            // broker, so what appears is exactly the enabled pipeline for this
+            // deployment: switching ai.gebo.opensearch.enabled / ai.gebo.neo4j.enabled
+            // off, or a step the workflow disables per data source, removes the step
+            // at the source. The step's target STORE is a separate node drawn only
+            // when that store is actually configured (its endpoint was reported): an
+            // enabled step whose store is not yet set up still appears as part of the
+            // workflow, but the graph never invents a store that does not exist.
+            const renderableTransformations = this.transformations.filter(t => knownEndpoints.has(t.sourceId));
+
+            const edgesRaw: { source: string; target: string }[] = [];
+            for (const transformation of renderableTransformations) {
+                edgesRaw.push({ source: transformation.sourceId, target: transformation.qualifiedId });
                 if (knownEndpoints.has(transformation.destinationId)) {
                     edgesRaw.push({ source: transformation.qualifiedId, target: transformation.destinationId });
                 }
@@ -216,7 +238,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
 
             const allIds = [
                 ...this.endpoints.map(e => e.qualifiedId),
-                ...this.transformations.map(t => t.qualifiedId)
+                ...renderableTransformations.map(t => t.qualifiedId)
             ];
             const targets = new Set(edgesRaw.map(e => e.target));
             const levels = new Map<string, number>();
@@ -275,7 +297,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                     data: endpoint
                 });
             }
-            for (const transformation of this.transformations) {
+            for (const transformation of renderableTransformations) {
                 nodes.push({
                     id: transformation.qualifiedId,
                     position: positionOf(transformation.qualifiedId),
@@ -301,14 +323,11 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
 
     protected openDataFlowDialog(): void {
         this.showDataFlowDialog = true;
-        // The dialog content does not exist until it is shown, so <ng-diagram>
-        // would otherwise initialize against a zero-size viewport and keep
-        // computing zoomToFit() against that stale size - the same library quirk
-        // the agents-network diagram works around inside a hidden tab panel.
-        // Fit from real DOM measurements once the dialog has actually rendered.
-        afterNextRender(() => {
-            this.fitDiagramToViewport();
-        }, { injector: this.injector });
+        // The dialog content does not exist until it is shown, so the diagram must
+        // be fit only once it has a real size. onDialogShow() fires when Primeng
+        // has rendered the dialog; this afterNextRender is the fallback for the
+        // already-open case.
+        afterNextRender(() => this.fitDiagramToViewport(), { injector: this.injector });
     }
 
     protected onDialogShow(): void {
@@ -317,43 +336,62 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
 
     protected refreshFromDialog(): void {
         this.reloadViewedData();
-        afterNextRender(() => {
-            this.fitDiagramToViewport();
-        }, { injector: this.injector });
+        afterNextRender(() => this.fitDiagramToViewport(), { injector: this.injector });
     }
 
+    /**
+     * Fits and centers the graph. ng-diagram's viewport {x,y} is the flow
+     * coordinate shown at the CENTRE of the viewport (not a translate), so
+     * centering is simply: point it at the middle of the node bounding box, at a
+     * scale that makes the box fit. Node sizes come from the rendered DOM, which
+     * is only measured a tick or two after the dialog opens, so the fit is fired
+     * at a few increasing delays; the last, post-measurement attempt lands it. It
+     * is idempotent - each call just re-centers.
+     */
     private fitDiagramToViewport(): void {
+        for (const delay of [120, 350, 700]) {
+            setTimeout(() => this.applyFit(), delay);
+        }
+    }
+
+    private applyFit(): void {
         const hostEl = this.diagramHostRef?.nativeElement;
-        if (!hostEl || this.lastLayoutNodes.length === 0) {
+        if (!hostEl || hostEl.clientWidth <= 0 || hostEl.clientHeight <= 0 || this.lastLayoutNodes.length === 0) {
             return;
         }
-        const padding = 40;
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
         for (const node of this.lastLayoutNodes) {
-            const nodeEl = hostEl.querySelector<HTMLElement>(`[data-node-id="${node.id}"]`);
-            const width = nodeEl?.offsetWidth || 260;
-            const height = nodeEl?.offsetHeight || 200;
+            const el = hostEl.querySelector<HTMLElement>(`[data-node-id="${node.id}"]`);
+            const w = el?.offsetWidth || 260;
+            const h = el?.offsetHeight || 200;
             minX = Math.min(minX, node.position.x);
             minY = Math.min(minY, node.position.y);
-            maxX = Math.max(maxX, node.position.x + width);
-            maxY = Math.max(maxY, node.position.y + height);
+            maxX = Math.max(maxX, node.position.x + w);
+            maxY = Math.max(maxY, node.position.y + h);
         }
         const boundsWidth = maxX - minX;
         const boundsHeight = maxY - minY;
-        const viewportWidth = hostEl.clientWidth;
-        const viewportHeight = hostEl.clientHeight;
-        if (boundsWidth <= 0 || boundsHeight <= 0 || viewportWidth <= 0 || viewportHeight <= 0) {
+        if (boundsWidth <= 0 || boundsHeight <= 0) {
             return;
         }
-        const scale = Math.min(
-            (viewportWidth - 2 * padding) / boundsWidth,
-            (viewportHeight - 2 * padding) / boundsHeight,
-            1
+        const padding = 60;
+        const scale = Math.max(Math.min(
+            (hostEl.clientWidth - 2 * padding) / boundsWidth,
+            (hostEl.clientHeight - 2 * padding) / boundsHeight,
+            1.5
+        ), 0.1);
+        // setViewport(x,y) sets the canvas translate. A node at flow (fx,fy) lands
+        // at screen x = x + fx*scale (X has no extra offset), but the canvas's Y
+        // origin is shifted down by exactly one host-height, so the Y translate has
+        // to compensate for that fixed offset (measured: the flow origin sits one
+        // clientHeight below the host top). Solving hostCentre = translate +
+        // centreFlow*scale (+hostHeight for Y) gives the two expressions below.
+        const centreX = (minX + maxX) / 2;
+        const centreY = (minY + maxY) / 2;
+        this.viewportService.setViewport(
+            hostEl.clientWidth / 2 - centreX * scale,
+            -hostEl.clientHeight / 2 - centreY * scale,
+            scale
         );
-        const x = (viewportWidth - boundsWidth * scale) / 2 - minX * scale;
-        // ng-diagram-canvas sits one full viewport-height below the host element,
-        // so the Y translate compensates for that fixed offset; X does not.
-        const y = (viewportHeight - boundsHeight * scale) / 2 - minY * scale - viewportHeight;
-        this.viewportService.setViewport(x, y, scale);
     }
 }

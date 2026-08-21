@@ -51,7 +51,7 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
           </div>
 
           <div class="text-xs text-muted-color">
-            <span class="font-semibold">Product: </span>{{ node().data.product }}
+            <span class="font-semibold">{{ productLabel() }}: </span>{{ node().data.product }}
           </div>
 
           <div class="text-xs text-overflow-ellipsis overflow-hidden" [title]="node().data.endpoint">
@@ -87,10 +87,15 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
                 <i class="pi pi-trash text-green-600"></i>
                 <span class="font-semibold"> Erasable by: </span>{{ node().data.disposer }}
               </div>
-            } @else if (node().data.output) {
-              <div title="No disposer component is wired for this endpoint - GDPR Art. 17 erasure cannot be demonstrated for it">
+            } @else if (isRetainingStore()) {
+              <div title="This store retains data but no disposer component is wired for it - GDPR Art. 17 erasure cannot be demonstrated">
                 <i class="pi pi-exclamation-triangle text-orange-600"></i>
                 <span class="font-semibold"> No erasure component wired</span>
+              </div>
+            } @else if (isManagedConfig()) {
+              <div title="A model / provider endpoint does not retain data; its configuration is created, changed and deleted by an administrator through the provider's model controller">
+                <i class="pi pi-cog text-muted-color"></i>
+                <span class="font-semibold"> Config managed by admin</span> (no data retained)
               </div>
             }
             @if (node().data.secretReference) {
@@ -109,6 +114,37 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
 })
 export class DataEndpointNodeComponent implements NgDiagramNodeTemplate<DataFlowEndpointNode, SimpleNode<DataFlowEndpointNode>> {
     node = input.required<SimpleNode<DataFlowEndpointNode>>();
+
+    /** The endpoint kinds that actually RETAIN data - the ones GDPR Art. 17 erasure applies to. */
+    private static readonly STORE_TYPES = new Set<string>([
+        "DATABASE", "VECTORIAL_DATABASE", "GRAPH_DATABASE", "FULLTEXT_INDEX",
+        "CHUNK", "OBJECT_STORAGE", "LOCAL_FILESYSTEM", "CHAT_SESSION"
+    ]);
+
+    /** For a model / web-search endpoint the "product" is really its provider. */
+    protected productLabel(): string {
+        return this.isModelOrSearch() ? "Provider" : "Product";
+    }
+
+    /** A retaining store that data comes to rest in - the erasure warning belongs here. */
+    protected isRetainingStore(): boolean {
+        const types = this.node().data.types || [];
+        return this.node().data.output === true && types.some(t => DataEndpointNodeComponent.STORE_TYPES.has(t));
+    }
+
+    /**
+     * A model or external-search endpoint: it processes/transfers data but retains
+     * none, and its configuration is inserted/modified/deleted by an admin through
+     * the provider's model controller - so "no erasure component" does not apply.
+     */
+    protected isManagedConfig(): boolean {
+        return this.isModelOrSearch() && !this.isRetainingStore();
+    }
+
+    private isModelOrSearch(): boolean {
+        const types = this.node().data.types || [];
+        return types.includes("LLM_ENDPOINT") || types.includes("WEB_SEARCH");
+    }
 
     protected localityColor(): string {
         switch (this.node().data.locality) {
