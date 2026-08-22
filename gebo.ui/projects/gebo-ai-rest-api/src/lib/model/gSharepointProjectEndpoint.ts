@@ -32,6 +32,7 @@ export interface GSharepointProjectEndpoint {
     synchroStrategy?: GSharepointProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GSharepointProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     paths?: Array<VFilesystemReference>;
     sharePointSystemCode?: string;
 }

@@ -32,6 +32,7 @@ export interface GAwsS3ProjectEndpoint {
     synchroStrategy?: GAwsS3ProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GAwsS3ProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     paths?: Array<VFilesystemReference>;
     s3SystemCode?: string;
 }

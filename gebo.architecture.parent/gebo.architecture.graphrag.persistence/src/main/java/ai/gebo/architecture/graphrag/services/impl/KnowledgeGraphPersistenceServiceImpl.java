@@ -71,11 +71,67 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 
 	@Override
 	public void knowledgeGraphDelete(GDocumentReference documentReference) {
-		entityInChunkRepository.deleteByDocumentChunkDocumentCode(documentReference.getCode());
-		eventInChunkRepository.deleteByDocumentChunkDocumentCode(documentReference.getCode());
-		relationInChunkRepository.deleteByDocumentChunkDocumentCode(documentReference.getCode());
-		docChunkRepository.deleteByDocumentCode(documentReference.getCode());
-		docReferenceRepository.deleteById(documentReference.getCode());
+		deleteDocumentGraph(documentReference.getCode());
+	}
+
+	/**
+	 * Erases everything the graph holds for a single document code - the chunk-level
+	 * entities, events and relations, the chunks and the document node itself. This
+	 * is the unit of erasure that {@link #knowledgeGraphUpdate} re-runs before a
+	 * re-extraction and that the scope deletions below apply per resolved document.
+	 */
+	private void deleteDocumentGraph(String documentCode) {
+		entityInChunkRepository.deleteByDocumentChunkDocumentCode(documentCode);
+		eventInChunkRepository.deleteByDocumentChunkDocumentCode(documentCode);
+		relationInChunkRepository.deleteByDocumentChunkDocumentCode(documentCode);
+		docChunkRepository.deleteByDocumentCode(documentCode);
+		docReferenceRepository.deleteById(documentCode);
+	}
+
+	@Override
+	public void knowledgeGraphDeleteByDocumentCodes(Collection<String> documentCodes) {
+		if (documentCodes == null) {
+			return;
+		}
+		for (String code : documentCodes) {
+			if (code != null) {
+				deleteDocumentGraph(code);
+			}
+		}
+	}
+
+	@Override
+	public void knowledgeGraphDeleteByKnowledgeBaseCode(String knowledgeBaseCode) {
+		deleteResolvedDocuments(docReferenceRepository.findByKnowledgeBaseCode(knowledgeBaseCode));
+	}
+
+	@Override
+	public void knowledgeGraphDeleteByProjectCode(String projectCode) {
+		deleteResolvedDocuments(docReferenceRepository.findByProjectCode(projectCode));
+	}
+
+	@Override
+	public void knowledgeGraphDeleteByProjectEndpoint(String projectEndpointClass, String projectEndpointCode) {
+		deleteResolvedDocuments(
+				docReferenceRepository.findByProjectEndpointClassAndProjectEndpointCode(projectEndpointClass,
+						projectEndpointCode));
+	}
+
+	/**
+	 * Resolves a scope to its document nodes, then erases each one's graph. The
+	 * scope fields (knowledgeBaseCode, projectCode, projectEndpointClass/Code) are
+	 * the same ones {@link #knowledgeGraphInsertDocument} stamps on the document
+	 * node at extraction time, so the erasure matches exactly what was written.
+	 */
+	private void deleteResolvedDocuments(List<GraphDocumentReference> references) {
+		if (references == null) {
+			return;
+		}
+		for (GraphDocumentReference reference : references) {
+			if (reference != null && reference.getCode() != null) {
+				deleteDocumentGraph(reference.getCode());
+			}
+		}
 	}
 
 	@Override

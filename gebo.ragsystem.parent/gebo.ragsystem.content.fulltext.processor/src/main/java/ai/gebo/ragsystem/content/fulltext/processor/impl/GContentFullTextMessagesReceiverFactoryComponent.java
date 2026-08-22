@@ -9,6 +9,7 @@
 
 package ai.gebo.ragsystem.content.fulltext.processor.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,19 @@ import ai.gebo.application.messaging.GAbstractTimedOutMessageReceiverFactory;
 import ai.gebo.application.messaging.IGBatchMessagesReceiver;
 import ai.gebo.application.messaging.IGTimedOutMessageReceiver;
 import ai.gebo.application.messaging.SystemComponentType;
+import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointLocality;
+import ai.gebo.application.messaging.model.DataTransformationInfo;
+import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
+import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.architecture.opensearch.config.OpenSearchConfig;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.core.messages.GRawContentMessageFragmentPayload;
+import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.ragsystem.content.fulltext.processor.config.GeboFullTextProcessorConfig;
 
 /**
@@ -46,9 +55,79 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 	 * 
 	 * @param config The configuration for the vectorizator
 	 */
-	public GContentFullTextMessagesReceiverFactoryComponent(GeboFullTextProcessorConfig config) {
+	/** The OpenSearch this node indexes into. */
+	final OpenSearchConfig openSearchConfig;
+
+	public GContentFullTextMessagesReceiverFactoryComponent(GeboFullTextProcessorConfig config,
+			OpenSearchConfig openSearchConfig) {
 		super(config.getVectorizatorReceiverConfig());
 		this.config = config;
+		this.openSearchConfig = openSearchConfig;
+	}
+
+	/**
+	 * Reports the full-text indexing step: chunks are indexed into OpenSearch and
+	 * retained there.
+	 *
+	 * <p>
+	 * This component only exists when {@code ai.gebo.opensearch.enabled} is true
+	 * (see the {@code @ConditionalOnProperty} on the class), so its presence in
+	 * the register is itself the answer to "is full-text indexing configured on
+	 * this installation".
+	 * </p>
+	 *
+	 * <p>
+	 * The locator is built from protocol, host and port only - the
+	 * {@code username} and {@code password} that {@code OpenSearchConfig} also
+	 * carries must never reach the register.
+	 * </p>
+	 */
+	@Override
+	public GDataFlowMetaInfos getDataFlowMetaInfos() {
+		if (openSearchConfig == null || !openSearchConfig.isEnabled()) {
+			return null;
+		}
+		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
+		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+
+		DataEndpoint index = new DataEndpoint();
+		index.setId("fulltext-index");
+		// Name the actual index the chunks land in - the store name an auditor needs
+		// to locate the retained data (see OpenSearchFullTextChunkIndexService).
+		index.setDescription("Full-text index of ingested chunks (index 'kb_chunks')");
+		index.setProduct("OpenSearch");
+		index.setEndpoint(openSearchConfig.getProtocol() != null ? openSearchConfig.getProtocol().name() : null,
+				openSearchConfig.getHost(), openSearchConfig.getPort(), "kb_chunks");
+		index.setTypes(new ArrayList<MetaEndpointType>(
+				List.of(MetaEndpointType.FULLTEXT_INDEX, MetaEndpointType.CHUNK)));
+		index.setOutput(true);
+		index.setLocality(DataEndpointLocality.hintFromLocator(index.getEndpoint()));
+		// The indexed text is the ingested content itself, so it carries whatever
+		// the sources carried.
+		index.setPersonalData(false);
+		// A lasting store: the indexed chunks stay searchable until the source is
+		// removed or re-indexed (then the erasure component prunes them).
+		index.setRetention("Until the source is deleted or re-indexed");
+		if (openSearchConfig.getUsername() != null) {
+			// Named so an auditor can see the index is credential-guarded; the
+			// password itself is deliberately never carried.
+			index.setSecretReference("ai.gebo.opensearch.username=" + openSearchConfig.getUsername());
+		}
+		flow.getDataEndpoints().add(index);
+
+		DataTransformationMetaInfo indexer = DataTransformationMetaInfo.of("fulltext-indexer",
+				"Indexes chunk text for lexical search", List.of(MetaEndpointType.CHUNK),
+				List.of(MetaEndpointType.FULLTEXT_INDEX));
+		flow.getEngines().add(indexer);
+
+		flow.getTransformations().add(DataTransformationInfo.of("fulltext-indexing",
+				"Chunks are indexed into OpenSearch and retained", indexer,
+				GDataFlowMetaInfos.qualifiedId(
+						new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
+								GStandardModulesConstraints.TOKENIZER_COMPONENT),
+						"chunk-cache"),
+				flow.qualifiedId(index.getId())));
+		return flow;
 	}
 
 	/** Runtime binder for dependency injection */

@@ -97,6 +97,11 @@ ai.gebo.vectorstore:
     host: 127.0.0.1
     port: 6334
     tls: false
+    # Must match QDRANT__SERVICE__API_KEY in dockers/gebo.ai/windows/docker-compose.yml;
+    # the qdrant image ships with an API key set, so a client without it is rejected
+    # (UNAUTHENTICATED: Must provide an API key). The three deployment configs under
+    # dockers/*/config/application.yml already carry this same key.
+    apiKey: ce7c85bc-f037-4c64-91d8-70335638329d
 spring.ai:
   openai:
     embedding:

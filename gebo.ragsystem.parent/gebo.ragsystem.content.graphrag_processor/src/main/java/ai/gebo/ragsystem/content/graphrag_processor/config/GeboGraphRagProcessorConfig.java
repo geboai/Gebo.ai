@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import ai.gebo.application.messaging.GAbstractMessageReceiverFactory.MessageReceiverFactoryConfig;
 import ai.gebo.application.messaging.GAbstractTimedOutMessageReceiverFactory.TimedOutMessageReceiverFactoryConfig;
 import lombok.Data;
 
@@ -47,6 +48,9 @@ public class GeboGraphRagProcessorConfig {
 	 */
 	GraphRagCustomReceiverConfig graphRagProcessorReceiverConfig = new GraphRagCustomReceiverConfig();
 
+	/** Configuration for the knowledge-graph erasure (deletion) message receiver. */
+	MessageReceiverFactoryConfig disposerConfig = new MessageReceiverFactoryConfig();
+
 	/**
 	 * Default constructor that initializes the configuration objects with default
 	 * values. Sets up pool cardinality, threading behavior, timeout values, and
@@ -58,6 +62,10 @@ public class GeboGraphRagProcessorConfig {
 		graphRagProcessorReceiverConfig.setUseSenderThread(true);
 		graphRagProcessorReceiverConfig.setTimeout(5000l);
 		graphRagProcessorReceiverConfig.setFlushThreshold(10);
+		// The erasure receiver needs a delivery thread of its own, like the
+		// vectorizator disposer; without a pool it would fail to register.
+		disposerConfig.setPoolCardinality(1);
+		disposerConfig.setUseSenderThread(false);
 	}
 
 }
