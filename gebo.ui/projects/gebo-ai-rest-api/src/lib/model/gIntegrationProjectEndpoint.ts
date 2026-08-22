@@ -31,6 +31,7 @@ export interface GIntegrationProjectEndpoint {
     synchroStrategy?: GIntegrationProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GIntegrationProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     allowedApplicationUsers?: Array<string>;
 }
 export namespace GIntegrationProjectEndpoint {

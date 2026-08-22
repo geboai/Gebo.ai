@@ -31,6 +31,7 @@ export interface GUserspaceProjectEndpoint {
     synchroStrategy?: GUserspaceProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GUserspaceProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     username: string;
 }
 export namespace GUserspaceProjectEndpoint {

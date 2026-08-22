@@ -31,6 +31,7 @@ export interface GGitProjectEndpoint {
     synchroStrategy?: GGitProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GGitProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     repositoryUri?: string;
     branch?: string;
     identityCode?: string;
