@@ -61,6 +61,33 @@
       </div>
     </div>
 
+    <div class="surface-card border-round p-4 border-1 surface-border">
+      <div class="flex align-items-start justify-content-between gap-4 flex-wrap">
+        <div class="flex flex-column gap-2" style="max-width: 46rem;">
+          <div class="flex align-items-center gap-2">
+            <i class="pi pi-shield text-green-600"></i>
+            <span class="text-xl font-bold" gebo-ai-text>Security audit logging — Wazuh / SIEM compatible</span>
+          </div>
+          <span class="text-muted-color" gebo-ai-text>
+            An append-only audit trail (security-log.jsonl) records authentication, credential
+            changes, model configuration and user-administration events - one JSON object per line,
+            ingested natively by Wazuh's json decoder and any SIEM. Retained 365 days by default, and
+            its Wazuh compatibility is verified on every build.
+          </span>
+        </div>
+
+        <div class="flex flex-column gap-2 align-items-stretch">
+          <span class="inline-flex align-items-center justify-content-center gap-2 px-3 py-2 border-round bg-green-100 text-green-700 font-semibold"
+            title="The security audit trail is active and SIEM/Wazuh-ready on this installation">
+            <i class="pi pi-check-circle"></i> <span gebo-ai-text>Up &amp; running</span>
+          </span>
+          <span class="text-xs text-muted-color text-center" gebo-ai-text>
+            GDPR Art. 32 · NIS2 Art. 21 — Security of processing &amp; monitoring
+          </span>
+        </div>
+      </div>
+    </div>
+
     <div class="flex gap-3 flex-wrap">
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;">
         <div class="text-2xl font-bold">{{ summary.endpoints }}</div>

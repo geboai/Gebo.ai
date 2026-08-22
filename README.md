@@ -58,6 +58,7 @@ an enterprise version with more feature and support is also available.
  - Monitor embedding batch job.
  - Monitor **LLM usage** with built-in dashboards (admin: every user; user: own usage only) — drill down by provider, model, model type (chat/embedding/image/reranking/TTS/transcription), user and month to track calls/tokens over time.
  - **NIS2-oriented security audit logging**: login/logout, LLM configuration changes, LLM invocations, secrets/API-key/3rd-party-integration changes and user administration are all traced to a dedicated, append-only, **Wazuh-compatible JSON** audit trail — see [Security & compliance](#security--compliance) below.
+ - **Compliance / data-flow register** (GDPR Art. 30 · NIS2 Art. 21): a live **record of processing activities** built from the components actually running — data sources, transformation engines, retaining stores and external providers, with per-source personal-data scope, retention & erasure per store, an interactive data-flow graph and CSV export, plus the Wazuh/SIEM security-audit-logging status — see [Security & compliance](#security--compliance) below.
  - Configure company users and groups.      
  - Organize multiple specific Retrieve augmented generation chats for specific company tasks:
     - Examples:
@@ -146,6 +147,30 @@ Gebo.ai ships with built-in **security audit logging**, oriented toward **NIS2**
 - **Rotation & archiving** — daily and 100MB size-triggered rotation with gzip-compressed archives; retention defaults to 365 days / 10GB total, both overridable via the `SECURITY_LOG_RETENTION_DAYS` / `SECURITY_LOG_TOTAL_SIZE_CAP` environment variables.
 - **Correlated & forensic-ready** — every event carries `correlationId`, `sourceIp`, `userId`, `httpMethod` and `requestUri` from the originating request, plus a caller-trace (`stackPoint`) for drill-down.
 - **Verified against a real Wazuh manager** — the SIEM compatibility claim is not just documented: as the last step of the `gebo.ai.app` test suite, `WazuhSecurityLogCompatibilityTest` takes the `security-log.jsonl` produced by all the other tests, feeds it to `wazuh-logtest` inside a containerized `wazuh/wazuh-manager`, and asserts Wazuh's built-in `json` decoder extracts every audit field (and the `eventType`/`category`/`action`/`outcome`/`timestamp` taxonomy) unchanged. Skippable with `-Dgebo.wazuh.compatibility.test.skip=true`.
+
+#### Records of processing & data-flow register (GDPR Art. 30 · NIS2 Art. 21)
+
+The admin **Compliance** screen builds a live **record of processing activities and
+data-flow register** from the components *actually running* (via the message broker),
+not from a declared configuration file — the answer to a GDPR Art. 30 / NIS2 Art. 21
+audit for the deployment as it stands.
+
+- **What it maps** — every data source, the engines that transform data on the way, and
+  every retaining store (chunk cache, vector store, full-text index, **Neo4j knowledge
+  graph**) and external provider (chat / embedding / reranker / transcript / image models
+  and web-search providers) the content reaches. Endpoint locators are **credential-free
+  by construction** — a credential is referenced only by the code of the secret that
+  guards it, never by value.
+- **Personal-data scope** — a `personalData` flag set per data source (GDPR) is propagated
+  across the flow, so every store and query path fed by a personal-data source is flagged
+  in scope; the propagation is computed authoritatively in the backend report.
+- **Retention & erasure** — each store reports its retention period and the component able
+  to erase it, so an Art. 17 gap (a store with no erasure wired) is visible at a glance.
+- **Graph view & export** — an interactive data-flow graph (localities colour-coded for
+  Art. 44 transfer review) plus a one-click **CSV export** of the register for filing.
+- **Security audit logging status** — the same screen surfaces the security audit trail
+  above as a live *"Security audit logging — Wazuh / SIEM compatible: up & running"*
+  status (GDPR Art. 32 · NIS2 Art. 21).
 
 ### How to build the software:
 
