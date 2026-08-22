@@ -316,21 +316,77 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                 }
             });
 
-            const levelGroups = new Map<number, string[]>();
-            levels.forEach((level, id) => {
-                if (!levelGroups.has(level)) {
-                    levelGroups.set(level, []);
-                }
-                levelGroups.get(level)!.push(id);
+            // Group nodes into connected components (treating edges as
+            // undirected) so each distinct data-flow tree is laid out in its own
+            // horizontal band instead of being interleaved into one centred
+            // block. A component flows left-to-right by level; separate
+            // components are stacked top-to-bottom with a blank gap between them.
+            const undirected = new Map<string, Set<string>>();
+            allIds.forEach(id => undirected.set(id, new Set<string>()));
+            edgesRaw.forEach(e => {
+                undirected.get(e.source)?.add(e.target);
+                undirected.get(e.target)?.add(e.source);
             });
+            const componentOf = new Map<string, number>();
+            let componentCount = 0;
+            for (const startId of allIds) {
+                if (componentOf.has(startId)) {
+                    continue;
+                }
+                const stack = [startId];
+                componentOf.set(startId, componentCount);
+                while (stack.length > 0) {
+                    const cur = stack.pop()!;
+                    undirected.get(cur)!.forEach(n => {
+                        if (!componentOf.has(n)) {
+                            componentOf.set(n, componentCount);
+                            stack.push(n);
+                        }
+                    });
+                }
+                componentCount++;
+            }
+
+            const COL_WIDTH = 420;
+            const ROW_HEIGHT = 260;
+            const COMPONENT_GAP = 240; // blank band separating distinct trees
+
+            // Rows are assigned per (component, level) pair so nodes never
+            // overlap; a component's height is that of its tallest level.
+            const componentLevelGroups = new Map<string, string[]>();
+            allIds.forEach(id => {
+                const key = `${componentOf.get(id) || 0}:${levels.get(id) || 0}`;
+                if (!componentLevelGroups.has(key)) {
+                    componentLevelGroups.set(key, []);
+                }
+                componentLevelGroups.get(key)!.push(id);
+            });
+            const componentRows = new Array(componentCount).fill(1);
+            componentLevelGroups.forEach((ids, key) => {
+                const comp = Number(key.split(":")[0]);
+                componentRows[comp] = Math.max(componentRows[comp], ids.length);
+            });
+            // Top of each component band = running sum of previous band heights
+            // plus one gap each, so the trees sit clearly apart.
+            const componentTop = new Array(componentCount).fill(0);
+            let bandOffset = 0;
+            for (let c = 0; c < componentCount; c++) {
+                componentTop[c] = bandOffset;
+                bandOffset += (componentRows[c] - 1) * ROW_HEIGHT + COMPONENT_GAP;
+            }
 
             const nodes: any[] = [];
             const positionOf = (id: string) => {
+                const comp = componentOf.get(id) || 0;
                 const level = levels.get(id) || 0;
-                const group = levelGroups.get(level) || [];
+                const group = componentLevelGroups.get(`${comp}:${level}`) || [];
                 const index = group.indexOf(id);
-                // Columns per level (left to right), rows within a level.
-                return { x: level * 420 + 60, y: (index - (group.length - 1) / 2) * 260 + 400 };
+                // Centre each level's rows within its component band so shorter
+                // levels sit mid-height against the tallest one.
+                const bandHeight = (componentRows[comp] - 1) * ROW_HEIGHT;
+                const levelHeight = (group.length - 1) * ROW_HEIGHT;
+                const y = componentTop[comp] + (bandHeight - levelHeight) / 2 + index * ROW_HEIGHT;
+                return { x: level * COL_WIDTH + 60, y };
             };
 
             for (const endpoint of this.endpoints) {
