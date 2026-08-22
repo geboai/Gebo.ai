@@ -22,6 +22,7 @@ export interface DataEndpoint {
     locality?: DataEndpoint.LocalityEnum;
     secretReference?: string;
     personalData?: boolean;
+    retention?: string;
     disposer?: GeboComponentInfo;
 }
 export namespace DataEndpoint {
