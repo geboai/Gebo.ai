@@ -9,12 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
-import { GUserMessage } from './gUserMessage';
 
-export interface OperationStatusGMistralEmbeddingModelConfig { 
-    result?: GMistralEmbeddingModelConfig;
-    messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
-    hasErrorMessages?: boolean;
+export interface UploadedFileInfo { 
+    name?: string;
+    absolutePath?: string;
+    extension?: string;
+    size?: number;
+    modificationTime?: Date;
+    folder?: boolean;
+    ingested?: boolean;
+    documentCode?: string;
+    tracked?: boolean;
 }

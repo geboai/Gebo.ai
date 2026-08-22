@@ -129,6 +129,7 @@ import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsCon
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
+import { UploadsBrowsingControllerService } from './api/uploadsBrowsingController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
@@ -270,6 +271,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     TokenRenewControllerService,
     TranscriptModelsControllerService,
     UiTextResourcesControllerService,
+    UploadsBrowsingControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
     UserWorkflowsControllerService,

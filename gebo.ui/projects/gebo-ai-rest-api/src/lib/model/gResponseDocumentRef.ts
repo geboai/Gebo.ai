@@ -29,10 +29,10 @@ export interface GResponseDocumentRef {
     nestedSearchResult?: SearchResult;
     loadPercentage?: number;
     references?: Array<DocInternalRef>;
-    ntotalContentTokens?: number;
     ntokensRelevant?: number;
     nbytesRelevant?: number;
     shortCode?: string;
+    ntotalContentTokens?: number;
 }
 export namespace GResponseDocumentRef {
     export type ReferenceTypeEnum = 'FILE' | 'WEB';

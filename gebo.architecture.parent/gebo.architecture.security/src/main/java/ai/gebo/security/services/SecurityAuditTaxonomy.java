@@ -66,6 +66,10 @@ public class SecurityAuditTaxonomy {
 		public static final String INTEGRATION_ENDPOINT_DELETE = "integrationEndpointDelete";
 		public static final String INTEGRATION_ENDPOINT_PUBLISH = "integrationEndpointPublish";
 
+		// 3rd-party content lifecycle
+		public static final String INTEGRATION_CONTENT_UPLOAD = "integrationContentUpload";
+		public static final String INTEGRATION_CONTENT_DELETE = "integrationContentDelete";
+
 		// 3rd-party data interaction
 		public static final String INTEGRATION_DATA_CONSUME = "integrationDataConsume";
 		public static final String INTEGRATION_DATA_READ = "integrationDataRead";

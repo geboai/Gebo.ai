@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.uploads.content.handler.service.UploadsSystemsManagementServiceImpl;
 
 /**
@@ -92,6 +94,32 @@ public class FileUploadController {
 	public void upload(@PathVariable("handShakeCode") String handShakeCode,
 			@RequestParam("files[]") List<MultipartFile> files) throws IOException {
 		fileUploadService.manageUpload(handShakeCode, files);
+	}
+
+	/**
+	 * Adds files to an uploads data source that already exists.
+	 *
+	 * <p>
+	 * The handshake flow above stages files until the endpoint is saved, which is
+	 * what creation needs since the endpoint has no code yet. Once the data source
+	 * exists it owns a contents folder, so files are stored there directly and are
+	 * immediately browsable and ingestable at the next publish.
+	 * </p>
+	 *
+	 * @param endpointCode The code of the target uploads data source
+	 * @param files        A list of multipart files to be uploaded
+	 * @throws IOException                       If an error occurs during file
+	 *                                           processing
+	 * @throws GeboContentHandlerSystemException If the data source folder cannot be
+	 *                                           resolved
+	 * @throws GeboPersistenceException          If the data source cannot be
+	 *                                           updated
+	 */
+	@PostMapping(value = "uploadToEndpoint/{endpointCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public void uploadToEndpoint(@PathVariable("endpointCode") String endpointCode,
+			@RequestParam("files[]") List<MultipartFile> files)
+			throws IOException, GeboContentHandlerSystemException, GeboPersistenceException {
+		fileUploadService.uploadToEndpoint(endpointCode, files);
 	}
 
 }

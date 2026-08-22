@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUploadsProjectEndpoint } from './gUploadsProjectEndpoint';
 import { GUserMessage } from './gUserMessage';
-import { GenericOpenAIAPITextToSpeechModelConfig } from './genericOpenAIAPITextToSpeechModelConfig';
 
-export interface OperationStatusGenericOpenAIAPITextToSpeechModelConfig { 
-    result?: GenericOpenAIAPITextToSpeechModelConfig;
+export interface OperationStatusGUploadsProjectEndpoint { 
+    result?: GUploadsProjectEndpoint;
     messages?: Array<GUserMessage>;
     hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
