@@ -49,6 +49,11 @@
             (onClick)="openDataFlowDialog()"
             icon="pi pi-sitemap" severity="primary"
             label="GDPR Art. 30 · NIS2 Art. 21 — Data Flow Register"></p-button>
+          <p-button id="ExportDataFlowCsvBtn" gebo-ai-label
+            (onClick)="exportCsv()" [outlined]="true"
+            [disabled]="endpoints.length === 0"
+            icon="pi pi-download" severity="secondary"
+            label="Export register (CSV)"></p-button>
           <span class="text-xs text-muted-color text-center" gebo-ai-text>
             Records of processing activities · Supply-chain and asset visibility
           </span>

@@ -111,6 +111,62 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
     }
 
     /**
+     * Downloads the register as a CSV record of processing activities - one row
+     * per store/source/interface, the shape an administrator files for a GDPR
+     * Art. 30 / NIS2 Art. 21 review. It is built from what is already on screen
+     * (the backend has already resolved the authoritative personal-data scope),
+     * so the file matches the register exactly, credentials and all excluded.
+     */
+    protected exportCsv(): void {
+        const headers = [
+            "Node", "Collected at", "Owner component", "Endpoint", "Local id", "Product",
+            "Locator", "Input", "Output", "Types", "Locality", "Personal data",
+            "Retained store", "Erasure component", "Secret reference"
+        ];
+        const collectedAt = this.report?.collectedAt ? new Date(this.report.collectedAt).toISOString() : "";
+        const rows = this.endpoints.map(e => {
+            const retained = this.isRetainingStore(e);
+            return [
+                e.nodeId || this.report?.nodeId || "",
+                collectedAt,
+                e.ownerComponent,
+                e.description,
+                e.localId,
+                e.product,
+                e.endpoint,
+                e.input ? "yes" : "no",
+                e.output ? "yes" : "no",
+                (e.types || []).join("; "),
+                e.locality || "",
+                e.personalData ? "yes" : "no",
+                retained ? "yes" : "no",
+                e.disposer || (retained ? "NONE" : ""),
+                e.secretReference || ""
+            ];
+        });
+        const csv = [headers, ...rows]
+            .map(row => row.map(v => this.csvCell(v)).join(","))
+            .join("\r\n");
+
+        // Prepend a UTF-8 BOM so Excel opens accented text correctly.
+        const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const stamp = new Date().toISOString().replace(/[:T]/g, "-").slice(0, 16);
+        const node = (this.report?.nodeId || "node").replace(/[^a-zA-Z0-9._-]/g, "_");
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `gebo-data-flow-register-${node}-${stamp}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+
+    /** Quotes a CSV cell, doubling any embedded quotes (RFC 4180). */
+    private csvCell(value: string): string {
+        const text = value == null ? "" : String(value);
+        return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+    }
+
+    /**
      * Flattens report -> module -> component -> flow into the two render-ready
      * lists, qualifying every endpoint id with its owning component so ids stay
      * unique once several components' reports sit in one graph.
