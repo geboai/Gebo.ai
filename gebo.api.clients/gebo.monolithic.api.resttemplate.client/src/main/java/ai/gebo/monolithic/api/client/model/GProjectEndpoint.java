@@ -27,7 +27,7 @@ import java.util.List;
  * GProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
 
 public class GProjectEndpoint {
   @JsonProperty("code")
@@ -145,6 +145,9 @@ public class GProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Boolean personalData = null;
 
   public GProjectEndpoint code(String code) {
     this.code = code;
@@ -502,6 +505,24 @@ public class GProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GProjectEndpoint personalData(Boolean personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Boolean isPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Boolean personalData) {
+    this.personalData = personalData;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -529,12 +550,13 @@ public class GProjectEndpoint {
         Objects.equals(this.vectorizeOnlyExtensions, gprojectEndpoint.vectorizeOnlyExtensions) &&
         Objects.equals(this.synchroStrategy, gprojectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gprojectEndpoint.objectSpaceType) &&
-        Objects.equals(this.aclAliases, gprojectEndpoint.aclAliases);
+        Objects.equals(this.aclAliases, gprojectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gprojectEndpoint.personalData);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData);
   }
 
 
@@ -561,6 +583,7 @@ public class GProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("}");
     return sb.toString();
   }

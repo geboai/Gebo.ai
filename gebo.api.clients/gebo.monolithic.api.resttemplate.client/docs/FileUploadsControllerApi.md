@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**deleteUploadedFiles**](FileUploadsControllerApi.md#deleteUploadedFiles) | **POST** /api/admin/FileUploadsController/deleteUploadedFiles | 
 [**deleteUploadsEndpoint**](FileUploadsControllerApi.md#deleteUploadsEndpoint) | **POST** /api/admin/FileUploadsController/deleteUploadsEndpoint | 
 [**findUploadsEndpointsByProject**](FileUploadsControllerApi.md#findUploadsEndpointsByProject) | **GET** /api/admin/FileUploadsController/findUploadsEndpointsByProject | 
 [**findUploadsEndpointsByQbe**](FileUploadsControllerApi.md#findUploadsEndpointsByQbe) | **POST** /api/admin/FileUploadsController/findUploadsEndpointsByQbe | 
@@ -11,8 +12,54 @@ Method | HTTP request | Description
 [**getUploadableFilesExtensions**](FileUploadsControllerApi.md#getUploadableFilesExtensions) | **GET** /api/admin/FileUploadsController/getUploadableFilesExtensions | 
 [**getUploadsSystems**](FileUploadsControllerApi.md#getUploadsSystems) | **GET** /api/admin/FileUploadsController/getUploadsSystems | 
 [**insertUploadsEndpoint**](FileUploadsControllerApi.md#insertUploadsEndpoint) | **POST** /api/admin/FileUploadsController/insertUploadsEndpoint | 
+[**listUploadedFiles**](FileUploadsControllerApi.md#listUploadedFiles) | **GET** /api/admin/FileUploadsController/listUploadedFiles | 
 [**publishUploadsEndpoint**](FileUploadsControllerApi.md#publishUploadsEndpoint) | **POST** /api/admin/FileUploadsController/publishUploadsEndpoint | 
 [**updateUploadsEndpoint**](FileUploadsControllerApi.md#updateUploadsEndpoint) | **POST** /api/admin/FileUploadsController/updateUploadsEndpoint | 
+
+<a name="deleteUploadedFiles"></a>
+# **deleteUploadedFiles**
+> OperationStatusGUploadsProjectEndpoint deleteUploadedFiles(body, endpointCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FileUploadsControllerApi;
+
+
+FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
+List<String> body = Arrays.asList("body_example"); // List<String> | 
+String endpointCode = "endpointCode_example"; // String | 
+try {
+    OperationStatusGUploadsProjectEndpoint result = apiInstance.deleteUploadedFiles(body, endpointCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileUploadsControllerApi#deleteUploadedFiles");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  |
+ **endpointCode** | **String**|  |
+
+### Return type
+
+[**OperationStatusGUploadsProjectEndpoint**](OperationStatusGUploadsProjectEndpoint.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="deleteUploadsEndpoint"></a>
 # **deleteUploadsEndpoint**
@@ -304,6 +351,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="listUploadedFiles"></a>
+# **listUploadedFiles**
+> List&lt;UploadedFileInfo&gt; listUploadedFiles(endpointCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FileUploadsControllerApi;
+
+
+FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
+String endpointCode = "endpointCode_example"; // String | 
+try {
+    List<UploadedFileInfo> result = apiInstance.listUploadedFiles(endpointCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileUploadsControllerApi#listUploadedFiles");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  |
+
+### Return type
+
+[**List&lt;UploadedFileInfo&gt;**](UploadedFileInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 <a name="publishUploadsEndpoint"></a>
