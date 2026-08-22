@@ -108,6 +108,19 @@ public class GraphExtractionDisposerMessageReceiverImpl extends GAbstractMessage
 		@Override
 		public void accept(GMessageEnvelope t) {
 			LOGGER.info("Begin accept(..) deleting knowledge-graph data");
+			// Erasure of the graph must never break the deletion propagation for the
+			// other stores: on an unconfigured or empty graph the scope deletes simply
+			// match nothing, and a transient Neo4j error is logged rather than
+			// rethrown, so the vector/chunk disposers still complete.
+			try {
+				dispose(t);
+			} catch (Throwable th) {
+				LOGGER.error("Error erasing knowledge-graph data on deletion; continuing", th);
+			}
+			LOGGER.info("End accept(..) deleting knowledge-graph data");
+		}
+
+		private void dispose(GMessageEnvelope t) {
 			if (t.getPayload() instanceof GDeletedProjectEndpointPayload payload) {
 				// The message carries the shareable centralized endpoint; match the graph
 				// by the concrete endpoint reference (real class name + code) stamped on
@@ -138,7 +151,6 @@ public class GraphExtractionDisposerMessageReceiverImpl extends GAbstractMessage
 				throw new IllegalStateException(
 						"Received message with payload type:" + t.getPayload().getClass().getName());
 			}
-			LOGGER.info("End accept(..) deleting knowledge-graph data");
 		}
 	}
 

@@ -62,6 +62,10 @@ public class GeboGraphRagProcessorConfig {
 		graphRagProcessorReceiverConfig.setUseSenderThread(true);
 		graphRagProcessorReceiverConfig.setTimeout(5000l);
 		graphRagProcessorReceiverConfig.setFlushThreshold(10);
+		// The erasure receiver needs a delivery thread of its own, like the
+		// vectorizator disposer; without a pool it would fail to register.
+		disposerConfig.setPoolCardinality(1);
+		disposerConfig.setUseSenderThread(false);
 	}
 
 }
