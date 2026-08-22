@@ -75,8 +75,8 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
             </span>
             @if (node().data.personalData) {
               <span class="p-1 border-round bg-orange-100 text-orange-700 text-xs font-semibold"
-                title="Holds or carries personal data - in scope for the GDPR record of processing activities">
-                <i class="pi pi-user"></i> Personal data
+                [title]="personalDataTitle()">
+                <i class="pi pi-user"></i> {{ personalDataLabel() }}
               </span>
             }
           </div>
@@ -144,6 +144,39 @@ export class DataEndpointNodeComponent implements NgDiagramNodeTemplate<DataFlow
     private isModelOrSearch(): boolean {
         const types = this.node().data.types || [];
         return types.includes("LLM_ENDPOINT") || types.includes("WEB_SEARCH");
+    }
+
+    /**
+     * The personal-data marker is a SCOPE indicator, never an automated
+     * determination: the platform cannot tell from configuration whether ingested
+     * documents or queries hold personal data or purely business/company data -
+     * that is the data controller's assessment. The wording is therefore honest
+     * about what is actually known, and varies by endpoint kind.
+     */
+    protected personalDataLabel(): string {
+        const types = this.node().data.types || [];
+        if (types.includes("CHAT_SESSION")) {
+            // A user's query/session is that user's own activity - personal by
+            // construction, whatever its subject matter.
+            return "Personal data (user activity)";
+        }
+        if (this.isModelOrSearch()) {
+            return "May process personal data";
+        }
+        return "May contain personal data";
+    }
+
+    protected personalDataTitle(): string {
+        const types = this.node().data.types || [];
+        if (types.includes("CHAT_SESSION")) {
+            return "A user's query and session are that user's own activity - personal data by construction, "
+                + "independent of subject matter.";
+        }
+        const verb = this.isModelOrSearch() ? "processes" : "may retain";
+        return "This endpoint " + verb + " ingested content or query text. Whether that content actually contains "
+            + "personal data or is purely business/company data cannot be inferred from configuration - it is a "
+            + "determination for the data controller (DPO). Flagged here only to bring the flow into scope for that "
+            + "assessment.";
     }
 
     protected localityColor(): string {

@@ -36,6 +36,12 @@
             Endpoint locators never carry credentials: a credential is identified only by the code
             of the secret that guards it.
           </span>
+          <span class="text-muted-color" gebo-ai-text>
+            "May carry personal data" marks a flow as in scope for a personal-data assessment - it is
+            not an automated determination. Whether ingested content is personal or purely
+            business/company data is the data controller's call; a user's own query/session is always
+            treated as personal activity.
+          </span>
         </div>
 
         <div class="flex flex-column gap-2 align-items-stretch">
@@ -75,7 +81,7 @@
         <div class="text-2xl font-bold" [class.text-orange-600]="summary.personalDataEndpoints > 0">
           {{ summary.personalDataEndpoints }}
         </div>
-        <div class="text-sm text-muted-color" gebo-ai-text>Carrying personal data</div>
+        <div class="text-sm text-muted-color" gebo-ai-text>May carry personal data (assess)</div>
       </div>
       <div class="surface-card border-round p-3 border-1 surface-border flex-1" style="min-width: 11rem;"
         [class.border-orange-500]="summary.retainingWithoutErasure > 0">
