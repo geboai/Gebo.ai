@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.application.messaging.GeboCurrentApplication;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.ComponentMetaInfo;
+import ai.gebo.application.messaging.model.DataFlowPersonalDataPropagation;
 import ai.gebo.application.messaging.model.GDataFlowReport;
 import ai.gebo.application.messaging.model.GModuleMetaInfo;
 import lombok.AllArgsConstructor;
@@ -104,7 +105,12 @@ public class DataFlowMetaInfoController {
 				}
 			}
 		}
-		return new GDataFlowReport(nodeId(), new Date(), out);
+		GDataFlowReport report = new GDataFlowReport(nodeId(), new Date(), out);
+		// Make the report authoritative: mark every store/endpoint that a
+		// personal-data source flows into as personal data too, so the transitive
+		// scope is answered here once rather than re-derived by each consumer.
+		DataFlowPersonalDataPropagation.apply(report);
+		return report;
 	}
 
 	private String nodeId() {
