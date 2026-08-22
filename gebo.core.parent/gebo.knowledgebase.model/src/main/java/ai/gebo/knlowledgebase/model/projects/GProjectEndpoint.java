@@ -51,8 +51,15 @@ public class GProjectEndpoint extends GBaseObject implements IAclGrantedResource
 	private List<String> vectorizeOnlyExtensions = null; // File extensions to vectorize
 	public FilesSynchronizationStrategy synchroStrategy = null; // Synchronization strategy
 	private ObjectSpaceType objectSpaceType = null; // The type of object space
-	
+
 	private List<Integer> aclAliases = null;
+
+	// Whether this data source is known to hold personal data (GDPR). Set by the
+	// data controller per source; the compliance data-flow register treats a flow
+	// as carrying personal data only when it originates from one or more sources
+	// with this flag set, rather than assuming it. Defaults to false (business /
+	// company data until classified otherwise).
+	private Boolean personalData = false;
 
 	/**
 	 * Creates a clone of the GProjectEndpoint object.

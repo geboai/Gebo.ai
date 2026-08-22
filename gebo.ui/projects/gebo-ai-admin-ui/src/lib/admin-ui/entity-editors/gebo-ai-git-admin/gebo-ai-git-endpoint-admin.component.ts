@@ -55,6 +55,7 @@ export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<
   formGroup: FormGroup<any> = new FormGroup({
     code: new FormControl(),
     description: new FormControl(),
+    personalData: new FormControl(),
     parentProjectCode: new FormControl(),
     rootObjectCode: new FormControl(),
     contentManagementSystem: new FormControl(),

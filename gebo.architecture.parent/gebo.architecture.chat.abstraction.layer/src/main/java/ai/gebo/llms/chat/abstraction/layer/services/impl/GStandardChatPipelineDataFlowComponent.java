@@ -177,7 +177,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			query.setEndpoint("chat-profile", profileCode, null, null);
 			query.setInput(true);
 			query.setTypes(list(MetaEndpointType.CHAT_SESSION));
-			query.setPersonalData(true);
+			query.setPersonalData(false);
 			query.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
 			flow.getDataEndpoints().add(query);
 
@@ -269,7 +269,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 				deepQuery.setEndpoint("chat-pipeline", "deep-search", null, null);
 				deepQuery.setInput(true);
 				deepQuery.setTypes(list(MetaEndpointType.CHAT_SESSION));
-				deepQuery.setPersonalData(true);
+				deepQuery.setPersonalData(false);
 				deepQuery.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
 				flow.getDataEndpoints().add(deepQuery);
 				queryAdded = true;
@@ -283,7 +283,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			provider.setInput(true);
 			provider.setOutput(true);
 			provider.setTypes(list(MetaEndpointType.WEB_SEARCH));
-			provider.setPersonalData(true);
+			provider.setPersonalData(false);
 			// A hosted web-search API is a third party; a self-hosted SearXNG is the
 			// local exception, but from here it is indistinguishable, so this errs
 			// towards flagging the transfer.
@@ -308,7 +308,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		endpoint.setTypes(list(MetaEndpointType.LLM_ENDPOINT));
 		endpoint.setInput(true);
 		endpoint.setOutput(true);
-		endpoint.setPersonalData(true);
+		endpoint.setPersonalData(false);
 		if (notEmpty(config.getApiSecretCode())) {
 			endpoint.setSecretReference(config.getApiSecretCode());
 		}
@@ -344,7 +344,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		endpoint.setTypes(list(MetaEndpointType.LLM_ENDPOINT));
 		endpoint.setInput(true);
 		endpoint.setOutput(true);
-		endpoint.setPersonalData(true);
+		endpoint.setPersonalData(false);
 		if (notEmpty(config.getApiSecretCode())) {
 			endpoint.setSecretReference(config.getApiSecretCode());
 		}
@@ -385,7 +385,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		endpoint.setTypes(list(MetaEndpointType.LLM_ENDPOINT));
 		endpoint.setInput(true);
 		endpoint.setOutput(true);
-		endpoint.setPersonalData(true);
+		endpoint.setPersonalData(false);
 		if (notEmpty(config.getApiSecretCode())) {
 			endpoint.setSecretReference(config.getApiSecretCode());
 		}

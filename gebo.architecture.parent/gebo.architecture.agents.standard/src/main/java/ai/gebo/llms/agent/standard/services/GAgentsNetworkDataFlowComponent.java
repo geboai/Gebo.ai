@@ -119,7 +119,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			query.setEndpoint("agents-network", code, null, null);
 			query.setInput(true);
 			query.setTypes(list(MetaEndpointType.CHAT_SESSION));
-			query.setPersonalData(true);
+			query.setPersonalData(false);
 			query.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
 			flow.getDataEndpoints().add(query);
 
@@ -176,7 +176,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		endpoint.setInput(true);
 		endpoint.setOutput(true);
 		endpoint.setTypes(list(MetaEndpointType.WEB_SEARCH));
-		endpoint.setPersonalData(true);
+		endpoint.setPersonalData(false);
 		endpoint.setLocality(DataEndpointLocality.EXTERNAL_PROVIDER);
 		return endpoint;
 	}

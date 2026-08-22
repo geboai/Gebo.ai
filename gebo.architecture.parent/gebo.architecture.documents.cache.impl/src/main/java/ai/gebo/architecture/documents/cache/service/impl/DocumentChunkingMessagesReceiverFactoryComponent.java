@@ -86,7 +86,7 @@ public class DocumentChunkingMessagesReceiverFactoryComponent extends GAbstractT
 		chunkStore.setLocality(DataEndpointLocality.hintFromLocator(chunkStore.getEndpoint()));
 		// Chunks are verbatim extracts of whatever was ingested, so they inherit the
 		// personal-data status of the sources rather than having one of their own.
-		chunkStore.setPersonalData(true);
+		chunkStore.setPersonalData(false);
 		chunkStore.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
 				ChunkingSessionDisposerReceiverFactory.DISPOSE_CHUNKING_SESSION_FOR_JOBS));
 		flow.getDataEndpoints().add(chunkStore);

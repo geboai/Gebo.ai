@@ -51,6 +51,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
         code: new FormControl(),
         parentCode: new FormControl(),
         description: new FormControl(),
+        personalData: new FormControl(),
         parentProjectCode: new FormControl(),
         readonly: new FormControl(),
         published: new FormControl(),

@@ -167,6 +167,8 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
             }
         }
 
+        this.propagatePersonalData(endpoints, transformations);
+
         this.endpoints = endpoints;
         this.transformations = transformations;
         this.summary = {
@@ -180,6 +182,49 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
             // configs are admin-managed, so they are not an Art. 17 concern.
             retainingWithoutErasure: endpoints.filter(e => this.isRetainingStore(e) && !e.disposer).length
         };
+    }
+
+    /**
+     * A flow carries personal data only when it originates from one or more data
+     * sources the controller has classified as holding personal data
+     * (GProjectEndpoint.personalData). The backend seeds that flag on the source
+     * endpoints only; here it is propagated to everything in the same connected
+     * data-flow component - the stores fed by a personal source, and the query
+     * paths that read those stores - so the determination follows the actual
+     * wiring rather than a blanket assumption. Traversal is undirected: a store is
+     * personal because a personal source wrote to it, and a chat/agent flow is
+     * personal because it reads a store that a personal source wrote to.
+     */
+    private propagatePersonalData(endpoints: DataFlowEndpointNode[], transformations: DataFlowTransformationNode[]): void {
+        const seeds = endpoints.filter(e => e.personalData).map(e => e.qualifiedId);
+        if (seeds.length === 0) {
+            return;
+        }
+        const adjacency = new Map<string, string[]>();
+        const link = (a: string, b: string) => {
+            if (!adjacency.has(a)) { adjacency.set(a, []); }
+            if (!adjacency.has(b)) { adjacency.set(b, []); }
+            adjacency.get(a)!.push(b);
+            adjacency.get(b)!.push(a);
+        };
+        for (const t of transformations) {
+            if (t.sourceId) { link(t.sourceId, t.qualifiedId); }
+            if (t.destinationId) { link(t.qualifiedId, t.destinationId); }
+        }
+        const reached = new Set<string>(seeds);
+        const queue = [...seeds];
+        while (queue.length > 0) {
+            const id = queue.shift()!;
+            for (const next of adjacency.get(id) || []) {
+                if (!reached.has(next)) {
+                    reached.add(next);
+                    queue.push(next);
+                }
+            }
+        }
+        for (const endpoint of endpoints) {
+            endpoint.personalData = reached.has(endpoint.qualifiedId);
+        }
     }
 
     /** Mirrors the backend's GDataFlowMetaInfos.qualifiedId(...) convention. */

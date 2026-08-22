@@ -860,7 +860,9 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			source.setEndpoint(baseUri != null ? baseUri : product + ":" + endpoint.getCode());
 			source.setInput(true);
 			source.setTypes(new ArrayList<MetaEndpointType>(List.of(MetaEndpointType.DOCUMENTS)));
-			source.setPersonalData(true);
+			// Personal-data status is the data controller's classification of this
+			// source, not an assumption; downstream flows inherit it by propagation.
+			source.setPersonalData(Boolean.TRUE.equals(endpoint.getPersonalData()));
 			source.setLocality(DataEndpointLocality.hintFromLocator(source.getEndpoint()));
 			flow.getDataEndpoints().add(source);
 			addWorkflowLinks(flow, source, endpoint);

@@ -104,7 +104,7 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 		index.setLocality(DataEndpointLocality.hintFromLocator(index.getEndpoint()));
 		// The indexed text is the ingested content itself, so it carries whatever
 		// the sources carried.
-		index.setPersonalData(true);
+		index.setPersonalData(false);
 		if (openSearchConfig.getUsername() != null) {
 			// Named so an auditor can see the index is credential-guarded; the
 			// password itself is deliberately never carried.

@@ -187,7 +187,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 		endpoint.setOutput(true);
 		// Vectors are derived from the ingested text and remain re-identifiable
 		// enough to be treated as carrying whatever the sources carried.
-		endpoint.setPersonalData(true);
+		endpoint.setPersonalData(false);
 		endpoint.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.VECTORIZATOR_MODULE,
 				GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT));
 
@@ -264,7 +264,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 			// Chunk text goes out; the vectors come back.
 			endpoint.setInput(true);
 			endpoint.setOutput(true);
-			endpoint.setPersonalData(true);
+			endpoint.setPersonalData(false);
 			if (config.getApiSecretCode() != null && !config.getApiSecretCode().isEmpty()) {
 				endpoint.setSecretReference(config.getApiSecretCode());
 			}
