@@ -66,6 +66,7 @@ spec and its stubs get orphaned. Also:
 
 - Set `GEBO_HOME`, `GEBO_WORK_DIRECTORY`, `GEBO_LOG_BASE` (Main aborts without `GEBO_HOME`) — point them at fresh scratchpad dirs.
 - Use a **fresh empty Mongo DB** via `SPRING_APPLICATION_JSON` to avoid a startup crash: with existing model data, `GTranscriptModelRuntimeConfigurationDaoimpl.onApplicationEvent` throws `LLMConfigException: Cannot find embedding model with type=null` and the context aborts. The DB is chosen by `ai.gebo.mongodb.databaseName` (NOT the connection-string path).
+- That name MUST be a throwaway you invent for this run (`gebo-ai-stubgen-tmp` below), because step 8 DROPS it. Never point it at a database that holds anything: `gebo-ai` is the default install, and `gebo-ai-swaggergen` — which earlier revisions of this skill used here — is on at least one machine the working DB of a developer's local backend. Check what the target DB contains before reusing any pre-existing name.
 
 Note: the `-Pswagger-on` spring-boot plugin `<jvmArguments>` are hardcoded, so
 `-Dspring-boot.run.jvmArguments` is ignored — that's why we run the **jar directly**
@@ -76,7 +77,7 @@ Run it in the background (fill in `<VER>` and the actual run.bat flags):
 ```bash
 SCRATCH="<scratchpad-dir>"; mkdir -p "$SCRATCH/gebo-home" "$SCRATCH/gebo-work" "$SCRATCH/gebo-logs"
 export GEBO_HOME="$SCRATCH/gebo-home" GEBO_WORK_DIRECTORY="$SCRATCH/gebo-work" GEBO_LOG_BASE="$SCRATCH/gebo-logs"
-export SPRING_APPLICATION_JSON='{"ai.gebo.mongodb.databaseName":"gebo-ai-swaggergen","ai.gebo.mongodb.connectionString":"mongodb://mongoroot:mongopwd@localhost:27017/gebo-ai-swaggergen?authSource=admin"}'
+export SPRING_APPLICATION_JSON='{"ai.gebo.mongodb.databaseName":"gebo-ai-stubgen-tmp","ai.gebo.mongodb.connectionString":"mongodb://mongoroot:mongopwd@localhost:27017/gebo-ai-stubgen-tmp?authSource=admin"}'
 java -Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED \
   -Dai.gebo.llms.config.mistralAIEnabled=true -Dai.gebo.llms.config.openAIEnabled=true -Dai.gebo.deepsearch.externalSourcesEnabled=true \
   -Dai.gebo.deepsearch.deepSearchUIAllowChooseSources=true -Dai.gebo.llms.config.ollamaEnabled=true -Dai.gebo.multilanguage.config.liveRecording=true \
@@ -129,7 +130,7 @@ standalone build deletes a working `dist` and blocks the admin-ui build.
 ## 8. Cleanup
 
 - Stop the backend you started (free port 12999): find the PID listening on 12999 and kill it (it's your process).
-- Drop the throwaway Mongo DB: `docker exec <mongo-container> mongosh -u mongoroot -p mongopwd --authenticationDatabase admin --quiet --eval 'db.getSiblingDB("gebo-ai-swaggergen").dropDatabase()'`.
+- Drop the throwaway Mongo DB **you created in step 3**, by the name you chose there: `docker exec <mongo-container> mongosh -u mongoroot -p mongopwd --authenticationDatabase admin --quiet --eval 'db.getSiblingDB("gebo-ai-stubgen-tmp").dropDatabase()'`. Never drop a DB you did not create in this run.
 - Leave the user's infra containers running and untouched.
 
 ## Report
