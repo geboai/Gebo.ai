@@ -27,7 +27,7 @@ import java.util.List;
  * GIntegrationProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
 
 public class GIntegrationProjectEndpoint {
   @JsonProperty("code")
@@ -145,6 +145,9 @@ public class GIntegrationProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Boolean personalData = null;
 
   @JsonProperty("allowedApplicationUsers")
   private List<String> allowedApplicationUsers = null;
@@ -505,6 +508,24 @@ public class GIntegrationProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GIntegrationProjectEndpoint personalData(Boolean personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Boolean isPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Boolean personalData) {
+    this.personalData = personalData;
+  }
+
   public GIntegrationProjectEndpoint allowedApplicationUsers(List<String> allowedApplicationUsers) {
     this.allowedApplicationUsers = allowedApplicationUsers;
     return this;
@@ -559,12 +580,13 @@ public class GIntegrationProjectEndpoint {
         Objects.equals(this.synchroStrategy, gintegrationProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gintegrationProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gintegrationProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gintegrationProjectEndpoint.personalData) &&
         Objects.equals(this.allowedApplicationUsers, gintegrationProjectEndpoint.allowedApplicationUsers);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, allowedApplicationUsers);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, allowedApplicationUsers);
   }
 
 
@@ -591,6 +613,7 @@ public class GIntegrationProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    allowedApplicationUsers: ").append(toIndentedString(allowedApplicationUsers)).append("\n");
     sb.append("}");
     return sb.toString();

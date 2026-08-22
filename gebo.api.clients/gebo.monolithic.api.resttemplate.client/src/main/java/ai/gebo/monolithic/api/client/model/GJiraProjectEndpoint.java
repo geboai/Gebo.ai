@@ -28,7 +28,7 @@ import java.util.List;
  * GJiraProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
 
 public class GJiraProjectEndpoint {
   @JsonProperty("code")
@@ -146,6 +146,9 @@ public class GJiraProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Boolean personalData = null;
 
   @JsonProperty("paths")
   private List<VFilesystemReference> paths = null;
@@ -509,6 +512,24 @@ public class GJiraProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GJiraProjectEndpoint personalData(Boolean personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Boolean isPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Boolean personalData) {
+    this.personalData = personalData;
+  }
+
   public GJiraProjectEndpoint paths(List<VFilesystemReference> paths) {
     this.paths = paths;
     return this;
@@ -581,13 +602,14 @@ public class GJiraProjectEndpoint {
         Objects.equals(this.synchroStrategy, gjiraProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gjiraProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gjiraProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gjiraProjectEndpoint.personalData) &&
         Objects.equals(this.paths, gjiraProjectEndpoint.paths) &&
         Objects.equals(this.jiraSystemCode, gjiraProjectEndpoint.jiraSystemCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, jiraSystemCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, paths, jiraSystemCode);
   }
 
 
@@ -614,6 +636,7 @@ public class GJiraProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    jiraSystemCode: ").append(toIndentedString(jiraSystemCode)).append("\n");
     sb.append("}");

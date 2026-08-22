@@ -644,3 +644,13 @@ textarea.p-inputtextarea:read-only {
     border: 1px solid transparent;
   }
 }
+
+/* Summary strip above the contents browser of an uploads data source */
+.uploads-contents-summary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  padding-bottom: 0.5rem;
+  color: var(--text-color-secondary, #6c757d);
+}

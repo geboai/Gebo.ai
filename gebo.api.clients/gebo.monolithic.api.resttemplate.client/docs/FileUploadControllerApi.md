@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getHandShakeCode**](FileUploadControllerApi.md#getHandShakeCode) | **GET** /api/admin/FileUploadController/getHandShakeCode | 
 [**upload1**](FileUploadControllerApi.md#upload1) | **POST** /api/admin/FileUploadController/upload/{handShakeCode} | 
+[**uploadToEndpoint**](FileUploadControllerApi.md#uploadToEndpoint) | **POST** /api/admin/FileUploadController/uploadToEndpoint/{endpointCode} | 
 
 <a name="getHandShakeCode"></a>
 # **getHandShakeCode**
@@ -75,6 +76,50 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **handShakeCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: Not defined
+
+<a name="uploadToEndpoint"></a>
+# **uploadToEndpoint**
+> uploadToEndpoint(endpointCode, files)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FileUploadControllerApi;
+
+
+FileUploadControllerApi apiInstance = new FileUploadControllerApi();
+String endpointCode = "endpointCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
+try {
+    apiInstance.uploadToEndpoint(endpointCode, files);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FileUploadControllerApi#uploadToEndpoint");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **endpointCode** | **String**|  |
  **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
 
 ### Return type
