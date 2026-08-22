@@ -188,6 +188,9 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 		// Vectors are derived from the ingested text and remain re-identifiable
 		// enough to be treated as carrying whatever the sources carried.
 		endpoint.setPersonalData(false);
+		// A lasting store: embeddings stay until the source is deleted or re-indexed,
+		// when the vectorization erasure component removes them.
+		endpoint.setRetention("Until the source is deleted or re-indexed");
 		endpoint.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.VECTORIZATOR_MODULE,
 				GStandardModulesConstraints.VECTORIZATION_DISPOSE_COMPONENT));
 

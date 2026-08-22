@@ -121,7 +121,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
         const headers = [
             "Node", "Collected at", "Owner component", "Endpoint", "Local id", "Product",
             "Locator", "Input", "Output", "Types", "Locality", "Personal data",
-            "Retained store", "Erasure component", "Secret reference"
+            "Retained store", "Retention period", "Erasure component", "Secret reference"
         ];
         const collectedAt = this.report?.collectedAt ? new Date(this.report.collectedAt).toISOString() : "";
         const rows = this.endpoints.map(e => {
@@ -140,6 +140,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                 e.locality || "",
                 e.personalData ? "yes" : "no",
                 retained ? "yes" : "no",
+                e.retention || "",
                 e.disposer || (retained ? "NONE" : ""),
                 e.secretReference || ""
             ];
@@ -198,6 +199,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
                         locality: endpoint.locality as any,
                         secretReference: endpoint.secretReference,
                         personalData: endpoint.personalData === true,
+                        retention: endpoint.retention,
                         disposer: endpoint.disposer
                             ? (endpoint.disposer.messagingModuleId || "") + "." + (endpoint.disposer.messagingComponentId || "")
                             : undefined,

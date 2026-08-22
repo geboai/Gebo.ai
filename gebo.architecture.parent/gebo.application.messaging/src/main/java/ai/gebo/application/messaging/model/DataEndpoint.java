@@ -73,6 +73,16 @@ public class DataEndpoint {
 	private boolean personalData = false;
 
 	/**
+	 * How long data stays at this endpoint, in plain language for an auditor - e.g.
+	 * "during workflow execution only", "until the source is deleted or
+	 * re-indexed", "not retained by this installation". Left null when the
+	 * reporting component does not characterise it; the retention <em>period</em> is
+	 * a required field of a GDPR Art. 30 record, and separates a transient
+	 * processing buffer from a lasting store.
+	 */
+	private String retention = null;
+
+	/**
 	 * The component able to erase this endpoint's data, when one is wired - the
 	 * {@code mongo-dispose-documents-component},
 	 * {@code vectorization-dispose-component},

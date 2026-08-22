@@ -105,6 +105,9 @@ public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractT
 		// The indexed text is the ingested content itself, so it carries whatever
 		// the sources carried.
 		index.setPersonalData(false);
+		// A lasting store: the indexed chunks stay searchable until the source is
+		// removed or re-indexed (then the erasure component prunes them).
+		index.setRetention("Until the source is deleted or re-indexed");
 		if (openSearchConfig.getUsername() != null) {
 			// Named so an auditor can see the index is credential-guarded; the
 			// password itself is deliberately never carried.

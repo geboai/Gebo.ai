@@ -98,6 +98,12 @@ import { DataFlowEndpointNode } from "./compliance-data-flow.model";
                 <span class="font-semibold"> Config managed by admin</span> (no data retained)
               </div>
             }
+            @if (node().data.retention) {
+              <div class="mt-1" [title]="'Retention period: ' + node().data.retention">
+                <i class="pi pi-clock text-muted-color"></i>
+                <span class="font-semibold"> Retention: </span>{{ node().data.retention }}
+              </div>
+            }
             @if (node().data.secretReference) {
               <div class="mt-1" [title]="'Secret code: ' + node().data.secretReference">
                 <i class="pi pi-key"></i>

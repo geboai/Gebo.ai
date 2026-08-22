@@ -33,6 +33,8 @@ export interface DataFlowEndpointNode {
     locality?: DataFlowLocality;
     secretReference?: string;
     personalData: boolean;
+    /** How long data stays here, in plain language - a GDPR Art. 30 field. */
+    retention?: string;
     /** Component able to erase this endpoint's data, when one is wired. */
     disposer?: string;
     /** The messaging component that reported this endpoint. */

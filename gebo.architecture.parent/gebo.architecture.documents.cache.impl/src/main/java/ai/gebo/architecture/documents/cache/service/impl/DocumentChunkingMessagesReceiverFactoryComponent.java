@@ -87,6 +87,11 @@ public class DocumentChunkingMessagesReceiverFactoryComponent extends GAbstractT
 		// Chunks are verbatim extracts of whatever was ingested, so they inherit the
 		// personal-data status of the sources rather than having one of their own.
 		chunkStore.setPersonalData(false);
+		// Chunks are retained only for the duration of the ingestion workflow, or as
+		// an internal cache: the dispose-chunking-session-for-jobs receiver removes
+		// them at end of job unless this node is configured to keep them cached.
+		chunkStore.setRetention(
+				"Only during workflow execution, or as an internal cache - disposed at end of the ingestion job by dispose-chunking-session-for-jobs unless kept as a cache");
 		chunkStore.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.TOKENIZER_MODULE,
 				ChunkingSessionDisposerReceiverFactory.DISPOSE_CHUNKING_SESSION_FOR_JOBS));
 		flow.getDataEndpoints().add(chunkStore);
