@@ -96,6 +96,12 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 		// sources carried; personal-data scope is propagated from the source.
 		graph.setPersonalData(false);
 		graph.setRetention("Until the source is deleted or re-indexed");
+		// Erased on deletion by GraphExtractionDisposerMessageReceiverImpl, which
+		// consumes the same GDeleted*/GInternalDeletion messages the knowledge-base
+		// and project controllers broadcast, so a deleted source is purged from the
+		// graph as it is from the vector store and the chunk store.
+		graph.setDisposer(new GeboComponentInfo(GStandardModulesConstraints.KNOWLEDGE_GRAPH_MODULE,
+				GStandardModulesConstraints.KNOWLEDGE_GRAPH_DISPOSE_COMPONENT));
 		if (neo4jUsername != null && !neo4jUsername.isEmpty()) {
 			graph.setSecretReference("spring.neo4j.authentication.username=" + neo4jUsername);
 		}

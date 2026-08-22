@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import ai.gebo.application.messaging.GAbstractMessageReceiverFactory.MessageReceiverFactoryConfig;
 import ai.gebo.application.messaging.GAbstractTimedOutMessageReceiverFactory.TimedOutMessageReceiverFactoryConfig;
 import lombok.Data;
 
@@ -46,6 +47,9 @@ public class GeboGraphRagProcessorConfig {
 	 * capabilities
 	 */
 	GraphRagCustomReceiverConfig graphRagProcessorReceiverConfig = new GraphRagCustomReceiverConfig();
+
+	/** Configuration for the knowledge-graph erasure (deletion) message receiver. */
+	MessageReceiverFactoryConfig disposerConfig = new MessageReceiverFactoryConfig();
 
 	/**
 	 * Default constructor that initializes the configuration objects with default
