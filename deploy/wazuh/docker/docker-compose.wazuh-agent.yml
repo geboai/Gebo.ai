@@ -68,10 +68,14 @@ services:
       # init script, which then fills in the CHANGE_* placeholders from the
       # environment above.
       - ../agent/ossec.conf:/wazuh-config-mount/etc/ossec.conf:ro
-      # The monolith's log directory as published by
-      # dockers/gebo.ai/docker-compose.yml. Read-only: an audit trail shipper
-      # has no business writing to it.
-      - ${GEBO_MONOLITH_LOG_DIR:-/home/gebo.ai/logs}:/gebo-logs/monolith:ro
+      # The monolith's log directory. dockers/gebo.ai/docker-compose.yml now
+      # keeps it in the NAMED volume gebo-monolith_gebo-logs (that stack sets
+      # `name: gebo-monolith`), which is referenced as an external volume below
+      # and mounted here read-only - an audit trail shipper has no business
+      # writing to it. If you instead run the monolith with a host BIND for its
+      # logs, set GEBO_MONOLITH_LOG_DIR to that host path and swap this line for
+      #   - ${GEBO_MONOLITH_LOG_DIR}:/gebo-logs/monolith:ro
+      - gebo-monolith-logs:/gebo-logs/monolith:ro
       # Microservices: same directory tree the security-logs override creates.
       # Uncomment together with the matching <localfile> block in
       # ../agent/ossec.conf.
@@ -83,6 +87,13 @@ services:
       - wazuh-agent-logs:/var/ossec/logs
 
 volumes:
+  # The monolith's audit-trail volume, created by dockers/gebo.ai/docker-compose
+  # .yml (project name `gebo-monolith`). `external: true` means "use the volume
+  # that stack already created" - this file never owns or deletes it. Bring the
+  # monolith stack up first, or this reference fails with "volume not found".
+  gebo-monolith-logs:
+    external: true
+    name: gebo-monolith_gebo-logs
   wazuh-agent-etc:
   wazuh-agent-queue:
   wazuh-agent-logs:

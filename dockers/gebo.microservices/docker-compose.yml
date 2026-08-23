@@ -46,15 +46,16 @@ x-microservice-env: &microservice-env
   MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
   MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
 
+# The config mount is the only volume every service shares verbatim, so it is the
+# only one this anchor can carry: /opt/gebo.ai/{home,work,logs} has to be a NAMED
+# volume PER SERVICE, and a YAML anchor cannot parameterise a volume name. Every
+# service therefore restates the full list - see the persistence note at the
+# bottom of this file for why they are named and why they are not shared.
 x-microservice: &microservice
   restart: unless-stopped
   depends_on: [eureka, rabbit, mongo]
   environment:
     <<: *microservice-env
-  volumes:
-    - ./config:/opt/gebo.ai/config:ro
-    - /opt/gebo.ai/home          # per-container anonymous volume
-    - /opt/gebo.ai/work
   networks: [gebo-net]
 
 services:
@@ -74,6 +75,12 @@ services:
     restart: always
     ports:
       - "127.0.0.1:15672:15672"   # management UI (loopback only)
+    # /var/lib/rabbitmq is the mnesia store: durable queue/exchange/binding
+    # definitions, users, and any persistent message not yet acked. Without it an
+    # upgrade silently drops the ingestion work still sitting in the broker along
+    # with the topology the services declared.
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq
     networks: [gebo-net]
 
   qdrant:
@@ -115,6 +122,11 @@ services:
     restart: unless-stopped
     ports:
       - "13017:13017"             # Eureka dashboard / registry
+    # The registry is intentionally stateless - it rebuilds itself from the
+    # heartbeats of the services that re-register - so no home/work here. It
+    # does write the security audit trail, which must outlive the container.
+    volumes:
+      - eureka-logs:/opt/gebo.ai/logs
     networks: [gebo-net]
 
   # ---------------- API gateway (the edge: Angular UI + aggregated API) --------
@@ -126,6 +138,11 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
     ports:
       - "13000:13000"
+    # Routes are resolved from Eureka at request time, so the edge holds no
+    # durable state of its own - but it is where every unauthenticated request
+    # first lands, which makes its audit trail the one you least want to lose.
+    volumes:
+      - gateway-logs:/opt/gebo.ai/logs
     networks: [gebo-net]
 
   # ---------------- Observability stack (metrics, traces, dashboards) --------
@@ -192,6 +209,11 @@ services:
   # admin API is reachable from the edge.
   heimdall:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - heimdall-home:/opt/gebo.ai/home
+      - heimdall-work:/opt/gebo.ai/work
+      - heimdall-logs:/opt/gebo.ai/logs
     image: geboai/heimdall.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13018:13018"
@@ -203,6 +225,11 @@ services:
   # gebo.microservices.clients.parent point their <swagger.file> at.
   brain:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - brain-home:/opt/gebo.ai/home
+      - brain-work:/opt/gebo.ai/work
+      - brain-logs:/opt/gebo.ai/logs
     image: geboai/brain.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, qdrant]
     ports:
@@ -210,6 +237,11 @@ services:
 
   vectorizator:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - vectorizator-home:/opt/gebo.ai/home
+      - vectorizator-work:/opt/gebo.ai/work
+      - vectorizator-logs:/opt/gebo.ai/logs
     image: geboai/vectorizator.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, qdrant]
     ports:
@@ -217,6 +249,11 @@ services:
 
   graphicator:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - graphicator-home:/opt/gebo.ai/home
+      - graphicator-work:/opt/gebo.ai/work
+      - graphicator-logs:/opt/gebo.ai/logs
     image: geboai/graphicator.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, neo4j]
     ports:
@@ -224,12 +261,22 @@ services:
 
   chunker:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - chunker-home:/opt/gebo.ai/home
+      - chunker-work:/opt/gebo.ai/work
+      - chunker-logs:/opt/gebo.ai/logs
     image: geboai/chunker.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13004:13004"
 
   fulltextor:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - fulltextor-home:/opt/gebo.ai/home
+      - fulltextor-work:/opt/gebo.ai/work
+      - fulltextor-logs:/opt/gebo.ai/logs
     image: geboai/fulltextor.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, opensearch]
     ports:
@@ -238,6 +285,11 @@ services:
   # ---------------- Content-handler microservices ----------------
   git:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - git-home:/opt/gebo.ai/home
+      - git-work:/opt/gebo.ai/work
+      - git-logs:/opt/gebo.ai/logs
     image: geboai/git.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13005:13005"
@@ -254,8 +306,9 @@ services:
       AI_GEBO_FILESYSTEM_ALLOWFILESYSTEMSHARESUI: "true"
     volumes:
       - ./config:/opt/gebo.ai/config:ro
-      - /opt/gebo.ai/home          # per-container anonymous volume
-      - /opt/gebo.ai/work
+      - filesystem-home:/opt/gebo.ai/home
+      - filesystem-work:/opt/gebo.ai/work
+      - filesystem-logs:/opt/gebo.ai/logs
       # microservices-integration-tests creates its shared test folder under the
       # HOST's system temp dir and hands this service that same absolute path -
       # a container with its own filesystem can't see it otherwise. Local test
@@ -265,68 +318,219 @@ services:
       - "13006:13006"
   uploads:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - uploads-home:/opt/gebo.ai/home
+      - uploads-work:/opt/gebo.ai/work
+      - uploads-logs:/opt/gebo.ai/logs
     image: geboai/uploads.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13007:13007"
   userspace:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - userspace-home:/opt/gebo.ai/home
+      - userspace-work:/opt/gebo.ai/work
+      - userspace-logs:/opt/gebo.ai/logs
     image: geboai/userspace.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13008:13008"
   sharepoint:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - sharepoint-home:/opt/gebo.ai/home
+      - sharepoint-work:/opt/gebo.ai/work
+      - sharepoint-logs:/opt/gebo.ai/logs
     image: geboai/sharepoint.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13009:13009"
   confluence:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - confluence-home:/opt/gebo.ai/home
+      - confluence-work:/opt/gebo.ai/work
+      - confluence-logs:/opt/gebo.ai/logs
     image: geboai/confluence.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13010:13010"
   jira:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - jira-home:/opt/gebo.ai/home
+      - jira-work:/opt/gebo.ai/work
+      - jira-logs:/opt/gebo.ai/logs
     image: geboai/jira.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13011:13011"
   aws-s3:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - aws-s3-home:/opt/gebo.ai/home
+      - aws-s3-work:/opt/gebo.ai/work
+      - aws-s3-logs:/opt/gebo.ai/logs
     image: geboai/aws-s3.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13012:13012"
   googledrive:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - googledrive-home:/opt/gebo.ai/home
+      - googledrive-work:/opt/gebo.ai/work
+      - googledrive-logs:/opt/gebo.ai/logs
     image: geboai/googledrive.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13013:13013"
   mcpclient:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - mcpclient-home:/opt/gebo.ai/home
+      - mcpclient-work:/opt/gebo.ai/work
+      - mcpclient-logs:/opt/gebo.ai/logs
     image: geboai/mcpclient.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13014:13014"
   webdav:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - webdav-home:/opt/gebo.ai/home
+      - webdav-work:/opt/gebo.ai/work
+      - webdav-logs:/opt/gebo.ai/logs
     image: geboai/webdav.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13020:13020"
   integration:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - integration-home:/opt/gebo.ai/home
+      - integration-work:/opt/gebo.ai/work
+      - integration-logs:/opt/gebo.ai/logs
     image: geboai/integration.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13015:13015"
   tyr:
     <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - tyr-home:/opt/gebo.ai/home
+      - tyr-work:/opt/gebo.ai/work
+      - tyr-logs:/opt/gebo.ai/logs
     image: geboai/tyr.gebo.ai:${GEBO_VERSION:-1.0.2.4-SNAPSHOT}
     ports:
       - "13019:13019"
 
+# ===========================================================================
+# NAMED volumes only, deliberately.
+#
+# /opt/gebo.ai/{home,work} used to be ANONYMOUS here, which looks like
+# persistence and is not: Compose carries an anonymous volume across a container
+# RECREATE, but `docker compose down` - the first half of every upgrade - leaves
+# it dangling, and the next `up` creates a fresh empty one. A later
+# `docker system prune --volumes` then deletes it for good. Naming them is what
+# actually makes the data survive an update/upgrade.
+#
+# Each service gets its OWN work volume rather than one shared across the
+# cluster. That is the architecture, not caution: DocumentsCacheServiceImpl
+# writes <work>/DOCUMENTSCACHE files keyed by a Mongo entry and deletes them on
+# eviction, so a shared work directory would put every service in a multi-writer
+# race over the same files. Services exchange documents over the content-handler
+# seam (REST + RabbitMQ), never through a shared filesystem.
+#
+# What each one holds:
+#   <svc>-work  DURABLE user data - chat SESSIONS_AREA, per-endpoint content
+#               mirrors, the document cache, uploads, Google Workspace OAuth
+#               tokens. Mongo only INDEXES it; the bytes live here, so losing it
+#               leaves dangling Mongo references. Back these up.
+#   <svc>-home  GEBO_HOME, the service's own home area.
+#   <svc>-logs  security-log.jsonl, the append-only GDPR Art.32 / NIS2 Art.21
+#               audit trail. deploy/wazuh/docker/docker-compose.security-logs
+#               .override.yml replaces these with host binds at the SAME
+#               container path - Compose merges volume lists by target - so that
+#               override still wins wherever it is layered on.
+#
+# Migrating a cluster whose data is still in anonymous volumes: do that BEFORE
+# the first `up` with this file. See dockers/PERSISTENCE.md.
+# ===========================================================================
 volumes:
+  # ---- infrastructure ----
   mongo-data:
+  rabbit-data:
   qdrant-data:
   neo4j-data:
   opensearch-data:
+  # ---- observability ----
   prometheus-data:
   grafana-data:
   tempo-data:
+  # ---- edge + registry: audit trail only ----
+  eureka-logs:
+  gateway-logs:
+  # ---- one home/work/logs triple per backend microservice ----
+  heimdall-home:
+  heimdall-work:
+  heimdall-logs:
+  brain-home:
+  brain-work:
+  brain-logs:
+  vectorizator-home:
+  vectorizator-work:
+  vectorizator-logs:
+  graphicator-home:
+  graphicator-work:
+  graphicator-logs:
+  chunker-home:
+  chunker-work:
+  chunker-logs:
+  fulltextor-home:
+  fulltextor-work:
+  fulltextor-logs:
+  git-home:
+  git-work:
+  git-logs:
+  filesystem-home:
+  filesystem-work:
+  filesystem-logs:
+  uploads-home:
+  uploads-work:
+  uploads-logs:
+  userspace-home:
+  userspace-work:
+  userspace-logs:
+  sharepoint-home:
+  sharepoint-work:
+  sharepoint-logs:
+  confluence-home:
+  confluence-work:
+  confluence-logs:
+  jira-home:
+  jira-work:
+  jira-logs:
+  aws-s3-home:
+  aws-s3-work:
+  aws-s3-logs:
+  googledrive-home:
+  googledrive-work:
+  googledrive-logs:
+  mcpclient-home:
+  mcpclient-work:
+  mcpclient-logs:
+  webdav-home:
+  webdav-work:
+  webdav-logs:
+  integration-home:
+  integration-work:
+  integration-logs:
+  tyr-home:
+  tyr-work:
+  tyr-logs:
 
 networks:
   gebo-net:

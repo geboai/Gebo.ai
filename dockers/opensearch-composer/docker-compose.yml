@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   opensearch:
     image: opensearchproject/opensearch:latest
@@ -21,6 +19,7 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+    # The index itself - the only durable state in this stack.
     volumes:
       - opensearch-data:/usr/share/opensearch/data
     ports:
@@ -29,6 +28,9 @@ services:
     networks:
       - opensearch-net
 
+  # No volume on purpose: Dashboards stores its saved objects (index patterns,
+  # visualisations) in the .kibana index INSIDE OpenSearch, so opensearch-data
+  # above already covers them. Its own container filesystem holds nothing.
   dashboards:
     image: opensearchproject/opensearch-dashboards:latest
     container_name: opensearch-dashboards
