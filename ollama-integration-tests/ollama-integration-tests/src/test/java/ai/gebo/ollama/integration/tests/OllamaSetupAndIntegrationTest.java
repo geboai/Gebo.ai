@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.web.client.RestClientException;
@@ -115,6 +116,17 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 	IGChatFullSessionStateService fullSessionService;
 	@Autowired
 	DocumentReferenceRepository documentsRepo;
+	/**
+	 * Admin account the monolith self-registers at boot from
+	 * {@code ai.gebo.sysinit.admin.config} (see application.yml, itself overridable
+	 * through GEBO_ADMIN_USERNAME / GEBO_ADMIN_PASSWORD). Read back from the
+	 * environment instead of being hardcoded, so changing the credentials in one
+	 * place is enough for the login below to keep working.
+	 */
+	@Value("${ai.gebo.sysinit.admin.config.adminUsername}")
+	String adminUsername;
+	@Value("${ai.gebo.sysinit.admin.config.adminPassword}")
+	String adminPassword;
 
 	@BeforeEach
 	protected void beforeEachCallback() throws Exception {
@@ -171,8 +183,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		AuthControllerApi controllerApi = new AuthControllerApi(apiClient);
 
 		LoginRequest login = new LoginRequest();
-		login.setUsername("mymail@gmail.com");
-		login.setPassword("mypassword");
+		login.setUsername(adminUsername);
+		login.setPassword(adminPassword);
 		OperationStatusAuthResponse result = controllerApi.authenticateUser(login);
 		result.getMessages().forEach(x -> {
 			LOGGER.info(x.getSummary() + " - " + x.getDetail());
@@ -321,8 +333,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		AuthControllerApi controllerApi = new AuthControllerApi(apiClient);
 
 		LoginRequest login = new LoginRequest();
-		login.setUsername("mymail@gmail.com");
-		login.setPassword("mypassword");
+		login.setUsername(adminUsername);
+		login.setPassword(adminPassword);
 		OperationStatusAuthResponse result = controllerApi.authenticateUser(login);
 		result.getMessages().forEach(x -> {
 			LOGGER.info(x.getSummary() + " - " + x.getDetail());

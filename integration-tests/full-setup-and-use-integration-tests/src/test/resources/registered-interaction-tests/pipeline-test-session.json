@@ -19,7 +19,7 @@
 		"description": "Testing the explicit search rule to answer a question",
 		"request": {
 			"id": "9234-233243-UXW",
-			"query": "Cerca su Google in internet dove é nata la figura della tradizione cristiana e gnostica Maria Maddalena"
+			"query": "Cerca sul web in internet dove é nata la figura della tradizione cristiana e gnostica Maria Maddalena"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": true,
