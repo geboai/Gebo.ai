@@ -1,10 +1,51 @@
-version: "3.1"
 #================================================================
 # This compose file creates a service for gebo.ai enterprise retrive augmented generation system
 # and its required mongodb (database) and qdrant (vector database) services
 # once runned simply open the address http://<your host address:12999/ with your browser
 # it will be required to create the administrative account and you'll be ready to setup and
 # start immediately to share the application with your company or team.
+#
+# ---------------------------------------------------------------------------
+# PERSISTENCE - NAMED VOLUMES ONLY
+#
+# Everything that has to survive an update/upgrade is a NAMED volume, declared at
+# the bottom of this file. Named volumes survive `docker compose down` and every
+# image upgrade; only `docker compose down -v` or an explicit `docker volume rm`
+# removes them. The `name:` below is fixed to `gebo-monolith`, so the volumes
+# have stable, predictable names (`gebo-monolith_<vol>`) you can target in
+# backup and restore commands.
+#
+#   gebo-mongo   all application state: users, LLM/KB config, chat history, and
+#                the INDEX of everything in gebo-work
+#   gebo-qdrant  vector store - embeddings; re-ingesting to rebuild costs real
+#                LLM money
+#   gebo-neo4j-* GraphRAG knowledge graphs (data + logs)
+#   gebo-work    GEBO_WORK_DIRECTORY - DURABLE user data: chat SESSIONS_AREA,
+#                per-endpoint content mirrors, the document cache, uploads,
+#                Google Workspace OAuth tokens. Mongo only INDEXES it; the bytes
+#                live here, so gebo-mongo and gebo-work are ONE backup unit.
+#   gebo-home    GEBO_HOME
+#   gebo-logs    security-log.jsonl, the append-only GDPR Art.32 / NIS2 Art.21
+#                audit trail, plus gc.log
+#   gebo-os      OpenSearch full-text index
+#   *-data       observability history (Prometheus / Grafana / Tempo)
+#
+# An ANONYMOUS volume is the thing that does NOT survive: it is what you get for
+# any path listed as VOLUME in the image but not mounted here. Every such path in
+# geboai/gebo.ai is mounted below; if you add one, mount it too.
+#
+# Back up (stack stopped, so the copy is consistent):
+#   docker compose stop
+#   for v in gebo-mongo gebo-work gebo-qdrant gebo-neo4j-data; do
+#     docker run --rm -v gebo-monolith_$v:/data -v "$PWD:/backup" \
+#       alpine tar czf /backup/$v.tgz -C /data .
+#   done
+#   docker compose start
+#
+# See dockers/PERSISTENCE.md.
+# ---------------------------------------------------------------------------
+name: gebo-monolith
+
 services:
   # =======================
   # MongoDB
@@ -19,9 +60,10 @@ services:
       MONGO_INITDB_ROOT_USERNAME: mongoroot
       MONGO_INITDB_ROOT_PASSWORD: mongopwd
     command: ["mongod", "--wiredTigerCacheSizeGB=1"]
+    # All application state, and the index of every file in gebo-work. Back the
+    # two up together - one without the other leaves dangling references.
     volumes:
-      # Bind mount a local directory instead of named volume
-      - /home/gebo.ai/mongo:/data/db
+      - gebo-mongo:/data/db
     networks: [gebo-monolith-net]
 
   # =======================
@@ -39,9 +81,10 @@ services:
       QDRANT__STORAGE__OPTIMIZE_INDEXING: "true"
       QDRANT__STORAGE__RAM_DISK_SIZE: "256MB"
       QDRANT__STORAGE__MAX_SEGMENT_SIZE: "1000000"
+    # The vector store. Rebuildable by re-ingesting, but re-embedding costs real
+    # money at the LLM provider - treat it as data.
     volumes:
-      # Bind mount a local directory
-      - /home/gebo.ai/qdrant:/qdrant/storage
+      - gebo-qdrant:/qdrant/storage
     networks: [gebo-monolith-net]
   neo4j:
     image: neo4j:5
@@ -62,11 +105,13 @@ services:
       NEO4J_apoc_export_file_enabled: "true"
       NEO4J_apoc_import_file_enabled: "true"
       NEO4J_apoc_import_file_use__neo4j__config: "true"
+    # GraphRAG knowledge graphs. /plugins and /import are deliberately NOT
+    # persisted: NEO4JLABS_PLUGINS re-resolves APOC for the running Neo4j version
+    # at every start, and a stale plugin jar pinned in a volume is exactly what
+    # breaks a version bump.
     volumes:
-      - /home/gebo.ai/neo4j/data:/data
-      - /home/gebo.ai/neo4j/logs:/logs
-      - /home/gebo.ai/neo4j/plugins:/plugins
-      - /home/gebo.ai/neo4j/import:/import
+      - gebo-neo4j-data:/data
+      - gebo-neo4j-logs:/logs
     networks: [gebo-monolith-net]
   opensearch:
     image: opensearchproject/opensearch:latest
@@ -88,8 +133,9 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+    # Full-text index. Rebuildable by re-ingesting, but not for free.
     volumes:
-      - opensearch-data:/usr/share/opensearch/data
+      - gebo-os:/usr/share/opensearch/data
     ports:
       - "9200:9200"
       - "9600:9600"
@@ -109,12 +155,31 @@ services:
       - qdrant
       - neo4j
       - opensearch
+    # geboai/gebo.ai declares VOLUME on /opt/gebo.ai/{home,work,logs,shares}.
+    # Anything NOT named here gets an ANONYMOUS volume, which the next `up` after
+    # a `down` replaces with an empty one - so every one of them is named.
     volumes:
-      # Bind mount two local directories for work and home
-      - /home/gebo.ai/work:/opt/gebo.ai/work
-      - /home/gebo.ai/home:/opt/gebo.ai/home
-      - /home/gebo.ai/logs:/opt/gebo.ai/logs
-      - /mnt:/opt/gebo.ai/shares
+      # THE one to back up. GEBO_WORK_DIRECTORY holds the chat SESSIONS_AREA,
+      # per-endpoint content mirrors, the document cache, uploads and the Google
+      # Workspace OAuth tokens. Mongo only INDEXES it; the bytes are here, so
+      # gebo-work and gebo-mongo are backed up and restored TOGETHER.
+      - gebo-work:/opt/gebo.ai/work
+      - gebo-home:/opt/gebo.ai/home
+      # security-log.jsonl (GDPR Art.32 / NIS2 Art.21 audit trail) + gc.log. A
+      # Wazuh agent tails this via the named volume - see the wazuh-agent compose
+      # and docs/wazuh-integration.md.
+      - gebo-logs:/opt/gebo.ai/logs
+      # Host content OFFERED to the filesystem content handler, read-only. This is
+      # content Gebo.ai INGESTS, not storage it owns, so unlike everything else it
+      # usually wants to be a real host path. Left as a named volume so the
+      # image's VOLUME does not become anonymous; to expose a host tree, replace
+      # this line with a bind, e.g.
+      #   - /srv/company-shares:/opt/gebo.ai/shares:ro
+      - gebo-shares:/opt/gebo.ai/shares:ro
+      # Config is a MOUNT, never a volume: an anonymous volume here would pin the
+      # first image's application.yml and mask the one shipped by every upgrade.
+      # Read-only so a running container cannot rewrite its own configuration.
+      - ./config:/opt/gebo.ai/config:ro
     deploy:
       resources:
         limits:
@@ -183,8 +248,23 @@ services:
       - "127.0.0.1:3000:3000"
     networks: [gebo-monolith-net]
 
+# Named volumes - the whole persistent surface of this stack. They survive
+# `docker compose down` and any image upgrade; only `down -v` / `docker volume
+# rm` destroys them. With `name: gebo-monolith` above, the real names are
+# `gebo-monolith_<key>` (see `docker volume ls`).
 volumes:
-  opensearch-data:
+  # ---- application state and durable data ----
+  gebo-mongo:
+  gebo-qdrant:
+  gebo-neo4j-data:
+  gebo-neo4j-logs:
+  gebo-os:
+  # gebo-work and gebo-mongo are one backup unit - see the header.
+  gebo-work:
+  gebo-home:
+  gebo-logs:
+  gebo-shares:
+  # ---- observability history (reconstructible) ----
   prometheus-data:
   grafana-data:
   tempo-data:

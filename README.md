@@ -82,6 +82,8 @@ an enterprise version with more feature and support is also available.
 You can use docker, docker-compose, download an already configured appliance or install a Ubuntu or windows package, 
 visit [https://gebo.ai/downloads/](https://gebo.ai/downloads/)
 
+For the monolith via Docker Compose, use [`dockers/gebo.ai/docker-compose.yml`](./dockers/gebo.ai/docker-compose.yml) on Linux hosts and [`dockers/gebo.ai/windows/docker-compose.yml`](./dockers/gebo.ai/windows/docker-compose.yml) on Docker Desktop for Windows — both keep all data on named volumes so it survives updates/upgrades (see [dockers/PERSISTENCE.md](./dockers/PERSISTENCE.md)).
+
 ### Post install configuration procedure:
 
 After you've installed with docker go to http://<your server ip>:12999/ and configure your enterprise rag system account & setup your system.
@@ -159,5 +161,12 @@ Gebo.ai ships with two always-on capabilities for **GDPR / NIS2** obligations, b
 To run the software uoy have to put 2 variables in your environment (with set on windows and export on bash/linux) 
  - GEBO_HOME ==> it points to the home directory the software it uses to allocate its own 
  - GEBO_WORK_DIRECTORY ==> it points to a local filesystem area that the software uses to archive informations/files (please back it up)
+
+In a container deployment both are mounted on persistent volumes. **What has to
+survive an update/upgrade, in every image and every compose file - and how to
+back it up or migrate it - is documented in
+[dockers/PERSISTENCE.md](./dockers/PERSISTENCE.md).** The short version: the work
+directory and the MongoDB database are ONE backup unit, because Mongo only
+*indexes* the files that live in the work directory.
  
        

@@ -1,5 +1,22 @@
 # Use root/example as user/password credentials
-version: '3.1'
+#
+# ---------------------------------------------------------------------------
+# MIGRATING AN EXISTING CONTAINER
+#
+# mongo previously had NO volume: its data sat in the container's writable layer
+# and was destroyed by any recreate. If you have a container from that era with
+# data you want, copy it out BEFORE the first `up` with this file - the new named
+# volume starts EMPTY and the old data is not deleted, only orphaned:
+#
+#   docker cp <old-container>:/data/db ./mongo-db-backup
+#   docker compose up -d
+#   docker compose stop mongo
+#   docker run --rm -v <project>_mongo-data:/data/db -v "$PWD/mongo-db-backup:/backup" \
+#     alpine sh -c 'cp -a /backup/. /data/db/'
+#   docker compose start mongo
+#
+# `docker volume ls` shows the real (project-prefixed) volume name.
+# ---------------------------------------------------------------------------
 
 services:
 
@@ -11,6 +28,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongoroot
       MONGO_INITDB_ROOT_PASSWORD: mongopwd
+    # Without this, /data/db lives in the container's writable layer: every
+    # `docker compose down`, and every image update (which recreates the
+    # container), silently destroys the whole database.
+    volumes:
+      - mongo-data:/data/db
 
   mongo-express:
     image: mongo-express
@@ -22,3 +44,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: mongopwd
       ME_CONFIG_MONGODB_URL: mongodb://mongoroot:mongopwd@mongo:27017/
       ME_CONFIG_BASICAUTH: "false"
+
+# mongo-express is a stateless UI over the database - nothing to persist.
+volumes:
+  mongo-data:

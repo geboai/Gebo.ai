@@ -92,13 +92,13 @@ last column so you can re-check it against your own version of the repo.
 
 | Deployment | `security-log.jsonl` | Where that comes from |
 |---|---|---|
-| **Monolith, Docker Compose** (`dockers/gebo.ai/docker-compose.yml`) | host **`/home/gebo.ai/logs/`** (container `/opt/gebo.ai/logs/`) | that compose file mounts `- /home/gebo.ai/logs:/opt/gebo.ai/logs`; the image runs with `WORKDIR /opt/gebo.ai` and no `GEBO_LOG_BASE`, so logback's default `logs` resolves there (`dockers/gebo.ai/Dockerfile`) |
-| **Monolith, Docker on Windows hosts** (`dockers/gebo.ai/windows/docker-compose.yml`) | container `/opt/gebo.ai/logs/` — **not published on the host** | that compose file declares *no* volumes for the `gebo.ai` service, so the trail stays in the image's anonymous `VOLUME /opt/gebo.ai/logs`. Add a mount (see [4a](#4a-monolith-on-docker)) |
+| **Monolith, Docker Compose** (`dockers/gebo.ai/docker-compose.yml`) | the **named volume `gebo-monolith_gebo-logs`** (container `/opt/gebo.ai/logs/`) — not a host path | that compose file (project `gebo-monolith`) mounts `- gebo-logs:/opt/gebo.ai/logs`; the image runs with `WORKDIR /opt/gebo.ai` and no `GEBO_LOG_BASE`, so logback's default `logs` resolves there (`dockers/gebo.ai/Dockerfile`). A container agent mounts that volume directly (the wazuh-agent compose already references it); a host agent needs the monolith run with a host bind for its logs instead — see [4a](#4a-monolith-on-docker) |
+| **Monolith, Docker on Windows hosts** (`dockers/gebo.ai/windows/docker-compose.yml`) | the **named volume `gebo-monolith-win_gebo-logs`** (container `/opt/gebo.ai/logs/`) — not a host path | that compose file mounts `- gebo-logs:/opt/gebo.ai/logs`, so the trail survives restarts and upgrades but lives inside the Docker Desktop VM. A container agent can mount that volume directly; a host agent needs the mount changed to a Windows path instead (see [4a](#4a-monolith-on-docker)) |
 | **Monolith, plain `docker run`** of `geboai/gebo.ai` | container `/opt/gebo.ai/logs/` | `WORKDIR /opt/gebo.ai` + `VOLUME /opt/gebo.ai/logs` in `dockers/gebo.ai/Dockerfile` |
 | **All-in-one appliance** `geboai/easyinstall.gebo.ai` | container `/opt/gebo.ai/logs/` | supervisord starts it with `directory=/opt/gebo.ai` (`dockers/easyinstall.gebo.ai/supervisord.conf`), and `VOLUME /opt/gebo.ai/logs` is declared in its Dockerfile. **`/var/log/gebo.ai/` is not the audit trail** — supervisord only captures the process's stdout/stderr there |
 | **Monolith, `.deb` / `.rpm`** (built with `-P package-unix-deb` / `-P package-unix-rpm`) | **`/var/log/gebo-ai/`** | the jpackage launcher config carries `-DGEBO_LOG_BASE=/var/log/gebo-ai` (`gebo.ai.app/pom.xml`), and the package's `postinst` creates and chowns that directory. The app itself installs to `/home/gebo-ai/gebo-ai/` and runs from `WorkingDirectory=/home/gebo-ai` as user `gebo-ai` |
 | **Monolith, `.msi`** (built with `-P package-windows`) | **`<install dir>\app\instance\logs\`** | the launcher config carries `-DGEBO_LOG_BASE=$APPDIR\instance\logs`, and jpackage's `$APPDIR` is the `app` folder under the install directory (`src/packaging/msi/instance/…` is copied into it). The MSI is built with a directory chooser (`winDirChooser`) over the default `Program Files\GeboAI`, so **the install directory is chosen at install time** — resolve it as shown in [4c](#4c-monolith-on-windows-msi) |
-| **Microservices, Docker Compose** (`dockers/gebo.microservices/docker-compose.yml`) | container `/opt/gebo.ai/logs/` per service — **not published on the host** | the Jib images run with `workingDirectory /opt/gebo.ai` (`gebo.microservices.apps.parent/pom.xml`, `docker` profile) and the compose file mounts only `config`, `home` and `work`. Publish them with the [override](#4d-microservices-on-docker-compose) |
+| **Microservices, Docker Compose** (`dockers/gebo.microservices/docker-compose.yml`) | per service, the named volume `gebo-microservices_<svc>-logs` (container `/opt/gebo.ai/logs/`) — **not on a host path** | the Jib images run with `workingDirectory /opt/gebo.ai` (`gebo.microservices.apps.parent/pom.xml`, `docker` profile) and the compose file gives each service its own `<svc>-logs` volume. To publish them on the host for a host agent, use the [override](#4d-microservices-on-docker-compose) |
 | **Gateway, `.deb` / `.rpm`** | **`/home/gebo-ai-gateway/logs/`** | its jpackage config does *not* set `GEBO_LOG_BASE`, so the `logs` default applies under the unit's `WorkingDirectory=/home/gebo-ai-gateway` (`gateway.gebo.ai/src/packaging/deb/resources/postinst`). The app installs to `/home/gebo-ai-gateway/gebo-ai-gateway/` |
 | **Kubernetes** (`deploy/helm/gebo-microservices`) | pod `/opt/gebo.ai/logs/` | same Jib images; the chart mounts `emptyDir`s for `home`/`work` only — see [4e](#4e-microservices-per-host-and-kubernetes) |
 | **Bootable jar started by hand** | `<working directory>/logs/` | logback's `${GEBO_LOG_BASE:-logs}` default |
@@ -245,9 +245,28 @@ for the containerized agent, or from the dashboard afterwards).
 
 ### 4a. Monolith on Docker
 
-`dockers/gebo.ai/docker-compose.yml` already publishes the log directory on the
-host (`/home/gebo.ai/logs`), so an agent **on the Docker host** needs nothing
-from the stack:
+`dockers/gebo.ai/docker-compose.yml` keeps the audit trail in a **named volume**
+(`gebo-monolith_gebo-logs`), not on a host path, so the simplest agent is a
+**containerized** one that mounts that volume:
+
+```bash
+export WAZUH_MANAGER_SERVER=wazuh.example.internal   # your manager
+export WAZUH_AGENT_NAME=gebo-ai-prod-01
+# bring the monolith stack up FIRST - it creates the gebo-monolith_gebo-logs volume
+docker compose -f deploy/wazuh/docker/docker-compose.wazuh-agent.yml up -d
+docker logs -f gebo-wazuh-agent
+```
+
+[`docker-compose.wazuh-agent.yml`](../deploy/wazuh/docker/docker-compose.wazuh-agent.yml)
+references that volume as an `external` volume and mounts it **read-only**, and
+uses [`deploy/wazuh/agent/ossec.conf`](../deploy/wazuh/agent/ossec.conf) (log
+shipping only — no FIM/SCA/vulnerability scanning; install a real host agent if
+you want those).
+
+Prefer an agent package **on the host**? A named volume has no stable host path,
+so first run the monolith with a host **bind** for its logs — replace the
+`gebo-logs:/opt/gebo.ai/logs` line in `dockers/gebo.ai/docker-compose.yml` with,
+say, `- /home/gebo.ai/logs:/opt/gebo.ai/logs` — then point the host agent at it:
 
 ```xml
 <localfile>
@@ -255,22 +274,6 @@ from the stack:
   <location>/home/gebo.ai/logs/security-log.jsonl</location>
 </localfile>
 ```
-
-Prefer not to install an agent package on the host? Run the agent as a
-container:
-
-```bash
-export WAZUH_MANAGER_SERVER=wazuh.example.internal   # your manager
-export WAZUH_AGENT_NAME=gebo-ai-prod-01
-docker compose -f deploy/wazuh/docker/docker-compose.wazuh-agent.yml up -d
-docker logs -f gebo-wazuh-agent
-```
-
-[`docker-compose.wazuh-agent.yml`](../deploy/wazuh/docker/docker-compose.wazuh-agent.yml)
-mounts `/home/gebo.ai/logs` **read-only** and
-[`deploy/wazuh/agent/ossec.conf`](../deploy/wazuh/agent/ossec.conf) (log
-shipping only — no FIM/SCA/vulnerability scanning; install a real host agent if
-you want those).
 
 Two container-agent specifics that are easy to get wrong:
 
@@ -281,15 +284,23 @@ Two container-agent specifics that are easy to get wrong:
   `CHANGE_AGENT_NAME` / `CHANGE_AGENT_GROUP` placeholders from the environment —
   so leave those placeholders in the file and set the environment variables.
 
-#### If the trail is not published on the host
+#### If the trail is on a named volume, or inside the container
 
-Two supported ways of running the monolith keep the audit trail inside the
-container, in the image's anonymous `VOLUME /opt/gebo.ai/logs`: the
-**all-in-one appliance** (`docker run -p 12999:12999 geboai/easyinstall.gebo.ai`,
-as documented in `dockers/easyinstall.gebo.ai/README.md`) and the **Windows-host
-compose file** (`dockers/gebo.ai/windows/docker-compose.yml`, which declares no
-volumes for the `gebo.ai` service). An anonymous volume survives a restart but
-not a `docker rm`, so publish it before you rely on it:
+Neither the Linux nor the Windows compose file puts the trail on a **host**
+path: the Linux stack keeps it in the named volume `gebo-monolith_gebo-logs`, the
+Windows stack in `gebo-monolith-win_gebo-logs`, and the **all-in-one appliance**
+(`docker run -p 12999:12999 geboai/easyinstall.gebo.ai`) keeps it in the image's
+anonymous `VOLUME /opt/gebo.ai/logs` (which survives a restart but not a
+`docker rm`). A host agent needs a real host directory; two ways to get one:
+
+**A — mount the named volume into a container agent (Linux stack).** Already
+wired: the container-agent compose references `gebo-monolith_gebo-logs` as an
+external volume, so with the monolith stack up you just
+`docker compose -f deploy/wazuh/docker/docker-compose.wazuh-agent.yml up -d`
+(see [4a](#4a-monolith-on-docker)). Nothing to publish on the host.
+
+**B — run the app with a host bind instead of the named volume,** then point a
+host agent at it:
 
 ```bash
 # appliance: give the audit trail (and the rest of /opt/gebo.ai/logs) a real home
@@ -299,16 +310,18 @@ docker run -d -p 12999:12999 \
 ```
 
 ```yaml
-# dockers/gebo.ai/windows/docker-compose.yml - add to the gebo.ai service
+# Linux compose - replace the gebo-logs named volume for the gebo.ai service:
+    volumes:
+      - /home/gebo.ai/logs:/opt/gebo.ai/logs
+# Windows compose - replace gebo-logs with a Windows path:
     volumes:
       - C:\gebo.ai\logs:/opt/gebo.ai/logs
 ```
 
-Then point the agent at the host side of that mount, exactly as above. The
-container-agent compose file takes the host directory from
-`GEBO_MONOLITH_LOG_DIR` (default `/home/gebo.ai/logs`), so
-`GEBO_MONOLITH_LOG_DIR=/home/gebo.ai/logs docker compose -f … up -d` covers both
-cases without editing anything.
+With option B the container-agent compose can instead take a host directory from
+`GEBO_MONOLITH_LOG_DIR` — swap its `gebo-monolith-logs` volume mount back to
+`- ${GEBO_MONOLITH_LOG_DIR}:/gebo-logs/monolith:ro` (the line is shown, commented,
+in that file).
 
 ### 4b. Monolith on-premise (.deb / .rpm)
 

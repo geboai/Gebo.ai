@@ -12,12 +12,12 @@
 # single Wazuh agent (on the host, or the sidecar in
 # docker-compose.wazuh-agent.yml) can tail all of them.
 #
-# The stock dockers/gebo.microservices/docker-compose.yml gives each service
-# only ./config, /opt/gebo.ai/home and /opt/gebo.ai/work - its logs stay inside
-# the container, where nothing can read them and where they die with it. Each
-# service writes to /opt/gebo.ai/logs/security-log.jsonl (Jib images run with
-# WORKDIR /opt/gebo.ai and logback's default GEBO_LOG_BASE=logs), so this file
-# bind-mounts that directory per service.
+# The stock dockers/gebo.microservices/docker-compose.yml now gives each service
+# a NAMED <svc>-logs volume for /opt/gebo.ai/logs, so the audit trail already
+# outlives the container - but it lives inside Docker, where a Wazuh agent cannot
+# tail it. Each service writes /opt/gebo.ai/logs/security-log.jsonl (Jib images
+# run with WORKDIR /opt/gebo.ai and logback's default GEBO_LOG_BASE=logs), so
+# this file swaps that named volume for a per-service HOST bind.
 #
 # Usage, from dockers/gebo.microservices/:
 #
@@ -38,8 +38,13 @@
 # carries architectureType=MICROSERVICES plus the service's own
 # spring.application.name in its "application" field.
 #
-# Volumes declared here are APPENDED to the ones in the base compose file
-# (compose merges volume lists by container path), so nothing is lost.
+# Compose merges volume lists by CONTAINER PATH, so the bind declared here
+# REPLACES the base file's <svc>-logs named volume at the same target rather than
+# sitting alongside it - the ./config, home and work mounts are untouched.
+# Verify with:
+#   docker compose -f docker-compose.yml \
+#                  -f ../../deploy/wazuh/docker/docker-compose.security-logs.override.yml \
+#                  config | grep -A2 'target: /opt/gebo.ai/logs'
 #
 # See docs/wazuh-integration.md.
 # ===========================================================================
