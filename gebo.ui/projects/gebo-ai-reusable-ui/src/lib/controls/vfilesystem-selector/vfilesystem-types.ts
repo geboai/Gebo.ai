@@ -48,6 +48,24 @@ export interface VFilesystemReference {
 }
 
 /**
+ * A filesystem reference carrying the deletion intent expressed by the user.
+ *
+ * The vfilesystem selector emits references of this shape only when it runs
+ * with `enableDeletion` set to true: entries flagged with
+ * `markedForDeletion === true` are the ones the user asked to remove from the
+ * remote system, the others keep meaning "selected" exactly as before. The type
+ * is a widening of {@link VFilesystemReference}, so a host that ignores the flag
+ * keeps working against the plain reference model.
+ *
+ * Marking is declarative: the control never deletes anything by itself, it only
+ * reports the intent so the host can apply it against its own backend when the
+ * edited entity is saved.
+ */
+export interface VFilesystemDeletableReference extends VFilesystemReference {
+    markedForDeletion?: boolean;
+}
+
+/**
  * Type definition for a callback function that returns an Observable for loading
  * filesystem roots, with no parameters required.
  */

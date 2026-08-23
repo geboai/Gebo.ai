@@ -32,6 +32,7 @@ export interface MCPClientProjectEndpoint {
     synchroStrategy?: MCPClientProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: MCPClientProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     paths?: Array<VFilesystemReference>;
     mcpClientConfigCode?: string;
 }

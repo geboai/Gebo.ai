@@ -52,6 +52,7 @@ export class GeboAiGoogleDriveProjectEndpointAdminComponent extends BaseEntityEd
   override formGroup: FormGroup<any> = new FormGroup({
     code: new FormControl(),
     description: new FormControl(),
+    personalData: new FormControl(),
     parentProjectCode: new FormControl(),
     readonly: new FormControl(),
     published: new FormControl(),

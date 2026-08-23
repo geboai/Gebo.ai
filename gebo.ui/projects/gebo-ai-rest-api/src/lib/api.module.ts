@@ -14,6 +14,7 @@ import { BedrockImageModelsConfigurationControllerService } from './api/bedrockI
 import { BedrockRankerModelsConfigurationControllerService } from './api/bedrockRankerModelsConfigurationController.service';
 import { BedrockTextToSpeechModelsConfigurationControllerService } from './api/bedrockTextToSpeechModelsConfigurationController.service';
 import { BedrockTranscriptModelsConfigurationControllerService } from './api/bedrockTranscriptModelsConfigurationController.service';
+import { BraveSearchConfigurationControllerService } from './api/braveSearchConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
@@ -23,6 +24,7 @@ import { ConfluenceSearchServiceControllerService } from './api/confluenceSearch
 import { ConfluenceSystemsControllerService } from './api/confluenceSystemsController.service';
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
+import { DataFlowMetaInfoControllerService } from './api/dataFlowMetaInfoController.service';
 import { DeepseekChatModelsConfigurationControllerService } from './api/deepseekChatModelsConfigurationController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
@@ -116,14 +118,18 @@ import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
+import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
 import { SecretsControllerService } from './api/secretsController.service';
+import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
+import { TavilySearchConfigurationControllerService } from './api/tavilySearchConfigurationController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
+import { UploadsBrowsingControllerService } from './api/uploadsBrowsingController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
@@ -150,6 +156,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     BedrockRankerModelsConfigurationControllerService,
     BedrockTextToSpeechModelsConfigurationControllerService,
     BedrockTranscriptModelsConfigurationControllerService,
+    BraveSearchConfigurationControllerService,
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
@@ -159,6 +166,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     ConfluenceSystemsControllerService,
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
+    DataFlowMetaInfoControllerService,
     DeepseekChatModelsConfigurationControllerService,
     DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,
@@ -252,14 +260,18 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     PromptTemplatesControllerService,
     RankerModelsControllerService,
     ReindexingFrequencyOptionsControllerService,
+    SearxngSearchConfigurationControllerService,
     SecretsControllerService,
+    SerpapiSearchConfigurationControllerService,
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
+    TavilySearchConfigurationControllerService,
     TextToSpeechModelsControllerService,
     TokenRenewControllerService,
     TranscriptModelsControllerService,
     UiTextResourcesControllerService,
+    UploadsBrowsingControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
     UserWorkflowsControllerService,

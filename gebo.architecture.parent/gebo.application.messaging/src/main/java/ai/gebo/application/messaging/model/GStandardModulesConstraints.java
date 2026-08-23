@@ -66,6 +66,7 @@ public class GStandardModulesConstraints {
 
 	public static final String KNOWLEDGE_GRAPH_MODULE = "knowledge-graph-module";
 	public static final String KNOWLEDGE_GRAPH_COMPONENT = "knowledge-graph-component";
+	public static final String KNOWLEDGE_GRAPH_DISPOSE_COMPONENT = "knowledge-graph-dispose-component";
 
 	// Constants for component names
 	public static final String RESOURCES_DISPOSE_COMPONENT = "resources-dispose-component";

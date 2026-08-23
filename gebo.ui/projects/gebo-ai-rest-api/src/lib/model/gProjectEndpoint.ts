@@ -31,6 +31,7 @@ export interface GProjectEndpoint {
     synchroStrategy?: GProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
 }
 export namespace GProjectEndpoint {
     export type SynchroStrategyEnum = 'SIZE_AND_TIMESTAMP_AND_HASH_CHECK' | 'HASH_CHECK';

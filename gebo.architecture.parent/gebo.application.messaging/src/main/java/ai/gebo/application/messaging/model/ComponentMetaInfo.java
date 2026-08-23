@@ -32,6 +32,23 @@ public class ComponentMetaInfo {
 	private boolean localSystem = false;
 
 	/**
+	 * What this component does with data, as currently configured - null for the
+	 * many components that have no data-flow configuration of their own.
+	 *
+	 * <p>
+	 * Carried here rather than on a parallel channel so that the data-flow report
+	 * reaches an administrator over the messaging-topology path that already
+	 * exists: {@code IGMessageBroker#getSystemsInfo()} builds these objects,
+	 * {@code InternalMessagingTopologyController} publishes them per node, and
+	 * {@code GGlobalInternalTopologyServiceImpl} polls and caches them
+	 * cluster-wide. Populated from
+	 * {@code IGMessagingSystem#getDataFlowMetaInfos()} in
+	 * {@link ComponentsTreeUtil}.
+	 * </p>
+	 */
+	private GDataFlowMetaInfos dataFlowMetaInfos = null;
+
+	/**
 	 * Default constructor for ComponentMetaInfo, initializes the object with
 	 * default values.
 	 */
@@ -144,5 +161,24 @@ public class ComponentMetaInfo {
 	 */
 	public void setLocalSystem(boolean localSystem) {
 		this.localSystem = localSystem;
+	}
+
+	/**
+	 * Gets this component's data-flow configuration.
+	 *
+	 * @return the data-flow meta information, or null when the component reports
+	 *         none.
+	 */
+	public GDataFlowMetaInfos getDataFlowMetaInfos() {
+		return dataFlowMetaInfos;
+	}
+
+	/**
+	 * Sets this component's data-flow configuration.
+	 *
+	 * @param dataFlowMetaInfos the data-flow meta information to set.
+	 */
+	public void setDataFlowMetaInfos(GDataFlowMetaInfos dataFlowMetaInfos) {
+		this.dataFlowMetaInfos = dataFlowMetaInfos;
 	}
 }

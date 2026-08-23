@@ -45,6 +45,7 @@ import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectur
 import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
 import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
+import ai.gebo.uploads.content.handler.UploadedFileInfo;
 import ai.gebo.uploads.content.handler.impl.GUploadsContentManagementSystemHandlerImpl.GSingletonUploadsConfigurationDao;
 import ai.gebo.uploads.content.handler.service.UploadsSystemsManagementServiceImpl;
 
@@ -194,7 +195,10 @@ public class FileUploadsController
 	@PostMapping(value = "updateUploadsEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GUploadsProjectEndpoint updateUploadsEndpoint(@RequestBody GUploadsProjectEndpoint endpoint)
 			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
-		endpoint=persistentObjectManager.update(endpoint);
+		// updateEndpoint() carries the reschedule/replication/audit-log side effects
+		// every other data source gets; uploadsService.update() then applies any file
+		// batch staged under the endpoint handshake code.
+		endpoint = updateEndpoint(endpoint);
 		return uploadsService.update(endpoint);
 	}
 
@@ -210,7 +214,9 @@ public class FileUploadsController
 	@PostMapping(value = "insertUploadsEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GUploadsProjectEndpoint insertUploadsEndpoint(@RequestBody GUploadsProjectEndpoint endpoint)
 			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
-		return uploadsService.insert(endpoint);
+		// The endpoint must exist before the staged files can be moved: its contents
+		// folder is derived from its persisted identity.
+		return uploadsService.update(insertEndpoint(endpoint));
 	}
 
 	/**
@@ -237,11 +243,47 @@ public class FileUploadsController
 
 	/**
 	 * Retrieves all supported file extensions for uploads
-	 * 
+	 *
 	 * @return list of supported file extensions
 	 */
 	@GetMapping(value = "getUploadableFilesExtensions", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getUploadableFilesExtensions() {
 		return this.formatsRepoPattern.getHandledExtensions();
+	}
+
+	/**
+	 * Lists the files currently held by an uploads data source, telling apart the
+	 * ones already ingested in the knowledge base from the ones merely uploaded.
+	 *
+	 * @param endpointCode code of the uploads data source
+	 * @return the files of the data source
+	 * @throws GeboContentHandlerSystemException if the data source folder cannot be
+	 *                                           resolved
+	 * @throws IOException                       if the folder cannot be listed
+	 */
+	@GetMapping(value = "listUploadedFiles", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<UploadedFileInfo> listUploadedFiles(@RequestParam("endpointCode") String endpointCode)
+			throws GeboContentHandlerSystemException, IOException {
+		return uploadsService.listUploadedFiles(endpointCode);
+	}
+
+	/**
+	 * Removes files from an uploads data source.
+	 *
+	 * <p>
+	 * The files leave the data source folder immediately; the documents already
+	 * ingested from them are dropped from the knowledge base by the regular
+	 * ingestion reconciliation at the next publish of this data source.
+	 * </p>
+	 *
+	 * @param endpointCode code of the uploads data source
+	 * @param names        names of the files to remove
+	 * @return operation status carrying the updated data source and the user
+	 *         messages describing the outcome
+	 */
+	@PostMapping(value = "deleteUploadedFiles", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GUploadsProjectEndpoint> deleteUploadedFiles(
+			@RequestParam("endpointCode") String endpointCode, @RequestBody List<String> names) {
+		return uploadsService.deleteUploadedFiles(endpointCode, names);
 	}
 }

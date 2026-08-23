@@ -130,6 +130,10 @@ export * from "./lib/admin-ui/entity-editors/gebo-deep-search-admin/gebo-deep-se
 export * from "./lib/admin-ui/entity-editors/gebo-ai-agents-admin/gebo-ai-agents-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-agents-network-admin/gebo-ai-agents-network-admin.component";
 export * from "./lib/admin-ui/main-panels/agent-networks/agent-networks.component";
+export * from "./lib/admin-ui/main-panels/compliance/compliance.component";
+export * from "./lib/admin-ui/main-panels/compliance/compliance-data-flow.model";
+export * from "./lib/admin-ui/main-panels/compliance/data-endpoint-node.component";
+export * from "./lib/admin-ui/main-panels/compliance/data-transformation-node.component";
 
 export * from "./lib/setup-wizard/mcp-server-wizard.component";
 export * from "./lib/setup-wizard/gebo-ai-mcp-server-wizard.component";

@@ -1,5 +1,6 @@
 package ai.gebo.architecture.graphrag.services;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -14,6 +15,23 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 public interface IKnowledgeGraphPersistenceService {
 
 	public void knowledgeGraphDelete(GDocumentReference documentReference);
+
+	/**
+	 * Erases from the knowledge graph everything extracted from the given documents.
+	 * Mirrors {@link #knowledgeGraphDelete(GDocumentReference)} for a set of codes -
+	 * the erasure path invoked when documents are removed
+	 * ({@code GInternalDeletionMessagePayload}).
+	 */
+	public void knowledgeGraphDeleteByDocumentCodes(Collection<String> documentCodes);
+
+	/** Erases everything the knowledge graph holds for a deleted knowledge base. */
+	public void knowledgeGraphDeleteByKnowledgeBaseCode(String knowledgeBaseCode);
+
+	/** Erases everything the knowledge graph holds for a deleted project. */
+	public void knowledgeGraphDeleteByProjectCode(String projectCode);
+
+	/** Erases everything the knowledge graph holds for a deleted data-source endpoint. */
+	public void knowledgeGraphDeleteByProjectEndpoint(String projectEndpointClass, String projectEndpointCode);
 
 	public GraphDocumentReference knowledgeGraphInsertDocument(GDocumentReference documentReference);
 
