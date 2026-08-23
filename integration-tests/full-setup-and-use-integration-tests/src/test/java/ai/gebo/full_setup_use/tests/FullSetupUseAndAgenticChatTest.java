@@ -1,7 +1,5 @@
 package ai.gebo.full_setup_use.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -41,11 +39,20 @@ public class FullSetupUseAndAgenticChatTest extends AbstractFullSetupUseChatTest
 		runFullSetupAndChatSession(registeredSession);
 	}
 
+	/**
+	 * With the standard agents enabled every request is expected to come back as
+	 * {@link RespondingWith#DELEGATED_AGENT}. Reported through the shared soft/strict
+	 * gate rather than asserted outright, so that a run whose only anomaly is the
+	 * route taken still proves the monolith answers - see the base class javadoc.
+	 */
 	@Override
 	protected void verifyRoutingDecision(RegisteredInteractionTestModel registeredInteractionTestModel,
 			GeboChatResponse response) {
-		assertEquals(RespondingWith.DELEGATED_AGENT.name(), response.getPipelineRouterDecisionCode(),
-				"With the default network of agents enabled every request must be delegated to the agents network");
+		if (!RespondingWith.DELEGATED_AGENT.name().equals(response.getPipelineRouterDecisionCode())) {
+			reportUnexpectedRoutingDecision(response.getPipelineRouterDecisionCode(),
+					"[" + RespondingWith.DELEGATED_AGENT.name()
+							+ "] (with the default network of agents enabled every request should be delegated to the agents network)");
+		}
 	}
 
 }

@@ -1,6 +1,7 @@
 package ai.gebo.architecture.integration.tests;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,17 +36,23 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.monolithic.api.client.api.AuthControllerApi;
+import ai.gebo.monolithic.api.client.api.BraveSearchConfigurationControllerApi;
 import ai.gebo.monolithic.api.client.api.ConfluenceSystemsControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboFastInstallationSetupControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboFastLlmsSetupControllerApi;
 import ai.gebo.monolithic.api.client.api.GoogleDriveSystemsControllerApi;
 import ai.gebo.monolithic.api.client.api.GoogleSearchConfigurationControllerApi;
 import ai.gebo.monolithic.api.client.api.JiraSystemsControllerApi;
+import ai.gebo.monolithic.api.client.api.SearxngSearchConfigurationControllerApi;
 import ai.gebo.monolithic.api.client.api.SecretsControllerApi;
+import ai.gebo.monolithic.api.client.api.SerpapiSearchConfigurationControllerApi;
 import ai.gebo.monolithic.api.client.api.SharepointSystemsControllerApi;
+import ai.gebo.monolithic.api.client.api.TavilySearchConfigurationControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.AuthResponse;
+import ai.gebo.monolithic.api.client.model.BraveSearchConfig;
+import ai.gebo.monolithic.api.client.model.ComponentSetupStatus;
 import ai.gebo.monolithic.api.client.model.ComputedWorkflowResult;
 import ai.gebo.monolithic.api.client.model.ComputedWorkflowStatus;
 import ai.gebo.monolithic.api.client.model.FastConfluenceSystemInsertRequest;
@@ -55,7 +62,11 @@ import ai.gebo.monolithic.api.client.model.FastInstallationSetupData;
 import ai.gebo.monolithic.api.client.model.FastJiraSystemInsertRequest;
 import ai.gebo.monolithic.api.client.model.FastSharepointSystemInsertRequest;
 import ai.gebo.monolithic.api.client.model.FastSharepointSystemInsertRequest.SharepointVersionEnum;
+import ai.gebo.monolithic.api.client.model.GBraveSearchApiCredentials;
 import ai.gebo.monolithic.api.client.model.GGoogleSearchApiCredentials;
+import ai.gebo.monolithic.api.client.model.GSearxngSearchApiCredentials;
+import ai.gebo.monolithic.api.client.model.GSerpapiSearchApiCredentials;
+import ai.gebo.monolithic.api.client.model.GTavilySearchApiCredentials;
 import ai.gebo.monolithic.api.client.model.GUserMessage;
 import ai.gebo.monolithic.api.client.model.GeboChatRequest;
 import ai.gebo.monolithic.api.client.model.GeboOauth2SecretContent;
@@ -77,9 +88,12 @@ import ai.gebo.monolithic.api.client.model.OperationStatusGJiraSystem;
 import ai.gebo.monolithic.api.client.model.OperationStatusGSharepointContentManagementSystem;
 import ai.gebo.monolithic.api.client.model.OperationStatusList;
 import ai.gebo.monolithic.api.client.model.OperationStatusListGBaseModelConfig;
+import ai.gebo.monolithic.api.client.model.SearxngSearchConfig;
 import ai.gebo.monolithic.api.client.model.SecretInfo;
 import ai.gebo.monolithic.api.client.model.SecretWrapperGeboTokenContent;
+import ai.gebo.monolithic.api.client.model.SerpapiSearchConfig;
 import ai.gebo.monolithic.api.client.model.SecurityHeaderData;
+import ai.gebo.monolithic.api.client.model.TavilySearchConfig;
 import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
@@ -328,9 +342,32 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		return tokenRenewApi.renew();
 	}
 
+	/**
+	 * Configures every subsystem declared in the setup secret against a freshly
+	 * installed Gebo.ai.
+	 * <p>
+	 * Web search gets special treatment. Since the multi-provider refactoring the
+	 * monolith exposes a provider's web-search tool to the LLM only while that
+	 * provider has stored credentials, so <em>exactly one</em> provider is meant to
+	 * be active, and the admin wizard enforces it by clearing every provider before
+	 * storing the selected one. This method applies the same rule: the setup secret
+	 * may name at most one {@code *_SEARCH} product, every provider is wiped first,
+	 * and after the insert the single-active invariant is asserted against the
+	 * per-provider status endpoints.
+	 */
 	protected void setupProducts(@NotNull @Valid List<TestSubsystemSetupInfo> setupInfos,
 			SecurityHeaderData securityHeader, String host, int port) {
 		ApiClient geboClient = createApiClient(host, port, securityHeader);
+		List<TestSubsystemSetupInfo> webSearchSetups = setupInfos.stream()
+				.filter(x -> x.getProduct() != null && x.getProduct().isWebSearchProvider()).toList();
+		assertTrue(webSearchSetups.size() <= 1,
+				"Only ONE web search provider can be active at a time, the setup secret declares: "
+						+ webSearchSetups.stream().map(x -> x.getProduct().name()).toList());
+		if (!webSearchSetups.isEmpty()) {
+			// Same order as the admin wizard: wipe every provider, then store the chosen
+			// one, so a re-run over an already configured system cannot leave two active.
+			clearAllWebSearchProviders(geboClient);
+		}
 		for (TestSubsystemSetupInfo productSetupInfo : setupInfos) {
 			switch (productSetupInfo.getProduct()) {
 			case GOOGLE_SEARCH: {
@@ -341,6 +378,44 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				searchConfig.setCustomSearchEngineId(productSetupInfo.getId());
 				GGoogleSearchApiCredentials outcome = api.fastInsertGoogleSearchApiCredentials(searchConfig);
 				LOGGER.info("Inserted google search api account config:" + outcome.getCode());
+			}
+				break;
+			case TAVILY_SEARCH: {
+				TavilySearchConfigurationControllerApi api = new TavilySearchConfigurationControllerApi(geboClient);
+				TavilySearchConfig searchConfig = new TavilySearchConfig();
+				searchConfig.setEnabled(true);
+				searchConfig.setApiKey(productSetupInfo.getApiKey());
+				GTavilySearchApiCredentials outcome = api.fastInsertTavilySearchApiCredentials(searchConfig);
+				LOGGER.info("Inserted tavily search api account config:" + outcome.getCode());
+			}
+				break;
+			case BRAVE_SEARCH: {
+				BraveSearchConfigurationControllerApi api = new BraveSearchConfigurationControllerApi(geboClient);
+				BraveSearchConfig searchConfig = new BraveSearchConfig();
+				searchConfig.setEnabled(true);
+				searchConfig.setApiKey(productSetupInfo.getApiKey());
+				GBraveSearchApiCredentials outcome = api.fastInsertBraveSearchApiCredentials(searchConfig);
+				LOGGER.info("Inserted brave search api account config:" + outcome.getCode());
+			}
+				break;
+			case SEARXNG_SEARCH: {
+				SearxngSearchConfigurationControllerApi api = new SearxngSearchConfigurationControllerApi(geboClient);
+				SearxngSearchConfig searchConfig = new SearxngSearchConfig();
+				searchConfig.setEnabled(true);
+				// Self-hosted: the instance URL is what identifies it, the key is optional.
+				searchConfig.setBaseUrl(productSetupInfo.getBasePath());
+				searchConfig.setApiKey(productSetupInfo.getApiKey());
+				GSearxngSearchApiCredentials outcome = api.fastInsertSearxngSearchApiCredentials(searchConfig);
+				LOGGER.info("Inserted searxng search api account config:" + outcome.getCode());
+			}
+				break;
+			case SERPAPI_SEARCH: {
+				SerpapiSearchConfigurationControllerApi api = new SerpapiSearchConfigurationControllerApi(geboClient);
+				SerpapiSearchConfig searchConfig = new SerpapiSearchConfig();
+				searchConfig.setEnabled(true);
+				searchConfig.setApiKey(productSetupInfo.getApiKey());
+				GSerpapiSearchApiCredentials outcome = api.fastInsertSerpapiSearchApiCredentials(searchConfig);
+				LOGGER.info("Inserted serpapi search api account config:" + outcome.getCode());
 			}
 				break;
 			case SHAREPOINT: {
@@ -400,6 +475,65 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				break;
 			}
 
+		}
+		if (!webSearchSetups.isEmpty()) {
+			assertSingleActiveWebSearchProvider(geboClient, webSearchSetups.get(0).getProduct());
+		}
+	}
+
+	/**
+	 * Deletes the stored credentials of every web-search provider, which is what
+	 * "deactivates" them: each provider's tool callback and its {@code isEnabled()}
+	 * are gated on its credentials repository being non-empty.
+	 */
+	protected void clearAllWebSearchProviders(ApiClient geboClient) {
+		GoogleSearchConfigurationControllerApi google = new GoogleSearchConfigurationControllerApi(geboClient);
+		for (GGoogleSearchApiCredentials credentials : google.getGoogleSearchApiCredentials()) {
+			google.deleteGGoogleSearchApiCredentials(credentials);
+		}
+		TavilySearchConfigurationControllerApi tavily = new TavilySearchConfigurationControllerApi(geboClient);
+		for (GTavilySearchApiCredentials credentials : tavily.getTavilySearchApiCredentials()) {
+			tavily.deleteGTavilySearchApiCredentials(credentials);
+		}
+		BraveSearchConfigurationControllerApi brave = new BraveSearchConfigurationControllerApi(geboClient);
+		for (GBraveSearchApiCredentials credentials : brave.getBraveSearchApiCredentials()) {
+			brave.deleteGBraveSearchApiCredentials(credentials);
+		}
+		SearxngSearchConfigurationControllerApi searxng = new SearxngSearchConfigurationControllerApi(geboClient);
+		for (GSearxngSearchApiCredentials credentials : searxng.getSearxngSearchApiCredentials()) {
+			searxng.deleteGSearxngSearchApiCredentials(credentials);
+		}
+		SerpapiSearchConfigurationControllerApi serpapi = new SerpapiSearchConfigurationControllerApi(geboClient);
+		for (GSerpapiSearchApiCredentials credentials : serpapi.getSerpapiSearchApiCredentials()) {
+			serpapi.deleteGSerpapiSearchApiCredentials(credentials);
+		}
+		LOGGER.info("Cleared the credentials of every web search provider");
+	}
+
+	/**
+	 * Asserts the post-condition of the single-active rule: the expected provider
+	 * reports itself set up and every other one does not.
+	 */
+	protected void assertSingleActiveWebSearchProvider(ApiClient geboClient, Product expected) {
+		GoogleSearchConfigurationControllerApi google = new GoogleSearchConfigurationControllerApi(geboClient);
+		TavilySearchConfigurationControllerApi tavily = new TavilySearchConfigurationControllerApi(geboClient);
+		BraveSearchConfigurationControllerApi brave = new BraveSearchConfigurationControllerApi(geboClient);
+		SearxngSearchConfigurationControllerApi searxng = new SearxngSearchConfigurationControllerApi(geboClient);
+		SerpapiSearchConfigurationControllerApi serpapi = new SerpapiSearchConfigurationControllerApi(geboClient);
+		assertWebSearchProviderStatus(Product.GOOGLE_SEARCH, expected, google.getGoogleSearchStatus());
+		assertWebSearchProviderStatus(Product.TAVILY_SEARCH, expected, tavily.getTavilySearchStatus());
+		assertWebSearchProviderStatus(Product.BRAVE_SEARCH, expected, brave.getBraveSearchStatus());
+		assertWebSearchProviderStatus(Product.SEARXNG_SEARCH, expected, searxng.getSearxngSearchStatus());
+		assertWebSearchProviderStatus(Product.SERPAPI_SEARCH, expected, serpapi.getSerpapiSearchStatus());
+		LOGGER.info("Active web search provider: " + expected);
+	}
+
+	private void assertWebSearchProviderStatus(Product provider, Product expected, ComponentSetupStatus status) {
+		boolean isSetup = status != null && Boolean.TRUE.equals(status.isIsSetup());
+		if (provider == expected) {
+			assertTrue(isSetup, "The web search provider " + provider + " declared by the setup secret must be active");
+		} else {
+			assertFalse(isSetup, "Only " + expected + " may be active, but " + provider + " is configured too");
 		}
 	}
 
