@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>ai.gebo.integration-tests</groupId>
-		<artifactId>gebo.integration-tests.parent</artifactId>
+		<groupId>ai.gebo.ollama-integration-tests</groupId>
+		<artifactId>gebo.ollama-integration-tests.parent</artifactId>
 		<version>1.0.2.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>ollama-integration-tests</artifactId>
@@ -30,13 +30,5 @@
 			<artifactId>gebo.monolithic.api.resttemplate.client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Source:
-		https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
-			<scope>provided</scope>
-		</dependency> -->
 	</dependencies>
 </project>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ===========================================================================
+    ollama-integration-tests - parent POM of the LOCAL-INFERENCE integration
+    test suite.
+
+    Why this tree exists separately from ../integration-tests:
+
+      * ../integration-tests holds only tests that talk to PURE CLOUD
+        providers/systems (OpenAI/Anthropic/Mistral/... plus Confluence, Jira,
+        Sharepoint, a web-search provider). Everything they need is either a
+        Testcontainer (Mongo/Neo4j/OpenSearch/Qdrant) or an API key handed over
+        by the CI secret store, so that suite is runnable unattended on Jenkins
+        or GitHub Actions.
+
+      * this tree holds the tests that need a REACHABLE OLLAMA SERVER with the
+        models already pulled (see the ai.gebo.sysinit.llms.config block in
+        ollama-integration-tests/src/test/resources/application.yml). That is a
+        machine-local, GPU-sized prerequisite no hosted CI runner provides, so
+        these tests must never be part of an automated pipeline run.
+
+    Exactly like ../integration-tests/pom.xml this pom is NOT listed in the
+    repository root <modules>, so a plain `mvn install` at the root never
+    descends into it. It is built only when the operator explicitly points
+    maven at it:
+
+        mvn -f ollama-integration-tests/pom.xml test
+
+    (run `mvn install` at the repository root first: the modules below depend
+    on ai.gebo.apps:gebo.ai.app and friends from the local repository).
+
+    Prerequisites for a run:
+      * ollama serving on OLLAMA_URL (default http://localhost:11434) with the
+        chat and embedding models of application.yml pulled;
+      * a docker daemon for the Testcontainers (Mongo/Neo4j/OpenSearch/Qdrant).
+    ===========================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- Inherits the platform (Spring Boot baseline, java 21, lombok, dependency
+	     management) from the repository parent, but is deliberately absent from
+	     that parent's <modules>: inheritance only, no reactor membership. -->
+	<parent>
+		<groupId>ai.gebo</groupId>
+		<artifactId>ai.gebo.parent</artifactId>
+		<version>1.0.2.4-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<groupId>ai.gebo.ollama-integration-tests</groupId>
+	<artifactId>gebo.ollama-integration-tests.parent</artifactId>
+
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>ollama-integration-tests</module>
+	</modules>
+</project>

@@ -249,20 +249,25 @@ ai.gebo.core.config:
 #                  apiKey: <put here your api key>
 #                  customSearchEngineId: <put here your search engine id>
 
+# Admin account the suite registers at boot and then logs in with. Overridable
+# from the environment so a run can use throwaway credentials.
 ai.gebo.sysinit.admin.config:
-       adminUsername: mymail@gmail.com
-       adminPassword: mypassword
+       adminUsername: ${GEBO_ADMIN_USERNAME:mymail@gmail.com}
+       adminPassword: ${GEBO_ADMIN_PASSWORD:mypassword}
 
+# Local inference server this suite needs. OLLAMA_URL / OLLAMA_CHAT_MODEL /
+# OLLAMA_EMBEDDING_MODEL let an operator point the run at another host or at
+# models already pulled on the machine, without editing this file.
 ai.gebo.sysinit.llms.config:
        providers:
         -
          providerId: ollama
-         url: http://localhost:11434
+         url: ${OLLAMA_URL:http://localhost:11434}
          chatModel:
-            modelCode: qwen3:14b
+            modelCode: ${OLLAMA_CHAT_MODEL:qwen3:14b}
             defaultModel: true
          embeddingModel:
-            modelCode: mxbai-embed-large:latest
+            modelCode: ${OLLAMA_EMBEDDING_MODEL:mxbai-embed-large:latest}
             defaultModel: true                       
              
                      
