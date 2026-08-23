@@ -27,3 +27,36 @@ ENV PATH=$JAVA_HOME/bin:$PATH
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
+
+# ---------------------------------------------------------------------------
+# The Gebo.ai runtime layout, created HERE so every image built on this base
+# already has it. The microservice images (Jib, gebo.microservices.apps.parent
+# `docker` profile) only SET GEBO_HOME / GEBO_WORK_DIRECTORY - Jib cannot run a
+# mkdir - so without this the work directory would not exist, and
+# GLocalPersistentFolderDiscoveryServiceImpl throws ("The configurated work
+# directory ... does not exists or is not a directory") the first time any
+# content endpoint is materialized.
+#
+#   home    GEBO_HOME            - the application's own home area
+#   work    GEBO_WORK_DIRECTORY  - DURABLE user data: chat SESSIONS_AREA,
+#                                  per-endpoint content mirrors, the document
+#                                  cache, uploads, Google Workspace OAuth
+#                                  tokens. Mongo only INDEXES it; the bytes live
+#                                  here, so losing it leaves dangling references.
+#   config  Spring's additional config location - mounted by the deployment,
+#           deliberately NOT a volume anywhere (a stale volume would mask the
+#           application.yml shipped by a newer image on upgrade).
+#   logs    security-log.jsonl, the append-only GDPR Art.32 / NIS2 Art.21 audit
+#           trail (logback's ${GEBO_LOG_BASE:-logs} under WORKDIR /opt/gebo.ai)
+#   shares  host filesystem shares exposed to the filesystem content handler
+#
+# No VOLUME is declared here on purpose: a base image should describe the layout,
+# not impose an anonymous volume on every derived image. The concrete images
+# (dockers/gebo.ai, dockers/easyinstall.gebo.ai) and the Jib `docker` profile
+# declare their own. See dockers/PERSISTENCE.md.
+# ---------------------------------------------------------------------------
+RUN mkdir -p /opt/gebo.ai/home \
+             /opt/gebo.ai/work \
+             /opt/gebo.ai/config \
+             /opt/gebo.ai/logs \
+             /opt/gebo.ai/shares

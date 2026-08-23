@@ -11,6 +11,7 @@ import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
 import org.apache.hc.client5.http.impl.nio.PoolingAsyncClientConnectionManager;
 import org.apache.hc.client5.http.impl.nio.PoolingAsyncClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder;
+import org.apache.hc.client5.http.ssl.HostnameVerificationPolicy;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.function.Factory;
@@ -62,7 +63,7 @@ public class OpenSearchInitialization {
 
         builder.setHttpClientConfigCallback(httpClientBuilder -> {
 
-            TlsStrategy tlsStrategy = ClientTlsStrategyBuilder.create()
+            ClientTlsStrategyBuilder tlsStrategyBuilder = ClientTlsStrategyBuilder.create()
                     .setSslContext(sslContext)
                     // workaround richiesto in alcuni casi con ALPN (come da esempio ufficiale)
                     .setTlsDetailsFactory(new Factory<SSLEngine, TlsDetails>() {
@@ -70,8 +71,28 @@ public class OpenSearchInitialization {
                         public TlsDetails create(SSLEngine sslEngine) {
                             return new TlsDetails(sslEngine.getSession(), sslEngine.getApplicationProtocol());
                         }
-                    })
-                    .build();
+                    });
+
+            // Skip TLS hostname (SAN) verification when configured (default true):
+            // reaching OpenSearch by a docker service name (https://opensearch:9200)
+            // whose demo cert has no matching SAN would otherwise fail the handshake
+            // with "No subject alternative DNS name matching opensearch found".
+            //
+            // httpclient5 5.4+ verifies the hostname at TWO points, and BOTH must be
+            // turned off - the NoopHostnameVerifier alone is not enough:
+            //   * BUILTIN - inside the TLS handshake, via the SSLEngine's endpoint
+            //     identification algorithm. This is the one that actually threw here.
+            //     Setting the policy to CLIENT removes it.
+            //   * CLIENT  - a post-handshake HostnameVerifier. NoopHostnameVerifier
+            //     makes that stage accept every name.
+            if (config.isNoopHostnameVerifier()) {
+                LOGGER.warn("OpenSearch: TLS hostname verification DISABLED "
+                        + "(ai.gebo.opensearch.noop-hostname-verifier=true) - set it to false in production");
+                tlsStrategyBuilder.setHostnameVerificationPolicy(HostnameVerificationPolicy.CLIENT);
+                tlsStrategyBuilder.setHostnameVerifier(NoopHostnameVerifier.INSTANCE);
+            }
+
+            TlsStrategy tlsStrategy = tlsStrategyBuilder.build();
 
             PoolingAsyncClientConnectionManager connectionManager =
                     PoolingAsyncClientConnectionManagerBuilder.create()

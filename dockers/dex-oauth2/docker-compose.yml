@@ -1,10 +1,13 @@
-version: '3.1'
-
+# A local OIDC provider for testing the SSO flows. It has NO volume on purpose:
+# dex-config.yaml sets `storage: type: memory`, so refresh tokens and auth codes
+# are deliberately transient and the static clients/users come from the config
+# file on every start. Nothing here survives a restart because nothing should.
+# Switching dex to `type: sqlite3` would need a volume for its database file.
 services:
   dex:
     image: ghcr.io/dexidp/dex:latest
     ports:
       - "5556:5556"
     volumes:
-      - ./dex-config.yaml:/etc/dex/config.yaml
+      - ./dex-config.yaml:/etc/dex/config.yaml:ro
     command: ["dex", "serve", "/etc/dex/config.yaml"]
