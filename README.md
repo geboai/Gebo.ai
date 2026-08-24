@@ -75,7 +75,7 @@ an enterprise version with more feature and support is also available.
  - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
  - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
  - Generate **images** directly in chat using configured image generation models.
- - Run a **deep search** from the chat: the platform plans several queries, searches the company knowledge bases **and the web** (through the configured web-search provider), fetches and reads the found pages/documents and streams back a referenced analysis — see [Web search, deep search & agents](#web-search-deep-search--agents).
+ - Run a **deep search** from the chat: the platform plans several queries and runs them, in parallel, over every searchable source the user is entitled to — company knowledge bases, **Confluence**, **Jira**, **SharePoint/OneDrive**, **Google Drive** and **the web** through the configured web-search provider — then reads the retrieved pages/issues/documents and streams back a referenced analysis. Sources are selectable per question — see [Deep search](#deep-search-every-searchable-integration-at-once).
  - Voice interface (speech to text & text to speech) working with OpenAI provider.   
 
 ## How to install Gebo.ai 
@@ -143,7 +143,9 @@ Every service (the monolith and each microservice) ships with **Micrometer** + *
 
 ### Web search, deep search & agents
 
-Web search is a first-class connector family, not a hardcoded call to one engine. Every provider is a module under `gebo.systems.parent` extending the same base, `AbstractWebSearchServiceImpl<N extends INativeQueryObject>` (`gebo.architecture.parent/gebo.architecture.search.abstraction.layer`), so all of them return the same `SearchResult`/`SearchResultReference` model, share result aggregation and share the page download & content-type guessing used to actually read what was found.
+Searching is one abstraction in Gebo.ai: web engines and enterprise systems (Confluence, Jira, SharePoint, Google Drive) are all `ISearchService` implementations, and whatever implements it is automatically available to deep search, to the agents network and — where it publishes a tool callback — to plain function calling.
+
+Web search in particular is a first-class connector family, not a hardcoded call to one engine. Every provider is a module under `gebo.systems.parent` extending the same base, `AbstractWebSearchServiceImpl<N extends INativeQueryObject>` (`gebo.architecture.parent/gebo.architecture.search.abstraction.layer`), so all of them return the same `SearchResult`/`SearchResultReference` model, share result aggregation and share the page download & content-type guessing used to actually read what was found.
 
 | Provider | Module | Endpoint called | Options the LLM can steer | Credentials |
 |---|---|---|---|---|
@@ -160,12 +162,29 @@ Providers that expose engine-specific options declare their own **native query t
 The configured provider is then used in **three** distinct ways:
 
 - **As an LLM tool (function calling)** — each handler publishes a `ToolCallback` in the `INTERNET_BROWSING` tools category (`*FunctionCallbackWrapperSourceImpl`), exposed to the models as `searchWebWithGoogle` / `searchWebWithTavily` / `searchWebWithBrave` / `searchWebWithSearxng` / `searchWebWithSerpapi`, and enabled per chat-model configuration like any other tool.
-- **As a deep-search data source** — `ReactiveDeepSearchDataSourceServiceWrapper` turns any enabled search service into a deep-search source, so the reactive worker (`FullReactiveDeepsearchWorker`, `gebo.architecture.chat.abstraction.layer/.../llms/deepsearch`) plans the queries, runs the web searches side by side with the internal knowledge bases, downloads and chunks the retrieved pages, and streams the consolidated analysis with its document references back into the chat. Who may use which external source is decided by `GExternalSearchSecurityServiceImpl` against the admin `DeepSearchConfig` — per data source, per user/group.
-- **As a searching agent** — with the standard agents network enabled (`ai.gebo.agents.standard.enabled`, on by default in the monolith), every enabled search service is registered automatically as an `EVIDENCES_SEARCHER_AGENT`: providers with a native query become a `<product>NativeSearcherAgent` (`NativeDocumentsSearchNetworkAgentService`) driven by the provider's own native prompt template, and `NativeSearchServiceWrapperTool` exposes their `<product>NativeSearch` function to the agents network. The same registration path serves the enterprise-systems searchers (Confluence, Jira, SharePoint, Google Drive), so a web-search provider behaves exactly like an internal source inside the network.
+- **As one deep-search data source among all the others** — see [Deep search](#deep-search-every-searchable-integration-at-once) below.
+- **As a searching agent** — with the standard agents network enabled (`ai.gebo.agents.standard.enabled`, on by default in the monolith), every enabled search service is registered automatically as an `EVIDENCES_SEARCHER_AGENT`: services with a native query type become a `<product>NativeSearcherAgent` (`NativeDocumentsSearchNetworkAgentService`) driven by the service's own native prompt template, and `NativeSearchServiceWrapperTool` exposes their `<product>NativeSearch` function to the agents network; the others become a `<product>SearchAgent` driven by their query-generation prompt. The same registration path serves the enterprise-systems searchers, so a web-search provider behaves exactly like Confluence or SharePoint inside the network.
 
 **Compliance note** — because these queries leave the installation, every enabled web-search provider is published in the data-flow register as a `WEB_SEARCH` endpoint with locality `EXTERNAL_PROVIDER` (`GStandardChatPipelineDataFlowComponent`), linked to the deep-search query endpoint, so the GDPR Art. 30 record shows the transfer. A self-hosted SearXNG is the local-deployment exception and is deliberately reported the same way, erring towards flagging the transfer.
 
 **Testing** — the full-setup integration harness configures the active provider through the admin API (`GOOGLE_SEARCH`, `TAVILY_SEARCH`, `BRAVE_SEARCH`, `SEARXNG_SEARCH`, `SERPAPI_SEARCH` entries in the `FullSetupSecret` subsystems array); declaring more than one fails the run on purpose. See [integration-tests/README.md](./integration-tests/README.md).
+
+#### Deep search: every searchable integration at once
+
+Deep search is **not** web-only. `DynamicReactiveDataSourceServicesProviderImpl` asks the search-services registry for *every* implementation that reports `isEnabled()` and wraps each one in a `ReactiveDeepSearchDataSourceServiceWrapper`, so a single deep search fans out over the configured web-search provider **and** every configured enterprise system, next to the company knowledge bases:
+
+| Deep-search source | Search service | Native query the LLM fills |
+|---|---|---|
+| Company knowledge bases (RAG) | `InternalKnowledgeBaseRagDeepSearchService` | embedding/rank based retrieval, driven by the deep-search prompts |
+| **Atlassian Confluence** | `ConfluenceSearchService` | `ConfluenceContentSearchFilter` — space keys, content types, title/text terms with match modes, labels, ancestor ids, people |
+| **Atlassian Jira** | `JiraSearchService` | `JiraIssuesSearchFilter` — projects, issue types, issue keys, summary/description terms, labels, priorities, statuses, affected/fix versions, people |
+| **Microsoft SharePoint / OneDrive** | `GMicrosoftGraphSearchService` | `SharePointSearchFilter` — content kinds, title/text terms, site urls, path prefixes, managed-property equals/contains, people |
+| **Google Drive / Workspace** | `GoogleDriveSearchService` | plain query generation (no native filter type) |
+| **Web** (Google / Tavily / Brave / SearXNG / SerpApi) | the modules in the table above | the provider's own native query type |
+
+The reactive worker (`FullReactiveDeepsearchWorker`, `gebo.architecture.chat.abstraction.layer/.../llms/deepsearch`) plans the queries per data source, runs them in parallel, downloads and chunks whatever each source returned — Confluence pages, Jira issues, SharePoint/Drive documents, web pages — filters out the irrelevant fragments against a token budget, and streams the consolidated analysis with its document references back into the chat. The user picks which sources to use for a given question from the chat; who *may* use each one is decided by `GExternalSearchSecurityServiceImpl` against the admin `DeepSearchConfig`, per data source and per user/group. In the microservices deployment the Confluence, Jira and SharePoint searchers are reached through their REST clients (`gebo.microservices.architecture.parent/gebo.microservices.searchservices.clients`), so the same fan-out works across the distributed topology.
+
+The consequence of the shared registry is that this list is not hardcoded anywhere: a new connector that implements `ISearchService` becomes, at once, a deep-search data source, an evidences-searcher agent and — when it also publishes a tool callback — an LLM tool.
 
 ### Security & compliance
 
