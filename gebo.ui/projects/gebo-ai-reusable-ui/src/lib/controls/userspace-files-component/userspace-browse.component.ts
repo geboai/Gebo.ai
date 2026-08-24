@@ -28,6 +28,7 @@ import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-ro
 import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { sliceWizard } from "../base-entity-editing-component/entities-modification-wizard";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { refreshTreeBranch, treeNodeTrackBy } from "../../services/primeng-tree-refresh";
 
 /**
  * Interface representing an item in the userspace tree structure.
@@ -78,6 +79,26 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
     loading: boolean = false;
     /** Root nodes of the tree structure */
     root: TreeNode<UserspaceTreeItem>[] = [];
+
+    /**
+     * Node tracking of the tree. The branch of a node is rebuilt out of new node
+     * objects every time its contents change, which is what PrimeNG repaints on;
+     * tracking the nodes by key keeps the views of the untouched ones in place.
+     */
+    public trackBy = treeNodeTrackBy;
+
+    /**
+     * Hands the tree the branch of a node whose contents have just changed.
+     *
+     * `Tree` and its nodes run OnPush and a node is repainted only when its object
+     * changes identity: filling `children` from the listing callback was invisible
+     * to the tree, so the first click on a folder flipped its toggler without ever
+     * showing what is inside it.
+     * @param node The node that changed
+     */
+    private refreshBranch(node: TreeNode<UserspaceTreeItem>): void {
+        this.root = refreshTreeBranch(this.root, node);
+    }
     /** Form group for handling the selection */
     formGroup: FormGroup = new FormGroup({
         choosed: new FormControl()
@@ -107,8 +128,12 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
         }
         const item: TreeNode<UserspaceTreeItem> = {
             data: node,
-            icon: "pi pi-folder",
-            expandedIcon: "pi pi-opened-folder",
+            // No `icon`: PrimeNG only falls back on the expanded/collapsed pair when
+            // `icon` is not set, so filling it kept the closed folder icon on an
+            // open folder. `pi-opened-folder` did not exist either.
+            collapsedIcon: "pi pi-folder",
+            expandedIcon: "pi pi-folder-open",
+            key: this.nodeKey(parent, node),
             label: label,
             leaf: false,
             parent: parent,
@@ -397,7 +422,9 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
     nodeExpand(item: TreeNodeExpandEvent) {
         const node: TreeNode<UserspaceTreeItem> = item.node;
         if (node.data?.isUserKnowledgeBase === true && node.data.data.code) {
-            this.loading = true;
+            // Per node spinner: locking the whole panel on every expansion made the
+            // tree swallow the clicks that came next.
+            node.loading = true;
             this.userspaceControllerService.listUserspaceFolders(node.data.data.code).subscribe({
                 next: (value) => {
                     if (value) {
@@ -411,8 +438,11 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
                         node.children = childs;
                     }
                 },
+                error: () => {
+                    this.endLoading(node);
+                },
                 complete: () => {
-                    this.loading = false;
+                    this.endLoading(node);
                 }
 
             });
@@ -420,7 +450,7 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
 
             const folder: UserspaceFolderDto = node.data.data as UserspaceFolderDto;
             if (folder.uploadCode) {
-                this.loading = true;
+                node.loading = true;
                 this.userspaceControllerService.listUserspaceFiles(folder.uploadCode).subscribe({
                     next: (value) => {
                         if (value) {
@@ -431,12 +461,37 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
                             node.children = childs;
                         }
                     },
+                    error: () => {
+                        this.endLoading(node);
+                    },
                     complete: () => {
-                        this.loading = false;
+                        this.endLoading(node);
                     }
                 });
             }
         }
+    }
+
+    /**
+     * Ends the wait of a node and hands its branch, children included, back to the
+     * tree so that it gets painted.
+     * @param node The node whose children have been listed
+     */
+    private endLoading(node: TreeNode<UserspaceTreeItem>): void {
+        node.loading = false;
+        this.refreshBranch(node);
+    }
+
+    /**
+     * Builds the key of a node, unique among the whole tree, out of the key of its
+     * parent and of the code of the entry it shows.
+     * @param parent The parent node, undefined for a root
+     * @param item The entry shown by the node
+     * @returns The key of the node
+     */
+    private nodeKey(parent: TreeNode<UserspaceTreeItem> | undefined, item: UserspaceTreeItem): string {
+        const code: string | undefined = (item.data as any)?.code;
+        return (parent && parent.key ? parent.key : "") + "/" + (code ? code : (item as any).data?.name);
     }
 
     /**
@@ -452,6 +507,7 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
         };
         const node: TreeNode<UserspaceTreeItem> = {
             data: childnode,
+            key: this.nodeKey(parent, childnode),
             leaf: true,
             label: x.name,
             parent: parent,

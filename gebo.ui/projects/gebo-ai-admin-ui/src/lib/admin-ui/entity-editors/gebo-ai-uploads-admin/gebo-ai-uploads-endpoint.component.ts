@@ -21,11 +21,19 @@
 import { Component, forwardRef, Inject, Injector, Input, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, BrowseParam, FileUploadControllerService, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService, UploadedFileInfo, UploadsBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, VFilesystemDeletableReference, VFilesystemReference, VFilesystemSelectorComponent } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, ServedFileReference, VFilesystemDeletableReference, VFilesystemReference, VFilesystemSelectorComponent } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { FileBeforeUploadEvent, FileProgressEvent, UploadEvent } from "primeng/fileupload";
 import { map, Observable, of, switchMap } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
+
+/**
+ * Endpoint serving a file physically present in the folder of an uploads data
+ * source. It is addressed by url and not through a generated client because the
+ * viewer consumes it as a url, the same way the knowledge base contents are
+ * served.
+ */
+const serveContentsUrl: string = "/api/admin/UploadsBrowsingController/serveUploadsEndpointFile";
 
 /**
  * Component for managing uploads endpoints in Gebo.ai
@@ -105,6 +113,16 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
 
     /** Files currently held by the data source, used for the contents summary */
     public uploadedFiles: UploadedFileInfo[] = [];
+
+    /**
+     * The file the admin asked to open, undefined when the viewer is closed.
+     *
+     * What is managed here is what the data source physically holds, ingested or
+     * not, so the file is served straight out of the folder of the data source
+     * instead of through the knowledge base contents controller, which only knows
+     * the documents that have already been published.
+     */
+    public viewedFile?: ServedFileReference;
 
     /** Loads the only browsing root of this data source: its contents folder */
     public loadRootsObservable: loadRootsObservableCallback = () => {
@@ -222,6 +240,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         this.contentsEndpointCode = undefined;
         this.pendingDeletions = [];
         this.uploadedFiles = [];
+        this.viewedFile = undefined;
     }
 
     /**
@@ -232,6 +251,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
     protected override onLoadedPersistentData(actualValue: GUploadsProjectEndpoint): void {
         this.contentsEndpointCode = actualValue?.code;
         this.pendingDeletions = [];
+        this.viewedFile = undefined;
         this.refreshUploadedFiles();
     }
 
@@ -258,11 +278,6 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         return this.uploadedFiles.length;
     }
 
-    /** Number of files already ingested in the knowledge base */
-    get ingestedFilesCount(): number {
-        return this.uploadedFiles.filter(x => x.ingested === true).length;
-    }
-
     /**
      * Endpoint the file uploader posts to.
      *
@@ -284,6 +299,30 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
     /** True when the data source already owns a browsable contents folder */
     get hasContentsFolder(): boolean {
         return this.contentsEndpointCode ? true : false;
+    }
+
+    /**
+     * Opens a file of the data source in the contents viewer.
+     *
+     * @param reference The entry the contents browser asked to open
+     */
+    onViewFile(reference: VFilesystemReference): void {
+        const path: string | undefined = reference?.path?.absolutePath;
+        const name: string | undefined = reference?.path?.name;
+        if (!this.contentsEndpointCode || !path || !name) return;
+        this.viewedFile = {
+            url: this.baseUrl + serveContentsUrl
+                + "?endpointCode=" + encodeURIComponent(this.contentsEndpointCode)
+                + "&path=" + encodeURIComponent(path),
+            fileName: name
+        };
+    }
+
+    /**
+     * Closes the contents viewer.
+     */
+    closeViewedFile(): void {
+        this.viewedFile = undefined;
     }
 
     /**

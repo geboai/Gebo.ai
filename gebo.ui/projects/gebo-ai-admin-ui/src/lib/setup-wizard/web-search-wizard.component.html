@@ -4,25 +4,10 @@
 <p-panel id="MainPanel" gebo-ai-label #webSearchSetupUI header="Web search provider">
 
     <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-
-    <div class="grid">
-        <div class="col-12">
-            <p gebo-ai-text>
-                Choose ONE web search provider for the AI to use. Activating a provider stores its key and
-                disables any other one, so exactly one web-search tool is exposed to the models.
-            </p>
-        </div>
-        <div class="col-12">
-            <p gebo-ai-text>
-                Currently active: <b>{{ providerLabel(activeProvider) }}</b>
-            </p>
-        </div>
-    </div>
-
-    <div class="grid geboLargeButtonsBar" *ngIf="!editing">
+<div class="grid geboLargeButtonsBar" *ngIf="!editing">
         <div class="col-6">
-            <p-button id="ConfigureWebSearchBtn" gebo-ai-label icon="pi pi-pencil"
-                label="Choose / change web search provider" styleClass="w-full" [outlined]="true"
+            <p-button id="ConfigureWebSearchBtn" gebo-ai-label icon="pi pi-pencil" title="Search web search provider"
+                label="Set provider" styleClass="w-full" [outlined]="true"
                 (onClick)="startEditing()"></p-button>
         </div>
         <div class="col-6">
@@ -31,16 +16,40 @@
                 (onClick)="clearAll()"></p-button>
         </div>
     </div>
+    <div class="grid" *ngIf="!editing">
+        
+        <div class="col-12">
+            <p >
+                <span id="CURRENTLY_ACTIVE" gebo-ai-text>Currently active:</span> <b>{{ providerLabel(activeProvider) }}</b>
+            </p>
+        </div>
+    </div>
+
+    
 
     <div class="grid" *ngIf="editing" [formGroup]="formGroup">
         <div class="col-12">
-            <div class="grid">
-                <div class="col-12 md:col-3" *ngFor="let p of providers">
-                    <p-radioButton [inputId]="p.id" name="provider" [value]="p.id" [(ngModel)]="selectedProvider"
-                        [ngModelOptions]="{ standalone: true }" (onClick)="onProviderChange()"></p-radioButton>
-                    <label [for]="p.id" gebo-ai-text style="margin-left: 0.5rem">{{ p.label }}</label>
+            <div class="grid  geboLargeButtonsBar">
+                <div class="col-6">
+                    <p-button id="ActivateBtn" gebo-ai-label [outlined]="true" label="Activate this provider"
+                        icon="pi pi-save" severity="success" styleClass="w-full" [disabled]="formGroup.invalid"
+                        (onClick)="save()"></p-button>
+                </div>
+                <div class="col-6">
+                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                        styleClass="w-full" (onClick)="cancel()"></p-button>
                 </div>
             </div>
+        </div>
+        <div class="col-12">
+            <b id="PROVIDER_TEXT" gebo-ai-text>Choose provider:</b>
+            <ul style="list-style: none;">
+                
+                <li *ngFor="let p of providers"><p-radioButton [inputId]="p.id" name="provider" [value]="p.id" [(ngModel)]="selectedProvider"
+                        [ngModelOptions]="{ standalone: true }" (onClick)="onProviderChange()"></p-radioButton>
+                    <label [for]="p.id" gebo-ai-text style="margin-left: 0.5rem">{{ p.label }}</label></li>
+            </ul>
+            
         </div>
 
         <div class="col-12">
@@ -70,19 +79,7 @@
             </gebo-ai-field>
         </div>
 
-        <div class="col-12">
-            <div class="grid">
-                <div class="col-6">
-                    <p-button id="ActivateBtn" gebo-ai-label [outlined]="true" label="Activate this provider"
-                        icon="pi pi-save" severity="success" styleClass="w-full" [disabled]="formGroup.invalid"
-                        (onClick)="save()"></p-button>
-                </div>
-                <div class="col-6">
-                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
-                        styleClass="w-full" (onClick)="cancel()"></p-button>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
 </p-panel>

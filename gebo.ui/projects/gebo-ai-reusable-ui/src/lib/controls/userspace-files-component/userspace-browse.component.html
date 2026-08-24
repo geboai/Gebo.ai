@@ -34,7 +34,7 @@
     </div>
   </p-fieldset>
   <p-fieldset id="chooseUserUploadedContent" gebo-ai-label legend="Choose user uploaded content">
-    <p-tree [value]="root" (onNodeExpand)="nodeExpand($event)">
+    <p-tree [value]="root" (onNodeExpand)="nodeExpand($event)" [trackBy]="trackBy" loadingMode="icon">
       <ng-template let-node pTemplate="default">
         <span [formGroup]="formGroup">
           @if (node.data?.isFile===true && node.data?.data?.code) {

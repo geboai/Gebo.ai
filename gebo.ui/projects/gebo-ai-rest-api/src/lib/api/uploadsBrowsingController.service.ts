@@ -30,7 +30,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class UploadsBrowsingControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13000';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -214,6 +214,62 @@ export class UploadsBrowsingControllerService {
         return this.httpClient.request<OperationStatusListGVirtualFilesystemRoot>('get',`${this.basePath}/api/admin/UploadsBrowsingController/getUploadsEndpointRoots`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param endpointCode 
+     * @param path 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (endpointCode === null || endpointCode === undefined) {
+            throw new Error('Required parameter endpointCode was null or undefined when calling serveUploadsEndpointFile.');
+        }
+
+        if (path === null || path === undefined) {
+            throw new Error('Required parameter path was null or undefined when calling serveUploadsEndpointFile.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (endpointCode !== undefined && endpointCode !== null) {
+            queryParameters = queryParameters.set('endpointCode', <any>endpointCode);
+        }
+        if (path !== undefined && path !== null) {
+            queryParameters = queryParameters.set('path', <any>path);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request('get',`${this.basePath}/api/admin/UploadsBrowsingController/serveUploadsEndpointFile`,
+            {
+                params: queryParameters,
+                responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

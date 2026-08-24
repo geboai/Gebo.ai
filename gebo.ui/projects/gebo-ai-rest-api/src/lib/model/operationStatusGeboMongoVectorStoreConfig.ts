@@ -15,6 +15,6 @@ import { GeboMongoVectorStoreConfig } from './geboMongoVectorStoreConfig';
 export interface OperationStatusGeboMongoVectorStoreConfig { 
     result?: GeboMongoVectorStoreConfig;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }
