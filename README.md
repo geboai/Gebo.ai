@@ -29,7 +29,7 @@ an enterprise version with more feature and support is also available.
       - **OpenRouter.ai** (multi-model router)
       - Almost every local large language model using **Ollama** or **vLLM**       
       - Every provider/local server compatible with **OpenAi API**
- - Configure tools & functions that each llm configuration can use, including **web search** (Google or Bing)      
+ - Configure tools & functions that each llm configuration can use, including **web search** (**Google Programmable Search**, **Tavily**, **Brave Search**, **SerpApi** or a self-hosted **SearXNG**) — see [Web search & deep search](#web-search--deep-search) below
  - Configure additional AI model types besides chat & embedding models:
     - **Image generation** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai & OpenAI-compatible providers)
     - **Text to speech** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai)
@@ -75,7 +75,31 @@ an enterprise version with more feature and support is also available.
  - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
  - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
  - Generate **images** directly in chat using configured image generation models.
+ - Run a **deep search** from the chat, choosing which sources to work on — company knowledge bases, Confluence, Jira, SharePoint/OneDrive, Google Drive and the web — see [Web search & deep search](#web-search--deep-search) below.
  - Voice interface (speech to text & text to speech) working with OpenAI provider.   
+
+### Web search & deep search
+ - Choose the **web search provider** the chatbots will use, from a guided wizard:
+    - **Google Programmable Search**
+    - **Tavily**
+    - **Brave Search**
+    - **SerpApi** (real Google/Bing/DuckDuckGo results pages)
+    - **SearXNG**, self-hosted, for companies that do not want their queries handled by a search vendor
+ - Only one provider is active at a time: switching provider is just entering the new key, nothing else to reconfigure. Keys are stored as protected secrets and every change to them is traced in the security audit log.
+ - The AI does not just send keywords: depending on the chosen provider it also decides **how** to search — how recent the results must be (last day/week/month/year), whether to look at news or general content, which country or language to favour, the safe-search level, or which underlying search engine to use.
+ - The configured provider is available in three different ways:
+    - as a **tool the chatbot can call** during a normal conversation, to check something on the internet;
+    - as one of the **deep search** sources;
+    - as a dedicated **searching agent** gathering evidences when the chatbot works as a network of agents.
+ - **Deep search** answers a question by working on it instead of replying in one shot: it breaks the question into several searches, runs them **in parallel on all the sources the user is entitled to**, opens and reads what it found, drops what is irrelevant and writes a final analysis with the references it used. Sources are:
+    - the company **knowledge bases**
+    - **Atlassian Confluence** — searched by space, labels, page title & text, authors
+    - **Atlassian Jira** — searched by project, issue type, status, priority, affected/fix versions, labels, people
+    - **Microsoft SharePoint/OneDrive** — searched by site, folder path, document type, title & text, people
+    - **Google Workspaces/Drives**
+    - the **web**, through the configured provider
+ - The user picks which sources to use for each question, and the administrator decides, per data source and per user/group, who is allowed to use them at all.
+ - Web searches leave the company installation, so each active provider is listed among the external providers of the compliance data-flow register — see [Security & compliance](#security--compliance).
 
 ## How to install Gebo.ai 
 
