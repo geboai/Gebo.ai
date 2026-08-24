@@ -350,6 +350,41 @@ public class UploadsSystemsManagementServiceImpl {
 	}
 
 	/**
+	 * Resolves a single file physically present in the contents folder of an
+	 * uploads data source, so it can be streamed to the editor.
+	 *
+	 * <p>
+	 * The path comes from the contents browser of the editor, hence from outside:
+	 * it is accepted only when it resolves inside the folder owned by the data
+	 * source, which is the boundary of what this data source may expose. Folders
+	 * and entries that are not readable regular files are refused as well, a
+	 * directory having nothing to serve.
+	 * </p>
+	 *
+	 * @param endpointCode code of the uploads data source.
+	 * @param path         absolute path, or simple name, of the file to serve.
+	 * @return the file to serve, or {@code null} when it is not a readable file of
+	 *         this data source.
+	 * @throws GeboContentHandlerSystemException if the data source or its folder
+	 *                                           cannot be resolved.
+	 */
+	public Path resolveServableFile(String endpointCode, String path) throws GeboContentHandlerSystemException {
+		GUploadsProjectEndpoint endpoint = findEndpoint(endpointCode);
+		Path folder = resolveContentsFolder(endpoint, false);
+		if (folder == null)
+			return null;
+		Path target = resolveContainedEntry(folder, path);
+		if (target == null)
+			return null;
+		if (!Files.exists(target) || Files.isDirectory(target) || !Files.isReadable(target))
+			return null;
+		logContentEvent(securityAuditLoggerService.newSecurityEvent(),
+				SecurityAuditTaxonomy.Action.INTEGRATION_DATA_READ, endpoint,
+				List.of(target.getFileName().toString()), SecurityAuditTaxonomy.Outcome.SUCCESS);
+		return target;
+	}
+
+	/**
 	 * Returns a human readable name for an uploads endpoint, falling back to the
 	 * given default when the endpoint carries no description.
 	 *
@@ -430,6 +465,26 @@ public class UploadsSystemsManagementServiceImpl {
 	 *         data source.
 	 */
 	private Path resolveDeletionTarget(Path folder, String name) {
+		return resolveContainedEntry(folder, name);
+	}
+
+	/**
+	 * Resolves an entry addressed by the editor against the contents folder of a
+	 * data source, refusing anything that does not live inside it.
+	 *
+	 * <p>
+	 * The containment check is the security boundary of every operation addressing
+	 * a single entry: the caller hands over a path coming from the browser, so a
+	 * path walking out of the folder - or the folder itself - has to be rejected
+	 * before the entry is read or removed.
+	 * </p>
+	 *
+	 * @param folder the contents folder of the data source.
+	 * @param name   the absolute path or the simple file name of the entry.
+	 * @return the entry, or {@code null} when it does not belong to this data
+	 *         source.
+	 */
+	private Path resolveContainedEntry(Path folder, String name) {
 		if (name == null)
 			return null;
 		String trimmed = name.trim();

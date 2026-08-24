@@ -53,10 +53,6 @@
               <div class="grid">
 
                 <div class="col-6">
-                  <gebo-ai-field id="personalData" label="Contains personal data"
-                    help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
-                    <p-checkbox formControlName="personalData" id="personalData" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
-                  </gebo-ai-field>
                   <gebo-ai-field id="description" label="Description" help="Enter the description of the uploaded content of jira entries." [required]="true">
                     <input pInputText id="description" formControlName="description" [required]="true" maxlength="120" gebo-ai-field-element />
                   </gebo-ai-field>
@@ -94,6 +90,12 @@
                 <div class="col-12">
                   <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated">
                     <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables" gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
+                  </gebo-ai-field>
+                </div>
+                <div class="col-12">
+                  <gebo-ai-field id="personalData" label="Contains personal data"
+                    help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
+                    <p-checkbox formControlName="personalData" id="personalData" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
                   </gebo-ai-field>
                 </div>
               </div>

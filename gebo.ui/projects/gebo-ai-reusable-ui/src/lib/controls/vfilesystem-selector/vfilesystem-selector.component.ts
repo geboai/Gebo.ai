@@ -386,6 +386,20 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
     @Output() deletionsChange: EventEmitter<VFilesystemReference[]> = new EventEmitter<VFilesystemReference[]>();
 
     /**
+     * Enables opening the browsed entries.
+     *
+     * An eye button appears on every entry that is not a folder, and clicking it
+     * emits {@link viewRequested}. The control does not know how to show the
+     * contents of the system it is browsing, so it only reports the request.
+     */
+    @Input() enableView: boolean = false;
+
+    /**
+     * Emits the entry the user asked to open when {@link enableView} is active.
+     */
+    @Output() viewRequested: EventEmitter<VFilesystemReference> = new EventEmitter<VFilesystemReference>();
+
+    /**
      * The root nodes of the filesystem tree
      */
     public roots: TreeNode<EnrichedFilesystemReference>[] = [];
@@ -547,6 +561,31 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
         if (this.enableDeletion !== true || this.readonly === true) return false;
         if (!item.data?.path) return false;
         return item.data.path.folder === true ? this.canDeleteFolders === true : true;
+    }
+
+    /**
+     * Tells whether the entries of the tree can be opened by the host.
+     *
+     * Only the entries themselves are openable: a root stands for the system being
+     * browsed, and a folder holds nothing to show.
+     * @param item - The tree node to check
+     * @returns true when the node offers the open action
+     */
+    showViewAction(item: TreeNode<EnrichedFilesystemReference>): boolean {
+        if (this.enableView !== true) return false;
+        if (!item.data?.path) return false;
+        return item.data.path.folder !== true;
+    }
+
+    /**
+     * Asks the host to open an entry. Nothing is done here: what opening means -
+     * a preview, a download, an editor - depends on the system being browsed, so
+     * it is the host that decides.
+     * @param item - The tree node to open
+     */
+    requestView(item: TreeNode<EnrichedFilesystemReference>): void {
+        if (!this.showViewAction(item) || !item.data) return;
+        this.viewRequested.emit(toBackendData(item.data));
     }
 
     /**

@@ -75,6 +75,12 @@
               <p-radioButton name="choosed" [id]="'choosed_' + node.data.uniqueCode" [value]="node.data.uniqueCode" [ngModel]="formGroup.controls['choosed'].value" [ngModelOptions]="{standalone: true}" [ariaLabel]="node.label" (ngModelChange)="toggleNodeSelection(node)" (click)="$event.stopPropagation()"></p-radioButton>
             }
             <span class="vfs-selector-node-label" [pTooltip]="node.data.path?.absolutePath || node.data.root?.absolutePath">{{node.label}}</span>
+            @if (showViewAction(node)) {
+              <p-button [id]="'view_' + node.data.uniqueCode" [text]="true" [rounded]="true"
+                icon="pi pi-eye" severity="secondary" title="Open this element"
+                styleClass="vfs-selector-node-action"
+                (onClick)="$event.stopPropagation(); requestView(node)"></p-button>
+            }
             @if (showDeleteToggle(node)) {
               <p-button [id]="'delete_' + node.data.uniqueCode" [text]="true" [rounded]="true"
                 [icon]="isMarkedForDeletion(node)?'pi pi-undo':'pi pi-trash'"

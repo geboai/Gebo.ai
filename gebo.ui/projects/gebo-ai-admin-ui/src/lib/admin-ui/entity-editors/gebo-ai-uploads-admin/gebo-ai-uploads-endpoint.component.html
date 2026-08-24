@@ -52,10 +52,6 @@
             <p-tabpanel [value]="0">
               <div class="grid">
                 <div class="col-6">
-                  <gebo-ai-field id="personalData" label="Contains personal data"
-                    help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
-                    <p-checkbox formControlName="personalData" id="personalData" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
-                  </gebo-ai-field>
                   <gebo-ai-field id="description" label="Description" help="Enter the description of the uploaded content of filesystem entry." [required]="true">
                     <input
                       pInputText
@@ -105,42 +101,35 @@
                     </div>
 
                     <div class="col-12">
-                      <gebo-ai-field id="upload" label="Upload contents" help="Click the browse button and select zip files or other files. Files can be added at any time, also to a data source that is already published.">
-                        <p-fileUpload
-                          mode="basic"
-                          name="files[]"
-                          chooseIcon="pi pi-upload"
-                          [disabled]="formGroup.invalid || !canUploadContents || relatedBackendProcessingRunning===true"
-                          [url]="uploadUrl"
-                          [accept]="filesExtensionsFlatList"
-                          maxFileSize="100000000"
-                          [multiple]="true"
-                          method="post"
-                          (onBeforeUpload)="onBeforeUpload($event)"
-                          (onProgress)="onProgress($event)"
-                          (onUpload)="onBasicUploadAuto($event)"
-                          [auto]="true"
-                          chooseLabel="Browse"
-                          id="upload"
-                          gebo-ai-field-element
-                        ></p-fileUpload>
-                      </gebo-ai-field>
-                    </div>
-
-                    <div class="col-12">
-                      <gebo-ai-field id="contents" label="Files of this data source" help="Browse the files this data source holds and sign the ones to remove. Removals are applied when you save; the corresponding contents leave the knowledge base at the next publish.">
+                      <gebo-ai-field id="contents" label="Files of this data source" help="The files this data source physically holds: open one to see it, add new ones at any time, sign the ones to remove. Removals are applied when you save; the corresponding contents leave the knowledge base at the next publish.">
                         <div id="contents" gebo-ai-field-element>
+                          <div class="uploads-contents-summary">
+                            <span gebo-ai-text>Files:</span>&nbsp;<span>{{uploadedFilesCount}}</span>
+                            <p-fileUpload
+                              mode="basic"
+                              name="files[]"
+                              chooseIcon="pi pi-upload"
+                              [disabled]="formGroup.invalid || !canUploadContents || relatedBackendProcessingRunning===true"
+                              [url]="uploadUrl"
+                              [accept]="filesExtensionsFlatList"
+                              maxFileSize="100000000"
+                              [multiple]="true"
+                              method="post"
+                              (onBeforeUpload)="onBeforeUpload($event)"
+                              (onProgress)="onProgress($event)"
+                              (onUpload)="onBasicUploadAuto($event)"
+                              [auto]="true"
+                              chooseLabel="Add files"
+                              id="upload"
+                            ></p-fileUpload>
+                            <p-button id="RefreshContentsBtn" gebo-ai-label label="Refresh" [text]="true"
+                              icon="pi pi-refresh" severity="secondary"
+                              (onClick)="refreshUploadedFiles(); contentsSelector?.reload()"></p-button>
+                          </div>
                           @if (hasContentsFolder) {
-                            <div class="uploads-contents-summary">
-                              <span gebo-ai-text>Files:</span>&nbsp;<span>{{uploadedFilesCount}}</span>
-                              <span>&nbsp;&middot;&nbsp;</span>
-                              <span gebo-ai-text>already in the knowledge base:</span>&nbsp;<span>{{ingestedFilesCount}}</span>
-                              <p-button id="RefreshContentsBtn" gebo-ai-label label="Refresh" [text]="true"
-                                icon="pi pi-refresh" severity="secondary"
-                                (onClick)="refreshUploadedFiles(); contentsSelector?.reload()"></p-button>
-                            </div>
                             <gebo-ai-vfilesystem-selector-component #contentsSelector
                               [enableDeletion]="true"
+                              [enableView]="true"
                               [canChooseFiles]="false"
                               [canChooseFolders]="false"
                               [readonly]="relatedBackendProcessingRunning===true"
@@ -148,6 +137,7 @@
                               [browsePathObservable]="browsePathObservable"
                               [reconstructNavigationCallback]="reconstructNavigationObservableCallback"
                               (deletionsChange)="onContentsDeletionsChange($event)"
+                              (viewRequested)="onViewFile($event)"
                             ></gebo-ai-vfilesystem-selector-component>
                             @if (pendingDeletionNames.length) {
                               <p-message id="PendingDeletionsMessage" severity="warn" styleClass="w-full mt-2">
@@ -173,6 +163,12 @@
                         </gebo-ai-field>
                       </div>
 
+                <div class="col-12">
+                  <gebo-ai-field id="personalData" label="Contains personal data"
+                    help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
+                    <p-checkbox formControlName="personalData" id="personalData" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+                  </gebo-ai-field>
+                </div>
                     </div>
                   </p-tabpanel><p-tabpanel [value]="1">
                   <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference"
@@ -181,6 +177,9 @@
           </p-tabs>
               </div>
             </p-panel>
+
+            <gebo-ai-content-viewer [servedFile]="viewedFile" [activate]="viewedFile?true:false"
+            (close)="closeViewedFile()"></gebo-ai-content-viewer>
 
             <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
             <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
