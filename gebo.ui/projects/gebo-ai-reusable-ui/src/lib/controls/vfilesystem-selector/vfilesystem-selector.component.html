@@ -62,7 +62,7 @@
 
     <p-fieldset id="ChooseElementsArea" gebo-ai-label legend="Choose elements" styleClass="vfs-selector-tree-fieldset">
       <p-tree class="w-full" [value]="roots" (onNodeExpand)="nodeExpand($event)"
-        (onNodeCollapse)="nodeCollapse($event)"
+        (onNodeCollapse)="nodeCollapse($event)" [trackBy]="trackBy" loadingMode="icon"
         containerStyleClass="w-full" [filter]="true" filterPlaceholder="Filter the loaded elements"
         scrollHeight="45vh">
         <ng-template let-node pTemplate="default">

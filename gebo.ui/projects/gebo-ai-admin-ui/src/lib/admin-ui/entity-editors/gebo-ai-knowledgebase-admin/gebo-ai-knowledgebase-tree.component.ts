@@ -12,7 +12,7 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { GKnowledgeBase, GProject, IngestionFileType, IngestionFileTypesLibraryControllerService, IngestionHandlerConfig, VDocumentInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint } from "@Gebo.ai/reusable-ui";
+import { cloneTreeNode, EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint, refreshTreeBranch, treeNodeTrackBy } from "@Gebo.ai/reusable-ui";
 import { TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
 
@@ -49,6 +49,37 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
   @Input() data: EnrichedChild[] = [];
   /** Flag indicating whether the component is currently loading data */
   public loading: boolean = false;
+  /**
+   * Node tracking of the tree. The nodes of a branch are rebuilt every time its
+   * contents change, so tracking them by key is what keeps the untouched views in
+   * place instead of throwing away the whole branch.
+   */
+  public trackBy = treeNodeTrackBy;
+
+  /**
+   * Builds the key of a node, unique among the whole tree, out of the key of its
+   * parent and of the code of the entry it shows.
+   * @param parent The parent node, undefined for a root
+   * @param code The code of the entry
+   * @param fallback A value to use when the entry carries no code
+   * @returns The key of the node
+   */
+  private nodeKey(parent: TreeNode | undefined, code: string | undefined, fallback: string | number): string {
+    return (parent && parent.key ? parent.key : "") + "/" + (code ? code : "#" + fallback);
+  }
+
+  /**
+   * Hands the tree the branch of a node whose contents have just changed.
+   *
+   * PrimeNG renders the tree with OnPush nodes: filling `children` from an http
+   * callback is invisible to it until the branch is handed over as new node
+   * objects, which is why an expansion used to need a second click to show up and
+   * why the toggler kept the icon it had when the request was fired.
+   * @param node The node that changed
+   */
+  private refreshBranch(node: TreeNode): void {
+    this.roots = refreshTreeBranch(this.roots, node);
+  }
 
   /**
    * Constructor initializes required services
@@ -94,8 +125,9 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["data"] && this.data) {
       const roots: TreeNode[] = [];
-      this.data.forEach(entry => {
+      this.data.forEach((entry, index) => {
         roots.push({
+          key: this.nodeKey(undefined, entry.info.code, index),
           label: entry.info.description,
           icon: getNodeIcon(entry),
           leaf: false,
@@ -111,6 +143,10 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
    * @param node The tree node that has been updated
    */
   onDataUpdate(node: TreeNode) {
+    // A child has just been created under this node: its contents are reloaded and
+    // the branch is left open, so the new element shows up without the user having
+    // to collapse and expand the node again.
+    node.expanded = true;
     const event: any = {
       node: node
     };
@@ -122,127 +158,148 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
    * @param event The expansion event containing the node to expand
    */
   nodeExpand(event: TreeNodeExpandEvent) {
-    if (event.node.data.isKnowledgeBase === true) {
-      event.node.loading = true;
-      this.loading = true;
+    const node: TreeNode = event.node;
+    if (node.data.isKnowledgeBase === true) {
+      this.startLoading(node);
       this.childsSearchService.loadKnowledgeChilds(
-        event.node.data.info
+        node.data.info
       ).subscribe({
         next: (projects) => {
           if (projects) {
-            const items: TreeNode[] = [];
-            projects.forEach(entry => {
-              items.push({
-                label: entry.info.description,
-                icon: getNodeIcon(entry),
-                leaf: entry.isLeaf,
-                data: entry,
-                parent: event.node
-              })
-            });
-            event.node.children = items;
-            event.node.expanded = true;
+            node.children = projects.map((entry, index) => this.toChildNode(node, entry, index));
           }
         },
+        error: () => {
+          this.endLoading(node);
+        },
         complete: () => {
-          this.loading = false;
-          event.node.loading = false;
+          this.endLoading(node);
         }
       });
-    } else if (event.node.data.isProject === true) {
-      const project: GProject = event.node.data.info;
+    } else if (node.data.isProject === true) {
+      const project: GProject = node.data.info;
 
       if (project.rootKnowledgeBaseCode && project.code) {
-        this.loading = true;
-        event.node.loading = true;
+        this.startLoading(node);
         this.childsSearchService.loadProjectChilds(project).subscribe({
           next: (childs) => {
             if (childs) {
-              const items: TreeNode[] = [];
-              childs.forEach(entry => {
-                items.push({
-                  label: entry.info.description,
-                  icon: getNodeIcon(entry),
-                  leaf: entry.isLeaf,
-                  data: entry,
-                  parent: event.node
-                })
-              });
-              event.node.children = items;
+              node.children = childs.map((entry, index) => this.toChildNode(node, entry, index));
             }
           },
+          error: () => {
+            this.endLoading(node);
+          },
           complete: () => {
-            this.loading = false;
-            event.node.loading = false;
+            this.endLoading(node);
           }
         });
       }
-    } else if (isProjectEndpoint(event.node.data)) {
+    } else if (isProjectEndpoint(node.data)) {
       //call root childs
-      event.node.loading = true;
-      this.loading = true;
-      this.childsSearchService.loadRootProjectEndpointChilds(event.node.data).subscribe({
+      this.startLoading(node);
+      this.childsSearchService.loadRootProjectEndpointChilds(node.data).subscribe({
         next: (childs) => {
           if (childs) {
-            const items: TreeNode[] = [];
-            childs.forEach(entry => {
-              if (entry.isVirtualFile === true) {
-                const fileType = this.fileTypesLibrary.find(x => x.extensions?.find(w => w === (entry.info as VDocumentInfo).extension));
-                entry.programmingLanguage = fileType?.programmingLanguage;
-                entry.fileTypeId = fileType?.fileTypeId;
-                entry.treatAs = fileType?.treatAs;
-                entry.uiViewable = fileType?.uiViewable === true ? true : false;
-              }
-              items.push({
-                label: entry.info.name,
-                icon: getVFSIcon(entry),
-                leaf: entry.isLeaf,
-                data: entry,
-                parent: event.node
-              })
-            });
-            event.node.children = items;
+            node.children = childs.map((entry, index) => this.toVFSChildNode(node, entry, index));
           }
         },
+        error: () => {
+          this.endLoading(node);
+        },
         complete: () => {
-          this.loading = false;
-          event.node.loading = false;
+          this.endLoading(node);
         }
       });
 
-    } else if (event.node.data.isVirtualFolder) {
-      event.node.loading = true;
-      this.loading = true;
-      this.childsSearchService.loadNestedProjectEndpointChilds(event.node.data).subscribe({
+    } else if (node.data.isVirtualFolder) {
+      this.startLoading(node);
+      this.childsSearchService.loadNestedProjectEndpointChilds(node.data).subscribe({
         next: (childs) => {
           if (childs) {
-            const items: TreeNode[] = [];
-            childs.forEach(entry => {
-              if (entry.isVirtualFile === true) {
-                const fileType = this.fileTypesLibrary.find(x => x.extensions?.find(w => w === (entry.info as VDocumentInfo).extension));
-                entry.programmingLanguage = fileType?.programmingLanguage;
-                entry.fileTypeId = fileType?.fileTypeId;
-                entry.treatAs = fileType?.treatAs;
-                entry.uiViewable = fileType?.uiViewable === true ? true : false;
-              }
-              items.push({
-                label: entry.info.name,
-                icon: getVFSIcon(entry),
-                leaf: entry.isLeaf,
-                data: entry,
-                parent: event.node
-              })
-            });
-            event.node.children = items;
+            node.children = childs.map((entry, index) => this.toVFSChildNode(node, entry, index));
           }
         },
+        error: () => {
+          this.endLoading(node);
+        },
         complete: () => {
-          this.loading = false;
-          event.node.loading = false;
+          this.endLoading(node);
         }
       });
 
     }
+  }
+
+  /**
+   * Marks a node as the one being listed. Only the toggler of the node shows the
+   * wait, the rest of the tree staying usable: locking the whole panel on every
+   * expansion made the tree swallow the clicks that came next.
+   * @param node The node whose children are being loaded
+   */
+  private startLoading(node: TreeNode): void {
+    node.loading = true;
+  }
+
+  /**
+   * Ends the wait of a node and hands its branch, children included, back to the
+   * tree so that it gets painted.
+   * @param node The node whose children have been loaded
+   */
+  private endLoading(node: TreeNode): void {
+    node.loading = false;
+    this.refreshBranch(node);
+  }
+
+  /**
+   * Builds the node of a knowledge base child: a project or a project endpoint.
+   * @param parent The node the child belongs to
+   * @param entry The child to show
+   * @param index The position of the child among its siblings
+   * @returns The node of the child
+   */
+  private toChildNode(parent: TreeNode, entry: EnrichedChild, index: number): TreeNode {
+    return {
+      key: this.nodeKey(parent, entry.info.code, index),
+      label: entry.info.description,
+      icon: getNodeIcon(entry),
+      leaf: entry.isLeaf,
+      data: entry,
+      parent: parent
+    };
+  }
+
+  /**
+   * Builds the node of a virtual filesystem entry. A folder gets the open and the
+   * closed icon instead of a single one, so that its state can be read off the
+   * icon the same way as off the toggler.
+   * @param parent The node the entry belongs to
+   * @param entry The entry to show
+   * @param index The position of the entry among its siblings
+   * @returns The node of the entry
+   */
+  private toVFSChildNode(parent: TreeNode, entry: any, index: number): TreeNode {
+    if (entry.isVirtualFile === true) {
+      const fileType = this.fileTypesLibrary.find(x => x.extensions?.find(w => w === (entry.info as VDocumentInfo).extension));
+      entry.programmingLanguage = fileType?.programmingLanguage;
+      entry.fileTypeId = fileType?.fileTypeId;
+      entry.treatAs = fileType?.treatAs;
+      entry.uiViewable = fileType?.uiViewable === true ? true : false;
+    }
+    const node: TreeNode = {
+      key: this.nodeKey(parent, entry.info.code, index),
+      label: entry.info.name,
+      leaf: entry.isLeaf,
+      data: entry,
+      parent: parent
+    };
+    if (entry.isVirtualFolder === true) {
+      node.collapsedIcon = "pi pi-folder";
+      node.expandedIcon = "pi pi-folder-open";
+    } else {
+      node.icon = getVFSIcon(entry);
+    }
+    return node;
   }
 
   /**
@@ -383,16 +440,22 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
           this.roots.forEach(entry => {
             const found = enricheds?.find(x => x.info.code === entry.data.info.code);
             if (found) {
-              entry.label = found.info.description;
-              entry.data = found;
-              remaining.push(entry);
+              // A copy, not the node itself: the tree only repaints a node whose
+              // identity changed, so reusing it would keep the old description on
+              // screen.
+              const updated: TreeNode = cloneTreeNode(entry);
+              updated.label = found.info.description;
+              updated.data = found;
+              updated.icon = getNodeIcon(found);
+              remaining.push(updated);
             }
           });
           if (enricheds) {
-            enricheds.forEach(enriched => {
+            enricheds.forEach((enriched, index) => {
               const found = remaining.find(x => x.data.info.code === enriched.info.code);
               if (!found) {
                 remaining.push({
+                  key: this.nodeKey(undefined, enriched.info.code, index),
                   label: enriched.info.description,
                   icon: getNodeIcon(enriched),
                   leaf: false,
@@ -425,20 +488,20 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
           const actualChilds = parent.children;
           const foundExisting: TreeNode[] = [];
           if (value) {
-            value.forEach(entry => {
+            value.forEach((entry, index) => {
               const found = actualChilds?.find(ch => ch.data.info.code === entry.info.code);
               if (found) {
-                foundExisting.push(found);
-                found.data = entry;
-                found.label = entry.info.description;
+                // The already shown children are copied as well: the tree keeps the
+                // views whose node did not change, so an updated description would
+                // otherwise stay as it was.
+                const updated: TreeNode = cloneTreeNode(found);
+                updated.data = entry;
+                updated.label = entry.info.description;
+                updated.icon = getNodeIcon(entry);
+                updated.parent = parent;
+                foundExisting.push(updated);
               } else {
-                foundExisting.push({
-                  label: entry.info.description,
-                  icon: getNodeIcon(entry),
-                  leaf: entry.isLeaf,
-                  data: entry,
-                  parent: parent
-                });
+                foundExisting.push(this.toChildNode(parent, entry, index));
               }
             });
           }
@@ -447,6 +510,7 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
         },
         complete: () => {
           this.loading = false;
+          this.refreshBranch(parent);
         }
 
       });
@@ -466,20 +530,17 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
           if (childs) {
 
             const actualChilds = parent.children;
-            childs.forEach(entry => {
+            childs.forEach((entry, index) => {
               const found = actualChilds?.find(x => x.data.info.code === entry.info.code);
               if (found) {
-                found.data = entry;
-                found.label = entry.info.description;
-                remaining.push(found);
+                const updated: TreeNode = cloneTreeNode(found);
+                updated.data = entry;
+                updated.label = entry.info.description;
+                updated.icon = getNodeIcon(entry);
+                updated.parent = parent;
+                remaining.push(updated);
               } else {
-                remaining.push({
-                  label: entry.info.description,
-                  icon: getNodeIcon(entry),
-                  leaf: entry.isLeaf,
-                  data: entry,
-                  parent: parent
-                });
+                remaining.push(this.toChildNode(parent, entry, index));
               }
             });
 
@@ -489,6 +550,7 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
         },
         complete: () => {
           this.loading = false;
+          this.refreshBranch(parent);
         }
       });
     }

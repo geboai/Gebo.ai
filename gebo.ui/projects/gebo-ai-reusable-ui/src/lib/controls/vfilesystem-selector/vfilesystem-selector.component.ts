@@ -24,6 +24,7 @@ import { ToastMessageOptions, TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from "primeng/tree";
 import { of } from "rxjs";
 import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemDeletableReference, VFilesystemReference, reconstructNavigationObservableCallback } from "./vfilesystem-types";
+import { refreshTreeNodes, treeNodeTrackBy } from "../../services/primeng-tree-refresh";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, fieldHostComponentName } from "../field-host-component-iface/field-host-component-iface";
 
@@ -206,8 +207,12 @@ function toEnrichedNode(entry: VFilesystemReference, parent?: TreeNode<EnrichedF
         label: entry.path ? entry.path.name : entry.root.description,
         leaf: folder ? false : true,
         data: data,
-        icon: folder ? icon_folder_opened(entry) : icon_file(entry),
-        collapsedIcon: folder ? icon_folder_closed(entry) : icon_file(entry),
+        // A folder gets no `icon`: PrimeNG uses `icon` whenever it is set and only
+        // falls back on the expanded/collapsed pair when it is not, so filling both
+        // meant the open folder icon was shown even on a closed folder.
+        icon: folder ? undefined : icon_file(entry),
+        expandedIcon: folder ? icon_folder_opened(entry) : undefined,
+        collapsedIcon: folder ? icon_folder_closed(entry) : undefined,
         parent: parent,
         // The node key and the lookup key of nodesMap must be the same string:
         // keeping two identity schemes (the old key was built from root code and
@@ -426,6 +431,27 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * Map of node unique codes to their tree nodes for quick lookup
      */
     private nodesMap: Map<string, TreeNode<EnrichedFilesystemReference>> = new Map();
+
+    /**
+     * Node tracking of the tree. The branch of a node is rebuilt out of new node
+     * objects every time its contents change, which is the only thing PrimeNG
+     * repaints on; tracking the nodes by key keeps the views of the untouched ones.
+     */
+    public trackBy = treeNodeTrackBy;
+
+    /**
+     * Hands the tree back its nodes after something they show has changed.
+     *
+     * `Tree` and its nodes run OnPush and a node is repainted only when its object
+     * changes identity, so what is written on the nodes outside of a click on them
+     * used to stay invisible: the first click on a folder flipped the toggler but
+     * no child ever appeared, the spinner of the toggler never went away and the
+     * checkboxes of the entries covered by a selected folder kept being offered.
+     */
+    private refreshTreeView(): void {
+        this.roots = refreshTreeNodes(this.roots);
+        this.checkChanges.markForCheck();
+    }
 
     /**
      * Form group for the selection control
@@ -692,8 +718,10 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
             const tobeSet = this.selectionMode === "multiple" ? newChoosed : (newChoosed.length ? newChoosed[0] : undefined);
             this.formGroup.controls["choosed"].setValue(tobeSet);
         }
+        // The selection flags just written live on the data of the nodes, which the
+        // tree does not look at again on its own: it has to be handed its nodes back.
+        this.refreshTreeView();
         this.checkChanges.detectChanges();
-        this.checkChanges.markForCheck();
     }
 
     /**
@@ -838,7 +866,6 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                 nodes.push(thisTreeNode);
             });
         }
-        this.resyncEditingChips();
         return sortNodes(nodes);
     }
 
@@ -1022,7 +1049,11 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
         };
         // Per node spinner instead of the modal padlock over the whole dialog: the
         // rest of the tree stays usable while a folder is being listed.
-        event.node.loading = true;
+        const node: TreeNode<EnrichedFilesystemReference> = event.node;
+        node.loading = true;
+        // The listing repaints the tree once: the nodes handed over then replace the
+        // ones held here, so a second repaint would only rebuild them for nothing.
+        let painted: boolean = false;
         this.browsePathObservable(browseParam).subscribe({
             next: (paths) => {
                 const childs: TreeNode<EnrichedFilesystemReference>[] = [];
@@ -1033,7 +1064,7 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                             root: rootNode,
                             path: entry
                         }
-                        const thisTreeNode = toEnrichedNode(ref, event.node);
+                        const thisTreeNode = toEnrichedNode(ref, node);
                         if (thisTreeNode.data) {
                             thisTreeNode.data.parentSelected = hierarchySelected;
                         }
@@ -1041,12 +1072,20 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                         this.addMap(thisTreeNode);
                     });
                 }
-                event.node.children = sortNodes(childs);
+                node.children = sortNodes(childs);
+                node.loading = false;
+                // Ends by handing the nodes back to the tree, the newly listed
+                // children included.
                 this.resyncEditingChips();
+                painted = true;
+            },
+            error: () => {
+                node.loading = false;
+                if (!painted) this.refreshTreeView();
             },
             complete: () => {
-                event.node.loading = false;
-                this.checkChanges.markForCheck();
+                node.loading = false;
+                if (!painted) this.refreshTreeView();
             }
         });
     }
