@@ -170,3 +170,14 @@ body.busy button { opacity: 0.6; pointer-events: none; }
 .md-content table { border-collapse: collapse; width: 100%; margin: 0 0 8px 0; font-size: 12px; }
 .md-content th, .md-content td { border: 1px solid #ddd; padding: 4px 6px; text-align: left; }
 .md-content th { background: #f8f8f8; font-weight: 600; }
+
+/* EU AI Act (Reg. 2024/1689) Art. 50 transparency notice */
+.ai-act-disclaimer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #888;
+  text-align: center;
+}
