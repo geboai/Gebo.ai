@@ -88,12 +88,6 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl<WebSea
 	}
 
 	@Override
-	public String getDescription() {
-
-		return "Google Web Search";
-	}
-
-	@Override
 	public List<SearchableSystemMetaData> getSearchableSystems() {
 
 		return isEnabled() ? allSystems : List.of();

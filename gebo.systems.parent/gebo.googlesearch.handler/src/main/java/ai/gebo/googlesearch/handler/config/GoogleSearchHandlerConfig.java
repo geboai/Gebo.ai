@@ -16,18 +16,18 @@ import lombok.Data;
 @Data
 public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 	public static final String GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT = "google-search-query-extraction-prompt";
-	final static String queryExtractionPrompt = "You are a GOOGLE SEARCH QUERY PLANNER.\r\n" + "\r\n" + "GOAL\r\n"
-			+ "Given a user question, you must generate a small set of optimized Google Search queries.\r\n" + "\r\n"
-			+ "Each query MUST:\r\n" + "- be a valid Google search string\r\n"
+	final static String queryExtractionPrompt = "You are a WEB SEARCH QUERY PLANNER.\r\n" + "\r\n" + "GOAL\r\n"
+			+ "Given a user question, you must generate a small set of optimized web search queries.\r\n" + "\r\n"
+			+ "Each query MUST:\r\n" + "- be a valid web search string\r\n"
 			+ "- focus on retrieving high-quality, relevant results\r\n"
 			+ "- be short and focused (typically 3–12 words)\r\n"
-			+ "- use Google operators only when they clearly improve precision\r\n" + "\r\n"
-			+ "You can use the following Google Search features:\r\n" + "- Exact match: \"exact phrase\"\r\n"
+			+ "- use search operators only when they clearly improve precision\r\n" + "\r\n"
+			+ "You can use the following common web search features:\r\n" + "- Exact match: \"exact phrase\"\r\n"
 			+ "- Alternatives: (term1 OR term2)  // use OR in uppercase\r\n" + "- Exclusion: -word\r\n"
 			+ "- Site restriction: site:example.com\r\n" + "- File type: filetype:pdf, filetype:docx\r\n"
 			+ "- Title focus: intitle:keyword\r\n" + "- URL focus: inurl:keyword\r\n"
 			+ "- Time constraints (as plain words if needed, e.g., 2023, 2024)\r\n" + "\r\n" + "DO NOT:\r\n"
-			+ "- invent non-standard operators (only use what Google supports)\r\n"
+			+ "- invent non-standard operators (only use widely-supported ones)\r\n"
 			+ "- overuse operators in every single query\r\n" + "- create excessively long or verbose queries\r\n"
 			+ "- add explanations, comments, or natural language text outside the queries\r\n" + "\r\n" + "STRATEGY\r\n"
 			+ "1. Understand the user question, its intent, and key concepts.\r\n" + "2. Identify:\r\n"
@@ -39,8 +39,8 @@ public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 			+ "   - a query with site: or filetype: if clearly relevant\r\n"
 			+ "   - a variant with synonyms or related terminology\r\n"
 			+ "4. Prefer fewer but high-quality queries over many noisy ones.\r\n" + "\r\n" + "OUTPUT FORMAT\r\n"
-			+ "{format}\r\n" + "\r\n" + "Rules for \"google_queries\":\r\n" + "- Between 2 and 8 queries\r\n"
-			+ "- No duplicates\r\n" + "- Each item must be a single Google search string (no line breaks)\r\n"
+			+ "{format}\r\n" + "\r\n" + "Rules for the produced queries:\r\n" + "- Between 2 and 8 queries\r\n"
+			+ "- No duplicates\r\n" + "- Each item must be a single web search string (no line breaks)\r\n"
 			+ "- Do not include any explanation or natural language text outside the JSON structure.\r\n" + "";
 	private GPromptTemplateConfig prompt = null;
 

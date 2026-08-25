@@ -10,6 +10,7 @@
 package ai.gebo.tavilysearch.handler.impl;
 
 import java.util.LinkedHashMap;
+import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -49,8 +50,8 @@ import lombok.AllArgsConstructor;
 public class TavilySearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TavilySearchApi.class);
 	public static final String TAVILY_SEARCH_URL = "https://api.tavily.com/search";
-	static final String SEARCH_WEB_WITH_TAVILY = "searchWebWithTavily";
-	static final String RUNNING_A_TAVILY_SEARCH = "Running a Tavily web search";
+	static final String SEARCH_WEB_WITH_TAVILY = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
+	static final String RUNNING_A_TAVILY_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_MAX_RESULTS = 5;
 
 	private final RestTemplateWrapperService restTemplateService;

@@ -31,10 +31,10 @@ public class BraveSearchHandlerConfig implements IGStaticPromptsProvider {
 
 	public static final String BRAVE_SEARCH_QUERY_EXTRACTION_PROMPT = "brave-search-query-extraction-prompt";
 
-	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER for the Brave Search engine.\r\n"
+	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER.\r\n"
 			+ "\r\n"
-			+ "Produce a native Brave query object:\r\n"
-			+ "- searchedTexts: 2 to 8 concise web search queries (no duplicates). You may use Brave operators (\"exact\", -exclude, site:) when they clearly help.\r\n"
+			+ "Produce a native search query object:\r\n"
+			+ "- searchedTexts: 2 to 8 concise web search queries (no duplicates). You may use search operators (\"exact\", -exclude, site:) when they clearly help.\r\n"
 			+ "- freshness (optional): \"pd\" (past day), \"pw\" (past week), \"pm\" (past month), \"py\" (past year) when recency matters.\r\n"
 			+ "- country (optional): 2-letter code to bias results (e.g. \"us\", \"it\") when the question is region-specific.\r\n"
 			+ "- safesearch (optional): \"off\", \"moderate\" or \"strict\".\r\n"

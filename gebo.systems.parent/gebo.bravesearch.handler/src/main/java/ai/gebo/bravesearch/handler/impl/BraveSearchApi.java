@@ -10,6 +10,7 @@
 package ai.gebo.bravesearch.handler.impl;
 
 import java.net.URI;
+import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -49,8 +50,8 @@ import lombok.AllArgsConstructor;
 public class BraveSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BraveSearchApi.class);
 	public static final String BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search";
-	static final String SEARCH_WEB_WITH_BRAVE = "searchWebWithBrave";
-	static final String RUNNING_A_BRAVE_SEARCH = "Running a Brave web search";
+	static final String SEARCH_WEB_WITH_BRAVE = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
+	static final String RUNNING_A_BRAVE_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_COUNT = 5;
 
 	private final RestTemplateWrapperService restTemplateService;

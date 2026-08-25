@@ -10,6 +10,7 @@
 package ai.gebo.serpapisearch.handler.impl;
 
 import java.net.URI;
+import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -49,8 +50,8 @@ import lombok.AllArgsConstructor;
 public class SerpapiSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SerpapiSearchApi.class);
 	public static final String SERPAPI_SEARCH_URL = "https://serpapi.com/search.json";
-	static final String SEARCH_WEB_WITH_SERPAPI = "searchWebWithSerpapi";
-	static final String RUNNING_A_SERPAPI_SEARCH = "Running a SerpApi web search";
+	static final String SEARCH_WEB_WITH_SERPAPI = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
+	static final String RUNNING_A_SERPAPI_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_NUM = 5;
 	private static final String DEFAULT_ENGINE = "google";
 

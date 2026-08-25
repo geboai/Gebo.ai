@@ -31,11 +31,11 @@ public class SearxngSearchHandlerConfig implements IGStaticPromptsProvider {
 
 	public static final String SEARXNG_SEARCH_QUERY_EXTRACTION_PROMPT = "searxng-search-query-extraction-prompt";
 
-	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER for a SearXNG meta-search instance.\r\n"
+	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER.\r\n"
 			+ "\r\n"
-			+ "Produce a native SearXNG query object:\r\n"
+			+ "Produce a native search query object:\r\n"
 			+ "- searchedTexts: 2 to 8 concise, natural-language web search queries (no duplicates).\r\n"
-			+ "- categories (optional): comma-separated SearXNG categories such as \"general\", \"news\", \"science\", \"it\".\r\n"
+			+ "- categories (optional): comma-separated categories such as \"general\", \"news\", \"science\", \"it\".\r\n"
 			+ "- timeRange (optional): \"day\", \"week\", \"month\" or \"year\" when recency matters.\r\n"
 			+ "- language (optional): a language code such as \"en\" or \"it\".\r\n"
 			+ "\r\n"
