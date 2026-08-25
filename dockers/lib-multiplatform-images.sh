@@ -51,6 +51,19 @@ image_platform() {
     "$REPO_ROOT/dockers/gebo.ai.platform"
 }
 
+# Update a Docker Hub repo's README (full_description). Only runs on the publish
+# phase; `docker push` never carries the README, so this is a separate API call.
+# Non-fatal: a README failure must not fail an otherwise-successful image push.
+# $1: push flag  $2: docker hub repo (namespace/name)  $3: README file
+push_readme() {
+  local push="$1" repo="$2" readme="$3"
+  [ "$push" = true ] || return 0
+  echo "=== [publish] README -> $repo ==="
+  if ! python3 "$REPO_ROOT/dockers/publish-readme.py" "$repo" "$readme"; then
+    echo "WARNING: README update for $repo failed (image push was not affected)" >&2
+  fi
+}
+
 image_gebo_ai() {
   local push="$1"
   check_artifacts
@@ -64,6 +77,7 @@ image_gebo_ai() {
     -t geboai/gebo.ai \
     -t geboai/gebo.ai:${VERSION} \
     "$REPO_ROOT/dockers/gebo.ai"
+  push_readme "$push" geboai/gebo.ai "$REPO_ROOT/dockers/gebo.ai/README.md"
 }
 
 image_easyinstall() {
@@ -79,6 +93,7 @@ image_easyinstall() {
     -t geboai/easyinstall.gebo.ai \
     -t geboai/easyinstall.gebo.ai:${VERSION} \
     "$REPO_ROOT/dockers/easyinstall.gebo.ai"
+  push_readme "$push" geboai/easyinstall.gebo.ai "$REPO_ROOT/dockers/easyinstall.gebo.ai/README.md"
 }
 
 # $1: push - "false" or "true"
