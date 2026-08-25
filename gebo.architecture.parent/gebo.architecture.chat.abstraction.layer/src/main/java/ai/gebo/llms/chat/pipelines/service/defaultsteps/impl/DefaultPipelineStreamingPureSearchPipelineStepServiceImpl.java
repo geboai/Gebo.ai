@@ -370,8 +370,12 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		Map<String, List<String>> toBeSearched = this.callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context,
 				params, List.of(SEARCHED_SYSTEMS));
 
-		return toBeSearched.containsKey(SEARCHED_SYSTEMS) ? toBeSearched.get(SEARCHED_SYSTEMS)
+		List<String> chosen = toBeSearched.containsKey(SEARCHED_SYSTEMS) ? toBeSearched.get(SEARCHED_SYSTEMS)
 				: List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
+		// The LLM chose from the generic codes shown in the prompt; translate the generic
+		// web-search code back to the real handlerId the executor dispatches on.
+		return RoutingPromptUtil.resolveChosenDataSourceCodes(chosen,
+				deepSearchDataSourcesCatalogsService.getActiveDeepSearchDataSourceMetaInfos());
 	}
 
 	private String deepSearchDataSourcesListPromptPart(List<GKnowledgeBase> knowledgeBases) {

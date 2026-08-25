@@ -88,11 +88,6 @@ public class BraveSearchServiceImpl extends AbstractWebSearchServiceImpl<BraveNa
 	}
 
 	@Override
-	public String getDescription() {
-		return "Brave web search";
-	}
-
-	@Override
 	public List<SearchableSystemMetaData> getSearchableSystems() throws SearchServiceException {
 		return List.of(SYSTEM_METADATA);
 	}

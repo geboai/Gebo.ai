@@ -41,8 +41,32 @@ import ai.gebo.model.base.TypedInputStream;
 public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
 		implements INativeSearchService<WebSearchResultsExtractionData, N> {
 
+	/**
+	 * Generic, provider-agnostic description for every web-search provider. The
+	 * pipeline surfaces web search to the routing LLM and the deep-search menu as a
+	 * single "Web search" choice, regardless of which provider (Google, Brave,
+	 * SerpApi, Tavily, SearXNG, ...) is actually configured behind it. Individual
+	 * providers must not override {@link #getDescription()}.
+	 */
+	public static final String WEB_SEARCH_DESCRIPTION = "Web search";
+
+	/**
+	 * Provider-agnostic name and description of the web-search LLM tool. Only one
+	 * web-search provider is active at a time, so every provider exposes the same
+	 * generic tool to the model: the chatbot decides to "search the web" without
+	 * ever seeing which vendor (Google, Brave, SerpApi, Tavily, SearXNG, ...) is
+	 * configured behind it.
+	 */
+	public static final String WEB_SEARCH_TOOL_NAME = "searchWeb";
+	public static final String WEB_SEARCH_TOOL_DESCRIPTION = "Search the public web for current, external information relevant to the user's question, and return the most relevant results.";
+
 	protected int SocketTimeout = 20000;
 	protected int ConnectTimeout = 10000;
+
+	@Override
+	public String getDescription() {
+		return WEB_SEARCH_DESCRIPTION;
+	}
 
 	protected String tryArgueContentType(String link) {
 		String contentType = LinkTypeGuesser.tryArgueContentType(link);

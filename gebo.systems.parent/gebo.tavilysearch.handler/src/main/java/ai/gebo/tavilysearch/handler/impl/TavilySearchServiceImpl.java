@@ -88,11 +88,6 @@ public class TavilySearchServiceImpl extends AbstractWebSearchServiceImpl<Tavily
 	}
 
 	@Override
-	public String getDescription() {
-		return "Tavily web search";
-	}
-
-	@Override
 	public List<SearchableSystemMetaData> getSearchableSystems() throws SearchServiceException {
 		return List.of(SYSTEM_METADATA);
 	}

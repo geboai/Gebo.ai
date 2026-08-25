@@ -307,8 +307,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				.getActiveDeepSearchDataSourceMetaInfos();
 		final Map<String, Boolean> validSystems = new HashMap<>();
 		validSystems.put(INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID, true);
+		// Validate against the codes the LLM actually saw in the prompt: web search is
+		// presented generically (getRoutingCode()), the rest by their real handlerId.
 		dataSources.forEach(ds -> {
-			validSystems.put(ds.getHandlerId(), true);
+			validSystems.put(ds.getRoutingCode(), true);
 		});
 		final List<String> defaultDataSource = List.of(INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
 		if (!decisionMap.containsKey(DEEP_SEARCHED_SYSTEMS)) {
@@ -325,7 +327,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			if (cleanedList.isEmpty()) {
 				decisionMap.put(DEEP_SEARCHED_SYSTEMS, defaultDataSource);
 			} else {
-				decisionMap.put(DEEP_SEARCHED_SYSTEMS, cleanedList);
+				// Translate the generic web-search code back to the real handlerId the
+				// deep-search executor dispatches on.
+				decisionMap.put(DEEP_SEARCHED_SYSTEMS,
+						RoutingPromptUtil.resolveChosenDataSourceCodes(cleanedList, dataSources));
 			}
 		}
 

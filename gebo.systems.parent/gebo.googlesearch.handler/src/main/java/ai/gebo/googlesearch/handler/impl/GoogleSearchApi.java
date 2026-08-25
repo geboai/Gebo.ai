@@ -15,6 +15,7 @@
 package ai.gebo.googlesearch.handler.impl;
 
 import java.io.UnsupportedEncodingException;
+import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -46,9 +47,9 @@ class GoogleSearchApi {
 	/** Base URL for Google Custom Search API */
 	private static final String googleSearch = "https://www.googleapis.com/customsearch/v1?key=";
 	/** Descriptive text for logging search operations */
-	static final String RUNNING_A_GOOGLE_SEARCH = "Running a google search";
+	static final String RUNNING_A_GOOGLE_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	/** Function name for the search web tool */
-	static final String SEARCH_WEB_WITH_GOOGLE = "searchWebWithGoogle";
+	static final String SEARCH_WEB_WITH_GOOGLE = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
 
 	/**
 	 * search with google api documentation:

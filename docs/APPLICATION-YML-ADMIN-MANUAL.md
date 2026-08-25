@@ -302,8 +302,7 @@ Shipped **commented out**, and for good reason beyond being optional: `enabled`/
 `customSearchEngineId` are **not bound to any `application.yml` property** in the current
 codebase — Google Search credentials are configured through the admin UI and persisted to
 MongoDB (`GoogleSearchConfigDaoImpl`), not through this file. Leave this block commented; editing
-it has no effect either way. (Bing web search, listed as a feature in the README, is configured
-the same way — via the admin UI.)
+it has no effect either way.
 
 ## 20. User workflows — activation, password reset, outbound mail
 
