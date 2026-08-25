@@ -190,6 +190,12 @@
       (stopReactiveChat)="stopReactiveChat($event)">
     </gebo-ai-chat-input-shell>
 
+    <!-- EU AI Act (Reg. 2024/1689) Art. 50 transparency notice -->
+    <div class="gebo-ai-reusable-chat__disclaimer" role="note">
+      <i class="pi pi-info-circle" aria-hidden="true"></i>
+      <span id="AiActInteractionDisclaimer" gebo-ai-text>You are interacting with an AI system. Responses are AI-generated and may be inaccurate or incomplete — always verify important information before relying on it.</span>
+    </div>
+
     <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup" [visible]="changeDescriptionDialogOpened"
       (cancelAction)="changeDescriptionDialogOpened=false"
     (saveAction)="doSaveChangedDescription()"></gebo-ai-chat-change-description>
