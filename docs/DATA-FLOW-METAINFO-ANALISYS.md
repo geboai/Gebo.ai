@@ -479,7 +479,7 @@ into tyr's Mongo — a cross-service replication flow worth showing.
 
 ### 5.10 Web search — queries leaving the installation (needs §2's model move)
 
-Six `AbstractWebSearchServiceImpl` subclasses: `BingSearchServiceImpl`, `BraveSearchServiceImpl`,
+Five `AbstractWebSearchServiceImpl` subclasses: `BraveSearchServiceImpl`,
 `GoogleSearchServiceImpl`, `SearxngSearchServiceImpl`, `SerpapiSearchServiceImpl`,
 `TavilySearchServiceImpl`. Each already exposes `getMessagingModuleId()`, `getId()`,
 `getDescription()`, `getProductId()`, `getSearchableSystems()`, and — decisively —

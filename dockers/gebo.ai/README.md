@@ -44,7 +44,7 @@ All the following features are fully configurable using the administrative user 
     - **OpenRouter.ai** (multi-model router)
     - Almost every local large language model using **Ollama** or **vLLM**
     - Every provider/local server compatible with **OpenAI API**
-- Configure tools & functions that each llm configuration can use, including **web search** (Google or Bing)
+- Configure tools & functions that each llm configuration can use, including **web search** (Google, Tavily, Brave, SerpApi or self-hosted SearXNG)
 - Configure additional AI model types besides chat & embedding models:
     - **Image generation** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai & OpenAI-compatible providers)
     - **Text to speech** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai)

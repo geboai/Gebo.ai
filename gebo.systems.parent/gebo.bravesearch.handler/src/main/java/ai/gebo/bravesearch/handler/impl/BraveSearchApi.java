@@ -42,8 +42,7 @@ import lombok.AllArgsConstructor;
 /**
  * Thin REST client for the Brave Web Search API + the LLM tool factory. Auth is
  * the {@code X-Subscription-Token} header; the query is properly percent-encoded
- * via {@code encode().build()} (unlike the retired Bing handler's build(true),
- * which threw on any multi-word query).
+ * via {@code encode().build()} so multi-word queries are handled correctly.
  */
 @Service
 @AllArgsConstructor

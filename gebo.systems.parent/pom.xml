@@ -13,7 +13,7 @@
 	<!--
 	  No global <dependencies> here. gebo.architecture.contentsystems.abstraction.layer
 	  used to be declared globally and inherited by every child, which silently forced
-	  it onto the web-search tools (bing/google) and the lightweight *.search.api DTO
+	  it onto the web-search tools (google) and the lightweight *.search.api DTO
 	  modules that do not use it - and, through them, onto brain. It is now declared
 	  explicitly by each real content-handler module that actually needs it.
 	-->
@@ -41,7 +41,6 @@
 		<module>gebo.atlassian.jira.search.api</module>
 		<module>gebo.atlassian.jira.handler</module>
 		<module>gebo.integration.content.handler</module>
-		<module>gebo.bingsearch.handler</module>
 		<module>gebo.mcp-client.content.handler</module>
 		<module>gebo.aws-s3.content.handler</module>
 		<module>gebo.webdav-cms.handler</module>
