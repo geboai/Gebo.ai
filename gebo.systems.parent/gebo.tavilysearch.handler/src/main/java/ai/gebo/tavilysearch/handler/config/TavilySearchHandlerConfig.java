@@ -32,9 +32,9 @@ public class TavilySearchHandlerConfig implements IGStaticPromptsProvider {
 
 	public static final String TAVILY_SEARCH_QUERY_EXTRACTION_PROMPT = "tavily-search-query-extraction-prompt";
 
-	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER.\r\n"
+	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER for the Tavily search API.\r\n"
 			+ "\r\n"
-			+ "Produce a native search query object:\r\n"
+			+ "Produce a native Tavily query object:\r\n"
 			+ "- searchedTexts: 2 to 8 concise, natural-language web search queries (no operators, no duplicates).\r\n"
 			+ "- searchDepth (optional): \"basic\" for quick lookups, \"advanced\" for deeper/high-quality research.\r\n"
 			+ "- topic (optional): \"news\" when the question is about current events, otherwise \"general\".\r\n"

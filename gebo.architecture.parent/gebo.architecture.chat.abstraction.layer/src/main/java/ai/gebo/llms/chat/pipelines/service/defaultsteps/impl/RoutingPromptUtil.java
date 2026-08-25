@@ -332,6 +332,38 @@ public final class RoutingPromptUtil {
 	private static final String DEEP_SEARCH_DATA_SOURCES_CATALOG = "DEEP_SEARCH_DATA_SOURCES_CATALOG";
 	private static final String END_DEEP_SEARCH_DATA_SOURCES_CATALOG = "END_DEEP_SEARCH_DATA_SOURCES_CATALOG";
 
+	/**
+	 * Translate the data-source codes chosen by the routing/pure-search LLM back to
+	 * the real handler ids the deep-search executor dispatches on. The prompt shows a
+	 * generic {@link DeepSearchDataSourceMetaInfos#WEB_SEARCH_ROUTING_CODE} for web
+	 * search (only one provider is active at a time); here it is mapped to that
+	 * provider's actual handlerId. Every other code is passed through unchanged.
+	 */
+	public static List<String> resolveChosenDataSourceCodes(List<String> chosen,
+			List<DeepSearchDataSourceMetaInfos> dataSources) {
+		if (chosen == null) {
+			return chosen;
+		}
+		String webHandlerId = null;
+		if (dataSources != null) {
+			for (DeepSearchDataSourceMetaInfos ds : dataSources) {
+				if (ds.isWebSearch() && ds.getHandlerId() != null) {
+					webHandlerId = ds.getHandlerId();
+					break;
+				}
+			}
+		}
+		List<String> out = new ArrayList<>(chosen.size());
+		for (String code : chosen) {
+			if (webHandlerId != null && DeepSearchDataSourceMetaInfos.WEB_SEARCH_ROUTING_CODE.equals(code)) {
+				out.add(webHandlerId);
+			} else {
+				out.add(code);
+			}
+		}
+		return out;
+	}
+
 	public static String dataSourcesListPromptPart(List<DeepSearchDataSourceMetaInfos> dataSources,
 			List<GKnowledgeBase> knowledgeBases) {
 		StringBuffer buffer = new StringBuffer();
@@ -369,7 +401,7 @@ public final class RoutingPromptUtil {
 					buffer.append(DEEP_SEARCH_DATA_SOURCE);
 					buffer.append(NEWLINE);
 					buffer.append(CODE);
-					buffer.append(obj.getHandlerId());
+					buffer.append(obj.getRoutingCode());
 					buffer.append(NEWLINE);
 					buffer.append(DESCRIPTION);
 					buffer.append(obj.getDescription());

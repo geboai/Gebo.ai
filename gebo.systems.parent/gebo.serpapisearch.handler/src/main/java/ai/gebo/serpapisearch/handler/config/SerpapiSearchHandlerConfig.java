@@ -31,10 +31,10 @@ public class SerpapiSearchHandlerConfig implements IGStaticPromptsProvider {
 
 	public static final String SERPAPI_SEARCH_QUERY_EXTRACTION_PROMPT = "serpapi-search-query-extraction-prompt";
 
-	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER.\r\n"
+	private static final String queryExtractionPrompt = "You are a WEB SEARCH PLANNER using SerpApi (a real search-engine results proxy).\r\n"
 			+ "\r\n"
-			+ "Produce a native search query object:\r\n"
-			+ "- searchedTexts: 2 to 8 concise web search queries (no duplicates). Common search operators (\"exact\", -exclude, site:, filetype:) are allowed when they clearly help.\r\n"
+			+ "Produce a native SerpApi query object:\r\n"
+			+ "- searchedTexts: 2 to 8 concise web search queries (no duplicates). Google operators (\"exact\", -exclude, site:, filetype:) are allowed when they clearly help.\r\n"
 			+ "- engine (optional): \"google\" (default), \"bing\" or \"duckduckgo\".\r\n"
 			+ "- gl (optional): 2-letter country code (e.g. \"us\", \"it\") when the question is region-specific.\r\n"
 			+ "- hl (optional): interface language code (e.g. \"en\", \"it\").\r\n"
