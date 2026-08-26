@@ -10,6 +10,7 @@
 package ai.gebo.searxngsearch.handler.impl;
 
 import java.net.URI;
+import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -48,8 +49,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SearxngSearchApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearxngSearchApi.class);
-	static final String SEARCH_WEB_WITH_SEARXNG = "searchWebWithSearxng";
-	static final String RUNNING_A_SEARXNG_SEARCH = "Running a SearXNG web search";
+	static final String SEARCH_WEB_WITH_SEARXNG = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_NAME;
+	static final String RUNNING_A_SEARXNG_SEARCH = AbstractWebSearchServiceImpl.WEB_SEARCH_TOOL_DESCRIPTION;
 	private static final int DEFAULT_LIMIT = 5;
 
 	private final RestTemplateWrapperService restTemplateService;

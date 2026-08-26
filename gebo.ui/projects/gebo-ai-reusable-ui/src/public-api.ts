@@ -72,6 +72,7 @@ export * from "./lib/controls/add-project-endpoint-component/choose-data-source-
 export * from "./lib/controls/content-viewer/gebo-ai-content-viewer.module";
 
 export * from "./lib/services/enriched-child";
+export * from "./lib/services/primeng-tree-refresh";
 export * from "./lib/controls/content-viewer/enriched-document-reference-view.service";
 export * from "./lib/services/pluggable-knowledge-base-admin-tree-search.service";
 export * from "./lib/services/filetypes.module";

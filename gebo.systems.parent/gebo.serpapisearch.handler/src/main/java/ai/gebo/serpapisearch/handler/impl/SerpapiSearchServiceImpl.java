@@ -88,11 +88,6 @@ public class SerpapiSearchServiceImpl extends AbstractWebSearchServiceImpl<Serpa
 	}
 
 	@Override
-	public String getDescription() {
-		return "SerpApi web search";
-	}
-
-	@Override
 	public List<SearchableSystemMetaData> getSearchableSystems() throws SearchServiceException {
 		return List.of(SYSTEM_METADATA);
 	}

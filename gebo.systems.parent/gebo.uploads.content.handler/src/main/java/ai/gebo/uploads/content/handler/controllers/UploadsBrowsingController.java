@@ -12,10 +12,17 @@
 
 package ai.gebo.uploads.content.handler.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -139,5 +146,58 @@ public class UploadsBrowsingController {
 			@RequestBody List<VFilesystemReference> references, @RequestParam("endpointCode") String endpointCode)
 			throws VirtualFilesystemBrowsingException {
 		return serverFilesystemBrowsingService.navigationStatus(references, getEndpointContext(endpointCode));
+	}
+
+	/**
+	 * Streams a file physically present in the folder of an uploads data source.
+	 *
+	 * <p>
+	 * The editor manages what the data source actually holds, not what has already
+	 * been ingested: a file that has just been uploaded and never published has no
+	 * document behind it and could therefore not be opened through the knowledge
+	 * base content controller. Serving it straight out of the folder makes every
+	 * entry the browser shows viewable, whatever its ingestion state.
+	 * </p>
+	 *
+	 * <p>
+	 * The path is checked against the folder owned by the data source before
+	 * anything is read, so it cannot be used to reach the rest of the filesystem.
+	 * The content is served inline, the viewer of the editor choosing on the
+	 * extension whether to render or to download it.
+	 * </p>
+	 *
+	 * @param endpointCode code of the uploads project endpoint.
+	 * @param path         absolute path, or simple name, of the file to serve.
+	 * @return the file contents, or 404 when the path is not a readable file of
+	 *         this data source.
+	 * @throws VirtualFilesystemBrowsingException when the data source or its folder
+	 *                                            cannot be resolved.
+	 */
+	@GetMapping(value = "serveUploadsEndpointFile")
+	public ResponseEntity<Resource> serveUploadsEndpointFile(@RequestParam("endpointCode") String endpointCode,
+			@RequestParam("path") String path) throws VirtualFilesystemBrowsingException {
+		Path file = null;
+		try {
+			file = uploadsService.resolveServableFile(endpointCode, path);
+		} catch (GeboContentHandlerSystemException contentHandlerException) {
+			throw new VirtualFilesystemBrowsingException(
+					"Cannot resolve the contents folder of the data source " + endpointCode, contentHandlerException);
+		}
+		if (file == null) {
+			return ResponseEntity.notFound().build();
+		}
+		String contentType = null;
+		try {
+			contentType = Files.probeContentType(file);
+		} catch (IOException probeFailure) {
+			// The media type is a hint for the viewer, not a reason to refuse the content.
+			contentType = null;
+		}
+		return ResponseEntity.ok()
+				.contentType(contentType != null ? MediaType.parseMediaType(contentType)
+						: MediaType.APPLICATION_OCTET_STREAM)
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+						"inline; filename=\"" + file.getFileName().toString().replace("\"", "") + "\"")
+				.body((Resource) new FileSystemResource(file));
 	}
 }

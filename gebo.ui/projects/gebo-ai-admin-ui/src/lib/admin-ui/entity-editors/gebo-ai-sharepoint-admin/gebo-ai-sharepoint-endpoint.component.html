@@ -51,10 +51,6 @@
               <div class="grid">
 
                 <div class="col-6">
-                  <gebo-ai-field id="personalData" label="Contains personal data"
-                    help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
-                    <p-checkbox formControlName="personalData" id="personalData" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
-                  </gebo-ai-field>
                   <gebo-ai-field id="description" label="Description" help="Enter the description of SharePoint/OneDrive entries data sources." [required]="true">
                     <input
                       pInputText
@@ -149,6 +145,12 @@
                         ></gebo-ai-content-reindex-scheduler-component>
                       </gebo-ai-field>
                     </div>
+                <div class="col-12">
+                  <gebo-ai-field id="personalData" label="Contains personal data"
+                    help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
+                    <p-checkbox formControlName="personalData" id="personalData" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+                  </gebo-ai-field>
+                </div>
                   </div>
                 </p-tabpanel>
                 <p-tabpanel [value]="1">

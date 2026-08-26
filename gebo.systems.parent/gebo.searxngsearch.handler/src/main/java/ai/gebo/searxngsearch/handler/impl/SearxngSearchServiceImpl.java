@@ -89,11 +89,6 @@ public class SearxngSearchServiceImpl extends AbstractWebSearchServiceImpl<Searx
 	}
 
 	@Override
-	public String getDescription() {
-		return "SearXNG web search";
-	}
-
-	@Override
 	public List<SearchableSystemMetaData> getSearchableSystems() throws SearchServiceException {
 		return List.of(SYSTEM_METADATA);
 	}

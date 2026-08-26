@@ -15,6 +15,7 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
   <p-tree id="MainTree" gebo-ai-label #mainTree [value]="roots" class=" col-12" selectionMode="single" [(selection)]="selectedNodes"
+    [trackBy]="trackBy" loadingMode="icon"
     (onNodeExpand)="nodeExpand($event)" (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="nodeSelect($event)"
     (onNodeUnselect)="nodeUnselect($event)">
     <ng-template let-node pTemplate="default">

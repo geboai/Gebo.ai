@@ -20,6 +20,24 @@ import { HttpClient } from "@angular/common/http";
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
 import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
 import { EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
+import { getAuthHeader } from "../../infrastructure/gebo-credentials";
+
+/**
+ * A file Gebo.ai serves by url and that has no ingested document behind it.
+ *
+ * The knowledge base contents are addressed by the code of their document
+ * reference, which only exists once they have been published. A data source can
+ * instead hold files that were only uploaded, and the editor of that data source
+ * has to be able to open them all the same: it hands over the url serving the
+ * file and its name, and the viewer picks the rendering on the extension exactly
+ * as it does for an ingested content.
+ */
+export interface ServedFileReference {
+  /** Url serving the raw contents of the file, protected by Gebo.ai. */
+  url: string;
+  /** Name of the file, shown in the header of the dialog. */
+  fileName: string;
+}
 
 /**
  * URL for the content controller API endpoint
@@ -46,6 +64,12 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
   @Input() userUploadedContent?: EnrichedUserUploadedContentView;
 
   @Input() generatedContent?: EnrichedLLMGeneratedResource;
+
+  /**
+   * A file served by url rather than by the code of an ingested document. See
+   * {@link ServedFileReference}.
+   */
+  @Input() servedFile?: ServedFileReference;
 
   /** Flag to determine if the viewer should be active */
   @Input() activate: boolean = false;
@@ -168,6 +192,9 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
         console.log("content viewer url:" + this.externalContentUrl);
       }
     }
+    if (this.servedFile) {
+      this.handleServedFile(this.servedFile);
+    }
     if (this.contentMetaInfo) {
       if (this.contentMetaInfo.extension) {
         this.loading = true;
@@ -220,6 +247,59 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
   }
 
   /**
+   * Prepares the rendering of a file served by url.
+   *
+   * The dialog is opened whatever the file type: a type the viewer cannot render
+   * is offered as a download instead of being silently refused, which is what an
+   * administrator browsing the contents of a data source expects. The text based
+   * contents are fetched here because the code editor works on the text itself
+   * and not on a url.
+   *
+   * @param servedFile The file to show
+   */
+  private handleServedFile(servedFile: ServedFileReference) {
+    const lastDot: number = servedFile.fileName.lastIndexOf(".");
+    const extension: string = lastDot >= 0 ? servedFile.fileName.substring(lastDot).toLowerCase() : "";
+    this.contentMetaInfo = { fileName: servedFile.fileName, extension: extension, exists: true };
+    this.externalContentUrl = servedFile.url;
+    this.contentServedByGebo = true;
+    this.contentObject = undefined;
+    this.sourceCodeContent = false;
+    this.plainTextContent = false;
+    this.pdfContent = false;
+    this.browsableContent = false;
+    this.downloadableContent = false;
+    this.loading = true;
+    this.ingestionMetaInfoService.getIngestionFileTypeByExtension(extension).subscribe({
+      next: (fileType) => {
+        this.ingestionFileType = fileType;
+        if (fileType?.uiViewable === true) {
+          this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
+          this.plainTextContent = fileType?.treatAs === 'plainText';
+          this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
+          this.sourceCodeLanguage = fileType?.programmingLanguage ? fileType.programmingLanguage : "";
+        }
+        this.downloadableContent = !(this.sourceCodeContent || this.plainTextContent || this.pdfContent);
+        this.visible = this.activate === true;
+        if (this.sourceCodeContent || this.plainTextContent) {
+          this.loading = true;
+          this.httpClient.get(servedFile.url, { headers: getAuthHeader(), responseType: "text" }).subscribe({
+            next: (text) => {
+              this.contentObject = { content: text };
+            },
+            complete: () => {
+              this.loading = false;
+            }
+          });
+        }
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+  /**
    * Angular lifecycle hook that responds to input changes
    * Fetches content metadata when the content code changes and the component is activated
    * 
@@ -246,6 +326,9 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
     }
     if (this.userUploadedContent && changes["userUploadedContent"]) {
       this.handleMetaInfo();
+    }
+    if (this.servedFile && changes["servedFile"]) {
+      this.handleServedFile(this.servedFile);
     }
   }
 
