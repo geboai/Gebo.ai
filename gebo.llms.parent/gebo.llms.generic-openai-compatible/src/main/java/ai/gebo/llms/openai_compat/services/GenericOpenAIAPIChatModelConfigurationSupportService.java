@@ -188,7 +188,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
-			if (config.getTemperature() != null && config.getTemperature() > 0) {
+			if (config.getTemperature() != null) {
 				builder = builder.temperature(config.getTemperature());
 			}
 			if (config.getTopP() != null && config.getTopP() > 0) {
