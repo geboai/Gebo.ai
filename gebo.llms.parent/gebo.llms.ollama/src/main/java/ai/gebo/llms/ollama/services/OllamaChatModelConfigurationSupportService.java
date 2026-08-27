@@ -138,7 +138,7 @@ public class OllamaChatModelConfigurationSupportService
 			}
 
 			// Configure temperature if specified
-			if (config.getTemperature() != null && config.getTemperature() > 0) {
+			if (config.getTemperature() != null) {
 				builder = builder.temperature(config.getTemperature());
 			}
 			if (config.getThinking() != null) {

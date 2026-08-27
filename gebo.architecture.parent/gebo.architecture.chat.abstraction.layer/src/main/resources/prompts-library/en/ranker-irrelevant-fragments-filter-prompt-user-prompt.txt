@@ -2,8 +2,8 @@ INPUTS:
 
 (A) USER QUESTION: {question}
 
-(B) LEAST RELEVANT RANKED FRAGMENTS BATCH (each fragment is a document block exposing its fragmentId
-and its content):
+(B) RANKED FRAGMENTS BATCH, from the more relevant to the less relevant (each fragment is a document
+block exposing its fragmentId and its content):
 {documents}
 
 Output only the IRRELEVANT= line listing the fragmentId of the fragments of batch (B) that are

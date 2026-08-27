@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.springframework.ai.document.Document;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -173,8 +174,14 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	 * without this stage a result set whose tail is pure noise reaches the answering
 	 * model as it is.
 	 * <p>
-	 * The best ranked fragment always survives the filter, so a ranked result set
-	 * never becomes an empty one.
+	 * Every fragment below the protected top is judged, batch after batch from the best
+	 * ranked to the worst, oversized fragments split into pieces so all of their content
+	 * is seen, and a fragment is removed only when the model discarded every one of its
+	 * pieces: the rank of a fragment never decides its fate, its own content does. The
+	 * best ranked fragments are never submitted at all (see
+	 * {@code rankerIrrelevanceFilterProtectedTopFragments}), so a moody verdict cannot
+	 * drop the ranker's strongest picks, and the best ranked fragment always survives -
+	 * a ranked result set never becomes an empty one.
 	 * <p>
 	 * Fail-open by design: when the filter cannot run (feature disabled, result set
 	 * too small, no chat model configured, prompt missing) or fails for any reason,
@@ -208,24 +215,31 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 						+ " not found, the ranked fragments are kept as they are");
 				return ranked;
 			}
-			// The best ranked fragment is never dropped: whatever the model thinks of it,
-			// returning nothing at all would leave the callers with no material to work on,
-			// and the ranker put that fragment first exactly because it is the closest thing
-			// to an answer the retrieval could find.
-			final int cutIndex = Math.max(1, irrelevanceCutIndex(ranked, query, serviceModel, prompt));
-			final int discarded = ranked.size() - cutIndex;
+			final Set<Integer> discardedIndices = discardedDocumentIndices(ranked, query, serviceModel, prompt);
+			// Only documents the model judged useless in all of their pieces leave, and the
+			// best ranked fragment is in the output list in every situation: whatever the
+			// model thinks of it, returning nothing at all would leave the callers with no
+			// material to work on, and the ranker put that fragment first exactly because it
+			// is the closest thing to an answer the retrieval could find.
+			final List<Document> kept = new ArrayList<>(ranked.size());
+			for (int index = 0; index < ranked.size(); index++) {
+				if (index == 0 || !discardedIndices.contains(index)) {
+					kept.add(ranked.get(index));
+				}
+			}
+			final int discarded = ranked.size() - kept.size();
 			logRankerFilterEvent(event, serviceModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS, ranked.size(),
 					discarded);
 			if (discarded <= 0)
 				return ranked;
-			if (cutIndex == 1) {
+			if (kept.size() == 1) {
 				LOGGER.warn("The irrelevance filter found no relevant fragment among the " + ranked.size()
 						+ " ranked one(s), only the best ranked one is kept");
 			} else if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Irrelevance filter discarded " + discarded + " of " + ranked.size()
 						+ " ranked fragment(s)");
 			}
-			return new ArrayList<>(ranked.subList(0, cutIndex));
+			return kept;
 		} catch (Throwable th) {
 			LOGGER.warn("Error filtering out the irrelevant ranked fragments, the ranked list is kept as it is", th);
 			logRankerFilterEvent(event, serviceModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE, ranked.size(),
@@ -235,54 +249,114 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	}
 
 	/**
-	 * Walks the ranked list bottom-up - worst ranked fragments first - in batches
-	 * sized on a fraction of the filtering model context window, and returns the
-	 * index the discarding starts at: the fragments before it are kept, the ones from
-	 * it onwards are dropped.
+	 * Judges every ranked fragment and returns the indices of the ones the model found
+	 * useless for the query, so they can be dropped from the ranked list.
 	 * <p>
-	 * Two consequences of feeding the batches in reverse ranking order. Whenever the
-	 * model discards a fragment, every worse ranked fragment is discarded with it,
-	 * even if the model did not name it, because the ranker already stated they are
-	 * less relevant than the discarded one. And as soon as a batch comes back with
-	 * nothing to discard, the walk stops: everything better ranked than a batch the
-	 * model finds entirely relevant is relevant too, so it is kept without spending
-	 * further LLM calls on it.
+	 * A fragment that does not fit the batch budget is split into budget-sized pieces
+	 * first, so no piece ever overflows the model context and no fragment is left
+	 * unjudged because of its size. Each piece is submitted for judgement; a fragment
+	 * counts as discarded only when the model discarded <em>every</em> one of its
+	 * pieces - one kept piece keeps the whole fragment, because a single relevant
+	 * passage is enough reason to hand the fragment to the answering model.
+	 * <p>
+	 * The pieces are walked in batches bounded by the budget and by a maximum piece
+	 * count, best ranked first. Every batch is submitted: the walk never stops early
+	 * and never infers anything about a piece it did not show to the model. The first
+	 * {@code rankerIrrelevanceFilterProtectedTopFragments} fragments are excluded from
+	 * the walk entirely and can never be discarded.
 	 */
-	private int irrelevanceCutIndex(List<Document> ranked, String query, IGConfigurableChatModel serviceModel,
-			GPromptTemplateConfig prompt) throws LLMConfigException {
+	private Set<Integer> discardedDocumentIndices(List<Document> ranked, String query,
+			IGConfigurableChatModel serviceModel, GPromptTemplateConfig prompt) throws LLMConfigException {
 		final long batchBudget = batchTokensBudget(serviceModel, prompt, query);
+		final int maxFragmentsPerBatch = Math.max(1, ragSearchConfig.getRankerIrrelevanceFilterMaxFragmentsPerBatch());
+		final int protectedTop = Math.max(0,
+				Math.min(ragSearchConfig.getRankerIrrelevanceFilterProtectedTopFragments(), ranked.size()));
 		final IChatRequestContext context = IChatRequestContext.of(query);
-		int cutIndex = ranked.size();
-		int batchEnd = ranked.size();
-		while (batchEnd > 0) {
-			int batchStart = batchEnd;
-			long batchWeight = 0l;
-			// cumulate backwards until the budget is filled, always taking at least one
-			// fragment even when a single one is bigger than the whole budget
-			while (batchStart > 0) {
-				final long documentWeight = weight(ranked.get(batchStart - 1));
-				if (batchStart < batchEnd && (batchWeight + documentWeight) > batchBudget)
-					break;
-				batchWeight += documentWeight;
-				batchStart--;
-			}
-			final List<Document> batch = ranked.subList(batchStart, batchEnd);
-			final Set<String> discarded = askDiscardedFragments(batch, query, serviceModel, prompt, context);
-			if (discarded.isEmpty()) {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Irrelevance filter stopped at fragments [" + batchStart + "," + batchEnd
-							+ "): nothing to discard, every better ranked fragment is kept");
-				}
-				break;
-			}
-			for (int index = batchStart; index < batchEnd; index++) {
-				if (discarded.contains(ranked.get(index).getId()) && index < cutIndex) {
-					cutIndex = index;
-				}
-			}
-			batchEnd = batchStart;
+		if (protectedTop > 0 && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Irrelevance filter protects the top " + protectedTop + " of " + ranked.size()
+					+ " ranked fragment(s) from judgement");
 		}
-		return cutIndex;
+
+		// break every oversized fragment into budget-sized pieces, mapping each piece
+		// back to the index of the fragment it came from. The protected top fragments are
+		// never submitted, so the walk starts below them
+		final TokenTextSplitter splitter = createTokenSplitter((int) Math.min(Integer.MAX_VALUE, batchBudget));
+		final List<Document> pieces = new ArrayList<>();
+		final Map<String, Integer> pieceToDocumentIndex = new HashMap<>();
+		final Map<Integer, Integer> piecesPerDocument = new HashMap<>();
+		for (int index = protectedTop; index < ranked.size(); index++) {
+			final Document document = ranked.get(index);
+			final List<Document> documentPieces = weight(document) <= batchBudget ? List.of(document)
+					: splitToBudget(splitter, document);
+			for (Document piece : documentPieces) {
+				pieceToDocumentIndex.put(piece.getId(), index);
+				pieces.add(piece);
+			}
+			piecesPerDocument.put(index, documentPieces.size());
+		}
+
+		// judge the pieces batch by batch, collecting the ids of the discarded ones
+		final Set<String> discardedPieces = new HashSet<>();
+		int batchStart = 0;
+		while (batchStart < pieces.size()) {
+			int batchEnd = batchStart;
+			long batchWeight = 0l;
+			// cumulate downwards until the budget or the piece cap is reached, always taking
+			// at least one piece (which fits the budget by construction)
+			while (batchEnd < pieces.size() && (batchEnd - batchStart) < maxFragmentsPerBatch) {
+				final long pieceWeight = weight(pieces.get(batchEnd));
+				if (batchEnd > batchStart && (batchWeight + pieceWeight) > batchBudget)
+					break;
+				batchWeight += pieceWeight;
+				batchEnd++;
+			}
+			final List<Document> batch = pieces.subList(batchStart, batchEnd);
+			final Set<String> batchDiscarded = askDiscardedFragments(batch, query, serviceModel, prompt, context);
+			discardedPieces.addAll(batchDiscarded);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Irrelevance filter judged pieces [" + batchStart + "," + batchEnd + ") of "
+						+ pieces.size() + ": " + batchDiscarded.size() + " to discard");
+			}
+			batchStart = batchEnd;
+		}
+
+		// a fragment is discarded only when every one of its pieces was discarded
+		final Map<Integer, Integer> discardedPiecesPerDocument = new HashMap<>();
+		for (Document piece : pieces) {
+			if (discardedPieces.contains(piece.getId())) {
+				final int documentIndex = pieceToDocumentIndex.get(piece.getId());
+				discardedPiecesPerDocument.merge(documentIndex, 1, Integer::sum);
+			}
+		}
+		final Set<Integer> discardedDocuments = new HashSet<>();
+		for (Map.Entry<Integer, Integer> entry : discardedPiecesPerDocument.entrySet()) {
+			final int documentIndex = entry.getKey();
+			if (entry.getValue() >= piecesPerDocument.get(documentIndex)) {
+				discardedDocuments.add(documentIndex);
+			}
+		}
+		return discardedDocuments;
+	}
+
+	/**
+	 * Splits an oversized fragment into budget-sized pieces. The splitter copies the
+	 * fragment metadata onto each piece and gives it its own id, so a piece renders in
+	 * the prompt like any other fragment and can be named back by the model; the ids
+	 * are mapped to the origin fragment by the caller. A fragment that the splitter
+	 * cannot break (no usable text) falls back to itself, so it is still judged rather
+	 * than silently dropped.
+	 */
+	private List<Document> splitToBudget(TokenTextSplitter splitter, Document document) {
+		try {
+			final List<Document> pieces = splitter.apply(List.of(document));
+			if (pieces != null && !pieces.isEmpty()) {
+				return pieces;
+			}
+		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot split the oversized fragment " + document.getId()
+					+ " for the irrelevance filter, it is judged whole", e);
+		}
+		return List.of(document);
 	}
 
 	/**

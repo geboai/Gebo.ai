@@ -118,7 +118,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 			}
 
 			// Configure temperature if specified and valid
-			if (config.getTemperature() != null && config.getTemperature() > 0) {
+			if (config.getTemperature() != null) {
 				builder = builder.temperature(config.getTemperature());
 			}
 
