@@ -205,6 +205,19 @@
 			<artifactId>gebo.architecture.mcp-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Agent2Agent (A2A) protocol: integrate external A2A agents as network
+		     participants (a2a-clients) and export gebo agents/networks as opaque A2A
+		     agents (a2a-server). -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.a2a-clients</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.a2a-server</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- user-messages-concentrator-component, externalized out of gebo.core onto
 		     its own jobs-master-module - see GWorkflowsConcentratorMessagesReceiverFactory.
 		     gebo.core no longer carries it, so this is required, not optional, for
