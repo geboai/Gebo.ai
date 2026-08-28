@@ -49,6 +49,25 @@ public class GeboRagSearchConfig {
 	private int pureSearchMaximumChunkSize = 512;
 	// Default similarity threshold for comparisons
 	private double defaultSimilarityThreshold = 0.50;
+	// Second stage of the ranking: the ranked fragments are submitted, worst ranked
+	// first, to the internal services chat model, that drops the ones completely
+	// useless for the query. Disabling it leaves the ranker output untouched.
+	private boolean rankerIrrelevanceFilterEnabled = true;
+	// Fraction of the filtering chat model context window used to size each batch of
+	// ranked fragments submitted to it
+	private double rankerIrrelevanceFilterContextFraction = 0.5;
+	// Upper bound on the fragments of a single batch, on top of the context window
+	// budget. It keeps the batches small enough for the model to judge them one by one
+	// and makes the walk advance in steps instead of deciding everything in one call.
+	private int rankerIrrelevanceFilterMaxFragmentsPerBatch = 5;
+	// The filter does not run on result sets smaller than this: on a handful of
+	// fragments the extra LLM round trip is not worth its latency
+	private int rankerIrrelevanceFilterMinDocuments = 5;
+	// The best ranked fragments are never submitted to the filter: the filtering model
+	// is non deterministic and can occasionally judge as useless a fragment the ranker
+	// scored among the most relevant, so the top of the ranked list is protected from
+	// it. Set to 0 to let the filter judge the whole list.
+	private int rankerIrrelevanceFilterProtectedTopFragments = 2;
 
 	public GeboRagSearchConfig(@Autowired IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
 			@Autowired IGSemanticSearchDocumentsCachedDao semanticSearchDao,

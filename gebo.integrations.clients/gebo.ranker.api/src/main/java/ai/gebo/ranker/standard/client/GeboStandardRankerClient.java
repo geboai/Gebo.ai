@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 public class GeboStandardRankerClient implements RankerModel {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboStandardRankerClient.class);
 
 	private final String serviceUrl;
 	private final String model;
@@ -101,6 +105,20 @@ public class GeboStandardRankerClient implements RankerModel {
 		List<RankingOutput.RankingItem> ranked = allRanked.stream().filter(item -> item.getRanking() != null)
 				.sorted(Comparator.comparing(RankingOutput.RankingItem::getRanking).reversed()).limit(requestedTopK)
 				.toList();
+
+		if (LOGGER.isDebugEnabled()) {
+			StringBuilder buffer = new StringBuilder();
+			buffer.append("Ranker '").append(model).append("' ordered ").append(ranked.size())
+					.append(" fragment(s) of ").append(documents.size()).append(" candidate(s) (topK=")
+					.append(requestedTopK).append("), best first:");
+			int position = 0;
+			for (RankingOutput.RankingItem item : ranked) {
+				final String fragmentId = item.getDocument() != null ? item.getDocument().getId() : "null";
+				buffer.append("\n  #").append(position++).append(" score=").append(item.getRanking())
+						.append(" fragmentId=").append(fragmentId);
+			}
+			LOGGER.debug(buffer.toString());
+		}
 
 		return RankingOutput.builder().ranked(ranked).build();
 	}

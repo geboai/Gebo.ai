@@ -165,6 +165,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	@Override
 	public void initialize(ModelConfig config, GChatModelType type) throws LLMConfigException {
+		// Deterministic by default: a chat model with no temperature set is initialized at
+		// temperature 0, so internal judgement calls (the ranking irrelevance filter,
+		// routing, query rewriting) do not vary run to run. An explicit temperature in the
+		// configuration is always respected.
+		if (config != null && config.getTemperature() == null) {
+			config.setTemperature(0.0d);
+		}
 		this.config = config;
 		this.type = type;
 		this.model = configureModel(config, type, null);

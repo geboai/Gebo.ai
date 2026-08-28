@@ -1008,6 +1008,11 @@ public class GeboLLMSSetupService {
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
 					configuration.setAccessibleToAll(true);
 					configuration.setForUses(config.getUses());
+					// Deterministic by default: every chat model the easy setup creates - the
+					// default chat model and the INTERNAL_SERVICES (service) model alike - is
+					// persisted with temperature 0, so judgement oriented internal calls (the
+					// ranking irrelevance filter, routing, query rewriting) do not vary run to run.
+					configuration.setTemperature(0.0d);
 					if (config.getContextWindow() != null) {
 						configuration.setContextLength(config.getContextWindow());
 					}

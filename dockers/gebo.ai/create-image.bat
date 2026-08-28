@@ -14,7 +14,7 @@ REM   mvn -f gebo.apps.parent\gebo.ai.app\pom.xml -P bootables package -DskipTes
 REM --------------------------------------------------------------------------
 
 set "REPO_ROOT=%~dp0..\.."
-set "VERSION=1.0.2.4-SNAPSHOT"
+set "VERSION=1.0.3.0-SNAPSHOT"
 set "JAR=%REPO_ROOT%\gebo.apps.parent\gebo.ai.app\target\gebo.ai.app-%VERSION%-bootable.jar"
 set "SBOM=%REPO_ROOT%\gebo.apps.parent\gebo.ai.app\target\classes\META-INF\sbom\application.cdx.json"
 

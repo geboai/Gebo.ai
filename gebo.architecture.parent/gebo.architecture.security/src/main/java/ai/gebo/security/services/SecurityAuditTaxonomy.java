@@ -56,6 +56,7 @@ public class SecurityAuditTaxonomy {
 		public static final String LLM_INVOKE_TTS = "llmInvokeTts";
 		public static final String LLM_INVOKE_TRANSCRIPT = "llmInvokeTranscript";
 		public static final String LLM_INVOKE_RANK = "llmInvokeRank";
+		public static final String LLM_INVOKE_RANK_FILTER = "llmInvokeRankFilter";
 
 		// 3rd-party integration settings
 		public static final String INTEGRATION_SYSTEM_INSERT = "integrationSystemInsert";
