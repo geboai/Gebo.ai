@@ -2,6 +2,7 @@ package ai.gebo.architecture.a2aserver.runtime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +72,11 @@ public class A2AAgentCardBuilder {
 				.description("Gebo.ai agents exported over A2A: " + config.getExportedRelativeUrl())
 				.version("1.0.0").url(cardUrl).preferredTransport("JSONRPC")
 				.capabilities(org.a2aproject.sdk.spec.AgentCapabilities.builder().streaming(true)
-						.pushNotifications(false).build())
-				.defaultInputModes(TEXT_MODES).defaultOutputModes(TEXT_MODES).skills(skills).build();
+						.pushNotifications(false).extendedAgentCard(false).extensions(List.of()).build())
+				.defaultInputModes(TEXT_MODES).defaultOutputModes(TEXT_MODES).skills(skills)
+				// The A2A AgentCard builder requires every collection field to be non-null.
+				.securitySchemes(Map.of()).securityRequirements(List.of()).supportedInterfaces(List.of())
+				.signatures(List.of()).additionalInterfaces(List.of()).build();
 	}
 
 	private AgentSkill buildSkill(A2AExportedAgent exported) {
@@ -97,8 +101,8 @@ public class A2AAgentCardBuilder {
 		if (Boolean.TRUE.equals(exported.getExposeMemberCapabilities())) {
 			appendMemberCapabilities(network, tags);
 		}
-		return AgentSkill.builder().id(id).name(name).description(description).tags(tags).inputModes(TEXT_MODES)
-				.outputModes(TEXT_MODES).build();
+		return AgentSkill.builder().id(id).name(name).description(description).tags(tags).examples(List.of())
+				.inputModes(TEXT_MODES).outputModes(TEXT_MODES).securityRequirements(List.of()).build();
 	}
 
 	private AgentSkill buildAgentSkill(A2AExportedAgent exported) {
@@ -121,8 +125,8 @@ public class A2AAgentCardBuilder {
 		} else {
 			description = "Exported Gebo agent " + exported.getAgentConfigCode();
 		}
-		return AgentSkill.builder().id(id).name(name).description(description).tags(tags).inputModes(TEXT_MODES)
-				.outputModes(TEXT_MODES).build();
+		return AgentSkill.builder().id(id).name(name).description(description).tags(tags).examples(List.of())
+				.inputModes(TEXT_MODES).outputModes(TEXT_MODES).securityRequirements(List.of()).build();
 	}
 
 	private void appendMemberCapabilities(GAgentsNetwork network, List<String> tags) {
