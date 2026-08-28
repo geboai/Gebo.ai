@@ -17,13 +17,14 @@
  * It allows users to browse and select files and folders from a virtual filesystem.
  */
 
-import { ChangeDetectorRef, Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BrowseParam, GSharepointProjectEndpoint, GVirtualFilesystemRoot, VirtualFilesystemNavigationNode, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions, TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from "primeng/tree";
 import { of } from "rxjs";
-import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemReference, reconstructNavigationObservableCallback } from "./vfilesystem-types";
+import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemDeletableReference, VFilesystemReference, reconstructNavigationObservableCallback } from "./vfilesystem-types";
+import { refreshTreeNodes, treeNodeTrackBy } from "../../services/primeng-tree-refresh";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, fieldHostComponentName } from "../field-host-component-iface/field-host-component-iface";
 
@@ -41,6 +42,107 @@ const iconsMapping:{[key:string]:string}={
 };
 const stdFolderOpened="pi pi-folder-open";
 const stdFolderClosed="pi pi-folder";
+
+/**
+ * Icon per file extension, so a listing is readable at a glance instead of
+ * showing the same generic sheet for every entry. Extensions not listed here
+ * fall back to the generic file icon.
+ */
+const fileIconsByExtension: { [key: string]: string } = {
+    ".pdf": "pi pi-file-pdf",
+    ".doc": "pi pi-file-word",
+    ".docx": "pi pi-file-word",
+    ".odt": "pi pi-file-word",
+    ".rtf": "pi pi-file-word",
+    ".xls": "pi pi-file-excel",
+    ".xlsx": "pi pi-file-excel",
+    ".ods": "pi pi-file-excel",
+    ".csv": "pi pi-file-excel",
+    ".zip": "pi pi-box",
+    ".gz": "pi pi-box",
+    ".tar": "pi pi-box",
+    ".7z": "pi pi-box",
+    ".rar": "pi pi-box",
+    ".png": "pi pi-image",
+    ".jpg": "pi pi-image",
+    ".jpeg": "pi pi-image",
+    ".gif": "pi pi-image",
+    ".svg": "pi pi-image",
+    ".bmp": "pi pi-image",
+    ".webp": "pi pi-image",
+    ".mp3": "pi pi-volume-up",
+    ".wav": "pi pi-volume-up",
+    ".m4a": "pi pi-volume-up",
+    ".mp4": "pi pi-video",
+    ".avi": "pi pi-video",
+    ".mov": "pi pi-video",
+    ".txt": "pi pi-align-left",
+    ".md": "pi pi-align-left",
+    ".log": "pi pi-align-left",
+    ".html": "pi pi-code",
+    ".htm": "pi pi-code",
+    ".xml": "pi pi-code",
+    ".json": "pi pi-code",
+    ".yaml": "pi pi-code",
+    ".yml": "pi pi-code",
+    ".java": "pi pi-code",
+    ".ts": "pi pi-code",
+    ".js": "pi pi-code",
+    ".py": "pi pi-code",
+    ".sql": "pi pi-database"
+};
+const stdFileIcon = "pi pi-file-o";
+
+/**
+ * Returns the icon of a non folder entry, chosen on its extension.
+ * @param entry - The filesystem reference to get the icon for
+ * @returns The icon css classes
+ */
+function icon_file(entry: VFilesystemReference): string {
+    const name: string | undefined = entry.path?.name;
+    if (name) {
+        const lastDot: number = name.lastIndexOf(".");
+        if (lastDot >= 0) {
+            const icon: string | undefined = fileIconsByExtension[name.substring(lastDot).toLowerCase()];
+            if (icon) {
+                return icon;
+            }
+        }
+    }
+    return stdFileIcon;
+}
+
+/**
+ * Orders the children of a node the way a file manager does: folders first,
+ * then files, both alphabetically and case insensitively. The browsing services
+ * return whatever order the remote system yields (`Files.list` order on the
+ * server filesystem), which makes long listings hard to scan.
+ * @param nodes - The nodes to sort, sorted in place
+ * @returns The same array, sorted
+ */
+function sortNodes(nodes: TreeNode<EnrichedFilesystemReference>[]): TreeNode<EnrichedFilesystemReference>[] {
+    return nodes.sort((a, b) => {
+        const aFolder: boolean = isFolderReference(a.data);
+        const bFolder: boolean = isFolderReference(b.data);
+        if (aFolder !== bFolder) {
+            return aFolder ? -1 : 1;
+        }
+        const aLabel: string = (a.label ? a.label : "").toLowerCase();
+        const bLabel: string = (b.label ? b.label : "").toLowerCase();
+        return aLabel.localeCompare(bLabel);
+    });
+}
+
+/**
+ * Tells whether a reference points to a folder or to a root, both of which are
+ * browsable containers.
+ * @param entry - The reference to check
+ * @returns true when the entry can contain other entries
+ */
+function isFolderReference(entry?: VFilesystemReference): boolean {
+    if (!entry) return false;
+    return (!entry.path) || entry.path.folder === true;
+}
 function icon_folder_opened(node?:VFilesystemReference):string {
     let out:string|undefined=undefined;
     let iconKey:string|undefined=node?.path?node.path.iconKey:node?.root?.iconKey;
@@ -72,6 +174,8 @@ interface EnrichedFilesystemReference extends VFilesystemReference {
     uniqueCode: string;
     selected: boolean;
     parentSelected: boolean;
+    /** True when the user asked to delete this entry on the remote system. */
+    markedForDeletion?: boolean;
 }
 
 /**
@@ -90,32 +194,31 @@ function hasValue(a: any): boolean {
  * @returns A TreeNode with EnrichedFilesystemReference data
  */
 function toEnrichedNode(entry: VFilesystemReference, parent?: TreeNode<EnrichedFilesystemReference>): TreeNode<EnrichedFilesystemReference> {
-    let key: string = "";
-    if (entry.root.code) {
-        key = entry.root.code + "::";
-    } else if (entry.root.absolutePath) {
-        key = entry.root.absolutePath + "::";
-    } else if (entry.root.uri) {
-        key = entry.root.uri + "::";
-    }
-    if (entry.path?.absolutePath) {
-        key = key + entry.path.absolutePath;
-    }
+    const uniqueCode: string = uniqueKey(entry);
     const data: EnrichedFilesystemReference = {
-        uniqueCode: uniqueKey(entry),
+        uniqueCode: uniqueCode,
         selected: false,
         parentSelected: false,
         ...entry
     };
+    const folder: boolean = isFolderReference(entry);
     const t: TreeNode<EnrichedFilesystemReference> = {
 
         label: entry.path ? entry.path.name : entry.root.description,
-        leaf: (!entry.path) || (entry.path && entry.path.folder === true) ? false : true,
+        leaf: folder ? false : true,
         data: data,
-        icon: (!entry.path) || (entry.path && entry.path.folder === true) ? icon_folder_opened(entry) : "pi pi-file-o",
-        collapsedIcon: (!entry.path) || (entry.path && entry.path.folder === true) ? icon_folder_closed(entry) : "pi pi-file-o",
+        // A folder gets no `icon`: PrimeNG uses `icon` whenever it is set and only
+        // falls back on the expanded/collapsed pair when it is not, so filling both
+        // meant the open folder icon was shown even on a closed folder.
+        icon: folder ? undefined : icon_file(entry),
+        expandedIcon: folder ? icon_folder_opened(entry) : undefined,
+        collapsedIcon: folder ? icon_folder_closed(entry) : undefined,
         parent: parent,
-        key: key
+        // The node key and the lookup key of nodesMap must be the same string:
+        // keeping two identity schemes (the old key was built from root code and
+        // absolute path with different rules than uniqueKey) made PrimeNG and the
+        // component disagree on which node a value refers to.
+        key: uniqueCode
     };
     return t;
 }
@@ -127,12 +230,28 @@ function toEnrichedNode(entry: VFilesystemReference, parent?: TreeNode<EnrichedF
  * @returns A clean VFilesystemReference without UI state properties
  */
 function toBackendData(entry: EnrichedFilesystemReference): VFilesystemReference {
-    const data: VFilesystemReference = {
+    const data: any = {
         ...entry
     };
-    const anyData: any = (data as any);
-    anyData.selected = undefined;
-    anyData.uniqueCode = undefined;
+    // Every ui only field has to leave the payload: they used to be blanked one by
+    // one and parentSelected was forgotten, so it ended up persisted in the
+    // entities holding a reference.
+    delete data.selected;
+    delete data.parentSelected;
+    delete data.uniqueCode;
+    delete data.markedForDeletion;
+    return data as VFilesystemReference;
+}
+
+/**
+ * Converts an EnrichedFilesystemReference into the payload of an entry the user
+ * asked to delete on the remote system.
+ * @param entry - The enriched reference to convert
+ * @returns A VFilesystemDeletableReference flagged for deletion
+ */
+function toDeletionData(entry: EnrichedFilesystemReference): VFilesystemDeletableReference {
+    const data: VFilesystemDeletableReference = toBackendData(entry);
+    data.markedForDeletion = true;
     return data;
 }
 
@@ -175,6 +294,7 @@ function findNode(x: EnrichedFilesystemReference, roots: TreeNode<EnrichedFilesy
 @Component({
     selector: "gebo-ai-vfilesystem-selector-component",
     templateUrl: "vfilesystem-selector.component.html",
+    styleUrl: "vfilesystem-selector.component.scss",
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -238,6 +358,48 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
     @Input() placeholder: string = "Select proper path";
 
     /**
+     * Enables signing remote entries for deletion.
+     *
+     * When false (the default) the control behaves and emits exactly as it always
+     * did, a {@link VFilesystemReference} or an array of them depending on
+     * {@link selectionMode}. When true a trash toggle appears on every deletable
+     * entry and the emitted array also carries the marked entries, flagged with
+     * `markedForDeletion: true` (see {@link VFilesystemDeletableReference}).
+     *
+     * The control never deletes anything: it reports the intent, the host applies
+     * it against its own backend when its entity is saved.
+     */
+    @Input() enableDeletion: boolean = false;
+
+    /**
+     * Whether folders may be signed for deletion when {@link enableDeletion} is
+     * active. Off by default because deleting a folder removes everything under
+     * it, which most hosts do not want to expose.
+     */
+    @Input() canDeleteFolders: boolean = false;
+
+    /**
+     * Emits the entries currently signed for deletion whenever the user confirms
+     * the editing. Hosts that keep the deletion marks out of their form value can
+     * listen here instead of reading the control value.
+     */
+    @Output() deletionsChange: EventEmitter<VFilesystemReference[]> = new EventEmitter<VFilesystemReference[]>();
+
+    /**
+     * Enables opening the browsed entries.
+     *
+     * An eye button appears on every entry that is not a folder, and clicking it
+     * emits {@link viewRequested}. The control does not know how to show the
+     * contents of the system it is browsing, so it only reports the request.
+     */
+    @Input() enableView: boolean = false;
+
+    /**
+     * Emits the entry the user asked to open when {@link enableView} is active.
+     */
+    @Output() viewRequested: EventEmitter<VFilesystemReference> = new EventEmitter<VFilesystemReference>();
+
+    /**
      * The root nodes of the filesystem tree
      */
     public roots: TreeNode<EnrichedFilesystemReference>[] = [];
@@ -258,6 +420,18 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
     public editingNodeValues: EnrichedFilesystemReference[] = [];
 
     /**
+     * Entries signed for deletion in the main panel, by unique code. This is the
+     * committed state, mirrored into the control value.
+     */
+    public deletionMarks: Map<string, EnrichedFilesystemReference> = new Map();
+
+    /**
+     * Entries signed for deletion inside the dialog, discarded when the user
+     * cancels the editing and promoted to {@link deletionMarks} when confirmed.
+     */
+    public editingDeletionMarks: Map<string, EnrichedFilesystemReference> = new Map();
+
+    /**
      * Toast messages to display to the user
      */
     public messages: ToastMessageOptions[] = [];
@@ -271,6 +445,27 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * Map of node unique codes to their tree nodes for quick lookup
      */
     private nodesMap: Map<string, TreeNode<EnrichedFilesystemReference>> = new Map();
+
+    /**
+     * Node tracking of the tree. The branch of a node is rebuilt out of new node
+     * objects every time its contents change, which is the only thing PrimeNG
+     * repaints on; tracking the nodes by key keeps the views of the untouched ones.
+     */
+    public trackBy = treeNodeTrackBy;
+
+    /**
+     * Hands the tree back its nodes after something they show has changed.
+     *
+     * `Tree` and its nodes run OnPush and a node is repainted only when its object
+     * changes identity, so what is written on the nodes outside of a click on them
+     * used to stay invisible: the first click on a folder flipped the toggler but
+     * no child ever appeared, the spinner of the toggler never went away and the
+     * checkboxes of the entries covered by a selected folder kept being offered.
+     */
+    private refreshTreeView(): void {
+        this.roots = refreshTreeNodes(this.roots);
+        this.checkChanges.markForCheck();
+    }
 
     /**
      * Form group for the selection control
@@ -357,6 +552,106 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
     }
 
     /**
+     * Determines whether the deletion toggle has to be shown for a tree node.
+     * Roots are never deletable: they are the browsing scope, not content.
+     * @param item - The tree node to check
+     * @returns true when the entry can be signed for deletion
+     */
+    showDeleteToggle(item: TreeNode<EnrichedFilesystemReference>): boolean {
+        if (this.enableDeletion !== true || this.readonly === true) return false;
+        if (!item.data?.path) return false;
+        return item.data.path.folder === true ? this.canDeleteFolders === true : true;
+    }
+
+    /**
+     * Tells whether the entries of the tree can be opened by the host.
+     *
+     * Only the entries themselves are openable: a root stands for the system being
+     * browsed, and a folder holds nothing to show.
+     * @param item - The tree node to check
+     * @returns true when the node offers the open action
+     */
+    showViewAction(item: TreeNode<EnrichedFilesystemReference>): boolean {
+        if (this.enableView !== true) return false;
+        if (!item.data?.path) return false;
+        return item.data.path.folder !== true;
+    }
+
+    /**
+     * Asks the host to open an entry. Nothing is done here: what opening means -
+     * a preview, a download, an editor - depends on the system being browsed, so
+     * it is the host that decides.
+     * @param item - The tree node to open
+     */
+    requestView(item: TreeNode<EnrichedFilesystemReference>): void {
+        if (!this.showViewAction(item) || !item.data) return;
+        this.viewRequested.emit(toBackendData(item.data));
+    }
+
+    /**
+     * Tells whether a tree node is currently signed for deletion in the dialog.
+     * @param item - The tree node to check
+     * @returns true when the entry is signed for deletion
+     */
+    isMarkedForDeletion(item: TreeNode<EnrichedFilesystemReference>): boolean {
+        const code: string | undefined = item.data?.uniqueCode;
+        return code ? this.editingDeletionMarks.has(code) : false;
+    }
+
+    /**
+     * Signs a tree node for deletion, or removes an existing mark.
+     * @param item - The tree node to toggle
+     */
+    toggleDeletionMark(item: TreeNode<EnrichedFilesystemReference>): void {
+        if (!this.showDeleteToggle(item)) return;
+        const code: string | undefined = item.data?.uniqueCode;
+        if (!code || !item.data) return;
+        if (this.editingDeletionMarks.has(code)) {
+            this.editingDeletionMarks.delete(code);
+        } else {
+            this.editingDeletionMarks.set(code, item.data);
+            // An entry cannot be selected and deleted at the same time: signing it
+            // for deletion drops it from the selection.
+            this.removeFromEditPanel(item.data);
+        }
+        this.checkChanges.markForCheck();
+    }
+
+    /**
+     * Removes a deletion mark from the dialog panel.
+     * @param item - The entry to unmark
+     */
+    removeEditingDeletionMark(item: EnrichedFilesystemReference): void {
+        this.editingDeletionMarks.delete(item.uniqueCode);
+        this.checkChanges.markForCheck();
+    }
+
+    /**
+     * Removes a committed deletion mark from the main panel, emitting the updated
+     * value.
+     * @param item - The entry to unmark
+     */
+    removeDeletionMark(item: EnrichedFilesystemReference): void {
+        if (this.readonly === true) return;
+        this.deletionMarks.delete(item.uniqueCode);
+        this.emitValue();
+    }
+
+    /**
+     * The entries signed for deletion inside the dialog, for the chips panel.
+     */
+    get editingDeletions(): EnrichedFilesystemReference[] {
+        return Array.from(this.editingDeletionMarks.values());
+    }
+
+    /**
+     * The committed entries signed for deletion, for the main panel.
+     */
+    get deletions(): EnrichedFilesystemReference[] {
+        return Array.from(this.deletionMarks.values());
+    }
+
+    /**
      * Opens the edit dialog with the current selection
      */
     openEditMode() {
@@ -369,6 +664,7 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
             this.loadRoots();
         }
         this.editingNodeValues = [...this.internalValue];
+        this.editingDeletionMarks = new Map(this.deletionMarks);
         let boundToChoosedControl: string[] | string | undefined;
         boundToChoosedControl = undefined;
         if (this.selectionMode === 'multiple') {
@@ -399,7 +695,6 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      */
     private resyncEditingChips(): void {
         const actualValue: string | string[] | undefined = this.formGroup.controls["choosed"].value;
-        console.log("Ctrl value=>" + JSON.stringify(actualValue));
         if (!actualValue) {
             this.editingNodeValues = [];
 
@@ -446,9 +741,6 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
             const node = this.nodesMap.get(x);
             if (node?.data) {
                 node.data.selected = true;
-                console.log("Signing as selected:" + node?.data?.uniqueCode);
-            } else {
-                console.error("NOT FOUND:" + node?.data?.uniqueCode);
             }
         });
         //now from roots do a visit and put parentSelected on all nodes in the descending hierarchy of a selected Node 
@@ -463,11 +755,12 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                 }
             });
             const tobeSet = this.selectionMode === "multiple" ? newChoosed : (newChoosed.length ? newChoosed[0] : undefined);
-            console.log("Ctrl new value=>" + JSON.stringify(tobeSet));
             this.formGroup.controls["choosed"].setValue(tobeSet);
         }
+        // The selection flags just written live on the data of the nodes, which the
+        // tree does not look at again on its own: it has to be handed its nodes back.
+        this.refreshTreeView();
         this.checkChanges.detectChanges();
-        this.checkChanges.markForCheck();
     }
 
     /**
@@ -612,8 +905,7 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                 nodes.push(thisTreeNode);
             });
         }
-        this.resyncEditingChips();
-        return nodes;
+        return sortNodes(nodes);
     }
 
     /**
@@ -622,12 +914,12 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * @returns true if all nodes are contained in the tree, false otherwise
      */
     private containedInTree(nodes: EnrichedFilesystemReference[]): boolean {
-        let contained: boolean = false;
-        let matchingNodes: EnrichedFilesystemReference[] = nodes;
-        if (this.roots && this.roots.length) {
-            matchingNodes = this.containedInTreeNodes(this.roots, matchingNodes);
-        }
-        return contained;
+        if (!nodes || !nodes.length) return true;
+        if (!this.roots || !this.roots.length) return false;
+        // The result of the lookup used to be computed and then dropped, the method
+        // always answering false: every opening of the dialog paid a full navigation
+        // reconstruction round trip even when the tree already held the entries.
+        return this.containedInTreeNodes(this.roots, nodes).length === 0;
     }
 
     /**
@@ -665,26 +957,31 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * @param obj - The value to write
      */
     writeValue(obj: any): void {
-        let snode: TreeNode<EnrichedFilesystemReference>[] = [];
-        let internal: EnrichedFilesystemReference[] = [];
+        let incoming: EnrichedFilesystemReference[] = [];
+        this.deletionMarks = new Map();
         if (obj) {
             if (Array.isArray(obj)) {
-                internal = Array.from(obj);
+                incoming = Array.from(obj);
             } else {
-                internal = [obj];
+                incoming = [obj];
             }
-            if (internal && internal.length) {
-                internal.forEach(x => {
-                    x.uniqueCode = uniqueKey(x);
-                });
-            }
+            incoming.forEach(x => {
+                x.uniqueCode = uniqueKey(x);
+            });
+            // Entries flagged for deletion are restored as marks, not as selection:
+            // a value written back by the host (or replayed from a saved form) has
+            // to reopen showing the same intents the user expressed.
+            const marked: EnrichedFilesystemReference[] = incoming.filter(x => x.markedForDeletion === true);
+            marked.forEach(x => this.deletionMarks.set(x.uniqueCode, x));
+            let internal: EnrichedFilesystemReference[] = incoming.filter(x => x.markedForDeletion !== true);
             if (this.selectionMode === "single") {
                 if (internal.length > 1) {
                     internal = [internal[0]];
                 }
             }
             this.internalValue = internal;
-            snode = this.internalValue.map(x => toEnrichedNode(x));
+        } else {
+            this.internalValue = [];
         }
         this.checkTreeConsistency = true;
     }
@@ -748,7 +1045,7 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                         this.internalValue = this.internalValue.filter(x => values?.result?.find(y => (y.code === x.root.code) || (y.absolutePath === x.root.absolutePath)));
                     }*/
                 }
-                this.roots = roots;
+                this.roots = sortNodes(roots);
                 this.resyncEditingChips();
             }, complete: () => {
                 this.loading = false;
@@ -776,16 +1073,29 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * @param event - The expand event
      */
     nodeExpand(event: TreeNodeExpandEvent) {
+        // Children already fetched during this session are kept: re-browsing on
+        // every expand made the tree flicker, lost the marks placed on the loaded
+        // entries and hit the remote system once per click. reload() is the way to
+        // ask for fresh contents.
+        if (event.node.children && event.node.children.length) {
+            return;
+        }
         const rootNode = this.findRoot(event.node);
         const hierarchySelected: boolean = event.node.data?.selected === true || event.node.data.parentSelected === true;
         const browseParam: BrowseParam = {
             root: event.node.data.root,
             path: event.node.data.path
         };
-        this.loading = true;
+        // Per node spinner instead of the modal padlock over the whole dialog: the
+        // rest of the tree stays usable while a folder is being listed.
+        const node: TreeNode<EnrichedFilesystemReference> = event.node;
+        node.loading = true;
+        // The listing repaints the tree once: the nodes handed over then replace the
+        // ones held here, so a second repaint would only rebuild them for nothing.
+        let painted: boolean = false;
         this.browsePathObservable(browseParam).subscribe({
             next: (paths) => {
-                const childs: TreeNode<VFilesystemReference>[] = [];
+                const childs: TreeNode<EnrichedFilesystemReference>[] = [];
                 this.messages = this.removeSuccess(paths?.messages as ToastMessageOptions[]);
                 if (paths?.result) {
                     paths?.result?.forEach(entry => {
@@ -793,7 +1103,7 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                             root: rootNode,
                             path: entry
                         }
-                        const thisTreeNode = toEnrichedNode(ref, event.node);
+                        const thisTreeNode = toEnrichedNode(ref, node);
                         if (thisTreeNode.data) {
                             thisTreeNode.data.parentSelected = hierarchySelected;
                         }
@@ -801,11 +1111,20 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
                         this.addMap(thisTreeNode);
                     });
                 }
-                event.node.children = childs;
+                node.children = sortNodes(childs);
+                node.loading = false;
+                // Ends by handing the nodes back to the tree, the newly listed
+                // children included.
                 this.resyncEditingChips();
+                painted = true;
+            },
+            error: () => {
+                node.loading = false;
+                if (!painted) this.refreshTreeView();
             },
             complete: () => {
-                this.loading = false;
+                node.loading = false;
+                if (!painted) this.refreshTreeView();
             }
         });
     }
@@ -857,14 +1176,57 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
             });
         }
         this.internalValue = newInternalvalue;
+        this.deletionMarks = new Map(this.editingDeletionMarks);
         this.openEditWindow = false;
+        this.emitValue();
+    }
+
+    /**
+     * Builds the outgoing value and notifies the form and the deletions output.
+     *
+     * With deletion disabled the payload is the historical one, so every existing
+     * host keeps receiving what it always received. With deletion enabled the
+     * emitted array is the union of the selected entries and of the ones signed
+     * for deletion, the latter flagged with `markedForDeletion`.
+     */
+    private emitValue(): void {
         let out: VFilesystemReference[] | VFilesystemReference | undefined = undefined;
-        if (this.selectionMode === "single") {
+        if (this.enableDeletion === true) {
+            const payload: VFilesystemDeletableReference[] = this.internalValue.map(toBackendData);
+            this.deletionMarks.forEach(entry => {
+                payload.push(toDeletionData(entry));
+            });
+            out = payload;
+            this.deletionsChange.emit(this.deletions.map(toDeletionData));
+        } else if (this.selectionMode === "single") {
             out = (this.internalValue.length ? toBackendData(this.internalValue[0]) : undefined);
         } else {
             out = this.internalValue.map(toBackendData);
         }
         this.onChange(out);
+    }
+
+    /**
+     * Reloads the browsing roots, dropping every cached child listing.
+     *
+     * Hosts call it after having actually applied the deletions (or added new
+     * contents) on their backend, so the tree stops showing entries that no longer
+     * exist on the remote system.
+     */
+    public reload(): void {
+        this.nodesMap = new Map();
+        // Reloading means "this is what the remote system holds now", so the
+        // pending deletion intents no longer have a subject: keeping them would
+        // leave the panel showing entries that have just been removed, and would
+        // make the host apply them a second time on its next save.
+        const hadMarks: boolean = this.deletionMarks.size > 0;
+        this.deletionMarks = new Map();
+        this.editingDeletionMarks = new Map();
+        this.roots = [];
+        this.loadRoots();
+        if (hadMarks) {
+            this.emitValue();
+        }
     }
 
     /**
@@ -886,13 +1248,7 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      */
     removeFromMainPanel(item: EnrichedFilesystemReference): void {
         this.internalValue = this.internalValue.filter(x => x.uniqueCode !== item.uniqueCode);
-        let out: VFilesystemReference[] | VFilesystemReference | undefined = undefined;
-        if (this.selectionMode === "single") {
-            out = (this.internalValue.length ? toBackendData(this.internalValue[0]) : undefined);
-        } else {
-            out = this.internalValue.map(toBackendData);
-        }
-        this.onChange(out);
+        this.emitValue();
     }
 
     /**

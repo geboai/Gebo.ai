@@ -32,6 +32,7 @@ export interface GFilesystemProjectEndpoint {
     synchroStrategy?: GFilesystemProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GFilesystemProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     path?: Array<VFilesystemReference>;
 }
 export namespace GFilesystemProjectEndpoint {

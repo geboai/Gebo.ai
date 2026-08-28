@@ -21,6 +21,9 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
@@ -48,7 +51,30 @@ public abstract class AbstractTranscriptModelsConfigurationCRUDController<Transc
 
 	protected final Class<TranscriptModelConfigType> type;
 
+	protected final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at insert/
+	// update/delete - the real API entry point - not at this shared helper.
+	private void logConfigEvent(SecurityEvent event, String action, String resourceId, OperationStatus<?> status) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_CONFIGURATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_CONFIGURATION);
+		event.setAction(action);
+		event.setResourceId(resourceId);
+		event.setOutcome(status.isHasErrorMessages() ? SecurityAuditTaxonomy.Outcome.FAILURE
+				: SecurityAuditTaxonomy.Outcome.SUCCESS);
+		securityAuditLoggerService.log(event);
+	}
+
 	protected OperationStatus<TranscriptModelConfigType> insert(TranscriptModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<TranscriptModelConfigType> status = insertInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_INSERT, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<TranscriptModelConfigType> insertInternal(TranscriptModelConfigType config) {
 		TranscriptModelConfigType out = null;
 		LOGGER.info("Begin transcript model configuration insert");
 		try {
@@ -91,6 +117,14 @@ public abstract class AbstractTranscriptModelsConfigurationCRUDController<Transc
 	}
 
 	protected OperationStatus<TranscriptModelConfigType> update(TranscriptModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<TranscriptModelConfigType> status = updateInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_UPDATE, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<TranscriptModelConfigType> updateInternal(TranscriptModelConfigType config) {
 		try {
 			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
@@ -110,6 +144,14 @@ public abstract class AbstractTranscriptModelsConfigurationCRUDController<Transc
 	}
 
 	protected OperationStatus<Boolean> delete(TranscriptModelConfigType type) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<Boolean> status = deleteInternal(type);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_DELETE, type != null ? type.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<Boolean> deleteInternal(TranscriptModelConfigType type) {
 		try {
 			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);

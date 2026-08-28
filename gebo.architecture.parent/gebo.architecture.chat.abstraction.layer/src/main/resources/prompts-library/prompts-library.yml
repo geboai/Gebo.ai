@@ -181,3 +181,14 @@ ai.gebo.prompts:
       contextDocuments: REQUIRED
       toolsCalling: REQUIRED
       description: Default Chat Agent prompt
+      #prompt used by the ranker service to drop the ranked fragments that are
+      #completely useless for the query: no chat session is involved, the query is
+      #carried by a session-less chat request context
+    - promptUse: ranker-irrelevant-fragments-filter-prompt
+      langCode: en
+      systemReference: /prompts-library/en/ranker-irrelevant-fragments-filter-prompt-system-prompt.txt
+      userReference: /prompts-library/en/ranker-irrelevant-fragments-filter-prompt-user-prompt.txt
+      chatHistory: NOT_REQUIRED
+      contextDocuments: NOT_REQUIRED
+      toolsCalling: NOT_REQUIRED
+      description: Ranker irrelevant fragments filter prompt

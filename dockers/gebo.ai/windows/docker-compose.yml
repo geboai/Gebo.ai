@@ -1,10 +1,38 @@
-version: '3.1'
 #================================================================
 # This compose file creates a service for gebo.ai enterprise retrive augmented generation system
 # and its required mongodb (database) and qdrant (vector database) services
 # once runned simply open the address http://<your host address:12999/ with your browser
 # it will be required to create the administrative account and you'll be ready to setup and
 # start immediately to share the application with your company or team.
+#
+# ---------------------------------------------------------------------------
+# WINDOWS / Docker Desktop variant of ../docker-compose.yml.
+#
+# Like the Linux file (../docker-compose.yml), this uses NAMED VOLUMES for the
+# whole persistent surface - the only reason it is a separate file is that a
+# Windows bind mount goes through a filesystem translation layer that MongoDB,
+# Neo4j and OpenSearch all dislike (file locking, fsync semantics, uid/gid
+# ownership), so nothing here is ever offered as a host bind. The volumes live
+# inside the Docker Desktop VM, survive `docker compose down` and every image
+# upgrade, and are removed only by `docker compose down -v` or an explicit
+# `docker volume rm`.
+#
+# This file previously declared NO volumes at all: every container wrote to its
+# own throwaway layer, so a single `docker compose down` - or any image upgrade,
+# which recreates the containers - discarded the whole installation: users, LLM
+# and knowledge-base configuration, chat history, embeddings and every uploaded
+# document.
+#
+# Back up with (stack stopped):
+#   docker run --rm -v gebo-monolith-win_gebo-work:/data -v ${PWD}:/backup alpine \
+#     tar czf /backup/gebo-work.tgz -C /data .
+# The volume name is prefixed with the compose project name, `gebo-monolith-win`
+# below; `docker volume ls` shows the real names.
+#
+# See dockers/PERSISTENCE.md.
+# ---------------------------------------------------------------------------
+name: gebo-monolith-win
+
 services:
   # =======================
   # MongoDB
@@ -19,7 +47,11 @@ services:
       MONGO_INITDB_ROOT_USERNAME: mongoroot
       MONGO_INITDB_ROOT_PASSWORD: mongopwd
     command: ["mongod", "--wiredTigerCacheSizeGB=1"]
-    
+    # All application state: users, LLM/knowledge-base configuration, chat
+    # history, and the INDEX of every file stored in gebo-work below. Back this
+    # up together with gebo-work - one without the other leaves dangling refs.
+    volumes:
+      - mongo-data:/data/db
 
   # =======================
   # Qdrant
@@ -36,14 +68,18 @@ services:
       QDRANT__STORAGE__OPTIMIZE_INDEXING: "true"
       QDRANT__STORAGE__RAM_DISK_SIZE: "256MB"
       QDRANT__STORAGE__MAX_SEGMENT_SIZE: "1000000"
-    
+    # The vector store. Rebuildable by re-ingesting everything, but re-embedding
+    # a corpus costs real money at the LLM provider - treat it as data.
+    volumes:
+      - qdrant-data:/qdrant/storage
+
   neo4j:
-     image: neo4j:5
-     restart: always
-     ports:
+    image: neo4j:5
+    restart: always
+    ports:
       - "127.0.0.1:7474:7474"
       - "127.0.0.1:7687:7687"
-     environment:
+    environment:
       NEO4J_AUTH: "neo4j/neo4jmaster"
       NEO4J_server_memory_heap_initial__size: 1G
       NEO4J_server_memory_heap_max__size: 2G
@@ -52,6 +88,13 @@ services:
       NEO4J_apoc_export_file_enabled: "true"
       NEO4J_apoc_import_file_enabled: "true"
       NEO4J_apoc_import_file_use__neo4j__config: "true"
+    # GraphRAG knowledge graphs. /plugins is deliberately NOT persisted:
+    # NEO4JLABS_PLUGINS re-resolves APOC for the running Neo4j version at every
+    # start, and a stale jar pinned in a volume is what breaks a version bump.
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+
   opensearch:
     image: opensearchproject/opensearch:latest
     container_name: opensearch
@@ -72,12 +115,15 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+    # Full-text index. Rebuildable by re-ingesting, but not for free.
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
     ports:
       - "9200:9200"
       - "9600:9600"
-    
+
   # =======================
-  # gebo.ai 
+  # gebo.ai
   # =======================
   # Bound to all host interface
   gebo.ai:
@@ -88,26 +134,63 @@ services:
     depends_on:
       - mongo
       - qdrant
-      - neo4j 
-      - opensearch 
+      - neo4j
+      - opensearch
     deploy:
       resources:
         limits:
           # Limit memory usage to 4GB
           memory: 4G
-          
+
+    # geboai/gebo.ai declares VOLUME on /opt/gebo.ai/{home,work,logs,shares}.
+    # Anything NOT named here gets an ANONYMOUS volume, which `docker compose
+    # down` leaves dangling and the next `up` replaces with an empty one - so
+    # every one of them is named.
+    volumes:
+      # THE one to back up. GEBO_WORK_DIRECTORY holds the chat SESSIONS_AREA,
+      # per-endpoint content mirrors, the document cache, uploads and the Google
+      # Workspace OAuth tokens. Mongo only INDEXES it; the bytes are here.
+      - gebo-work:/opt/gebo.ai/work
+      - gebo-home:/opt/gebo.ai/home
+      # security-log.jsonl - the append-only GDPR Art.32 / NIS2 Art.21 audit
+      # trail - plus gc.log from the -Xlog:gc flag below.
+      - gebo-logs:/opt/gebo.ai/logs
+      # Config is a MOUNT, never a volume: an anonymous volume here would pin the
+      # first image's application.yml and mask the one shipped by every upgrade.
+      - ../config:/opt/gebo.ai/config:ro
+      # Host content to INGEST, read-only. Point it at a real Windows path when
+      # you want the filesystem content handler to see one, e.g.
+      #   - C:/Users/Public/Documents:/opt/gebo.ai/shares:ro
+      # Left as a named volume so the image's VOLUME does not become anonymous.
+      - gebo-shares:/opt/gebo.ai/shares
+
     environment:
       #SPRING_PROFILES_ACTIVE: "prod"
       #Jvm settings
       JAVA_TOOL_OPTIONS:
-        --enable-native-access=ALL-UNNAMED 
-        -Dsun.jnu.encoding=UTF-8 
-        -Dfile.encoding=UTF-8    
-        -Dai.gebo.neo4j.enabled=true        
-        -XX:+AggressiveHeap         
-        -XX:+PrintGCDetails        
-        -Xlog:gc:/opt/gebo.ai/logs/gc.log 
+        --enable-native-access=ALL-UNNAMED
+        -Dsun.jnu.encoding=UTF-8
+        -Dfile.encoding=UTF-8
+        -Dai.gebo.neo4j.enabled=true
+        -XX:+AggressiveHeap
+        -XX:+PrintGCDetails
+        -Xlog:gc:/opt/gebo.ai/logs/gc.log
         -Xms2g
         -Xmx4g
         -XX:MaxMetaspaceSize=512m
-        --add-opens=java.base/java.nio.charset=ALL-UNNAMED         
+        --add-opens=java.base/java.nio.charset=ALL-UNNAMED
+
+# Named volumes survive `docker compose down` and every image upgrade. Only
+# `docker compose down -v` or `docker volume rm` destroys them.
+volumes:
+  # ---- infrastructure ----
+  mongo-data:
+  qdrant-data:
+  neo4j-data:
+  neo4j-logs:
+  opensearch-data:
+  # ---- application ----
+  gebo-work:
+  gebo-home:
+  gebo-logs:
+  gebo-shares:

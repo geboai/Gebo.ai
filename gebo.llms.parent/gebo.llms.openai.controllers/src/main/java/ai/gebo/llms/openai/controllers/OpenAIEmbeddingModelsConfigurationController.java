@@ -29,6 +29,7 @@ import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig;
 import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -49,9 +50,11 @@ public class OpenAIEmbeddingModelsConfigurationController extends
 
 	public OpenAIEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			OpenAIEmbeddingModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIEmbeddingModelConfig.class, ifaceType);
-		
+			OpenAIEmbeddingModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIEmbeddingModelConfig.class, ifaceType,
+				securityAuditLoggerService);
+
 	}
 
 	/**

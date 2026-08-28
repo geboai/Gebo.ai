@@ -18,14 +18,22 @@
  * and provides functionality for file uploads, project selection, and publishing.
  */
 
-import { Component, forwardRef, Inject, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Inject, Injector, Input, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH, FileUploadControllerService, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BASE_PATH, BrowseParam, FileUploadControllerService, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService, UploadedFileInfo, UploadsBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, ServedFileReference, VFilesystemDeletableReference, VFilesystemReference, VFilesystemSelectorComponent } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { FileBeforeUploadEvent, FileProgressEvent, UploadEvent } from "primeng/fileupload";
-import { map, Observable, of } from "rxjs";
+import { map, Observable, of, switchMap } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
+
+/**
+ * Endpoint serving a file physically present in the folder of an uploads data
+ * source. It is addressed by url and not through a generated client because the
+ * viewer consumes it as a url, the same way the knowledge base contents are
+ * served.
+ */
+const serveContentsUrl: string = "/api/admin/UploadsBrowsingController/serveUploadsEndpointFile";
 
 /**
  * Component for managing uploads endpoints in Gebo.ai
@@ -65,6 +73,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         code: new FormControl(),
         parentCode: new FormControl(),
         description: new FormControl(),
+        personalData: new FormControl(),
         parentProjectCode: new FormControl(),
         readonly: new FormControl(),
         published: new FormControl(),
@@ -89,6 +98,53 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
     /** List of allowed file types for upload */
     fileTypesList: GeboAIFileType[] = [];
 
+    /** The contents browser of this data source, refreshed after every change */
+    @ViewChild("contentsSelector") contentsSelector?: VFilesystemSelectorComponent;
+
+    /**
+     * Code of the data source whose contents are being managed. It is only known
+     * once the endpoint exists: while creating one the files go through the
+     * handshake staging area instead.
+     */
+    public contentsEndpointCode?: string;
+
+    /** Files signed for deletion in the contents browser, applied on save */
+    public pendingDeletions: VFilesystemDeletableReference[] = [];
+
+    /** Files currently held by the data source, used for the contents summary */
+    public uploadedFiles: UploadedFileInfo[] = [];
+
+    /**
+     * The file the admin asked to open, undefined when the viewer is closed.
+     *
+     * What is managed here is what the data source physically holds, ingested or
+     * not, so the file is served straight out of the folder of the data source
+     * instead of through the knowledge base contents controller, which only knows
+     * the documents that have already been published.
+     */
+    public viewedFile?: ServedFileReference;
+
+    /** Loads the only browsing root of this data source: its contents folder */
+    public loadRootsObservable: loadRootsObservableCallback = () => {
+        return this.contentsEndpointCode
+            ? this.uploadsBrowsingService.getUploadsEndpointRoots(this.contentsEndpointCode)
+            : of({});
+    };
+
+    /** Lists the children of a folder of this data source */
+    public browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => {
+        return this.contentsEndpointCode
+            ? this.uploadsBrowsingService.browseUploadsEndpointPath(param, this.contentsEndpointCode)
+            : of({});
+    };
+
+    /** Rebuilds the navigation tree down to the given entries */
+    public reconstructNavigationObservableCallback: reconstructNavigationObservableCallback = (navigationPoints: VFilesystemReference[]) => {
+        return this.contentsEndpointCode
+            ? this.uploadsBrowsingService.getUploadsEndpointNavigationStatus(navigationPoints, this.contentsEndpointCode)
+            : of({});
+    };
+
     /**
      * Constructor initializes services and sets up subscriptions
      * 
@@ -112,6 +168,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         private actionsRouter: GeboUIActionRoutingService,
         private messageService: GeboAIRootNotificationService,
         private uploadControllerService: FileUploadControllerService,
+        private uploadsBrowsingService: UploadsBrowsingControllerService,
 
         confirmService: ConfirmationService,
         @Inject(BASE_PATH) path: string,
@@ -178,7 +235,12 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
      * @param actualValue The newly created entity
      */
     protected override onNewData(actualValue: GUploadsProjectEndpoint): void {
-
+        // A data source that does not exist yet owns no contents folder: uploads
+        // stay staged under the handshake code until the first save.
+        this.contentsEndpointCode = undefined;
+        this.pendingDeletions = [];
+        this.uploadedFiles = [];
+        this.viewedFile = undefined;
     }
 
     /**
@@ -187,8 +249,106 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
      * @param actualValue The loaded entity
      */
     protected override onLoadedPersistentData(actualValue: GUploadsProjectEndpoint): void {
+        this.contentsEndpointCode = actualValue?.code;
+        this.pendingDeletions = [];
+        this.viewedFile = undefined;
+        this.refreshUploadedFiles();
+    }
 
+    /**
+     * Reloads the summary of the files held by the data source.
+     */
+    refreshUploadedFiles(): void {
+        if (!this.contentsEndpointCode) {
+            this.uploadedFiles = [];
+            return;
+        }
+        this.uploadsControllerService.listUploadedFiles(this.contentsEndpointCode).subscribe({
+            next: (files) => {
+                this.uploadedFiles = files ? files : [];
+            },
+            error: () => {
+                this.uploadedFiles = [];
+            }
+        });
+    }
 
+    /** Number of files currently held by the data source */
+    get uploadedFilesCount(): number {
+        return this.uploadedFiles.length;
+    }
+
+    /**
+     * Endpoint the file uploader posts to.
+     *
+     * While the data source exists the files go straight into its contents folder;
+     * during creation there is no folder yet, so they are staged under the
+     * handshake code and moved when the data source is saved.
+     */
+    get uploadUrl(): string {
+        return this.contentsEndpointCode
+            ? this.baseUrl + '/api/admin/FileUploadController/uploadToEndpoint/' + this.contentsEndpointCode
+            : this.baseUrl + '/api/admin/FileUploadController/upload/' + this.handShakeCode;
+    }
+
+    /** True when the uploader can be used */
+    get canUploadContents(): boolean {
+        return this.contentsEndpointCode ? true : (this.handShakeCode ? true : false);
+    }
+
+    /** True when the data source already owns a browsable contents folder */
+    get hasContentsFolder(): boolean {
+        return this.contentsEndpointCode ? true : false;
+    }
+
+    /**
+     * Opens a file of the data source in the contents viewer.
+     *
+     * @param reference The entry the contents browser asked to open
+     */
+    onViewFile(reference: VFilesystemReference): void {
+        const path: string | undefined = reference?.path?.absolutePath;
+        const name: string | undefined = reference?.path?.name;
+        if (!this.contentsEndpointCode || !path || !name) return;
+        this.viewedFile = {
+            url: this.baseUrl + serveContentsUrl
+                + "?endpointCode=" + encodeURIComponent(this.contentsEndpointCode)
+                + "&path=" + encodeURIComponent(path),
+            fileName: name
+        };
+    }
+
+    /**
+     * Closes the contents viewer.
+     */
+    closeViewedFile(): void {
+        this.viewedFile = undefined;
+    }
+
+    /**
+     * Collects the deletion intents expressed in the contents browser. Nothing is
+     * removed here: the files leave the data source when the editing is saved.
+     *
+     * @param deletions The entries signed for deletion
+     */
+    onContentsDeletionsChange(deletions: VFilesystemReference[]): void {
+        this.pendingDeletions = deletions ? deletions : [];
+    }
+
+    /**
+     * Entries signed for deletion, addressed by their absolute path so a file
+     * nested in a subfolder is not confused with a file of the same name sitting
+     * at the root of the data source.
+     */
+    get pendingDeletionNames(): string[] {
+        const names: string[] = [];
+        this.pendingDeletions.forEach(x => {
+            const reference: string | undefined = x.path?.absolutePath ? x.path.absolutePath : x.path?.name;
+            if (reference) {
+                names.push(reference);
+            }
+        });
+        return names;
     }
 
     /**
@@ -208,7 +368,24 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
      * @returns Observable that emits the saved entity
      */
     override save(value: GUploadsProjectEndpoint): Observable<GUploadsProjectEndpoint> {
-        return this.uploadsControllerService.updateUploadsEndpoint(value);
+        const names: string[] = this.pendingDeletionNames;
+        const saved: Observable<GUploadsProjectEndpoint> = this.uploadsControllerService.updateUploadsEndpoint(value);
+        if (!names.length || !this.contentsEndpointCode) {
+            return saved;
+        }
+        const endpointCode: string = this.contentsEndpointCode;
+        // The deletion runs after the settings update on purpose: the form still
+        // carries the uploaded contents list as it was loaded, while the backend
+        // deletion prunes it authoritatively and returns the resulting data source.
+        return saved.pipe(switchMap(updated => {
+            return this.uploadsControllerService.deleteUploadedFiles(names, endpointCode).pipe(map(status => {
+                this.assignBackendMessages(status?.messages);
+                this.pendingDeletions = [];
+                this.refreshUploadedFiles();
+                this.contentsSelector?.reload();
+                return status?.result ? status.result : updated;
+            }));
+        }));
     }
 
     /**
@@ -247,9 +424,16 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
      * @param event The upload event
      */
     onBasicUploadAuto(event: UploadEvent) {
-        this.formGroup.controls["uploadHandshakeCode"].setValue(this.handShakeCode);
+        if (this.contentsEndpointCode) {
+            // The files are already in the contents folder of the data source: no
+            // handshake code has to be carried by the entity, the browser and the
+            // summary just have to show them.
+            this.refreshUploadedFiles();
+            this.contentsSelector?.reload();
+        } else {
+            this.formGroup.controls["uploadHandshakeCode"].setValue(this.handShakeCode);
+        }
         this.messageService.addMessage("GeboAIUploadsModule","GeboAIUploadsEndpointComponent",{id:"FILE_UPLOAD_SUCCESS", severity: 'success', summary: 'Success', detail: 'File Uploaded with success' });
-        console.log("onBasicUploadAuto");
         this.loadingRelatedBackend = false;
     }
 

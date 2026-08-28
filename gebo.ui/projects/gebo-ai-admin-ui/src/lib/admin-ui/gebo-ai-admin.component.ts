@@ -63,6 +63,10 @@ export class GeboAiAdminComponent implements OnInit {
   @ViewChild("child5") child5?: AncestorPanelComponent;
   @ViewChild("child6") child6?: AncestorPanelComponent;
   @ViewChild("child7") child7?: AncestorPanelComponent;
+  // Declared so activatedIndex() can re-read the compliance register when the tab
+  // is selected: it reports live configuration, so a cached first render would go
+  // stale as soon as an administrator changes an endpoint elsewhere in this UI.
+  @ViewChild("child9") child9?: AncestorPanelComponent;
 
   /** Current authenticated user information */
   user?: UserInfo;

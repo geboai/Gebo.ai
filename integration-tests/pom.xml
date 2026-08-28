@@ -1,3 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ===========================================================================
+    integration-tests - parent POM of the CLOUD-ONLY integration test suite.
+
+    Scope rule for this tree: every module below must be runnable by a hosted
+    CI runner (Jenkins / GitHub Actions) given nothing but
+
+      * a docker daemon (the suite boots Mongo, Neo4j, OpenSearch and Qdrant as
+        Testcontainers itself), and
+      * credentials injected as environment variables / CI secrets.
+
+    In other words: pure cloud providers and pure cloud (or otherwise remotely
+    reachable) systems only - no locally installed inference server, no model
+    files on the runner's disk.
+
+    Tests that need a local ollama server live in ../ollama-integration-tests,
+    which has its own standalone parent pom and is never part of a pipeline run.
+
+    Like ../ollama-integration-tests/pom.xml this pom is NOT listed in the
+    repository root <modules>: it inherits the platform from ai.gebo.parent but
+    a plain `mvn install` at the root never descends into it. Run it explicitly:
+
+        mvn -f integration-tests/pom.xml test
+
+    (run `mvn install` at the repository root first: the modules below resolve
+    ai.gebo.apps:gebo.ai.app and friends from the local repository).
+    ===========================================================================
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -5,16 +34,15 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.2.3</version>
+		<version>1.0.2.4</version>
 	</parent>
 	<groupId>ai.gebo.integration-tests</groupId>
 	<artifactId>gebo.integration-tests.parent</artifactId>
-	
+
 	<packaging>pom</packaging>
-	
+
 	<modules>
 		<module>atlassian-confluence-integration-tests</module>
-		<module>ollama-integration-tests</module>
 		<module>vectorstores-integration-tests</module>
 		<module>heavy-workload-integration-tests</module>
 		<module>sharepoint-integration-tests</module>

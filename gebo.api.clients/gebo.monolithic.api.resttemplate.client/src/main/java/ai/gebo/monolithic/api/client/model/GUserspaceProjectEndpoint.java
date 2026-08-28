@@ -27,7 +27,7 @@ import java.util.List;
  * GUserspaceProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
 
 public class GUserspaceProjectEndpoint {
   @JsonProperty("code")
@@ -145,6 +145,9 @@ public class GUserspaceProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Boolean personalData = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -505,6 +508,24 @@ public class GUserspaceProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GUserspaceProjectEndpoint personalData(Boolean personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Boolean isPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Boolean personalData) {
+    this.personalData = personalData;
+  }
+
   public GUserspaceProjectEndpoint username(String username) {
     this.username = username;
     return this;
@@ -551,12 +572,13 @@ public class GUserspaceProjectEndpoint {
         Objects.equals(this.synchroStrategy, guserspaceProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, guserspaceProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, guserspaceProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, guserspaceProjectEndpoint.personalData) &&
         Objects.equals(this.username, guserspaceProjectEndpoint.username);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, username);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, username);
   }
 
 
@@ -583,6 +605,7 @@ public class GUserspaceProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("}");
     return sb.toString();

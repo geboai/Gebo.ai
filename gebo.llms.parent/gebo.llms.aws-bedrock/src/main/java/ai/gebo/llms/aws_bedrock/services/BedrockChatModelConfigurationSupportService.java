@@ -85,7 +85,7 @@ public class BedrockChatModelConfigurationSupportService
 			if (config.getChoosedModel() != null) {
 				builder.model(config.getChoosedModel().getCode());
 			}
-			if (config.getTemperature() != null && config.getTemperature() > 0) {
+			if (config.getTemperature() != null) {
 				builder.temperature(config.getTemperature());
 			}
 			if (config.getTopP() != null && config.getTopP() > 0) {

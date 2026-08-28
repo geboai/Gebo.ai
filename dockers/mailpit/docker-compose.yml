@@ -5,3 +5,15 @@ services:
     ports:
       - "1025:1025"   # SMTP
       - "8025:8025"   # Web UI
+    # Mailpit keeps captured mail in MEMORY unless MP_DATABASE points it at a
+    # file, so without these two lines every restart loses the whole mailbox -
+    # including whatever you were mid-way through verifying.
+    environment:
+      MP_DATABASE: /data/mailpit.db
+    volumes:
+      - mailpit-data:/data
+
+# A local mail-capture tool: this is test data, but losing it mid-test is still
+# an interruption, and a named volume costs nothing.
+volumes:
+  mailpit-data:

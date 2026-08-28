@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-	<version>1.0.2.3</version>
+	<version>1.0.2.4</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.1.0</version>
+		<version>4.1.1</version>
 	</parent>
 	<properties>
 		<java.version>21</java.version>
@@ -20,12 +20,36 @@
 		<org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
 		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
 		<apache-poi.version>5.5.1</apache-poi.version>
-		<spring.ai.version>2.0.0</spring.ai.version>
+		<spring.ai.version>2.0.1</spring.ai.version>
 		<springdoc.version>3.0.3</springdoc.version>
-		<spring-retry.version>2.0.12</spring-retry.version>
+		<!-- Required, not an override: gebo.ranker.api and
+		     gebo.architecture.llms.abstraction.layer declare spring-retry with
+		     <version>${spring-retry.version}</version>, and Spring Boot does not
+		     manage spring-retry, so the build does not resolve without it. 2.0.13 is
+		     the current release (it also carries the fix for CVE-2026-41710). -->
+		<spring-retry.version>2.0.13</spring-retry.version>
+		<!-- Security fixes are normally taken by bumping spring-boot-starter-parent
+		     (and spring.ai.version), NOT by pinning single libraries: an override
+		     drifts out of date and starts pinning its library DOWN once the parent
+		     moves past it, which is what happened to the netty pin that used to sit
+		     here (Boot 4.1.0 managed 4.2.15.Final, the pin lifted it to 4.2.16.Final,
+		     and Boot 4.1.1 now manages 4.2.17.Final on its own).
+
+		     tomcat is the one exception right now. Boot 4.1.1 manages 11.0.24, which
+		     closes CVE-2026-53434/-55276/-59083/-59084 (9.1) and CVE-2026-53404, but
+		     not CVE-2026-66299, whose range is >=11.0.1,<11.0.25. 11.0.25 is GA and a
+		     patch of the very minor the parent already ships, so lifting it is safe.
+		     DROP this property as soon as the parent manages 11.0.25 or later. -->
+		<tomcat.version>11.0.25</tomcat.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
+		<!-- Bouncy Castle expects its bc* artifacts to move as a matched set; see the
+		     dependencyManagement entries below. bcprov ships an extra patch release
+		     (1.85.2) that the other artifacts don't, so the provider carries its own
+		     property — that pairing is the combination BC itself publishes. -->
+		<bouncycastle.version>1.85</bouncycastle.version>
+		<bouncycastle.prov.version>1.85.2</bouncycastle.prov.version>
 		<maven.compiler.release></maven.compiler.release>
 	</properties>
 	<modules>
@@ -35,6 +59,7 @@
 		<module>gebo.architecture.parent</module>
 		<module>gebo.system.ingestion</module>
 		<module>gebo.ui</module>
+		<module>gebo.js-plugins</module>
 		<module>gebo.config</module>
 		<module>gebo.config.services</module>
 		<module>gebo.core.parent</module>
@@ -183,6 +208,31 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- Tika arrives transitively through io.github.twwch:markdown2office, which
+			     asks for 3.2.2 while dragging tika-langdetect-optimaize 3.2.3 — the family
+			     was already resolving out of sync. 3.2.x is affected by CVE-2026-66755
+			     (tika-core and tika-langdetect-optimaize); 3.3.2 is the fix and stays on
+			     the same major. Importing the BOM keeps every tika-* artifact on one
+			     version instead of pinning them one by one, and it also lifts junrar:
+			     tika-parent 3.3.2 sets junrar.version=7.6.0, above the 7.5.10 that fixes
+			     CVE-2026-41245, so the RAR parser is covered without a pin of its own. -->
+			<dependency>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-bom</artifactId>
+				<version>3.3.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- opentelemetry-semconv is pulled transitively at 1.41.1, which is inside the
+			     range of CVE-2026-39883 (>=1.15.0,<1.43.0). Spring Boot manages the
+			     OpenTelemetry BOM but not this artifact, which versions on its own line.
+			     1.43.0 is the fix; the artifact carries generated attribute constants, so
+			     moving it does not change behaviour. -->
+			<dependency>
+				<groupId>io.opentelemetry.semconv</groupId>
+				<artifactId>opentelemetry-semconv</artifactId>
+				<version>1.43.0</version>
+			</dependency>
 			<!-- gebo.architecture.llms.abstraction.layer pins okhttp:4.12.0, which pulls
 			     okio-jvm:3.6.0; the OpenTelemetry okhttp sender (auto-configured on every
 			     microservice via tracing) pulls okhttp-jvm:5.3.2, which requires
@@ -200,6 +250,38 @@
 				<groupId>com.squareup.okio</groupId>
 				<artifactId>okio-jvm</artifactId>
 				<version>3.16.4</version>
+			</dependency>
+			<!-- gebo.architecture.crypting, gebo.secrets.services and gebo.secrets.impl
+			     each hardcoded their own bcprov/bcpkix version (1.84 vs 1.78.1), so
+			     nearest-wins mediation put bcprov 1.78.1 on the assembled app's runtime
+			     classpath next to bcpkix 1.81.1 and bcpg 1.84 — an unsupported mix, and
+			     an outdated provider the module poms gave no hint of. Managing all five
+			     bc* artifacts here pins the transitive ones (bcutil, bcjmail) too, so
+			     the set can only move together. -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk18on</artifactId>
+				<version>${bouncycastle.prov.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpkix-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpg-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcutil-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcjmail-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -60,6 +60,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.model.UserInfos;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
@@ -85,11 +86,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
 			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
-			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao) {
+			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
-				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao);
+				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
+				securityAuditLoggerService);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;

@@ -12,7 +12,7 @@ RUN update-locale LANG=en_US.UTF-8
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="1.0.2.3"
+LABEL org.opencontainers.image.version="1.0.2.4"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -20,11 +20,12 @@ LABEL org.opencontainers.image.licenses="MPL-2.0,https://gebo.ai/gebo-ai-communi
 LABEL org.opencontainers.image.sbom="/opt/gebo.ai/sbom.cdx.json"
 
 
-VOLUME /opt/gebo.ai/home 
-VOLUME /opt/gebo.ai/work
-VOLUME /opt/gebo.ai/config
-VOLUME /opt/gebo.ai/shares
-VOLUME /opt/gebo.ai/logs
+# NOTE: no VOLUME here. Every VOLUME of this image is declared at the BOTTOM of
+# the file, after the last build step that writes below one of those paths. The
+# volumes used to sit here, above the mkdir/COPY steps that populate
+# /opt/gebo.ai - BuildKit tolerates that, but the classic builder (and some other
+# OCI builders) discard writes to an already-declared volume path, so the layout
+# was one builder away from shipping empty. Declaring them last is portable.
 #RUN useradd --home-dir /opt/gebo.ai --shell /bin/bash gebo.ai
 #RUN chown gebo.ai:users -R /opt/gebo.ai
 #USER gebo.ai
@@ -138,14 +139,8 @@ ENV PATH=$JAVA_HOME/bin:$PATH
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
-RUN mkdir -p /opt
-RUN mkdir -p /opt/gebo.ai
-RUN mkdir -p /opt/gebo.ai/home
-RUN mkdir -p /opt/gebo.ai/config
-RUN mkdir -p /opt/gebo.ai/work
-RUN mkdir -p /opt/gebo.ai/shares
-RUN mkdir -p /var/log/gebo.ai
-COPY gebo.ai.app-1.0.2.3-bootable.jar /opt/gebo.ai
+RUN mkdir -p /opt/gebo.ai/home /opt/gebo.ai/config /opt/gebo.ai/work /opt/gebo.ai/logs /opt/gebo.ai/shares /var/log/gebo.ai
+COPY gebo.ai.app-1.0.2.4-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
@@ -159,7 +154,58 @@ RUN set -eux; \
 RUN chmod a+x /bin/mongo-init.sh /bin/container-start.sh  /bin/neo4j-entry.sh /bin/gebo.ai.sh
 
 
-VOLUME ["/data/db", "/var/lib/qdrant", "/var/lib/neo4j", "/var/log/neo4j","/var/log/gebo.ai", "/opt/gebo.ai/shares", "/opt/opensearch/data"]
+# ===========================================================================
+# THE PERSISTENT SURFACE OF THE ALL-IN-ONE IMAGE
+#
+# Declared here, at the very bottom, on purpose. BuildKit keeps writes made to a
+# path that is already a declared volume, but the classic builder mounts a
+# scratch volume for each RUN and throws them away - so a VOLUME above the
+# mkdir/COPY steps that populate /opt/gebo.ai makes the image builder-dependent
+# for no gain. Last is portable.
+#
+# This image bundles the databases, so EVERYTHING the deployment owns lives
+# inside it. All of the following must be mounted onto named volumes or host
+# paths to survive an update/upgrade - see dockers/PERSISTENCE.md:
+#
+#   Application
+#     /opt/gebo.ai/work    GEBO_WORK_DIRECTORY - DURABLE user data: chat
+#                          SESSIONS_AREA, per-endpoint content mirrors, the
+#                          document cache, uploads, Google Workspace OAuth
+#                          tokens. Mongo only INDEXES it; the bytes live here.
+#     /opt/gebo.ai/home    GEBO_HOME
+#     /opt/gebo.ai/shares  host filesystem shares for the filesystem handler
+#     /opt/gebo.ai/logs    gc.log (see -Xlog:gc above)
+#     /var/log/gebo.ai     supervisord's stdout/stderr for the app, and the
+#                          security-log.jsonl audit trail
+#   Bundled infrastructure (paths taken from the configs COPY'd above)
+#     /data/db             MongoDB   (mongod.conf / supervisord --dbpath)
+#     /var/lib/qdrant      Qdrant    (qdrant-config.yaml -> storage.path)
+#     /var/lib/neo4j       Neo4j     (neo4j.conf -> server.directories.data
+#                                     = /var/lib/neo4j/data)
+#     /var/log/neo4j       Neo4j     (neo4j.conf -> server.directories.logs)
+#     /opt/opensearch/data OpenSearch (opensearch.yml -> path.data)
+#
+# /opt/gebo.ai/config is deliberately NOT a volume: it is a MOUNT. This one is
+# not theoretical - it was reproduced: Docker seeds an anonymous volume there
+# from the image on first run, Compose carries that volume across the recreate an
+# upgrade performs, and the container keeps serving the FIRST image's
+# application.yml no matter how many times you upgrade. Leaving config out of the
+# volume set is what lets a new image's defaults actually take effect.
+#
+# `docker run geboai/easyinstall.gebo.ai` with no -v gives every one of these an
+# ANONYMOUS volume, and an anonymous volume does not survive `docker rm` /
+# `docker compose down`. For anything you care about, name them.
+# ===========================================================================
+VOLUME ["/opt/gebo.ai/home", \
+        "/opt/gebo.ai/work", \
+        "/opt/gebo.ai/logs", \
+        "/opt/gebo.ai/shares", \
+        "/var/log/gebo.ai", \
+        "/data/db", \
+        "/var/lib/qdrant", \
+        "/var/lib/neo4j", \
+        "/var/log/neo4j", \
+        "/opt/opensearch/data"]
 EXPOSE 27017 6333 7474 7687 9200 9600 12999
 
 

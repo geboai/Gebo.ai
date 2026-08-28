@@ -23,6 +23,9 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
 
 /**
@@ -54,6 +57,21 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 
 	protected final Iface supportService;
 
+	protected final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at insert/
+	// update/delete - the real API entry point - not at this shared helper.
+	private void logConfigEvent(SecurityEvent event, String action, String resourceId, OperationStatus<?> status) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_CONFIGURATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_CONFIGURATION);
+		event.setAction(action);
+		event.setResourceId(resourceId);
+		event.setOutcome(status.isHasErrorMessages() ? SecurityAuditTaxonomy.Outcome.FAILURE
+				: SecurityAuditTaxonomy.Outcome.SUCCESS);
+		securityAuditLoggerService.log(event);
+	}
+
 	/**
 	 * Inserts a new image model configuration and handles runtime configuration.
 	 *
@@ -61,6 +79,14 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 	 * @return The operation status containing the inserted configuration or error.
 	 */
 	protected OperationStatus<ImageModelConfigType> insert(ImageModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<ImageModelConfigType> status = insertInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_INSERT, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<ImageModelConfigType> insertInternal(ImageModelConfigType config) {
 		ImageModelConfigType out = null;
 		LOGGER.info("Begin image model configuration insert");
 		try {
@@ -115,6 +141,14 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 	 * @return The operation status containing the updated configuration or error.
 	 */
 	protected OperationStatus<ImageModelConfigType> update(ImageModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<ImageModelConfigType> status = updateInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_UPDATE, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<ImageModelConfigType> updateInternal(ImageModelConfigType config) {
 		try {
 			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
@@ -140,6 +174,14 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 	 * @return Operation status indicating success or with any errors encountered.
 	 */
 	protected OperationStatus<Boolean> delete(ImageModelConfigType type) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<Boolean> status = deleteInternal(type);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_DELETE, type != null ? type.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<Boolean> deleteInternal(ImageModelConfigType type) {
 		try {
 			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);

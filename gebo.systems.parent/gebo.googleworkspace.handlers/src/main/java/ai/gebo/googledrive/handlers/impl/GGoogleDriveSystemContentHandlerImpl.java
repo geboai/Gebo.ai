@@ -17,7 +17,6 @@ package ai.gebo.googledrive.handlers.impl;
  * This class manages interactions with Google Drive as a content management system.
  * AI generated comments
  */
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -36,7 +35,6 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 
-@Service
 public class GGoogleDriveSystemContentHandlerImpl extends
 		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GGoogleDriveSystem, GGoogleDriveProjectEndpoint, GoogleDriveResourceReference, IGGoogleDriveVirtualFilesystemConsumingService>
 		implements IGGoogleDriveSystemContentHandler {

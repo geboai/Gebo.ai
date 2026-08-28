@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -47,7 +46,6 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
-@Service
 public class AwsS3VirtualFilesystemConsumingService
 		extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GAwsS3System, GAwsS3ProjectEndpoint, AwsS3NativePositionObject, AwsS3NavigationCoordinates, AwsS3ResourceReference>

@@ -21,6 +21,7 @@
     <p-tab [value]="6" gebo-ai-text>Rag chat profiles/Model prompts</p-tab>
     <p-tab [value]="7" gebo-ai-text>Agents/Networks of agents</p-tab>
     <p-tab [value]="8" gebo-ai-text>Logs</p-tab>
+    <p-tab [value]="9" gebo-ai-text>Compliance</p-tab>
   </p-tablist>
   <p-tabpanels>
 
@@ -53,6 +54,9 @@
   </p-tabpanel>
   <p-tabpanel [value]="8">
     <gebo-ai-logs-view-component id="childs" #child8></gebo-ai-logs-view-component>
+  </p-tabpanel>
+  <p-tabpanel [value]="9">
+    <gebo-ai-compliance-component id="childs" #child9></gebo-ai-compliance-component>
   </p-tabpanel>
   </p-tabpanels>
 </p-tabs>

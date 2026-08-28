@@ -21,6 +21,9 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import io.micrometer.observation.annotation.Observed;
 import lombok.AllArgsConstructor;
 
@@ -49,7 +52,30 @@ public abstract class AbstractTextToSpeechModelsConfigurationCRUDController<Text
 
 	protected final Class<TextToSpeechModelConfigType> type;
 
+	protected final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at insert/
+	// update/delete - the real API entry point - not at this shared helper.
+	private void logConfigEvent(SecurityEvent event, String action, String resourceId, OperationStatus<?> status) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_CONFIGURATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.LLM_CONFIGURATION);
+		event.setAction(action);
+		event.setResourceId(resourceId);
+		event.setOutcome(status.isHasErrorMessages() ? SecurityAuditTaxonomy.Outcome.FAILURE
+				: SecurityAuditTaxonomy.Outcome.SUCCESS);
+		securityAuditLoggerService.log(event);
+	}
+
 	protected OperationStatus<TextToSpeechModelConfigType> insert(TextToSpeechModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<TextToSpeechModelConfigType> status = insertInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_INSERT, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<TextToSpeechModelConfigType> insertInternal(TextToSpeechModelConfigType config) {
 		TextToSpeechModelConfigType out = null;
 		LOGGER.info("Begin text to speech model configuration insert");
 		try {
@@ -92,6 +118,14 @@ public abstract class AbstractTextToSpeechModelsConfigurationCRUDController<Text
 	}
 
 	protected OperationStatus<TextToSpeechModelConfigType> update(TextToSpeechModelConfigType config) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<TextToSpeechModelConfigType> status = updateInternal(config);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_UPDATE, config != null ? config.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<TextToSpeechModelConfigType> updateInternal(TextToSpeechModelConfigType config) {
 		try {
 			this.modelRuntimeConfigurationDao.reconfigureByConfigClustered(config);
 		} catch (Throwable e) {
@@ -111,6 +145,14 @@ public abstract class AbstractTextToSpeechModelsConfigurationCRUDController<Text
 	}
 
 	protected OperationStatus<Boolean> delete(TextToSpeechModelConfigType type) {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<Boolean> status = deleteInternal(type);
+		logConfigEvent(event, SecurityAuditTaxonomy.Action.LLM_CONFIG_DELETE, type != null ? type.getCode() : null,
+				status);
+		return status;
+	}
+
+	private OperationStatus<Boolean> deleteInternal(TextToSpeechModelConfigType type) {
 		try {
 			this.modelRuntimeConfigurationDao.deleteByCodeClustered(type.getCode());
 			this.persistentObjectManager.delete(type);

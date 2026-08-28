@@ -16,6 +16,7 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.sharepoint.handler.GSharepointProjectEndpoint;
+import ai.gebo.sharepoint.handler.IGSharepointContentManagementSystemHandler;
 import ai.gebo.sharepoint.handler.repositories.SharepointProjectEndpointRepository;
 import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
@@ -45,7 +46,7 @@ public class GSharepointResourcesDisposerFactoryImpl
 	 * @param persistentObjectManager
 	 */
 	public GSharepointResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
-			GSharepointContentManagementSystemHandlerImpl moduleHandler,
+			IGSharepointContentManagementSystemHandler moduleHandler,
 			SharepointProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo,
 			IGPersistentObjectManager persistentObjectManager) {
 		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);

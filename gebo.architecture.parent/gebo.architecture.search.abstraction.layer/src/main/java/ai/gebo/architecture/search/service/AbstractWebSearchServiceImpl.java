@@ -28,11 +28,45 @@ import ai.gebo.architecture.search.model.WebSearchResultsExtractionData;
 import ai.gebo.architecture.search.model.WebSearchResultsExtractionData.RelevantLink;
 import ai.gebo.model.base.TypedInputStream;
 
-public abstract class AbstractWebSearchServiceImpl implements ISearchService<WebSearchResultsExtractionData>,
-		INativeSearchService<WebSearchResultsExtractionData, WebSearchQueryObject> {
+/**
+ * Base for every web-search connector. Generic over the native query type
+ * {@code N} so a provider that exposes richer, engine-specific options (Tavily
+ * search depth, Brave freshness, SearXNG categories, ...) can declare its own
+ * {@link INativeQueryObject} subtype for the LLM to fill via structured output,
+ * while plain providers keep using {@link WebSearchQueryObject}. The default
+ * {@link #nativeSearch} treats the native object as a bag of query strings
+ * ({@link INativeQueryObject#relevantKeywords()}); providers that carry options
+ * override it to pass them through.
+ */
+public abstract class AbstractWebSearchServiceImpl<N extends INativeQueryObject>
+		implements INativeSearchService<WebSearchResultsExtractionData, N> {
+
+	/**
+	 * Generic, provider-agnostic description for every web-search provider. The
+	 * pipeline surfaces web search to the routing LLM and the deep-search menu as a
+	 * single "Web search" choice, regardless of which provider (Google, Brave,
+	 * SerpApi, Tavily, SearXNG, ...) is actually configured behind it. Individual
+	 * providers must not override {@link #getDescription()}.
+	 */
+	public static final String WEB_SEARCH_DESCRIPTION = "Web search";
+
+	/**
+	 * Provider-agnostic name and description of the web-search LLM tool. Only one
+	 * web-search provider is active at a time, so every provider exposes the same
+	 * generic tool to the model: the chatbot decides to "search the web" without
+	 * ever seeing which vendor (Google, Brave, SerpApi, Tavily, SearXNG, ...) is
+	 * configured behind it.
+	 */
+	public static final String WEB_SEARCH_TOOL_NAME = "searchWeb";
+	public static final String WEB_SEARCH_TOOL_DESCRIPTION = "Search the public web for current, external information relevant to the user's question, and return the most relevant results.";
 
 	protected int SocketTimeout = 20000;
 	protected int ConnectTimeout = 10000;
+
+	@Override
+	public String getDescription() {
+		return WEB_SEARCH_DESCRIPTION;
+	}
 
 	protected String tryArgueContentType(String link) {
 		String contentType = LinkTypeGuesser.tryArgueContentType(link);
@@ -159,12 +193,12 @@ public abstract class AbstractWebSearchServiceImpl implements ISearchService<Web
 	}
 
 	@Override
-	public List<SearchResult> nativeSearch(WebSearchQueryObject query, SearchableSystemMetaData system, int nEntryLimit)
+	public List<SearchResult> nativeSearch(N query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
 
 		List<SearchResult> results = new ArrayList<>();
-		if (query != null && query.getSearchedTexts() != null && !query.getSearchedTexts().isEmpty()) {
-			for (String text : query.getSearchedTexts()) {
+		if (query != null && query.relevantKeywords() != null && !query.relevantKeywords().isEmpty()) {
+			for (String text : query.relevantKeywords()) {
 				SearchQuery searchQuery = new SearchQuery();
 				searchQuery.setQueryText(text);
 				List<SearchResult> res = search(searchQuery, system, nEntryLimit);

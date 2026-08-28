@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 
 import org.springframework.boot.devtools.filewatch.ChangedFile;
 import org.springframework.boot.devtools.filewatch.ChangedFiles;
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -55,7 +54,6 @@ import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsuming
  * service manages file system interactions for the content management system,
  * handling operations like file discovery, consumption, and change tracking.
  */
-@Service
 public class GFilesystemContentManagementSystemHandlerImpl extends
 		GAbstractContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam>
 		implements IGFilesystemContentManagementSystemHandler {
@@ -207,7 +205,8 @@ public class GFilesystemContentManagementSystemHandlerImpl extends
 	 * @throws GeboContentHandlerSystemException If an error occurs during
 	 *                                           processing
 	 */
-	void consume(GFilesystemProjectEndpoint endpoint, IGContentConsumer contentConsumer,
+	@Override
+	public void consume(GFilesystemProjectEndpoint endpoint, IGContentConsumer contentConsumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			ChangedFiles changedFiles) throws GeboContentHandlerSystemException {
 		List<Path> added = new ArrayList<Path>();

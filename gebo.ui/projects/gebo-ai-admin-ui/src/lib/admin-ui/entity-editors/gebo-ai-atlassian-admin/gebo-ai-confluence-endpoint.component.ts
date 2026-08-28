@@ -56,6 +56,7 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
         description: new FormControl(),
+        personalData: new FormControl(),
         parentProjectCode: new FormControl(),
         readonly: new FormControl(),
         published: new FormControl(),

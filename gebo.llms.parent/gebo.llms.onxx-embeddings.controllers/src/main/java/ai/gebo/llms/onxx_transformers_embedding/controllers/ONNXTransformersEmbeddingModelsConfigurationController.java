@@ -28,6 +28,7 @@ import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbedding
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelConfig;
 import ai.gebo.llms.onxx_transformers_embedding.services.ONNXTransformersEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -44,10 +45,11 @@ public class ONNXTransformersEmbeddingModelsConfigurationController extends
 
 	public ONNXTransformersEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			ONNXTransformersEmbeddingModelConfigurationSupportService ifaceType) {
+			ONNXTransformersEmbeddingModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		super(persistentObjectManager, modelRuntimeConfigurationDao, GONNXTransformersEmbeddingModelConfig.class,
-				ifaceType);
-		
+				ifaceType, securityAuditLoggerService);
+
 	}
 
 	/**

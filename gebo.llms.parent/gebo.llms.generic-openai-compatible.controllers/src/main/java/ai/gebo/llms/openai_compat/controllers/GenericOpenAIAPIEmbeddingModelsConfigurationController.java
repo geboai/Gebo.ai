@@ -36,6 +36,7 @@ import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -60,12 +61,13 @@ public class GenericOpenAIAPIEmbeddingModelsConfigurationController extends
 	 */
 	private final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingProviders;
 	public GenericOpenAIAPIEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
-			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao, IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingProviders, GenericOpenAICompatibleProvidersConfig config) {
-		
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIEmbeddingModelConfig.class);
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao, IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingProviders, GenericOpenAICompatibleProvidersConfig config,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIEmbeddingModelConfig.class, securityAuditLoggerService);
 		this.config = config;
 		this.embeddingProviders = embeddingProviders;
-	 
+
 	}
 
 	

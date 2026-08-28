@@ -28,7 +28,7 @@ import java.util.List;
  * MCPClientProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
 
 public class MCPClientProjectEndpoint {
   @JsonProperty("code")
@@ -146,6 +146,9 @@ public class MCPClientProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Boolean personalData = null;
 
   @JsonProperty("paths")
   private List<VFilesystemReference> paths = null;
@@ -509,6 +512,24 @@ public class MCPClientProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public MCPClientProjectEndpoint personalData(Boolean personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Boolean isPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Boolean personalData) {
+    this.personalData = personalData;
+  }
+
   public MCPClientProjectEndpoint paths(List<VFilesystemReference> paths) {
     this.paths = paths;
     return this;
@@ -581,13 +602,14 @@ public class MCPClientProjectEndpoint {
         Objects.equals(this.synchroStrategy, mcPClientProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, mcPClientProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, mcPClientProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, mcPClientProjectEndpoint.personalData) &&
         Objects.equals(this.paths, mcPClientProjectEndpoint.paths) &&
         Objects.equals(this.mcpClientConfigCode, mcPClientProjectEndpoint.mcpClientConfigCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, mcpClientConfigCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, paths, mcpClientConfigCode);
   }
 
 
@@ -614,6 +636,7 @@ public class MCPClientProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    mcpClientConfigCode: ").append(toIndentedString(mcpClientConfigCode)).append("\n");
     sb.append("}");

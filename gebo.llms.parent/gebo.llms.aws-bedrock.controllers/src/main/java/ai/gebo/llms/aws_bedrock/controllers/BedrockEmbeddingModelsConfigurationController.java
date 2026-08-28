@@ -29,6 +29,7 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockEmbeddingModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockEmbeddingModelConfig;
 import ai.gebo.llms.aws_bedrock.services.BedrockEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Admin controller for AWS Bedrock embedding model configurations.
@@ -42,8 +43,10 @@ public class BedrockEmbeddingModelsConfigurationController extends
 
 	public BedrockEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			BedrockEmbeddingModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockEmbeddingModelConfig.class, ifaceType);
+			BedrockEmbeddingModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockEmbeddingModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 	}
 
 	@PostMapping(value = "insertBedrockEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

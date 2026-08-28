@@ -30,7 +30,7 @@ import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
  * AI generated comments
  * 
  * Implementation of IGToolCallbackSource that provides tool callbacks for Google Search
- * and Bing Search functionality. This service serves as a wrapper to expose search APIs
+ * functionality. This service serves as a wrapper to expose search APIs
  * to the AI system.
  */
 @Service
@@ -69,7 +69,7 @@ public class GoogleSearchFunctionCallbackWrapperSourceImpl implements IGToolCall
 	/**
 	 * Provides the list of tool callbacks for search functionality
 	 * 
-	 * @return a list containing Bing Search and Google Search tool callbacks (if configured)
+	 * @return a list containing Google Search tool callbacks (if configured)
 	 */
 	@Override
 	public List<ToolCallback> getToolCallbacks() {

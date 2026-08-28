@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -79,7 +78,6 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
  * to Confluence content through a virtual filesystem interface, supporting both
  * cloud and on-premise Confluence instances.
  */
-@Service
 public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference>
 		implements IGConfluenceVirtualFilesystemConsumingService {

@@ -22,7 +22,9 @@ import java.security.Provider.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -31,11 +33,27 @@ import java.util.zip.ZipFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
+import ai.gebo.application.messaging.model.DataEndpoint;
+import ai.gebo.application.messaging.model.DataEndpointLocality;
+import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
+import ai.gebo.application.messaging.model.DataTransformationInfo;
+import ai.gebo.application.messaging.model.DataTransformationMetaInfo;
+import ai.gebo.application.messaging.model.GMessagingComponentRef;
+import ai.gebo.application.messaging.model.MetaEndpointType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
+import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowItem;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStructure;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.buildsystems.abstraction.layer.IGBuildSystemHandler;
 import ai.gebo.architecture.buildsystems.abstraction.layer.IGBuildSystemHandlerRepositoryPattern;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -65,7 +83,11 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.model.base.TypedInputStream;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
@@ -104,6 +126,23 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	// content-handler module.
 	@Autowired
 	protected IGKnowledgeBaseHierarchyLookupService knowledgeBaseHierarchyLookupService;
+
+	// Same field-injection rationale as knowledgeBaseHierarchyLookupService above.
+	@Autowired
+	protected IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	// Resolves the active STANDARD ingestion workflow so a data source can be linked
+	// to the pipeline steps actually enabled for it. Held through an ObjectProvider
+	// and resolved lazily at getDataFlowMetaInfos() call time, NOT injected eagerly:
+	// the workflow subsystem depends transitively back on content handlers (via the
+	// step-enabled handlers -> graph/chat/search services -> the remote-filesystem
+	// search+consuming beans, which are themselves handlers), so a direct field
+	// injection here forms a startup bean cycle. The compliance register is read
+	// long after context refresh, so lazy resolution avoids the cycle while still
+	// giving the live repository. Absent (compute-workflow not deployed) -> the
+	// handler still reports its source endpoints, just without the connecting edges.
+	@Autowired
+	protected ObjectProvider<IWorkflowStatusHandlerRepositoryPattern> workflowStatusHandlerRepositoryProvider;
 
 	// Message broker for system messaging
 	protected IGMessageBroker messageBroker = null;
@@ -412,6 +451,34 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	 */
 	@Override
 	public void consume(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+		// Logged once per sync run (not per document/file) to avoid flooding the
+		// audit log - consumeImplementation() below fans out to potentially
+		// thousands of per-file reads during a single ingestion crawl.
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			consumeInternal(endpoint, sessionParam, consumer, messagesConsumer, errorConsumer);
+			logDataAccessEvent(event, endpoint, SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (RuntimeException | GeboContentHandlerSystemException e) {
+			logDataAccessEvent(event, endpoint, SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		}
+	}
+
+	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
+	// itself) so newSecurityEvent()'s caller-stack capture points at consume()
+	// - the real API entry point - not at this shared helper.
+	private void logDataAccessEvent(SecurityEvent event, ProjectEndpointType endpoint, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.INTEGRATION_DATA_ACCESS);
+		event.setCategory(SecurityAuditTaxonomy.Category.INTEGRATION_DATA_ACCESS);
+		event.setAction(SecurityAuditTaxonomy.Action.INTEGRATION_DATA_CONSUME);
+		event.setResourceId(endpoint != null ? endpoint.getCode() : null);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
+	}
+
+	private void consumeInternal(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
 			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
 			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 
@@ -734,6 +801,216 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			}
 		}
 		return modules;
+	}
+
+	/**
+	 * Reports this content handler's <b>data sources</b> for the compliance
+	 * register: one input endpoint per configured project endpoint, the point at
+	 * which documents enter the installation.
+	 *
+	 * <p>
+	 * The same two DAOs {@link #getModuleUseInfo()} already walks supply the data -
+	 * {@code endpointsDao.getConfigurations()} for the configured endpoints and
+	 * {@link #getSystem(GProjectEndpoint)} for the system each hangs off - so this
+	 * is the base-class implementation shared by every content handler
+	 * (git, filesystem, uploads, sharepoint, confluence, jira, aws-s3,
+	 * googledrive, mcp-client, integration, userspace, webdav) at once.
+	 * </p>
+	 *
+	 * <p>
+	 * The locator is built from the system's {@code baseUri} and the endpoint code
+	 * through {@link DataEndpoint#setEndpoint(String)}, so any credential embedded
+	 * in the URI is stripped before it is stored. Locality is only asserted when
+	 * it can be established from the locator - a corporate source over a real DNS
+	 * name is left undetermined rather than guessed. Every source is marked as
+	 * carrying personal data: ingested documents are in scope for the record of
+	 * processing activities regardless of the connector.
+	 * </p>
+	 */
+	@Override
+	public GDataFlowMetaInfos getDataFlowMetaInfos() {
+		List<ProjectEndpointType> endpoints = endpointsDao.getConfigurations();
+		if (endpoints == null || endpoints.isEmpty()) {
+			// A handler with no configured endpoint is not a data source yet; keep
+			// it out of the register rather than showing an empty connector.
+			return null;
+		}
+		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
+		flow.setComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
+		String product = getHandledSystemType() != null ? getHandledSystemType().getCode() : "content source";
+		for (ProjectEndpointType endpoint : endpoints) {
+			if (endpoint == null || endpoint.getCode() == null) {
+				continue;
+			}
+			String baseUri = null;
+			try {
+				SystemIntegrationType system = getSystem(endpoint);
+				if (system != null) {
+					baseUri = system.getBaseUri();
+				}
+			} catch (GeboContentHandlerSystemException e) {
+				LOGGER.error("Exception building data-flow source endpoint for " + endpoint.getCode(), e);
+			}
+			DataEndpoint source = new DataEndpoint();
+			source.setId("source-" + endpoint.getCode());
+			source.setDescription(endpoint.getDescription() != null ? endpoint.getDescription() : endpoint.getCode());
+			source.setProduct(product);
+			// baseUri may be null for connectors that carry no single address
+			// (e.g. uploads); the endpoint code alone still identifies the source.
+			source.setEndpoint(baseUri != null ? baseUri : product + ":" + endpoint.getCode());
+			source.setInput(true);
+			source.setTypes(new ArrayList<MetaEndpointType>(List.of(MetaEndpointType.DOCUMENTS)));
+			// Personal-data status is the data controller's classification of this
+			// source, not an assumption; downstream flows inherit it by propagation.
+			source.setPersonalData(Boolean.TRUE.equals(endpoint.getPersonalData()));
+			source.setLocality(DataEndpointLocality.hintFromLocator(source.getEndpoint()));
+			flow.getDataEndpoints().add(source);
+			addWorkflowLinks(flow, source, endpoint);
+		}
+		return flow.getDataEndpoints().isEmpty() ? null : flow;
+	}
+
+	/**
+	 * Connects this data source to the pipeline components it actually flows
+	 * through, using the live workflow structure rather than a fixed assumption.
+	 *
+	 * <p>
+	 * The STANDARD/INGESTION workflow ({@code GStandardWorkflowStep}) routes
+	 * {@code DOCUMENT_DISCOVERY -> TOKENIZATION -> {EMBEDDING, GRAPHEXTRACTION,
+	 * FULLTEXT_INDEXING}}, and which of the optional steps are on is decided per
+	 * data source by {@code IWorkflowStepEnabledHandler}. {@code IWorkflowStatusHandler.getWorkflowStructure(...)}
+	 * returns exactly that resolved tree for this source's {@link WorkflowContext},
+	 * so the edges drawn here are the ones this endpoint is really wired to - not
+	 * every step the platform could run.
+	 * </p>
+	 *
+	 * <p>
+	 * Each workflow step maps to a messaging component
+	 * ({@code GStandardWorkflowStep.getTargetComponent()}); the destination
+	 * endpoints are the ones those components publish into the same register
+	 * (the tokenizer's chunk cache, the vectorizator's vector store, the
+	 * full-text index). A downstream edge is emitted only when that component is
+	 * actually running on this node ({@code messageBroker.checkReceivingComponentPresent}),
+	 * so an enabled-but-undeployed step does not draw an edge to a store that
+	 * is not there.
+	 * </p>
+	 */
+	private void addWorkflowLinks(GDataFlowMetaInfos flow, DataEndpoint source, ProjectEndpointType endpoint) {
+		IWorkflowStatusHandlerRepositoryPattern workflowStatusHandlerRepositoryPattern = workflowStatusHandlerRepositoryProvider != null
+				? workflowStatusHandlerRepositoryProvider.getIfAvailable()
+				: null;
+		if (workflowStatusHandlerRepositoryPattern == null) {
+			return;
+		}
+		WorkflowContext context = buildWorkflowContext(endpoint);
+		if (context == null) {
+			return;
+		}
+		List<IWorkflowStatusHandler> handlers = workflowStatusHandlerRepositoryPattern
+				.findByWorkflowsTypeAndWorkflowId(GWorkflowType.STANDARD, GStandardWorkflow.INGESTION.name());
+		if (handlers == null || handlers.isEmpty()) {
+			return;
+		}
+		ComputedWorkflowStructure structure;
+		try {
+			structure = handlers.get(0).getWorkflowStructure(GWorkflowType.STANDARD.name(),
+					GStandardWorkflow.INGESTION.name(), context);
+		} catch (RuntimeException e) {
+			LOGGER.error("Exception computing workflow structure for data-flow links of " + endpoint.getCode(), e);
+			return;
+		}
+		if (structure == null || structure.getRootStep() == null) {
+			return;
+		}
+		Set<String> enabledSteps = new HashSet<String>();
+		collectEnabledSteps(structure.getRootStep(), enabledSteps);
+
+		// TOKENIZATION is the mandatory first processing step; connecting the source
+		// to it is what turns a floating data-source node into the head of a flow.
+		// The target component comes from GStandardWorkflowStep itself - the same
+		// enum the router uses to route the real message traffic - so this view and
+		// the runtime pipeline can never disagree on where a step runs.
+		GMessagingComponentRef tokenizer = GStandardWorkflowStep.TOKENIZATION.getTargetComponent();
+		if (!enabledSteps.contains(GStandardWorkflowStep.TOKENIZATION.name()) || !messageBroker
+				.checkReceivingComponentPresent(tokenizer.getModuleId(), tokenizer.getComponentId())) {
+			return;
+		}
+		String chunkEndpointId = crossRef(tokenizer, "chunk-cache");
+		DataTransformationMetaInfo ingestEngine = DataTransformationMetaInfo.of("ingest-" + endpoint.getCode(),
+				"Document ingestion and chunking", List.of(MetaEndpointType.DOCUMENTS), List.of(MetaEndpointType.CHUNK));
+		flow.getEngines().add(ingestEngine);
+		flow.getTransformations().add(DataTransformationInfo.of("ingest-flow-" + endpoint.getCode(),
+				"Documents from '" + source.getDescription() + "' are ingested and chunked", ingestEngine,
+				flow.qualifiedId(source.getId()), chunkEndpointId));
+
+		// Optional downstream steps: one edge from the chunk cache to each enabled,
+		// deployed indexing store. Only the store's endpoint id is a local
+		// convention here; the component that owns it is taken from the workflow
+		// step's own target, not restated.
+		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.EMBEDDING,
+				"vector-store", MetaEndpointType.VECTORIAL_DATABASE, "Embedding / semantic indexing");
+		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.FULLTEXT_INDEXING,
+				"fulltext-index", MetaEndpointType.FULLTEXT_INDEX, "Full-text indexing");
+		addDownstreamLink(flow, endpoint, enabledSteps, chunkEndpointId, GStandardWorkflowStep.GRAPHEXTRACTION,
+				"graph-store", MetaEndpointType.GRAPH_DATABASE, "Knowledge-graph extraction");
+	}
+
+	private void addDownstreamLink(GDataFlowMetaInfos flow, ProjectEndpointType endpoint, Set<String> enabledSteps,
+			String chunkEndpointId, GStandardWorkflowStep step, String endpointLocalId, MetaEndpointType producedType,
+			String description) {
+		GMessagingComponentRef target = step.getTargetComponent();
+		if (!enabledSteps.contains(step.name())
+				|| !messageBroker.checkReceivingComponentPresent(target.getModuleId(), target.getComponentId())) {
+			return;
+		}
+		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(step.name().toLowerCase() + "-" + endpoint.getCode(),
+				description, List.of(MetaEndpointType.CHUNK), List.of(producedType));
+		flow.getEngines().add(engine);
+		flow.getTransformations().add(DataTransformationInfo.of(step.name().toLowerCase() + "-flow-" + endpoint.getCode(),
+				description + " of '" + endpoint.getCode() + "'", engine, chunkEndpointId,
+				crossRef(target, endpointLocalId)));
+	}
+
+	/**
+	 * Qualified id of an endpoint owned by the component a workflow step targets.
+	 * The component identity comes from {@code GStandardWorkflowStep}; only the
+	 * endpoint's local id is supplied by the caller.
+	 */
+	private String crossRef(GMessagingComponentRef component, String endpointLocalId) {
+		return GDataFlowMetaInfos.qualifiedId(new GeboComponentInfo(component.getModuleId(), component.getComponentId()),
+				endpointLocalId);
+	}
+
+	private void collectEnabledSteps(ComputedWorkflowItem item, Set<String> out) {
+		if (item == null) {
+			return;
+		}
+		if (item.isEnabledStep() && item.getWorkflowStepId() != null) {
+			out.add(item.getWorkflowStepId().toUpperCase());
+		}
+		if (item.getChilds() != null) {
+			for (ComputedWorkflowItem child : item.getChilds()) {
+				collectEnabledSteps(child, out);
+			}
+		}
+	}
+
+	private WorkflowContext buildWorkflowContext(ProjectEndpointType endpoint) {
+		try {
+			String projectCode = endpoint.getParentProjectCode();
+			if (projectCode == null) {
+				return null;
+			}
+			GProject project = knowledgeBaseHierarchyLookupService.findProjectByCode(projectCode);
+			String knowledgeBaseCode = project != null ? project.getRootKnowledgeBaseCode() : null;
+			if (knowledgeBaseCode == null) {
+				return null;
+			}
+			return new WorkflowContext(knowledgeBaseCode, projectCode, GObjectRef.of(endpoint));
+		} catch (GeboPersistenceException e) {
+			LOGGER.error("Exception building workflow context for " + endpoint.getCode(), e);
+			return null;
+		}
 	}
 
 	/**

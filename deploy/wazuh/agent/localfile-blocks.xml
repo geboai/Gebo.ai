@@ -1,0 +1,145 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+ -->
+<!--
+  Ready-to-paste <localfile> blocks for an EXISTING Wazuh agent's ossec.conf
+  (Linux: /var/ossec/etc/ossec.conf - Windows: C:\Program Files (x86)\ossec-agent\ossec.conf).
+
+  Paste ONLY the block(s) matching how Gebo.ai is installed on that host, inside
+  the existing <ossec_config> ... </ossec_config>, then restart the agent:
+      systemctl restart wazuh-agent           (Linux)
+      Restart-Service -Name WazuhSvc          (Windows)
+
+  If you manage agents in groups, put the same blocks in the group's agent.conf
+  on the manager instead - see deploy/wazuh/manager/agent.conf.
+
+  log_format json is what makes the manager parse each line into fields with its
+  built-in "json" decoder. Never point a block at logs/archived/*.jsonl.gz:
+  those lines were already shipped while the file was live.
+
+  EVERY PATH BELOW COMES FROM THE DEPLOYMENT PROCEDURE THAT CREATES IT - the
+  file that decides it is named in each block, so you can re-check it in your own
+  version of the repo. The log directory is ${GEBO_LOG_BASE}, defaulting to
+  "logs" relative to the process working directory.
+
+  Confirm on the host before trusting any of it:
+      docker exec <container> ls -l /opt/gebo.ai/logs/security-log.jsonl
+      docker inspect -f '{{range .Mounts}}{{.Source}} -> {{.Destination}}{{"\n"}}{{end}}' <container>
+      systemctl show -p WorkingDirectory,ExecStart gebo-ai
+  An absent file just means nothing security-relevant happened yet on that
+  instance.
+
+  Full guide: docs/wazuh-integration.md
+-->
+
+<!-- ####################################################################### -->
+<!-- 1. MONOLITH, .deb / .rpm install                                        -->
+<!--                                                                         -->
+<!-- gebo.ai.app/pom.xml (profiles package-unix-deb / package-unix-rpm)       -->
+<!-- passes -DGEBO_LOG_BASE=/var/log/gebo-ai to the launcher, and the         -->
+<!-- package's postinst creates that directory (owner gebo-ai:gebo-ai).       -->
+<!-- The app itself lives in /home/gebo-ai/gebo-ai/, service gebo-ai.service. -->
+<!-- ####################################################################### -->
+<localfile>
+  <log_format>json</log_format>
+  <location>/var/log/gebo-ai/security-log.jsonl</location>
+</localfile>
+
+<!-- ####################################################################### -->
+<!-- 2. MONOLITH, Docker Compose (agent running on the DOCKER HOST)          -->
+<!--                                                                         -->
+<!-- dockers/gebo.ai/docker-compose.yml mounts                               -->
+<!--   - /home/gebo.ai/logs:/opt/gebo.ai/logs                                 -->
+<!-- (the container itself runs with WORKDIR /opt/gebo.ai and no             -->
+<!-- GEBO_LOG_BASE, per dockers/gebo.ai/Dockerfile). Adjust the host side if  -->
+<!-- you changed that mapping.                                               -->
+<!-- ####################################################################### -->
+<localfile>
+  <log_format>json</log_format>
+  <location>/home/gebo.ai/logs/security-log.jsonl</location>
+</localfile>
+
+<!-- ####################################################################### -->
+<!-- 2b. MONOLITH, all-in-one appliance OR Docker on a Windows host          -->
+<!--                                                                         -->
+<!-- geboai/easyinstall.gebo.ai (supervisord runs it with                     -->
+<!-- directory=/opt/gebo.ai) and dockers/gebo.ai/windows/docker-compose.yml   -->
+<!-- (no volumes for the gebo.ai service) both leave the trail in the image's -->
+<!-- anonymous VOLUME /opt/gebo.ai/logs, which no agent can read and which a  -->
+<!-- docker rm deletes. Publish it first, e.g.                                -->
+<!--   docker run -p 12999:12999 -v /home/gebo.ai/logs:/opt/gebo.ai/logs \    -->
+<!--     geboai/easyinstall.gebo.ai                                           -->
+<!-- and then use block 2 above. NOTE: in the appliance image                 -->
+<!-- /var/log/gebo.ai/ is NOT the audit trail - supervisord only captures the -->
+<!-- process stdout/stderr there.                                            -->
+<!-- ####################################################################### -->
+
+<!-- ####################################################################### -->
+<!-- 3. MONOLITH, Windows .msi install                                       -->
+<!--                                                                         -->
+<!-- gebo.ai.app/pom.xml (profile package-windows) passes                     -->
+<!-- -DGEBO_LOG_BASE=$APPDIR\instance\logs; $APPDIR is the "app" folder of    -->
+<!-- the install directory. The MSI is built with a directory chooser over    -->
+<!-- the default Program Files\GeboAI, so RESOLVE THE REAL PATH FIRST:        -->
+<!--                                                                         -->
+<!--   $exe = (Get-CimInstance Win32_Service |                                -->
+<!--           Where-Object { $_.PathName -like '*gebo-ai.exe*' } |           -->
+<!--           Select-Object -First 1).PathName.Trim('"')                     -->
+<!--   Join-Path (Split-Path $exe) 'app\instance\logs\security-log.jsonl'     -->
+<!--                                                                         -->
+<!-- The block below assumes the default install directory.                   -->
+<!-- ####################################################################### -->
+<localfile>
+  <log_format>json</log_format>
+  <location>C:\Program Files\GeboAI\app\instance\logs\security-log.jsonl</location>
+</localfile>
+
+<!-- ####################################################################### -->
+<!-- 4. MICROSERVICES, Docker Compose (agent on the DOCKER HOST)             -->
+<!--                                                                         -->
+<!-- The Jib images run with workingDirectory /opt/gebo.ai (see the "docker"  -->
+<!-- profile in gebo.microservices.apps.parent/pom.xml), so each service      -->
+<!-- writes /opt/gebo.ai/logs/security-log.jsonl INSIDE its container, and    -->
+<!-- dockers/gebo.microservices/docker-compose.yml mounts only config, home   -->
+<!-- and work. Publish the logs first, with                                  -->
+<!-- deploy/wazuh/docker/docker-compose.security-logs.override.yml, which     -->
+<!-- bind-mounts every service's log directory to                            -->
+<!--   ${GEBO_SECURITY_LOG_BASE}/<compose service name>                       -->
+<!-- (fallback ./security-logs, i.e. inside dockers/gebo.microservices/ -     -->
+<!-- fine for a test cluster, not for a production audit trail).              -->
+<!--                                                                         -->
+<!-- The block below assumes GEBO_SECURITY_LOG_BASE=/var/log/gebo-ai-microservices.
+     One block covers all 21 services: the directory wildcard is expanded by
+     the agent, and each event names its own service in "application"
+     (brain_gebo_ai, heimdall_gebo_ai, tyr_gebo_ai, ...).                     -->
+<!-- ####################################################################### -->
+<localfile>
+  <log_format>json</log_format>
+  <location>/var/log/gebo-ai-microservices/*/security-log.jsonl</location>
+</localfile>
+
+<!-- ####################################################################### -->
+<!-- 5. MICROSERVICES installed per host                                     -->
+<!--                                                                         -->
+<!-- Only the gateway ships as .deb/.rpm: its postinst runs                   -->
+<!-- gebo-ai-gateway.service with WorkingDirectory=/home/gebo-ai-gateway and  -->
+<!-- its launcher does NOT set GEBO_LOG_BASE, so the "logs" default applies   -->
+<!-- there. Same rule for any service started by hand from its own directory. -->
+<!-- Setting Environment=GEBO_LOG_BASE=/var/log/gebo-ai-<service> in the unit -->
+<!-- is cleaner - then use block 1's path shape instead.                      -->
+<!-- ####################################################################### -->
+<localfile>
+  <log_format>json</log_format>
+  <location>/home/gebo-ai-gateway/logs/security-log.jsonl</location>
+</localfile>
+<localfile>
+  <log_format>json</log_format>
+  <location>/home/gebo-ai-*/logs/security-log.jsonl</location>
+</localfile>

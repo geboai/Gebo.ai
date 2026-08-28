@@ -25,10 +25,11 @@ import { PanelModule } from "primeng/panel";
 import { RadioButtonModule } from "primeng/radiobutton";
 import { CheckboxModule } from "primeng/checkbox";
 import { FieldsetModule } from "primeng/fieldset";
+import { TooltipModule } from "primeng/tooltip";
 import {  GeboAINotificationsModule } from "../../notifications/notifications.module";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, TreeSelectModule, TreeModule, DialogModule, ChipModule, ButtonModule, BlockUIModule, PanelModule, RadioButtonModule, CheckboxModule, FieldsetModule, GeboAIFieldTranslationContainerModule,GeboAINotificationsModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, TreeSelectModule, TreeModule, DialogModule, ChipModule, ButtonModule, BlockUIModule, PanelModule, RadioButtonModule, CheckboxModule, FieldsetModule, TooltipModule, GeboAIFieldTranslationContainerModule,GeboAINotificationsModule],
     declarations:[VFilesystemSelectorComponent],
     exports:[VFilesystemSelectorComponent]
 })

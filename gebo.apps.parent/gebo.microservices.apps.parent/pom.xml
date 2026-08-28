@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.2.3</version>
+		<version>1.0.2.4</version>
 	</parent>
 	<groupId>ai.gebo.apps.microservices</groupId>
 	<artifactId>gebo.microservices.apps.parent</artifactId>
@@ -118,11 +118,12 @@
 
 		  Each app produces geboai/<artifactId>:<version> (e.g. geboai/git.gebo.ai)
 		  layered on the shared geboai/platform base, with GEBO_HOME/GEBO_WORK_DIRECTORY
-		  and the standard JVM flags preset. Jib auto-detects the single Spring Boot
-		  main class and auto-skips pom-packaging modules (this aggregator), so no
-		  per-app configuration is needed. Runtime config (Mongo/RabbitMQ/Eureka/
-		  OpenSearch/security) is expected to be mounted at /opt/gebo.ai/config, not
-		  baked into the images.
+		  and the standard JVM flags preset, and with /opt/gebo.ai/{home,work,logs}
+		  declared as volumes (see the <volumes> block below). Jib auto-detects the
+		  single Spring Boot main class and auto-skips pom-packaging modules (this
+		  aggregator), so no per-app configuration is needed. Runtime config
+		  (Mongo/RabbitMQ/Eureka/OpenSearch/security) is expected to be mounted at
+		  /opt/gebo.ai/config, not baked into the images.
 		-->
 		<profile>
 			<id>docker</id>
@@ -155,6 +156,33 @@
 									<GEBO_HOME>/opt/gebo.ai/home</GEBO_HOME>
 									<GEBO_WORK_DIRECTORY>/opt/gebo.ai/work</GEBO_WORK_DIRECTORY>
 								</environment>
+								<!--
+								  The image's PERSISTENT surface, declared so the images are
+								  self-describing and so a plain `docker run` of one of them cannot
+								  silently write durable data into the container's throwaway layer.
+								  The directories themselves are created by the geboai/platform base
+								  image (dockers/gebo.ai.platform/Dockerfile) - Jib cannot RUN mkdir.
+
+								  work  DURABLE user data - chat SESSIONS_AREA, per-endpoint content
+								        mirrors, the document cache, uploads, Google Workspace OAuth
+								        tokens. Mongo only INDEXES it; the bytes live here.
+								  home  GEBO_HOME, the application's own home area.
+								  logs  security-log.jsonl, the append-only GDPR Art.32 / NIS2 Art.21
+								        audit trail (WORKDIR is /opt/gebo.ai and logback defaults to
+								        ${GEBO_LOG_BASE:-logs}).
+
+								  NOTE /opt/gebo.ai/config is deliberately absent: it is a MOUNT, not a
+								  volume - an anonymous volume there would pin the first image's
+								  application.yml and mask the one shipped by every later upgrade.
+								  Deployments must bind a NAMED volume (or a host path) over each of
+								  these; an anonymous volume does not survive `docker compose down`.
+								  See dockers/PERSISTENCE.md and dockers/gebo.microservices/docker-compose.yml.
+								-->
+								<volumes>
+									<volume>/opt/gebo.ai/home</volume>
+									<volume>/opt/gebo.ai/work</volume>
+									<volume>/opt/gebo.ai/logs</volume>
+								</volumes>
 								<jvmFlags>
 									<jvmFlag>-Dsun.jnu.encoding=UTF-8</jvmFlag>
 									<jvmFlag>-Dfile.encoding=UTF-8</jvmFlag>

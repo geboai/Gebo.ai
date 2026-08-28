@@ -14,7 +14,7 @@ import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "
 import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, refreshTreeNodes } from "@Gebo.ai/reusable-ui";
 import { ScrollerOptions, TreeNode } from "primeng/api";
 import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "primeng/tree";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -227,12 +227,17 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 });
 
                 this.chatsTree[0].children = newItems;
+                this.chatsTree[0].expanded = true;
+                this.chatsTree = refreshTreeNodes(this.chatsTree);
+                this.cd.markForCheck();
 
             }, error: (err) => {
                 this.chatsPageLoading = false;
+                this.cd.markForCheck();
             },
             complete: () => {
                 this.chatsPageLoading = false;
+                this.cd.markForCheck();
             }
         });
 

@@ -12,64 +12,113 @@
 
 
 
-<p-dialog id="VFileSystemSelector" gebo-ai-label [maximizable]="true" [visible]="openEditWindow" [modal]="true" [style]="{width:'95%',height:'800px'}" [closable]="true"
+<p-dialog id="VFileSystemSelector" gebo-ai-label [maximizable]="true" [visible]="openEditWindow" [modal]="true"
+  [style]="{width:'80vw',height:'85vh'}" [contentStyle]="{overflow:'hidden'}" [closable]="true"
   header="Choose elements" [showHeader]="true" (onHide)="this.openEditWindow=false;"
   (visibleChange)="this.openEditWindow=false;">
-  <p-panel #window [showHeader]="false">
+  <p-panel #window [showHeader]="false" styleClass="vfs-selector-panel">
     <p-blockUI [target]="window" [blocked]="loading">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <gebo-ai-notifications [messages]="messages"></gebo-ai-notifications>
 
-    <div class="grid" style="width:240px;">
-      <div class="col-6">
-        <p-button id="ChooseOk" gebo-ai-label label="OK" [outlined]="true" icon="pi pi-check" (onClick)="confirmEditing()"
-        severity="success"></p-button>
-      </div>
-      <div class="col-6">
-        <p-button  id="ChooseCancel" gebo-ai-label  label="Cancel" [outlined]="true" icon="pi pi-cancel" (onClick)="openEditWindow=false;"
-        severity="secondary"></p-button>
-      </div>
+    <div class="vfs-selector-toolbar">
+      <span class="vfs-selector-counter">
+        <i class="pi pi-check-circle"></i>&nbsp;<span>{{editingNodeValues.length}}</span>
+      </span>
+      @if (enableDeletion) {
+        <span class="vfs-selector-counter vfs-selector-counter-danger">
+          <i class="pi pi-trash"></i>&nbsp;<span>{{editingDeletions.length}}</span>
+        </span>
+      }
+      <p-button id="RefreshBtn" gebo-ai-label label="Refresh" [text]="true" icon="pi pi-refresh"
+        title="Reload the contents from the remote system" (onClick)="reload()" severity="secondary"></p-button>
     </div>
-    <p-fieldset id="ChoosedElementsArea" gebo-ai-label legend="Choosed elements">
-      <div style="width: 100%; border: solid #C0C0C0 1px;">
 
-        @for (p of editingNodeValues; track p) {
-          <p-chip [label]="(p.path?''+p.path.name:p.root.description)"
-            [removable]="true" (onRemove)="removeFromEditPanel(p)"
-            [icon]="'pi ' + ((!p.path || p.path.folder===true)?'pi-folder':'pi-file' )" />
-        }
+    @if (editingNodeValues.length) {
+      <p-fieldset id="ChoosedElementsArea" gebo-ai-label legend="Choosed elements" [toggleable]="true">
+        <div class="vfs-selector-chips">
+          @for (p of editingNodeValues; track p.uniqueCode) {
+            <p-chip [label]="(p.path?''+p.path.name:p.root.description)"
+              [pTooltip]="p.path?.absolutePath || p.root.absolutePath || p.root.code"
+              [removable]="true" (onRemove)="removeFromEditPanel(p)"
+              [icon]="'pi ' + ((!p.path || p.path.folder===true)?'pi-folder':'pi-file' )" />
+          }
+        </div>
+      </p-fieldset>
+    }
 
-      </div>
-    </p-fieldset>
-    <p-fieldset  id="ChooseElementsArea" gebo-ai-label  legend="Choose elements">
-      <p-tree class="md:w-20rem w-full col-12" [value]="roots" (onNodeExpand)="nodeExpand($event)"
-        (onNodeCollapse)="nodeCollapse($event)"
-        containerStyleClass="w-full col-12" [filter]="true">
+    @if (enableDeletion && editingDeletions.length) {
+      <p-fieldset id="DeletedElementsArea" gebo-ai-label legend="To be deleted" [toggleable]="true">
+        <div class="vfs-selector-chips">
+          @for (p of editingDeletions; track p.uniqueCode) {
+            <p-chip styleClass="vfs-selector-chip-danger" [label]="(p.path?''+p.path.name:p.root.description)"
+              [pTooltip]="p.path?.absolutePath || p.root.absolutePath || p.root.code"
+              [removable]="true" (onRemove)="removeEditingDeletionMark(p)" icon="pi pi-trash" />
+          }
+        </div>
+      </p-fieldset>
+    }
+
+    <p-fieldset id="ChooseElementsArea" gebo-ai-label legend="Choose elements" styleClass="vfs-selector-tree-fieldset">
+      <p-tree class="w-full" [value]="roots" (onNodeExpand)="nodeExpand($event)"
+        (onNodeCollapse)="nodeCollapse($event)" [trackBy]="trackBy" loadingMode="icon"
+        containerStyleClass="w-full" [filter]="true" filterPlaceholder="Filter the loaded elements"
+        scrollHeight="45vh">
         <ng-template let-node pTemplate="default">
-          <div [formGroup]="formGroup" [style]="onlineStyle(node)" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; cursor: pointer;" (click)="toggleNodeSelection(node)">
+          <div [formGroup]="formGroup" [style]="onlineStyle(node)" class="vfs-selector-node"
+            [class.vfs-selector-node-deleted]="isMarkedForDeletion(node)" (click)="toggleNodeSelection(node)">
             @if (showCheckbox(node)) {
-              <p-checkbox name="choosed" [id]="'choosed_' + node.data.uniqueCode" [binary]="true" [ngModel]="node.data.selected" [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleNodeSelection(node)" (click)="$event.stopPropagation()"></p-checkbox>
+              <p-checkbox name="choosed" [id]="'choosed_' + node.data.uniqueCode" [binary]="true" [ngModel]="node.data.selected" [ngModelOptions]="{standalone: true}" [ariaLabel]="node.label" (ngModelChange)="toggleNodeSelection(node)" (click)="$event.stopPropagation()"></p-checkbox>
             }
             @if (showRadio(node)) {
-              <p-radioButton name="choosed" [id]="'choosed_' + node.data.uniqueCode" [value]="node.data.uniqueCode" [ngModel]="formGroup.controls['choosed'].value" [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleNodeSelection(node)" (click)="$event.stopPropagation()"></p-radioButton>
+              <p-radioButton name="choosed" [id]="'choosed_' + node.data.uniqueCode" [value]="node.data.uniqueCode" [ngModel]="formGroup.controls['choosed'].value" [ngModelOptions]="{standalone: true}" [ariaLabel]="node.label" (ngModelChange)="toggleNodeSelection(node)" (click)="$event.stopPropagation()"></p-radioButton>
             }
-            <span>{{node.label}}</span>
+            <span class="vfs-selector-node-label" [pTooltip]="node.data.path?.absolutePath || node.data.root?.absolutePath">{{node.label}}</span>
+            @if (showViewAction(node)) {
+              <p-button [id]="'view_' + node.data.uniqueCode" [text]="true" [rounded]="true"
+                icon="pi pi-eye" severity="secondary" title="Open this element"
+                styleClass="vfs-selector-node-action"
+                (onClick)="$event.stopPropagation(); requestView(node)"></p-button>
+            }
+            @if (showDeleteToggle(node)) {
+              <p-button [id]="'delete_' + node.data.uniqueCode" [text]="true" [rounded]="true"
+                [icon]="isMarkedForDeletion(node)?'pi pi-undo':'pi pi-trash'"
+                [severity]="isMarkedForDeletion(node)?'secondary':'danger'"
+                [title]="isMarkedForDeletion(node)?'Keep this element':'Sign this element for deletion'"
+                styleClass="vfs-selector-node-action"
+                (onClick)="$event.stopPropagation(); toggleDeletionMark(node)"></p-button>
+            }
           </div>
         </ng-template>
       </p-tree>
     </p-fieldset>
 
   </p-panel>
+  <ng-template pTemplate="footer">
+    <p-button id="ChooseCancel" gebo-ai-label label="Cancel" [outlined]="true" icon="pi pi-times"
+      (onClick)="openEditWindow=false;" severity="secondary"></p-button>
+    <p-button id="ChooseOk" gebo-ai-label label="OK" icon="pi pi-check" (onClick)="confirmEditing()"
+      severity="success"></p-button>
+  </ng-template>
 </p-dialog>
 
-<div style="width: 100%; border: solid #C0C0C0 1px;">
-  <p-button  id="EditBtn" gebo-ai-label  [disabled]="readonly" (onClick)="openEditMode()" icon="pi pi-pen-to-square" title="Modify selected"
-  [outlined]="true"></p-button>
-  @for (p of internalValue; track p) {
-    <p-chip [label]="(p.path?''+p.path.name:p.root.description)"
-      [removable]="readonly===false" (onRemove)="removeFromMainPanel(p)"
-      [icon]="'pi ' + ((!p.path || p.path.folder===true)?'pi-folder':'pi-file' )" />
-  }
-
+<div class="vfs-selector-main">
+  <p-button id="EditBtn" gebo-ai-label [disabled]="readonly" (onClick)="openEditMode()" icon="pi pi-pen-to-square" title="Modify selected"
+    [outlined]="true"></p-button>
+  <div class="vfs-selector-chips">
+    @for (p of internalValue; track p.uniqueCode) {
+      <p-chip [label]="(p.path?''+p.path.name:p.root.description)"
+        [pTooltip]="p.path?.absolutePath || p.root.absolutePath || p.root.code"
+        [removable]="readonly===false" (onRemove)="removeFromMainPanel(p)"
+        [icon]="'pi ' + ((!p.path || p.path.folder===true)?'pi-folder':'pi-file' )" />
+    }
+    @for (p of deletions; track p.uniqueCode) {
+      <p-chip styleClass="vfs-selector-chip-danger" [label]="(p.path?''+p.path.name:p.root.description)"
+        [pTooltip]="p.path?.absolutePath || p.root.absolutePath || p.root.code"
+        [removable]="readonly===false" (onRemove)="removeDeletionMark(p)" icon="pi pi-trash" />
+    }
+  </div>
 </div>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -21,7 +21,27 @@ REM --------------------------------------------------------------------------
 setlocal enabledelayedexpansion
 
 set "REPO_ROOT=%~dp0.."
-set "VERSION=1.0.2.1-SNAPSHOT"
+REM Read the project's own <version> from the root pom.xml, taking the first
+REM <version> and stopping at <parent> so we don't pick up spring-boot-starter-
+REM parent's version instead. Mirrors lib-multiplatform-images.sh / build-sbom-
+REM images.sh — keeps this aligned with whatever the actual build produces
+REM instead of a hardcoded literal that goes stale as the version moves on.
+set "VERSION="
+for /f "usebackq delims=" %%L in ("%REPO_ROOT%\pom.xml") do (
+  if not defined VERSION (
+    set "LINE=%%L"
+    echo(!LINE! | findstr /c:"<parent>" >nul && goto :version_done
+    echo(!LINE! | findstr /c:"<version>" >nul && (
+      set "VERSION=!LINE:*<version>=!"
+      set "VERSION=!VERSION:</version>=!"
+    )
+  )
+)
+:version_done
+if not defined VERSION (
+  echo ERROR: Could not read project version from %REPO_ROOT%\pom.xml
+  exit /b 1
+)
 set "JAR=%REPO_ROOT%\gebo.apps.parent\gebo.ai.app\target\gebo.ai.app-%VERSION%-bootable.jar"
 set "SBOM=%REPO_ROOT%\gebo.apps.parent\gebo.ai.app\target\classes\META-INF\sbom\application.cdx.json"
 

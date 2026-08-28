@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
 
 public class FileUploadControllerApi {
     private ApiClient apiClient;
@@ -112,6 +112,56 @@ public class FileUploadControllerApi {
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
         uriVariables.put("handShakeCode", handShakeCode);
         String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/upload/{handShakeCode}").buildAndExpand(uriVariables).toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        if (files != null)
+            formParams.add("files[]", files);
+
+        final String[] accepts = {  };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "multipart/form-data"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param endpointCode  (required)
+     * @param files  (optional)
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public void uploadToEndpoint(String endpointCode, List<File> files) throws RestClientException {
+        uploadToEndpointWithHttpInfo(endpointCode, files);
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param endpointCode  (required)
+     * @param files  (optional)
+     * @return ResponseEntity&lt;Void&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<Void> uploadToEndpointWithHttpInfo(String endpointCode, List<File> files) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'endpointCode' is set
+        if (endpointCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling uploadToEndpoint");
+        }
+        // create path and map variables
+        final Map<String, Object> uriVariables = new HashMap<String, Object>();
+        uriVariables.put("endpointCode", endpointCode);
+        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/uploadToEndpoint/{endpointCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();

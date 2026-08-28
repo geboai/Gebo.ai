@@ -1,0 +1,89 @@
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+
+.vfs-selector-main {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.25rem;
+  border: solid 1px var(--surface-border, #C0C0C0);
+  border-radius: var(--border-radius, 4px);
+}
+
+.vfs-selector-chips {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.vfs-selector-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0 0.5rem 0;
+}
+
+.vfs-selector-counter {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-color-secondary, #6c757d);
+  font-size: 0.875rem;
+}
+
+.vfs-selector-counter-danger {
+  color: var(--red-500, #ef4444);
+}
+
+.vfs-selector-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+}
+
+.vfs-selector-node-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* An entry signed for deletion has to read as "on its way out" without being
+   confused with a disabled one, hence the strike plus the danger colour. */
+.vfs-selector-node-deleted .vfs-selector-node-label {
+  text-decoration: line-through;
+  color: var(--red-500, #ef4444);
+}
+
+/* The row action is only meaningful while pointing the row, but it stays
+   visible once the entry is signed so the state is never hidden. */
+.vfs-selector-node-action {
+  visibility: hidden;
+}
+
+.vfs-selector-node:hover .vfs-selector-node-action,
+.vfs-selector-node-deleted .vfs-selector-node-action {
+  visibility: visible;
+}
+
+.vfs-selector-chip-danger {
+  background: var(--red-100, #fee2e2);
+  color: var(--red-700, #b91c1c);
+}
+
+.vfs-selector-tree-fieldset {
+  min-height: 0;
+}

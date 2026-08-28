@@ -32,6 +32,7 @@ export interface GJiraProjectEndpoint {
     synchroStrategy?: GJiraProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GJiraProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     paths?: Array<VFilesystemReference>;
     jiraSystemCode?: string;
 }

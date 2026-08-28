@@ -29,6 +29,7 @@ import ai.gebo.llms.mistralai.model.GMistralChatModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralChatModelConfig;
 import ai.gebo.llms.mistralai.services.MistralChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * AI generated comments
@@ -46,9 +47,11 @@ public class MistralAIChatModelsConfigurationController extends
 
 	public MistralAIChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			MistralChatModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GMistralChatModelConfig.class, ifaceType);
-		
+			MistralChatModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GMistralChatModelConfig.class, ifaceType,
+				securityAuditLoggerService);
+
 	}
 
 	/**

@@ -37,7 +37,7 @@
 	<parent>
 		<groupId>ai.gebo.microservices-integration-tests</groupId>
 		<artifactId>microservices-integration-tests.parent</artifactId>
-		<version>1.0.2.3</version>
+		<version>1.0.2.4</version>
 	</parent>
 
 	<artifactId>setup-use-microservices-tests</artifactId>

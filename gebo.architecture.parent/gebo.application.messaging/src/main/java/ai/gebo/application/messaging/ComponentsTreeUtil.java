@@ -15,6 +15,7 @@ import java.util.Map;
 
 import ai.gebo.application.messaging.external.IGExternalInterface;
 import ai.gebo.application.messaging.model.ComponentMetaInfo;
+import ai.gebo.application.messaging.model.GDataFlowMetaInfos;
 import ai.gebo.application.messaging.model.GModuleMetaInfo;
 
 /**
@@ -44,6 +45,7 @@ public class ComponentsTreeUtil {
 				ComponentMetaInfo component = new ComponentMetaInfo(x.getKey(), y.getMessagingSystemId(), true, false,
 						!(y instanceof IGExternalInterface));
 				component.setLocalSystem(y.isLocalSystem()); // Set local system flag for receiver
+				component.setDataFlowMetaInfos(y.getDataFlowMetaInfos()); // Null for most components
 				return component;
 			}).toList());
 			receiversList.add(module);
@@ -54,6 +56,7 @@ public class ComponentsTreeUtil {
 				ComponentMetaInfo component = new ComponentMetaInfo(x.getKey(), y.getMessagingSystemId(), false, true,
 						!(y instanceof IGExternalInterface));
 				component.setLocalSystem(y.isLocalSystem()); // Set local system flag for emitter
+				component.setDataFlowMetaInfos(y.getDataFlowMetaInfos()); // Null for most components
 				return component;
 			}).toList());
 			emittersList.add(module);
@@ -130,6 +133,15 @@ public class ComponentsTreeUtil {
 				ComponentMetaInfo newComponent = new ComponentMetaInfo(component.getMessagingModuleId(),
 						component.getMessagingSystemId(), true, true, component.isLocalSystem());
 				newComponent.setLocalSystem(component.isLocalSystem()); // Preserve local system status
+				// A brand-new instance is built here, so anything not copied across is
+				// lost for exactly the dual-role components. The emitter and receiver
+				// sides can be two distinct beans sharing one identity, so merge rather
+				// than pick a side.
+				ComponentMetaInfo receivingSide = receivingComponents.stream()
+						.filter(x -> x.getMessagingSystemId().equals(component.getMessagingSystemId())).findFirst()
+						.orElse(null);
+				newComponent.setDataFlowMetaInfos(GDataFlowMetaInfos.merge(component.getDataFlowMetaInfos(),
+						receivingSide != null ? receivingSide.getDataFlowMetaInfos() : null));
 				joinedComponents.add(newComponent);
 			} else {
 				joinedComponents.add(component);

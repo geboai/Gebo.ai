@@ -32,6 +32,7 @@ export interface GCentralizedProjectEndpoint {
     synchroStrategy?: GCentralizedProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GCentralizedProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     remoteProjectReference?: GObjectRefGProjectEndpoint;
 }
 export namespace GCentralizedProjectEndpoint {

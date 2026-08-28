@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.2.3</version>
+		<version>1.0.2.4</version>
 	</parent>
 	<groupId>ai.gebo.systems</groupId>
 	<artifactId>gebo.systems.parent</artifactId>
@@ -13,7 +13,7 @@
 	<!--
 	  No global <dependencies> here. gebo.architecture.contentsystems.abstraction.layer
 	  used to be declared globally and inherited by every child, which silently forced
-	  it onto the web-search tools (bing/google) and the lightweight *.search.api DTO
+	  it onto the web-search tools (google) and the lightweight *.search.api DTO
 	  modules that do not use it - and, through them, onto brain. It is now declared
 	  explicitly by each real content-handler module that actually needs it.
 	-->
@@ -24,6 +24,10 @@
 		<module>gebo.filesystem.content.handler</module>
 		<module>gebo.uploads.content.handler</module>
 		<module>gebo.googlesearch.handler</module>
+		<module>gebo.tavilysearch.handler</module>
+		<module>gebo.bravesearch.handler</module>
+		<module>gebo.searxngsearch.handler</module>
+		<module>gebo.serpapisearch.handler</module>
 		<module>gebo.sharepoint.search.api</module>
 		<module>gebo.sharepoint.handler</module>
 		<module>gebo.atlassian.confluence.search.api</module>
@@ -37,7 +41,6 @@
 		<module>gebo.atlassian.jira.search.api</module>
 		<module>gebo.atlassian.jira.handler</module>
 		<module>gebo.integration.content.handler</module>
-		<module>gebo.bingsearch.handler</module>
 		<module>gebo.mcp-client.content.handler</module>
 		<module>gebo.aws-s3.content.handler</module>
 		<module>gebo.webdav-cms.handler</module>

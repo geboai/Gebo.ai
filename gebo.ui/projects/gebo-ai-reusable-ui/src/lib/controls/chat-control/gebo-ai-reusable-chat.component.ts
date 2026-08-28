@@ -20,7 +20,7 @@
  */
 
 import { HttpClient } from "@angular/common/http";
-import { Component, EventEmitter, forwardRef, HostListener, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
@@ -72,6 +72,14 @@ interface GeboChatTemplatedResponse {
 const moduleId: string = "GeboAIChatControlModule";
 const entityId: string = "GeboAIReusableChatComponent";
 const scrollStart: number = 350;
+/**
+ * Pixels scrolled for a single wheel "line" when the mouse reports line based deltas
+ */
+const wheelLineHeight: number = 40;
+/**
+ * How long the resolved scrolling container stays valid before being looked up again
+ */
+const scrollHostCacheMillis: number = 250;
 /**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
@@ -290,6 +298,17 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     public showTopButton: boolean = false;
     public showBottomButton: boolean = false;
+
+    /**
+     * Host element, used to find the container the chat scrolls into
+     */
+    private readonly elementRef: ElementRef<HTMLElement> = inject(ElementRef);
+
+    /**
+     * Short lived cache of the scrolling container, wheel and scroll events are frequent
+     */
+    private scrollHost?: HTMLElement;
+    private scrollHostResolvedAt: number = 0;
     /**
      * Metadata about the current chat model
      */
@@ -342,15 +361,136 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
     @HostListener('window:scroll')
     onWindowScroll() {
-        this.showTopButton = window.scrollY > scrollStart;
-        this.showBottomButton = ((window.document.body.scrollHeight - window.innerHeight) - window.scrollY) > scrollStart;
+        this.updateScrollButtons();
     }
+
+    /**
+     * Moves the chat up/down with the mouse wheel, on the same scrolling container
+     * used by the up/down buttons. Wheel events aimed at an inner scrollable element
+     * (the input textarea, a code block, a dropdown panel) are left to the browser.
+     */
+    @HostListener('wheel', ['$event'])
+    public onWheel(event: WheelEvent): void {
+        if (event.defaultPrevented || event.ctrlKey) {
+            return;
+        }
+        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+            return;
+        }
+        const delta: number = this.normalizedWheelDelta(event);
+        if (!delta) {
+            return;
+        }
+        if (this.hasInnerScrollableTarget(event.target, delta)) {
+            return;
+        }
+        const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
+        if (scrollHost) {
+            scrollHost.scrollTop = scrollHost.scrollTop + delta;
+        } else {
+            window.scrollBy(0, delta);
+        }
+        event.preventDefault();
+        this.updateScrollButtons();
+    }
+
     public scrollToTop(): void {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
+        if (scrollHost) {
+            scrollHost.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        this.updateScrollButtons();
     }
 
     public scrollToBottom(): void {
-        window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
+        const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
+        if (scrollHost) {
+            scrollHost.scrollTop = scrollHost.scrollHeight - scrollHost.clientHeight;
+        } else {
+            window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
+        }
+        this.updateScrollButtons();
+    }
+
+    /**
+     * Refreshes the visibility of the up/down buttons against the current scroll position
+     */
+    private updateScrollButtons(): void {
+        const scrollHost: HTMLElement | undefined = this.resolveScrollHost();
+        const position: number = scrollHost ? scrollHost.scrollTop : window.scrollY;
+        const maxPosition: number = scrollHost
+            ? (scrollHost.scrollHeight - scrollHost.clientHeight)
+            : (window.document.body.scrollHeight - window.innerHeight);
+        this.showTopButton = position > scrollStart;
+        this.showBottomButton = (maxPosition - position) > scrollStart;
+    }
+
+    /**
+     * The element that actually scrolls the chat: the closest scrollable ancestor
+     * (a dialog body, for instance) or undefined when the page itself is the scroller.
+     */
+    private resolveScrollHost(): HTMLElement | undefined {
+        const now: number = Date.now();
+        if ((now - this.scrollHostResolvedAt) < scrollHostCacheMillis) {
+            return this.scrollHost;
+        }
+        this.scrollHost = undefined;
+        this.scrollHostResolvedAt = now;
+        let candidate: HTMLElement | null = this.elementRef?.nativeElement?.parentElement || null;
+        while (candidate && candidate !== window.document.body && candidate !== window.document.documentElement) {
+            if (this.isScrollableElement(candidate)) {
+                this.scrollHost = candidate;
+                break;
+            }
+            candidate = candidate.parentElement;
+        }
+        return this.scrollHost;
+    }
+
+    /**
+     * True when the wheel event started inside an element able to consume the scroll on its own
+     */
+    private hasInnerScrollableTarget(target: EventTarget | null, delta: number): boolean {
+        const host: HTMLElement | undefined = this.elementRef?.nativeElement;
+        let candidate: HTMLElement | null = (target instanceof HTMLElement) ? target : null;
+        while (candidate && candidate !== host) {
+            if (this.isScrollableElement(candidate) && this.canConsumeDelta(candidate, delta)) {
+                return true;
+            }
+            candidate = candidate.parentElement;
+        }
+        return false;
+    }
+
+    private isScrollableElement(element: HTMLElement): boolean {
+        if (element.scrollHeight <= element.clientHeight) {
+            return false;
+        }
+        const overflowY: string = window.getComputedStyle(element).overflowY;
+        return overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay";
+    }
+
+    private canConsumeDelta(element: HTMLElement, delta: number): boolean {
+        if (delta < 0) {
+            return element.scrollTop > 0;
+        }
+        return element.scrollTop < (element.scrollHeight - element.clientHeight - 1);
+    }
+
+    /**
+     * Converts the wheel delta to pixels, whatever unit the device reports
+     */
+    private normalizedWheelDelta(event: WheelEvent): number {
+        if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) {
+            return event.deltaY * wheelLineHeight;
+        }
+        if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+            const host: HTMLElement | undefined = this.resolveScrollHost();
+            return event.deltaY * (host ? host.clientHeight : window.innerHeight);
+        }
+        return event.deltaY;
     }
 
     public getEntityName(): string {

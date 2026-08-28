@@ -49,6 +49,8 @@ import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumingService;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;
 
@@ -74,9 +76,9 @@ public class ConfluenceSearchService extends
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceSearchService.class);
 
 	public ConfluenceSearchService(ConfluenceConnectionFactory confluenceConnectionFactory,
-			GConfluenceRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			ConfluenceContentManagementHandlerImpl contentManagementSystemHandler, ConfluenceHandlerConfig config,
-			ConfluenceBrowsingService browsingService) {
+			GAbstractRemoteVirtualFilesystemConsumingService<GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference> virtualFileSystemConsumingService,
+			GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService> contentManagementSystemHandler,
+			ConfluenceHandlerConfig config, ConfluenceBrowsingService browsingService) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.confluenceConnectionFactory = confluenceConnectionFactory;
 	}

@@ -105,8 +105,8 @@ export class LoginService {
     //I reset actual credentials
     try { resetAuth(); } catch (e) { }
     return this.authControllerService.authenticateUser({
-      username: credentials.username,
-      password: credentials.password
+      username: credentials.username?.trim(),
+      password: credentials.password?.trim()
     }).pipe(map(result => {
 
       const logged: boolean = result?.result?.securityHeaderData?.token ? true : false;

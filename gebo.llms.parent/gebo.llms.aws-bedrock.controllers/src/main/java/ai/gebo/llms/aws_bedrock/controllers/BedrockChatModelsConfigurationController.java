@@ -29,6 +29,7 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockChatModelChoice;
 import ai.gebo.llms.aws_bedrock.model.GBedrockChatModelConfig;
 import ai.gebo.llms.aws_bedrock.services.BedrockChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * Admin controller for AWS Bedrock chat model configurations. Only active when
@@ -44,8 +45,10 @@ public class BedrockChatModelsConfigurationController extends
 
 	public BedrockChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			BedrockChatModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockChatModelConfig.class, ifaceType);
+			BedrockChatModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GBedrockChatModelConfig.class, ifaceType,
+				securityAuditLoggerService);
 	}
 
 	@PostMapping(value = "insertBedrockChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

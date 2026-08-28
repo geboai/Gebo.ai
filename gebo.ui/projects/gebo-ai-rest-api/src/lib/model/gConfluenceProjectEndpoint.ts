@@ -32,6 +32,7 @@ export interface GConfluenceProjectEndpoint {
     synchroStrategy?: GConfluenceProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GConfluenceProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     paths?: Array<VFilesystemReference>;
     confluenceSystemCode?: string;
     extractedFormat?: GConfluenceProjectEndpoint.ExtractedFormatEnum;

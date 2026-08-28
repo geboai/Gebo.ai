@@ -15,7 +15,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
@@ -50,7 +49,6 @@ import ai.gebo.userspace.handler.repository.UserspaceProjectEndpointRepository;
  * manages userspace content by extending the abstract content management system
  * handler. AI generated comments
  */
-@Service
 public class GUserspaceContentManagementSystemHandlerImpl extends
 		GAbstractContentManagementSystemHandler<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint, NoContentConsumingSessionParam>
 		implements IGUserspaceContentManagementSystemHandler {

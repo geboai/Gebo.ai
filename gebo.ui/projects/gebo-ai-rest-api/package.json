@@ -1,6 +1,6 @@
 {
   "name": "@Gebo.ai/gebo-ai-rest-api",
-  "version": "1.0.2.3",
+  "version": "1.0.2.4",
   "peerDependencies": {
     "@angular/common": "^21.2.18",
     "@angular/core": "^21.2.18"

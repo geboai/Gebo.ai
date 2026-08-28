@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
@@ -102,6 +103,7 @@ public class DataSourcesCatalogsServiceImpl implements IDataSourcesCatalogsServi
 			ISearchService service = servicesById.get(handler.getCode());
 			if (service != null) {
 				entry.setDescription(service.getDescription());
+				entry.setWebSearch(service instanceof AbstractWebSearchServiceImpl);
 				try {
 					List<CatalogueSample> catalogues = service.getCachedCatalogues();
 					if (catalogues != null) {

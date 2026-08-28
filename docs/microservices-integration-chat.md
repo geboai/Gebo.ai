@@ -12,12 +12,12 @@
 > The output will be a detailed MICROSERVICES-INTEGRATION.md plan for the execution and gap/missing architectural design analisys/open point and the refactory "to do list" of the following refactory commands:
 > The microservices will be:
 > - **heimdall.gebo.ai** ← authentication/authorization/oauth2 integration; everything in `gebo.architecture.security` and `gebo.architecture.security.controllers`.
-> - **brain.gebo.ai** ← llms/chat/embedding/rag/agents + `GKnowledgeBase`/`GProject` + `GCentralizedProjectEndpoint` (representations/extensions of `GProjectEndpoint` present in other microservices) + `GDocumentReference` + `GVirtualFolder` stored centrally. Also includes `gebo.googlesearch.handler`, `gebo.bingsearch.handler`, and `gebo.ragsystem.client.rest` (to serve chat/agents).
+> - **brain.gebo.ai** ← llms/chat/embedding/rag/agents + `GKnowledgeBase`/`GProject` + `GCentralizedProjectEndpoint` (representations/extensions of `GProjectEndpoint` present in other microservices) + `GDocumentReference` + `GVirtualFolder` stored centrally. Also includes `gebo.googlesearch.handler` and `gebo.ragsystem.client.rest` (to serve chat/agents).
 > - **vectorizator.gebo.ai** ← receives the part of the workflow with messages about which file chunks are ready to embed, embeds them with embedding LLMs for semantic search, hosts the rag-autotune module.
 > - **textsearch.gebo.ai** ← uses OpenSearch (or other full-text engine) for text indexing; like vectorizator, receives "chunks ready" messages from the chunking services and indexes them.
 > - **graphsearch.gebo.ai** ← part of the workflow like vectorizator/textsearch, takes chunks and builds a graph representation for GraphRAG.
 > - **chunker.gebo.ai** ← runs `gebo.architecture.documents.cache` doing document caching on request, chunk preparation, participates in the ingestion workflow.
-> - **content microservices**: each child maven module of `ai.gebo.systems::gebo.systems.parent` except `gebo.googlesearch.handler`, `gebo.bingsearch.handler` has an equivalent `*.gebo.ai` microservice.
+> - **content microservices**: each child maven module of `ai.gebo.systems::gebo.systems.parent` except `gebo.googlesearch.handler` has an equivalent `*.gebo.ai` microservice.
 >
 > **Messaging directive:** modules communicate during workflows via `gebo.application.messaging` (an internal multithreaded broker mimicking a queue). It already has `IGExternalMessageEmitter`/`IGExternalMessageReceiver` + providers, meant to proxy to external microservices. Create generic modules binding **RabbitMQ**, **Kafka**, and **async REST** to `IGExternalMessageEmitter`/`IGExternalMessageReceiver`.
 >

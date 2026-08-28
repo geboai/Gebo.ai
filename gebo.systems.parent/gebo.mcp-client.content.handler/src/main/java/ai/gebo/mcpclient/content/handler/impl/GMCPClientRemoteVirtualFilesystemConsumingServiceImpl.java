@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
@@ -58,7 +57,6 @@ import io.modelcontextprotocol.spec.McpSchema;
  * reuses a live, already-authenticated connection resolved from the
  * {@link MCPClientConfig} referenced by the {@link GMCPClientSystem}.
  */
-@Service
 public class GMCPClientRemoteVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GMCPClientSystem, MCPClientProjectEndpoint, MCPClientNativePositionObject, MCPClientNavigationCoordinates, MCPClientResourceReference>
 		implements IGMCPClientVirtualFilesystemConsumingService {

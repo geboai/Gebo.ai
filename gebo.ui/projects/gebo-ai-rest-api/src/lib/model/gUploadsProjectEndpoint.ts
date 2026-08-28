@@ -31,6 +31,7 @@ export interface GUploadsProjectEndpoint {
     synchroStrategy?: GUploadsProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GUploadsProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     uploadHandshakeCode?: string;
     uploadedContents?: Array<string>;
 }

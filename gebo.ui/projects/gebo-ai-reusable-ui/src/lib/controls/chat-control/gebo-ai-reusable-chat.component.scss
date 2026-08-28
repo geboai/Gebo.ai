@@ -140,6 +140,25 @@
     padding-bottom: 0.5rem;
     background-color: #fff;
   }
+  &__disclaimer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.25rem 0.75rem 0;
+    font-size: 0.72rem;
+    line-height: 1.25;
+    color: #6b7280;
+    text-align: center;
+
+    i {
+      font-size: 0.72rem;
+      line-height: 1.4;
+      opacity: 0.8;
+      flex: 0 0 auto;
+    }
+  }
   &__clean_chat_middle {
     display: block;
     width: 100%;

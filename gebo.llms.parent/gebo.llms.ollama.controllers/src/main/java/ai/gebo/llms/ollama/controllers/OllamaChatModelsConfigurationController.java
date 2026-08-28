@@ -29,6 +29,7 @@ import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
 import ai.gebo.llms.ollama.services.OllamaChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 
 /**
  * REST controller that provides endpoints for managing Ollama chat model
@@ -47,9 +48,11 @@ public class OllamaChatModelsConfigurationController extends
 
 	public OllamaChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
 			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
-			OllamaChatModelConfigurationSupportService ifaceType) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GOllamaChatModelConfig.class, ifaceType);
-		 
+			OllamaChatModelConfigurationSupportService ifaceType,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOllamaChatModelConfig.class, ifaceType,
+				securityAuditLoggerService);
+
 	}
 
 	/**

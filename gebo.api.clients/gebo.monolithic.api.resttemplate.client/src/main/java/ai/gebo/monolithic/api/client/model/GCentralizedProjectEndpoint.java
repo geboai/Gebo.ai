@@ -28,7 +28,7 @@ import java.util.List;
  * GCentralizedProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-08T08:46:40.992038400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
 
 public class GCentralizedProjectEndpoint {
   @JsonProperty("code")
@@ -146,6 +146,9 @@ public class GCentralizedProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Boolean personalData = null;
 
   @JsonProperty("remoteProjectReference")
   private GObjectRefGProjectEndpoint remoteProjectReference = null;
@@ -506,6 +509,24 @@ public class GCentralizedProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GCentralizedProjectEndpoint personalData(Boolean personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Boolean isPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Boolean personalData) {
+    this.personalData = personalData;
+  }
+
   public GCentralizedProjectEndpoint remoteProjectReference(GObjectRefGProjectEndpoint remoteProjectReference) {
     this.remoteProjectReference = remoteProjectReference;
     return this;
@@ -552,12 +573,13 @@ public class GCentralizedProjectEndpoint {
         Objects.equals(this.synchroStrategy, gcentralizedProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gcentralizedProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gcentralizedProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gcentralizedProjectEndpoint.personalData) &&
         Objects.equals(this.remoteProjectReference, gcentralizedProjectEndpoint.remoteProjectReference);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, remoteProjectReference);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, remoteProjectReference);
   }
 
 
@@ -584,6 +606,7 @@ public class GCentralizedProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    remoteProjectReference: ").append(toIndentedString(remoteProjectReference)).append("\n");
     sb.append("}");
     return sb.toString();

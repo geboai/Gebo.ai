@@ -40,6 +40,12 @@ WORKDIR /build-area
 COPY build.sh /build-area
 RUN chmod 744 /build-area/build.sh
 
+# Build-toolchain image, not a product runtime: these hold BUILD state, not
+# customer data. delivery = the artifacts the build hands back; repository = the
+# Maven ~/.m2 cache, whose whole point is to survive between builds. The ubuntu
+# sibling image already declares both; this one was missing the repository, so
+# every rockylinux build re-downloaded the world.
 VOLUME /build-area/delivery
+VOLUME /build-area/repository
 
 ENTRYPOINT ["/build-area/build.sh"]

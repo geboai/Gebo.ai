@@ -21,10 +21,13 @@ import ai.gebo.security.model.UserWorkflowTicket;
 import ai.gebo.security.model.UserWorkflowType;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.services.IGCustomUserWorkflowDiscriminationService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IGUserWorkflowMailService;
 import ai.gebo.security.services.IGUserWorkflowService;
 import ai.gebo.security.services.IGUsersAdminService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.security.services.UserWorkflowException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -57,12 +60,14 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	private final IGUserWorkflowMailService workflowMailService;
 	private final IGUsersAdminService userAdminService;
 	private final IGCustomUserWorkflowDiscriminationService userDiscriminationService;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	public GUserWorkflowServiceImpl(GeboUserWorkflowsConfig workflowsConfig,
 			IGUserWorkflowMailService workflowMailService, UserRepository userRepository,
 			IGUsersAdminService userAdminService, IGSecurityService securityService,
 			IGeboSecretsAccessService secretAccessService, IGeboCryptingService cryptService,
-			@Autowired(required = false) IGCustomUserWorkflowDiscriminationService userDiscriminationService) {
+			@Autowired(required = false) IGCustomUserWorkflowDiscriminationService userDiscriminationService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		this.userRepository = userRepository;
 		this.securityService = securityService;
 		this.secretAccessService = secretAccessService;
@@ -71,6 +76,7 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 		this.workflowMailService = workflowMailService;
 		this.userAdminService = userAdminService;
 		this.userDiscriminationService = userDiscriminationService;
+		this.securityAuditLoggerService = securityAuditLoggerService;
 	}
 
 	@Override
@@ -162,37 +168,53 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	@Override
 	public UserWorkFlowChangePasswordResponse userChangePasswordWithTicket(
 			@Valid @NotNull UserChangePasswordWithTicket data) throws UserWorkflowException, GeboCryptSecretException {
-		UserWorkFlowChangePasswordResponse outState = null;
-		LoadAndVerifyOutput loaded = loadAndVerifyTicket(data);
-		if (loaded.getOutState() != null) {
-			return loaded.getOutState();
-		}
-		UserWorkflowSecret originalSecret = loaded.getSecret();
-		EditableUser user = userAdminService.findUserByUsername(data.getEmail().trim().toLowerCase());
-		if (user != null) {
-			switch (originalSecret.getType()) {
-			case ACTIVATION: {
-				if (user.getDisabled() != null && user.getDisabled()) {
-					user.setDisabled(false);
-					userAdminService.updateUser(user);
-					userAdminService.changePassword(user.getUsername(), data.getPassword());
-					outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(SecurityAuditTaxonomy.Action.PASSWORD_RESET_TICKET);
+		event.setResourceId(data != null ? data.getEmail() : null);
+		try {
+			UserWorkFlowChangePasswordResponse outState = null;
+			LoadAndVerifyOutput loaded = loadAndVerifyTicket(data);
+			if (loaded.getOutState() != null) {
+				event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+				securityAuditLoggerService.log(event);
+				return loaded.getOutState();
+			}
+			UserWorkflowSecret originalSecret = loaded.getSecret();
+			EditableUser user = userAdminService.findUserByUsername(data.getEmail().trim().toLowerCase());
+			if (user != null) {
+				switch (originalSecret.getType()) {
+				case ACTIVATION: {
+					if (user.getDisabled() != null && user.getDisabled()) {
+						user.setDisabled(false);
+						userAdminService.updateUser(user);
+						userAdminService.changePassword(user.getUsername(), data.getPassword());
+						outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+					}
 				}
-			}
-				break;
-			case FORGOT_PASSWORD: {
-				if (user.getDisabled() == null || !user.getDisabled()) {
-					userAdminService.changePassword(user.getUsername(), data.getPassword());
-					outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+					break;
+				case FORGOT_PASSWORD: {
+					if (user.getDisabled() == null || !user.getDisabled()) {
+						userAdminService.changePassword(user.getUsername(), data.getPassword());
+						outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+					}
 				}
-			}
-				break;
-			}
+					break;
+				}
 
-		} else {
-			outState = new UserWorkFlowChangePasswordResponse(false, true, false, false);
+			} else {
+				outState = new UserWorkFlowChangePasswordResponse(false, true, false, false);
+			}
+			event.setOutcome(outState != null && outState.isOk() ? SecurityAuditTaxonomy.Outcome.SUCCESS
+					: SecurityAuditTaxonomy.Outcome.FAILURE);
+			securityAuditLoggerService.log(event);
+			return outState;
+		} catch (RuntimeException | UserWorkflowException | GeboCryptSecretException e) {
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			securityAuditLoggerService.log(event);
+			throw e;
 		}
-		return outState;
 	}
 
 	@AllArgsConstructor

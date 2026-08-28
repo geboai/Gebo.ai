@@ -53,6 +53,7 @@ export class GeboAIMCPClientEndpointComponent extends BaseEntityEditingComponent
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
         description: new FormControl(),
+        personalData: new FormControl(),
         parentProjectCode: new FormControl(),
         mcpClientConfigCode: new FormControl(),
         published: new FormControl(),

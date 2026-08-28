@@ -12,21 +12,32 @@
 
 package ai.gebo.filesystem.content.handler;
 
+import org.springframework.boot.devtools.filewatch.ChangedFiles;
+
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
+import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemContentManagementSystemHandler;
 
 /**
  * AI generated comments
- * 
+ *
  * This interface defines the contract for filesystem-based content management system handlers.
  * It extends the generic content management system handler interface, specifying the concrete
  * types for filesystem implementations (GFilesystemContentManagementSystem as the CMS type and
  * GFilesystemProjectEndpoint as the endpoint type).
- * 
- * This empty interface serves as a type-specific extension of the parent interface without
- * adding additional method requirements.
  */
 public interface IGFilesystemContentManagementSystemHandler
 		extends IGVirtualFilesystemContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint> {
+
+	/**
+	 * Applies a batch of local filesystem changes detected by the file watcher to
+	 * the given endpoint.
+	 */
+	void consume(GFilesystemProjectEndpoint endpoint, IGContentConsumer contentConsumer,
+			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
+			ChangedFiles changedFiles) throws GeboContentHandlerSystemException;
 
 }

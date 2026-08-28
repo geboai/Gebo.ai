@@ -1,0 +1,99 @@
+# /**
+#  * This Source Code is subject to the terms of the
+#  * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+#  * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+#  * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+#  * and https://mozilla.org/MPL/2.0/.
+#  * Copyright (c) 2025+ Gebo.ai
+#  */
+#
+# ===========================================================================
+# A Wazuh AGENT as a container, shipping Gebo.ai's security audit trail to an
+# existing Wazuh manager. Use it when you do not want to install an agent
+# package on the Docker host.
+#
+# It only reads log files (read-only mounts) and talks to the manager - it does
+# no host monitoring: for FIM/SCA/vulnerability detection of the host itself,
+# install a normal agent on the host instead.
+#
+# ---------------------------------------------------------------------------
+# 1. Point it at your manager, and give the agent a name you will recognise in
+#    the Wazuh dashboard:
+#
+#      export WAZUH_MANAGER_SERVER=wazuh.example.internal
+#      export WAZUH_AGENT_NAME=gebo-ai-prod-01
+#      # export WAZUH_REGISTRATION_PASSWORD=...   # only if authd uses a password
+#
+# 2. Monolith (dockers/gebo.ai/docker-compose.yml already publishes its logs on
+#    the host at /home/gebo.ai/logs):
+#
+#      docker compose -f deploy/wazuh/docker/docker-compose.wazuh-agent.yml up -d
+#
+# 3. Microservices: bring the stack up with
+#    docker-compose.security-logs.override.yml first, set
+#    GEBO_SECURITY_LOG_BASE to the same value, and uncomment the microservices
+#    mount + <localfile> block (see deploy/wazuh/agent/ossec.conf and
+#    deploy/wazuh/agent/localfile-blocks.xml).
+#
+# The manager must already have deploy/wazuh/manager/local_rules.xml installed,
+# otherwise the events arrive and are stored but nothing classifies them.
+#
+# See docs/wazuh-integration.md.
+# ===========================================================================
+name: gebo-wazuh-agent
+
+services:
+
+  wazuh-agent:
+    image: wazuh/wazuh-agent:${WAZUH_VERSION:-4.14.7}
+    container_name: gebo-wazuh-agent
+    restart: unless-stopped
+    # The agent enrolls with the manager over 1515/tcp and then reports over
+    # 1514/tcp; nothing needs to be published on this side.
+    environment:
+      # NOTE: the wazuh-agent image reads WAZUH_MANAGER_SERVER (not
+      # WAZUH_MANAGER): its init script substitutes it into ossec.conf's
+      # CHANGE_MANAGER_IP placeholder.
+      WAZUH_MANAGER_SERVER: ${WAZUH_MANAGER_SERVER:?set WAZUH_MANAGER_SERVER to your Wazuh manager host}
+      WAZUH_MANAGER_PORT: ${WAZUH_MANAGER_PORT:-1514}
+      WAZUH_REGISTRATION_SERVER: ${WAZUH_REGISTRATION_SERVER:-${WAZUH_MANAGER_SERVER}}
+      WAZUH_REGISTRATION_PORT: ${WAZUH_REGISTRATION_PORT:-1515}
+      WAZUH_REGISTRATION_PASSWORD: ${WAZUH_REGISTRATION_PASSWORD:-}
+      WAZUH_AGENT_NAME: ${WAZUH_AGENT_NAME:-gebo-ai-audit-shipper}
+      # Enroll into a group whose agent.conf you control from the manager
+      # (deploy/wazuh/manager/agent.conf). "default" also works.
+      WAZUH_AGENT_GROUP: ${WAZUH_AGENT_GROUP:-gebo-ai}
+    volumes:
+      # Our ossec.conf: copied over /var/ossec/etc/ossec.conf by the image's
+      # init script, which then fills in the CHANGE_* placeholders from the
+      # environment above.
+      - ../agent/ossec.conf:/wazuh-config-mount/etc/ossec.conf:ro
+      # The monolith's log directory. dockers/gebo.ai/docker-compose.yml now
+      # keeps it in the NAMED volume gebo-monolith_gebo-logs (that stack sets
+      # `name: gebo-monolith`), which is referenced as an external volume below
+      # and mounted here read-only - an audit trail shipper has no business
+      # writing to it. If you instead run the monolith with a host BIND for its
+      # logs, set GEBO_MONOLITH_LOG_DIR to that host path and swap this line for
+      #   - ${GEBO_MONOLITH_LOG_DIR}:/gebo-logs/monolith:ro
+      - gebo-monolith-logs:/gebo-logs/monolith:ro
+      # Microservices: same directory tree the security-logs override creates.
+      # Uncomment together with the matching <localfile> block in
+      # ../agent/ossec.conf.
+      # - ${GEBO_SECURITY_LOG_BASE:-/var/log/gebo-ai-microservices}:/gebo-logs/microservices:ro
+      # Keeps the agent's identity (client.keys) across restarts, so it does not
+      # re-enroll as a new agent every time.
+      - wazuh-agent-etc:/var/ossec/etc
+      - wazuh-agent-queue:/var/ossec/queue
+      - wazuh-agent-logs:/var/ossec/logs
+
+volumes:
+  # The monolith's audit-trail volume, created by dockers/gebo.ai/docker-compose
+  # .yml (project name `gebo-monolith`). `external: true` means "use the volume
+  # that stack already created" - this file never owns or deletes it. Bring the
+  # monolith stack up first, or this reference fails with "volume not found".
+  gebo-monolith-logs:
+    external: true
+    name: gebo-monolith_gebo-logs
+  wazuh-agent-etc:
+  wazuh-agent-queue:
+  wazuh-agent-logs:

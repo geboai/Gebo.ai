@@ -32,6 +32,7 @@ export interface GWebdavProjectEndpoint {
     synchroStrategy?: GWebdavProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GWebdavProjectEndpoint.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
+    personalData?: boolean;
     paths?: Array<VFilesystemReference>;
     webdavSystemCode?: string;
 }
