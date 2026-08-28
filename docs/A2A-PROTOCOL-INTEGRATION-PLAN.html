@@ -498,6 +498,29 @@
     </div>
   </section>
 
+  <!-- PART 6.1 -->
+  <section>
+    <span class="part-num">PART 6.1</span>
+    <h2>Identity, credentials &amp; impersonation</h2>
+    <p class="measure">Identity semantics differ by direction &mdash; and this is where A2A needs something the MCP server did not. The MCP server reuses the <strong>local</strong> Spring Security principal (<code>GeboMcpSecurityContextSupport</code> captures the authenticated <code>Authentication</code> and re-establishes it so handlers run &ldquo;under the identity of the calling (impersonated) user and honour that user&rsquo;s ACLs&rdquo;; <code>GeboMcpAccessChecker</code> checks <code>isCanDo(config, READ, EXECUTE)</code>). That works because MCP callers are <em>local</em>. An A2A caller is <em>external</em>.</p>
+
+    <div class="flow client">
+      <div class="cap">Outbound &mdash; coherence is authMode-dependent, not blanket impersonation</div>
+      <div class="steps">
+        <div class="step" style="min-width:210px;"><div class="s-num">SERVICE MODES</div><div class="s-t">API_KEY · BEARER · CLIENT_CREDENTIALS</div><div class="s-d">Remote sees <strong>Gebo-as-a-service</strong>. Local user NOT propagated; credential NOT mapped into local Spring Security. Local ACLs still gate who may invoke.</div></div>
+        <div class="step" style="min-width:210px;"><div class="s-num">PER-USER MODES</div><div class="s-t">AUTH_CODE_PER_USER · TOKEN_RELAY · TOKEN_EXCHANGE</div><div class="s-d">Local user&rsquo;s own/exchanged token relayed &rarr; remote sees the <strong>actual local user</strong>. Coherent &mdash; but this is <em>delegation, not impersonation</em>.</div></div>
+      </div>
+    </div>
+    <p class="measure"><code>RemoteA2ANetworkAgentService</code> runs locally as a network participant under the <strong>local invoking user&rsquo;s</strong> <code>runAs</code>, and presents outward whatever <code>authMode</code> dictates. No automatic impersonation of remote agents.</p>
+
+    <div class="note" style="border-left-color: var(--good);">
+      <span class="k" style="color: var(--good);">Inbound &mdash; impersonation MUST be coherent with a local principal (decided)</span>
+      <p style="margin-bottom:.4em;">The exported network runs via <code>executeNetwork(... runAs ...)</code> against a <strong>local Spring Security principal</strong>. Requirement: <strong>the inbound credential must itself resolve to a local principal</strong>, and the network impersonates that principal &mdash; never a synthetic identity divorced from a real Gebo user. This reuses existing auth, not new machinery:</p>
+      <p style="margin-bottom:.4em;"><strong>Gebo-generated API key</strong> is already a <strong>JWT bound to a local user</strong> &mdash; <code>GGeneratedApiKeyServiceImpl</code> sets <code>impersonatedUser</code> and mints it via <code>jwtTokenProvider.createToken(username, …)</code>; presented as an inbound bearer it resolves to that user through the normal JWT chain. <strong>OAuth2</strong> tokens federate to a local user the same way; any other auth that establishes a local principal is treated identically.</p>
+      <p style="margin-bottom:0;">So the a2a-server endpoint sits behind <strong>the same Spring Security chain</strong> as the rest of the product &mdash; itself <strong>deployment-configurable</strong>: Gebo runs with its own JWT / API-key mechanism (<code>LocalJwtTokenProvider</code>) <em>or</em> as an <strong>OAuth2 resource server</strong> (<code>GeboSecurityConfig.oauth2ResourceServerEnabled</code>, default true; per-issuer <code>JwtDecoderCache</code> via <code>GHttpRequestAuthenticationManagerResolverImpl</code>). The a2a-server implements no auth of its own: whichever mode is active validates the bearer token and yields the local <code>Authentication</code>; the bridge runs the network <code>runAs</code> <strong>that</strong> principal, honouring <strong>that</strong> user&rsquo;s ACLs (<code>ReactiveIdentityUtil</code> + <code>IGSecurityService.isCanDo</code>). The AgentCard&rsquo;s <code>securityScheme</code> mirrors the active mode. A credential that resolves to no local principal is rejected (401) &mdash; never run under a fallback identity.</p>
+    </div>
+  </section>
+
   <!-- PART 7 -->
   <section>
     <span class="part-num">PART 7</span>

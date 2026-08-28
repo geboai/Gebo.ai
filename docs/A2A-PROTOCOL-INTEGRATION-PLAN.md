@@ -327,6 +327,62 @@ Both directions ride the streaming machinery the agent runtime already has — n
 
 ---
 
+## Part 6.1 — Identity, credentials & impersonation
+
+Identity semantics differ by direction, and this is where A2A needs something the MCP server did not.
+The MCP server reuses the **local** Spring Security principal: `GeboMcpSecurityContextSupport` captures
+the already-authenticated `Authentication` and re-establishes it so handlers "run under the identity of
+the calling (impersonated) user and honour that user's ACLs," and `GeboMcpAccessChecker` calls
+`IGSecurityService.isCanDo(config, READ, EXECUTE)` against that principal. That works because MCP
+callers are *local*. An A2A caller is *external*.
+
+**Outbound (`a2a-clients` — we call a remote agent): coherence is `authMode`-dependent, not blanket
+impersonation.** The `authMode` decides what identity the remote sees:
+
+- `API_KEY` / `STATIC_BEARER_TOKEN` / `OAUTH2_CLIENT_CREDENTIALS` → a **service identity**. The remote
+  authenticates *Gebo-as-a-service*, not the individual local user; the remote-facing credential is
+  **not** mapped into local Spring Security, and the local user is **not** propagated. Local Spring
+  Security still governs *who locally may invoke the remote agent* (ACLs on `A2ARemoteAgentConfig` +
+  the network's `runAs`) — a separate, local decision.
+- `OAUTH2_AUTHORIZATION_CODE_PER_USER` / `USER_TOKEN_RELAY` / `TOKEN_EXCHANGE` → **per-user
+  delegation**. The local user's own (or exchanged) token is relayed, so the remote sees the actual
+  local user. Coherent by construction — but this is *delegation, not impersonation*.
+
+  So `RemoteA2ANetworkAgentService` runs locally as a network participant under the **local invoking
+  user's** `runAs`, and presents outward whatever the `authMode` dictates. No automatic impersonation
+  of remote agents.
+
+**Inbound (`a2a-server` — a remote agent calls an exported network): impersonation MUST be coherent
+with a local principal — decided.** The exported network runs via `executeNetwork(... runAs ...)` and
+its ACLs are enforced against a **local Spring Security principal**. Requirement: **the inbound
+credential must itself resolve to a local principal**, and the network runs impersonating that
+principal — never a synthetic identity divorced from a real Gebo user.
+
+This is not new machinery — it reuses Gebo's existing authentication:
+
+- **Gebo-generated API key** — already a **JWT bound to a local user**: `GGeneratedApiKeyServiceImpl`
+  sets `impersonatedUser` and mints the key via `jwtTokenProvider.createToken(user.getUsername(), …)`.
+  Presented as an inbound bearer token, it resolves to that user through the normal JWT filter chain.
+- **OAuth2 token** — its subject federates to a local user the same way.
+- **Any other auth that establishes a local principal** — treated identically.
+
+So the a2a-server endpoint sits behind (or invokes) **the same Spring Security chain the rest of the
+product uses** — and that chain is itself **deployment-configurable**: Gebo can run with its own
+JWT / API-key mechanism (`LocalJwtTokenProvider`) *or* as an **OAuth2 resource server**
+(`GeboSecurityConfig.oauth2ResourceServerEnabled`, default true; wired in `GeboAISecurityConfig`,
+with per-issuer validation via `GHttpRequestAuthenticationManagerResolverImpl` + `JwtDecoderCache`
+over `JwtDecoders.fromIssuerLocation`). The a2a-server does **not** implement its own auth: whichever
+mode is active validates the inbound bearer token and yields the local `Authentication`, and the task
+bridge runs the exported network `runAs` **that** principal, honouring **that** user's ACLs on both
+the `A2AServerConfig` and every resource the network touches. Mechanism: `ReactiveIdentityUtil` to
+carry the principal across the reactive/async run + `IGSecurityService.isCanDo(...)` for ACLs —
+identical to the MCP server, except the principal comes from the **inbound credential's own local
+identity** instead of an in-process caller. The AgentCard's advertised `securityScheme` mirrors the
+active mode (bearer JWT vs OAuth2). A request whose credential does not resolve to a local principal is
+rejected (401), never run under a fallback identity.
+
+---
+
 ## Part 7 — What is reused, unchanged
 
 | Capability | Existing type reused |
