@@ -167,6 +167,11 @@ public class GeboAISecurityConfig {
 	// Erogated MCP server endpoints (served at /mcp/<exportedUniqueRelativeUrl>)
 	private static final String[] mcpUrls = new String[] { "/mcp/**" };
 
+	// Published A2A endpoints (served at /a2a/<exportedRelativeUrl>): the Agent Card
+	// and the JSON-RPC endpoint. Authenticated like the MCP endpoints so the inbound
+	// credential establishes the local principal the exported network runs as.
+	private static final String[] a2aUrls = new String[] { "/a2a/**" };
+
 	public static final String ADMIN_ROLE = "ADMIN";
 	public static final String USER_ROLE = "USER";
 	public static final String APPLICATION_ROLE = "APPLICATION";
@@ -355,6 +360,7 @@ public class GeboAISecurityConfig {
 						authorizeRequests.requestMatchers(swaggerUrls).permitAll();
 					}
 					authorizeRequests.requestMatchers(mcpUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
+							.requestMatchers(a2aUrls).hasAnyAuthority(USER_ROLE, ADMIN_ROLE, APPLICATION_ROLE)
 							.anyRequest().authenticated();
 				});
 		if (oauth2LoginEnabled) {
