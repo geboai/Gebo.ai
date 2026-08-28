@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class IntegrationInputControllerApi {
     private ApiClient apiClient;
@@ -76,7 +76,7 @@ public class IntegrationInputControllerApi {
         if (endpointCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling publishContents");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishContents").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishContents").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -95,7 +95,7 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -123,7 +123,7 @@ public class IntegrationInputControllerApi {
         if (endpointCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling publishSync");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishSync").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/publishSync").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -140,7 +140,7 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -180,7 +180,7 @@ public class IntegrationInputControllerApi {
         if (relativePath == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocument");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -200,7 +200,7 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -240,7 +240,7 @@ public class IntegrationInputControllerApi {
         if (relativePath == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'relativePath' when calling spoolDocument1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/application/IntegrationInputController/spoolDocument").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -262,6 +262,6 @@ public class IntegrationInputControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobTicket> returnType = new ParameterizedTypeReference<JobTicket>() {};
-        return apiClient.invokeAPI(path, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.PUT, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

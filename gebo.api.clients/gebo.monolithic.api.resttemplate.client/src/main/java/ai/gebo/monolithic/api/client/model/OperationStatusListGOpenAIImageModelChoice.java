@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusListGOpenAIImageModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class OperationStatusListGOpenAIImageModelChoice {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusListGOpenAIImageModelChoice {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusListGOpenAIImageModelChoice result(List<GOpenAIImageModelChoice> result) {
     this.result = result;
@@ -93,24 +93,6 @@ public class OperationStatusListGOpenAIImageModelChoice {
     this.messages = messages;
   }
 
-  public OperationStatusListGOpenAIImageModelChoice hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusListGOpenAIImageModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -129,6 +111,24 @@ public class OperationStatusListGOpenAIImageModelChoice {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusListGOpenAIImageModelChoice hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -141,13 +141,13 @@ public class OperationStatusListGOpenAIImageModelChoice {
     OperationStatusListGOpenAIImageModelChoice operationStatusListGOpenAIImageModelChoice = (OperationStatusListGOpenAIImageModelChoice) o;
     return Objects.equals(this.result, operationStatusListGOpenAIImageModelChoice.result) &&
         Objects.equals(this.messages, operationStatusListGOpenAIImageModelChoice.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusListGOpenAIImageModelChoice.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusListGOpenAIImageModelChoice.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusListGOpenAIImageModelChoice.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusListGOpenAIImageModelChoice.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -158,8 +158,8 @@ public class OperationStatusListGOpenAIImageModelChoice {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

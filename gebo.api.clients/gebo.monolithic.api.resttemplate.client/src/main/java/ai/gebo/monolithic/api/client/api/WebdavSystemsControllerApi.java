@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class WebdavSystemsControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteWebdavEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/deleteWebdavEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/deleteWebdavEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -115,7 +115,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteWebdavSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/deleteWebdavSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/deleteWebdavSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastWebdavConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/fastWebdavConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/fastWebdavConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,7 +177,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -205,7 +205,7 @@ public class WebdavSystemsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findWebdavEndpointsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavEndpointsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavEndpointsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -222,7 +222,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GWebdavProjectEndpoint> returnType = new ParameterizedTypeReference<GWebdavProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -250,7 +250,7 @@ public class WebdavSystemsControllerApi {
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findWebdavEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -267,7 +267,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GWebdavProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GWebdavProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -295,7 +295,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findWebdavEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -313,7 +313,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GWebdavProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GWebdavProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -341,7 +341,7 @@ public class WebdavSystemsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findWebdavSystemByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavSystemByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/findWebdavSystemByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -358,7 +358,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GWebdavContentManagementSystem> returnType = new ParameterizedTypeReference<GWebdavContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -380,7 +380,7 @@ public class WebdavSystemsControllerApi {
      */
     public ResponseEntity<GContentManagementSystemType> getWebdavSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/getWebdavSystemType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/getWebdavSystemType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -396,7 +396,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystemType> returnType = new ParameterizedTypeReference<GContentManagementSystemType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -418,7 +418,7 @@ public class WebdavSystemsControllerApi {
      */
     public ResponseEntity<List<GWebdavContentManagementSystem>> getWebdavSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/getWebdavSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/getWebdavSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -434,7 +434,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GWebdavContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GWebdavContentManagementSystem>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -462,7 +462,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertWebdavEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/insertWebdavEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/insertWebdavEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -480,7 +480,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GWebdavProjectEndpoint> returnType = new ParameterizedTypeReference<GWebdavProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -508,7 +508,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertWebdavSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/insertWebdavSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/insertWebdavSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -526,7 +526,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -554,7 +554,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishWebdavEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/publishWebdavEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/publishWebdavEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -572,7 +572,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -600,7 +600,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling testWebdavSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/testWebdavSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/testWebdavSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -618,7 +618,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -646,7 +646,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateWebdavEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/updateWebdavEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/updateWebdavEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -664,7 +664,7 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GWebdavProjectEndpoint> returnType = new ParameterizedTypeReference<GWebdavProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -692,7 +692,7 @@ public class WebdavSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateWebdavSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/updateWebdavSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/updateWebdavSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -710,6 +710,6 @@ public class WebdavSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGWebdavContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

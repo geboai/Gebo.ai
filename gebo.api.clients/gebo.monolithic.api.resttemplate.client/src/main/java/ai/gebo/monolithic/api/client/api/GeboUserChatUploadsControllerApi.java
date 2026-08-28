@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class GeboUserChatUploadsControllerApi {
     private ApiClient apiClient;
@@ -74,7 +74,7 @@ public class GeboUserChatUploadsControllerApi {
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
         uriVariables.put("userSessionCode", userSessionCode);
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode}").buildAndExpand(uriVariables).toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -94,7 +94,7 @@ public class GeboUserChatUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListUserUploadedContent> returnType = new ParameterizedTypeReference<OperationStatusListUserUploadedContent>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -116,7 +116,7 @@ public class GeboUserChatUploadsControllerApi {
      */
     public ResponseEntity<OperationStatusListUserUploadedContent> deleteSessionUploadsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/deleteSessionUploads").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/deleteSessionUploads").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -134,7 +134,7 @@ public class GeboUserChatUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListUserUploadedContent> returnType = new ParameterizedTypeReference<OperationStatusListUserUploadedContent>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -171,7 +171,7 @@ public class GeboUserChatUploadsControllerApi {
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
         uriVariables.put("userSessionCode", userSessionCode);
         uriVariables.put("uploadedContentId", uploadedContentId);
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId}").buildAndExpand(uriVariables).toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -185,6 +185,6 @@ public class GeboUserChatUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

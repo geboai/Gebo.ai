@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class FileUploadControllerApi {
     private ApiClient apiClient;
@@ -63,7 +63,7 @@ public class FileUploadControllerApi {
      */
     public ResponseEntity<HandShakeToken> getHandShakeCodeWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/getHandShakeCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/getHandShakeCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -79,7 +79,7 @@ public class FileUploadControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<HandShakeToken> returnType = new ParameterizedTypeReference<HandShakeToken>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -111,7 +111,7 @@ public class FileUploadControllerApi {
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
         uriVariables.put("handShakeCode", handShakeCode);
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/upload/{handShakeCode}").buildAndExpand(uriVariables).toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/upload/{handShakeCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -129,7 +129,7 @@ public class FileUploadControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -161,7 +161,7 @@ public class FileUploadControllerApi {
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
         uriVariables.put("endpointCode", endpointCode);
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/uploadToEndpoint/{endpointCode}").buildAndExpand(uriVariables).toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadController/uploadToEndpoint/{endpointCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -179,6 +179,6 @@ public class FileUploadControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class GenericOpenAiapiChatModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGenericOpenAIAPIChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/deleteGenericOpenAIAPIChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/deleteGenericOpenAIAPIChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -90,7 +90,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusBoolean> returnType = new ParameterizedTypeReference<OperationStatusBoolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -118,7 +118,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findGenericOpenAIAPIChatModelConfigByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/findGenericOpenAIAPIChatModelConfigByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/findGenericOpenAIAPIChatModelConfigByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -135,7 +135,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GenericOpenAIAPIChatModelConfig> returnType = new ParameterizedTypeReference<GenericOpenAIAPIChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -163,7 +163,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getGenericOpenAIAPIChatModels");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIAPIChatModels").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIAPIChatModels").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -181,7 +181,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGenericOpenAIAPIChatModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGenericOpenAIAPIChatModelChoice>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -203,7 +203,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
      */
     public ResponseEntity<List<GenericOpenAIChatModelTypeConfig>> getGenericOpenAIChatModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIChatModelTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIChatModelTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -219,7 +219,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GenericOpenAIChatModelTypeConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIChatModelTypeConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -247,7 +247,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGenericOpenAIAPIChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/insertGenericOpenAIAPIChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/insertGenericOpenAIAPIChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -265,7 +265,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGenericOpenAIAPIChatModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGenericOpenAIAPIChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -293,7 +293,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGenericOpenAIAPIChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/updateGenericOpenAIAPIChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/updateGenericOpenAIAPIChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -311,6 +311,6 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGenericOpenAIAPIChatModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGenericOpenAIAPIChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class GeboAdminPromptsControllerApi {
     private ApiClient apiClient;
@@ -68,7 +68,7 @@ public class GeboAdminPromptsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deletePromptConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/deletePromptConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/deletePromptConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -84,7 +84,7 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -112,7 +112,7 @@ public class GeboAdminPromptsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findPromptConfigByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/findPromptConfigByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/findPromptConfigByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -129,7 +129,7 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -151,7 +151,7 @@ public class GeboAdminPromptsControllerApi {
      */
     public ResponseEntity<List<String>> getPromptCategoriesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getPromptCategories").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getPromptCategories").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -167,7 +167,7 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -195,7 +195,7 @@ public class GeboAdminPromptsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getPromptConfigByFilter");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getPromptConfigByFilter").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getPromptConfigByFilter").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -213,7 +213,7 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -241,7 +241,7 @@ public class GeboAdminPromptsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertPromptConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/insertPromptConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/insertPromptConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -259,7 +259,7 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -287,7 +287,7 @@ public class GeboAdminPromptsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updatePromptConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/updatePromptConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/updatePromptConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -305,6 +305,6 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class GenericOpenAiapiImageModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGenericOpenAIAPIImageModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/deleteGenericOpenAIAPIImageModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/deleteGenericOpenAIAPIImageModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -90,7 +90,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusBoolean> returnType = new ParameterizedTypeReference<OperationStatusBoolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -118,7 +118,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findGenericOpenAIAPIImageModelConfigByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/findGenericOpenAIAPIImageModelConfigByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/findGenericOpenAIAPIImageModelConfigByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -135,7 +135,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GenericOpenAIAPIImageModelConfig> returnType = new ParameterizedTypeReference<GenericOpenAIAPIImageModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -163,7 +163,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getGenericOpenAIAPIImageModels");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIAPIImageModels").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIAPIImageModels").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -181,7 +181,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGenericOpenAIAPIImageModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGenericOpenAIAPIImageModelChoice>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -203,7 +203,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
      */
     public ResponseEntity<List<GenericOpenAIAPIImageModelConfig>> getGenericOpenAIImageModelConfigsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelConfigs").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelConfigs").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -219,7 +219,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GenericOpenAIAPIImageModelConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIAPIImageModelConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -241,7 +241,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
      */
     public ResponseEntity<List<GenericOpenAIImageModelTypeConfig>> getGenericOpenAIImageModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -257,7 +257,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GenericOpenAIImageModelTypeConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIImageModelTypeConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -285,7 +285,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGenericOpenAIAPIImageModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/insertGenericOpenAIAPIImageModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/insertGenericOpenAIAPIImageModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -303,7 +303,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGenericOpenAIAPIImageModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGenericOpenAIAPIImageModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -331,7 +331,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGenericOpenAIAPIImageModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/updateGenericOpenAIAPIImageModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/updateGenericOpenAIAPIImageModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -349,6 +349,6 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGenericOpenAIAPIImageModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGenericOpenAIAPIImageModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

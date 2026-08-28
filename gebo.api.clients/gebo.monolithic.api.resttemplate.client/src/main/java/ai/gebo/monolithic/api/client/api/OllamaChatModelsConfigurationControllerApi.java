@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class OllamaChatModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -71,7 +71,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteOllamaChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/deleteOllamaChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/deleteOllamaChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -89,7 +89,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusBoolean> returnType = new ParameterizedTypeReference<OperationStatusBoolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -117,7 +117,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findOllamaChatModelConfigByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/findOllamaChatModelConfigByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/findOllamaChatModelConfigByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -134,7 +134,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GOllamaChatModelConfig> returnType = new ParameterizedTypeReference<GOllamaChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -162,7 +162,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getOllamaChatModels");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/getOllamaModels").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/getOllamaModels").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -180,7 +180,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGOllamaChatModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGOllamaChatModelChoice>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -208,7 +208,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertOllamaChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/insertOllamaChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/insertOllamaChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -226,7 +226,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGOllamaChatModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGOllamaChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -254,7 +254,7 @@ public class OllamaChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateOllamaChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/updateOllamaChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OllamaChatModelsConfigurationController/updateOllamaChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -272,6 +272,6 @@ public class OllamaChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGOllamaChatModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGOllamaChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

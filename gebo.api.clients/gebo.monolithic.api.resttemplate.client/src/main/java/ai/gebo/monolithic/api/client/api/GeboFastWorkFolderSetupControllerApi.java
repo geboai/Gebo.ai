@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class GeboFastWorkFolderSetupControllerApi {
     private ApiClient apiClient;
@@ -71,7 +71,7 @@ public class GeboFastWorkFolderSetupControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling configureWorkDirectory");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastWorkFolderSetupController/configureWorkDirectory").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboFastWorkFolderSetupController/configureWorkDirectory").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -89,7 +89,7 @@ public class GeboFastWorkFolderSetupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusWorkFolderSetupStatus> returnType = new ParameterizedTypeReference<OperationStatusWorkFolderSetupStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -111,7 +111,7 @@ public class GeboFastWorkFolderSetupControllerApi {
      */
     public ResponseEntity<ComponentEnabledStatus> getWorkDirectorySetupEnabledWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupEnabled").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupEnabled").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -127,7 +127,7 @@ public class GeboFastWorkFolderSetupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ComponentEnabledStatus> returnType = new ParameterizedTypeReference<ComponentEnabledStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -149,7 +149,7 @@ public class GeboFastWorkFolderSetupControllerApi {
      */
     public ResponseEntity<WorkFolderSetupStatus> getWorkDirectorySetupStatusWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboFastWorkFolderSetupController/getWorkDirectorySetupStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -165,6 +165,6 @@ public class GeboFastWorkFolderSetupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<WorkFolderSetupStatus> returnType = new ParameterizedTypeReference<WorkFolderSetupStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

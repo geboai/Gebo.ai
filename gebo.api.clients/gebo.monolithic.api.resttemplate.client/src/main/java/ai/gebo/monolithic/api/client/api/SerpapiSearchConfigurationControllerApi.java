@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class SerpapiSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -69,7 +69,7 @@ public class SerpapiSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGSerpapiSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/deleteGSerpapiSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/deleteGSerpapiSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class SerpapiSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -113,7 +113,7 @@ public class SerpapiSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastInsertSerpapiSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/fastInsertSerpapiSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/fastInsertSerpapiSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class SerpapiSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSerpapiSearchApiCredentials> returnType = new ParameterizedTypeReference<GSerpapiSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -153,7 +153,7 @@ public class SerpapiSearchConfigurationControllerApi {
      */
     public ResponseEntity<List<GSerpapiSearchApiCredentials>> getSerpapiSearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/getSerpapiSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/getSerpapiSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -169,7 +169,7 @@ public class SerpapiSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GSerpapiSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GSerpapiSearchApiCredentials>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -191,7 +191,7 @@ public class SerpapiSearchConfigurationControllerApi {
      */
     public ResponseEntity<ComponentSetupStatus> getSerpapiSearchStatusWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/getSerpapiSearchStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/getSerpapiSearchStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -207,7 +207,7 @@ public class SerpapiSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ComponentSetupStatus> returnType = new ParameterizedTypeReference<ComponentSetupStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -235,7 +235,7 @@ public class SerpapiSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGSerpapiSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/insertGSerpapiSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/insertGSerpapiSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -253,7 +253,7 @@ public class SerpapiSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSerpapiSearchApiCredentials> returnType = new ParameterizedTypeReference<GSerpapiSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -281,7 +281,7 @@ public class SerpapiSearchConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling searchGSerpapiSearchApiCredentialsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/searchGSerpapiSearchApiCredentialsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/searchGSerpapiSearchApiCredentialsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -298,7 +298,7 @@ public class SerpapiSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSerpapiSearchApiCredentials> returnType = new ParameterizedTypeReference<GSerpapiSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -326,7 +326,7 @@ public class SerpapiSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGSerpapiSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/updateGSerpapiSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/updateGSerpapiSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -344,6 +344,6 @@ public class SerpapiSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSerpapiSearchApiCredentials> returnType = new ParameterizedTypeReference<GSerpapiSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

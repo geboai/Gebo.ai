@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class MistralAiChatModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -71,7 +71,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteMistralAIChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/deleteMistralAIChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/deleteMistralAIChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -89,7 +89,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusBoolean> returnType = new ParameterizedTypeReference<OperationStatusBoolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -117,7 +117,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findMistralAIChatModelConfigByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/findMistralAIChatModelConfigByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/findMistralAIChatModelConfigByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -134,7 +134,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GMistralChatModelConfig> returnType = new ParameterizedTypeReference<GMistralChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -162,7 +162,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getMistralAIChatModels");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/getMistralAIChatModels").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/getMistralAIChatModels").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -180,7 +180,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGMistralChatModelChoice> returnType = new ParameterizedTypeReference<OperationStatusListGMistralChatModelChoice>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -208,7 +208,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertMistralAIChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/insertMistralAIChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/insertMistralAIChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -226,7 +226,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGMistralChatModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGMistralChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -254,7 +254,7 @@ public class MistralAiChatModelsConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateMistralAIChatModelConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/updateMistralAIChatModelConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MistralAIChatModelsConfigurationController/updateMistralAIChatModelConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -272,6 +272,6 @@ public class MistralAiChatModelsConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGMistralChatModelConfig> returnType = new ParameterizedTypeReference<OperationStatusGMistralChatModelConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

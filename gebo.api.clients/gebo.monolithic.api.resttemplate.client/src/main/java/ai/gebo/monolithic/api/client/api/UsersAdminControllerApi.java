@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class UsersAdminControllerApi {
     private ApiClient apiClient;
@@ -77,7 +77,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling changeUserPassword");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/changeUserPassword").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/changeUserPassword").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -95,7 +95,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GUserMessage> returnType = new ParameterizedTypeReference<GUserMessage>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -122,7 +122,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGroup");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/deleteGroup").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/deleteGroup").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -138,7 +138,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -165,7 +165,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteUser");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/deleteUser").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/deleteUser").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -181,7 +181,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -209,7 +209,7 @@ public class UsersAdminControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findGroupByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findGroupByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findGroupByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -226,7 +226,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UsersGroup> returnType = new ParameterizedTypeReference<UsersGroup>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -254,7 +254,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUserByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUserByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUserByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -272,7 +272,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PagedModelUserInfos> returnType = new ParameterizedTypeReference<PagedModelUserInfos>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -300,7 +300,7 @@ public class UsersAdminControllerApi {
         if (email == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'email' when calling findUserByUsername");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUserByUsername").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUserByUsername").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -317,7 +317,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<EditableUser> returnType = new ParameterizedTypeReference<EditableUser>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -345,7 +345,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUsersGroupByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUsersGroupByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/findUsersGroupByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -363,7 +363,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PagedModelUsersGroup> returnType = new ParameterizedTypeReference<PagedModelUsersGroup>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -385,7 +385,7 @@ public class UsersAdminControllerApi {
      */
     public ResponseEntity<List<UsersGroup>> getAllGroupsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllGroups").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllGroups").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -401,7 +401,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UsersGroup>> returnType = new ParameterizedTypeReference<List<UsersGroup>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -423,7 +423,7 @@ public class UsersAdminControllerApi {
      */
     public ResponseEntity<List<UserInfos>> getAllUsersWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllUsers").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllUsers").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -439,7 +439,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UserInfos>> returnType = new ParameterizedTypeReference<List<UserInfos>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -467,7 +467,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGroup");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/insertGroup").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/insertGroup").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -485,7 +485,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UsersGroup> returnType = new ParameterizedTypeReference<UsersGroup>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -513,7 +513,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertUser");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/insertUser").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/insertUser").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -531,7 +531,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<EditableUser> returnType = new ParameterizedTypeReference<EditableUser>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -559,7 +559,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGroup");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/updateGroup").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/updateGroup").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -577,7 +577,7 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UsersGroup> returnType = new ParameterizedTypeReference<UsersGroup>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -605,7 +605,7 @@ public class UsersAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateUser");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/updateUser").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/updateUser").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -623,6 +623,6 @@ public class UsersAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<EditableUser> returnType = new ParameterizedTypeReference<EditableUser>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

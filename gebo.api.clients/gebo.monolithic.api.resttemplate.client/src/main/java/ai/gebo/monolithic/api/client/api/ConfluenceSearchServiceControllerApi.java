@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class ConfluenceSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -76,7 +76,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate3");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/aggregate").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/aggregate").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -94,7 +94,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ConfluenceResultsExtractionData> returnType = new ParameterizedTypeReference<ConfluenceResultsExtractionData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -122,7 +122,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMap2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -140,7 +140,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Map<String, Object>> returnType = new ParameterizedTypeReference<Map<String, Object>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -174,7 +174,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences3");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -193,7 +193,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchResultAnalisysOutcome> returnType = new ParameterizedTypeReference<SearchResultAnalisysOutcome>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -221,7 +221,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById3");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/findSystemById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/findSystemById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -238,7 +238,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -266,7 +266,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult3");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/findSystemBySearchResult").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/findSystemBySearchResult").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -284,7 +284,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -308,7 +308,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<List<CatalogueSample>> restGetCachedCatalogues3WithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getCachedCatalogues").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getCachedCatalogues").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -325,7 +325,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -353,7 +353,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (configurationCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample3");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getCataloguesListSample").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getCataloguesListSample").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -370,7 +370,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -392,7 +392,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetDescription3WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getDescription").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getDescription").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -408,7 +408,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -430,7 +430,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetId3WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -446,7 +446,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -468,7 +468,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetMessagingModuleId3WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getMessagingModuleId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getMessagingModuleId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -484,7 +484,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -506,7 +506,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetNativePromptTemplateUseCode2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -522,7 +522,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -544,7 +544,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetProductId3WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getProductId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getProductId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -560,7 +560,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -582,7 +582,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetQueriesGenerationPromptUseCode3WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -598,7 +598,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -620,7 +620,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystems3WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getSearchableSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/getSearchableSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -636,7 +636,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchableSystemMetaData>> returnType = new ParameterizedTypeReference<List<SearchableSystemMetaData>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -658,7 +658,7 @@ public class ConfluenceSearchServiceControllerApi {
      */
     public ResponseEntity<Boolean> restIsEnabled3WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/isEnabled").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/isEnabled").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -674,7 +674,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -714,7 +714,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (nEntryLimit == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearch2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/nativeSearch").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/nativeSearch").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -734,7 +734,7 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchResult>> returnType = new ParameterizedTypeReference<List<SearchResult>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -774,7 +774,7 @@ public class ConfluenceSearchServiceControllerApi {
         if (nEntryLimit == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch3");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/search").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ConfluenceSearchServiceController/search").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -794,6 +794,6 @@ public class ConfluenceSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchResult>> returnType = new ParameterizedTypeReference<List<SearchResult>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

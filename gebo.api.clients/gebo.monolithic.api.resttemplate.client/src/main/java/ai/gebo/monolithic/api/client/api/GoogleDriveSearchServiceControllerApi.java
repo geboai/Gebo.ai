@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class GoogleDriveSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -74,7 +74,7 @@ public class GoogleDriveSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/aggregate").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/aggregate").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -92,7 +92,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GoogleDriveResultsExtractionData> returnType = new ParameterizedTypeReference<GoogleDriveResultsExtractionData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -126,7 +126,7 @@ public class GoogleDriveSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -145,7 +145,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchResultAnalisysOutcome> returnType = new ParameterizedTypeReference<SearchResultAnalisysOutcome>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -173,7 +173,7 @@ public class GoogleDriveSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/findSystemById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/findSystemById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -190,7 +190,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -218,7 +218,7 @@ public class GoogleDriveSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/findSystemBySearchResult").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/findSystemBySearchResult").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -236,7 +236,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -260,7 +260,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<List<CatalogueSample>> restGetCachedCatalogues2WithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getCachedCatalogues").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getCachedCatalogues").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -277,7 +277,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -305,7 +305,7 @@ public class GoogleDriveSearchServiceControllerApi {
         if (configurationCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getCataloguesListSample").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getCataloguesListSample").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -322,7 +322,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -344,7 +344,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetDescription2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getDescription").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getDescription").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -360,7 +360,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -382,7 +382,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetId2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -398,7 +398,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -420,7 +420,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetMessagingModuleId2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getMessagingModuleId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getMessagingModuleId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -436,7 +436,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -458,7 +458,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetProductId2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getProductId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getProductId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -474,7 +474,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -496,7 +496,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetQueriesGenerationPromptUseCode2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -512,7 +512,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -534,7 +534,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystems2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getSearchableSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/getSearchableSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -550,7 +550,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchableSystemMetaData>> returnType = new ParameterizedTypeReference<List<SearchableSystemMetaData>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -572,7 +572,7 @@ public class GoogleDriveSearchServiceControllerApi {
      */
     public ResponseEntity<Boolean> restIsEnabled2WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/isEnabled").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/isEnabled").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -588,7 +588,7 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -628,7 +628,7 @@ public class GoogleDriveSearchServiceControllerApi {
         if (nEntryLimit == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch2");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/search").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GoogleDriveSearchServiceController/search").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -648,6 +648,6 @@ public class GoogleDriveSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchResult>> returnType = new ParameterizedTypeReference<List<SearchResult>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

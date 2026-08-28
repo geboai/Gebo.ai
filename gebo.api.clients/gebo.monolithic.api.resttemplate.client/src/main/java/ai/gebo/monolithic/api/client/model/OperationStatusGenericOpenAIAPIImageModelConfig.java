@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGenericOpenAIAPIImageModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class OperationStatusGenericOpenAIAPIImageModelConfig {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusGenericOpenAIAPIImageModelConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusGenericOpenAIAPIImageModelConfig result(GenericOpenAIAPIImageModelConfig result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusGenericOpenAIAPIImageModelConfig {
     this.messages = messages;
   }
 
-  public OperationStatusGenericOpenAIAPIImageModelConfig hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusGenericOpenAIAPIImageModelConfig hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusGenericOpenAIAPIImageModelConfig {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusGenericOpenAIAPIImageModelConfig hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusGenericOpenAIAPIImageModelConfig {
     OperationStatusGenericOpenAIAPIImageModelConfig operationStatusGenericOpenAIAPIImageModelConfig = (OperationStatusGenericOpenAIAPIImageModelConfig) o;
     return Objects.equals(this.result, operationStatusGenericOpenAIAPIImageModelConfig.result) &&
         Objects.equals(this.messages, operationStatusGenericOpenAIAPIImageModelConfig.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGenericOpenAIAPIImageModelConfig.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGenericOpenAIAPIImageModelConfig.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusGenericOpenAIAPIImageModelConfig.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusGenericOpenAIAPIImageModelConfig.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusGenericOpenAIAPIImageModelConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

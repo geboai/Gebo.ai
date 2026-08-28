@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class McpClientSystemsControllerApi {
     private ApiClient apiClient;
@@ -69,7 +69,7 @@ public class McpClientSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteMCPClientEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/deleteMCPClientEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/deleteMCPClientEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -113,7 +113,7 @@ public class McpClientSystemsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findMCPClientEndpointsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/findMCPClientEndpointsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/findMCPClientEndpointsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -130,7 +130,7 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<MCPClientProjectEndpoint> returnType = new ParameterizedTypeReference<MCPClientProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -158,7 +158,7 @@ public class McpClientSystemsControllerApi {
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findMCPClientEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/findMCPClientEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/findMCPClientEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -175,7 +175,7 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<MCPClientProjectEndpoint>> returnType = new ParameterizedTypeReference<List<MCPClientProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -203,7 +203,7 @@ public class McpClientSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findMCPClientEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/findMCPClientEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/findMCPClientEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -221,7 +221,7 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<MCPClientProjectEndpoint>> returnType = new ParameterizedTypeReference<List<MCPClientProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -243,7 +243,7 @@ public class McpClientSystemsControllerApi {
      */
     public ResponseEntity<GContentManagementSystemType> getMCPClientSystemTypeWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/getMCPClientSystemType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/getMCPClientSystemType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -259,7 +259,7 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystemType> returnType = new ParameterizedTypeReference<GContentManagementSystemType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -287,7 +287,7 @@ public class McpClientSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertMCPClientEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/insertMCPClientEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/insertMCPClientEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -305,7 +305,7 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<MCPClientProjectEndpoint> returnType = new ParameterizedTypeReference<MCPClientProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -333,7 +333,7 @@ public class McpClientSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishMCPClientEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/publishMCPClientEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/publishMCPClientEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -351,7 +351,7 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -379,7 +379,7 @@ public class McpClientSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateMCPClientEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/updateMCPClientEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientSystemsController/updateMCPClientEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -397,6 +397,6 @@ public class McpClientSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<MCPClientProjectEndpoint> returnType = new ParameterizedTypeReference<MCPClientProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

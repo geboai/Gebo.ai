@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
 
 public class SecretsControllerApi {
     private ApiClient apiClient;
@@ -76,7 +76,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createAWSConnectionSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createAWSConnectionSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createAWSConnectionSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -94,7 +94,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -122,7 +122,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createCustomSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createCustomSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createCustomSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -140,7 +140,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -168,7 +168,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createGoogleJsonCredentialsSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createGoogleJsonCredentialsSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createGoogleJsonCredentialsSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -186,7 +186,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -214,7 +214,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createGoogleOauth2Secret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createGoogleOauth2Secret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createGoogleOauth2Secret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -232,7 +232,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -260,7 +260,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createOauth2StandardSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createOauth2StandardSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createOauth2StandardSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -278,7 +278,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -306,7 +306,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createSshKeySecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createSshKeySecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createSshKeySecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -324,7 +324,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -352,7 +352,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createTokenSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createTokenSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createTokenSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -370,7 +370,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -398,7 +398,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createUsernamePasswordSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createUsernamePasswordSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/createUsernamePasswordSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -416,7 +416,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -443,7 +443,7 @@ public class SecretsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/deleteSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/deleteSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -459,7 +459,7 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -487,7 +487,7 @@ public class SecretsControllerApi {
         if (context == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'context' when calling getSecretsByContextCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SecretsController/getSecretsByContextCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SecretsController/getSecretsByContextCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -504,6 +504,6 @@ public class SecretsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SecretInfo>> returnType = new ParameterizedTypeReference<List<SecretInfo>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }
