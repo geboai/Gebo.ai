@@ -118,7 +118,7 @@ services:
 
   # ---------------- Service registry ----------------
   eureka:
-    image: geboai/eureka.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/eureka.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     restart: unless-stopped
     ports:
       - "13017:13017"             # Eureka dashboard / registry
@@ -131,7 +131,7 @@ services:
 
   # ---------------- API gateway (the edge: Angular UI + aggregated API) --------
   gateway:
-    image: geboai/gateway.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/gateway.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     restart: unless-stopped
     depends_on: [eureka]
     environment:
@@ -214,7 +214,7 @@ services:
       - heimdall-home:/opt/gebo.ai/home
       - heimdall-work:/opt/gebo.ai/work
       - heimdall-logs:/opt/gebo.ai/logs
-    image: geboai/heimdall.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/heimdall.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13018:13018"
 
@@ -230,7 +230,7 @@ services:
       - brain-home:/opt/gebo.ai/home
       - brain-work:/opt/gebo.ai/work
       - brain-logs:/opt/gebo.ai/logs
-    image: geboai/brain.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/brain.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, qdrant]
     ports:
       - "13001:13001"
@@ -242,7 +242,7 @@ services:
       - vectorizator-home:/opt/gebo.ai/home
       - vectorizator-work:/opt/gebo.ai/work
       - vectorizator-logs:/opt/gebo.ai/logs
-    image: geboai/vectorizator.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/vectorizator.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, qdrant]
     ports:
       - "13002:13002"
@@ -254,7 +254,7 @@ services:
       - graphicator-home:/opt/gebo.ai/home
       - graphicator-work:/opt/gebo.ai/work
       - graphicator-logs:/opt/gebo.ai/logs
-    image: geboai/graphicator.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/graphicator.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, neo4j]
     ports:
       - "13003:13003"
@@ -266,7 +266,7 @@ services:
       - chunker-home:/opt/gebo.ai/home
       - chunker-work:/opt/gebo.ai/work
       - chunker-logs:/opt/gebo.ai/logs
-    image: geboai/chunker.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/chunker.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13004:13004"
 
@@ -277,7 +277,7 @@ services:
       - fulltextor-home:/opt/gebo.ai/home
       - fulltextor-work:/opt/gebo.ai/work
       - fulltextor-logs:/opt/gebo.ai/logs
-    image: geboai/fulltextor.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/fulltextor.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     depends_on: [eureka, rabbit, mongo, opensearch]
     ports:
       - "13016:13016"
@@ -290,12 +290,12 @@ services:
       - git-home:/opt/gebo.ai/home
       - git-work:/opt/gebo.ai/work
       - git-logs:/opt/gebo.ai/logs
-    image: geboai/git.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/git.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13005:13005"
   filesystem:
     <<: *microservice
-    image: geboai/filesystem.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/filesystem.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     environment:
       <<: *microservice-env
       # Off by default (GeboAiFilesystemsConfig) since it lets an admin point a
@@ -323,7 +323,7 @@ services:
       - uploads-home:/opt/gebo.ai/home
       - uploads-work:/opt/gebo.ai/work
       - uploads-logs:/opt/gebo.ai/logs
-    image: geboai/uploads.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/uploads.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13007:13007"
   userspace:
@@ -333,7 +333,7 @@ services:
       - userspace-home:/opt/gebo.ai/home
       - userspace-work:/opt/gebo.ai/work
       - userspace-logs:/opt/gebo.ai/logs
-    image: geboai/userspace.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/userspace.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13008:13008"
   sharepoint:
@@ -343,7 +343,7 @@ services:
       - sharepoint-home:/opt/gebo.ai/home
       - sharepoint-work:/opt/gebo.ai/work
       - sharepoint-logs:/opt/gebo.ai/logs
-    image: geboai/sharepoint.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/sharepoint.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13009:13009"
   confluence:
@@ -353,7 +353,7 @@ services:
       - confluence-home:/opt/gebo.ai/home
       - confluence-work:/opt/gebo.ai/work
       - confluence-logs:/opt/gebo.ai/logs
-    image: geboai/confluence.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/confluence.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13010:13010"
   jira:
@@ -363,7 +363,7 @@ services:
       - jira-home:/opt/gebo.ai/home
       - jira-work:/opt/gebo.ai/work
       - jira-logs:/opt/gebo.ai/logs
-    image: geboai/jira.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/jira.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13011:13011"
   aws-s3:
@@ -373,7 +373,7 @@ services:
       - aws-s3-home:/opt/gebo.ai/home
       - aws-s3-work:/opt/gebo.ai/work
       - aws-s3-logs:/opt/gebo.ai/logs
-    image: geboai/aws-s3.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/aws-s3.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13012:13012"
   googledrive:
@@ -383,7 +383,7 @@ services:
       - googledrive-home:/opt/gebo.ai/home
       - googledrive-work:/opt/gebo.ai/work
       - googledrive-logs:/opt/gebo.ai/logs
-    image: geboai/googledrive.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/googledrive.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13013:13013"
   mcpclient:
@@ -393,7 +393,7 @@ services:
       - mcpclient-home:/opt/gebo.ai/home
       - mcpclient-work:/opt/gebo.ai/work
       - mcpclient-logs:/opt/gebo.ai/logs
-    image: geboai/mcpclient.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/mcpclient.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13014:13014"
   webdav:
@@ -403,7 +403,7 @@ services:
       - webdav-home:/opt/gebo.ai/home
       - webdav-work:/opt/gebo.ai/work
       - webdav-logs:/opt/gebo.ai/logs
-    image: geboai/webdav.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/webdav.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13020:13020"
   integration:
@@ -413,7 +413,7 @@ services:
       - integration-home:/opt/gebo.ai/home
       - integration-work:/opt/gebo.ai/work
       - integration-logs:/opt/gebo.ai/logs
-    image: geboai/integration.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/integration.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13015:13015"
   tyr:
@@ -423,7 +423,7 @@ services:
       - tyr-home:/opt/gebo.ai/home
       - tyr-work:/opt/gebo.ai/work
       - tyr-logs:/opt/gebo.ai/logs
-    image: geboai/tyr.gebo.ai:${GEBO_VERSION:-1.0.2.4}
+    image: geboai/tyr.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
     ports:
       - "13019:13019"
 
