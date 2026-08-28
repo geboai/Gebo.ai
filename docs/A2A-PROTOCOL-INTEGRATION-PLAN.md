@@ -287,19 +287,26 @@ request/response dispatch, so server and client stay spec-conformant by construc
 protocol code. The Gebo-side work becomes: (a) map `AgentCapabilities` ⇄ the SDK's `AgentCard`, and
 (b) bridge the SDK's task handler ⇄ `IGNetworkAgentService` / the streaming lifecycle.
 
-**Open sub-question (needs your input):** the exact SDK artifact + version, and its transport fit.
-The canonical implementation is `a2a-java` (github.com/a2aproject/a2a-java, `io.a2a.sdk:*`
-coordinates), but it is not in the local `.m2` yet and its **server** transports are
-Jakarta/Quarkus-oriented; this repo serves MCP over **Spring MVC `RouterFunction`s** with a
-hot-reload registry. So:
+**RESOLVED (verified against Maven Central + the SDK jars).** Coordinates, footprint and transport
+fit were checked directly:
 
-- the **client** side (`a2a-clients`) can use the SDK client cleanly;
-- the **server** side (`a2a-server`) needs verification that the SDK offers a Spring-MVC-compatible
-  server transport (or that we drive its request handler from our own `RouterFunction`, keeping the
-  hot-reload registry). If no clean Spring fit exists, the fallback is to use the SDK **types** for
-  the wire model but keep our own Spring MVC JSON-RPC/SSE handlers.
+- **Coordinates:** the current group is **`org.a2aproject.sdk`** (the old `io.github.a2asdk` group is
+  frozen at `0.3.x`). Pinned version **`1.3.0.Final`**, managed via the SDK BOM
+  (`org.a2aproject.sdk:a2a-java-sdk-bom`) imported in the root `pom.xml`. Requires Java 17+ (repo is 21).
+- **We consume only `a2a-java-sdk-jsonrpc-common`** — which pulls `a2a-java-sdk-spec` (the wire types:
+  `AgentCard`, `Message`/`TextPart`, `Task`/`TaskStatus`/`TaskState`, records with builders) plus
+  `JsonUtil` (the configured Gson) and the JSON-RPC wrappers (`SendMessageRequest/Response`,
+  `SendStreamingMessageResponse`, `A2ARequest/Response`, `GetTaskRequest`, `CancelTaskRequest`). Its
+  only transitive deps are `spec` + `gson` — clean.
+- **The SDK transports are deliberately NOT used:** `a2a-java-sdk-server-common` requires
+  `quarkus-arc` + CDI, and the `a2a-java-sdk-client` umbrella drags Vert.x + gRPC + protobuf — neither
+  fits a Spring monolith. So **both** modules serve/consume JSON-RPC + SSE over Spring themselves
+  (server = `RouterFunction` like mcp-server; client = reactive `WebClient`), using the SDK's official
+  types + `JsonUtil` for spec-correct (Gson) serialization. This is the "SDK types + our own Spring
+  handlers" path noted below, now the confirmed design.
 
-I will confirm coordinates and Spring compatibility against Maven Central before writing module code.
+Note the A2A wire serialization is **Gson**, not Jackson — the a2a modules serialize card/JSON-RPC
+bodies through `JsonUtil`, independent of Spring's Jackson `ObjectMapper`.
 
 ---
 
