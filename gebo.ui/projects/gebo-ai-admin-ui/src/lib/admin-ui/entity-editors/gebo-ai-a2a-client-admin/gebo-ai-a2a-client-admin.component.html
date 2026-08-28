@@ -1,0 +1,167 @@
+<p-blockUI id="BlockUI" [target]="a2aClientCtrl" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+
+<p-panel id="MainPanel" gebo-ai-label #a2aClientCtrl header="Editing A2A Remote Agent" [formGroup]="formGroup">
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true"
+                    styleClass="w-full"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full"
+                    [disabled]="canDelete===false || readonly===true" />
+            </div>
+        </div>
+    </div>
+
+    <div class="geboDialogContent">
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+        <p-tabs [value]="0" id="TabView">
+            <p-tablist>
+                <p-tab [value]="0" gebo-ai-text>General settings</p-tab>
+                <p-tab [value]="1" gebo-ai-text>Security access settings</p-tab>
+                <p-tab [value]="2" gebo-ai-text [disabled]="!skills.length">Discovered Skills</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <!-- General -->
+                <p-tabpanel [value]="0">
+                    <div class="grid">
+                        <div class="col-6">
+                            <gebo-ai-field id="description" label="Description"
+                                help="A short description of this remote A2A agent.">
+                                <input pInputText id="description" formControlName="description" maxlength="120"
+                                    gebo-ai-field-element [readonly]="readonly" />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="code" label="Unique Code"
+                                help="Automatically generated unique code.">
+                                <input pInputText id="code" formControlName="code" readonly="true"
+                                    gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+
+                        <div class="col-12">
+                            <gebo-ai-field id="baseUrl" label="Base URL"
+                                help="Base address of the remote A2A agent, e.g. https://host:port." [required]="true">
+                                <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true" class="col-12"
+                                    gebo-ai-field-element [readonly]="readonly" />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="agentCardPath" label="Agent Card Path"
+                                help="Relative path of the Agent Card (well-known location by default).">
+                                <input pInputText id="agentCardPath" formControlName="agentCardPath" class="col-12"
+                                    gebo-ai-field-element [readonly]="readonly" />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                            <gebo-ai-field id="rpcEndpoint" label="JSON-RPC Endpoint"
+                                help="Relative path of the JSON-RPC endpoint (message/send, message/stream).">
+                                <input pInputText id="rpcEndpoint" formControlName="rpcEndpoint" class="col-12"
+                                    gebo-ai-field-element [readonly]="readonly" />
+                            </gebo-ai-field>
+                        </div>
+
+                        <div class="col-4">
+                            <gebo-ai-field id="transportType" label="Transport Type"
+                                help="A2A transport. JSON-RPC is the default." [required]="true">
+                                <p-select id="transportType" formControlName="transportType" [options]="transportTypes"
+                                    optionLabel="label" optionValue="value" gebo-ai-field-element
+                                    [disabled]="readonly"></p-select>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-4">
+                            <gebo-ai-field id="authMode" label="Authentication Mode"
+                                help="How outbound calls to the remote agent authenticate." [required]="true">
+                                <p-select id="authMode" formControlName="authMode" [options]="authModes"
+                                    optionLabel="label" optionValue="value" gebo-ai-field-element
+                                    [disabled]="readonly"></p-select>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-4">
+                            <gebo-ai-field id="exportingPrefix" label="Exporting Prefix"
+                                help="Prefix that namespaces this remote agent's local id." [required]="true">
+                                <input pInputText id="exportingPrefix" formControlName="exportingPrefix"
+                                    [required]="true" gebo-ai-field-element [readonly]="readonly" />
+                            </gebo-ai-field>
+                        </div>
+
+                        <ng-container
+                            *ngIf="formGroup.get('authMode')?.value === 'OAUTH2_CLIENT_CREDENTIALS'">
+                            <div class="col-12">
+                                <gebo-ai-field id="oauth2AuthenticatorCode" label="OAuth2 Authenticator Code"
+                                    help="Code of the OAuth2 runtime configuration used for the client-credentials grant.">
+                                    <input pInputText id="oauth2AuthenticatorCode"
+                                        formControlName="oauth2AuthenticatorCode" class="col-12" gebo-ai-field-element
+                                        [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                        </ng-container>
+                        <ng-container
+                            *ngIf="formGroup.get('authMode')?.value && formGroup.get('authMode')?.value !== 'NONE' && formGroup.get('authMode')?.value !== 'OAUTH2_CLIENT_CREDENTIALS'">
+                            <div class="col-12">
+                                <gebo-ai-field id="secretCode" label="Credential Secret"
+                                    help="The stored secret (API key / bearer / OAuth2 token) presented to the remote agent.">
+                                    <input pInputText id="secretCode" formControlName="secretCode" class="col-12"
+                                        gebo-ai-field-element [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                        </ng-container>
+
+                        <div class="col-6">
+                            <gebo-ai-field id="enabled" label="Enabled"
+                                help="When enabled, the remote agent is mounted as a selectable network participant.">
+                                <p-toggleswitch id="enabled" formControlName="enabled" gebo-ai-field-element
+                                    [disabled]="readonly"></p-toggleswitch>
+                            </gebo-ai-field>
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col-12">
+                            <p-button id="DiscoverBtn" gebo-ai-label icon="pi pi-search" [outlined]="true"
+                                label="Test connectivity &amp; discover skills" styleClass="w-full"
+                                (onClick)="testAndDiscoveryConnection()" [disabled]="readonly"></p-button>
+                        </div>
+                    </div>
+                </p-tabpanel>
+
+                <!-- Security access -->
+                <p-tabpanel [value]="1">
+                    <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                </p-tabpanel>
+
+                <!-- Discovered skills -->
+                <p-tabpanel [value]="2">
+                    <p-table [value]="skills" [tableStyle]="{ 'min-width': '40rem' }">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th gebo-ai-text>Id</th>
+                                <th gebo-ai-text>Name</th>
+                                <th gebo-ai-text>Description</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item>
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.description }}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</p-panel>

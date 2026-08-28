@@ -1,0 +1,44 @@
+<p-blockUI id="BlockUILock" [target]="a2aImportUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #a2aImportUI header="Import external A2A agents">
+  <div class="grid geboLargeButtonsBar">
+    <div class="col-6">
+      <p-button id="A2AImportAddBtn" gebo-ai-label icon="pi pi-plus" label="Register A2A Agent" styleClass="w-full"
+        [outlined]="true" (onClick)="addConfig()"></p-button>
+    </div>
+  </div>
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <div class="grid">
+    <div class="col-12">
+      <p-table id="Table" gebo-ai-label [value]="configs" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header pTemplate="header">
+          <tr>
+            <th gebo-ai-text>Prefix</th>
+            <th gebo-ai-text>Base URL</th>
+            <th gebo-ai-text>Enabled</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item pTemplate="body">
+          <tr>
+            <td>{{ item.exportingPrefix }}</td>
+            <td>{{ item.baseUrl }}</td>
+            <td>
+              <i class="pi" [class.pi-check]="item.enabled === true" [class.pi-times]="item.enabled !== true"></i>
+            </td>
+            <td>
+              <p-button gebo-ai-label label="Edit" icon="pi pi-pencil" [outlined]="true"
+                (onClick)="editConfig(item)"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #emptymessage pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" gebo-ai-text>No remote A2A agents registered yet.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</p-panel>
