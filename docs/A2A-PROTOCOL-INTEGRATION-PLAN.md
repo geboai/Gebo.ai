@@ -101,7 +101,8 @@ modelling.
 | A2A concept | Existing Gebo concept |
 |---|---|
 | Agent Card at `/.well-known/agent-card.json` | `AgentCapabilities` projected from `GAgentConfig` / `GAgentsNetwork` |
-| Skill (id, name, description, tags, i/o modes) | `AgentCapabilityResource` + the `capabilities` list |
+| **A2A agent = one opaque service** | **an entire `GAgentsNetwork`** run via `IGAgentsNetworkServiceFactory.create(...).executeNetwork()` (the proven chat path) — internals hidden. NB: the `AgentType.AGENTS_NETWORK` config indirection is declared but unwired; see Part 3.1 |
+| Skill (id, name, description, tags, i/o modes) | `AgentCapabilityResource` + the `capabilities` list; for a network, its `scenarioDescription` + `getInputType()`/`getOutputType()` |
 | JSON-RPC `message/send` · `message/stream` (SSE) | `IGNetworkAgentService.onMessage()` + reactive `Flux`/`Sinks.Many` |
 | Task lifecycle `submitted→working→completed/failed/input-required` | `AgentsCollaborationSessionContext` + `IGPartialOperation` / `PartialOperationStatus` + `INotificationSink` |
 | Message parts (Text / File / Data) | `AgentsExchangeMessage` payload + rich-response fragments |
@@ -119,19 +120,140 @@ turns inbound tasks into network runs and streams status back.
 
 | Class | Kind | Role |
 |---|---|---|
-| `A2AServerConfig` | new | Mongo doc, `extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource`. Fields: `exportedRelativeUrl`, `enabled` (**defaults off**), `List<A2AExportedAgent>` (agentConfigCode / networkCode / skillName), exported networks, selected `securityScheme`, ACL fields. Direct analog of `GeboMCPServerConfig`. **Secure by default:** an agent or network is published *only* when an admin creates a config, adds it to the export list, and sets `enabled=true`; the ACL fields still gate who may call the published endpoint. |
+| `A2AServerConfig` | new | Mongo doc, `extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource`. Fields: `exportedRelativeUrl`, `enabled` (**defaults off**), `List<A2AExportedAgent>`, selected `securityScheme`, ACL fields. Direct analog of `GeboMCPServerConfig`. **Secure by default:** an agent or network is published *only* when an admin creates a config, adds it to the export list, and sets `enabled=true`; the ACL fields still gate who may call the published endpoint. |
+| `A2AExportedAgent` | new | One export entry. `kind` = `AGENT` \| `NETWORK`; for `NETWORK`: `networkCode` (resolved static-or-code-generated via `IAgentsNetworkDao`; factory & I/O come from the resolved network, not restated), optional marshalling profile, `exposeMemberCapabilities` (default false); for `AGENT`: `agentConfigCode`; plus `skillName`. See Part 3.1. |
 | `A2AServerConfigRepository` | new | `extends IGBaseMongoDBRepository<A2AServerConfig>` with `findByExportedRelativeUrl(...)`, like `GeboMCPServerConfigRepository`. |
 | `A2AAgentCardBuilder` | new | Projects each exported agent's `AgentCapabilities` (summary→description, capabilities/tools/catalogs→A2A `skills`) into an `AgentCard`, served at `<url>/.well-known/agent-card.json`. |
 | `A2AServerRegistry` | new | Holds the `volatile` composite `RouterFunction`; `reload(code)` / `remove(code)` / `reloadAll()`. Copies `GeboMcpServerRegistry` structure. |
 | `A2ADispatcherConfig` | new | One delegating `@Bean RouterFunction` → `registry.currentComposite().route(request)`. Copies `GeboMcpDispatcherConfig` so endpoints change without restart. |
 | `A2AServerBuilder` | new | Builds the per-config router: the well-known card route + the JSON-RPC route (`message/send`, `message/stream` SSE, `tasks/get`, `tasks/cancel`), wrapped in an access filter that 403s callers not granted on the config — mirrors `GeboMcpServerBuilder`'s filter. |
-| `A2ATaskBridge` | new | **Heart of the module.** Inbound task → build an `AgentsExchangeMessage` inside an `AgentsCollaborationSessionContext` → invoke the target `IGNetworkAgentService` / network under the caller's `ReactiveIdentityUtil` → map `INotificationSink` / `IGPartialOperation` events onto A2A task-status SSE frames and the terminal `PartialOperationStatus` onto the final artifact. |
+| `A2ATaskBridge` | new | **Heart of the module.** Inbound task → resolve the export to a `GAgentsNetwork` (referenced network, or a synthesized single-node network wrapping the agent — see Part 3.1) → `IGAgentsNetworkServiceFactory.create(...).executeNetwork()` / `getFlux()` under the caller's `ReactiveIdentityUtil` → map `INotificationSink` / `IGPartialOperation` events onto A2A task-status SSE frames and the terminal output onto the artifact. |
 | `A2AServerConfigManagerService` (+Impl) | new | CRUD through `IGPersistentObjectManager`; validates the relative URL; applies ACLs via `IGSecurityService`; after every mutation calls `registry.reload/remove`. Line-for-line `GMCPServerConfigManagerServiceImpl`. |
 | `GeboA2AServerAdminController` | new | `@RestController @PreAuthorize("hasRole('ADMIN')")`, returns `OperationStatus<A2AServerConfig>`. Mirrors `GeboMCPServerAdminController`. |
 
 > **Caveat:** the MCP-server side of "export an agent as a callable" (`GeboMCPAgentAsToolProvider.buildTools()`)
 > currently returns `List.of()` — it is still a stub. So the export half of A2A is genuinely new
 > ground; only the *scaffolding* (registry, dispatcher, builder, manager) is proven.
+
+### Part 3.1 — Exporting a whole network-of-agents as ONE A2A agent
+
+This is the primary and most natural export unit: **a network presented as a single agent with its
+own input/output.** A2A agents are *opaque services* — a caller sees a card and a task interface,
+never the internals — and a Gebo network maps to exactly that: one card, one task endpoint, with the
+constituent agents, routing, and loop iterations hidden behind it.
+
+**Wiring status — verified against the code (important correction).** The runtime *execution* layer
+for "a network as a single unit" exists and is exercised; the `AgentType.AGENTS_NETWORK` *config
+indirection* is **declared but not wired**. Do not assume it is production-ready.
+
+*What exists and is proven (chat runs on it):*
+
+- `IGAgentsNetworkService<I,O>` — the single-unit contract: `executeNetwork(chatRequestContext, input, environment)`,
+  `getInputType()`, `getOutputType()`. The reactive variant `IGReactiveOutputAgentsNetworkService.getFlux()`
+  gives the streaming needed for A2A `message/stream`.
+- `IGAgentsNetworkServiceFactory` + `GAgentsNetworkServiceFactoryRepositoryPatternImpl` +
+  `GReactiveChatAgentsNetworkServiceFactoryImpl` (id `REACTIVE_CHAT_AGENTS_NETWORK`, typed
+  `ChatPipelineExecutionRuntimeData → GeboChatMessageEnvelope`). This factory→`executeNetwork` path is
+  exactly how chat runs its network — the trustworthy entry point.
+
+*What is declared but NOT wired (verified):*
+
+- **Nothing branches on `agentType`** — `getAgentType()` is never read, `== AGENTS_NETWORK` is never
+  tested in main source. The enum constant is effectively dead metadata today.
+- **No config is ever created as a network adapter** — `setAdaptedAgentNetworkCode(...)` /
+  `setAgentNetworkServiceCode(...)` are never called anywhere; those fields are only *read* inside
+  `GBaseAgentsNetworkToNetworkAgentAdapterService.onMessage()`. No default init, dynamic source, or
+  CRUD path produces a populated `AGENTS_NETWORK` config.
+- **Type gap** — the only registered adapter bean,
+  `GStringToStringAgentsNetworkToNetworkAgentAdapterServiceImpl` (`@Service`, String→String), has no
+  compatible factory: the sole network factory is the chat-typed one above, and its input type is
+  *not* assignable from `String`, so the adapter's own runtime type-check would fail. No `String→String`
+  (or text/parts) network factory exists.
+
+**Consequence for A2A export — call the proven path directly, not the `AGENTS_NETWORK` indirection.**
+`A2ATaskBridge` should resolve an exported network to an `IGAgentsNetworkService` via
+`IGAgentsNetworkServiceFactory.create(network, sink, inputType, outputType, runAs)` and call
+`executeNetwork(...)` / consume `getFlux()` — the same path chat uses. The `AgentType.AGENTS_NETWORK`
++ adapter machinery is an *unfinished convenience*; we either bypass it (recommended) or finish and
+test it as explicitly scoped work — not treat it as existing capability.
+
+**Network provenance — static or code-generated, addressed uniformly.** A `GAgentsNetwork` can be
+either **persisted in Mongo** (via `AgentsNetworkRepository`) or **generated purely in code** (a
+`IDynamicAgentsNetworkDataSource`, e.g. the default streaming chat network built in
+`StandardAgentsInitialization`). `AgentNetworkConfigDaoImpl` (`IAgentsNetworkDao`) composes both
+sources — code-generated ones are cloned and flagged `readOnly=true` — and `findByCode(code)`
+resolves across both. So an A2A export references a network **by `code`** regardless of provenance,
+and the factory to run it is already named on the config itself (`GAgentsNetwork.agentsNetworkServiceFactoryId`).
+
+**I/O type is a consequence of the node agent services, not declared independently.** In
+`GAbstractAgentsNetworkService.executeNetwork()` the accepted input is validated against the
+**input-node participant's** agent service: `inputRuntime.getService().getInputType().isAssignableFrom(input.getClass())`;
+the produced output flows from the participants' output types. So a network's effective I/O — and thus
+what the A2A card advertises and what the marshalling must convert — is derived from the input/output
+**node agent service ids and their `getInputType()`/`getOutputType()`**. A network is A2A-exportable
+with text/parts I/O only when its input node accepts a text/parts-marshallable type. Concretely, the
+default chat network's input node adapts `ChatPipelineExecutionRuntimeData` (not text), which is
+exactly why a generic text export needs marshalling / a text-in node.
+
+**New work this exposes:** exporting an *arbitrary* network over A2A with text/parts I/O needs a
+**network-service factory (and input/output node services) whose I/O is A2A-friendly** (e.g.
+`String → String`, or a parts-aware type). Only the chat-typed factory exists today, so this factory
+(plus the I/O marshalling below) is genuinely new — not reuse.
+
+**Why the network is the better A2A unit than a bare agent:**
+
+- It fits A2A's opacity model directly — internals are not exposed.
+- It reinforces **secure-by-default**: the admin exports the *network* as one card; the individual
+  member agents are never individually reachable over A2A.
+
+**The Agent Card for a network:**
+
+- `name` ← network code; `description` ← `GAgentsNetwork.scenarioDescription` (+ `GBaseObject.description`).
+- A single A2A **skill** representing the network's job, its input/output modes derived from the
+  network service's `getInputType()` / `getOutputType()` (the declared input-node and output-node
+  participant I/O).
+- *Optional, opt-in, default off* — `exposeMemberCapabilities`: aggregate each participant's
+  `getAgentCapabilities()` into the skill's tags/description for richer discovery. Default keeps the
+  network opaque.
+
+**New design concern this surfaces — I/O marshalling.** A2A messages are Text / File / Data parts,
+but a Gebo network's I/O is Java types (e.g. `String → String` via
+`GStringToStringAgentsNetworkToNetworkAgentAdapterServiceImpl`, or
+`ChatPipelineExecutionRuntimeData → GeboChatMessageEnvelope`). The task bridge therefore needs a small
+converter layer between A2A parts and the network's typed I/O:
+
+- text-in / text-out networks (String→String): trivial pass-through;
+- typed networks: a converter registry (Jackson `BeanOutputConverter` is already used on the
+  task-performer path) mapping A2A `DataPart` ⇄ the network's `InputType` / `OutputType`.
+
+**Config impact — `A2AExportedAgent` carries granularity + marshalling:**
+
+- `kind`: `AGENT` | `NETWORK`.
+- for `NETWORK`: `networkCode` (→ `IAgentsNetworkDao.findByCode`, static **or** code-generated). The
+  factory comes from `GAgentsNetwork.agentsNetworkServiceFactoryId`; the I/O modes are read from the
+  resolved network service's input/output node types, not restated here. Plus an optional marshalling
+  profile and `exposeMemberCapabilities` (default false).
+- for `AGENT`: `agentConfigCode`, as before.
+
+**Both export kinds unify onto ONE proven path — a single agent is NOT independently runnable.**
+Verified: an agent's only execution entry points, `IGNetworkAgentService.onMessage(...)` and
+`IGReactiveAgentService.execute(...)`, both **require full network context** (`GAgentsNetwork`, the
+`AgentNetworkParticipant` persona, an `AgentsCollaborationSessionContext`, private memory, the runtime
+DAO), and the *only* caller anywhere is the network executor (`GAbstractAgentsNetworkService`).
+`IGGenericAgentService` — the sole standalone base — has no execution method. So there is no way to
+"just call an agent."
+
+`A2ATaskBridge` therefore dispatches both kinds through `IGAgentsNetworkServiceFactory.create(...)` →
+`executeNetwork(...)` / `getFlux()` (the chat path):
+
+- `NETWORK` → run the referenced network (static or code-generated, resolved by `code`);
+- `AGENT` → **synthesize an ephemeral single-node `GAgentsNetwork`** whose one participant (the
+  exported `GAgentConfig`) is both input and output node, then run it through the same path.
+
+Both stream `INotificationSink` / `getFlux()` onto SSE and map the terminal output to the A2A
+artifact. Per-kind differences: **card construction** and, for `AGENT`, the trivial single-node
+network synthesis. Both still need an A2A-friendly network-service factory + I/O marshalling (new
+work, above) whenever the agent/network I/O types are not already text/parts-marshallable.
 
 ---
 
