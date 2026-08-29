@@ -7,6 +7,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
+import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -24,6 +25,9 @@ import ai.gebo.secrets.services.IGOauth2AccessTokenService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.impl.LocalJwtTokenProvider;
+import ai.gebo.security.model.UserInfos;
 import lombok.AllArgsConstructor;
 import org.a2aproject.sdk.jsonrpc.common.json.JsonUtil;
 import org.a2aproject.sdk.jsonrpc.common.wrappers.SendMessageRequest;
@@ -62,9 +66,14 @@ public class A2AClientConnector {
 	private static final String DEFAULT_CARD_PATH = "/.well-known/agent-card.json";
 	private static final String DEFAULT_RPC_ENDPOINT = "/";
 
+	/** TTL of the short-lived token minted when relaying the caller's own identity. */
+	private static final Duration USER_TOKEN_EXCHANGE_TTL = Duration.ofMinutes(5);
+
 	private final IGeboSecretsAccessService secretsAccessService;
 	private final IGOauth2AccessTokenService oauth2AccessTokenService;
 	private final IGOauth2RuntimeConfigurationDao oauth2ConfigDao;
+	private final IGSecurityService securityService;
+	private final LocalJwtTokenProvider jwtTokenProvider;
 
 	private HttpClient newHttpClient() {
 		// Pin HTTP/1.1: A2A servers are plain HTTP(S)/SSE endpoints, and forcing 1.1
@@ -233,11 +242,16 @@ public class A2AClientConnector {
 			return "Bearer " + resolveClientCredentialsToken(config);
 		case OAUTH2_AUTHORIZATION_CODE_PER_USER:
 		case USER_TOKEN_RELAY:
+			// Per-user delegation: relay the stored authorized-client token when a
+			// secretCode is configured; otherwise fall back to token exchange and relay
+			// the caller's own live identity.
+			if (isBlank(config.getSecretCode())) {
+				return "Bearer " + exchangeCurrentUserToken();
+			}
 			return "Bearer " + resolveStoredOauthAccessToken(config, authMode);
 		case TOKEN_EXCHANGE:
-			throw new UnsupportedOperationException(
-					"authMode TOKEN_EXCHANGE is not yet supported for A2A clients (no token-exchange endpoint is "
-							+ "configured on the platform)");
+			// Always relay the caller's live identity.
+			return "Bearer " + exchangeCurrentUserToken();
 		default:
 			throw new UnsupportedOperationException("Unsupported A2A auth mode: " + authMode);
 		}
@@ -296,6 +310,25 @@ public class A2AClientConnector {
 					"OAuth2 configuration '" + config.getOauth2AuthenticatorCode() + "' has no clientSecretId");
 		}
 		return oauth2AccessTokenService.getAccessToken(tokenUri, null, oauthConfig.getClientSecretId());
+	}
+
+	/**
+	 * Token exchange: mints a fresh short-lived platform JWT for the currently
+	 * authenticated user, so the remote A2A agent receives the caller's own identity
+	 * rather than a service credential. Used by the per-user auth modes when no stored
+	 * secret is configured, and always by {@link A2AAuthMode#TOKEN_EXCHANGE}. The
+	 * network runs under the invoking user's {@code runAs}, so the current security
+	 * context here is that user; a Gebo A2A server validates the minted token through
+	 * the same JWT chain and runs the exported network impersonating that same user.
+	 */
+	private String exchangeCurrentUserToken() {
+		UserInfos user = securityService.getCurrentUser();
+		if (user == null || isBlank(user.getUsername())) {
+			throw new IllegalStateException(
+					"Cannot relay user authentication: no authenticated user in the current context");
+		}
+		Date expiration = new Date(System.currentTimeMillis() + USER_TOKEN_EXCHANGE_TTL.toMillis());
+		return jwtTokenProvider.createToken(user.getUsername(), expiration);
 	}
 
 	private void requireBaseUrl(A2ARemoteAgentConfig config) {

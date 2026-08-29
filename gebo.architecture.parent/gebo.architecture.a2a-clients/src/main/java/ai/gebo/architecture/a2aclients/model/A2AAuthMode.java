@@ -16,6 +16,11 @@ package ai.gebo.architecture.a2aclients.model;
  * {@link #USER_TOKEN_RELAY}, {@link #TOKEN_EXCHANGE}): the local user's own (or an
  * exchanged) token is relayed, so the remote sees the actual local user.</li>
  * </ul>
+ * For the OAuth2/user-relay modes a stored authorized-client token is used when a
+ * {@code secretCode} is configured; when {@code secretCode} is left null the connector
+ * falls back to <b>token exchange</b> &mdash; minting a fresh short-lived platform JWT
+ * for the currently authenticated user. {@link #TOKEN_EXCHANGE} always relays the
+ * caller's live identity this way.
  */
 public enum A2AAuthMode {
 	NONE, API_KEY, STATIC_BEARER_TOKEN, OAUTH2_CLIENT_CREDENTIALS, OAUTH2_AUTHORIZATION_CODE_PER_USER, USER_TOKEN_RELAY,
