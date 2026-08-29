@@ -108,14 +108,44 @@
                                 </gebo-ai-field>
                             </div>
                         </ng-container>
-                        <ng-container
-                            *ngIf="formGroup.get('authMode')?.value && formGroup.get('authMode')?.value !== 'NONE' && formGroup.get('authMode')?.value !== 'OAUTH2_CLIENT_CREDENTIALS'">
+                        <!-- Static service credential (API key / bearer): the secret is required. -->
+                        <ng-container *ngIf="isStaticSecretMode">
                             <div class="col-12">
                                 <gebo-ai-field id="secretCode" label="Credential Secret"
-                                    help="The stored secret (API key / bearer / OAuth2 token) presented to the remote agent.">
+                                    help="The stored secret (API key / bearer token) presented to the remote agent."
+                                    [required]="true">
                                     <input pInputText id="secretCode" formControlName="secretCode" class="col-12"
                                         gebo-ai-field-element [readonly]="readonly" />
                                 </gebo-ai-field>
+                            </div>
+                        </ng-container>
+
+                        <!-- Per-user delegation: the secret is optional; empty means relay the caller's identity. -->
+                        <ng-container *ngIf="isPerUserRelayMode">
+                            <div class="col-12">
+                                <gebo-ai-field id="secretCode" label="Credential Secret (optional)"
+                                    help="A stored OAuth2 authorized-client token to relay. Leave empty to relay the calling user's own identity (token exchange).">
+                                    <input pInputText id="secretCode" formControlName="secretCode" class="col-12"
+                                        gebo-ai-field-element [readonly]="readonly" />
+                                </gebo-ai-field>
+                            </div>
+                            <div class="col-12">
+                                <p-message severity="info" styleClass="w-full" gebo-ai-text>
+                                    With no secret set, the calling user's own authentication is relayed: the inbound
+                                    OAuth2 token when this platform runs as an OAuth2 resource server, otherwise a
+                                    short-lived JWT minted for the user.
+                                </p-message>
+                            </div>
+                        </ng-container>
+
+                        <!-- Token exchange: no secret; the caller's live identity is always relayed. -->
+                        <ng-container *ngIf="isTokenExchangeMode">
+                            <div class="col-12">
+                                <p-message severity="info" styleClass="w-full" gebo-ai-text>
+                                    Token exchange: the calling user's own authentication is relayed to the remote agent
+                                    — the inbound OAuth2 token when this platform runs as an OAuth2 resource server,
+                                    otherwise a short-lived JWT minted for the user. No stored secret is used.
+                                </p-message>
                             </div>
                         </ng-container>
 

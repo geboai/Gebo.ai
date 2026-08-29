@@ -42,6 +42,7 @@ public class A2AAgentCardBuilder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(A2AAgentCardBuilder.class);
 
 	private static final List<String> TEXT_MODES = List.of("text/plain");
+	private static final String BEARER_SCHEME = "bearer";
 
 	private final IGRuntimeBinder runtimeBinder;
 
@@ -74,9 +75,18 @@ public class A2AAgentCardBuilder {
 				.capabilities(org.a2aproject.sdk.spec.AgentCapabilities.builder().streaming(true)
 						.pushNotifications(false).extendedAgentCard(false).extensions(List.of()).build())
 				.defaultInputModes(TEXT_MODES).defaultOutputModes(TEXT_MODES).skills(skills)
-				// The A2A AgentCard builder requires every collection field to be non-null.
-				.securitySchemes(Map.of()).securityRequirements(List.of()).supportedInterfaces(List.of())
-				.signatures(List.of()).additionalInterfaces(List.of()).build();
+				// Advertise that callers must present a Bearer token; the platform security
+				// chain (self-issued JWT / API key, or OAuth2 resource server) validates it,
+				// and the exported network runs impersonating the resolved caller. Both modes
+				// present a bearer token, so a single HTTP bearer scheme is accurate.
+				.securitySchemes(Map.of(BEARER_SCHEME, org.a2aproject.sdk.spec.HTTPAuthSecurityScheme.builder()
+						.scheme("bearer").bearerFormat("JWT")
+						.description("Bearer token validated by the platform security chain "
+								+ "(self-issued JWT / API key, or OAuth2 resource server)")
+						.build()))
+				.securityRequirements(List.of(new org.a2aproject.sdk.spec.SecurityRequirement(
+						Map.of(BEARER_SCHEME, List.of()))))
+				.supportedInterfaces(List.of()).signatures(List.of()).additionalInterfaces(List.of()).build();
 	}
 
 	private AgentSkill buildSkill(A2AExportedAgent exported) {

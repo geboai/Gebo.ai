@@ -81,6 +81,21 @@ export class GeboAIA2AClientAdminComponent extends BaseEntityEditingComponent<A2
     public skills: A2ARemoteSkill[] = [];
     public readonly: boolean = false;
 
+    // Auth-mode helpers driving the conditional credential UI.
+    get authModeValue(): string { return this.formGroup.get('authMode')?.value; }
+    /** Modes that use a stored secret (API key / bearer): the secret is required. */
+    get isStaticSecretMode(): boolean {
+        return this.authModeValue === 'API_KEY' || this.authModeValue === 'STATIC_BEARER_TOKEN';
+    }
+    /** Per-user delegation modes: a stored secret is optional (empty ⇒ token exchange). */
+    get isPerUserRelayMode(): boolean {
+        return this.authModeValue === 'OAUTH2_AUTHORIZATION_CODE_PER_USER' || this.authModeValue === 'USER_TOKEN_RELAY';
+    }
+    /** Token exchange always relays the caller's own identity: no secret is used. */
+    get isTokenExchangeMode(): boolean {
+        return this.authModeValue === 'TOKEN_EXCHANGE';
+    }
+
     constructor(
         injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,

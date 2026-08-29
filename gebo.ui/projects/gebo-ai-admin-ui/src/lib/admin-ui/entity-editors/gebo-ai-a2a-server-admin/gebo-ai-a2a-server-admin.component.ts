@@ -40,7 +40,6 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
         dateCreated: new FormControl(),
         exportedRelativeUrl: new FormControl('', Validators.required),
         enabled: new FormControl(false),
-        securitySchemeName: new FormControl(),
         exportedAgents: new FormControl([]),
         accessibleGroups: new FormControl(),
         accessibleUsers: new FormControl(),

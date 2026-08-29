@@ -65,6 +65,14 @@
                                     [disabled]="readonly"></p-toggleswitch>
                             </gebo-ai-field>
                         </div>
+                        <div class="col-12">
+                            <p-message severity="info" styleClass="w-full" gebo-ai-text>
+                                Callers authenticate through this platform's active security (self-issued JWT / API key,
+                                or OAuth2 resource server) — there is no per-server credential here. The exported network
+                                runs impersonating the resolved caller and honours that user's access rights; the served
+                                Agent Card advertises the active scheme.
+                            </p-message>
+                        </div>
                     </div>
                 </p-tabpanel>
 
