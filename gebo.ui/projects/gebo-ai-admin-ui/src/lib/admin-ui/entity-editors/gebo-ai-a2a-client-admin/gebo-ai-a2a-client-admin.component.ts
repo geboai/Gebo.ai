@@ -42,7 +42,7 @@ export class GeboAIA2AClientAdminComponent extends BaseEntityEditingComponent<A2
         dateCreated: new FormControl(),
         baseUrl: new FormControl('', Validators.required),
         agentCardPath: new FormControl('/.well-known/agent-card.json'),
-        rpcEndpoint: new FormControl('/'),
+        rpcEndpoint: new FormControl(''),
         transportType: new FormControl('JSONRPC', Validators.required),
         authMode: new FormControl('NONE', Validators.required),
         secretCode: new FormControl(),

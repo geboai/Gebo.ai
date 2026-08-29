@@ -68,7 +68,8 @@ public class A2AClientConnector {
 	private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(60);
 	private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(20);
 	private static final String DEFAULT_CARD_PATH = "/.well-known/agent-card.json";
-	private static final String DEFAULT_RPC_ENDPOINT = "/";
+	private static final Duration ENDPOINT_CACHE_TTL = Duration.ofMinutes(10);
+	private static final String JSONRPC_TRANSPORT = "JSONRPC";
 
 	/** TTL of the short-lived token minted when relaying the caller's own identity. */
 	private static final Duration USER_TOKEN_EXCHANGE_TTL = Duration.ofMinutes(5);
@@ -79,6 +80,7 @@ public class A2AClientConnector {
 	private final IGSecurityService securityService;
 	private final LocalJwtTokenProvider jwtTokenProvider;
 	private final GeboSecurityConfig securityConfig;
+	private final java.util.Map<String, CachedEndpoint> endpointCache = new java.util.concurrent.ConcurrentHashMap<>();
 
 	private HttpClient newHttpClient() {
 		// Pin HTTP/1.1: A2A servers are plain HTTP(S)/SSE endpoints, and forcing 1.1
@@ -127,7 +129,7 @@ public class A2AClientConnector {
 		MessageSendParams params = buildParams(text, contextId);
 		SendMessageRequest request = new SendMessageRequest(UUID.randomUUID().toString(), params);
 		String requestBody = JsonUtil.toJson(request);
-		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(config.getBaseUrl() + rpcEndpoint(config)))
+		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(resolveRpcEndpointUrl(config)))
 				.timeout(REQUEST_TIMEOUT).header("Content-Type", "application/json").header("Accept", "application/json")
 				.POST(BodyPublishers.ofString(requestBody));
 		applyAuth(builder, authorization);
@@ -157,7 +159,7 @@ public class A2AClientConnector {
 			SendStreamingMessageRequest streamRequest = new SendStreamingMessageRequest(UUID.randomUUID().toString(),
 					params);
 			HttpRequest.Builder builder = HttpRequest.newBuilder()
-					.uri(URI.create(config.getBaseUrl() + rpcEndpoint(config))).timeout(REQUEST_TIMEOUT)
+					.uri(URI.create(resolveRpcEndpointUrl(config))).timeout(REQUEST_TIMEOUT)
 					.header("Content-Type", "application/json").header("Accept", "text/event-stream")
 					.POST(BodyPublishers.ofString(JsonUtil.toJson(streamRequest)));
 			applyAuth(builder, authorization);
@@ -225,8 +227,80 @@ public class A2AClientConnector {
 		}
 	}
 
-	private String rpcEndpoint(A2ARemoteAgentConfig config) {
-		return config.getRpcEndpoint() != null ? config.getRpcEndpoint() : DEFAULT_RPC_ENDPOINT;
+	/**
+	 * Resolves the absolute JSON-RPC endpoint URL for a remote agent. Per the A2A
+	 * standard the endpoint comes from the discovered Agent Card ({@code url} for the
+	 * preferred transport, or a JSON-RPC entry in its interfaces); a non-blank
+	 * {@code rpcEndpoint} on the config overrides this. The card-derived value is
+	 * cached per remote (keyed by base URL) with a short TTL to avoid re-fetching the
+	 * card on every message.
+	 */
+	private String resolveRpcEndpointUrl(A2ARemoteAgentConfig config) throws Exception {
+		String override = config.getRpcEndpoint();
+		if (!isBlank(override)) {
+			return override.startsWith("http") ? override : config.getBaseUrl() + override;
+		}
+		String key = config.getBaseUrl();
+		long now = System.currentTimeMillis();
+		CachedEndpoint cached = endpointCache.get(key);
+		if (cached != null && cached.expiresAt > now) {
+			return cached.url;
+		}
+		AgentCard card = fetchAgentCard(config);
+		String resolved = jsonRpcEndpointFromCard(card, config.getBaseUrl());
+		endpointCache.put(key, new CachedEndpoint(resolved, now + ENDPOINT_CACHE_TTL.toMillis()));
+		return resolved;
+	}
+
+	/**
+	 * Picks the JSON-RPC service endpoint from an Agent Card: the card {@code url} when
+	 * the preferred transport is JSON-RPC (or unspecified), otherwise a JSON-RPC entry
+	 * in the card's supported/additional interfaces, falling back to the card {@code url}
+	 * and finally the base URL.
+	 */
+	String jsonRpcEndpointFromCard(AgentCard card, String baseUrl) {
+		if (card != null) {
+			String preferred = card.preferredTransport();
+			if (!isBlank(card.url()) && (isBlank(preferred) || JSONRPC_TRANSPORT.equalsIgnoreCase(preferred))) {
+				return card.url();
+			}
+			if (card.supportedInterfaces() != null) {
+				for (var iface : card.supportedInterfaces()) {
+					if (iface != null && JSONRPC_TRANSPORT.equalsIgnoreCase(iface.protocolBinding())
+							&& !isBlank(iface.url())) {
+						return iface.url();
+					}
+				}
+			}
+			if (card.additionalInterfaces() != null) {
+				for (var iface : card.additionalInterfaces()) {
+					if (iface != null && JSONRPC_TRANSPORT.equalsIgnoreCase(iface.transport()) && !isBlank(iface.url())) {
+						return iface.url();
+					}
+				}
+			}
+			if (!isBlank(card.url())) {
+				return card.url();
+			}
+		}
+		return baseUrl;
+	}
+
+	/** Drops any cached endpoint for a remote, so the next call re-resolves from the card. */
+	public void invalidateEndpointCache(A2ARemoteAgentConfig config) {
+		if (config != null && config.getBaseUrl() != null) {
+			endpointCache.remove(config.getBaseUrl());
+		}
+	}
+
+	private static final class CachedEndpoint {
+		private final String url;
+		private final long expiresAt;
+
+		private CachedEndpoint(String url, long expiresAt) {
+			this.url = url;
+			this.expiresAt = expiresAt;
+		}
 	}
 
 	/**

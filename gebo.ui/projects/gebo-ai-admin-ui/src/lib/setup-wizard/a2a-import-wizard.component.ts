@@ -63,7 +63,6 @@ export class A2AImportWizardComponent extends BaseWizardSectionComponent {
             transportType: 'JSONRPC',
             authMode: 'NONE',
             agentCardPath: '/.well-known/agent-card.json',
-            rpcEndpoint: '/',
             exportingPrefix: 'a2a-',
             enabled: false,
             accessibleToAll: true,

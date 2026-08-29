@@ -38,8 +38,14 @@ public class A2ARemoteAgentConfig extends GBaseObject implements IAclGrantedReso
 	 */
 	private String agentCardPath = "/.well-known/agent-card.json";
 
-	/** JSON-RPC endpoint path used for {@code message/send} and {@code message/stream}. */
-	private String rpcEndpoint = "/";
+	/**
+	 * Optional override of the JSON-RPC endpoint for {@code message/send} /
+	 * {@code message/stream}. Per the A2A standard the endpoint is normally taken from
+	 * the remote Agent Card ({@code url} / interfaces), so this is left null by default
+	 * and only set to force a specific endpoint (absolute URL, or a path relative to
+	 * {@link #baseUrl}).
+	 */
+	private String rpcEndpoint;
 
 	@NotNull
 	private A2ATransportType transportType = A2ATransportType.JSONRPC;

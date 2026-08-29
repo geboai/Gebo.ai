@@ -66,8 +66,8 @@
                             </gebo-ai-field>
                         </div>
                         <div class="col-6">
-                            <gebo-ai-field id="rpcEndpoint" label="JSON-RPC Endpoint"
-                                help="Relative path of the JSON-RPC endpoint (message/send, message/stream).">
+                            <gebo-ai-field id="rpcEndpoint" label="JSON-RPC Endpoint (override, optional)"
+                                help="Leave empty to use the endpoint from the remote Agent Card (A2A standard). Set only to force a specific endpoint (absolute URL or path relative to Base URL).">
                                 <input pInputText id="rpcEndpoint" formControlName="rpcEndpoint" class="col-12"
                                     gebo-ai-field-element [readonly]="readonly" />
                             </gebo-ai-field>
