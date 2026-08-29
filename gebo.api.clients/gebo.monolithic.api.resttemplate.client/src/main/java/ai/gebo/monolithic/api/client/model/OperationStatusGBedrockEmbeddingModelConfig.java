@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGBedrockEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class OperationStatusGBedrockEmbeddingModelConfig {
   @JsonProperty("result")

@@ -9,8 +9,7 @@ Name | Type | Description | Notes
 **userCreated** | **String** |  |  [optional]
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
-**baseUrl** | **String** |  | 
-**agentCardPath** | **String** |  |  [optional]
+**agentCardUrl** | **String** |  | 
 **rpcEndpoint** | **String** |  |  [optional]
 **transportType** | [**TransportTypeEnum**](#TransportTypeEnum) |  | 
 **authMode** | [**AuthModeEnum**](#AuthModeEnum) |  | 

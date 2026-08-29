@@ -89,8 +89,8 @@ public class A2AExportImportIntegrationTest extends AbstractVendorSetupAndUseTes
 		try {
 			String peerBaseUrl = "http://127.0.0.1:" + mockPeer.getAddress().getPort();
 			A2AClientConfigControllerApi clientAdmin = new A2AClientConfigControllerApi(apiClient);
-			A2ARemoteAgentConfig remote = new A2ARemoteAgentConfig().baseUrl(peerBaseUrl)
-					.agentCardPath("/.well-known/agent-card.json").rpcEndpoint("/")
+			A2ARemoteAgentConfig remote = new A2ARemoteAgentConfig()
+					.agentCardUrl(peerBaseUrl + "/.well-known/agent-card.json")
 					.transportType(A2ARemoteAgentConfig.TransportTypeEnum.JSONRPC)
 					.authMode(A2ARemoteAgentConfig.AuthModeEnum.NONE).exportingPrefix("itest-peer");
 			OperationStatusA2ARemoteAgentConfig discovery = clientAdmin.testAndDiscovery1(remote);

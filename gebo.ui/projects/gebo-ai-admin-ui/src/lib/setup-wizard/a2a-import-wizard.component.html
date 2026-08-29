@@ -15,7 +15,7 @@
         <ng-template #header pTemplate="header">
           <tr>
             <th gebo-ai-text>Prefix</th>
-            <th gebo-ai-text>Base URL</th>
+            <th gebo-ai-text>Agent Card URL</th>
             <th gebo-ai-text>Enabled</th>
             <th></th>
           </tr>
@@ -23,7 +23,7 @@
         <ng-template #body let-item pTemplate="body">
           <tr>
             <td>{{ item.exportingPrefix }}</td>
-            <td>{{ item.baseUrl }}</td>
+            <td>{{ item.agentCardUrl }}</td>
             <td>
               <i class="pi" [class.pi-check]="item.enabled === true" [class.pi-times]="item.enabled !== true"></i>
             </td>

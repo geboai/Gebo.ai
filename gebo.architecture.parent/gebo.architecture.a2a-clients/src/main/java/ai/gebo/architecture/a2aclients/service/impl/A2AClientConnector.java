@@ -67,7 +67,6 @@ public class A2AClientConnector {
 
 	private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(60);
 	private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(20);
-	private static final String DEFAULT_CARD_PATH = "/.well-known/agent-card.json";
 	private static final Duration ENDPOINT_CACHE_TTL = Duration.ofMinutes(10);
 	private static final String JSONRPC_TRANSPORT = "JSONRPC";
 
@@ -100,10 +99,9 @@ public class A2AClientConnector {
 	 * @throws Exception if the card cannot be fetched or parsed
 	 */
 	public AgentCard fetchAgentCard(A2ARemoteAgentConfig config) throws Exception {
-		requireBaseUrl(config);
-		String cardPath = config.getAgentCardPath() != null ? config.getAgentCardPath() : DEFAULT_CARD_PATH;
+		requireAgentCardUrl(config);
 		String authorization = resolveAuthorizationHeader(config);
-		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(config.getBaseUrl() + cardPath))
+		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(config.getAgentCardUrl()))
 				.timeout(REQUEST_TIMEOUT).header("Accept", "application/json").GET();
 		applyAuth(builder, authorization);
 		HttpResponse<String> response = newHttpClient().send(builder.build(), BodyHandlers.ofString());
@@ -124,7 +122,7 @@ public class A2AClientConnector {
 	 * @throws Exception on transport failure or a JSON-RPC error response
 	 */
 	public EventKind sendMessage(A2ARemoteAgentConfig config, String text, String contextId) throws Exception {
-		requireBaseUrl(config);
+		requireAgentCardUrl(config);
 		String authorization = resolveAuthorizationHeader(config);
 		MessageSendParams params = buildParams(text, contextId);
 		SendMessageRequest request = new SendMessageRequest(UUID.randomUUID().toString(), params);
@@ -153,7 +151,7 @@ public class A2AClientConnector {
 	public Flux<StreamingEventKind> streamMessage(A2ARemoteAgentConfig config, String text, String contextId) {
 		final HttpRequest request;
 		try {
-			requireBaseUrl(config);
+			requireAgentCardUrl(config);
 			String authorization = resolveAuthorizationHeader(config);
 			MessageSendParams params = buildParams(text, contextId);
 			SendStreamingMessageRequest streamRequest = new SendStreamingMessageRequest(UUID.randomUUID().toString(),
@@ -238,16 +236,16 @@ public class A2AClientConnector {
 	private String resolveRpcEndpointUrl(A2ARemoteAgentConfig config) throws Exception {
 		String override = config.getRpcEndpoint();
 		if (!isBlank(override)) {
-			return override.startsWith("http") ? override : config.getBaseUrl() + override;
+			return override.startsWith("http") ? override : originOf(config.getAgentCardUrl()) + override;
 		}
-		String key = config.getBaseUrl();
+		String key = config.getAgentCardUrl();
 		long now = System.currentTimeMillis();
 		CachedEndpoint cached = endpointCache.get(key);
 		if (cached != null && cached.expiresAt > now) {
 			return cached.url;
 		}
 		AgentCard card = fetchAgentCard(config);
-		String resolved = jsonRpcEndpointFromCard(card, config.getBaseUrl());
+		String resolved = jsonRpcEndpointFromCard(card, originOf(config.getAgentCardUrl()));
 		endpointCache.put(key, new CachedEndpoint(resolved, now + ENDPOINT_CACHE_TTL.toMillis()));
 		return resolved;
 	}
@@ -258,7 +256,7 @@ public class A2AClientConnector {
 	 * in the card's supported/additional interfaces, falling back to the card {@code url}
 	 * and finally the base URL.
 	 */
-	String jsonRpcEndpointFromCard(AgentCard card, String baseUrl) {
+	String jsonRpcEndpointFromCard(AgentCard card, String fallback) {
 		if (card != null) {
 			String preferred = card.preferredTransport();
 			if (!isBlank(card.url()) && (isBlank(preferred) || JSONRPC_TRANSPORT.equalsIgnoreCase(preferred))) {
@@ -283,13 +281,13 @@ public class A2AClientConnector {
 				return card.url();
 			}
 		}
-		return baseUrl;
+		return fallback;
 	}
 
 	/** Drops any cached endpoint for a remote, so the next call re-resolves from the card. */
 	public void invalidateEndpointCache(A2ARemoteAgentConfig config) {
-		if (config != null && config.getBaseUrl() != null) {
-			endpointCache.remove(config.getBaseUrl());
+		if (config != null && config.getAgentCardUrl() != null) {
+			endpointCache.remove(config.getAgentCardUrl());
 		}
 	}
 
@@ -441,10 +439,31 @@ public class A2AClientConnector {
 		return null;
 	}
 
-	private void requireBaseUrl(A2ARemoteAgentConfig config) {
-		if (isBlank(config.getBaseUrl())) {
-			throw new IllegalArgumentException("baseUrl is required to reach an A2A agent");
+	private void requireAgentCardUrl(A2ARemoteAgentConfig config) {
+		if (isBlank(config.getAgentCardUrl())) {
+			throw new IllegalArgumentException("agentCardUrl is required to reach an A2A agent");
 		}
+	}
+
+	/**
+	 * Derives the origin ({@code scheme://host[:port]}) of a URL, used to resolve a
+	 * relative {@link A2ARemoteAgentConfig#getRpcEndpoint() endpoint override} and as
+	 * the fallback endpoint when the Agent Card advertises none.
+	 */
+	private static String originOf(String url) {
+		try {
+			URI u = URI.create(url);
+			if (u.getScheme() != null && u.getHost() != null) {
+				StringBuilder sb = new StringBuilder(u.getScheme()).append("://").append(u.getHost());
+				if (u.getPort() > -1) {
+					sb.append(':').append(u.getPort());
+				}
+				return sb.toString();
+			}
+		} catch (Exception ignored) {
+			// fall through
+		}
+		return url;
 	}
 
 	private static boolean isBlank(String value) {

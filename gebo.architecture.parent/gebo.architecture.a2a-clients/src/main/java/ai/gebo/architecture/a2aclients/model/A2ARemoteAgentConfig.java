@@ -28,22 +28,21 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class A2ARemoteAgentConfig extends GBaseObject implements IAclGrantedResource, IGObjectWithSecurity {
 
-	/** Base URL of the remote A2A agent, e.g. {@code https://host:port}. */
-	@NotNull
-	private String baseUrl;
-
 	/**
-	 * Relative path of the Agent Card. Defaults to the A2A well-known location when
-	 * left null.
+	 * Full URL of the remote Agent Card, e.g.
+	 * {@code https://host:port/.well-known/agent-card.json}. This is the single A2A
+	 * discovery input: the card is fetched from here, and the JSON-RPC service endpoint
+	 * is taken from the card body ({@code url} / interfaces).
 	 */
-	private String agentCardPath = "/.well-known/agent-card.json";
+	@NotNull
+	private String agentCardUrl;
 
 	/**
 	 * Optional override of the JSON-RPC endpoint for {@code message/send} /
 	 * {@code message/stream}. Per the A2A standard the endpoint is normally taken from
 	 * the remote Agent Card ({@code url} / interfaces), so this is left null by default
-	 * and only set to force a specific endpoint (absolute URL, or a path relative to
-	 * {@link #baseUrl}).
+	 * and only set to force a specific endpoint (absolute URL, or a path relative to the
+	 * Agent Card URL's origin).
 	 */
 	private String rpcEndpoint;
 

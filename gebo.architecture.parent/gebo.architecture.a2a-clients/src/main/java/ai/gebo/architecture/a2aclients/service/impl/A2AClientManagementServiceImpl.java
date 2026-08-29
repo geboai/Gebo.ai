@@ -248,8 +248,8 @@ public class A2AClientManagementServiceImpl implements A2AClientManagementServic
 			messages.add(GUserMessage.errorMessage("Missing config", "No A2A agent configuration was provided"));
 			return;
 		}
-		if (isBlank(config.getBaseUrl())) {
-			messages.add(GUserMessage.errorMessage("Missing baseUrl", "baseUrl is required to reach an A2A agent"));
+		if (isBlank(config.getAgentCardUrl())) {
+			messages.add(GUserMessage.errorMessage("Missing agentCardUrl", "agentCardUrl is required to reach an A2A agent"));
 		}
 		if (isBlank(config.getExportingPrefix())) {
 			messages.add(GUserMessage.errorMessage("Missing exportingPrefix",

@@ -52,17 +52,11 @@
                         </div>
 
                         <div class="col-12">
-                            <gebo-ai-field id="baseUrl" label="Base URL"
-                                help="Base address of the remote A2A agent, e.g. https://host:port." [required]="true">
-                                <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true" class="col-12"
-                                    gebo-ai-field-element [readonly]="readonly" />
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="agentCardPath" label="Agent Card Path"
-                                help="Relative path of the Agent Card (well-known location by default).">
-                                <input pInputText id="agentCardPath" formControlName="agentCardPath" class="col-12"
-                                    gebo-ai-field-element [readonly]="readonly" />
+                            <gebo-ai-field id="agentCardUrl" label="Agent Card URL"
+                                help="Full URL of the remote Agent Card, e.g. https://host:port/.well-known/agent-card.json. The card is fetched here and the JSON-RPC endpoint is taken from it."
+                                [required]="true">
+                                <input pInputText id="agentCardUrl" formControlName="agentCardUrl" [required]="true"
+                                    class="col-12" gebo-ai-field-element [readonly]="readonly" />
                             </gebo-ai-field>
                         </div>
                         <div class="col-6">

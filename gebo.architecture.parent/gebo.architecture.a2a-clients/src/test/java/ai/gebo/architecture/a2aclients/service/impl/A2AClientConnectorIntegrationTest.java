@@ -125,9 +125,9 @@ class A2AClientConnectorIntegrationTest {
 
 	private A2ARemoteAgentConfig config() {
 		A2ARemoteAgentConfig config = new A2ARemoteAgentConfig();
-		config.setBaseUrl(baseUrl);
-		config.setAgentCardPath("/.well-known/agent-card.json");
-		config.setRpcEndpoint("/");
+		config.setAgentCardUrl(baseUrl + "/.well-known/agent-card.json");
+		// No rpcEndpoint override: exercise card-derived endpoint resolution. The card's
+		// url is baseUrl, which the mock serves the JSON-RPC handler at ("/").
 		config.setAuthMode(A2AAuthMode.NONE);
 		config.setExportingPrefix("mock");
 		return config;

@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -35,14 +35,14 @@ public class DocumentReferenceView {
   @JsonProperty("contentType")
   private String contentType = null;
 
+  @JsonProperty("messagingModuleId")
+  private String messagingModuleId = null;
+
   @JsonProperty("description")
   private String description = null;
 
   @JsonProperty("code")
   private String code = null;
-
-  @JsonProperty("messagingModuleId")
-  private String messagingModuleId = null;
 
   @JsonProperty("deleted")
   private Boolean deleted = null;
@@ -119,6 +119,24 @@ public class DocumentReferenceView {
     this.contentType = contentType;
   }
 
+  public DocumentReferenceView messagingModuleId(String messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
+    return this;
+  }
+
+   /**
+   * Get messagingModuleId
+   * @return messagingModuleId
+  **/
+  @Schema(description = "")
+  public String getMessagingModuleId() {
+    return messagingModuleId;
+  }
+
+  public void setMessagingModuleId(String messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
+  }
+
   public DocumentReferenceView description(String description) {
     this.description = description;
     return this;
@@ -153,24 +171,6 @@ public class DocumentReferenceView {
 
   public void setCode(String code) {
     this.code = code;
-  }
-
-  public DocumentReferenceView messagingModuleId(String messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
-    return this;
-  }
-
-   /**
-   * Get messagingModuleId
-   * @return messagingModuleId
-  **/
-  @Schema(description = "")
-  public String getMessagingModuleId() {
-    return messagingModuleId;
-  }
-
-  public void setMessagingModuleId(String messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
   }
 
   public DocumentReferenceView deleted(Boolean deleted) {
@@ -312,9 +312,9 @@ public class DocumentReferenceView {
     return Objects.equals(this.name, documentReferenceView.name) &&
         Objects.equals(this.extension, documentReferenceView.extension) &&
         Objects.equals(this.contentType, documentReferenceView.contentType) &&
+        Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.description, documentReferenceView.description) &&
         Objects.equals(this.code, documentReferenceView.code) &&
-        Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.deleted, documentReferenceView.deleted) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
@@ -326,7 +326,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, contentType, description, code, messagingModuleId, deleted, rootKnowledgebaseCode, parentProjectCode, modificationDate, relativePath, parentVirtualFolderCode, creationDate);
+    return Objects.hash(name, extension, contentType, messagingModuleId, description, code, deleted, rootKnowledgebaseCode, parentProjectCode, modificationDate, relativePath, parentVirtualFolderCode, creationDate);
   }
 
 
@@ -338,9 +338,9 @@ public class DocumentReferenceView {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
+    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");

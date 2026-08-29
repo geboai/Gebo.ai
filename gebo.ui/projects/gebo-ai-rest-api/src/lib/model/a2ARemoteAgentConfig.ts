@@ -18,8 +18,7 @@ export interface A2ARemoteAgentConfig {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    baseUrl: string;
-    agentCardPath?: string;
+    agentCardUrl: string;
     rpcEndpoint?: string;
     transportType: A2ARemoteAgentConfig.TransportTypeEnum;
     authMode: A2ARemoteAgentConfig.AuthModeEnum;

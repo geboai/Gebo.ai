@@ -26,7 +26,7 @@ import java.util.List;
  * A2ARemoteAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-28T21:59:13.835580477+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class A2ARemoteAgentConfig {
   @JsonProperty("code")
@@ -47,11 +47,8 @@ public class A2ARemoteAgentConfig {
   @JsonProperty("dateCreated")
   private Date dateCreated = null;
 
-  @JsonProperty("baseUrl")
-  private String baseUrl = null;
-
-  @JsonProperty("agentCardPath")
-  private String agentCardPath = null;
+  @JsonProperty("agentCardUrl")
+  private String agentCardUrl = null;
 
   @JsonProperty("rpcEndpoint")
   private String rpcEndpoint = null;
@@ -265,40 +262,22 @@ public class A2ARemoteAgentConfig {
     this.dateCreated = dateCreated;
   }
 
-  public A2ARemoteAgentConfig baseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
+  public A2ARemoteAgentConfig agentCardUrl(String agentCardUrl) {
+    this.agentCardUrl = agentCardUrl;
     return this;
   }
 
    /**
-   * Get baseUrl
-   * @return baseUrl
+   * Get agentCardUrl
+   * @return agentCardUrl
   **/
   @Schema(required = true, description = "")
-  public String getBaseUrl() {
-    return baseUrl;
+  public String getAgentCardUrl() {
+    return agentCardUrl;
   }
 
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
-  }
-
-  public A2ARemoteAgentConfig agentCardPath(String agentCardPath) {
-    this.agentCardPath = agentCardPath;
-    return this;
-  }
-
-   /**
-   * Get agentCardPath
-   * @return agentCardPath
-  **/
-  @Schema(description = "")
-  public String getAgentCardPath() {
-    return agentCardPath;
-  }
-
-  public void setAgentCardPath(String agentCardPath) {
-    this.agentCardPath = agentCardPath;
+  public void setAgentCardUrl(String agentCardUrl) {
+    this.agentCardUrl = agentCardUrl;
   }
 
   public A2ARemoteAgentConfig rpcEndpoint(String rpcEndpoint) {
@@ -565,8 +544,7 @@ public class A2ARemoteAgentConfig {
         Objects.equals(this.userCreated, a2ARemoteAgentConfig.userCreated) &&
         Objects.equals(this.dateModified, a2ARemoteAgentConfig.dateModified) &&
         Objects.equals(this.dateCreated, a2ARemoteAgentConfig.dateCreated) &&
-        Objects.equals(this.baseUrl, a2ARemoteAgentConfig.baseUrl) &&
-        Objects.equals(this.agentCardPath, a2ARemoteAgentConfig.agentCardPath) &&
+        Objects.equals(this.agentCardUrl, a2ARemoteAgentConfig.agentCardUrl) &&
         Objects.equals(this.rpcEndpoint, a2ARemoteAgentConfig.rpcEndpoint) &&
         Objects.equals(this.transportType, a2ARemoteAgentConfig.transportType) &&
         Objects.equals(this.authMode, a2ARemoteAgentConfig.authMode) &&
@@ -583,7 +561,7 @@ public class A2ARemoteAgentConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, baseUrl, agentCardPath, rpcEndpoint, transportType, authMode, secretCode, oauth2AuthenticatorCode, exportingPrefix, enabled, skills, accessibleGroups, accessibleUsers, accessibleToAll, aclAliases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentCardUrl, rpcEndpoint, transportType, authMode, secretCode, oauth2AuthenticatorCode, exportingPrefix, enabled, skills, accessibleGroups, accessibleUsers, accessibleToAll, aclAliases);
   }
 
 
@@ -598,8 +576,7 @@ public class A2ARemoteAgentConfig {
     sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
-    sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
-    sb.append("    agentCardPath: ").append(toIndentedString(agentCardPath)).append("\n");
+    sb.append("    agentCardUrl: ").append(toIndentedString(agentCardUrl)).append("\n");
     sb.append("    rpcEndpoint: ").append(toIndentedString(rpcEndpoint)).append("\n");
     sb.append("    transportType: ").append(toIndentedString(transportType)).append("\n");
     sb.append("    authMode: ").append(toIndentedString(authMode)).append("\n");

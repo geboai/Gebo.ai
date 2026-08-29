@@ -59,10 +59,9 @@ export class A2AImportWizardComponent extends BaseWizardSectionComponent {
 
     protected addConfig(): void {
         const config: A2ARemoteAgentConfig = {
-            baseUrl: '',
+            agentCardUrl: '',
             transportType: 'JSONRPC',
             authMode: 'NONE',
-            agentCardPath: '/.well-known/agent-card.json',
             exportingPrefix: 'a2a-',
             enabled: false,
             accessibleToAll: true,
