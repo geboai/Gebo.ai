@@ -93,7 +93,7 @@ class A2AClientConnectorIntegrationTest {
 
 	@Test
 	void fetchesAndParsesTheAgentCard() throws Exception {
-		A2AClientConnector connector = new A2AClientConnector(null, null, null, null, null);
+		A2AClientConnector connector = new A2AClientConnector(null, null, null, null, null, null);
 		AgentCard card = connector.fetchAgentCard(config());
 
 		assertNotNull(card);
@@ -106,7 +106,7 @@ class A2AClientConnectorIntegrationTest {
 
 	@Test
 	void sendsMessageAndParsesTheReply() throws Exception {
-		A2AClientConnector connector = new A2AClientConnector(null, null, null, null, null);
+		A2AClientConnector connector = new A2AClientConnector(null, null, null, null, null, null);
 		EventKind result = connector.sendMessage(config(), "ping", null);
 
 		// The reply is an agent Message carrying the mock's text.

@@ -18,9 +18,11 @@ package ai.gebo.architecture.a2aclients.model;
  * </ul>
  * For the OAuth2/user-relay modes a stored authorized-client token is used when a
  * {@code secretCode} is configured; when {@code secretCode} is left null the connector
- * falls back to <b>token exchange</b> &mdash; minting a fresh short-lived platform JWT
- * for the currently authenticated user. {@link #TOKEN_EXCHANGE} always relays the
- * caller's live identity this way.
+ * falls back to <b>token exchange</b>, and {@link #TOKEN_EXCHANGE} always does. Token
+ * exchange follows the platform's active auth mode: in <b>OAuth2 resource-server</b>
+ * mode the actual inbound OAuth2 bearer is relayed as-is (the platform is not the
+ * issuer); in <b>self-issued JWT / API-key</b> mode a fresh short-lived JWT is minted
+ * for the current user. Either way the remote sees the caller's actual identity.
  */
 public enum A2AAuthMode {
 	NONE, API_KEY, STATIC_BEARER_TOKEN, OAUTH2_CLIENT_CREDENTIALS, OAUTH2_AUTHORIZATION_CODE_PER_USER, USER_TOKEN_RELAY,

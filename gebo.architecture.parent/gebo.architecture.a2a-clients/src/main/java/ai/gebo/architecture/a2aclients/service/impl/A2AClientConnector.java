@@ -27,6 +27,10 @@ import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.impl.LocalJwtTokenProvider;
+import ai.gebo.security.config.GeboSecurityConfig;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.AbstractOAuth2TokenAuthenticationToken;
 import ai.gebo.security.model.UserInfos;
 import lombok.AllArgsConstructor;
 import org.a2aproject.sdk.jsonrpc.common.json.JsonUtil;
@@ -74,6 +78,7 @@ public class A2AClientConnector {
 	private final IGOauth2RuntimeConfigurationDao oauth2ConfigDao;
 	private final IGSecurityService securityService;
 	private final LocalJwtTokenProvider jwtTokenProvider;
+	private final GeboSecurityConfig securityConfig;
 
 	private HttpClient newHttpClient() {
 		// Pin HTTP/1.1: A2A servers are plain HTTP(S)/SSE endpoints, and forcing 1.1
@@ -313,15 +318,29 @@ public class A2AClientConnector {
 	}
 
 	/**
-	 * Token exchange: mints a fresh short-lived platform JWT for the currently
-	 * authenticated user, so the remote A2A agent receives the caller's own identity
-	 * rather than a service credential. Used by the per-user auth modes when no stored
-	 * secret is configured, and always by {@link A2AAuthMode#TOKEN_EXCHANGE}. The
-	 * network runs under the invoking user's {@code runAs}, so the current security
-	 * context here is that user; a Gebo A2A server validates the minted token through
-	 * the same JWT chain and runs the exported network impersonating that same user.
+	 * Token exchange: relays the caller's own identity to the remote A2A agent instead
+	 * of a service credential. The mechanism follows the platform's active auth mode:
+	 * <ul>
+	 * <li><b>OAuth2 resource-server mode</b> ({@code ai.gebo.security.oauth2ResourceServerEnabled}):
+	 * the platform is not the token issuer, so the actual inbound OAuth2 bearer token
+	 * (the one the user authenticated with) is relayed as-is.</li>
+	 * <li><b>Self-issued JWT / API-key mode</b>: the platform is the issuer, so a fresh
+	 * short-lived JWT is minted for the current user via {@link LocalJwtTokenProvider}
+	 * (the same primitive the API-key mechanism uses).</li>
+	 * </ul>
+	 * The network runs under the invoking user's {@code runAs}, so the current security
+	 * context here is that user; a Gebo A2A server validates the token through the same
+	 * chain and runs the exported network impersonating that same user.
 	 */
 	private String exchangeCurrentUserToken() {
+		if (isOauth2ResourceServerMode()) {
+			String relayed = currentResourceServerToken();
+			if (isBlank(relayed)) {
+				throw new IllegalStateException(
+						"OAuth2 resource-server mode: no bearer token in the current context to relay to the remote A2A agent");
+			}
+			return relayed;
+		}
 		UserInfos user = securityService.getCurrentUser();
 		if (user == null || isBlank(user.getUsername())) {
 			throw new IllegalStateException(
@@ -329,6 +348,23 @@ public class A2AClientConnector {
 		}
 		Date expiration = new Date(System.currentTimeMillis() + USER_TOKEN_EXCHANGE_TTL.toMillis());
 		return jwtTokenProvider.createToken(user.getUsername(), expiration);
+	}
+
+	private boolean isOauth2ResourceServerMode() {
+		return securityConfig != null && Boolean.TRUE.equals(securityConfig.getOauth2ResourceServerEnabled());
+	}
+
+	/**
+	 * Extracts the raw inbound OAuth2 token value from the current authentication.
+	 * Covers both JWT and opaque-token resource-server authentications (both extend
+	 * {@code AbstractOAuth2TokenAuthenticationToken}).
+	 */
+	private String currentResourceServerToken() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth instanceof AbstractOAuth2TokenAuthenticationToken<?> tokenAuth && tokenAuth.getToken() != null) {
+			return tokenAuth.getToken().getTokenValue();
+		}
+		return null;
 	}
 
 	private void requireBaseUrl(A2ARemoteAgentConfig config) {
