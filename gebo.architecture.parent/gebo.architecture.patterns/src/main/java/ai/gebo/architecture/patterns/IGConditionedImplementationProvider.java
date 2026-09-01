@@ -6,7 +6,7 @@ public interface IGConditionedImplementationProvider<ParamType, Handler extends 
 		Handler handler = findImplementation(x -> x.isHandlerFor(param));
 		if (handler == null)
 			return defaultHandler();
-		return null;
+		return handler;
 
 	}
 
