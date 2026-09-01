@@ -19,6 +19,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
@@ -31,6 +32,7 @@ import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
+import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
@@ -270,5 +272,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	public Page<UserInfos> findUserByQbe(EditableUser qbe, Pageable pageable) {
 		return this.userRepo.findByQbe(qbe, pageable);
 	}
+
+	
 
 }

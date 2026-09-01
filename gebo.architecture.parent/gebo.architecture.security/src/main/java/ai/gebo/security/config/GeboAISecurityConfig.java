@@ -46,6 +46,7 @@ import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.IGOauth2UserSyncServiceConditionedImplementationProvider;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
 import ai.gebo.security.services.RequestAuditFilter;
@@ -193,6 +194,7 @@ public class GeboAISecurityConfig {
 	private final UserDetailsService directoryBackedUserDetailsService;
 	private final AuthenticationSuccessHandler authenticationSuccessHandler;
 	private final AuthenticationFailureHandler authenticationFailureHandler;
+	private final IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -210,7 +212,9 @@ public class GeboAISecurityConfig {
 			@Qualifier("customUserDetailsService") UserDetailsService userDetailsService,
 			DirectoryBackedUserDetailsService directoryBackedUserDetailsService,
 			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
-			IGSecurityAuditLoggerService securityAuditLoggerService) {
+			IGSecurityAuditLoggerService securityAuditLoggerService,
+			IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider) {
+		this.oauth2UserSyncProvider = oauth2UserSyncProvider;
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		this.directoryBackedUserDetailsService = directoryBackedUserDetailsService;
@@ -227,9 +231,9 @@ public class GeboAISecurityConfig {
 		this.reactiveOAuth2AuthorizedClientService = new GReactiveOauth2AuthorizedClientService(
 				reactiveClientRegistrationRepository, secretsService);
 		this.oauth2UserService = new GOAuth2UserService(oauth2ConfigurationService, userAdminService,
-				securityProperties);
+				securityProperties, oauth2UserSyncProvider);
 		this.reactiveOAuth2UserService = new ReactiveGOAuth2UserService(oauth2ConfigurationService, userAdminService,
-				securityProperties);
+				securityProperties, oauth2UserSyncProvider);
 		this.passwordEncoder = passwordEncoder;
 
 		this.oAuth2AuthorizationRequestResolver = new GOauth2CustomAuthorizationRequestResolver(dynamicClient);
@@ -237,8 +241,8 @@ public class GeboAISecurityConfig {
 		this.tokenProvider = tokenProvider;
 		this.point = point;
 		this.cryptService = cryptService;
-		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler(
-				backendOauth2LoginSPASupportService, securityAuditLoggerService);
+		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler(backendOauth2LoginSPASupportService,
+				securityAuditLoggerService);
 		this.authenticationFailureHandler = new GOAuth2AuthenticationFailureHandler(securityAuditLoggerService);
 
 	}
@@ -358,21 +362,21 @@ public class GeboAISecurityConfig {
 							.anyRequest().authenticated();
 				});
 		if (oauth2LoginEnabled) {
-			configBuilder = configBuilder.oauth2Login(oauth2 -> oauth2
-					.clientRegistrationRepository(clientRegistrationRepository)
-					.authorizedClientService(oauth2AuthorizedClientService).successHandler(authenticationSuccessHandler)
-					.failureHandler(authenticationFailureHandler)
-					.authorizationEndpoint(
-							auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
-					.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
-			// Optional: use a custom success handler to issue JWT
-			);
+			configBuilder = configBuilder
+					.oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(clientRegistrationRepository)
+							.authorizedClientService(oauth2AuthorizedClientService)
+							.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler)
+							.authorizationEndpoint(
+									auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
+							.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
+					// Optional: use a custom success handler to issue JWT
+					);
 		}
 		if (oauth2ResourceServerEnabled) {
 			configBuilder = configBuilder.oauth2ResourceServer(
 					oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
 		}
-		//request audit for security logging
+		// request audit for security logging
 		configBuilder.addFilterAfter(requestAuditFilter, AnonymousAuthenticationFilter.class);
 		return configBuilder.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
