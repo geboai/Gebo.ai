@@ -19,6 +19,10 @@ public class SingleOauth2ConfigJwtAuthenticationManager implements Authenticatio
 	final Oauth2RuntimeConfiguration oauth2Configuration;
 	final Converter<Jwt, AbstractAuthenticationToken> converter;
 	final JwtDecoderCache decoderCache;
+	// Nullable: when set, decoded tokens auto-provision/sync the user (policy-gated)
+	// before the principal is loaded, so a trusted identity is never rejected for
+	// merely not existing locally yet.
+	final GOauth2ResourceServerUserProvisioner provisioner;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -27,8 +31,20 @@ public class SingleOauth2ConfigJwtAuthenticationManager implements Authenticatio
 		// JWKS download on every request.
 		JwtDecoder jwtDecoder = decoderCache.forIssuerLocation(issuerUri);
 		JwtAuthenticationProvider jwtProvider = new JwtAuthenticationProvider(jwtDecoder);
-		jwtProvider.setJwtAuthenticationConverter(converter);
+		jwtProvider.setJwtAuthenticationConverter(wrapWithProvisioning(converter));
 		return jwtProvider.authenticate(authentication);
+	}
+
+	private Converter<Jwt, AbstractAuthenticationToken> wrapWithProvisioning(
+			Converter<Jwt, AbstractAuthenticationToken> delegate) {
+		if (provisioner == null)
+			return delegate;
+		// The provider has already validated the JWT by the time it invokes the
+		// converter, so provisioning here runs only on an authentic token.
+		return jwt -> {
+			provisioner.provisionIfNeeded(oauth2Configuration, jwt.getTokenValue(), jwt.getClaims());
+			return delegate.convert(jwt);
+		};
 	}
 
 }

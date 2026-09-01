@@ -16,6 +16,9 @@ public class SingleOauth2ConfigOpaqueTokenAuthenticationManager implements Authe
 	final SecurityHeaderData header;
 	final Oauth2RuntimeConfiguration oauth2Configuration;
 	final OpaqueTokenAuthenticationConverter converter;
+	// Nullable: when set, introspected tokens auto-provision/sync the user
+	// (policy-gated) before the principal is loaded.
+	final GOauth2ResourceServerUserProvisioner provisioner;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -26,9 +29,20 @@ public class SingleOauth2ConfigOpaqueTokenAuthenticationManager implements Authe
 		OpaqueTokenAuthenticationProvider opaqueProvider = new OpaqueTokenAuthenticationProvider(
 				opaqueTokenIntrospector);
 
-		opaqueProvider.setAuthenticationConverter(converter);
+		opaqueProvider.setAuthenticationConverter(wrapWithProvisioning(converter));
 		return opaqueProvider.authenticate(authentication);
 
+	}
+
+	private OpaqueTokenAuthenticationConverter wrapWithProvisioning(OpaqueTokenAuthenticationConverter delegate) {
+		if (provisioner == null)
+			return delegate;
+		// The provider has already introspected/validated the token before invoking the
+		// converter, so provisioning here runs only on an authentic token.
+		return (introspectedToken, principal) -> {
+			provisioner.provisionIfNeeded(oauth2Configuration, introspectedToken, principal.getAttributes());
+			return delegate.convert(introspectedToken, principal);
+		};
 	}
 
 }

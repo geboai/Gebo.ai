@@ -62,6 +62,8 @@ import ai.gebo.security.services.impl.GPasswordEncoder;
 import ai.gebo.security.services.impl.GReactiveOauth2AuthorizedClientService;
 import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import ai.gebo.security.services.impl.ReactiveGOAuth2UserService;
+import ai.gebo.security.services.impl.authmanagers.GOauth2ResourceServerUserProvisioner;
+import ai.gebo.security.services.impl.authmanagers.Oauth2ResourceServerSyncTokenCache;
 
 /**
  * Configuration class for setting up security in the Gebo AI application. It
@@ -385,8 +387,17 @@ public class GeboAISecurityConfig {
 
 	@Bean
 	public IGHttpRequestAuthenticationManagerResolver authenticationManagerResolver() {
+		// On the resource-server path GOAuth2UserService never runs, so under
+		// TRUST_EVERY_OAUTH_IDENTITY an accepted bearer token must provision/sync its
+		// user here (seeding ACL aliases via IGUsersAdminService), throttled by a TTL
+		// cache so the sync runs at most once per token per window.
+		Oauth2ResourceServerSyncTokenCache resourceServerSyncTokenCache = new Oauth2ResourceServerSyncTokenCache(
+				securityConfig.getOauth2ResourceServerSyncCacheTtlSeconds());
+		GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner = new GOauth2ResourceServerUserProvisioner(
+				oauth2UserSyncProvider, userAdminService, securityConfig, resourceServerSyncTokenCache);
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
-				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService);
+				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService,
+				resourceServerUserProvisioner);
 	}
 
 }
