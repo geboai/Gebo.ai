@@ -21,9 +21,12 @@ import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.cluster.cache.GeboTtlCache;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.security.client.RestSecurityDirectory;
+import ai.gebo.microservices.security.client.RestUsersAdminService;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfiguration;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.IGUsersAdminService;
 
 /**
  * Wires the remote security directory.
@@ -86,5 +89,21 @@ public class GeboSecurityMicroserviceClientAutoConfiguration {
 		return new RestSecurityDirectory(geboSecurityClientWebClient, urlResolver, tokenPropagator,
 				properties.getMicroserviceId(), properties.getBasePath(),
 				new GeboTtlCache(properties.getCacheTtl(), properties.getCacheMaxEntries()));
+	}
+
+	/**
+	 * Same mechanism as {@link #restSecurityDirectory}: a service that packages this
+	 * module (does not own the user store) gets the remote, topology-aware
+	 * {@link IGUsersAdminService}; a service that packages {@code
+	 * gebo.security.directory.mongo} instead gets its local, Mongo-backed one and this
+	 * bean backs off.
+	 */
+	@Bean
+	@ConditionalOnMissingBean(IGUsersAdminService.class)
+	public IGUsersAdminService restUsersAdminService(@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient,
+			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
+			GeboSecurityClientProperties properties, IGSecurityAuditLoggerService securityAuditLoggerService) {
+		return new RestUsersAdminService(geboSecurityClientWebClient, urlResolver, tokenPropagator,
+				properties.getMicroserviceId(), properties.getBasePath(), securityAuditLoggerService);
 	}
 }

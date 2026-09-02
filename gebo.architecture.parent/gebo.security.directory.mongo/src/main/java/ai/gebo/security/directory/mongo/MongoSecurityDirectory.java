@@ -10,10 +10,13 @@
 package ai.gebo.security.directory.mongo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
@@ -21,6 +24,7 @@ import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.IGeboSystemUserService;
 import lombok.AllArgsConstructor;
 
@@ -55,6 +59,13 @@ public class MongoSecurityDirectory implements IGSecurityDirectory {
 	private final UsersGroupRepository groupsRepo;
 	private final PasswordEncoder passwordEncoder;
 	private final IGeboSystemUserService systemUserService;
+	// ObjectProvider, not a direct IGUsersAdminService dependency: GUsersAdminServiceImpl
+	// depends (transitively, through AclGrantedAccessorServiceImpl) on IGSecurityDirectory
+	// itself, so injecting it directly here is a circular bean reference that fails
+	// context startup. ObjectProvider defers the actual lookup to first use (inside
+	// createUserIfNotExists, well after the context has finished refreshing), which
+	// breaks the cycle without changing what gets called or when.
+	private final ObjectProvider<IGUsersAdminService> userAdminService;
 
 	@Override
 	public UserInfos findUserByUsername(String username) {
@@ -90,5 +101,16 @@ public class MongoSecurityDirectory implements IGSecurityDirectory {
 			return false;
 		}
 		return passwordEncoder.matches(rawPassword, user.get().getPassword());
+	}
+
+	@Override
+	public UserInfos createUserIfNotExists(String username, Map<String, Object> attributes,
+			AuthProvider authProvider) {
+		// createUserIfNotExists() is idempotent and already the single chokepoint for
+		// user creation (see GUsersAdminServiceImpl) - reused as-is rather than
+		// duplicating the system-identity guard / role defaulting / ACL grant setup it
+		// already does.
+		userAdminService.getObject().createUserIfNotExists(username, attributes, authProvider);
+		return findUserByUsername(username);
 	}
 }

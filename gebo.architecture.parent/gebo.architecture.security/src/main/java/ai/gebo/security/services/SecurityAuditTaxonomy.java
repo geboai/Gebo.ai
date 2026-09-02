@@ -104,6 +104,14 @@ public class SecurityAuditTaxonomy {
 		public static final String GROUP_INSERT = "groupInsert";
 		public static final String GROUP_UPDATE = "groupUpdate";
 		public static final String GROUP_DELETE = "groupDelete";
+
+		// OAuth2/resource-server user auto-provisioning and sync (distinct from
+		// USER_INSERT/USER_UPDATE, which are admin-UI-initiated): fires wherever an
+		// unknown validated identity is auto-created or an existing one is synced,
+		// whether decided locally (heimdall/monolith) or requested by a peer
+		// microservice over the security cluster REST surface.
+		public static final String USER_AUTO_PROVISION = "userAutoProvision";
+		public static final String USER_SYNC = "userSync";
 	}
 
 	public static class Outcome {

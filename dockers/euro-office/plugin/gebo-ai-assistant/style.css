@@ -1,0 +1,183 @@
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  padding: 10px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+h1 {
+  font-size: 15px;
+  margin: 0 0 4px 0;
+}
+.profile-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.profile-row select {
+  flex: 1;
+  padding: 4px;
+}
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+.tab {
+  padding: 6px 10px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: #666;
+}
+.tab.active {
+  color: #FF6F3D;
+  border-bottom-color: #FF6F3D;
+  font-weight: 600;
+}
+.panel { display: none; flex-direction: column; gap: 8px; }
+.panel.active { display: flex; }
+textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  resize: vertical;
+}
+button {
+  background: #FF6F3D;
+  color: white;
+  border: none;
+  padding: 7px 12px;
+  font-size: 13px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+button:hover { background: #E55A2B; }
+button.secondary {
+  background: #eee;
+  color: #333;
+}
+button.secondary:hover { background: #ddd; }
+.row { display: flex; gap: 6px; }
+.muted { color: #999; font-style: italic; }
+.status {
+  min-height: 16px;
+  font-size: 12px;
+  color: #666;
+}
+.status.error { color: #c0392b; }
+.llms-warning {
+  background: #fff8e1;
+  border: 1px solid #ffca28;
+  color: #7a5b00;
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+body.busy { cursor: progress; }
+body.busy button { opacity: 0.6; pointer-events: none; }
+
+#searchResults { display: flex; flex-direction: column; gap: 6px; }
+.result-row { border: 1px solid #eee; border-radius: 3px; padding: 6px; }
+.result-title { font-weight: 600; }
+.result-meta { color: #888; font-size: 11px; }
+
+#elaborateResult {
+  display: none;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#elaborateResult.visible { display: block; }
+
+#kbMessages {
+  flex: 1;
+  min-height: 200px;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.message-role { font-size: 11px; color: #888; font-weight: 600; }
+.message.user .message-body { color: #333; }
+.message.assistant .message-body { color: #444; }
+.kb-input-row { display: flex; gap: 6px; }
+.kb-input-row textarea { flex: 1; height: 40px; }
+
+/* Rendered Markdown from a model response (renderMarkdown() in app.js) - applied to
+   #elaborateResult and to assistant message bodies. Overrides the plain-text
+   white-space:pre-wrap those containers otherwise use, since real block elements
+   (p/ul/li/...) already handle their own layout. */
+.md-content {
+  white-space: normal;
+  line-height: 1.45;
+}
+.md-content > *:first-child { margin-top: 0; }
+.md-content > *:last-child { margin-bottom: 0; }
+.md-content p { margin: 0 0 8px 0; }
+.md-content h1, .md-content h2, .md-content h3,
+.md-content h4, .md-content h5, .md-content h6 {
+  margin: 12px 0 6px 0;
+  line-height: 1.25;
+  font-weight: 600;
+}
+.md-content h1 { font-size: 16px; }
+.md-content h2 { font-size: 15px; }
+.md-content h3 { font-size: 14px; }
+.md-content h4, .md-content h5, .md-content h6 { font-size: 13px; }
+.md-content strong { font-weight: 600; }
+.md-content em { font-style: italic; }
+.md-content ul, .md-content ol { margin: 0 0 8px 0; padding-left: 20px; }
+.md-content li { margin: 2px 0; }
+.md-content li > ul, .md-content li > ol { margin: 2px 0 2px 0; }
+.md-content blockquote {
+  margin: 0 0 8px 0;
+  padding: 2px 10px;
+  border-left: 3px solid #FF6F3D;
+  color: #666;
+}
+.md-content blockquote p:last-child { margin-bottom: 0; }
+.md-content code {
+  background: #f3f3f3;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 12px;
+}
+.md-content pre {
+  background: #f3f3f3;
+  padding: 8px;
+  border-radius: 3px;
+  overflow-x: auto;
+  margin: 0 0 8px 0;
+}
+.md-content pre code { background: none; padding: 0; }
+.md-content a { color: #FF6F3D; text-decoration: underline; }
+.md-content a:hover { color: #E55A2B; }
+.md-content hr { border: none; border-top: 1px solid #ddd; margin: 10px 0; }
+.md-content img { max-width: 100%; }
+.md-content table { border-collapse: collapse; width: 100%; margin: 0 0 8px 0; font-size: 12px; }
+.md-content th, .md-content td { border: 1px solid #ddd; padding: 4px 6px; text-align: left; }
+.md-content th { background: #f8f8f8; font-weight: 600; }
+
+/* EU AI Act (Reg. 2024/1689) Art. 50 transparency notice */
+.ai-act-disclaimer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #888;
+  text-align: center;
+}

@@ -1,0 +1,39 @@
+{
+  "realm": "euro-office-dev",
+  "enabled": true,
+  "sslRequired": "none",
+  "clients": [
+    {
+      "clientId": "euro-office-plugin-dev",
+      "enabled": true,
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "secret": "745864b1-64b3-4a62-a1b8-7f9ab5d0769a",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:4181/oauth2/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:4181"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "developer",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "developer@euro-office-dev.local",
+      "firstName": "Plugin",
+      "lastName": "Developer",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "developer",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

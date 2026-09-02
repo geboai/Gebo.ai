@@ -47,6 +47,7 @@ import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import ai.gebo.security.services.IGOauth2UserSyncServiceConditionedImplementationProvider;
+import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
 import ai.gebo.security.services.RequestAuditFilter;
@@ -201,6 +202,7 @@ public class GeboAISecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final UserDetailsService directoryBackedUserDetailsService;
 	private final AuthenticationSuccessHandler authenticationSuccessHandler;
+	private final IGSecurityDirectory securityDirectory;
 	private final AuthenticationFailureHandler authenticationFailureHandler;
 	private final IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider;
 
@@ -220,12 +222,14 @@ public class GeboAISecurityConfig {
 			@Qualifier("customUserDetailsService") UserDetailsService userDetailsService,
 			DirectoryBackedUserDetailsService directoryBackedUserDetailsService,
 			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
+			IGSecurityDirectory securityDirectory,
 			IGSecurityAuditLoggerService securityAuditLoggerService,
 			IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider) {
 		this.oauth2UserSyncProvider = oauth2UserSyncProvider;
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		this.directoryBackedUserDetailsService = directoryBackedUserDetailsService;
+		this.securityDirectory = securityDirectory;
 		Oauth2DynamicClientRegistrationRepository dynamicClient = new Oauth2DynamicClientRegistrationRepository(
 				oauth2ConfigurationService);
 		this.clientRegistrationRepository = dynamicClient;
@@ -412,8 +416,8 @@ public class GeboAISecurityConfig {
 	public IGHttpRequestAuthenticationManagerResolver authenticationManagerResolver(
 			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
-				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService,
-				resourceServerUserProvisioner);
+				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService, securityConfig,
+				securityDirectory, resourceServerUserProvisioner);
 	}
 
 	/**
