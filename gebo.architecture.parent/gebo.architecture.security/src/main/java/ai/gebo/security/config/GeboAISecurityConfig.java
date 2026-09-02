@@ -52,6 +52,7 @@ import ai.gebo.security.services.JwtAuthenticationEntryPoint;
 import ai.gebo.security.services.RequestAuditFilter;
 import ai.gebo.security.services.impl.DirectoryBackedUserDetailsService;
 import ai.gebo.security.services.impl.GHttpRequestAuthenticationManagerResolverImpl;
+import ai.gebo.security.services.impl.GReactiveHttpRequestAuthenticationManagerResolverImpl;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.impl.GOAuth2AuthenticationFailureHandler;
 import ai.gebo.security.services.impl.GOAuth2AuthenticationSuccessHandler;
@@ -376,7 +377,8 @@ public class GeboAISecurityConfig {
 		}
 		if (oauth2ResourceServerEnabled) {
 			configBuilder = configBuilder.oauth2ResourceServer(
-					oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
+					oauth2 -> oauth2.authenticationManagerResolver(
+						authenticationManagerResolver(oauth2ResourceServerUserProvisioner())));
 		}
 		// request audit for security logging
 		configBuilder.addFilterAfter(requestAuditFilter, AnonymousAuthenticationFilter.class);
@@ -385,19 +387,40 @@ public class GeboAISecurityConfig {
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
 	}
 
+	/**
+	 * On the resource-server path GOAuth2UserService never runs, so under
+	 * TRUST_EVERY_OAUTH_IDENTITY an accepted bearer token must provision/sync its
+	 * user here (seeding ACL aliases via IGUsersAdminService), throttled by a TTL
+	 * cache so the sync runs at most once per token per window. Shared by the
+	 * servlet and reactive resolvers.
+	 */
 	@Bean
-	public IGHttpRequestAuthenticationManagerResolver authenticationManagerResolver() {
-		// On the resource-server path GOAuth2UserService never runs, so under
-		// TRUST_EVERY_OAUTH_IDENTITY an accepted bearer token must provision/sync its
-		// user here (seeding ACL aliases via IGUsersAdminService), throttled by a TTL
-		// cache so the sync runs at most once per token per window.
+	public GOauth2ResourceServerUserProvisioner oauth2ResourceServerUserProvisioner() {
 		Oauth2ResourceServerSyncTokenCache resourceServerSyncTokenCache = new Oauth2ResourceServerSyncTokenCache(
 				securityConfig.getOauth2ResourceServerSyncCacheTtlSeconds());
-		GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner = new GOauth2ResourceServerUserProvisioner(
-				oauth2UserSyncProvider, userAdminService, securityConfig, resourceServerSyncTokenCache);
+		return new GOauth2ResourceServerUserProvisioner(oauth2UserSyncProvider, userAdminService, securityConfig,
+				resourceServerSyncTokenCache);
+	}
+
+	@Bean
+	public IGHttpRequestAuthenticationManagerResolver authenticationManagerResolver(
+			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
 				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService,
 				resourceServerUserProvisioner);
+	}
+
+	/**
+	 * Reactive (WebFlux) counterpart of {@link #authenticationManagerResolver}. It
+	 * is provided for a reactive deployment to wire into a
+	 * {@code SecurityWebFilterChain}'s {@code oauth2ResourceServer(...)}; on a
+	 * servlet app it is simply an unused bean.
+	 */
+	@Bean
+	public GReactiveHttpRequestAuthenticationManagerResolverImpl reactiveAuthenticationManagerResolver(
+			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
+		return new GReactiveHttpRequestAuthenticationManagerResolverImpl(directoryBackedUserDetailsService,
+				oauth2RuntimeConfigurationDao, tokenProvider, resourceServerUserProvisioner);
 	}
 
 }
