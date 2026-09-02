@@ -11,9 +11,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
+import ai.gebo.security.model.Oauth2SyncUsersData;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
+import ai.gebo.security.services.IGOauth2UserSyncService;
+import ai.gebo.security.services.IGOauth2UserSyncServiceConditionedImplementationProvider;
 import ai.gebo.security.services.IGUsersAdminService;
 import lombok.AllArgsConstructor;
 
@@ -23,6 +26,7 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 	private final IGOauth2ConfigurationService oauth2ConfigService;
 	private final IGUsersAdminService userService; // servizio che gestisce la tua logica utenti
 	private final GeboSecurityConfig securityProperties;
+	private final IGOauth2UserSyncServiceConditionedImplementationProvider oauth2SyncService;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -44,18 +48,21 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 		String email = oauth2User.getAttribute("email"); // o "preferred_username", dipende dal provider
 		if (email == null)
 			throw new OAuth2AuthenticationException("Missing email attribute");
-
+		EditableUser user = userService.findUserByUsername(email);
+		Oauth2SyncUsersData data = new Oauth2SyncUsersData(user, oauth2User, config);
+		IGOauth2UserSyncService service = oauth2SyncService.handlerOf(data);
 		switch (securityProperties.getLoginPolicy()) {
 		case TRUST_EVERY_OAUTH_IDENTITY: {
-			userService.createUserIfNotExists(email, oauth2User.getAttributes(), authProvider);
+			service.createOrSyncUser(data);
 		}
 			break;
 		case USER_SELF_REGISTERS:
 		case REQUIRE_INVITATION: {
-			EditableUser user = userService.findUserByUsername(email);
-			if (user == null || user.getAuthProvider()!=authProvider) {
+
+			if (user == null || user.getAuthProvider() != authProvider) {
 				throw new OAuth2AuthenticationException("User not authorized");
 			}
+			service.syncUser(data);
 		}
 		}
 
