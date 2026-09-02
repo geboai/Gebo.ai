@@ -40,6 +40,17 @@ import lombok.AllArgsConstructor;
  * </p>
  *
  * <p>
+ * <b>Deliberately not delegated to
+ * {@code ai.gebo.security.services.impl.authmanagers.GOauth2ResourceServerUserProvisioner}</b>
+ * (the mechanism opaque tokens use): that provisioner calls {@code IGUsersAdminService}
+ * directly, which is backed by a plain Mongo-repository implementation with no
+ * microservices-safe counterpart (unlike {@link IGSecurityDirectory}, which
+ * {@code RestSecurityDirectory} proxies to heimdall for every non-owning service). JWT
+ * resource-server auth runs on every microservice, so it must stay on the
+ * {@link IGSecurityDirectory} seam to keep working correctly off the monolith/heimdall.
+ * </p>
+ *
+ * <p>
  * Provisioning needs an {@link AuthProvider} to record against the new user.
  * Unlike the redirect flow (which already knows which OAuth2 client registration is
  * logging in), this converter only ever sees the validated {@link Jwt} - so the

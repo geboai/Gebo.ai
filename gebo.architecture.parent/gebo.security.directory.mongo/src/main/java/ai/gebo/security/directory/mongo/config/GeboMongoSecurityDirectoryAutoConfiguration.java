@@ -18,14 +18,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ai.gebo.acl.IAclAliasesDao;
+import ai.gebo.crypting.services.IGeboCryptingService;
+import ai.gebo.security.directory.mongo.GUsersAdminServiceImpl;
 import ai.gebo.security.directory.mongo.GeboSystemUserAclInitializer;
 import ai.gebo.security.directory.mongo.MongoSecurityDirectory;
 import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.repository.UsersGroupRepository;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.IGeboSystemUserService;
+import ai.gebo.security.services.impl.AclGrantedAccessorServiceImpl;
 
 /**
  * Publishes the local, Mongo-backed security directory on a service that owns the
@@ -62,6 +66,26 @@ public class GeboMongoSecurityDirectoryAutoConfiguration {
 			ObjectProvider<IGUsersAdminService> userAdminService) {
 		return new MongoSecurityDirectory(usersRepo, groupsRepo, passwordEncoder, systemUserService,
 				userAdminService);
+	}
+
+	/**
+	 * The local, Mongo-backed {@link IGUsersAdminService} of a service that owns the
+	 * user store - see {@link GUsersAdminServiceImpl}'s own class comment for why it
+	 * is published here (an explicit {@code @Bean}, not component-scanned) rather than
+	 * living in {@code gebo.architecture.security} as a plain {@code @Service}: that
+	 * module is a transitive dependency of virtually everything, so a bean shipped
+	 * inside it would always win {@code restUsersAdminService}'s
+	 * {@code @ConditionalOnMissingBean} race and the remote implementation could never
+	 * activate on any other microservice.
+	 */
+	@Bean
+	@ConditionalOnMissingBean(IGUsersAdminService.class)
+	public GUsersAdminServiceImpl usersAdminService(UserRepository usersRepo, UsersGroupRepository groupsRepo,
+			PasswordEncoder passwordEncoder, AclGrantedAccessorServiceImpl grantedAccessorService,
+			IAclAliasesDao aclAliasesDao, IGeboCryptingService cryptService, IGeboSystemUserService systemUserService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		return new GUsersAdminServiceImpl(usersRepo, groupsRepo, passwordEncoder, grantedAccessorService,
+				aclAliasesDao, cryptService, systemUserService, securityAuditLoggerService);
 	}
 
 	/**

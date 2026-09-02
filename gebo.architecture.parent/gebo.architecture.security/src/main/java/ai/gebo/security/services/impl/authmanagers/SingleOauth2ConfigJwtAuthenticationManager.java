@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
@@ -19,6 +20,10 @@ public class SingleOauth2ConfigJwtAuthenticationManager implements Authenticatio
 	final Oauth2RuntimeConfiguration oauth2Configuration;
 	final Converter<Jwt, AbstractAuthenticationToken> converter;
 	final JwtDecoderCache decoderCache;
+	// Nullable: when set, decoded tokens auto-provision/sync the user (policy-gated)
+	// before the principal is loaded, so a trusted identity is never rejected for
+	// merely not existing locally yet.
+	final GOauth2ResourceServerUserProvisioner provisioner;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -27,8 +32,30 @@ public class SingleOauth2ConfigJwtAuthenticationManager implements Authenticatio
 		// JWKS download on every request.
 		JwtDecoder jwtDecoder = decoderCache.forIssuerLocation(issuerUri);
 		JwtAuthenticationProvider jwtProvider = new JwtAuthenticationProvider(jwtDecoder);
-		jwtProvider.setJwtAuthenticationConverter(converter);
+		jwtProvider.setJwtAuthenticationConverter(wrapWithProvisioning(converter));
 		return jwtProvider.authenticate(authentication);
+	}
+
+	private Converter<Jwt, AbstractAuthenticationToken> wrapWithProvisioning(
+			Converter<Jwt, AbstractAuthenticationToken> delegate) {
+		if (provisioner == null)
+			return delegate;
+		// Provision strictly on the "validated token, unknown user" signal: the
+		// UsernameNotFoundException can only surface after the provider has decoded and
+		// validated the JWT (signature/issuer/expiry) and the converter then found no
+		// local user. So an unauthenticated token can never reach provisioning, and this
+		// does not depend on Spring's converter-invocation ordering.
+		return jwt -> {
+			try {
+				return delegate.convert(jwt);
+			} catch (UsernameNotFoundException notFound) {
+				if (provisioner.provisionOnValidatedUnknownUser(oauth2Configuration, jwt.getTokenValue(),
+						jwt.getClaims())) {
+					return delegate.convert(jwt);
+				}
+				throw notFound;
+			}
+		};
 	}
 
 }
