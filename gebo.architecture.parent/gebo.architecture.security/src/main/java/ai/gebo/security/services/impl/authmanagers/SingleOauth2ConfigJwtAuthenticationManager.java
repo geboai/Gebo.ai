@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
@@ -39,11 +40,21 @@ public class SingleOauth2ConfigJwtAuthenticationManager implements Authenticatio
 			Converter<Jwt, AbstractAuthenticationToken> delegate) {
 		if (provisioner == null)
 			return delegate;
-		// The provider has already validated the JWT by the time it invokes the
-		// converter, so provisioning here runs only on an authentic token.
+		// Provision strictly on the "validated token, unknown user" signal: the
+		// UsernameNotFoundException can only surface after the provider has decoded and
+		// validated the JWT (signature/issuer/expiry) and the converter then found no
+		// local user. So an unauthenticated token can never reach provisioning, and this
+		// does not depend on Spring's converter-invocation ordering.
 		return jwt -> {
-			provisioner.provisionIfNeeded(oauth2Configuration, jwt.getTokenValue(), jwt.getClaims());
-			return delegate.convert(jwt);
+			try {
+				return delegate.convert(jwt);
+			} catch (UsernameNotFoundException notFound) {
+				if (provisioner.provisionOnValidatedUnknownUser(oauth2Configuration, jwt.getTokenValue(),
+						jwt.getClaims())) {
+					return delegate.convert(jwt);
+				}
+				throw notFound;
+			}
 		};
 	}
 

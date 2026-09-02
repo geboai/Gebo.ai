@@ -40,12 +40,15 @@ import ai.gebo.security.services.IGUsersAdminService;
  * </p>
  *
  * <p>
- * The actual create/sync is delegated to the same
+ * It is invoked only from the {@code UsernameNotFoundException} branch of the
+ * resource-server converters - i.e. a validated token whose user does not exist
+ * locally yet - so provisioning is, by construction, unreachable on an
+ * unauthenticated token. The actual create/sync is delegated to the same
  * {@link IGOauth2UserSyncServiceConditionedImplementationProvider} the login
  * flow uses, so it goes through {@link IGUsersAdminService} (seeding ACL alias
- * ids) and honours any per-provider handler. To avoid running it on every
- * request, each token is remembered in a TTL cache after a successful sync and
- * skipped while that entry is live.
+ * ids) and honours any per-provider handler. A TTL cache throttles this to at
+ * most one attempt per token per window, so a token whose user cannot be created
+ * does not drive a write on every request.
  * </p>
  */
 public class GOauth2ResourceServerUserProvisioner {
@@ -71,30 +74,50 @@ public class GOauth2ResourceServerUserProvisioner {
 	}
 
 	/**
-	 * Runs a create/sync for the identity carried by an accepted resource-server
-	 * token, unless the policy forbids it or the token was synced recently. Never
-	 * throws: a sync failure is logged and left to the downstream user lookup to
-	 * decide the outcome (a still-absent user simply fails to authenticate).
+	 * Provisions the identity carried by a resource-server token that has ALREADY
+	 * been validated and whose local user could not be loaded
+	 * ({@code UsernameNotFoundException}).
+	 *
+	 * <p>
+	 * Calling this only from the not-found branch of a converter makes the
+	 * "must be authenticated first" guarantee self-evident from control flow: the
+	 * exception is reachable only after the provider has decoded/introspected and
+	 * validated the token, so this method can never run on an unauthenticated
+	 * token, independent of Spring's converter-invocation ordering.
+	 * </p>
+	 *
+	 * <p>
+	 * Never throws: a provisioning failure is logged and reported as "do not retry"
+	 * so the original not-found outcome stands (the request fails to authenticate,
+	 * exactly as it would have without provisioning).
+	 * </p>
 	 *
 	 * @param runtimeConfig the provider configuration the token validated against
-	 * @param token         the raw bearer token (used only as a cache key)
-	 * @param attributes    the token claims / introspection attributes
+	 * @param token         the raw bearer token (used only as a throttle-cache key)
+	 * @param attributes    the validated token claims / introspection attributes
+	 * @return {@code true} if a provisioning attempt ran and the caller should retry
+	 *         loading the user; {@code false} if provisioning was skipped or failed
+	 *         and the not-found result should stand
 	 */
-	public void provisionIfNeeded(Oauth2RuntimeConfiguration runtimeConfig, String token,
+	public boolean provisionOnValidatedUnknownUser(Oauth2RuntimeConfiguration runtimeConfig, String token,
 			Map<String, Object> attributes) {
 		if (runtimeConfig == null || attributes == null)
-			return;
+			return false;
 		if (securityConfig.getLoginPolicy() != GeboLoginPolicy.TRUST_EVERY_OAUTH_IDENTITY)
-			return;
-		if (tokenCache.contains(token))
-			return;
+			return false;
 
 		String nameKey = pickUsernameClaim(attributes);
 		if (nameKey == null) {
 			LOGGER.debug("Resource-server token for provider {} carries no username claim; skipping provisioning",
 					runtimeConfig.getProvider());
-			return;
+			return false;
 		}
+		// Throttle: at most one provisioning attempt per token per TTL window, whatever
+		// the outcome, so a token whose user cannot be created does not drive a Mongo
+		// write on every request.
+		if (tokenCache.contains(token))
+			return false;
+		tokenCache.put(token);
 
 		try {
 			OAuth2User oauth2User = new DefaultOAuth2User(List.of(), attributes, nameKey);
@@ -106,15 +129,16 @@ public class GOauth2ResourceServerUserProvisioner {
 			IGOauth2UserSyncService handler = syncProvider.handlerOf(data);
 			if (handler == null) {
 				LOGGER.warn("No OAuth2 user sync handler resolved for provider {}", runtimeConfig.getProvider());
-				return;
+				return false;
 			}
 			handler.createOrSyncUser(data);
-			tokenCache.put(token);
+			return true;
 		} catch (RuntimeException e) {
-			// Do not break authentication on a sync failure: if the user still cannot be
-			// loaded downstream, the request fails to authenticate as it would have before.
+			// Do not break authentication on a sync failure: the caller keeps the original
+			// not-found outcome and the request fails to authenticate as before.
 			LOGGER.warn("Resource-server OAuth2 user provisioning failed for provider {}: {}",
 					runtimeConfig.getProvider(), e.getMessage());
+			return false;
 		}
 	}
 
