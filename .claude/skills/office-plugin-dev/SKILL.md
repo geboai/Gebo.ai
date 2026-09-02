@@ -338,6 +338,37 @@ shells don't inherit these — pass as `-D` flags), a throwaway Mongo DB
 (`ai.gebo.mongodb.databaseName`), and the `oauth2configs` block from §6. See
 `.claude/skills/gebo-backend-test/SKILL.md` for the general run recipe.
 
+**Port and Mongo gotchas hit for real doing this:**
+- **Check port 12999 isn't already taken** by an unrelated running instance before assuming
+  a clean `curl http://localhost:<port>/` 200 means *your* config took effect — a stray
+  already-running monolith answers just as happily. Pick a throwaway port (`--server.port=`)
+  and confirm requests actually hit it.
+- **The Mongo connection property is `ai.gebo.mongodb.connectionString`, NOT
+  `spring.data.mongodb.uri`.** Setting the latter via `--spring.config.additional-location`
+  is silently ignored — the app builds its own `MongoClient` from `ai.gebo.mongodb.*`
+  custom properties, which default to `mongodb://mongoroot:mongopwd@localhost:27017/...`
+  (a real local dev DB per project memory — never assume an override took effect without
+  checking the startup log's `MongoClient with metadata ... hosts=[...]` line for the
+  actual host/port before doing anything that could write).
+- **`--spring.config.additional-location=...` must come AFTER `-jar <file>`**, not before -
+  everything before `-jar` is a JVM arg (`-D...`), everything after is a Spring Boot program
+  arg. Put it before `-jar` and you get "Unrecognized option" and the JVM never starts (a
+  silent-looking failure if you're only polling a port for readiness, since a stray existing
+  instance on that port can mask it - see above).
+- **A fresh `git pull` can add a new Maven dependency the local `.m2` doesn't have yet**
+  (e.g. an SDK for a newly-merged feature) - an offline (`-o`) build fails on it with a
+  `Cannot access central/spring-milestones in offline mode` error even though nothing about
+  *your* change caused it. Build online once after a pull that brought in new modules.
+- To verify OAuth2 resource-server auto-provisioning end-to-end without ever letting a raw
+  token reach the agent's own context: have the **browser itself** fetch the protected
+  endpoint (`fetch(url, {headers:{Authorization:'Bearer '+await
+  window.GeboAuthBridge.getAccessToken(), 'X-AuthType':'OAUTH2'}})` via the JS-exec tool) and
+  only read back status/body - the JS-exec tool already blocks a raw JWT from being returned
+  to the caller, so this is the only safe way to drive an authenticated call. Confirm the
+  provisioning by reading the audit log (`security-log.jsonl` under `GEBO_LOG_BASE`) rather
+  than the token: its `stackPoint` shows the exact call chain and `details.created` says
+  whether the user was pre-existing or freshly auto-provisioned by this request.
+
 Two more things worth knowing if the test goes further than auth:
 
 - **A default RAG chat profile (`default-rag-chat-profile`) is created unconditionally**
