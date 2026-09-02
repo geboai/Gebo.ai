@@ -50,6 +50,11 @@ public enum AuthProvider {
 			List.of(Oauth2CustomAttribute.of("cognitoDomain", "AWS Cognito domain"),
 					Oauth2CustomAttribute.of("userPoolId", "AWS Cognito uer pool"),
 					Oauth2CustomAttribute.of("region", "AWS Region"))),
+	// Authentication using a Keycloak realm (OIDC). The realm is carried in the
+	// issuer/authorization/token URIs; expose it as a custom attribute so those
+	// URIs can be templated with {realm}.
+	keycloak(AuthProviderType.OAUTH2, "Keycloak OIDC auth provider", false,
+			List.of(Oauth2CustomAttribute.of("realm", "Keycloak realm"))),
 	// Authentication using Linkedin account
 	// linkedin(AuthProviderType.OAUTH2, "Linkedin auth provider",
 	// false,Oauth2LoginModel.SPA),
