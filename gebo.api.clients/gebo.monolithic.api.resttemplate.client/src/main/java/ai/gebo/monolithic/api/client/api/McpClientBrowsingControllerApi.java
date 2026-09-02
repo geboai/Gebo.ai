@@ -26,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class McpClientBrowsingControllerApi {
     private ApiClient apiClient;
@@ -78,7 +78,7 @@ public class McpClientBrowsingControllerApi {
         if (mcpClientConfigCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'mcpClientConfigCode' when calling browseMCPClientPath");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/browseMCPClientPath").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/browseMCPClientPath").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -97,7 +97,7 @@ public class McpClientBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -131,7 +131,7 @@ public class McpClientBrowsingControllerApi {
         if (mcpClientConfigCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'mcpClientConfigCode' when calling getMCPClientNavigationStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientNavigationStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientNavigationStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -150,7 +150,7 @@ public class McpClientBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus> returnType = new ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -178,7 +178,7 @@ public class McpClientBrowsingControllerApi {
         if (mcpClientConfigCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'mcpClientConfigCode' when calling getMCPClientRoots");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientRoots").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/MCPClientBrowsingController/getMCPClientRoots").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -195,6 +195,6 @@ public class McpClientBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -2,7 +2,7 @@
 
 # Gebo.ai, The open source Enterprise AI vendor agnostic platform (visit https://gebo.ai)
 
-**Enterprise RAG · AI Agents · Deep Search · MCP · Cloud or On-Premise**
+**Enterprise RAG · AI Agents · A2A & MCP Interoperability · Deep Search · Cloud or On-Premise**
 
 Gebo.ai is an open-source Enterprise AI and retrieval-augmented generation platform designed to connect company knowledge, collaboration systems and business information to modern Large Language Models.
 
@@ -179,11 +179,14 @@ Typical capabilities include:
 - enterprise knowledge retrieval
 - web search
 - Deep Search
-- MCP tools
+- MCP tools (call external MCP servers, or expose Gebo.ai as one)
+- **A2A agent interoperability** — import external Agent2Agent agents, and export your own agents or entire agent networks
 - document analysis
 - multimodal interaction
 - specialized searching agents
 - multi-source information gathering
+
+Through the open **Agent2Agent (A2A) protocol**, Gebo.ai interoperates with other agent platforms in **both directions**: it can consume external A2A agents as tools and network participants, and publish its own agents — a single agent or a whole network — as standards-compliant, opaque A2A agents with their own Agent Card. A2A interoperability is **admin-enabled and secure by default**, so nothing is exposed until you choose to expose it.
 
 Access to chatbots and knowledge bases can be granted individually to users and groups.
 

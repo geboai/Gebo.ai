@@ -69,6 +69,8 @@ import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/
 import { AgentStatusService, GeboAIAgentSetupWizardComponent } from "./agent-setup-wizard.component";
 import { McpServerWizardComponent, McpServerWizardStatusService } from "./mcp-server-wizard.component";
 import { GeboAIMCPServerWizardComponent, GeboAIMcpServerWizardStatusService } from "./gebo-ai-mcp-server-wizard.component";
+import { A2AImportWizardComponent, A2AImportWizardStatusService } from "./a2a-import-wizard.component";
+import { A2AExportWizardComponent, A2AExportWizardStatusService } from "./a2a-export-wizard.component";
 import { GeneratedAdminApiKeyWizardComponent, GeneratedAdminApiKeyEnabledService } from "./generated-admin-api-key-wizard.component";
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -382,6 +384,30 @@ const geboMcpServerSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+const a2aImportSetupSection: SetupWizardsSection = {
+    orderEntry: 19.6,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: A2AImportWizardStatusService,
+    label: "Import external A2A agents",
+    description: "Register external Agent2Agent (A2A) agents so they can be used as participants in your networks of agents.",
+    wizardComponent: A2AImportWizardComponent,
+    wizardSectionId: "a2aImportSetupSection",
+    mandatory: false
+};
+
+const a2aExportSetupSection: SetupWizardsSection = {
+    orderEntry: 19.7,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: A2AExportWizardStatusService,
+    label: "Expose Gebo agents over A2A",
+    description: "Publish your Gebo agents and networks of agents as opaque Agent2Agent (A2A) agents callable by external clients.",
+    wizardComponent: A2AExportWizardComponent,
+    wizardSectionId: "a2aExportSetupSection",
+    mandatory: false
+};
+
 const generatedAdminApiKeySetupSection: SetupWizardsSection = {
     orderEntry: 20,
     requredStepsIds: [],
@@ -403,7 +429,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, GeneratedAdminApiKeyWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -437,6 +463,8 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         AgentStatusService,
         McpServerWizardStatusService,
         GeboAIMcpServerWizardStatusService,
+        A2AImportWizardStatusService,
+        A2AExportWizardStatusService,
         GeneratedAdminApiKeyEnabledService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
@@ -459,6 +487,8 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: agentSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: mcpServerSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboMcpServerSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: a2aImportSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: a2aExportSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: generatedAdminApiKeySetupSection, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 

@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class JiraSystemsControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteJiraEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/deleteJiraEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/deleteJiraEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -115,7 +115,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteJiraSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/deleteJiraSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/deleteJiraSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastJiraConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/fastJiraConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/fastJiraConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,7 +177,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJiraSystem> returnType = new ParameterizedTypeReference<OperationStatusGJiraSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -205,7 +205,7 @@ public class JiraSystemsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findJiraEndpointsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraEndpointsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraEndpointsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -222,7 +222,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GJiraProjectEndpoint> returnType = new ParameterizedTypeReference<GJiraProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -250,7 +250,7 @@ public class JiraSystemsControllerApi {
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findJiraEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -267,7 +267,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GJiraProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GJiraProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -295,7 +295,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findJiraEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -313,7 +313,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GJiraProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GJiraProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -341,7 +341,7 @@ public class JiraSystemsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findJiraSystemByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraSystemByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/findJiraSystemByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -358,7 +358,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GJiraSystem> returnType = new ParameterizedTypeReference<GJiraSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -380,7 +380,7 @@ public class JiraSystemsControllerApi {
      */
     public ResponseEntity<GContentManagementSystemType> getJiraSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/getJiraSystemType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/getJiraSystemType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -396,7 +396,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystemType> returnType = new ParameterizedTypeReference<GContentManagementSystemType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -418,7 +418,7 @@ public class JiraSystemsControllerApi {
      */
     public ResponseEntity<List<GJiraSystem>> getJiraSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/getJiraSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/getJiraSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -434,7 +434,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GJiraSystem>> returnType = new ParameterizedTypeReference<List<GJiraSystem>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -462,7 +462,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertJiraEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/insertJiraEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/insertJiraEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -480,7 +480,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GJiraProjectEndpoint> returnType = new ParameterizedTypeReference<GJiraProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -508,7 +508,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertJiraSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/insertJiraSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/insertJiraSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -526,7 +526,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJiraSystem> returnType = new ParameterizedTypeReference<OperationStatusGJiraSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -554,7 +554,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishJiraEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/publishJiraEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/publishJiraEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -572,7 +572,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -600,7 +600,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling testJiraSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/testJiraSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/testJiraSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -618,7 +618,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJiraSystem> returnType = new ParameterizedTypeReference<OperationStatusGJiraSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -646,7 +646,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateJiraEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/updateJiraEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/updateJiraEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -664,7 +664,7 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GJiraProjectEndpoint> returnType = new ParameterizedTypeReference<GJiraProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -692,7 +692,7 @@ public class JiraSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateJiraSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/updateJiraSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JiraSystemsController/updateJiraSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -710,6 +710,6 @@ public class JiraSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJiraSystem> returnType = new ParameterizedTypeReference<OperationStatusGJiraSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

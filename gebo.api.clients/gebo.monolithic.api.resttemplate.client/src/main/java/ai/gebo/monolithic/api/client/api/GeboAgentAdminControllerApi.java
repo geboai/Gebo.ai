@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class GeboAgentAdminControllerApi {
     private ApiClient apiClient;
@@ -69,7 +69,7 @@ public class GeboAgentAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteAgent");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/deleteAgent").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/deleteAgent").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -113,7 +113,7 @@ public class GeboAgentAdminControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getAgentByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgentByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgentByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -130,7 +130,7 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAgentConfig> returnType = new ParameterizedTypeReference<GAgentConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -152,7 +152,7 @@ public class GeboAgentAdminControllerApi {
      */
     public ResponseEntity<List<GBaseObject>> getAgentsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgents").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgents").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -168,7 +168,7 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -190,7 +190,7 @@ public class GeboAgentAdminControllerApi {
      */
     public ResponseEntity<List<GBaseObject>> getAgentsChoicesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgentsChoices").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgentsChoices").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -206,7 +206,7 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -234,7 +234,7 @@ public class GeboAgentAdminControllerApi {
         if (agentId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'agentId' when calling getPromptTemplatesByAgentId");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -251,7 +251,7 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GPromptTemplateConfig>> returnType = new ParameterizedTypeReference<List<GPromptTemplateConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -279,7 +279,7 @@ public class GeboAgentAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertAgent");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/insertAgent").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/insertAgent").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -297,7 +297,7 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAgentConfig> returnType = new ParameterizedTypeReference<GAgentConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -325,7 +325,7 @@ public class GeboAgentAdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateAgent");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/updateAgent").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/updateAgent").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -343,6 +343,6 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAgentConfig> returnType = new ParameterizedTypeReference<GAgentConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

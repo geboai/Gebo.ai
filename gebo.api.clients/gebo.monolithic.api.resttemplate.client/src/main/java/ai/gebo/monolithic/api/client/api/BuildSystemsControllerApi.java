@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class BuildSystemsControllerApi {
     private ApiClient apiClient;
@@ -69,7 +69,7 @@ public class BuildSystemsControllerApi {
         if (buildSystemTypeCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'buildSystemTypeCode' when calling getBuildSystemConfigs");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/BuildSystemsController/getBuildSystemConfigs").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BuildSystemsController/getBuildSystemConfigs").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -86,7 +86,7 @@ public class BuildSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GBuildSystem>> returnType = new ParameterizedTypeReference<List<GBuildSystem>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -108,7 +108,7 @@ public class BuildSystemsControllerApi {
      */
     public ResponseEntity<List<GBuildSystemType>> getBuildSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/BuildSystemsController/getBuildSystemTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BuildSystemsController/getBuildSystemTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -124,6 +124,6 @@ public class BuildSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GBuildSystemType>> returnType = new ParameterizedTypeReference<List<GBuildSystemType>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

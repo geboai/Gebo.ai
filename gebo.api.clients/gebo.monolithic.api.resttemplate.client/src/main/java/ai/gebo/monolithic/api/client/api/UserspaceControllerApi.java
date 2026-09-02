@@ -29,7 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class UserspaceControllerApi {
     private ApiClient apiClient;
@@ -74,7 +74,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteUserKnowledgebase");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/deleteUserKnowledgebase").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/deleteUserKnowledgebase").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -90,7 +90,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -117,7 +117,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteUserspaceFiles");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/deleteUserspaceFiles").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/deleteUserspaceFiles").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -133,7 +133,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -160,7 +160,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteUserspaceFolder");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/deleteUserspaceFolder").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/deleteUserspaceFolder").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -176,7 +176,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -204,7 +204,7 @@ public class UserspaceControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findUserKnowledgebaseByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/findUserKnowledgebaseByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/findUserKnowledgebaseByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -221,7 +221,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserspaceKnowledgebaseDto> returnType = new ParameterizedTypeReference<UserspaceKnowledgebaseDto>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -249,7 +249,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUserspaceFileByCodes");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/findUserspaceFileByCodes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/findUserspaceFileByCodes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -267,7 +267,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UserspaceFileDto>> returnType = new ParameterizedTypeReference<List<UserspaceFileDto>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -295,7 +295,7 @@ public class UserspaceControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findUserspaceFolderByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/findUserspaceFolderByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/findUserspaceFolderByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -312,7 +312,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserspaceFolderDto> returnType = new ParameterizedTypeReference<UserspaceFolderDto>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -334,7 +334,7 @@ public class UserspaceControllerApi {
      */
     public ResponseEntity<List<UserspaceKnowledgebaseDto>> getPersonalKnowledgebasesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/getPersonalKnowledgebases").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/getPersonalKnowledgebases").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -350,7 +350,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>> returnType = new ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -378,7 +378,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getPublishingStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/getPublishingStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/getPublishingStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -396,7 +396,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PublishingStatus> returnType = new ParameterizedTypeReference<PublishingStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -424,7 +424,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling listChildPersonalKnowledgebases");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/listChildPersonalKnowledgebases").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/listChildPersonalKnowledgebases").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -442,7 +442,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>> returnType = new ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -470,7 +470,7 @@ public class UserspaceControllerApi {
         if (userspaceUploadCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userspaceUploadCode' when calling listUserspaceFiles");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/listUserspaceFiles").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/listUserspaceFiles").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -487,7 +487,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UserspaceFileDto>> returnType = new ParameterizedTypeReference<List<UserspaceFileDto>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -515,7 +515,7 @@ public class UserspaceControllerApi {
         if (userspaceKnowledgeBase == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userspaceKnowledgeBase' when calling listUserspaceFolders");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/listUserspaceFolders").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/listUserspaceFolders").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -532,7 +532,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UserspaceFolderDto>> returnType = new ParameterizedTypeReference<List<UserspaceFolderDto>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -560,7 +560,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling newUserKnowledgebase");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/newUserKnowledgebase").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/newUserKnowledgebase").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -578,7 +578,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserspaceKnowledgebaseDto> returnType = new ParameterizedTypeReference<UserspaceKnowledgebaseDto>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -606,7 +606,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling newUserspaceFolder");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/newUserspaceFolder").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/newUserspaceFolder").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -624,7 +624,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserspaceFolderDto> returnType = new ParameterizedTypeReference<UserspaceFolderDto>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -652,7 +652,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishFolder");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/publishFolder").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/publishFolder").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -670,7 +670,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusPublishingStatus> returnType = new ParameterizedTypeReference<OperationStatusPublishingStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -698,7 +698,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishUserspaceProjectEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/publishUserspaceProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/publishUserspaceProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -716,7 +716,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -744,7 +744,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling transferUploadsToUserSpaceAndPublish");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/transferUploadsToUserSpaceAndPublish").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/transferUploadsToUserSpaceAndPublish").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -762,7 +762,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusPublishingStatus> returnType = new ParameterizedTypeReference<OperationStatusPublishingStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -790,7 +790,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateUserKnowledgebase");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/updateUserKnowledgebase").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/updateUserKnowledgebase").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -808,7 +808,7 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserspaceKnowledgebaseDto> returnType = new ParameterizedTypeReference<UserspaceKnowledgebaseDto>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -836,7 +836,7 @@ public class UserspaceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateUserspaceFolder");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceController/updateUserspaceFolder").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/updateUserspaceFolder").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -854,6 +854,6 @@ public class UserspaceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserspaceFolderDto> returnType = new ParameterizedTypeReference<UserspaceFolderDto>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

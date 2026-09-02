@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class JiraSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -76,7 +76,7 @@ public class JiraSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/aggregate").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/aggregate").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -94,7 +94,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JiraResultsExtractionData> returnType = new ParameterizedTypeReference<JiraResultsExtractionData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -122,7 +122,7 @@ public class JiraSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMap1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -140,7 +140,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Map<String, Object>> returnType = new ParameterizedTypeReference<Map<String, Object>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -174,7 +174,7 @@ public class JiraSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -193,7 +193,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchResultAnalisysOutcome> returnType = new ParameterizedTypeReference<SearchResultAnalisysOutcome>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -221,7 +221,7 @@ public class JiraSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/findSystemById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/findSystemById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -238,7 +238,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -266,7 +266,7 @@ public class JiraSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/findSystemBySearchResult").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/findSystemBySearchResult").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -284,7 +284,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -308,7 +308,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<List<CatalogueSample>> restGetCachedCatalogues1WithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getCachedCatalogues").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getCachedCatalogues").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -325,7 +325,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -353,7 +353,7 @@ public class JiraSearchServiceControllerApi {
         if (configurationCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getCataloguesListSample").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getCataloguesListSample").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -370,7 +370,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -392,7 +392,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetDescription1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getDescription").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getDescription").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -408,7 +408,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -430,7 +430,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetId1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -446,7 +446,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -468,7 +468,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetMessagingModuleId1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getMessagingModuleId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getMessagingModuleId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -484,7 +484,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -506,7 +506,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetNativePromptTemplateUseCode1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -522,7 +522,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -544,7 +544,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetProductId1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getProductId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getProductId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -560,7 +560,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -582,7 +582,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetQueriesGenerationPromptUseCode1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -598,7 +598,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -620,7 +620,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystems1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getSearchableSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/getSearchableSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -636,7 +636,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchableSystemMetaData>> returnType = new ParameterizedTypeReference<List<SearchableSystemMetaData>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -658,7 +658,7 @@ public class JiraSearchServiceControllerApi {
      */
     public ResponseEntity<Boolean> restIsEnabled1WithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/isEnabled").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/isEnabled").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -674,7 +674,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -714,7 +714,7 @@ public class JiraSearchServiceControllerApi {
         if (nEntryLimit == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearch1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/nativeSearch").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/nativeSearch").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -734,7 +734,7 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchResult>> returnType = new ParameterizedTypeReference<List<SearchResult>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -774,7 +774,7 @@ public class JiraSearchServiceControllerApi {
         if (nEntryLimit == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/search").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/JiraSearchServiceController/search").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -794,6 +794,6 @@ public class JiraSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchResult>> returnType = new ParameterizedTypeReference<List<SearchResult>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

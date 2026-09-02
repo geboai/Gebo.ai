@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { A2AClientConfigControllerService } from './api/a2AClientConfigController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
@@ -34,6 +35,7 @@ import { FileSystemsControllerService } from './api/fileSystemsController.servic
 import { FileUploadControllerService } from './api/fileUploadController.service';
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
+import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
@@ -145,6 +147,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
   declarations: [],
   exports:      [],
   providers: [
+    A2AClientConfigControllerService,
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
@@ -176,6 +179,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     FileUploadControllerService,
     FileUploadsControllerService,
     FunctionsLookupControllerService,
+    GeboA2AServerAdminControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,

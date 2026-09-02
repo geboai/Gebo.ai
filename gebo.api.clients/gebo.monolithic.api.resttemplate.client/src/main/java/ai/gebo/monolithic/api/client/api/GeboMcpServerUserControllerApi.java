@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class GeboMcpServerUserControllerApi {
     private ApiClient apiClient;
@@ -68,7 +68,7 @@ public class GeboMcpServerUserControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findAccessibleMcpServerByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/findAccessibleMcpServerByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/findAccessibleMcpServerByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class GeboMcpServerUserControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserAccessibleMcpServerView> returnType = new ParameterizedTypeReference<UserAccessibleMcpServerView>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -107,7 +107,7 @@ public class GeboMcpServerUserControllerApi {
      */
     public ResponseEntity<Boolean> getUsersCanAccessMcpServersListWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -123,7 +123,7 @@ public class GeboMcpServerUserControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -145,7 +145,7 @@ public class GeboMcpServerUserControllerApi {
      */
     public ResponseEntity<List<UserAccessibleMcpServerView>> listAccessibleMcpServersWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/listAccessibleMcpServers").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/GeboMCPServerUserController/listAccessibleMcpServers").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -161,6 +161,6 @@ public class GeboMcpServerUserControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UserAccessibleMcpServerView>> returnType = new ParameterizedTypeReference<List<UserAccessibleMcpServerView>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

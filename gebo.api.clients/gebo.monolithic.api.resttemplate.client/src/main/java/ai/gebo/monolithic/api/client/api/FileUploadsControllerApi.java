@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class FileUploadsControllerApi {
     private ApiClient apiClient;
@@ -79,7 +79,7 @@ public class FileUploadsControllerApi {
         if (endpointCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling deleteUploadedFiles");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/deleteUploadedFiles").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/deleteUploadedFiles").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -98,7 +98,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGUploadsProjectEndpoint> returnType = new ParameterizedTypeReference<OperationStatusGUploadsProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -125,7 +125,7 @@ public class FileUploadsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteUploadsEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/deleteUploadsEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/deleteUploadsEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -141,7 +141,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -169,7 +169,7 @@ public class FileUploadsControllerApi {
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findUploadsEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/findUploadsEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/findUploadsEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -186,7 +186,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GUploadsProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GUploadsProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -214,7 +214,7 @@ public class FileUploadsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findUploadsEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/findUploadsEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/findUploadsEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -232,7 +232,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GUploadsProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GUploadsProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -254,7 +254,7 @@ public class FileUploadsControllerApi {
      */
     public ResponseEntity<List<GContentManagementSystemType>> getFileSystemSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getFileSystemSystemTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getFileSystemSystemTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -270,7 +270,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GContentManagementSystemType>> returnType = new ParameterizedTypeReference<List<GContentManagementSystemType>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -292,7 +292,7 @@ public class FileUploadsControllerApi {
      */
     public ResponseEntity<List<String>> getUploadableFilesExtensionsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getUploadableFilesExtensions").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getUploadableFilesExtensions").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -308,7 +308,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -332,7 +332,7 @@ public class FileUploadsControllerApi {
      */
     public ResponseEntity<List<GUploadsContentManagementSystem>> getUploadsSystemsWithHttpInfo(String handlerCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getUploadsSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getUploadsSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -349,7 +349,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GUploadsContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GUploadsContentManagementSystem>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -377,7 +377,7 @@ public class FileUploadsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertUploadsEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/insertUploadsEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/insertUploadsEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -395,7 +395,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GUploadsProjectEndpoint> returnType = new ParameterizedTypeReference<GUploadsProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -423,7 +423,7 @@ public class FileUploadsControllerApi {
         if (endpointCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'endpointCode' when calling listUploadedFiles");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/listUploadedFiles").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/listUploadedFiles").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -440,7 +440,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<UploadedFileInfo>> returnType = new ParameterizedTypeReference<List<UploadedFileInfo>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -468,7 +468,7 @@ public class FileUploadsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishUploadsEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/publishUploadsEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/publishUploadsEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -486,7 +486,7 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -514,7 +514,7 @@ public class FileUploadsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateUploadsEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/updateUploadsEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/updateUploadsEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -532,6 +532,6 @@ public class FileUploadsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GUploadsProjectEndpoint> returnType = new ParameterizedTypeReference<GUploadsProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

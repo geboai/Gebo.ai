@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class JobStatusControllerApi {
     private ApiClient apiClient;
@@ -71,7 +71,7 @@ public class JobStatusControllerApi {
         if (jobCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'jobCode' when calling getJobStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JobStatusController/getJobStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JobStatusController/getJobStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class JobStatusControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GJobStatus> returnType = new ParameterizedTypeReference<GJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -116,7 +116,7 @@ public class JobStatusControllerApi {
         if (jobCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'jobCode' when calling getJobSummary");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JobStatusController/getJobSummary").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JobStatusController/getJobSummary").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -133,7 +133,7 @@ public class JobStatusControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<JobSummary> returnType = new ParameterizedTypeReference<JobSummary>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -161,7 +161,7 @@ public class JobStatusControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobsEntriesForProjectEndpoint1");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/JobStatusController/getJobsEntriesForProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/JobStatusController/getJobsEntriesForProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -179,6 +179,6 @@ public class JobStatusControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PagedModelGJobStatusItem> returnType = new ParameterizedTypeReference<PagedModelGJobStatusItem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

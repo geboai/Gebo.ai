@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class GraphRagConfigurationControllerApi {
     private ApiClient apiClient;
@@ -68,7 +68,7 @@ public class GraphRagConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGraphRagExtractionConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/deleteGraphRagExtractionConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/deleteGraphRagExtractionConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -84,7 +84,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -112,7 +112,7 @@ public class GraphRagConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findGraphRagExtractionConfigByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -129,7 +129,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GraphRagExtractionConfig> returnType = new ParameterizedTypeReference<GraphRagExtractionConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -157,7 +157,7 @@ public class GraphRagConfigurationControllerApi {
         if (knowledgeBaseCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'knowledgeBaseCode' when calling findGraphRagExtractionConfigByKnowledgeBase");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBase").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBase").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -174,7 +174,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -208,7 +208,7 @@ public class GraphRagConfigurationControllerApi {
         if (projectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'projectCode' when calling findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -226,7 +226,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -254,7 +254,7 @@ public class GraphRagConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findGraphRagExtractionConfigByProjectEndpointGObjectRef");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByProjectEndpointGObjectRef").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByProjectEndpointGObjectRef").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -272,7 +272,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -294,7 +294,7 @@ public class GraphRagConfigurationControllerApi {
      */
     public ResponseEntity<List<GraphRagExtractionConfig>> getDefaultGraphRagExtractionConfigWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/getDefaultGraphRagExtractionConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/getDefaultGraphRagExtractionConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -310,7 +310,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -338,7 +338,7 @@ public class GraphRagConfigurationControllerApi {
         if (format == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'format' when calling getSystemGraphRagExtractionConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/getSystemGraphRagExtractionConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/getSystemGraphRagExtractionConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -355,7 +355,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GraphRagExtractionConfig> returnType = new ParameterizedTypeReference<GraphRagExtractionConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -383,7 +383,7 @@ public class GraphRagConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling instertGraphRagExtractionConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/instertGraphRagExtractionConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/instertGraphRagExtractionConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -401,7 +401,7 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GraphRagExtractionConfig> returnType = new ParameterizedTypeReference<GraphRagExtractionConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -429,7 +429,7 @@ public class GraphRagConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling saveGraphRagExtractionConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/saveGraphRagExtractionConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/saveGraphRagExtractionConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -447,6 +447,6 @@ public class GraphRagConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GraphRagExtractionConfig> returnType = new ParameterizedTypeReference<GraphRagExtractionConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

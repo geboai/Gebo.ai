@@ -171,6 +171,18 @@
 			<artifactId>gebo.architecture.mcp-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Agent2Agent (A2A) protocol: integrate external A2A agents (a2a-clients)
+		     and export gebo agents/networks over A2A (a2a-server). -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.a2a-clients</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.a2a-server</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

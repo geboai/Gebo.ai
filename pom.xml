@@ -22,6 +22,16 @@
 		<apache-poi.version>5.5.1</apache-poi.version>
 		<spring.ai.version>2.0.1</spring.ai.version>
 		<springdoc.version>3.0.3</springdoc.version>
+		<!-- Official Agent2Agent (A2A) Java SDK (org.a2aproject.sdk, the current group;
+		     the old io.github.a2asdk group is frozen at 0.3.x). gebo.architecture.a2a-*
+		     consume ONLY a2a-java-sdk-spec (the Gson wire types: AgentCard, Message/Part,
+		     Task, JSON-RPC envelopes). The SDK's transports are deliberately NOT used:
+		     server-common pulls quarkus-arc + CDI, and the client umbrella pulls Vert.x +
+		     gRPC + protobuf. Both a2a modules serve/consume JSON-RPC + SSE over Spring
+		     instead, keeping one clean SDK dependency. The SDK BOM is deliberately NOT
+		     imported (it manages junit/mockito at test scope and would leak into the
+		     whole reactor); the a2a module poms pin this version on their single dep. -->
+		<a2a.sdk.version>1.3.0.Final</a2a.sdk.version>
 		<!-- Required, not an override: gebo.ranker.api and
 		     gebo.architecture.llms.abstraction.layer declare spring-retry with
 		     <version>${spring-retry.version}</version>, and Spring Boot does not

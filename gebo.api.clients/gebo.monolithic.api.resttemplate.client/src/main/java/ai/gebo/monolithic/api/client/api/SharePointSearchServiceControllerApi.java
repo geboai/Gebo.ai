@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class SharePointSearchServiceControllerApi {
     private ApiClient apiClient;
@@ -76,7 +76,7 @@ public class SharePointSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restAggregate");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/aggregate").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/aggregate").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -94,7 +94,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<MicrosoftResultsExtractionData> returnType = new ParameterizedTypeReference<MicrosoftResultsExtractionData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -122,7 +122,7 @@ public class SharePointSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restCreateCustomTemplateParamsMap");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/createCustomTemplateParamsMap").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -140,7 +140,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Map<String, Object>> returnType = new ParameterizedTypeReference<Map<String, Object>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -174,7 +174,7 @@ public class SharePointSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restExtractRelatedAnalisysReferences");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -193,7 +193,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchResultAnalisysOutcome> returnType = new ParameterizedTypeReference<SearchResultAnalisysOutcome>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -221,7 +221,7 @@ public class SharePointSearchServiceControllerApi {
         if (systemId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemId' when calling restFindSystemById");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/findSystemById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/findSystemById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -238,7 +238,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -266,7 +266,7 @@ public class SharePointSearchServiceControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling restFindSystemBySearchResult");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/findSystemBySearchResult").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/findSystemBySearchResult").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -284,7 +284,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SearchableSystemMetaData> returnType = new ParameterizedTypeReference<SearchableSystemMetaData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -308,7 +308,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<List<CatalogueSample>> restGetCachedCataloguesWithHttpInfo(String systemConfigurationCode) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getCachedCatalogues").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getCachedCatalogues").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -325,7 +325,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -353,7 +353,7 @@ public class SharePointSearchServiceControllerApi {
         if (configurationCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'configurationCode' when calling restGetCataloguesListSample");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getCataloguesListSample").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getCataloguesListSample").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -370,7 +370,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<CatalogueSample>> returnType = new ParameterizedTypeReference<List<CatalogueSample>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -392,7 +392,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetDescriptionWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getDescription").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getDescription").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -408,7 +408,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -430,7 +430,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetIdWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -446,7 +446,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -468,7 +468,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetMessagingModuleIdWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getMessagingModuleId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getMessagingModuleId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -484,7 +484,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -506,7 +506,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetNativePromptTemplateUseCodeWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -522,7 +522,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -544,7 +544,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetProductIdWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getProductId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getProductId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -560,7 +560,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -582,7 +582,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<String> restGetQueriesGenerationPromptUseCodeWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -598,7 +598,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -620,7 +620,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<List<SearchableSystemMetaData>> restGetSearchableSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getSearchableSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/getSearchableSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -636,7 +636,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchableSystemMetaData>> returnType = new ParameterizedTypeReference<List<SearchableSystemMetaData>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -658,7 +658,7 @@ public class SharePointSearchServiceControllerApi {
      */
     public ResponseEntity<Boolean> restIsEnabledWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/isEnabled").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/isEnabled").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -674,7 +674,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -714,7 +714,7 @@ public class SharePointSearchServiceControllerApi {
         if (nEntryLimit == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restNativeSearch");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/nativeSearch").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/nativeSearch").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -734,7 +734,7 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchResult>> returnType = new ParameterizedTypeReference<List<SearchResult>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -774,7 +774,7 @@ public class SharePointSearchServiceControllerApi {
         if (nEntryLimit == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'nEntryLimit' when calling restSearch");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/search").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/SharePointSearchServiceController/search").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -794,6 +794,6 @@ public class SharePointSearchServiceControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<SearchResult>> returnType = new ParameterizedTypeReference<List<SearchResult>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

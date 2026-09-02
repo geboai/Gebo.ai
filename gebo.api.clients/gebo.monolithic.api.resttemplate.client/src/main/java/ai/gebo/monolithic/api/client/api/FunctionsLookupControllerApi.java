@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class FunctionsLookupControllerApi {
     private ApiClient apiClient;
@@ -63,7 +63,7 @@ public class FunctionsLookupControllerApi {
      */
     public ResponseEntity<List<GLookupEntry>> getAllFunctionsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctions").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctions").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -79,7 +79,7 @@ public class FunctionsLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GLookupEntry>> returnType = new ParameterizedTypeReference<List<GLookupEntry>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -103,7 +103,7 @@ public class FunctionsLookupControllerApi {
      */
     public ResponseEntity<List<ToolCategoriesTree>> getAllFunctionsTreeWithHttpInfo(Boolean ragContextFunctions) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctionsTree").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllFunctionsTree").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -120,7 +120,7 @@ public class FunctionsLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<ToolCategoriesTree>> returnType = new ParameterizedTypeReference<List<ToolCategoriesTree>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -142,7 +142,7 @@ public class FunctionsLookupControllerApi {
      */
     public ResponseEntity<List<GLookupEntry>> getAllLocalFunctionsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctions").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctions").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -158,7 +158,7 @@ public class FunctionsLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GLookupEntry>> returnType = new ParameterizedTypeReference<List<GLookupEntry>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -182,7 +182,7 @@ public class FunctionsLookupControllerApi {
      */
     public ResponseEntity<List<ToolCategoriesTree>> getAllLocalFunctionsTreeWithHttpInfo(Boolean ragContextFunctions) throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctionsTree").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAllLocalFunctionsTree").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -199,6 +199,6 @@ public class FunctionsLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<ToolCategoriesTree>> returnType = new ParameterizedTypeReference<List<ToolCategoriesTree>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

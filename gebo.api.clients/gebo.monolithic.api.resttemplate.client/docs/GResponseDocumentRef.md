@@ -20,9 +20,9 @@ Name | Type | Description | Notes
 **loadPercentage** | **Double** |  |  [optional]
 **references** | [**List&lt;DocInternalRef&gt;**](DocInternalRef.md) |  |  [optional]
 **ntokensRelevant** | **Long** |  |  [optional]
-**shortCode** | **String** |  |  [optional]
-**nbytesRelevant** | **Long** |  |  [optional]
 **ntotalContentTokens** | **Long** |  |  [optional]
+**nbytesRelevant** | **Long** |  |  [optional]
+**shortCode** | **String** |  |  [optional]
 
 <a name="ReferenceTypeEnum"></a>
 ## Enum: ReferenceTypeEnum

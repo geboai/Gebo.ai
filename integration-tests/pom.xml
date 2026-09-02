@@ -49,5 +49,6 @@
 
 		<module>atlassian-jira-integration-tests</module>
 		<module>full-setup-and-use-integration-tests</module>
+		<module>a2a-integration-tests</module>
 	</modules>
 </project>

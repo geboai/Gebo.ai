@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class GeboFastChatProfileStatusControllerApi {
     private ApiClient apiClient;
@@ -62,7 +62,7 @@ public class GeboFastChatProfileStatusControllerApi {
      */
     public ResponseEntity<ComponentSetupStatus> getChatProfilesSetupStatusWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboFastChatProfileStatusController/getChatProfilesSetupStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboFastChatProfileStatusController/getChatProfilesSetupStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -78,6 +78,6 @@ public class GeboFastChatProfileStatusControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ComponentSetupStatus> returnType = new ParameterizedTypeReference<ComponentSetupStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

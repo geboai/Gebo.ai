@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class GeboModulesConfigControllerApi {
     private ApiClient apiClient;
@@ -62,7 +62,7 @@ public class GeboModulesConfigControllerApi {
      */
     public ResponseEntity<List<GeboModuleInfo>> getAllModulesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboModulesConfigController/getAllModules").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboModulesConfigController/getAllModules").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -78,7 +78,7 @@ public class GeboModulesConfigControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GeboModuleInfo>> returnType = new ParameterizedTypeReference<List<GeboModuleInfo>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -106,7 +106,7 @@ public class GeboModulesConfigControllerApi {
         if (moduleId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'moduleId' when calling getModuleInfo");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboModulesConfigController/getModuleInfo").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboModulesConfigController/getModuleInfo").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -123,6 +123,6 @@ public class GeboModulesConfigControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboModuleInfo> returnType = new ParameterizedTypeReference<GeboModuleInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

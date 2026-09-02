@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusListGenericOpenAIAPIRankerModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class OperationStatusListGenericOpenAIAPIRankerModelChoice {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusListGenericOpenAIAPIRankerModelChoice {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusListGenericOpenAIAPIRankerModelChoice result(List<GenericOpenAIAPIRankerModelChoice> result) {
     this.result = result;
@@ -93,24 +93,6 @@ public class OperationStatusListGenericOpenAIAPIRankerModelChoice {
     this.messages = messages;
   }
 
-  public OperationStatusListGenericOpenAIAPIRankerModelChoice hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusListGenericOpenAIAPIRankerModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -129,6 +111,24 @@ public class OperationStatusListGenericOpenAIAPIRankerModelChoice {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusListGenericOpenAIAPIRankerModelChoice hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -141,13 +141,13 @@ public class OperationStatusListGenericOpenAIAPIRankerModelChoice {
     OperationStatusListGenericOpenAIAPIRankerModelChoice operationStatusListGenericOpenAIAPIRankerModelChoice = (OperationStatusListGenericOpenAIAPIRankerModelChoice) o;
     return Objects.equals(this.result, operationStatusListGenericOpenAIAPIRankerModelChoice.result) &&
         Objects.equals(this.messages, operationStatusListGenericOpenAIAPIRankerModelChoice.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusListGenericOpenAIAPIRankerModelChoice.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusListGenericOpenAIAPIRankerModelChoice.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusListGenericOpenAIAPIRankerModelChoice.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusListGenericOpenAIAPIRankerModelChoice.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -158,8 +158,8 @@ public class OperationStatusListGenericOpenAIAPIRankerModelChoice {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

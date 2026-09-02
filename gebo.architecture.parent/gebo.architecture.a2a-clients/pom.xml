@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.3.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.architecture.a2a-clients</artifactId>
+
+	<dependencies>
+		<!-- Official A2A Java SDK: wire-spec types + JsonUtil + JSON-RPC wrappers
+		     (Gson POJOs — AgentCard, Message/Part, Task, JSON-RPC envelopes). The
+		     connector calls remote agents over JSON-RPC + SSE using the JDK HttpClient
+		     rather than the SDK client transports (which drag Vert.x/gRPC/protobuf).
+		     Version pinned via the a2a.sdk.version property (the SDK BOM is deliberately
+		     NOT imported — it manages junit/mockito at test scope and would leak into
+		     the whole reactor). -->
+		<dependency>
+			<groupId>org.a2aproject.sdk</groupId>
+			<artifactId>a2a-java-sdk-jsonrpc-common</artifactId>
+			<version>${a2a.sdk.version}</version>
+		</dependency>
+
+		<!-- Gebo platform: persistence, agents runtime, security, secrets. Mirrors
+		     the dependency set of gebo.architecture.mcp-clients, plus the agents
+		     abstraction layer so a remote agent can be exposed as an
+		     IGNetworkAgentService via IGDynamicAgentServiceSupplier. -->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.base.model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.ai</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Test only: JUnit 5 + assertions for the self-contained A2A round-trip
+		     integration test (a JDK HttpServer stands in for a remote A2A agent). -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

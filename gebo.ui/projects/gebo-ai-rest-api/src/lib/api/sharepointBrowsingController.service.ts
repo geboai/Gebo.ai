@@ -30,7 +30,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class SharepointBrowsingControllerService {
 
-    protected basePath = 'http://localhost:13000';
+    protected basePath = 'http://localhost:12999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

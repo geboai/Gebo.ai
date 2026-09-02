@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class SearxngSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -69,7 +69,7 @@ public class SearxngSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGSearxngSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/deleteGSearxngSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/deleteGSearxngSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class SearxngSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -113,7 +113,7 @@ public class SearxngSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastInsertSearxngSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/fastInsertSearxngSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/fastInsertSearxngSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class SearxngSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSearxngSearchApiCredentials> returnType = new ParameterizedTypeReference<GSearxngSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -153,7 +153,7 @@ public class SearxngSearchConfigurationControllerApi {
      */
     public ResponseEntity<List<GSearxngSearchApiCredentials>> getSearxngSearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -169,7 +169,7 @@ public class SearxngSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GSearxngSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GSearxngSearchApiCredentials>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -191,7 +191,7 @@ public class SearxngSearchConfigurationControllerApi {
      */
     public ResponseEntity<ComponentSetupStatus> getSearxngSearchStatusWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/getSearxngSearchStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/getSearxngSearchStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -207,7 +207,7 @@ public class SearxngSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ComponentSetupStatus> returnType = new ParameterizedTypeReference<ComponentSetupStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -235,7 +235,7 @@ public class SearxngSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGSearxngSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/insertGSearxngSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/insertGSearxngSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -253,7 +253,7 @@ public class SearxngSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSearxngSearchApiCredentials> returnType = new ParameterizedTypeReference<GSearxngSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -281,7 +281,7 @@ public class SearxngSearchConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling searchGSearxngSearchApiCredentialsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/searchGSearxngSearchApiCredentialsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/searchGSearxngSearchApiCredentialsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -298,7 +298,7 @@ public class SearxngSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSearxngSearchApiCredentials> returnType = new ParameterizedTypeReference<GSearxngSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -326,7 +326,7 @@ public class SearxngSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGSearxngSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/updateGSearxngSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/updateGSearxngSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -344,6 +344,6 @@ public class SearxngSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSearxngSearchApiCredentials> returnType = new ParameterizedTypeReference<GSearxngSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

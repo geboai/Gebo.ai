@@ -1,0 +1,580 @@
+<title>A2A Integration Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #f6f8fa;
+    --surface: #ffffff;
+    --surface-2: #eef2f6;
+    --ink: #14202b;
+    --muted: #556472;
+    --faint: #7c8a97;
+    --border: #dde4ea;
+    --border-strong: #c3cdd6;
+    --accent: #0d7a84;
+    --accent-soft: #e2f1f2;
+    --export: #b0530b;      /* server / export-out */
+    --export-soft: #f7ebdf;
+    --import: #1f5aa0;      /* client / import-in */
+    --import-soft: #e4edf7;
+    --good: #2f7d4f;
+    --code-bg: #f2f5f8;
+    --code-ink: #22303c;
+    --shadow: 0 1px 2px rgba(20,32,43,.04), 0 6px 20px rgba(20,32,43,.05);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --ground: #0d131a;
+      --surface: #141d26;
+      --surface-2: #1b2731;
+      --ink: #e6ecf2;
+      --muted: #9aa8b5;
+      --faint: #71808d;
+      --border: #253340;
+      --border-strong: #33454f;
+      --accent: #38b9c3;
+      --accent-soft: #113037;
+      --export: #e08b45;
+      --export-soft: #33220f;
+      --import: #6098db;
+      --import-soft: #12233b;
+      --good: #5cb989;
+      --code-bg: #101922;
+      --code-ink: #cdd8e2;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 26px rgba(0,0,0,.32);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0d131a;
+    --surface: #141d26;
+    --surface-2: #1b2731;
+    --ink: #e6ecf2;
+    --muted: #9aa8b5;
+    --faint: #71808d;
+    --border: #253340;
+    --border-strong: #33454f;
+    --accent: #38b9c3;
+    --accent-soft: #113037;
+    --export: #e08b45;
+    --export-soft: #33220f;
+    --import: #6098db;
+    --import-soft: #12233b;
+    --good: #5cb989;
+    --code-bg: #101922;
+    --code-ink: #cdd8e2;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 26px rgba(0,0,0,.32);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+  .measure { max-width: 68ch; }
+
+  h1, h2, h3, h4 { font-family: "IBM Plex Serif", Georgia, serif; text-wrap: balance; line-height: 1.2; }
+  h2 { font-size: 1.7rem; font-weight: 600; margin: 0 0 .2em; letter-spacing: -.01em; }
+  h3 { font-size: 1.24rem; font-weight: 600; margin: 2.1em 0 .5em; }
+  h4 { font-size: 1.02rem; font-weight: 600; margin: 1.5em 0 .4em; }
+  p { margin: 0 0 1em; }
+  a { color: var(--accent); }
+  strong { font-weight: 600; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  :not(pre) > code {
+    font-size: .855em;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: .12em .4em;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    word-break: break-word;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .72rem;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  /* ---- Masthead ---- */
+  header.masthead {
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(120% 140% at 88% -10%, var(--accent-soft) 0%, transparent 46%),
+      var(--surface);
+  }
+  .masthead .wrap { padding-top: 56px; padding-bottom: 44px; }
+  .masthead h1 {
+    font-size: clamp(2.1rem, 5.2vw, 3.1rem);
+    font-weight: 600;
+    letter-spacing: -.02em;
+    margin: .28em 0 .34em;
+  }
+  .masthead .lede { font-size: 1.12rem; color: var(--muted); max-width: 60ch; margin-bottom: 1.5em; }
+  .metaline {
+    display: flex; flex-wrap: wrap; gap: 8px 10px;
+    font-family: "IBM Plex Mono", monospace; font-size: .74rem; color: var(--muted);
+  }
+  .metaline span {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 11px;
+  }
+
+  section { padding: 30px 0; }
+  section + section { border-top: 1px solid var(--border); }
+  .part-num {
+    font-family: "IBM Plex Mono", monospace;
+    color: var(--accent);
+    font-size: .82rem; font-weight: 600;
+    letter-spacing: .04em;
+  }
+
+  ul, ol { margin: 0 0 1em; padding-left: 1.25em; }
+  li { margin: .3em 0; }
+  li::marker { color: var(--faint); }
+
+  /* ---- Callout ---- */
+  .note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 1.4em 0;
+    box-shadow: var(--shadow);
+  }
+  .note .k { font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color: var(--accent); display:block; margin-bottom:.3em; }
+  .note p:last-child { margin-bottom: 0; }
+
+  /* ---- Mapping table ---- */
+  .tablewrap { overflow-x: auto; margin: 1.2em 0; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; font-size: .93rem; background: var(--surface); }
+  th, td { text-align: left; padding: 11px 15px; vertical-align: top; border-bottom: 1px solid var(--border); }
+  thead th {
+    font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+    color: var(--muted); background: var(--surface-2); font-weight: 500;
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td code { white-space: nowrap; }
+  .col-gebo code { white-space: normal; }
+
+  /* ---- Module cards ---- */
+  .modcard {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin: 1.3em 0;
+  }
+  .modcard > .head { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .modcard.server > .head { background: var(--export-soft); border-bottom-color: color-mix(in srgb, var(--export) 30%, var(--border)); }
+  .modcard.client > .head { background: var(--import-soft); border-bottom-color: color-mix(in srgb, var(--import) 30%, var(--border)); }
+  .modcard .head .tag {
+    font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600;
+  }
+  .modcard.server .head .tag { color: var(--export); }
+  .modcard.client .head .tag { color: var(--import); }
+  .modcard .head h3 { margin: .25em 0 0; font-size: 1.28rem; }
+  .modcard .head .path { font-family:"IBM Plex Mono",monospace; font-size:.82rem; color: var(--muted); margin-top:.3em; }
+  .modcard .body { padding: 6px 20px 14px; }
+
+  /* class list rows */
+  .clsrow { display: grid; grid-template-columns: minmax(0,1fr); gap: 3px; padding: 13px 0; border-bottom: 1px dashed var(--border); }
+  .clsrow:last-child { border-bottom: none; }
+  .clsrow .n { font-family:"IBM Plex Mono",monospace; font-size:.9rem; font-weight:600; color: var(--ink); word-break: break-word; }
+  .clsrow.server .n { color: var(--export); }
+  .clsrow.client .n { color: var(--import); }
+  .clsrow .d { font-size: .92rem; color: var(--muted); }
+  .clsrow .d code { font-size: .82em; }
+  .pill {
+    display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.06em;
+    text-transform:uppercase; padding:1px 7px; border-radius:5px; border:1px solid var(--border-strong);
+    color: var(--faint); margin-left:6px; vertical-align: middle;
+  }
+  .pill.new { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, var(--border)); }
+  .pill.reuse { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+
+  /* ---- Flow diagram ---- */
+  .flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 1.3em 0;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .flow .cap { font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; margin-bottom: 14px; }
+  .flow.server .cap { color: var(--export); }
+  .flow.client .cap { color: var(--import); }
+  .steps { display: flex; align-items: stretch; gap: 0; min-width: min-content; }
+  .step {
+    flex: 1 1 0; min-width: 118px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface-2);
+    padding: 11px 12px;
+    position: relative;
+  }
+  .step + .step { margin-left: 26px; }
+  .step + .step::before {
+    content: "→";
+    position: absolute; left: -22px; top: 50%; transform: translateY(-50%);
+    color: var(--faint); font-size: 1rem;
+  }
+  .step .s-num { font-family:"IBM Plex Mono",monospace; font-size:.66rem; color: var(--faint); }
+  .step .s-t { font-size: .82rem; font-weight: 600; margin: 2px 0 3px; line-height:1.25; }
+  .step .s-d { font-size: .74rem; color: var(--muted); line-height: 1.4; }
+  .flow.server .step .s-num { color: var(--export); }
+  .flow.client .step .s-num { color: var(--import); }
+
+  /* build order */
+  .order { counter-reset: step; list-style: none; padding: 0; margin: 1.2em 0; }
+  .order > li {
+    counter-increment: step;
+    position: relative;
+    padding: 12px 0 12px 52px;
+    border-bottom: 1px solid var(--border);
+  }
+  .order > li:last-child { border-bottom: none; }
+  .order > li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 12px;
+    width: 34px; height: 34px; border-radius: 8px;
+    display: grid; place-items: center;
+    font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:.9rem;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  }
+  .order .ot { font-weight: 600; }
+  .order .od { font-size: .92rem; color: var(--muted); }
+
+  /* open questions */
+  .q { border:1px solid var(--border); border-radius:10px; background:var(--surface); padding:15px 18px; margin:1em 0; box-shadow: var(--shadow); }
+  .q .qh { font-weight:600; font-family:"IBM Plex Serif",serif; font-size:1.05rem; margin-bottom:.2em; }
+  .q .lean { font-size:.9rem; color: var(--ink); }
+  .q .lean b { font-family:"IBM Plex Mono",monospace; font-size:.82rem; color: var(--accent); font-weight:600; letter-spacing:.02em; }
+
+  footer { border-top: 1px solid var(--border); color: var(--muted); font-size: .86rem; padding: 26px 0 60px; }
+  .kicker { color: var(--muted); font-size: 1.02rem; }
+
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    .steps { min-width: 620px; }
+  }
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Architecture Decision Record · Draft for review</div>
+    <h1>Bringing A2A to the Gebo agent network</h1>
+    <p class="lede">A plan to export Gebo agents &amp; agent-networks over the Agent2Agent protocol, and to register external A2A agents as first-class network participants &mdash; persisted in Mongo, built entirely on patterns the codebase already uses.</p>
+    <div class="metaline">
+      <span>gebo.architecture.parent</span>
+      <span>2 new modules</span>
+      <span>0 core-contract changes</span>
+      <span>precedent: mcp-server / mcp-clients</span>
+      <span>2026-08-28</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- SUMMARY -->
+  <section>
+    <div class="measure">
+      <p class="kicker">The agent layer is already a network-of-agents runtime with a native capability model and a live streaming lifecycle. A2A is the same shape of problem the MCP modules already solve &mdash; export internal capability, integrate external capability &mdash; over a different wire format. This plan reuses those two precedents almost line-for-line.</p>
+    </div>
+    <div class="note" style="border-left-color: var(--good);">
+      <span class="k" style="color: var(--good);">Decisions locked · 2026-08-28</span>
+      <p style="margin-bottom:.5em;"><strong>Protocol:</strong> official A2A Java SDK (not hand-rolled) &mdash; exact artifact/version &amp; Spring-MVC fit confirmed before coding. &nbsp;<strong>Task lifecycle:</strong> SSE-first (synchronous + <code>message/stream</code>). &nbsp;<strong>Layout:</strong> <code>a2a-server</code> / <code>a2a-clients</code>.</p>
+      <p style="margin-bottom:0;"><strong>Scope:</strong> both directions, <strong>secure by default</strong> &mdash; no agent and no network of agents is externally visible or callable unless an admin has explicitly configured and enabled it. <code>enabled</code> defaults off on both sides; ACLs still gate callers.</p>
+    </div>
+    <div class="note">
+      <span class="k">The thesis</span>
+      <p><code>IGGenericAgentService.getAgentCapabilities()</code> is already an &ldquo;agent card&rdquo; in all but wire format; <code>IGNetworkAgentService.onMessage()</code> + the reactive <code>Flux</code>/<code>Sinks</code> path is already a task lifecycle; and <code>IGDynamicAgentServiceSupplier</code> is a clean seam for injecting remote agents at runtime. A2A needs a <em>projection</em> of these onto JSON-RPC + Agent Cards, not new agent machinery.</p>
+    </div>
+  </section>
+
+  <!-- PART 1 -->
+  <section>
+    <span class="part-num">PART 1</span>
+    <h2>What already exists</h2>
+    <p class="measure">Grounding, with the real types the plan builds on.</p>
+
+    <h3>The agent runtime &mdash; <code>gebo.architecture.agents.abstraction.layer</code></h3>
+    <ul class="measure">
+      <li><strong>Capability model.</strong> <code>IGGenericAgentService.getAgentCapabilities(GAgentConfig)</code> returns <code>AgentCapabilities</code> &mdash; a <code>summary</code> plus lists of <code>capabilities</code>, <code>catalogs</code>, <code>resources</code>, <code>tools</code>, each an <code>AgentCapabilityResource{code, name, description}</code>. Its own Javadoc says it&rsquo;s rendered into &ldquo;the shared network-of-agents description used by coordinating agents to reason about their reachable peers.&rdquo;</li>
+      <li><strong>Network agent contract.</strong> <code>IGNetworkAgentService&lt;I,O&gt;</code> handles an <code>AgentsExchangeMessage&lt;I&gt;</code> and returns <code>List&lt;AgentsExchangeMessage&lt;O&gt;&gt;</code>, driven inside a <code>GAgentsNetwork</code> (participants, <code>CommunicationPolicy</code> ALLOW/DENY lists, input/output nodes, <code>maxLoopIteration</code>). Progress streams through <code>INotificationSink</code>; the reactive variant emits <code>IGPartialOperation&lt;O&gt;</code> onto a <code>Flux</code> via <code>Sinks.Many</code>.</li>
+      <li><strong>Runtime aggregation.</strong> <code>AgentServiceRuntimeDaoImpl</code> gathers every <code>IGGenericAgentService</code> bean <em>plus</em> every <code>IGDynamicAgentServiceSupplier.get()</code>. That supplier is how the <code>standard</code> module already injects runtime agents (e.g. <code>externalSourcesAgentServicesSupplier()</code>).</li>
+      <li><strong>Persistence &amp; CRUD.</strong> <code>GAgentConfig</code> / <code>GAgentsNetwork</code> extend <code>GBaseObject</code> (Mongo <code>@Id code</code>), stored via <code>IGBaseMongoDBRepository&lt;T&gt;</code>, surfaced through <code>IGRuntimeConfigurationDao</code>, mutated through an <code>IGAgentsNetworkCrudService</code> returning <code>OperationStatus&lt;T&gt;</code> + <code>GUserMessage</code>s, all ACL-secured via <code>IGObjectWithSecurity</code>/<code>IAclGrantedResource</code> (<code>accessibleToAll/Users/Groups</code>, <code>aclAliases</code>).</li>
+    </ul>
+
+    <h3>Chat &mdash; <code>gebo.architecture.chat.abstraction.layer</code></h3>
+    <p class="measure">A pipeline/step engine (routing, RAG, tool-using, deep-search steps) with reactive streaming output (<code>ISinkUIEmitter</code>) and Mongo-persisted session state. It consumes the agent network through <code>gebo.architecture.agents.standard</code> &mdash; <code>GReactiveChatAgentsNetworkService</code> extends <code>GAbstractReactiveOutputAgentsNetworkService&lt;ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope&gt;</code> and exposes <code>getFlux()</code>. A2A doesn&rsquo;t touch chat directly; it plugs in one layer below, at the agent runtime.</p>
+
+    <h3>The precedent to copy &mdash; the MCP modules</h3>
+    <p class="measure">You have already built this exact &ldquo;export / integrate&rdquo; pair twice:</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Concern</th><th>mcp-server (export)</th><th>mcp-clients (integrate)</th></tr></thead>
+        <tbody>
+          <tr><td>Config doc (Mongo)</td><td><code>GeboMCPServerConfig</code></td><td><code>MCPClientConfig</code></td></tr>
+          <tr><td>Live endpoint</td><td><code>GeboMcpServerRegistry</code> holds a <code>volatile</code> composite <code>RouterFunction</code>; one delegating bean in <code>GeboMcpDispatcherConfig</code> routes to it, so endpoints hot-reload with no restart</td><td><code>McpClientConnector</code> builds &amp; initializes a client per transport</td></tr>
+          <tr><td>Build / connect</td><td><code>GeboMcpServerBuilder</code> wires transport + capabilities, wraps router in a 403 access filter</td><td>transport switch: <code>STREAMABLE_HTTP</code> / <code>SSE_LEGACY</code> / <code>STDIO</code></td></tr>
+          <tr><td>CRUD keeps runtime in sync</td><td><code>GMCPServerConfigManagerServiceImpl</code>: <code>insert/update</code> &rarr; <code>registry.reload(code)</code>, <code>delete</code> &rarr; <code>registry.remove(code)</code></td><td><code>McpClientManagementService.testAndDiscovery()</code> probes &amp; diffs remote features</td></tr>
+          <tr><td>Auth</td><td>Gebo identity via security context capture</td><td><code>McpAuthMode</code> resolved to an <code>Authorization</code> header via <code>IGeboSecretsAccessService</code> / <code>IGOauth2AccessTokenService</code></td></tr>
+          <tr><td>Admin API</td><td><code>GeboMCPServerAdminController</code> (<code>hasRole('ADMIN')</code>)</td><td><code>McpClientConfigController</code> (<code>hasRole('ADMIN')</code>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <span class="k">Greenfield</span>
+      <p>No A2A code exists today &mdash; a repo-wide grep for <code>a2a</code> / <code>AgentCard</code> / <code>.well-known/agent</code> is clean, and there is no <code>spring-ai</code> A2A artifact in the local <code>.m2</code>. This is a new build, not a retrofit.</p>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section>
+    <span class="part-num">PART 2</span>
+    <h2>How A2A maps onto Gebo</h2>
+    <p class="measure">Every A2A concept has an existing home. The work is projection and transport, not new domain modelling.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>A2A concept</th><th class="col-gebo">Existing Gebo concept</th></tr></thead>
+        <tbody>
+          <tr><td>Agent Card at <code>/.well-known/agent-card.json</code></td><td class="col-gebo"><code>AgentCapabilities</code> projected from <code>GAgentConfig</code> / <code>GAgentsNetwork</code></td></tr>
+          <tr><td><strong>A2A agent = one opaque service</strong></td><td class="col-gebo"><strong>an entire <code>GAgentsNetwork</code></strong> run via <code>IGAgentsNetworkServiceFactory.create(...).executeNetwork()</code> (the proven chat path) &mdash; internals hidden. NB: the <code>AgentType.AGENTS_NETWORK</code> config indirection is declared but unwired &mdash; see Part 3.1</td></tr>
+          <tr><td>Skill (id, name, description, tags, i/o modes)</td><td class="col-gebo"><code>AgentCapabilityResource</code> + the <code>capabilities</code> list; for a network, its <code>scenarioDescription</code> + <code>getInputType()</code>/<code>getOutputType()</code></td></tr>
+          <tr><td>JSON-RPC <code>message/send</code> · <code>message/stream</code> (SSE)</td><td class="col-gebo"><code>IGNetworkAgentService.onMessage()</code> + reactive <code>Flux</code>/<code>Sinks.Many</code></td></tr>
+          <tr><td>Task lifecycle <span class="mono">submitted&rarr;working&rarr;completed/failed/input-required</span></td><td class="col-gebo"><code>AgentsCollaborationSessionContext</code> + <code>IGPartialOperation</code> / <code>PartialOperationStatus</code> + <code>INotificationSink</code></td></tr>
+          <tr><td>Message parts (Text / File / Data)</td><td class="col-gebo"><code>AgentsExchangeMessage</code> payload + rich-response fragments</td></tr>
+          <tr><td>Security schemes (OAuth2 / API-key / Bearer)</td><td class="col-gebo"><code>McpAuthMode</code> pattern + secrets / oauth2 services (reused verbatim)</td></tr>
+          <tr><td>Remote server registration + discovery</td><td class="col-gebo"><code>MCPClientConfig</code> + <code>testAndDiscovery()</code> + connector</td></tr>
+          <tr><td>Live publish / unpublish of an endpoint</td><td class="col-gebo"><code>GeboMcpServerRegistry</code> composite-router hot-reload</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PART 3 -->
+  <section>
+    <span class="part-num">PART 3</span>
+    <h2>Module A &mdash; export Gebo over A2A</h2>
+    <p class="measure">Mirrors <code>mcp-server</code>. Publishes selected agents &amp; networks as an A2A server: an Agent Card plus a JSON-RPC endpoint that turns inbound tasks into network runs and streams status back.</p>
+
+    <div class="modcard server">
+      <div class="head">
+        <span class="tag">New module · export</span>
+        <h3>gebo.architecture.a2a-server</h3>
+        <div class="path">gebo.architecture.parent/gebo.architecture.a2a-server</div>
+      </div>
+      <div class="body">
+        <div class="clsrow server"><div class="n">A2AServerConfig <span class="pill new">new</span></div><div class="d">Mongo doc, <code>extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource</code>. Fields: <code>exportedRelativeUrl</code>, <code>enabled</code> (<strong>defaults off</strong>), <code>List&lt;A2AExportedAgent&gt;</code>, selected <code>securityScheme</code>, ACL fields. Direct analog of <code>GeboMCPServerConfig</code>. <strong>Secure by default:</strong> an agent or network is published only when an admin creates a config, lists it, and sets <code>enabled=true</code>; ACL fields still gate who may call it.</div></div>
+        <div class="clsrow server"><div class="n">A2AExportedAgent <span class="pill new">new</span></div><div class="d">One export entry. <code>kind</code> = <code>AGENT</code> | <code>NETWORK</code>; for <code>NETWORK</code>: <code>networkCode</code> (resolved static-or-code-generated via <code>IAgentsNetworkDao</code>; factory &amp; I/O come from the resolved network), optional marshalling profile, <code>exposeMemberCapabilities</code> (default false); for <code>AGENT</code>: <code>agentConfigCode</code>; plus <code>skillName</code>. See Part 3.1.</div></div>
+        <div class="clsrow server"><div class="n">A2AServerConfigRepository <span class="pill new">new</span></div><div class="d"><code>extends IGBaseMongoDBRepository&lt;A2AServerConfig&gt;</code> with <code>findByExportedRelativeUrl(...)</code>, exactly like <code>GeboMCPServerConfigRepository</code>.</div></div>
+        <div class="clsrow server"><div class="n">A2AAgentCardBuilder <span class="pill new">new</span></div><div class="d">Projects each exported agent&rsquo;s <code>AgentCapabilities</code> (summary&rarr;description, capabilities/tools/catalogs&rarr;A2A <code>skills</code>) into an <code>AgentCard</code>, served at <code>&lt;url&gt;/.well-known/agent-card.json</code>.</div></div>
+        <div class="clsrow server"><div class="n">A2AServerRegistry <span class="pill new">new</span></div><div class="d">Holds the <code>volatile</code> composite <code>RouterFunction</code>; <code>reload(code)</code> / <code>remove(code)</code> / <code>reloadAll()</code>. Copies <code>GeboMcpServerRegistry</code> structure.</div></div>
+        <div class="clsrow server"><div class="n">A2ADispatcherConfig <span class="pill new">new</span></div><div class="d">One delegating <code>@Bean RouterFunction</code> &rarr; <code>registry.currentComposite().route(request)</code>. Copies <code>GeboMcpDispatcherConfig</code> so endpoints change without restart.</div></div>
+        <div class="clsrow server"><div class="n">A2AServerBuilder <span class="pill new">new</span></div><div class="d">Builds the per-config router: the well-known card route + the JSON-RPC route (<code>message/send</code>, <code>message/stream</code> SSE, <code>tasks/get</code>, <code>tasks/cancel</code>), wrapped in an access filter that 403s callers not granted on the config &mdash; mirrors <code>GeboMcpServerBuilder</code>&rsquo;s filter.</div></div>
+        <div class="clsrow server"><div class="n">A2ATaskBridge <span class="pill new">new</span></div><div class="d">The heart of the module. Inbound task &rarr; resolve the export to a <code>GAgentsNetwork</code> (referenced network, or a synthesized single-node network wrapping the agent &mdash; see Part 3.1) &rarr; <code>IGAgentsNetworkServiceFactory.create(...).executeNetwork()</code> / <code>getFlux()</code> under the caller&rsquo;s <code>ReactiveIdentityUtil</code> &rarr; map <code>INotificationSink</code> / <code>IGPartialOperation</code> events onto A2A task-status SSE frames and the terminal output onto the artifact.</div></div>
+        <div class="clsrow server"><div class="n">A2AServerConfigManagerService (+Impl) <span class="pill new">new</span></div><div class="d">CRUD through <code>IGPersistentObjectManager</code>; validates the relative URL; applies ACLs via <code>IGSecurityService</code>; after every mutation calls <code>registry.reload/remove</code>. Line-for-line <code>GMCPServerConfigManagerServiceImpl</code>.</div></div>
+        <div class="clsrow server"><div class="n">GeboA2AServerAdminController <span class="pill new">new</span></div><div class="d"><code>@RestController @PreAuthorize("hasRole('ADMIN')")</code>, returns <code>OperationStatus&lt;A2AServerConfig&gt;</code>. Mirrors <code>GeboMCPServerAdminController</code>.</div></div>
+      </div>
+    </div>
+
+    <h3 style="color: var(--export);">Part 3.1 &mdash; Exporting a whole network-of-agents as ONE A2A agent</h3>
+    <p class="measure">The primary export unit: a network presented as a single agent with its own input/output. A2A agents are <em>opaque services</em> &mdash; a caller sees a card and a task interface, never the internals &mdash; and a Gebo network maps to exactly that: one card, one endpoint, the member agents / routing / loop iterations hidden behind it.</p>
+
+    <div class="note" style="border-left-color: var(--export);">
+      <span class="k" style="color: var(--export);">Wiring status &mdash; verified against the code (correction)</span>
+      <p>The runtime <strong>execution</strong> layer for &ldquo;a network as one unit&rdquo; exists and is exercised; the <code>AgentType.AGENTS_NETWORK</code> <strong>config indirection is declared but NOT wired</strong>. Do not treat it as production-ready.</p>
+      <p style="margin-bottom:.4em;"><strong>Proven (chat runs on it):</strong> <code>IGAgentsNetworkService&lt;I,O&gt;</code> (<code>executeNetwork(...)</code>, <code>getInputType/getOutputType</code>; reactive <code>getFlux()</code> for <code>message/stream</code>) built by <code>IGAgentsNetworkServiceFactory</code> / <code>GReactiveChatAgentsNetworkServiceFactoryImpl</code> (<code>ChatPipelineExecutionRuntimeData &rarr; GeboChatMessageEnvelope</code>).</p>
+      <p style="margin-bottom:0;"><strong>Declared but unwired (verified):</strong> nothing branches on <code>agentType</code> (<code>getAgentType()</code> never read); no code ever sets <code>adaptedAgentNetworkCode</code>/<code>agentNetworkServiceCode</code> (only read inside the adapter); and the one registered adapter bean (<code>GStringToStringAgentsNetworkToNetworkAgentAdapterServiceImpl</code>, String&rarr;String) has <em>no compatible factory</em> &mdash; the sole factory is chat-typed, whose input is not assignable from <code>String</code>. No text/parts network factory exists.</p>
+    </div>
+
+    <p class="measure"><strong>Consequence &mdash; call the proven path, not the <code>AGENTS_NETWORK</code> indirection.</strong> <code>A2ATaskBridge</code> resolves an exported network via <code>IGAgentsNetworkServiceFactory.create(network, sink, inputType, outputType, runAs)</code> then <code>executeNetwork(...)</code> / <code>getFlux()</code> &mdash; the same path chat uses. The adapter + <code>AGENTS_NETWORK</code> config machinery is an <em>unfinished convenience</em>: bypass it (recommended), or finish-and-test it as explicitly scoped work.</p>
+
+    <div class="note" style="border-left-color: var(--export);">
+      <span class="k" style="color: var(--export);">Both export kinds unify on ONE path &mdash; a single agent is not independently runnable</span>
+      <p style="margin-bottom:.4em;">Verified: an agent&rsquo;s only execution entry points &mdash; <code>IGNetworkAgentService.onMessage(...)</code> and <code>IGReactiveAgentService.execute(...)</code> &mdash; both <strong>require full network context</strong> (<code>GAgentsNetwork</code>, the <code>AgentNetworkParticipant</code> persona, an <code>AgentsCollaborationSessionContext</code>, private memory, the runtime DAO), and the only caller anywhere is the network executor. <code>IGGenericAgentService</code> has no execution method. There is no &ldquo;just call an agent.&rdquo;</p>
+      <p style="margin-bottom:0;">So <code>A2ATaskBridge</code> runs <strong>both</strong> kinds through <code>executeNetwork()</code>: <strong>NETWORK</strong> &rarr; the referenced network; <strong>AGENT</strong> &rarr; a synthesized <strong>ephemeral single-node <code>GAgentsNetwork</code></strong> whose one participant (the exported <code>GAgentConfig</code>) is both input and output node. Per-kind difference is only card construction + the trivial one-node synthesis.</p>
+    </div>
+
+    <p class="measure"><strong>Provenance &mdash; static or code-generated, addressed uniformly.</strong> A <code>GAgentsNetwork</code> can be <strong>persisted in Mongo</strong> (<code>AgentsNetworkRepository</code>) or <strong>generated purely in code</strong> (an <code>IDynamicAgentsNetworkDataSource</code>, e.g. the default streaming chat network). <code>AgentNetworkConfigDaoImpl</code> composes both (code-generated ones cloned, <code>readOnly=true</code>) and <code>findByCode(code)</code> resolves across both &mdash; so an export references a network <strong>by <code>code</code></strong> regardless of provenance, and the factory is already named on <code>GAgentsNetwork.agentsNetworkServiceFactoryId</code>.</p>
+    <p class="measure"><strong>I/O type is a consequence of the node agent services.</strong> <code>executeNetwork()</code> validates input against the input-node participant&rsquo;s service (<code>inputRuntime.getService().getInputType().isAssignableFrom(input.getClass())</code>); output flows from the participants&rsquo; output types. So the card&rsquo;s advertised I/O and the marshalling derive from the input/output <strong>node agent service ids and their types</strong> &mdash; a network is text/parts-exportable only if its input node accepts a marshallable type. The default chat network&rsquo;s input node adapts <code>ChatPipelineExecutionRuntimeData</code> (not text), which is exactly why a generic text export needs marshalling / a text-in node.</p>
+
+    <div class="note">
+      <span class="k">New work this exposes</span>
+      <p>Exporting an <em>arbitrary</em> network with A2A text/parts I/O needs a <strong>network-service factory (and input/output node services) whose I/O is A2A-friendly</strong> (e.g. <code>String &rarr; String</code>, or a parts-aware type). Only the chat-typed factory exists today &mdash; so this factory, plus the I/O marshalling between A2A <code>Part</code>s and the network&rsquo;s typed I/O, is genuinely new, not reuse.</p>
+    </div>
+
+    <p class="measure"><strong>The card for a network:</strong> <code>name</code> &larr; network code; <code>description</code> &larr; <code>GAgentsNetwork.scenarioDescription</code>; a single skill whose I/O modes come from the network service&rsquo;s <code>getInputType()</code>/<code>getOutputType()</code>. Optional, default off: <code>exposeMemberCapabilities</code> aggregates each participant&rsquo;s <code>getAgentCapabilities()</code> into the skill for richer discovery; default keeps it opaque, which also reinforces secure-by-default (member agents never individually reachable).</p>
+  </section>
+
+  <!-- PART 4 -->
+  <section>
+    <span class="part-num">PART 4</span>
+    <h2>Module B &mdash; integrate external A2A agents</h2>
+    <p class="measure">Mirrors <code>mcp-clients</code>. Registers a remote A2A agent, discovers its skills, and exposes it as an <code>IGNetworkAgentService</code> so it drops into any <code>GAgentsNetwork</code> exactly like an internal agent.</p>
+
+    <div class="modcard client">
+      <div class="head">
+        <span class="tag">New module · integrate</span>
+        <h3>gebo.architecture.a2a-clients</h3>
+        <div class="path">gebo.architecture.parent/gebo.architecture.a2a-clients</div>
+      </div>
+      <div class="body">
+        <div class="clsrow client"><div class="n">A2ARemoteAgentConfig <span class="pill new">new</span></div><div class="d">Mongo doc, <code>extends GBaseObject</code>. Fields: <code>baseUrl</code>, <code>agentCardPath</code>, <code>transportType</code>, <code>authMode</code>, <code>secretCode</code> / <code>oauth2AuthenticatorCode</code>, <code>exportingPrefix</code>, <code>enabled</code> (<strong>defaults off</strong>), cached discovered <code>skills</code>, ACL fields. Shaped like <code>MCPClientConfig</code>. <strong>Admin-gated:</strong> a remote agent is mounted as a network participant only when an admin has registered it and set <code>enabled=true</code>; the supplier skips disabled configs.</div></div>
+        <div class="clsrow client"><div class="n">A2AAuthMode <span class="pill reuse">reuse pattern</span></div><div class="d">Same enum shape as <code>McpAuthMode</code> (<code>NONE, API_KEY, STATIC_BEARER_TOKEN, OAUTH2_CLIENT_CREDENTIALS, OAUTH2_AUTHORIZATION_CODE_PER_USER, USER_TOKEN_RELAY</code>).</div></div>
+        <div class="clsrow client"><div class="n">A2AClientConnector <span class="pill new">new</span></div><div class="d">Fetches the Agent Card; resolves the <code>Authorization</code> header via <code>IGeboSecretsAccessService</code> / <code>IGOauth2AccessTokenService</code> / <code>IGOauth2RuntimeConfigurationDao</code> &mdash; the credential-resolution logic lifts almost verbatim from <code>McpClientConnector.resolveAuthorizationHeader()</code>. Speaks JSON-RPC <code>message/send</code> + <code>message/stream</code>.</div></div>
+        <div class="clsrow client"><div class="n">A2AClientManagementService (+Impl) <span class="pill new">new</span></div><div class="d"><code>testAndDiscovery()</code> fetches the card and diffs skills against the stored config (added / removed flags) &mdash; same contract &amp; <code>OperationStatus</code> returns as <code>McpClientManagementService</code>. Plus insert/update/delete/list.</div></div>
+        <div class="clsrow client"><div class="n">RemoteA2ANetworkAgentService <span class="pill new">new</span></div><div class="d"><strong>The integration seam.</strong> <code>implements IGNetworkAgentService&lt;I,O&gt;</code>; its <code>onMessage()</code> translates the exchange message into an A2A task call and streams the reply back through the <code>INotificationSink</code>. Exports <code>getAgentCapabilities()</code> built from the discovered skills, so the remote agent shows real capabilities in the network composer.</div></div>
+        <div class="clsrow client"><div class="n">A2ADynamicAgentServiceSupplier <span class="pill reuse">reuse seam</span></div><div class="d"><code>implements IGDynamicAgentServiceSupplier</code> &mdash; returns one <code>RemoteA2ANetworkAgentService</code> per enabled <code>A2ARemoteAgentConfig</code>. This is <em>the</em> hook: <code>AgentServiceRuntimeDaoImpl</code> already ingests these suppliers, so remote agents become selectable network participants with zero core changes.</div></div>
+        <div class="clsrow client"><div class="n">A2AClientConfigController <span class="pill new">new</span></div><div class="d"><code>@PreAuthorize("hasRole('ADMIN')")</code>; testAndDiscovery / insert / update / delete / list. Mirrors <code>McpClientConfigController</code>.</div></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="k">Optional</span>
+      <p>Remote A2A skills can <em>additionally</em> be surfaced as chat <code>ToolCallback</code>s, the way discovered MCP tools already are through <code>MCPToolsExporter</code> &mdash; a follow-on, not part of the core cut.</p>
+    </div>
+  </section>
+
+  <!-- PART 5 -->
+  <section>
+    <span class="part-num">PART 5</span>
+    <h2>Shared wire model</h2>
+    <p class="measure"><strong>Decision: use the official A2A Java SDK</strong> rather than hand-rolling POJOs. The SDK supplies the wire vocabulary (<code>AgentCard</code>, <code>AgentSkill</code>, capabilities, security schemes; <code>Message</code>+<code>Part</code>; <code>Task</code>, <code>TaskStatus</code>, <code>TaskState</code>, <code>Artifact</code>; JSON-RPC envelopes) and the dispatch, so both sides stay spec-conformant by construction. Gebo-side work: map <code>AgentCapabilities</code> &harr; the SDK&rsquo;s <code>AgentCard</code>, and bridge the SDK&rsquo;s task handler &harr; <code>IGNetworkAgentService</code> / the streaming lifecycle.</p>
+    <div class="note">
+      <span class="k">Open sub-question &mdash; needs confirmation before coding</span>
+      <p>Exact SDK artifact + version, and its <strong>transport fit</strong>. The canonical impl is <code>a2a-java</code> (<code>io.a2a.sdk:*</code>), not yet in the local <code>.m2</code>, and its <em>server</em> transports are Jakarta/Quarkus-oriented &mdash; while this repo serves MCP over Spring MVC <code>RouterFunction</code>s with a hot-reload registry. The <strong>client</strong> side can use the SDK client cleanly; the <strong>server</strong> side needs verification that a Spring-MVC-compatible server transport exists (or that we drive the SDK request handler from our own <code>RouterFunction</code>). Fallback: use the SDK <em>types</em> for the wire model, keep our own Spring MVC JSON-RPC/SSE handlers. I&rsquo;ll confirm against Maven Central first.</p>
+    </div>
+  </section>
+
+  <!-- PART 6 -->
+  <section>
+    <span class="part-num">PART 6</span>
+    <h2>Request / response lifecycle</h2>
+    <p class="measure">Both directions ride the streaming machinery the agent runtime already has &mdash; no new concurrency model.</p>
+
+    <div class="flow server">
+      <div class="cap">Inbound &mdash; a remote caller invokes an exported Gebo agent</div>
+      <div class="steps">
+        <div class="step"><div class="s-num">01</div><div class="s-t">JSON-RPC in</div><div class="s-d">message/send or message/stream hits the config&rsquo;s route</div></div>
+        <div class="step"><div class="s-num">02</div><div class="s-t">Access filter</div><div class="s-d">ACL check on A2AServerConfig; 403 if not granted</div></div>
+        <div class="step"><div class="s-num">03</div><div class="s-t">Build message</div><div class="s-d">Task &rarr; AgentsExchangeMessage in a collaboration session</div></div>
+        <div class="step"><div class="s-num">04</div><div class="s-t">Run network</div><div class="s-d">onMessage() under caller&rsquo;s ReactiveIdentityUtil</div></div>
+        <div class="step"><div class="s-num">05</div><div class="s-t">Stream status</div><div class="s-d">Sink / IGPartialOperation &rarr; SSE task-status frames</div></div>
+        <div class="step"><div class="s-num">06</div><div class="s-t">Final artifact</div><div class="s-d">PartialOperationStatus &rarr; completed / failed</div></div>
+      </div>
+    </div>
+
+    <div class="flow client">
+      <div class="cap">Outbound &mdash; a Gebo network calls a registered remote A2A agent</div>
+      <div class="steps">
+        <div class="step"><div class="s-num">01</div><div class="s-t">onMessage()</div><div class="s-d">RemoteA2ANetworkAgentService receives an exchange message</div></div>
+        <div class="step"><div class="s-num">02</div><div class="s-t">Resolve auth</div><div class="s-d">Authorization header via secrets / oauth2 services</div></div>
+        <div class="step"><div class="s-num">03</div><div class="s-t">message/stream</div><div class="s-d">JSON-RPC task sent to the remote base URL</div></div>
+        <div class="step"><div class="s-num">04</div><div class="s-t">Consume SSE</div><div class="s-d">Remote task-status events read back</div></div>
+        <div class="step"><div class="s-num">05</div><div class="s-t">Bridge to sink</div><div class="s-d">Progress &rarr; INotificationSink notifications</div></div>
+        <div class="step"><div class="s-num">06</div><div class="s-t">Return outputs</div><div class="s-d">Final artifact &rarr; List&lt;AgentsExchangeMessage&lt;O&gt;&gt;</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 6.1 -->
+  <section>
+    <span class="part-num">PART 6.1</span>
+    <h2>Identity, credentials &amp; impersonation</h2>
+    <p class="measure">Identity semantics differ by direction &mdash; and this is where A2A needs something the MCP server did not. The MCP server reuses the <strong>local</strong> Spring Security principal (<code>GeboMcpSecurityContextSupport</code> captures the authenticated <code>Authentication</code> and re-establishes it so handlers run &ldquo;under the identity of the calling (impersonated) user and honour that user&rsquo;s ACLs&rdquo;; <code>GeboMcpAccessChecker</code> checks <code>isCanDo(config, READ, EXECUTE)</code>). That works because MCP callers are <em>local</em>. An A2A caller is <em>external</em>.</p>
+
+    <div class="flow client">
+      <div class="cap">Outbound &mdash; coherence is authMode-dependent, not blanket impersonation</div>
+      <div class="steps">
+        <div class="step" style="min-width:210px;"><div class="s-num">SERVICE MODES</div><div class="s-t">API_KEY · BEARER · CLIENT_CREDENTIALS</div><div class="s-d">Remote sees <strong>Gebo-as-a-service</strong>. Local user NOT propagated; credential NOT mapped into local Spring Security. Local ACLs still gate who may invoke.</div></div>
+        <div class="step" style="min-width:210px;"><div class="s-num">PER-USER MODES</div><div class="s-t">AUTH_CODE_PER_USER · TOKEN_RELAY · TOKEN_EXCHANGE</div><div class="s-d">Local user&rsquo;s own/exchanged token relayed &rarr; remote sees the <strong>actual local user</strong>. Coherent &mdash; but this is <em>delegation, not impersonation</em>.</div></div>
+      </div>
+    </div>
+    <p class="measure"><code>RemoteA2ANetworkAgentService</code> runs locally as a network participant under the <strong>local invoking user&rsquo;s</strong> <code>runAs</code>, and presents outward whatever <code>authMode</code> dictates. No automatic impersonation of remote agents.</p>
+
+    <div class="note" style="border-left-color: var(--good);">
+      <span class="k" style="color: var(--good);">Inbound &mdash; impersonation MUST be coherent with a local principal (decided)</span>
+      <p style="margin-bottom:.4em;">The exported network runs via <code>executeNetwork(... runAs ...)</code> against a <strong>local Spring Security principal</strong>. Requirement: <strong>the inbound credential must itself resolve to a local principal</strong>, and the network impersonates that principal &mdash; never a synthetic identity divorced from a real Gebo user. This reuses existing auth, not new machinery:</p>
+      <p style="margin-bottom:.4em;"><strong>Gebo-generated API key</strong> is already a <strong>JWT bound to a local user</strong> &mdash; <code>GGeneratedApiKeyServiceImpl</code> sets <code>impersonatedUser</code> and mints it via <code>jwtTokenProvider.createToken(username, …)</code>; presented as an inbound bearer it resolves to that user through the normal JWT chain. <strong>OAuth2</strong> tokens federate to a local user the same way; any other auth that establishes a local principal is treated identically.</p>
+      <p style="margin-bottom:0;">So the a2a-server endpoint sits behind <strong>the same Spring Security chain</strong> as the rest of the product &mdash; itself <strong>deployment-configurable</strong>: Gebo runs with its own JWT / API-key mechanism (<code>LocalJwtTokenProvider</code>) <em>or</em> as an <strong>OAuth2 resource server</strong> (<code>GeboSecurityConfig.oauth2ResourceServerEnabled</code>, default true; per-issuer <code>JwtDecoderCache</code> via <code>GHttpRequestAuthenticationManagerResolverImpl</code>). The a2a-server implements no auth of its own: whichever mode is active validates the bearer token and yields the local <code>Authentication</code>; the bridge runs the network <code>runAs</code> <strong>that</strong> principal, honouring <strong>that</strong> user&rsquo;s ACLs (<code>ReactiveIdentityUtil</code> + <code>IGSecurityService.isCanDo</code>). The AgentCard&rsquo;s <code>securityScheme</code> mirrors the active mode. A credential that resolves to no local principal is rejected (401) &mdash; never run under a fallback identity.</p>
+    </div>
+  </section>
+
+  <!-- PART 7 -->
+  <section>
+    <span class="part-num">PART 7</span>
+    <h2>What is reused, unchanged</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Capability</th><th>Existing type reused</th></tr></thead>
+        <tbody>
+          <tr><td>Persistence</td><td><code>GBaseObject</code>, <code>IGBaseMongoDBRepository</code>, <code>IGPersistentObjectManager</code></td></tr>
+          <tr><td>Validated CRUD + user messages</td><td><code>OperationStatus&lt;T&gt;</code>, <code>GUserMessage</code>, <code>PartialOperationStatus</code></td></tr>
+          <tr><td>Security &amp; ACLs</td><td><code>IGObjectWithSecurity</code>, <code>IAclGrantedResource</code>, <code>IGSecurityService</code>, <code>ReactiveIdentityUtil</code></td></tr>
+          <tr><td>Credentials</td><td><code>IGeboSecretsAccessService</code>, <code>IGOauth2AccessTokenService</code>, <code>IGOauth2RuntimeConfigurationDao</code></td></tr>
+          <tr><td>Live endpoint hot-reload</td><td>registry + delegating <code>RouterFunction</code> (from mcp-server)</td></tr>
+          <tr><td>Runtime agent injection</td><td><code>IGDynamicAgentServiceSupplier</code> &rarr; <code>AgentServiceRuntimeDaoImpl</code></td></tr>
+          <tr><td>Capability &amp; streaming lifecycle</td><td><code>AgentCapabilities</code>, <code>IGNetworkAgentService</code>, <code>INotificationSink</code>, <code>IGPartialOperation</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <span class="k">Core-contract impact</span>
+      <p>None. Everything attaches through existing extension points. No change to <code>IGNetworkAgentService</code>, the network executor, or the repository/CRUD contracts.</p>
+    </div>
+  </section>
+
+  <!-- PART 8 -->
+  <section>
+    <span class="part-num">PART 8</span>
+    <h2>Build order</h2>
+    <p class="measure">A genuine sequence &mdash; each step compiles and is testable before the next.</p>
+    <ol class="order">
+      <li><div class="ot">Shared wire model (<code>a2a-common</code>)</div><div class="od">AgentCard, Skill, Message/Part, Task/TaskStatus, JSON-RPC envelopes. No dependencies; unit-testable against sample A2A payloads.</div></li>
+      <li><div class="ot">Module B &mdash; a2a-clients</div><div class="od">Config + repo + connector + testAndDiscovery + <code>RemoteA2ANetworkAgentService</code> + supplier + controller. Lands remote agents in the network composer first &mdash; the higher-value half.</div></li>
+      <li><div class="ot">Module A &mdash; a2a-server</div><div class="od">Config + repo + card builder + registry + dispatcher + builder + task bridge + manager + controller.</div></li>
+      <li><div class="ot">Wire into the build</div><div class="od">Register both modules in <code>gebo.architecture.parent/pom.xml</code> and the monolith starter (and <code>brain.gebo.ai</code> if agents run there), following the mcp modules&rsquo; dependency sets.</div></li>
+      <li><div class="ot">Angular admin UI</div><div class="od">Two admin screens mirroring the existing MCP client/server screens. Follow-on.</div></li>
+    </ol>
+  </section>
+
+  <!-- PART 9 -->
+  <section>
+    <span class="part-num">PART 9</span>
+    <h2>Decisions &mdash; resolved 2026-08-28</h2>
+
+    <div class="q"><div class="qh">1 · Protocol layer &check;</div><p><span class="lean">Resolved: <b>official A2A Java SDK</b>. Exact artifact/version and Spring-MVC server-transport fit to be confirmed against Maven Central before coding (Part 5); fallback is SDK types + our own Spring MVC handlers.</span></p></div>
+
+    <div class="q"><div class="qh">2 · Scope of the first cut &check;</div><p><span class="lean">Resolved: <b>both directions, secure by default</b>. No agent and no network is externally visible or callable unless an admin has configured and enabled it (<code>enabled</code> defaults off on both configs; ACLs still gate callers).</span></p></div>
+
+    <div class="q"><div class="qh">3 · Durable tasks &amp; resubscription &check;</div><p><span class="lean">Resolved: <b>SSE-first</b> (synchronous + <code>message/stream</code>). No persisted <code>A2ATaskState</code> yet; <code>tasks/resubscribe</code> + webhooks are a follow-up.</span></p></div>
+
+    <div class="q"><div class="qh">4 · Module naming &amp; placement &check;</div><p><span class="lean">Resolved: <b>gebo.architecture.a2a-server</b> / <b>gebo.architecture.a2a-clients</b> under <code>gebo.architecture.parent</code>.</span></p></div>
+  </section>
+
+  <footer>
+    <p>Draft architecture plan &mdash; grounded in the current <code>develop</code> tree (post 1.0.3.0-SNAPSHOT bump). Class and method names reflect the code as read on 2026-08-28. Nothing here is implemented yet; this document exists to be corrected before a line is written.</p>
+  </footer>
+
+</div>

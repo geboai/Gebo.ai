@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class BraveSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -69,7 +69,7 @@ public class BraveSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteGBraveSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/deleteGBraveSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/deleteGBraveSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class BraveSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -113,7 +113,7 @@ public class BraveSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastInsertBraveSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/fastInsertBraveSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/fastInsertBraveSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class BraveSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GBraveSearchApiCredentials> returnType = new ParameterizedTypeReference<GBraveSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -153,7 +153,7 @@ public class BraveSearchConfigurationControllerApi {
      */
     public ResponseEntity<List<GBraveSearchApiCredentials>> getBraveSearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/getBraveSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/getBraveSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -169,7 +169,7 @@ public class BraveSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GBraveSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GBraveSearchApiCredentials>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -191,7 +191,7 @@ public class BraveSearchConfigurationControllerApi {
      */
     public ResponseEntity<ComponentSetupStatus> getBraveSearchStatusWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/getBraveSearchStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/getBraveSearchStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -207,7 +207,7 @@ public class BraveSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ComponentSetupStatus> returnType = new ParameterizedTypeReference<ComponentSetupStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -235,7 +235,7 @@ public class BraveSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertGBraveSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/insertGBraveSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/insertGBraveSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -253,7 +253,7 @@ public class BraveSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GBraveSearchApiCredentials> returnType = new ParameterizedTypeReference<GBraveSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -281,7 +281,7 @@ public class BraveSearchConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling searchGBraveSearchApiCredentialsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/searchGBraveSearchApiCredentialsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/searchGBraveSearchApiCredentialsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -298,7 +298,7 @@ public class BraveSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GBraveSearchApiCredentials> returnType = new ParameterizedTypeReference<GBraveSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -326,7 +326,7 @@ public class BraveSearchConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateGBraveSearchApiCredentials");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/updateGBraveSearchApiCredentials").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/updateGBraveSearchApiCredentials").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -344,6 +344,6 @@ public class BraveSearchConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GBraveSearchApiCredentials> returnType = new ParameterizedTypeReference<GBraveSearchApiCredentials>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

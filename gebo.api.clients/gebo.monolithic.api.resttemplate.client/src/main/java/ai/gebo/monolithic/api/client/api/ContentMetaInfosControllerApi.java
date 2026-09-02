@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class ContentMetaInfosControllerApi {
     private ApiClient apiClient;
@@ -73,7 +73,7 @@ public class ContentMetaInfosControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findDocumentReferenceViewByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/findDocumentReferenceViewByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/findDocumentReferenceViewByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -91,7 +91,7 @@ public class ContentMetaInfosControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<DocumentReferenceView>> returnType = new ParameterizedTypeReference<List<DocumentReferenceView>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -119,7 +119,7 @@ public class ContentMetaInfosControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getContentMetaInfos");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/getContentMetaInfos").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/getContentMetaInfos").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -136,7 +136,7 @@ public class ContentMetaInfosControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ContentMetaInfo> returnType = new ParameterizedTypeReference<ContentMetaInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -164,7 +164,7 @@ public class ContentMetaInfosControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getContentObject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/getContentObject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/getContentObject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -181,7 +181,7 @@ public class ContentMetaInfosControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ContentObject> returnType = new ParameterizedTypeReference<ContentObject>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -209,7 +209,7 @@ public class ContentMetaInfosControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling searchByDocumentName");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/searchByDocumentName").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/searchByDocumentName").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -227,7 +227,7 @@ public class ContentMetaInfosControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<DocumentReferenceView>> returnType = new ParameterizedTypeReference<List<DocumentReferenceView>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -255,7 +255,7 @@ public class ContentMetaInfosControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling searchByDocumentNamePaged");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/searchByDocumentNamePaged").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ContentMetaInfosController/searchByDocumentNamePaged").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -273,6 +273,6 @@ public class ContentMetaInfosControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PagedModelDocumentReferenceView> returnType = new ParameterizedTypeReference<PagedModelDocumentReferenceView>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-22T15:15:57.119207400+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
 
 public class SharepointSystemsControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteSharepointEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/deleteSharepointEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/deleteSharepointEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -115,7 +115,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteSharepointSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/deleteSharepointSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/deleteSharepointSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastSharepointConfig");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/fastSharepointConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/fastSharepointConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,7 +177,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -205,7 +205,7 @@ public class SharepointSystemsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findSharepointEndpointsByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointEndpointsByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointEndpointsByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -222,7 +222,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSharepointProjectEndpoint> returnType = new ParameterizedTypeReference<GSharepointProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -250,7 +250,7 @@ public class SharepointSystemsControllerApi {
         if (parentProjectCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'parentProjectCode' when calling findSharepointEndpointsByProject");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointEndpointsByProject").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointEndpointsByProject").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -267,7 +267,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GSharepointProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GSharepointProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -295,7 +295,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findSharepointEndpointsByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointEndpointsByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointEndpointsByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -313,7 +313,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GSharepointProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GSharepointProjectEndpoint>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -341,7 +341,7 @@ public class SharepointSystemsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findSharepointSystemByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointSystemByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/findSharepointSystemByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -358,7 +358,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSharepointContentManagementSystem> returnType = new ParameterizedTypeReference<GSharepointContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -380,7 +380,7 @@ public class SharepointSystemsControllerApi {
      */
     public ResponseEntity<GContentManagementSystemType> getSharepointSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/getSharepointSystemType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/getSharepointSystemType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -396,7 +396,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GContentManagementSystemType> returnType = new ParameterizedTypeReference<GContentManagementSystemType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -418,7 +418,7 @@ public class SharepointSystemsControllerApi {
      */
     public ResponseEntity<List<GSharepointContentManagementSystem>> getSharepointSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/getSharepointSystems").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/getSharepointSystems").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -434,7 +434,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GSharepointContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GSharepointContentManagementSystem>>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -462,7 +462,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertSharepointEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/insertSharepointEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/insertSharepointEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -480,7 +480,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSharepointProjectEndpoint> returnType = new ParameterizedTypeReference<GSharepointProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -508,7 +508,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertSharepointSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/insertSharepointSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/insertSharepointSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -526,7 +526,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -554,7 +554,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling publishSharepointEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/publishSharepointEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/publishSharepointEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -572,7 +572,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGJobStatus> returnType = new ParameterizedTypeReference<OperationStatusGJobStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -600,7 +600,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling testSharepointSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/testSharepointSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/testSharepointSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -618,7 +618,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -646,7 +646,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateSharepointEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/updateSharepointEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/updateSharepointEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -664,7 +664,7 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GSharepointProjectEndpoint> returnType = new ParameterizedTypeReference<GSharepointProjectEndpoint>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -692,7 +692,7 @@ public class SharepointSystemsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateSharepointSystem");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/updateSharepointSystem").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointSystemsController/updateSharepointSystem").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -710,6 +710,6 @@ public class SharepointSystemsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem> returnType = new ParameterizedTypeReference<OperationStatusGSharepointContentManagementSystem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }
