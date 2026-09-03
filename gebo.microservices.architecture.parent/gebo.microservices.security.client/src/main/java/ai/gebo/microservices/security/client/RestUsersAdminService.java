@@ -10,6 +10,7 @@
 package ai.gebo.microservices.security.client;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +59,21 @@ import ai.gebo.security.services.SecurityAuditTaxonomy;
  * </p>
  *
  * <p>
- * <b>Auditing</b>: {@code createUserIfNotExists} - the OAuth2 resource-server
- * auto-provisioning/sync entrypoint reached from every microservice - is audited here
- * as the caller's own "I asked heimdall to provision/sync this identity" event, giving
- * this service's own security-log a trail entry for the network hop, in addition to
- * heimdall's own (cluster controller) and the actual write's (local
- * {@code GUsersAdminServiceImpl}).
+ * <b>Auditing</b>: every mutating call is audited here, on <i>this</i> service's own
+ * security-log, as the caller's "I asked heimdall to do this" event - the network hop
+ * that heimdall's own events (cluster controller, and the local
+ * {@code GUsersAdminServiceImpl} that performs the write) cannot record, because from
+ * heimdall's side the request is indistinguishable from any other cluster caller. The
+ * two sides correlate by {@code correlationId}, which the caller token propagation
+ * carries across the hop, so a user/group change can be followed from the microservice
+ * that wanted it to the store that applied it.
+ * </p>
+ *
+ * <p>
+ * The outcome recorded here is the outcome <i>of the remote call</i>: a FAILURE means
+ * this service could not get heimdall to apply the change (transport, authorization,
+ * rejection), not necessarily that nothing happened at the other end. Reads are not
+ * audited - only writes, matching {@code GUsersAdminServiceImpl}.
  * </p>
  *
  * Gebo.ai comment agent
@@ -90,21 +100,87 @@ public class RestUsersAdminService implements IGUsersAdminService {
 		this.securityAuditLoggerService = securityAuditLoggerService;
 	}
 
+	/** {@code resourceType} of the events raised for a user identity. */
+	private static final String RESOURCE_TYPE_USER = "user";
+
+	/** {@code resourceType} of the events raised for a users group. */
+	private static final String RESOURCE_TYPE_GROUP = "usersGroup";
+
+	/**
+	 * Runs a remote write and audits it, whichever way it goes.
+	 *
+	 * <p>
+	 * The event is created by the caller (never here), so that the caller-stack
+	 * {@code newSecurityEvent()} captures points at the real service method rather than
+	 * at this shared helper.
+	 * </p>
+	 */
+	private <T> T auditedCall(SecurityEvent event, String action, String resourceType, String resourceId,
+			Supplier<T> remoteCall) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(action);
+		event.setResourceType(resourceType);
+		event.setResourceId(resourceId);
+		event.getDetails().put("remote", true);
+		event.getDetails().put("securityMicroserviceId", microserviceId);
+		try {
+			T out = remoteCall.get();
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return out;
+		} catch (RuntimeException e) {
+			event.getDetails().put("error", e.getMessage());
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		} finally {
+			securityAuditLoggerService.log(event);
+		}
+	}
+
+	/**
+	 * The security-relevant shape of a user, for an event's {@code details}. Never the
+	 * password - which this class does send over the wire, and must never log.
+	 */
+	private static void describeUser(SecurityEvent event, String prefix, EditableUser user) {
+		event.getDetails().put(prefix + "Roles",
+				user == null || user.getRoles() == null ? List.of() : new ArrayList<>(user.getRoles()));
+		event.getDetails().put(prefix + "Disabled", user == null ? null : user.getDisabled());
+		event.getDetails().put(prefix + "AuthProvider",
+				user == null || user.getAuthProvider() == null ? null : user.getAuthProvider().toString());
+	}
+
+	/** The security-relevant shape of a group: its membership. */
+	private static void describeGroup(SecurityEvent event, String prefix, UsersGroup group) {
+		List<String> members = group == null || group.getUserIds() == null ? List.of() : group.getUserIds();
+		event.getDetails().put(prefix + "MembersCount", members.size());
+		event.getDetails().put(prefix + "Members", new ArrayList<>(members));
+	}
+
 	@Override
 	public EditableUser insertUser(EditableUser user, String password) {
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("user", user);
 		body.put("password", password);
-		return call("insertUser", () -> webClient.post().uri(uri("insertUser")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(body)
-				.retrieve().bodyToMono(EditableUser.class).block());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		describeUser(event, "new", user);
+		return auditedCall(event, SecurityAuditTaxonomy.Action.USER_INSERT, RESOURCE_TYPE_USER,
+				user != null ? user.getUsername() : null,
+				() -> call("insertUser", () -> webClient.post().uri(uri("insertUser")).headers(this::applyCallerToken)
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(body)
+						.retrieve().bodyToMono(EditableUser.class).block()));
 	}
 
 	@Override
 	public EditableUser updateUser(EditableUser user) {
-		return call("updateUser", () -> webClient.post().uri(uri("updateUser")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(user)
-				.retrieve().bodyToMono(EditableUser.class).block());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		// Only the requested state: this side never held the previous one, so the
+		// before/after diff lives in heimdall's own userUpdate event.
+		describeUser(event, "requested", user);
+		return auditedCall(event, SecurityAuditTaxonomy.Action.USER_UPDATE, RESOURCE_TYPE_USER,
+				user != null ? user.getUsername() : null,
+				() -> call("updateUser", () -> webClient.post().uri(uri("updateUser")).headers(this::applyCallerToken)
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(user)
+						.retrieve().bodyToMono(EditableUser.class).block()));
 	}
 
 	@Override
@@ -116,8 +192,13 @@ public class RestUsersAdminService implements IGUsersAdminService {
 
 	@Override
 	public void deleteUser(EditableUser user) {
-		call("deleteUser", () -> webClient.post().uri(uri("deleteUser")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).bodyValue(user).retrieve().toBodilessEntity().block());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		describeUser(event, "deleted", user);
+		auditedCall(event, SecurityAuditTaxonomy.Action.USER_DELETE, RESOURCE_TYPE_USER,
+				user != null ? user.getUsername() : null,
+				() -> call("deleteUser", () -> webClient.post().uri(uri("deleteUser")).headers(this::applyCallerToken)
+						.contentType(MediaType.APPLICATION_JSON).bodyValue(user).retrieve().toBodilessEntity()
+						.block()));
 	}
 
 	@Override
@@ -150,9 +231,13 @@ public class RestUsersAdminService implements IGUsersAdminService {
 
 	@Override
 	public UsersGroup insertGroup(UsersGroup group) {
-		return call("insertGroup", () -> webClient.post().uri(uri("insertGroup")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(group)
-				.retrieve().bodyToMono(UsersGroup.class).block());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		describeGroup(event, "new", group);
+		return auditedCall(event, SecurityAuditTaxonomy.Action.GROUP_INSERT, RESOURCE_TYPE_GROUP,
+				group != null ? group.getCode() : null,
+				() -> call("insertGroup", () -> webClient.post().uri(uri("insertGroup")).headers(this::applyCallerToken)
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(group)
+						.retrieve().bodyToMono(UsersGroup.class).block()));
 	}
 
 	@Override
@@ -164,15 +249,24 @@ public class RestUsersAdminService implements IGUsersAdminService {
 
 	@Override
 	public UsersGroup updateGroup(UsersGroup group) {
-		return call("updateGroup", () -> webClient.post().uri(uri("updateGroup")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(group)
-				.retrieve().bodyToMono(UsersGroup.class).block());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		describeGroup(event, "requested", group);
+		return auditedCall(event, SecurityAuditTaxonomy.Action.GROUP_UPDATE, RESOURCE_TYPE_GROUP,
+				group != null ? group.getCode() : null,
+				() -> call("updateGroup", () -> webClient.post().uri(uri("updateGroup")).headers(this::applyCallerToken)
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).bodyValue(group)
+						.retrieve().bodyToMono(UsersGroup.class).block()));
 	}
 
 	@Override
 	public void deleteGroup(UsersGroup group) {
-		call("deleteGroup", () -> webClient.post().uri(uri("deleteGroup")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).bodyValue(group).retrieve().toBodilessEntity().block());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		describeGroup(event, "deleted", group);
+		auditedCall(event, SecurityAuditTaxonomy.Action.GROUP_DELETE, RESOURCE_TYPE_GROUP,
+				group != null ? group.getCode() : null,
+				() -> call("deleteGroup", () -> webClient.post().uri(uri("deleteGroup")).headers(this::applyCallerToken)
+						.contentType(MediaType.APPLICATION_JSON).bodyValue(group).retrieve().toBodilessEntity()
+						.block()));
 	}
 
 	@Override
@@ -217,6 +311,10 @@ public class RestUsersAdminService implements IGUsersAdminService {
 		body.put("username", email);
 		body.put("attributes", attributes);
 		body.put("authProvider", authProvider);
+		event.setResourceType(RESOURCE_TYPE_USER);
+		event.getDetails().put("remote", true);
+		event.getDetails().put("securityMicroserviceId", microserviceId);
+		event.getDetails().put("authProvider", authProvider == null ? null : authProvider.toString());
 		try {
 			call("createUserIfNotExists",
 					() -> webClient.post().uri(uri("createUserIfNotExists")).headers(this::applyCallerToken)
@@ -224,6 +322,7 @@ public class RestUsersAdminService implements IGUsersAdminService {
 							.block());
 			event.setOutcome(SecurityAuditTaxonomy.Outcome.SUCCESS);
 		} catch (RuntimeException e) {
+			event.getDetails().put("error", e.getMessage());
 			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
 			throw e;
 		} finally {
@@ -236,8 +335,12 @@ public class RestUsersAdminService implements IGUsersAdminService {
 		Map<String, String> body = new LinkedHashMap<>();
 		body.put("username", username);
 		body.put("password", password);
-		call("changePassword", () -> webClient.post().uri(uri("changePassword")).headers(this::applyCallerToken)
-				.contentType(MediaType.APPLICATION_JSON).bodyValue(body).retrieve().toBodilessEntity().block());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		auditedCall(event, SecurityAuditTaxonomy.Action.PASSWORD_CHANGE_ADMIN, RESOURCE_TYPE_USER, username,
+				() -> call("changePassword",
+						() -> webClient.post().uri(uri("changePassword")).headers(this::applyCallerToken)
+								.contentType(MediaType.APPLICATION_JSON).bodyValue(body).retrieve()
+								.toBodilessEntity().block()));
 	}
 
 	// --- Internals ----------------------------------------------------------

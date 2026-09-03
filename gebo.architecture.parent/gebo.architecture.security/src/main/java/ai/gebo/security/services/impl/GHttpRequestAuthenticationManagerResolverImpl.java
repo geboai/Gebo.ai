@@ -24,6 +24,7 @@ import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.impl.authmanagers.GOauth2ResourceServerUserProvisioner;
 import ai.gebo.security.services.impl.authmanagers.IssuerConfigCache;
@@ -69,7 +70,8 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 			PasswordEncoder passwordEncoder, IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao,
 			LocalJwtTokenProvider tokenProvider, UserDetailsService customUserDetailsService,
 			GeboSecurityConfig securityConfig, IGSecurityDirectory securityDirectory,
-			GOauth2ResourceServerUserProvisioner provisioner) {
+			GOauth2ResourceServerUserProvisioner provisioner,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 
 		this.userDetailsService = userDetailsService;
 		this.passwordEncoder = passwordEncoder;
@@ -78,7 +80,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 		this.customUserDetailsService = customUserDetailsService;
 		this.provisioner = provisioner;
 		this.jwtAuthenticationConverter = new GJwtAuthenticationConverter(customUserDetailsService, securityConfig,
-				oauth2RuntimeConfigurationDao, securityDirectory, issuerConfigCache);
+				oauth2RuntimeConfigurationDao, securityDirectory, issuerConfigCache, securityAuditLoggerService);
 		this.tokenAuthenticationConverter = new GOpaqueTokenAuthenticationConverter(customUserDetailsService);
 		final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
 		authProvider.setPasswordEncoder(passwordEncoder);

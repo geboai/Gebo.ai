@@ -205,6 +205,10 @@ public class GeboAISecurityConfig {
 	private final IGSecurityDirectory securityDirectory;
 	private final AuthenticationFailureHandler authenticationFailureHandler;
 	private final IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider;
+	// Held as a field (not just a constructor parameter) because the collaborators
+	// built lazily in @Bean methods below - the resource-server provisioner and the
+	// authentication-manager resolver - audit the OAuth2 provisioning decision too.
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -226,6 +230,7 @@ public class GeboAISecurityConfig {
 			IGSecurityAuditLoggerService securityAuditLoggerService,
 			IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider) {
 		this.oauth2UserSyncProvider = oauth2UserSyncProvider;
+		this.securityAuditLoggerService = securityAuditLoggerService;
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		this.directoryBackedUserDetailsService = directoryBackedUserDetailsService;
@@ -243,9 +248,9 @@ public class GeboAISecurityConfig {
 		this.reactiveOAuth2AuthorizedClientService = new GReactiveOauth2AuthorizedClientService(
 				reactiveClientRegistrationRepository, secretsService);
 		this.oauth2UserService = new GOAuth2UserService(oauth2ConfigurationService, userAdminService,
-				securityProperties, oauth2UserSyncProvider);
+				securityProperties, oauth2UserSyncProvider, securityAuditLoggerService);
 		this.reactiveOAuth2UserService = new ReactiveGOAuth2UserService(oauth2ConfigurationService, userAdminService,
-				securityProperties, oauth2UserSyncProvider);
+				securityProperties, oauth2UserSyncProvider, securityAuditLoggerService);
 		this.passwordEncoder = passwordEncoder;
 
 		this.oAuth2AuthorizationRequestResolver = new GOauth2CustomAuthorizationRequestResolver(dynamicClient);
@@ -409,7 +414,7 @@ public class GeboAISecurityConfig {
 		Oauth2ResourceServerSyncTokenCache resourceServerSyncTokenCache = new Oauth2ResourceServerSyncTokenCache(
 				securityConfig.getOauth2ResourceServerSyncCacheTtlSeconds());
 		return new GOauth2ResourceServerUserProvisioner(oauth2UserSyncProvider, userAdminService, securityConfig,
-				resourceServerSyncTokenCache);
+				resourceServerSyncTokenCache, securityAuditLoggerService);
 	}
 
 	@Bean
@@ -417,7 +422,7 @@ public class GeboAISecurityConfig {
 			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
 				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService, securityConfig,
-				securityDirectory, resourceServerUserProvisioner);
+				securityDirectory, resourceServerUserProvisioner, securityAuditLoggerService);
 	}
 
 	/**
