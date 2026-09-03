@@ -15,7 +15,10 @@ import ai.gebo.security.model.GeboLoginPolicy;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.security.services.impl.authmanagers.IssuerConfigCache;
 import lombok.AllArgsConstructor;
 
@@ -59,6 +62,25 @@ import lombok.AllArgsConstructor;
  * {@link IssuerConfigCache} (the same cache the authentication-manager resolver uses
  * to avoid scanning every configured provider on every request).
  * </p>
+ *
+ * <h2>Auditing</h2>
+ * <p>
+ * The provisioning decision is audited here as {@code oauth2IdentityProvision} - this
+ * converter's own decision, which the {@code userAutoProvision} raised further down by
+ * the security directory does not replace: only this one names the issuer, the resolved
+ * provider and the policy. It is recorded in both directions: an unknown identity admitted under
+ * {@link GeboLoginPolicy#TRUST_EVERY_OAUTH_IDENTITY}, and an unknown identity refused
+ * under the other policies. The refusal matters as much as the admission - it is a
+ * validated token from a configured issuer being turned away, which without an event
+ * of its own is just another 401 in the access log.
+ * </p>
+ *
+ * <p>
+ * Unlike the opaque-token path this converter has no throttle cache in front of it, so
+ * the refusal branch would fire on every request carrying the same unknown token. It
+ * is therefore audited only where an event is genuinely new information - see the
+ * comment on that branch.
+ * </p>
  */
 @AllArgsConstructor
 public class GJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
@@ -67,6 +89,10 @@ public class GJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthe
 	private final IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao;
 	private final IGSecurityDirectory securityDirectory;
 	private final IssuerConfigCache issuerConfigCache;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	/** {@code resourceType} of the events raised here: an external identity. */
+	private static final String RESOURCE_TYPE_USER = "user";
 
 	@Override
 	@Nullable
@@ -80,18 +106,57 @@ public class GJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthe
 			user = userDetailsService.loadUserByUsername(email);
 		} catch (UsernameNotFoundException notFound) {
 			if (securityConfig.getLoginPolicy() != GeboLoginPolicy.TRUST_EVERY_OAUTH_IDENTITY) {
+				// Not audited, for the same reason the opaque-token provisioner does not audit
+				// its policy gate: with no throttle in front of this converter, a client
+				// retrying one unknown token would write an event per request. The refusal is
+				// a standing consequence of the configured policy, and the 401 the caller
+				// gets already records the attempt.
 				throw notFound;
 			}
-			securityDirectory.createUserIfNotExists(email, source.getClaims(), resolveAuthProvider(source));
-			// Re-fetch rather than build UserDetails from the freshly created UserInfos
-			// directly: userDetailsService may be the DirectoryBackedUserDetailsService
-			// (system-user check, disabled check, UserPrincipal construction) or a
-			// different implementation entirely - going back through it keeps this
-			// converter agnostic to which one, exactly as the pre-provisioning lookup
-			// above already was.
-			user = userDetailsService.loadUserByUsername(email);
+			SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+			event.getDetails().put("flow", "oauth2ResourceServerJwt");
+			event.getDetails().put("issuer", source.getIssuer() != null ? source.getIssuer().toString() : null);
+			event.getDetails().put("loginPolicy", String.valueOf(securityConfig.getLoginPolicy()));
+			AuthProvider provider = resolveAuthProvider(source);
+			event.getDetails().put("authProvider", String.valueOf(provider));
+			// Claim NAMES, never their values: a token's claims can carry anything the
+			// issuer chose to put in them.
+			event.getDetails().put("usernameFromClaim", source.getClaim("email") != null ? "email" : "sub");
+			try {
+				securityDirectory.createUserIfNotExists(email, source.getClaims(), provider);
+				// Re-fetch rather than build UserDetails from the freshly created UserInfos
+				// directly: userDetailsService may be the DirectoryBackedUserDetailsService
+				// (system-user check, disabled check, UserPrincipal construction) or a
+				// different implementation entirely - going back through it keeps this
+				// converter agnostic to which one, exactly as the pre-provisioning lookup
+				// above already was.
+				user = userDetailsService.loadUserByUsername(email);
+			} catch (RuntimeException e) {
+				// Includes the re-fetch: a provisioning call that "succeeded" but left the
+				// user still unloadable (a disabled account, the system identity) is a
+				// failure of this decision, and the most interesting one to see.
+				event.getDetails().put("error", e.getMessage());
+				logProvisioningEvent(event, email, SecurityAuditTaxonomy.Outcome.FAILURE);
+				throw e;
+			}
+			logProvisioningEvent(event, email, SecurityAuditTaxonomy.Outcome.SUCCESS);
 		}
 		return new JwtAuthenticationToken(source, user.getAuthorities(), user.getUsername());
+	}
+
+	/**
+	 * Fills in and emits a provisioning event. Takes an already-created
+	 * {@link SecurityEvent} so the caller-stack captured by {@code newSecurityEvent()}
+	 * points at {@code convert}, not at this helper.
+	 */
+	private void logProvisioningEvent(SecurityEvent event, String username, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(SecurityAuditTaxonomy.Action.OAUTH2_IDENTITY_PROVISION);
+		event.setResourceType(RESOURCE_TYPE_USER);
+		event.setResourceId(username);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
 	}
 
 	private AuthProvider resolveAuthProvider(Jwt source) {

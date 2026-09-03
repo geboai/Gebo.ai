@@ -85,10 +85,11 @@ public class GeboSecurityMicroserviceClientAutoConfiguration {
 	@ConditionalOnMissingBean(IGSecurityDirectory.class)
 	public IGSecurityDirectory restSecurityDirectory(@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient,
 			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
-			GeboSecurityClientProperties properties) {
+			GeboSecurityClientProperties properties, IGSecurityAuditLoggerService securityAuditLoggerService) {
 		return new RestSecurityDirectory(geboSecurityClientWebClient, urlResolver, tokenPropagator,
 				properties.getMicroserviceId(), properties.getBasePath(),
-				new GeboTtlCache(properties.getCacheTtl(), properties.getCacheMaxEntries()));
+				new GeboTtlCache(properties.getCacheTtl(), properties.getCacheMaxEntries()),
+				securityAuditLoggerService);
 	}
 
 	/**

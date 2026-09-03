@@ -34,7 +34,10 @@ import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.model.UserInfos;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 
 /**
  * The {@link IGSecurityDirectory} of a service that does <b>not</b> own the user
@@ -81,6 +84,18 @@ import ai.gebo.security.services.IGSecurityDirectory;
  * caller just supplied, not a fact about the user.
  * </p>
  *
+ * <h2>Auditing</h2>
+ * <p>
+ * Only {@code createUserIfNotExists} is audited - the one method here that <b>writes</b>.
+ * It is the OAuth2 resource-server auto-provisioning hop: on a service that does not own
+ * the user store, {@code GJwtAuthenticationConverter} admits an unknown bearer identity
+ * by calling it, and the write itself then happens on heimdall. The event recorded here
+ * is this service's own "I asked heimdall to admit this identity", which heimdall cannot
+ * produce (from its side the request is indistinguishable from any other cluster
+ * caller); the two correlate by {@code correlationId}. Reads are not audited - they run
+ * on every authenticated request.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 public class RestSecurityDirectory implements IGSecurityDirectory {
@@ -100,16 +115,21 @@ public class RestSecurityDirectory implements IGSecurityDirectory {
 	private final String basePath;
 	/** L2: survives across requests, keyed by the presented credential. */
 	private final GeboTtlCache cache;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	/** {@code resourceType} of the events raised here: an external identity. */
+	private static final String RESOURCE_TYPE_USER = "user";
 
 	public RestSecurityDirectory(WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
 			IGeboCallerTokenPropagator tokenPropagator, String microserviceId, String basePath,
-			GeboTtlCache cache) {
+			GeboTtlCache cache, IGSecurityAuditLoggerService securityAuditLoggerService) {
 		this.webClient = webClient;
 		this.urlResolver = urlResolver;
 		this.tokenPropagator = tokenPropagator;
 		this.microserviceId = microserviceId;
 		this.basePath = trimSlashes(basePath);
 		this.cache = cache;
+		this.securityAuditLoggerService = securityAuditLoggerService;
 	}
 
 	@Override
@@ -170,12 +190,33 @@ public class RestSecurityDirectory implements IGSecurityDirectory {
 		request.put("username", username);
 		request.put("attributes", attributes);
 		request.put("authProvider", authProvider);
-		UserInfos created = call("createUserIfNotExists",
-				() -> webClient.post().uri(uri("createUserIfNotExists")).headers(this::applyCallerToken)
-						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-						.bodyValue(request).retrieve().bodyToMono(UserInfosImpl.class).block());
-		clearCachedLookup(username);
-		return created;
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(SecurityAuditTaxonomy.Action.USER_AUTO_PROVISION);
+		event.setResourceType(RESOURCE_TYPE_USER);
+		event.setResourceId(username);
+		event.getDetails().put("flow", "oauth2ResourceServerJwt");
+		event.getDetails().put("remote", true);
+		event.getDetails().put("securityMicroserviceId", microserviceId);
+		event.getDetails().put("authProvider", String.valueOf(authProvider));
+		try {
+			UserInfos created = call("createUserIfNotExists",
+					() -> webClient.post().uri(uri("createUserIfNotExists")).headers(this::applyCallerToken)
+							.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+							.bodyValue(request).retrieve().bodyToMono(UserInfosImpl.class).block());
+			clearCachedLookup(username);
+			// The outcome of the *hop*: heimdall accepted the request. Whether it created a
+			// user or found one already there is in heimdall's own event.
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.SUCCESS);
+			return created;
+		} catch (RuntimeException e) {
+			event.getDetails().put("error", e.getMessage());
+			event.setOutcome(SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
+		} finally {
+			securityAuditLoggerService.log(event);
+		}
 	}
 
 	/** Drops this user's L1 entry and clears L2 entirely (its only invalidation op). */

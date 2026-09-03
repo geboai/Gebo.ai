@@ -97,6 +97,21 @@ public class SecurityAuditTaxonomy {
 		public static final String PASSWORD_CHANGE_ADMIN = "passwordChangeAdmin";
 		public static final String PASSWORD_RESET_TICKET = "passwordResetTicket";
 
+		// Password *secret store* lifecycle - the tier below the three actions above.
+		// Those record the caller's intent ("an admin changed someone's password", "a
+		// user changed their own", "a reset ticket was redeemed"); these record what
+		// actually happened to the stored credential, wherever the write came from -
+		// including paths that have no controller at all (installation bootstrap, OAuth2
+		// auto-provisioning, user deletion). Emitted by IGUserPasswordService's
+		// implementation.
+		public static final String PASSWORD_SECRET_STORE = "passwordSecretStore";
+		public static final String PASSWORD_SECRET_DELETE = "passwordSecretDelete";
+		// Only ever logged with outcome FAILURE: the secret store could not be read
+		// while verifying a password, which IGUserPasswordService.matches() reports to
+		// its caller as a plain mismatch. Without this the infrastructure fault is
+		// indistinguishable, in the security log, from a wrong password.
+		public static final String PASSWORD_SECRET_READ = "passwordSecretRead";
+
 		// User / group administration
 		public static final String USER_INSERT = "userInsert";
 		public static final String USER_UPDATE = "userUpdate";
@@ -110,8 +125,28 @@ public class SecurityAuditTaxonomy {
 		// unknown validated identity is auto-created or an existing one is synced,
 		// whether decided locally (heimdall/monolith) or requested by a peer
 		// microservice over the security cluster REST surface.
+		//
+		// These are the USER STORE's actions - "the store was asked to create this
+		// identity if it does not exist". The *decision* to ask, taken up in the OAuth2
+		// handler chain, is the pair below: one login produces both, and they say
+		// different things.
 		public static final String USER_AUTO_PROVISION = "userAutoProvision";
 		public static final String USER_SYNC = "userSync";
+
+		// The OAuth2/OIDC handler chain's own decision about an external identity,
+		// raised by GOAuth2UserService and its reactive twin (interactive oauth2Login),
+		// GJwtAuthenticationConverter (bearer JWT) and
+		// GOauth2ResourceServerUserProvisioner (bearer JWT/opaque, servlet + reactive).
+		//
+		// Deliberately NOT the same action as USER_AUTO_PROVISION/USER_SYNC above, which
+		// they can cause: these carry what only the chain knows - the provider, the
+		// issuer or client registration, the login policy in force, the sync handler that
+		// ran - and, crucially, they are the ONLY events raised on the paths where no
+		// store write happens at all: an identity refused by the policy (DENIED), or a
+		// provisioning attempt that failed and was swallowed so the request could fail to
+		// authenticate exactly as it would have anyway.
+		public static final String OAUTH2_IDENTITY_PROVISION = "oauth2IdentityProvision";
+		public static final String OAUTH2_IDENTITY_SYNC = "oauth2IdentitySync";
 	}
 
 	public static class Outcome {

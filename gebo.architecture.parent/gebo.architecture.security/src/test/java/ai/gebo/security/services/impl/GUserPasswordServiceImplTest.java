@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,7 +31,10 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.architecture.environment.GeboApplicationArchitecture.ArchitectureType;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGUserPasswordService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 
 /**
  * What {@link GUserPasswordServiceImpl} has to get right, against an in-memory
@@ -51,12 +55,19 @@ class GUserPasswordServiceImplTest {
 	private static final String USERNAME = "someone@gebo.ai";
 
 	private FakeSecretsStore store;
+	private RecordingAuditLogger auditLogger;
 	private GUserPasswordServiceImpl service;
 
 	@BeforeEach
 	void setUp() {
 		store = new FakeSecretsStore();
-		service = new GUserPasswordServiceImpl(store);
+		auditLogger = new RecordingAuditLogger();
+		service = new GUserPasswordServiceImpl(store, auditLogger);
+	}
+
+	/** The events of one action, so an assertion does not depend on what came before it. */
+	private List<IGSecurityAuditLoggerService.SecurityEvent> eventsOf(String action) {
+		return auditLogger.events.stream().filter(e -> action.equals(e.getAction())).toList();
 	}
 
 	/** The context code is the contract with the migration and with anything reading the store by hand. */
@@ -211,6 +222,144 @@ class GUserPasswordServiceImplTest {
 				.isInstanceOf(IllegalArgumentException.class);
 		assertThatThrownBy(() -> service.storePassword(USERNAME, null))
 				.isInstanceOf(IllegalArgumentException.class);
+	}
+
+	// --- Auditing ----------------------------------------------------------
+	//
+	// The events are the SIEM's only view of what happens to a stored credential:
+	// every path that sets or removes a password comes through this service, and
+	// several of them (installation bootstrap, user deletion, OAuth2 provisioning)
+	// have no controller to be audited at.
+
+	@Test
+	void aFirstPasswordIsAuditedAsAStoreThatReplacedNothing() throws Exception {
+		service.storePassword(USERNAME, "s3cret");
+
+		List<IGSecurityAuditLoggerService.SecurityEvent> events = eventsOf(
+				SecurityAuditTaxonomy.Action.PASSWORD_SECRET_STORE);
+		assertThat(events).hasSize(1);
+		IGSecurityAuditLoggerService.SecurityEvent event = events.get(0);
+		assertThat(event.getEventType()).isEqualTo(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		assertThat(event.getOutcome()).isEqualTo(SecurityAuditTaxonomy.Outcome.SUCCESS);
+		assertThat(event.getResourceId()).isEqualTo(USERNAME);
+		assertThat(event.getDetails()).containsEntry("replacedExisting", false);
+	}
+
+	/** The distinction a SIEM correlates on: replacing someone's live credential. */
+	@Test
+	void aPasswordChangeIsAuditedAsAReplacement() throws Exception {
+		service.storePassword(USERNAME, "first");
+		service.storePassword(USERNAME, "second");
+
+		List<IGSecurityAuditLoggerService.SecurityEvent> events = eventsOf(
+				SecurityAuditTaxonomy.Action.PASSWORD_SECRET_STORE);
+		assertThat(events).hasSize(2);
+		assertThat(events.get(0).getDetails()).containsEntry("replacedExisting", false);
+		assertThat(events.get(1).getDetails()).containsEntry("replacedExisting", true);
+	}
+
+	/** No event may ever carry the password, in any field. */
+	@Test
+	void noEventCarriesThePassword() throws Exception {
+		service.storePassword(USERNAME, "s3cret");
+		service.matches(USERNAME, "s3cret");
+		service.deletePassword(USERNAME);
+
+		assertThat(auditLogger.events).isNotEmpty();
+		for (IGSecurityAuditLoggerService.SecurityEvent event : auditLogger.events) {
+			assertThat(String.valueOf(event.getDetails())).doesNotContain("s3cret");
+			assertThat(String.valueOf(event.getResourceId())).doesNotContain("s3cret");
+		}
+	}
+
+	@Test
+	void aDeletionIsAuditedWithHowManySecretsItRemoved() throws Exception {
+		service.storePassword(USERNAME, "s3cret");
+		service.deletePassword(USERNAME);
+
+		List<IGSecurityAuditLoggerService.SecurityEvent> events = eventsOf(
+				SecurityAuditTaxonomy.Action.PASSWORD_SECRET_DELETE);
+		assertThat(events).hasSize(1);
+		assertThat(events.get(0).getOutcome()).isEqualTo(SecurityAuditTaxonomy.Outcome.SUCCESS);
+		assertThat(events.get(0).getDetails()).containsEntry("deletedSecrets", 1);
+	}
+
+	/** The no-op deletion is still audited - with zero, which is what makes it a no-op. */
+	@Test
+	void aDeletionThatRemovedNothingIsStillAudited() throws Exception {
+		service.deletePassword(USERNAME);
+
+		List<IGSecurityAuditLoggerService.SecurityEvent> events = eventsOf(
+				SecurityAuditTaxonomy.Action.PASSWORD_SECRET_DELETE);
+		assertThat(events).hasSize(1);
+		assertThat(events.get(0).getDetails()).containsEntry("deletedSecrets", 0);
+	}
+
+	@Test
+	void aFailedWriteIsAuditedAsAFailure() {
+		store.failing = true;
+
+		assertThatThrownBy(() -> service.storePassword(USERNAME, "s3cret"))
+				.isInstanceOf(GeboCryptSecretException.class);
+
+		List<IGSecurityAuditLoggerService.SecurityEvent> events = eventsOf(
+				SecurityAuditTaxonomy.Action.PASSWORD_SECRET_STORE);
+		assertThat(events).hasSize(1);
+		assertThat(events.get(0).getOutcome()).isEqualTo(SecurityAuditTaxonomy.Outcome.FAILURE);
+	}
+
+	/**
+	 * The reason this action exists: matches() reports an unreadable store to its
+	 * caller as a plain mismatch, so without an event of its own a broken store looks
+	 * in the security log exactly like a burst of wrong passwords.
+	 */
+	@Test
+	void anUnreadableStoreIsAuditedRatherThanHiddenBehindAMismatch() {
+		store.failing = true;
+
+		service.matches(USERNAME, "s3cret");
+		service.hasPassword(USERNAME);
+
+		List<IGSecurityAuditLoggerService.SecurityEvent> events = eventsOf(
+				SecurityAuditTaxonomy.Action.PASSWORD_SECRET_READ);
+		assertThat(events).hasSize(2);
+		assertThat(events).allSatisfy(e -> assertThat(e.getOutcome())
+				.isEqualTo(SecurityAuditTaxonomy.Outcome.FAILURE));
+		assertThat(events.get(0).getDetails()).containsEntry("reportedAs", "mismatch");
+		assertThat(events.get(1).getDetails()).containsEntry("reportedAs", "noPassword");
+	}
+
+	/** A working store must not put a login on the security log on every request. */
+	@Test
+	void anOrdinaryPasswordCheckIsNotAudited() throws Exception {
+		service.storePassword(USERNAME, "s3cret");
+		auditLogger.events.clear();
+
+		service.matches(USERNAME, "s3cret");
+		service.matches(USERNAME, "wrong");
+		service.hasPassword(USERNAME);
+
+		assertThat(auditLogger.events).isEmpty();
+	}
+
+	/**
+	 * A {@link IGSecurityAuditLoggerService} that keeps the events instead of writing
+	 * them, so the tests can assert on what a SIEM would receive.
+	 */
+	private static class RecordingAuditLogger implements IGSecurityAuditLoggerService {
+
+		final List<SecurityEvent> events = new ArrayList<>();
+
+		@Override
+		public void log(SecurityEvent event) {
+			events.add(event);
+		}
+
+		@Override
+		public SecurityEvent newSecurityEvent() {
+			return new SecurityEvent(ArchitectureType.MONOLITHIC, "test-user", "203.0.113.7", "test-app",
+					"test-correlation-id", Instant.now().toString(), "test", "POST", "/test");
+		}
 	}
 
 	/**

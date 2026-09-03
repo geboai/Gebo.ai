@@ -23,7 +23,10 @@ import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGUserPasswordService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 
 /**
  * The secret-store implementation of {@link IGUserPasswordService} - the only one.
@@ -45,6 +48,34 @@ import ai.gebo.security.services.IGUserPasswordService;
  * working.
  * </p>
  *
+ * <h2>Auditing</h2>
+ * <p>
+ * Every credential write and removal raises a {@code userAdministration} security
+ * event on the Wazuh-ingested "security-log" appender
+ * ({@link IGSecurityAuditLoggerService}). This is the last tier before the store, and
+ * the only one every path passes through: the admin UI, a user changing their own
+ * password, a redeemed reset ticket, user creation, user deletion, the installation
+ * bootstrap and OAuth2 auto-provisioning all end up here, and several of those have
+ * no instrumentation of their own. The higher tiers record <i>who wanted</i> the
+ * change ({@code passwordChangeSelf} / {@code passwordChangeAdmin} /
+ * {@code passwordResetTicket}); these record that a stored credential actually moved,
+ * and correlate to them by {@code correlationId}.
+ * </p>
+ *
+ * <p>
+ * The underlying {@code IGeboSecretsAccessService} raises its own
+ * {@code secretManagement} events for the same writes. They are not redundant: a
+ * {@code secretCreate} says a secret appeared, but only the events raised here say
+ * that the secret <b>is a login credential, and whose</b> - the secret's own event
+ * carries an opaque generated id, not a username.
+ * </p>
+ *
+ * <p>
+ * A password never reaches an event - not in {@code details}, not in a message. The
+ * failure branches log the exception's message, which comes from the secret store and
+ * never contains the content it was asked to store.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 @Service
@@ -52,30 +83,74 @@ public class GUserPasswordServiceImpl implements IGUserPasswordService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GUserPasswordServiceImpl.class);
 
-	private final IGeboSecretsAccessService secretsAccessService;
+	/** {@code resourceType} of every event raised here: a user's login credential. */
+	private static final String RESOURCE_TYPE_USER_PASSWORD = "userPassword";
 
-	public GUserPasswordServiceImpl(IGeboSecretsAccessService secretsAccessService) {
+	private final IGeboSecretsAccessService secretsAccessService;
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	public GUserPasswordServiceImpl(IGeboSecretsAccessService secretsAccessService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		this.secretsAccessService = secretsAccessService;
+		this.securityAuditLoggerService = securityAuditLoggerService;
+	}
+
+	/**
+	 * Fills in and emits an audit event.
+	 *
+	 * <p>
+	 * Takes an already-created {@link SecurityEvent} rather than calling
+	 * {@code newSecurityEvent()} itself, so that the caller-stack it captures points at
+	 * the real operation ({@code storePassword}, {@code deletePassword}, ...) instead of
+	 * at this helper.
+	 * </p>
+	 *
+	 * <p>
+	 * The username is the {@code resourceId}; the password is nowhere.
+	 * </p>
+	 */
+	private void logPasswordEvent(SecurityEvent event, String action, String username, String outcome) {
+		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
+		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
+		event.setAction(action);
+		event.setResourceType(RESOURCE_TYPE_USER_PASSWORD);
+		event.setResourceId(username);
+		event.setOutcome(outcome);
+		securityAuditLoggerService.log(event);
 	}
 
 	@Override
 	public void storePassword(String username, String rawPassword) throws GeboCryptSecretException {
-		requireUsername(username);
-		if (rawPassword == null)
-			throw new IllegalArgumentException("A null password cannot be stored for user " + username);
-		GeboUsernamePasswordContent content = new GeboUsernamePasswordContent();
-		content.setUsername(username);
-		content.setPassword(rawPassword);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		try {
+			requireUsername(username);
+			if (rawPassword == null)
+				throw new IllegalArgumentException("A null password cannot be stored for user " + username);
+			GeboUsernamePasswordContent content = new GeboUsernamePasswordContent();
+			content.setUsername(username);
+			content.setPassword(rawPassword);
 
-		String contextCode = IGUserPasswordService.contextCodeOf(username);
-		SecretInfo existing = findSecretInfo(username);
-		if (existing == null) {
-			secretsAccessService.storeSecret(content, descriptionOf(username), contextCode);
-		} else {
-			// Same code, so every reference that already resolved this secret keeps
-			// resolving it - a password change must not mint a second secret and orphan
-			// the first, which would then sit in the store holding a live old password.
-			secretsAccessService.updateSecret(content, descriptionOf(username), contextCode, existing.getCode());
+			String contextCode = IGUserPasswordService.contextCodeOf(username);
+			SecretInfo existing = findSecretInfo(username);
+			// "A credential was created for an account that had none" and "an existing
+			// credential was replaced" are different things to a SIEM: the second, on an
+			// account the actor does not own, is the shape of an account takeover.
+			event.getDetails().put("replacedExisting", existing != null);
+			if (existing == null) {
+				secretsAccessService.storeSecret(content, descriptionOf(username), contextCode);
+			} else {
+				// Same code, so every reference that already resolved this secret keeps
+				// resolving it - a password change must not mint a second secret and orphan
+				// the first, which would then sit in the store holding a live old password.
+				secretsAccessService.updateSecret(content, descriptionOf(username), contextCode, existing.getCode());
+			}
+			logPasswordEvent(event, SecurityAuditTaxonomy.Action.PASSWORD_SECRET_STORE, username,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (GeboCryptSecretException | RuntimeException e) {
+			event.getDetails().put("error", e.getMessage());
+			logPasswordEvent(event, SecurityAuditTaxonomy.Action.PASSWORD_SECRET_STORE, username,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
 	}
 
@@ -103,6 +178,17 @@ public class GUserPasswordServiceImpl implements IGUserPasswordService {
 			// is a login or a "confirm your password" check. Logged at warn because it is
 			// an infrastructure fault masquerading as a wrong password.
 			LOGGER.warn("Cannot read the password secret of user {} - treating the check as a mismatch", username, e);
+			// ... and audited for exactly the same reason: to the caller, and therefore to
+			// the authentication events it goes on to raise, this is indistinguishable from
+			// a wrong password. Without this event, a secret store that has gone unreadable
+			// looks in the security log like a burst of failed logins. A successful or
+			// genuinely-wrong check is NOT audited here: those are the authentication
+			// events' job, and this runs on every login.
+			SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+			event.getDetails().put("error", e.getMessage());
+			event.getDetails().put("reportedAs", "mismatch");
+			logPasswordEvent(event, SecurityAuditTaxonomy.Action.PASSWORD_SECRET_READ, username,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
 			return false;
 		}
 		if (stored == null)
@@ -117,18 +203,45 @@ public class GUserPasswordServiceImpl implements IGUserPasswordService {
 			return findSecretInfo(username) != null;
 		} catch (GeboCryptSecretException | RuntimeException e) {
 			LOGGER.warn("Cannot look up the password secret of user {}", username, e);
+			// Same reasoning as matches(): an unreadable store is reported to the caller as
+			// "this account has no password", which is a security-relevant answer to give
+			// wrongly.
+			SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+			event.getDetails().put("error", e.getMessage());
+			event.getDetails().put("reportedAs", "noPassword");
+			logPasswordEvent(event, SecurityAuditTaxonomy.Action.PASSWORD_SECRET_READ, username,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
 			return false;
 		}
 	}
 
 	@Override
 	public void deletePassword(String username) throws GeboCryptSecretException {
-		requireUsername(username);
-		// Every secret in the context, not just the first: this is the one operation
-		// that must leave nothing behind, and a duplicate left here would keep a deleted
-		// user's password alive in the store.
-		for (SecretInfo info : passwordSecretsOf(username)) {
-			secretsAccessService.deleteSecret(info.getCode());
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		int deleted = 0;
+		try {
+			requireUsername(username);
+			// Every secret in the context, not just the first: this is the one operation
+			// that must leave nothing behind, and a duplicate left here would keep a deleted
+			// user's password alive in the store.
+			for (SecretInfo info : passwordSecretsOf(username)) {
+				secretsAccessService.deleteSecret(info.getCode());
+				deleted++;
+			}
+			// Zero is the documented no-op (a federated account, or a second delete), and
+			// more than one means the duplicate-secret condition findSecretInfo() warns
+			// about was real - both worth being able to see in the log.
+			event.getDetails().put("deletedSecrets", deleted);
+			logPasswordEvent(event, SecurityAuditTaxonomy.Action.PASSWORD_SECRET_DELETE, username,
+					SecurityAuditTaxonomy.Outcome.SUCCESS);
+		} catch (GeboCryptSecretException | RuntimeException e) {
+			// The count so far: a failure part-way through leaves the account with some of
+			// its credentials still live, which is the case that needs investigating.
+			event.getDetails().put("deletedSecrets", deleted);
+			event.getDetails().put("error", e.getMessage());
+			logPasswordEvent(event, SecurityAuditTaxonomy.Action.PASSWORD_SECRET_DELETE, username,
+					SecurityAuditTaxonomy.Outcome.FAILURE);
+			throw e;
 		}
 	}
 
