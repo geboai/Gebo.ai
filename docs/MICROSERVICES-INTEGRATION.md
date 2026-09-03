@@ -880,11 +880,21 @@ the real work; the module carve is code motion.
 1. **`UserDetailsService`.** Every service turns a validated token into a principal
    (`LocalJwtAuthenticationManager` → `loadUserByUsername`), so this cannot be
    owner-only. But `CustomUserDetailsService` reads Mongo. Split it like the directory:
-   the owner keeps the Mongo one (it has the password, so password login works);
-   consumers get a **directory-backed** one built from `IGSecurityDirectory`
+   the owner keeps the Mongo one (it can resolve the password, so password login
+   works); consumers get a **directory-backed** one built from `IGSecurityDirectory`
    (`UserInfos`: username, roles, disabled) with **no password**. That is not a
-   limitation — **login only ever happens on heimdall** — and it means a password hash
+   limitation — **login only ever happens on heimdall** — and it means a password
    cannot leave the owner even by accident.
+
+   The password itself is no longer a field of the `User` document: it is a
+   `USERNAME_PASSWORD` secret in the secret store, filed under the context code
+   `user:<username>` and reached through `IGUserPasswordService`
+   (`gebo.architecture.security`). So the owner's `CustomUserDetailsService` resolves
+   it from the secret store on the login path only, while every token path keeps using
+   the directory-backed service and never pays for that lookup.
+   `UserPasswordSecretMigration` (`gebo.security.directory.mongo`, so it runs only on a
+   service that owns the store) drains the legacy field of an already-deployed
+   installation at startup, idempotently.
 
 2. **`IGOauth2RuntimeConfigurationDao` — the one genuinely new pair, and it is a RUNTIME
    DAO, not a cached REST client.**

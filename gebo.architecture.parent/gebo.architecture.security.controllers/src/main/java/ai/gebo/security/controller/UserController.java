@@ -17,13 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.security.exception.ResourceNotFoundException;
 import ai.gebo.security.model.CurrentUser;
 import ai.gebo.security.model.GroupInfo;
@@ -35,6 +35,7 @@ import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.IGUserPasswordService;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -51,8 +52,10 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository; // Repository for accessing user data
+	// The password is not a field of the user document any more - it is a secret filed
+	// under "user:<username>". See IGUserPasswordService.
 	@Autowired
-	private PasswordEncoder passwordEncoder; // Password encoder for handling password encryption
+	private IGUserPasswordService userPasswordService;
 	@Autowired
 	private IGSecurityService securityService; // Security service for accessing additional security features
 	@Autowired
@@ -142,12 +145,17 @@ public class UserController {
 				else {
 					ChangePasswordResponse response = new ChangePasswordResponse();
 					User user = userOpt.get();
-					String encodeOld = passwordEncoder.encode(param.oldPassword);
-					response.wrongPassword = !encodeOld.equals(user.getPassword());
+					// The persisted username, not the one the caller sent: it is what the password
+					// secret's context code was built from.
+					response.wrongPassword = !userPasswordService.matches(user.getUsername(), param.oldPassword);
 					response.newPasswordNeverMatch = !param.newPassword.equals(param.newPassword1);
 					if ((!response.wrongPassword) && (!response.newPasswordNeverMatch)) {
-						user.setPassword(passwordEncoder.encode(param.newPassword));
-						userRepository.save(user);
+						try {
+							userPasswordService.storePassword(user.getUsername(), param.newPassword);
+						} catch (GeboCryptSecretException e) {
+							throw new IllegalStateException("Cannot store the new password of user "
+									+ user.getUsername(), e);
+						}
 						response.ok = true;
 					}
 					event.setOutcome(

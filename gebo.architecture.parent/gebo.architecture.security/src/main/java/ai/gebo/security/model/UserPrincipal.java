@@ -46,12 +46,35 @@ public class UserPrincipal implements UserDetails {
     }
 
     /**
-     * Creates a UserPrincipal from a given User object.
+     * Creates a UserPrincipal from a given User object, <b>without</b> a password:
+     * {@link User} no longer carries one (it lives in the secret store - see
+     * {@code IGUserPasswordService}), and the overwhelming majority of this method's
+     * callers - every token-based path, the ACL bootstrap, the system identity - never
+     * compare one.
+     *
+     * <p>
+     * The password-login path is the exception, and it says so explicitly by calling
+     * {@link #create(User, String)}. That keeps the secret-store read on the one flow
+     * that needs it instead of on every authenticated request.
+     * </p>
      *
      * @param user the User object.
      * @return a UserPrincipal instance with roles converted to authorities.
      */
     public static UserPrincipal create(User user) {
+        return create(user, (String) null);
+    }
+
+    /**
+     * Creates a UserPrincipal from a given User object with the encoded password
+     * {@code DaoAuthenticationProvider} will compare against - the password-login path,
+     * and the only place that resolves a password at all.
+     *
+     * @param user            the User object.
+     * @param encodedPassword the password as {@code GPasswordEncoder} encodes it.
+     * @return a UserPrincipal instance with roles converted to authorities.
+     */
+    public static UserPrincipal create(User user, String encodedPassword) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
         if (user.getRoles() != null) {
             List<String> roles = user.getRoles();
@@ -60,7 +83,7 @@ public class UserPrincipal implements UserDetails {
             }
         }
 
-        return new UserPrincipal(user.getUsername(), user.getPassword(), authorities);
+        return new UserPrincipal(user.getUsername(), encodedPassword, authorities);
     }
 
     /**

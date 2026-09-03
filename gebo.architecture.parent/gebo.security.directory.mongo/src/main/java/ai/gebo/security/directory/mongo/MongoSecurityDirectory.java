@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.User;
@@ -24,6 +23,7 @@ import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.IGUserPasswordService;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.IGeboSystemUserService;
 import lombok.AllArgsConstructor;
@@ -57,7 +57,10 @@ public class MongoSecurityDirectory implements IGSecurityDirectory {
 
 	private final UserRepository usersRepo;
 	private final UsersGroupRepository groupsRepo;
-	private final PasswordEncoder passwordEncoder;
+	// Not a PasswordEncoder any more: the password is no longer a field of the user
+	// document, it is a USERNAME_PASSWORD secret under "user:<username>". See
+	// IGUserPasswordService.
+	private final IGUserPasswordService userPasswordService;
 	private final IGeboSystemUserService systemUserService;
 	// ObjectProvider, not a direct IGUsersAdminService dependency: GUsersAdminServiceImpl
 	// depends (transitively, through AclGrantedAccessorServiceImpl) on IGSecurityDirectory
@@ -97,10 +100,12 @@ public class MongoSecurityDirectory implements IGSecurityDirectory {
 			return false;
 		}
 		Optional<User> user = usersRepo.findById(username);
-		if (user.isEmpty() || user.get().getPassword() == null) {
+		if (user.isEmpty()) {
 			return false;
 		}
-		return passwordEncoder.matches(rawPassword, user.get().getPassword());
+		// The persisted username, not the one presented: it is what the password secret's
+		// context code was built from, and Mongo ids are case-sensitive.
+		return userPasswordService.matches(user.get().getUsername(), rawPassword);
 	}
 
 	@Override

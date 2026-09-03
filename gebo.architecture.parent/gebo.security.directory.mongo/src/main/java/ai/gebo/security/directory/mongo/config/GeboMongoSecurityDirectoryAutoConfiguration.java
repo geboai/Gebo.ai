@@ -15,18 +15,20 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.security.directory.mongo.GUsersAdminServiceImpl;
 import ai.gebo.security.directory.mongo.GeboSystemUserAclInitializer;
 import ai.gebo.security.directory.mongo.MongoSecurityDirectory;
+import ai.gebo.security.directory.mongo.UserPasswordSecretMigration;
 import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityDirectory;
+import ai.gebo.security.services.IGUserPasswordService;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.IGeboSystemUserService;
 import ai.gebo.security.services.impl.AclGrantedAccessorServiceImpl;
@@ -59,12 +61,12 @@ public class GeboMongoSecurityDirectoryAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(IGSecurityDirectory.class)
 	public MongoSecurityDirectory mongoSecurityDirectory(UserRepository usersRepo, UsersGroupRepository groupsRepo,
-			PasswordEncoder passwordEncoder, IGeboSystemUserService systemUserService,
+			IGUserPasswordService userPasswordService, IGeboSystemUserService systemUserService,
 			// ObjectProvider, not IGUsersAdminService directly: that bean depends (through
 			// AclGrantedAccessorServiceImpl) on IGSecurityDirectory itself, so a direct
 			// dependency here is circular. See MongoSecurityDirectory's own field comment.
 			ObjectProvider<IGUsersAdminService> userAdminService) {
-		return new MongoSecurityDirectory(usersRepo, groupsRepo, passwordEncoder, systemUserService,
+		return new MongoSecurityDirectory(usersRepo, groupsRepo, userPasswordService, systemUserService,
 				userAdminService);
 	}
 
@@ -81,11 +83,30 @@ public class GeboMongoSecurityDirectoryAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(IGUsersAdminService.class)
 	public GUsersAdminServiceImpl usersAdminService(UserRepository usersRepo, UsersGroupRepository groupsRepo,
-			PasswordEncoder passwordEncoder, AclGrantedAccessorServiceImpl grantedAccessorService,
-			IAclAliasesDao aclAliasesDao, IGeboCryptingService cryptService, IGeboSystemUserService systemUserService,
+			IGUserPasswordService userPasswordService, AclGrantedAccessorServiceImpl grantedAccessorService,
+			IAclAliasesDao aclAliasesDao, IGeboSystemUserService systemUserService,
 			IGSecurityAuditLoggerService securityAuditLoggerService) {
-		return new GUsersAdminServiceImpl(usersRepo, groupsRepo, passwordEncoder, grantedAccessorService,
-				aclAliasesDao, cryptService, systemUserService, securityAuditLoggerService);
+		return new GUsersAdminServiceImpl(usersRepo, groupsRepo, userPasswordService, grantedAccessorService,
+				aclAliasesDao, systemUserService, securityAuditLoggerService);
+	}
+
+	/**
+	 * Moves an already-deployed installation's user passwords out of the {@code users}
+	 * documents and into the secret store.
+	 *
+	 * <p>
+	 * Published here, next to the owner's directory, for the same reason
+	 * {@link #geboSystemUserAclInitializer} is: it writes to the user store, so it must
+	 * run on the service that owns it - and only there. A consumer microservice never
+	 * carries this module, so it never runs the migration against a database that is
+	 * not its to rewrite.
+	 * </p>
+	 */
+	@Bean
+	@ConditionalOnMissingBean(UserPasswordSecretMigration.class)
+	public UserPasswordSecretMigration userPasswordSecretMigration(MongoTemplate mongoTemplate,
+			IGeboCryptingService cryptService, IGUserPasswordService userPasswordService) {
+		return new UserPasswordSecretMigration(mongoTemplate, cryptService, userPasswordService);
 	}
 
 	/**
