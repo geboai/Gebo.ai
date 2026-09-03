@@ -18,13 +18,11 @@ import java.util.UUID;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.crypting.services.GeboCryptSecretException;
-import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
@@ -36,6 +34,7 @@ import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGeboSystemUserService;
+import ai.gebo.security.services.IGUserPasswordService;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.security.services.impl.AclGrantedAccessorServiceImpl;
@@ -66,10 +65,11 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 
 	final UsersGroupRepository groupsRepo; // Repository for groups-related database operations
 
-	final PasswordEncoder passwordEncoder; // Encoder for hashing user passwords
+	// Passwords do not live in the user document any more: they are USERNAME_PASSWORD
+	// secrets under "user:<username>". See IGUserPasswordService.
+	final IGUserPasswordService userPasswordService;
 	final AclGrantedAccessorServiceImpl grantedAccessorService;
 	final IAclAliasesDao aclAliasesDao;
-	final IGeboCryptingService cryptService;
 	final IGeboSystemUserService systemUserService;
 	final IGSecurityAuditLoggerService securityAuditLoggerService;
 
@@ -104,7 +104,17 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 		u.assignValues(user);
 		if (password == null || password.trim().length() == 0)
 			throw new IllegalStateException("Empty password forbidden");
-		u.setPassword(passwordEncoder.encode(password));
+		// Written BEFORE the user row, and keyed on the username assignValues just
+		// normalised. The two stores cannot be updated atomically, so the order is chosen
+		// for which half is safe to have on its own: a password secret with no user is
+		// inert (nothing can log in as a user that does not exist, and a retry overwrites
+		// it), whereas a user row with no password would be an account nobody - including
+		// its owner - could ever authenticate as.
+		try {
+			userPasswordService.storePassword(u.getUsername(), password);
+		} catch (GeboCryptSecretException e) {
+			throw new IllegalStateException("Cannot store the password of user " + u.getUsername(), e);
+		}
 		EditableUser out = new EditableUser(u = userRepo.insert(u));
 		String id = grantedAccessorService.getUniqueId(new UserInfosImpl(u));
 		AclGrantType[] allPossibleGrants = AclGrantType.values();
@@ -141,7 +151,14 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	@Override
 	public void deleteUser(EditableUser user) {
 		userRepo.deleteById(user.getUsername());
-
+		// The password outlives the user document unless it is deleted too - it is in a
+		// different store. Done after the row so a failure here leaves an orphan secret
+		// (inert: no user, no login) rather than a live account with no password.
+		try {
+			userPasswordService.deletePassword(user.getUsername());
+		} catch (GeboCryptSecretException e) {
+			throw new IllegalStateException("Cannot delete the password of user " + user.getUsername(), e);
+		}
 	}
 
 	/**
@@ -302,9 +319,9 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 
 		Optional<User> user = this.userRepo.findById(username);
 		if (user.isPresent()) {
-			User usr = user.get();
-			usr.setPassword(passwordEncoder.encode(password));
-			userRepo.save(usr);
+			// The persisted username, not the one asked for: it is what the secret's context
+			// code was built from.
+			userPasswordService.storePassword(user.get().getUsername(), password);
 		}
 
 	}

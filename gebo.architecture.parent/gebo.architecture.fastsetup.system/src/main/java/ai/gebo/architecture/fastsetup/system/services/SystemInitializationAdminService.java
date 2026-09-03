@@ -12,7 +12,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.architecture.fastsetup.system.configuration.SystemInitializationAdminConfiguration;
 import ai.gebo.knlowledgebase.model.licence.GeboLicence;
 import ai.gebo.knlowledgebase.model.licence.GeboLicence.GeboLicenceType;
@@ -20,21 +19,25 @@ import ai.gebo.knowledgebase.repositories.GeboLicenceRepository;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.User;
 import ai.gebo.security.repository.UserRepository;
+import ai.gebo.security.services.IGUserPasswordService;
 
 @Component
 @Scope("singleton")
 public class SystemInitializationAdminService {
 	private final SystemInitializationAdminConfiguration configuration;
-	private final IGeboCryptingService cryptService;
+	// The password is not a field of the user document any more - it is a secret filed
+	// under "user:<username>". See IGUserPasswordService.
+	private final IGUserPasswordService userPasswordService;
 	private final UserRepository userRepository;
 	private final GeboLicenceRepository licenceRepository;
 	private final static Logger LOGGER = LoggerFactory.getLogger(SystemInitializationAdminService.class);
 
 	public SystemInitializationAdminService(
 			@Autowired(required = false) SystemInitializationAdminConfiguration configuration,
-			IGeboCryptingService cryptService, UserRepository userRepository, GeboLicenceRepository licenceRepository) {
+			IGUserPasswordService userPasswordService, UserRepository userRepository,
+			GeboLicenceRepository licenceRepository) {
 		this.configuration = configuration;
-		this.cryptService = cryptService;
+		this.userPasswordService = userPasswordService;
 		this.userRepository = userRepository;
 		this.licenceRepository = licenceRepository;
 	}
@@ -50,9 +53,12 @@ public class SystemInitializationAdminService {
 				User user = new User();
 				user.setProvider(AuthProvider.local);
 				user.setUsername(configuration.getAdminUsername());
-				user.setPassword(this.cryptService.crypt(configuration.getAdminPassword()));
 				user.setRoles(List.of("USER", "ADMIN"));
 				user.setDisabled(false);
+				// The secret first, then the row: a password secret with no user is inert,
+				// whereas an admin row with no password would be an account nobody can sign in
+				// as - and this is the only account there is at this point.
+				userPasswordService.storePassword(user.getUsername(), configuration.getAdminPassword());
 				userRepository.insert(user);
 				GeboLicence geboLicence = new GeboLicence();
 				geboLicence.setCode("ConfigLicence");

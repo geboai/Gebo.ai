@@ -24,9 +24,20 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * This class represents a user entity in the security model. It includes user
- * details such as name, username, password, provider, roles, etc. Each user is
- * uniquely identified by their username in the MongoDB document.
- * 
+ * details such as name, username, provider, roles, etc. Each user is uniquely
+ * identified by their username in the MongoDB document.
+ *
+ * <p>
+ * It deliberately holds <b>no password</b>. A local user's password is a
+ * {@code USERNAME_PASSWORD} secret in the secret store, filed under the context
+ * code {@code "user:<username>"} and reached through
+ * {@link ai.gebo.security.services.IGUserPasswordService} - see that interface for
+ * why the credential was taken out of this document, and
+ * {@code UserPasswordSecretMigration} for how already-deployed installations are
+ * moved over. Adding a password field back here would quietly reintroduce a second
+ * place a credential can live.
+ * </p>
+ *
  * AI generated comments
  */
 @Document
@@ -42,9 +53,6 @@ public class User {
 	private Boolean emailVerified = false;
 
 	private Boolean disabled = null;
-
-	@JsonIgnore
-	private String password;
 
 	@NotNull
 	private AuthProvider provider;
@@ -124,25 +132,6 @@ public class User {
 	 */
 	public void setEmailVerified(Boolean emailVerified) {
 		this.emailVerified = emailVerified;
-	}
-
-	/**
-	 * Gets the password of the user. Note: This field is ignored during JSON
-	 * serialization.
-	 * 
-	 * @return the user's password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * Sets the password of the user.
-	 * 
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	/**
