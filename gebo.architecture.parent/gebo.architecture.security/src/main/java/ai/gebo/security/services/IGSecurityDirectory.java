@@ -115,7 +115,17 @@ public interface IGSecurityDirectory {
 	 *
 	 * @param username     the username (the user's email / id)
 	 * @param attributes   claims/attributes from the token or OAuth2 userinfo
-	 *                     response, stored as the new user's custom info
+	 *                     response, for an implementation that can derive something
+	 *                     from them. They are deliberately <b>not</b> persisted
+	 *                     wholesale - this said "stored as the new user's custom
+	 *                     info", which no implementation did, and which would put a
+	 *                     token's whole claim set, incidental personal data
+	 *                     included, in a document that has no retention policy of
+	 *                     its own. Code that wants a provenance record on the user
+	 *                     writes a curated one into {@code EditableUser.customInfos}
+	 *                     and saves it through
+	 *                     {@link IGUsersAdminService#updateUser(ai.gebo.security.model.EditableUser)},
+	 *                     which is audited like every other user write
 	 * @param authProvider which provider this identity is being provisioned for
 	 * @return the existing or newly created user; never {@code null}
 	 */

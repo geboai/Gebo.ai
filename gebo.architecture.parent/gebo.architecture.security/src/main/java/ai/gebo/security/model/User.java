@@ -289,6 +289,15 @@ public class User {
 		this.disabled = u.getDisabled();
 		this.roles = u.getRoles();
 		this.langCode = u.getLangCode();
+		// Only when the caller actually supplied one. Every other field here is
+		// overwritten unconditionally because a caller posts a whole user, but custom
+		// infos are written by code that knows about one particular key (OAuth2
+		// provisioning provenance, say) and are invisible to callers that do not - a
+		// blind copy would let any of those erase the rest. null therefore means
+		// "leave what is stored alone", which is also what a client that has never
+		// heard of the field sends.
+		if (u.getCustomInfos() != null)
+			this.customInfos = u.getCustomInfos();
 	}
 
 	public String getLangCode() {
