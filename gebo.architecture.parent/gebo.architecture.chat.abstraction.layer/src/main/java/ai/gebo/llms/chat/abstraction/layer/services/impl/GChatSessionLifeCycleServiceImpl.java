@@ -796,7 +796,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode) throws GeboPersistenceException {
+	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode)
+			throws GeboPersistenceException {
 		Optional<GChatProfileConfiguration> profileOpt = this.chatProfilesRepository.findById(chatProfileCode);
 		if (profileOpt.isPresent()) {
 			UserInfos user = this.securityService.getCurrentUser();
@@ -807,6 +808,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			GUserChatSession userContext = new GUserChatSession();
 			userContext.setRagChat(true);
 			userContext.setChatProfileCode(chatProfileCode);
+			userContext.setContextCode(contextCode != null && !contextCode.isBlank() ? contextCode : null);
 			userContext.setDescription(profile.getDescription());
 			userContext.setUsername(user.getUsername());
 			userContext = persistenceManager.insert(userContext);

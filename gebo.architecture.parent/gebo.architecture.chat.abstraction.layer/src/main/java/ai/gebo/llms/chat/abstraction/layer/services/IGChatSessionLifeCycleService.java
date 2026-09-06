@@ -93,7 +93,18 @@ public interface IGChatSessionLifeCycleService {
 
 	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel) throws GeboPersistenceException;
 
-	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode) throws GeboPersistenceException;
+	public default GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode)
+			throws GeboPersistenceException {
+		return createCleanChatByChatProfileCode(chatProfileCode, null);
+	}
+
+	/**
+	 * Creates a clean chat for the given chat profile, bound to the given external
+	 * context code (e.g. the office document the chat assists). A {@code null}
+	 * contextCode creates an unbound chat, as the single-argument overload does.
+	 */
+	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode)
+			throws GeboPersistenceException;
 
 	public GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException;
 
