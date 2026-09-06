@@ -40,7 +40,7 @@ import reactor.core.publisher.Flux;
  * wrap document content meant for the editor in a {@code <GEBO-DOCUMENT>} escape.
  * {@link OfficeDocumentStreamSplitter} isolates that content so only the
  * user-facing chat text is streamed to the chat, while the document part is
- * attached to {@link GeboChatResponse#setAdditionalContent} for the office plugin
+ * attached to {@link GeboChatResponse#setAdditionalContents} for the office plugin
  * to insert into the document the user is working on.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
@@ -101,7 +101,7 @@ public class OfficeReportWriterReactiveAgentService extends ReportWriterReactive
 			response.setDocumentsRef(documentsList(session));
 			response.setCalledFunctions(calledFunctions(callBacksListener));
 			if (splitter.hasDocuments()) {
-				response.setAdditionalContent(splitter.getDocuments());
+				response.setAdditionalContents(splitter.getDocuments());
 			}
 			GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 			envelope.setLastMessage(lastMessage);

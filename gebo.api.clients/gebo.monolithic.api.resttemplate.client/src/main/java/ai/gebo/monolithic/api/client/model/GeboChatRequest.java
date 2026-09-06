@@ -109,8 +109,8 @@ public class GeboChatRequest {
   }  @JsonProperty("userIntent")
   private UserIntentEnum userIntent = null;
 
-  @JsonProperty("additionalsContent")
-  private List<AdditionalContent> additionalsContent = null;
+  @JsonProperty("additionalContents")
+  private List<AdditionalContent> additionalContents = null;
 
   @JsonProperty("tokensSize")
   private Integer tokensSize = null;
@@ -399,30 +399,30 @@ public class GeboChatRequest {
     this.userIntent = userIntent;
   }
 
-  public GeboChatRequest additionalsContent(List<AdditionalContent> additionalsContent) {
-    this.additionalsContent = additionalsContent;
+  public GeboChatRequest additionalContents(List<AdditionalContent> additionalContents) {
+    this.additionalContents = additionalContents;
     return this;
   }
 
-  public GeboChatRequest addAdditionalsContentItem(AdditionalContent additionalsContentItem) {
-    if (this.additionalsContent == null) {
-      this.additionalsContent = new ArrayList<>();
+  public GeboChatRequest addAdditionalContentsItem(AdditionalContent additionalContentsItem) {
+    if (this.additionalContents == null) {
+      this.additionalContents = new ArrayList<>();
     }
-    this.additionalsContent.add(additionalsContentItem);
+    this.additionalContents.add(additionalContentsItem);
     return this;
   }
 
    /**
-   * Get additionalsContent
-   * @return additionalsContent
+   * Get additionalContents
+   * @return additionalContents
   **/
   @Schema(description = "")
-  public List<AdditionalContent> getAdditionalsContent() {
-    return additionalsContent;
+  public List<AdditionalContent> getAdditionalContents() {
+    return additionalContents;
   }
 
-  public void setAdditionalsContent(List<AdditionalContent> additionalsContent) {
-    this.additionalsContent = additionalsContent;
+  public void setAdditionalContents(List<AdditionalContent> additionalContents) {
+    this.additionalContents = additionalContents;
   }
 
   public GeboChatRequest tokensSize(Integer tokensSize) {
@@ -467,13 +467,13 @@ public class GeboChatRequest {
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
-        Objects.equals(this.additionalsContent, geboChatRequest.additionalsContent) &&
+        Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, additionalsContent, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, additionalContents, tokensSize);
   }
 
 
@@ -496,7 +496,7 @@ public class GeboChatRequest {
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
-    sb.append("    additionalsContent: ").append(toIndentedString(additionalsContent)).append("\n");
+    sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();

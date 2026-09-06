@@ -73,9 +73,12 @@ export class ReactiveRagChatService extends GeboAIBaseStreamingService{
         this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
     }
 
-    streamAgenticChat(request: AgenticChatRequestBody, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void, onComplete?: () => void): void {
-        const apiUrl:string= this.basePath+"/api/users/GeboChatPipelinesController/streamChatPipeline";
-         this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
+    streamAgenticChat(request: AgenticChatRequestBody, pipelineCode: string | undefined, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void, onComplete?: () => void): void {
+        let apiUrl:string= this.basePath+"/api/users/GeboChatPipelinesController/streamChatPipeline";
+        if (pipelineCode !== undefined && pipelineCode !== null && ("" + pipelineCode).trim() !== "") {
+            apiUrl += "?pipelineCode=" + encodeURIComponent(pipelineCode);
+        }
+        this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
     }
 
     

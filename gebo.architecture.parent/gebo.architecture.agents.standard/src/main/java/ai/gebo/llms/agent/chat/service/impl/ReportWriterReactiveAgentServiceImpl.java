@@ -183,7 +183,7 @@ public class ReportWriterReactiveAgentServiceImpl
 	 * This is the single seam where the output is materialised, so a subclass can
 	 * post-process the writer's stream - for instance the office assistant writer,
 	 * which splits an escaped document part out of the user-facing chat text and
-	 * attaches it to {@link GeboChatResponse#setAdditionalContent(List)} - by
+	 * attaches it to {@link GeboChatResponse#setAdditionalContents(List)} - by
 	 * overriding this method while keeping {@link #createResponse} untouched.
 	 */
 	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> renderOutputStream(Flux<String> textStream,

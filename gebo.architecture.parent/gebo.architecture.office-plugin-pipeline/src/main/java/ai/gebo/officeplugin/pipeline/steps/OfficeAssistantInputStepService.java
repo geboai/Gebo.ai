@@ -32,7 +32,7 @@ import ai.gebo.officeplugin.pipeline.agents.OfficeFragments;
 /**
  * Input step of the office-assistant pipeline. Like the default input step it does
  * no LLM work; it normalises the {@link AdditionalContent} fragments the office
- * plugin attached to the request ({@code additionalsContent} - the document the
+ * plugin attached to the request ({@code additionalContents} - the document the
  * user is editing) and publishes them into the pipeline shared environment under
  * {@link OfficeAssistantConstants#OFFICE_DOCUMENT_FRAGMENTS}, so the router, the
  * network streaming step and the network input node all see the same normalised
@@ -49,7 +49,7 @@ public class OfficeAssistantInputStepService implements IInputChatPipelineStepSe
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 		GeboChatRequest request = input.getRequestResources().getCurrentRequest();
 		final List<AdditionalContent> fragments = OfficeFragments
-				.normalize(request != null ? request.getAdditionalsContent() : null);
+				.normalize(request != null ? request.getAdditionalContents() : null);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Office input step normalised {} document fragment(s)", fragments.size());
 		}

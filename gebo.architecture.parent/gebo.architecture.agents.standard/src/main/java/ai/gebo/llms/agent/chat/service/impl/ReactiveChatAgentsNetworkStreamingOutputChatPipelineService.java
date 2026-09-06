@@ -159,7 +159,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					// Carry any additional content the writer produced (e.g. the office
 					// assistant's document part) onto the emitted response. Null for the
 					// default network, which never sets it.
-					responseReference.setAdditionalContent(response.getAdditionalContent());
+					responseReference.setAdditionalContents(response.getAdditionalContents());
 					return new GeboChatMessageEnvelope(responseReference);
 				}
 				return x;

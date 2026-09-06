@@ -22,7 +22,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { AdditionalContent, BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable, of } from "rxjs";
@@ -242,6 +242,28 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     @Input() ragsystem: boolean = false;
 
     /**
+     * Additional content (e.g. the document fragment(s) the user is editing) to
+     * attach to every outgoing chat request as GeboChatRequest.additionalContents.
+     * Driven by the host; when it changes it is copied into the request form group.
+     */
+    @Input() additionalContents: AdditionalContent[] = [];
+
+    /**
+     * Optional pipeline code to run for the agentic (RAG) chat path. When set it is
+     * passed to the backend as the pipelineCode query parameter of the chat pipeline
+     * stream, selecting a specific pipeline (e.g. "office-assistant"). When unset the
+     * backend uses its default pipeline.
+     */
+    @Input() pipelineId?: string;
+
+    /**
+     * Emits the additionalContent produced by the backend when a chat stream ends:
+     * the last GeboChatResponse of the stream carrying a non-empty additionalContent
+     * list (e.g. the office assistant's document part to insert into the document).
+     */
+    @Output() outputAdditionalContents: EventEmitter<AdditionalContent[]> = new EventEmitter<AdditionalContent[]>();
+
+    /**
      * Event emitted when a cancel action is triggered
      */
     @Output() cancelAction: EventEmitter<boolean> = new EventEmitter();
@@ -276,7 +298,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
         userUploadedContents: new FormControl(),
-        deepSearchDataSources: new FormControl()
+        deepSearchDataSources: new FormControl(),
+        additionalContents: new FormControl([])
     });
     protected currentPipelineRoutingOption?: PipelineRoutingOption;
     /**
@@ -572,6 +595,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Loads model info and chat history when chatInfo changes
      */
     ngOnChanges(changes: SimpleChanges): void {
+        if (changes["additionalContents"]) {
+            this.formGroup.controls["additionalContents"].setValue(this.additionalContents ?? []);
+        }
         if (this.chatInfo && changes["chatInfo"]) {
             this.formGroup.patchValue(this.chatInfo);
             this.chatInfoFormGroup.patchValue(this.chatInfo);
@@ -653,6 +679,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Initializes the component by setting up form value change subscriptions
      */
     ngOnInit(): void {
+        this.formGroup.controls["additionalContents"].setValue(this.additionalContents ?? []);
         this.formGroup.controls["forcedRequestDocuments"].valueChanges.subscribe((selectedDocuments: string[]) => {
             this.docSelectedMap.clear();
             if (selectedDocuments) {
@@ -912,6 +939,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     }
                 }
                 this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
+                // On stream end, surface any additionalContent produced by the backend
+                // (e.g. the office assistant's document part) to the host.
+                if (response.additionalContents && response.additionalContents.length > 0) {
+                    this.outputAdditionalContents.emit(response.additionalContents);
+                }
                 const dataUpdate: any = {
                     chatProfileCode: r.chatProfileCode,
                     chatModelCode: r.chatModelCode,
@@ -1057,7 +1089,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 agenticChatRequest.environment = this.currentPipelineRoutingOption.pipelineParams;
             }
             //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
-            this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack, onCompleteCallback);
+            this.reactiveChatService.streamAgenticChat(agenticChatRequest, this.pipelineId, messageCallback, errorCallBack, onCompleteCallback);
         } else {
             this.reactiveChatService.streamChat(r, messageCallback, errorCallBack, onCompleteCallback);
         }

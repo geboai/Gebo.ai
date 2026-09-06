@@ -30,7 +30,7 @@ import ai.gebo.officeplugin.pipeline.OfficeAssistantConstants;
 /**
  * Symbolic messaging component that records, in the compliance data-flow register,
  * the inflow specific to the office plugin: the document fragments the user is
- * editing ({@code GeboChatRequest.additionalsContent}) travel from the external
+ * editing ({@code GeboChatRequest.additionalContents}) travel from the external
  * office document editor into the office assistant chat session / agents network.
  *
  * <p>
@@ -78,7 +78,7 @@ public class OfficePluginDataFlowComponent implements IGMessageEmitter {
 		// originates in the external editor and may contain personal / business data.
 		DataEndpoint editorDocument = new DataEndpoint();
 		editorDocument.setId(EDITOR_DOCUMENT_ENDPOINT);
-		editorDocument.setDescription("Office document fragments the user is editing (plugin additionalsContent)");
+		editorDocument.setDescription("Office document fragments the user is editing (plugin additionalContents)");
 		editorDocument.setProduct("Office document editor");
 		editorDocument.setEndpoint("office-editor", "document", null, null);
 		editorDocument.setInput(true);
