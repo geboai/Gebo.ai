@@ -108,7 +108,12 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "getMyChats", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GUserChatInfo> getMyChats() {
-		return repository.findByUsername(securityService.getCurrentUser().getUsername());
+		return repository.findByUsernameAndContextCodeIsNull(securityService.getCurrentUser().getUsername());
+	}
+
+	@GetMapping(value = "getMyChatsByContextCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GUserChatInfo> getMyChatsByContextCode(@RequestParam("contextCode") String contextCode) {
+		return repository.findByUsernameAndContextCode(securityService.getCurrentUser().getUsername(), contextCode);
 	}
 
 	/**
@@ -126,7 +131,8 @@ public class GeboUserChatsController {
 		_page.setPage(page);
 		_page.setPageSize(pageSize);
 
-		return repository.findByUsername(securityService.getCurrentUser().getUsername(), _page.toPageable());
+		return repository.findByUsernameAndContextCodeIsNull(securityService.getCurrentUser().getUsername(),
+				_page.toPageable());
 	}
 
 	/**
