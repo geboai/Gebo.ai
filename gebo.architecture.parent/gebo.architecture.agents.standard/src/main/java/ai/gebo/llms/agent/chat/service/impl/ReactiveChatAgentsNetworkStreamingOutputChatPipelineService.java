@@ -32,21 +32,43 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-@AllArgsConstructor
 public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
 	private static final String SERVICE_ID = "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
 	private static final String EXCEPTION_CREATING_NETWORK_OF_AGENTS = "Exception creating network of agents";
 	private static final String EXCEPTION_RUNNING_NETWORK_OF_AGENTS = "Exception running network of agents";
-	private final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
-	private final IDynamicAgentsNetworkDataSource agentsNetworkDataSource;
-	private final IGChatSessionLifeCycleService lifeCycleService;
+	protected final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
+	protected final IDynamicAgentsNetworkDataSource agentsNetworkDataSource;
+	protected final IGChatSessionLifeCycleService lifeCycleService;
+	/**
+	 * Pipeline step id. The chat pipeline step repository indexes steps globally by
+	 * {@link #getStepId()}, so a second network-streaming step (e.g. the office
+	 * assistant network) must carry a distinct id; this is constructor-injectable
+	 * for exactly that reuse, defaulting to {@link #SERVICE_ID} for the standard
+	 * default-network step.
+	 */
+	private final String stepId;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
+
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, SERVICE_ID);
+	}
+
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			String stepId) {
+		this.factory = factory;
+		this.agentsNetworkDataSource = agentsNetworkDataSource;
+		this.lifeCycleService = lifeCycleService;
+		this.stepId = stepId;
+	}
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -57,7 +79,27 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	@Override
 	public String getStepId() {
 
-		return SERVICE_ID;
+		return stepId;
+	}
+
+	/**
+	 * Builds the environment map seeded into the agents network session
+	 * ({@code session.getEnvironment()}). The default network contributes the
+	 * available knowledge-base codes and the user intent. Subclasses (e.g. the
+	 * office assistant network) override this to enrich the shared environment with
+	 * additional entries - such as the document fragments the user is editing -
+	 * while keeping the standard entries by calling {@code super}.
+	 */
+	protected Map<String, Object> buildNetworkEnvironment(ChatPipelineExecutionRuntimeData runtimeData)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
+		final Map<String, Object> environment = new HashMap<String, Object>();
+		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
+		List<GKnowledgeBase> knowledgeBases = lifeCycleService.getSessionAvailableKnowledgeBases(request);
+		List<String> knowledgeBaseCodes = knowledgeBases.stream().map(x -> x.getCode()).toList();
+		environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
+		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
+				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
+		return environment;
 	}
 
 	@Override
@@ -78,17 +120,10 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			INotificationSink notificationSink = sinkUIEmitter;
 			final GeboChatResponse responseReference = runtimeData.getChatResponse();
-			final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 			List<GAgentsNetwork> ds = this.agentsNetworkDataSource.getConfigurations();
 			if (ds.isEmpty())
 				throw new ChatPipelineException("No agentic chat network set");
-			final Map<String, Object> environment = new HashMap<String, Object>();
-			List<GKnowledgeBase> knowledgeBases = lifeCycleService
-					.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
-			List<String> knowledgeBaseCodes = knowledgeBases.stream().map(x -> x.getCode()).toList();
-			environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
-			environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
-					request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
+			final Map<String, Object> environment = buildNetworkEnvironment(runtimeData);
 			GAgentsNetwork network = ds.get(0);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
@@ -121,6 +156,10 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					responseReference.setQueryResponse(response.getQueryResponse());
 					responseReference.setCalledFunctions(response.getCalledFunctions());
 					responseReference.setDocumentsRef(response.getDocumentsRef());
+					// Carry any additional content the writer produced (e.g. the office
+					// assistant's document part) onto the emitted response. Null for the
+					// default network, which never sets it.
+					responseReference.setAdditionalContent(response.getAdditionalContent());
 					return new GeboChatMessageEnvelope(responseReference);
 				}
 				return x;

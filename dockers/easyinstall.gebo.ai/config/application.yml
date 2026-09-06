@@ -276,6 +276,7 @@ ai.gebo.core.config:
     timeout: 10000
 
 ai.gebo.agents.standard.enabled: false
+ai.gebo.officeplugin.enabled: false
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

@@ -308,6 +308,9 @@ ai.gebo.opensearch:
 
 ai.gebo.rag-threashold-autotune.config.enabled: false	
 ai.gebo.agents.standard.enabled: true
+# Office assistant pipeline (requires ai.gebo.agents.standard.enabled=true; it reuses
+# the standard searcher/tool agents and the controller service).
+ai.gebo.officeplugin.enabled: true
 ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: true
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:

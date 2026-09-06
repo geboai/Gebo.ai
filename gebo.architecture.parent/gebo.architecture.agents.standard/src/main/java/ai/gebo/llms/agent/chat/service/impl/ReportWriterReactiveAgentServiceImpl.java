@@ -169,6 +169,27 @@ public class ReportWriterReactiveAgentServiceImpl
 					notificationSink);
 		}
 
+		return renderOutputStream(textStream, response, session, contextAgentPersona, notificationSink,
+				callBacksListener);
+	}
+
+	/**
+	 * Turns the writer's raw text stream into the outgoing partial-operation stream:
+	 * the running text is emitted chunk by chunk as body envelopes, then a final
+	 * envelope carries the assembled {@link GeboChatResponse} (query response,
+	 * documents, called functions).
+	 *
+	 * <p>
+	 * This is the single seam where the output is materialised, so a subclass can
+	 * post-process the writer's stream - for instance the office assistant writer,
+	 * which splits an escaped document part out of the user-facing chat text and
+	 * attaches it to {@link GeboChatResponse#setAdditionalContent(List)} - by
+	 * overriding this method while keeping {@link #createResponse} untouched.
+	 */
+	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> renderOutputStream(Flux<String> textStream,
+			GeboChatResponse response, AgentsCollaborationSessionContext session,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			ToolCallsListener callBacksListener) {
 		final StringBuffer cumulatedContent = new StringBuffer();
 		Flux<IGPartialOperation<GeboChatMessageEnvelope>> bodyStream = textStream.map(content -> {
 			cumulatedContent.append(content);
@@ -192,6 +213,14 @@ public class ReportWriterReactiveAgentServiceImpl
 			return Flux.just(IGPartialOperation.of(envelope, lastMessage));
 		});
 		return Flux.concat(bodyStream, lastItem);
+	}
+
+	protected List<GResponseDocumentRef> documentsList(AgentsCollaborationSessionContext session) {
+		return extractDocumentsList(session);
+	}
+
+	protected List<CalledFunction> calledFunctions(ToolCallsListener callBacksListener) {
+		return renderFunctions(callBacksListener.getCalls());
 	}
 
 	private List<GResponseDocumentRef> extractDocumentsList(AgentsCollaborationSessionContext session) {

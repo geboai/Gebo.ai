@@ -192,6 +192,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.office-plugin-pipeline</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.neo4j</artifactId>
 			<version>${project.version}</version>
 		</dependency>

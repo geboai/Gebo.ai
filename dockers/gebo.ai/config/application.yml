@@ -276,6 +276,7 @@ ai.gebo.opensearch:
 
 ai.gebo.rag-threashold-autotune.config.enabled: true	
 ai.gebo.agents.standard.enabled: false
+ai.gebo.officeplugin.enabled: false
 ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: false
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
