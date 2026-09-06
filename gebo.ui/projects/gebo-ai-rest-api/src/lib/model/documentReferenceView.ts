@@ -15,12 +15,12 @@ export interface DocumentReferenceView {
     extension?: string;
     contentType?: string;
     messagingModuleId?: string;
+    modificationDate?: Date;
     description?: string;
     code?: string;
-    deleted?: boolean;
     rootKnowledgebaseCode?: string;
     parentProjectCode?: string;
-    modificationDate?: Date;
+    deleted?: boolean;
     relativePath?: string;
     parentVirtualFolderCode?: string;
     creationDate?: Date;

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Oauth2ProviderConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
 
 public class Oauth2ProviderConfig {
   /**
@@ -34,6 +34,7 @@ public class Oauth2ProviderConfig {
     MICROSOFT("microsoft"),
     MICROSOFT_MULTITENANT("microsoft_multitenant"),
     AWS_COGNITO("aws_cognito"),
+    KEYCLOAK("keycloak"),
     OAUTH2_GENERIC("oauth2_generic"),
     LDAP("ldap");
 

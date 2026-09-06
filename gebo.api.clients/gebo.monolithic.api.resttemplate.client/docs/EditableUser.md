@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **roles** | **List&lt;String&gt;** |  | 
 **authProvider** | [**AuthProviderEnum**](#AuthProviderEnum) |  | 
 **langCode** | **String** |  |  [optional]
+**customInfos** | **Map&lt;String, Object&gt;** |  |  [optional]
 
 <a name="AuthProviderEnum"></a>
 ## Enum: AuthProviderEnum
@@ -20,5 +21,6 @@ GOOGLE | &quot;google&quot;
 MICROSOFT | &quot;microsoft&quot;
 MICROSOFT_MULTITENANT | &quot;microsoft_multitenant&quot;
 AWS_COGNITO | &quot;aws_cognito&quot;
+KEYCLOAK | &quot;keycloak&quot;
 OAUTH2_GENERIC | &quot;oauth2_generic&quot;
 LDAP | &quot;ldap&quot;

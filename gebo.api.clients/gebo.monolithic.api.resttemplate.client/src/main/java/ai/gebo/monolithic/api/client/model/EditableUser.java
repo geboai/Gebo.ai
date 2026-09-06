@@ -19,12 +19,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * EditableUser
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
 
 public class EditableUser {
   @JsonProperty("name")
@@ -51,6 +53,7 @@ public class EditableUser {
     MICROSOFT("microsoft"),
     MICROSOFT_MULTITENANT("microsoft_multitenant"),
     AWS_COGNITO("aws_cognito"),
+    KEYCLOAK("keycloak"),
     OAUTH2_GENERIC("oauth2_generic"),
     LDAP("ldap");
 
@@ -83,6 +86,9 @@ public class EditableUser {
 
   @JsonProperty("langCode")
   private String langCode = null;
+
+  @JsonProperty("customInfos")
+  private Map<String, Object> customInfos = null;
 
   public EditableUser name(String name) {
     this.name = name;
@@ -215,6 +221,32 @@ public class EditableUser {
     this.langCode = langCode;
   }
 
+  public EditableUser customInfos(Map<String, Object> customInfos) {
+    this.customInfos = customInfos;
+    return this;
+  }
+
+  public EditableUser putCustomInfosItem(String key, Object customInfosItem) {
+    if (this.customInfos == null) {
+      this.customInfos = new HashMap<>();
+    }
+    this.customInfos.put(key, customInfosItem);
+    return this;
+  }
+
+   /**
+   * Get customInfos
+   * @return customInfos
+  **/
+  @Schema(description = "")
+  public Map<String, Object> getCustomInfos() {
+    return customInfos;
+  }
+
+  public void setCustomInfos(Map<String, Object> customInfos) {
+    this.customInfos = customInfos;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -231,12 +263,13 @@ public class EditableUser {
         Objects.equals(this.disabled, editableUser.disabled) &&
         Objects.equals(this.roles, editableUser.roles) &&
         Objects.equals(this.authProvider, editableUser.authProvider) &&
-        Objects.equals(this.langCode, editableUser.langCode);
+        Objects.equals(this.langCode, editableUser.langCode) &&
+        Objects.equals(this.customInfos, editableUser.customInfos);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, sourname, username, disabled, roles, authProvider, langCode);
+    return Objects.hash(name, sourname, username, disabled, roles, authProvider, langCode, customInfos);
   }
 
 
@@ -252,6 +285,7 @@ public class EditableUser {
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    authProvider: ").append(toIndentedString(authProvider)).append("\n");
     sb.append("    langCode: ").append(toIndentedString(langCode)).append("\n");
+    sb.append("    customInfos: ").append(toIndentedString(customInfos)).append("\n");
     sb.append("}");
     return sb.toString();
   }

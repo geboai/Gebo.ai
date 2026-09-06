@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGOllamaEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
 
 public class OperationStatusGOllamaEmbeddingModelConfig {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusGOllamaEmbeddingModelConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGOllamaEmbeddingModelConfig result(GOllamaEmbeddingModelConfig result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusGOllamaEmbeddingModelConfig {
     this.messages = messages;
   }
 
-  public OperationStatusGOllamaEmbeddingModelConfig hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusGOllamaEmbeddingModelConfig hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusGOllamaEmbeddingModelConfig {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusGOllamaEmbeddingModelConfig hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusGOllamaEmbeddingModelConfig {
     OperationStatusGOllamaEmbeddingModelConfig operationStatusGOllamaEmbeddingModelConfig = (OperationStatusGOllamaEmbeddingModelConfig) o;
     return Objects.equals(this.result, operationStatusGOllamaEmbeddingModelConfig.result) &&
         Objects.equals(this.messages, operationStatusGOllamaEmbeddingModelConfig.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGOllamaEmbeddingModelConfig.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGOllamaEmbeddingModelConfig.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusGOllamaEmbeddingModelConfig.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusGOllamaEmbeddingModelConfig.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusGOllamaEmbeddingModelConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

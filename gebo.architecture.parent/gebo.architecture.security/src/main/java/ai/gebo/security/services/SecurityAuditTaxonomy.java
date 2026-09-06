@@ -34,6 +34,7 @@ public class SecurityAuditTaxonomy {
 	public static class Action {
 		// Session / token
 		public static final String SESSION_TOKEN_RENEW = "sessionTokenRenew";
+		public static final String SESSION_HEADER_DATA_COMPLETE = "sessionHeaderDataComplete";
 
 		// Authentication
 		public static final String AUTH_LOGIN_LOCAL = "authLoginLocal";

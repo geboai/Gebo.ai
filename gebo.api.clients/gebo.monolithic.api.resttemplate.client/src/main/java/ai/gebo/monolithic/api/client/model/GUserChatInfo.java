@@ -23,47 +23,29 @@ import java.util.Date;
  * GUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
 
 public class GUserChatInfo {
-  @JsonProperty("username")
-  private String username = null;
-
   @JsonProperty("description")
   private String description = null;
 
   @JsonProperty("code")
   private String code = null;
 
-  @JsonProperty("chatProfileCode")
-  private String chatProfileCode = null;
-
   @JsonProperty("chatModelCode")
   private String chatModelCode = null;
 
-  @JsonProperty("ragChat")
-  private Boolean ragChat = null;
+  @JsonProperty("chatProfileCode")
+  private String chatProfileCode = null;
 
   @JsonProperty("chatCreationDateTime")
   private Date chatCreationDateTime = null;
 
-  public GUserChatInfo username(String username) {
-    this.username = username;
-    return this;
-  }
+  @JsonProperty("username")
+  private String username = null;
 
-   /**
-   * Get username
-   * @return username
-  **/
-  @Schema(description = "")
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
+  @JsonProperty("ragChat")
+  private Boolean ragChat = null;
 
   public GUserChatInfo description(String description) {
     this.description = description;
@@ -101,24 +83,6 @@ public class GUserChatInfo {
     this.code = code;
   }
 
-  public GUserChatInfo chatProfileCode(String chatProfileCode) {
-    this.chatProfileCode = chatProfileCode;
-    return this;
-  }
-
-   /**
-   * Get chatProfileCode
-   * @return chatProfileCode
-  **/
-  @Schema(description = "")
-  public String getChatProfileCode() {
-    return chatProfileCode;
-  }
-
-  public void setChatProfileCode(String chatProfileCode) {
-    this.chatProfileCode = chatProfileCode;
-  }
-
   public GUserChatInfo chatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
     return this;
@@ -137,22 +101,22 @@ public class GUserChatInfo {
     this.chatModelCode = chatModelCode;
   }
 
-  public GUserChatInfo ragChat(Boolean ragChat) {
-    this.ragChat = ragChat;
+  public GUserChatInfo chatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
     return this;
   }
 
    /**
-   * Get ragChat
-   * @return ragChat
+   * Get chatProfileCode
+   * @return chatProfileCode
   **/
   @Schema(description = "")
-  public Boolean isRagChat() {
-    return ragChat;
+  public String getChatProfileCode() {
+    return chatProfileCode;
   }
 
-  public void setRagChat(Boolean ragChat) {
-    this.ragChat = ragChat;
+  public void setChatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
   }
 
   public GUserChatInfo chatCreationDateTime(Date chatCreationDateTime) {
@@ -173,6 +137,42 @@ public class GUserChatInfo {
     this.chatCreationDateTime = chatCreationDateTime;
   }
 
+  public GUserChatInfo username(String username) {
+    this.username = username;
+    return this;
+  }
+
+   /**
+   * Get username
+   * @return username
+  **/
+  @Schema(description = "")
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public GUserChatInfo ragChat(Boolean ragChat) {
+    this.ragChat = ragChat;
+    return this;
+  }
+
+   /**
+   * Get ragChat
+   * @return ragChat
+  **/
+  @Schema(description = "")
+  public Boolean isRagChat() {
+    return ragChat;
+  }
+
+  public void setRagChat(Boolean ragChat) {
+    this.ragChat = ragChat;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -183,18 +183,18 @@ public class GUserChatInfo {
       return false;
     }
     GUserChatInfo guserChatInfo = (GUserChatInfo) o;
-    return Objects.equals(this.username, guserChatInfo.username) &&
-        Objects.equals(this.description, guserChatInfo.description) &&
+    return Objects.equals(this.description, guserChatInfo.description) &&
         Objects.equals(this.code, guserChatInfo.code) &&
-        Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
         Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode) &&
-        Objects.equals(this.ragChat, guserChatInfo.ragChat) &&
-        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime);
+        Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
+        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime) &&
+        Objects.equals(this.username, guserChatInfo.username) &&
+        Objects.equals(this.ragChat, guserChatInfo.ragChat);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, description, code, chatProfileCode, chatModelCode, ragChat, chatCreationDateTime);
+    return Objects.hash(description, code, chatModelCode, chatProfileCode, chatCreationDateTime, username, ragChat);
   }
 
 
@@ -203,13 +203,13 @@ public class GUserChatInfo {
     StringBuilder sb = new StringBuilder();
     sb.append("class GUserChatInfo {\n");
     
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
-    sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
+    sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
     sb.append("}");
     return sb.toString();
   }

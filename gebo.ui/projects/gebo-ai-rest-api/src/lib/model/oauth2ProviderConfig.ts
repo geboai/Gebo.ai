@@ -21,13 +21,14 @@ export interface Oauth2ProviderConfig {
     jwkSetUri?: string;
 }
 export namespace Oauth2ProviderConfig {
-    export type ProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'oauth2_generic' | 'ldap';
+    export type ProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'keycloak' | 'oauth2_generic' | 'ldap';
     export const ProviderEnum = {
         Local: 'local' as ProviderEnum,
         Google: 'google' as ProviderEnum,
         Microsoft: 'microsoft' as ProviderEnum,
         MicrosoftMultitenant: 'microsoft_multitenant' as ProviderEnum,
         AwsCognito: 'aws_cognito' as ProviderEnum,
+        Keycloak: 'keycloak' as ProviderEnum,
         Oauth2Generic: 'oauth2_generic' as ProviderEnum,
         Ldap: 'ldap' as ProviderEnum
     };

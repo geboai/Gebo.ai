@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-29T21:00:52.028175694+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -38,14 +38,14 @@ public class DocumentReferenceView {
   @JsonProperty("messagingModuleId")
   private String messagingModuleId = null;
 
+  @JsonProperty("modificationDate")
+  private Date modificationDate = null;
+
   @JsonProperty("description")
   private String description = null;
 
   @JsonProperty("code")
   private String code = null;
-
-  @JsonProperty("deleted")
-  private Boolean deleted = null;
 
   @JsonProperty("rootKnowledgebaseCode")
   private String rootKnowledgebaseCode = null;
@@ -53,8 +53,8 @@ public class DocumentReferenceView {
   @JsonProperty("parentProjectCode")
   private String parentProjectCode = null;
 
-  @JsonProperty("modificationDate")
-  private Date modificationDate = null;
+  @JsonProperty("deleted")
+  private Boolean deleted = null;
 
   @JsonProperty("relativePath")
   private String relativePath = null;
@@ -137,6 +137,24 @@ public class DocumentReferenceView {
     this.messagingModuleId = messagingModuleId;
   }
 
+  public DocumentReferenceView modificationDate(Date modificationDate) {
+    this.modificationDate = modificationDate;
+    return this;
+  }
+
+   /**
+   * Get modificationDate
+   * @return modificationDate
+  **/
+  @Schema(description = "")
+  public Date getModificationDate() {
+    return modificationDate;
+  }
+
+  public void setModificationDate(Date modificationDate) {
+    this.modificationDate = modificationDate;
+  }
+
   public DocumentReferenceView description(String description) {
     this.description = description;
     return this;
@@ -171,24 +189,6 @@ public class DocumentReferenceView {
 
   public void setCode(String code) {
     this.code = code;
-  }
-
-  public DocumentReferenceView deleted(Boolean deleted) {
-    this.deleted = deleted;
-    return this;
-  }
-
-   /**
-   * Get deleted
-   * @return deleted
-  **/
-  @Schema(description = "")
-  public Boolean isDeleted() {
-    return deleted;
-  }
-
-  public void setDeleted(Boolean deleted) {
-    this.deleted = deleted;
   }
 
   public DocumentReferenceView rootKnowledgebaseCode(String rootKnowledgebaseCode) {
@@ -227,22 +227,22 @@ public class DocumentReferenceView {
     this.parentProjectCode = parentProjectCode;
   }
 
-  public DocumentReferenceView modificationDate(Date modificationDate) {
-    this.modificationDate = modificationDate;
+  public DocumentReferenceView deleted(Boolean deleted) {
+    this.deleted = deleted;
     return this;
   }
 
    /**
-   * Get modificationDate
-   * @return modificationDate
+   * Get deleted
+   * @return deleted
   **/
   @Schema(description = "")
-  public Date getModificationDate() {
-    return modificationDate;
+  public Boolean isDeleted() {
+    return deleted;
   }
 
-  public void setModificationDate(Date modificationDate) {
-    this.modificationDate = modificationDate;
+  public void setDeleted(Boolean deleted) {
+    this.deleted = deleted;
   }
 
   public DocumentReferenceView relativePath(String relativePath) {
@@ -313,12 +313,12 @@ public class DocumentReferenceView {
         Objects.equals(this.extension, documentReferenceView.extension) &&
         Objects.equals(this.contentType, documentReferenceView.contentType) &&
         Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
+        Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.description, documentReferenceView.description) &&
         Objects.equals(this.code, documentReferenceView.code) &&
-        Objects.equals(this.deleted, documentReferenceView.deleted) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
-        Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
+        Objects.equals(this.deleted, documentReferenceView.deleted) &&
         Objects.equals(this.relativePath, documentReferenceView.relativePath) &&
         Objects.equals(this.parentVirtualFolderCode, documentReferenceView.parentVirtualFolderCode) &&
         Objects.equals(this.creationDate, documentReferenceView.creationDate);
@@ -326,7 +326,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, contentType, messagingModuleId, description, code, deleted, rootKnowledgebaseCode, parentProjectCode, modificationDate, relativePath, parentVirtualFolderCode, creationDate);
+    return Objects.hash(name, extension, contentType, messagingModuleId, modificationDate, description, code, rootKnowledgebaseCode, parentProjectCode, deleted, relativePath, parentVirtualFolderCode, creationDate);
   }
 
 
@@ -339,12 +339,12 @@ public class DocumentReferenceView {
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
+    sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
-    sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
+    sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");
     sb.append("    relativePath: ").append(toIndentedString(relativePath)).append("\n");
     sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
