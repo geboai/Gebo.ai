@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**getChatInfosByCode**](GeboUserChatsControllerApi.md#getChatInfosByCode) | **GET** /api/users/GeboUserChatsController/getChatInfosByCode | 
 [**getChatInfosByQbe**](GeboUserChatsControllerApi.md#getChatInfosByQbe) | **POST** /api/users/GeboUserChatsController/getChatInfosByQbe | 
 [**getMyChats**](GeboUserChatsControllerApi.md#getMyChats) | **GET** /api/users/GeboUserChatsController/getMyChats | 
+[**getMyChatsByContextCode**](GeboUserChatsControllerApi.md#getMyChatsByContextCode) | **GET** /api/users/GeboUserChatsController/getMyChatsByContextCode | 
 [**getMyChatsPaged**](GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
 [**getUIConfig**](GeboUserChatsControllerApi.md#getUIConfig) | **GET** /api/users/GeboUserChatsController/getUIConfig | 
 [**isMinimalLLMSSetupDone**](GeboUserChatsControllerApi.md#isMinimalLLMSSetupDone) | **GET** /api/users/GeboUserChatsController/isMinimalLLMSSetupDone | 
@@ -389,6 +390,49 @@ try {
 
 ### Parameters
 This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;GUserChatInfo&gt;**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getMyChatsByContextCode"></a>
+# **getMyChatsByContextCode**
+> List&lt;GUserChatInfo&gt; getMyChatsByContextCode(contextCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String contextCode = "contextCode_example"; // String | 
+try {
+    List<GUserChatInfo> result = apiInstance.getMyChatsByContextCode(contextCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#getMyChatsByContextCode");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **contextCode** | **String**|  |
 
 ### Return type
 

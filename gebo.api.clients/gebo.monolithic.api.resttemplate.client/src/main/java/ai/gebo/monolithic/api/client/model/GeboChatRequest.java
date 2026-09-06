@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.AdditionalContent;
 import ai.gebo.monolithic.api.client.model.GeboRagRequestCustomConfig;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,7 +27,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -107,6 +108,9 @@ public class GeboChatRequest {
 
   }  @JsonProperty("userIntent")
   private UserIntentEnum userIntent = null;
+
+  @JsonProperty("additionalsContent")
+  private List<AdditionalContent> additionalsContent = null;
 
   @JsonProperty("tokensSize")
   private Integer tokensSize = null;
@@ -395,6 +399,32 @@ public class GeboChatRequest {
     this.userIntent = userIntent;
   }
 
+  public GeboChatRequest additionalsContent(List<AdditionalContent> additionalsContent) {
+    this.additionalsContent = additionalsContent;
+    return this;
+  }
+
+  public GeboChatRequest addAdditionalsContentItem(AdditionalContent additionalsContentItem) {
+    if (this.additionalsContent == null) {
+      this.additionalsContent = new ArrayList<>();
+    }
+    this.additionalsContent.add(additionalsContentItem);
+    return this;
+  }
+
+   /**
+   * Get additionalsContent
+   * @return additionalsContent
+  **/
+  @Schema(description = "")
+  public List<AdditionalContent> getAdditionalsContent() {
+    return additionalsContent;
+  }
+
+  public void setAdditionalsContent(List<AdditionalContent> additionalsContent) {
+    this.additionalsContent = additionalsContent;
+  }
+
   public GeboChatRequest tokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
     return this;
@@ -437,12 +467,13 @@ public class GeboChatRequest {
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
+        Objects.equals(this.additionalsContent, geboChatRequest.additionalsContent) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, additionalsContent, tokensSize);
   }
 
 
@@ -465,6 +496,7 @@ public class GeboChatRequest {
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
+    sb.append("    additionalsContent: ").append(toIndentedString(additionalsContent)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();

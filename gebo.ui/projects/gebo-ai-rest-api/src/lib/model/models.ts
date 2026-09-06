@@ -3,6 +3,7 @@ export * from './a2ARemoteAgentConfig';
 export * from './a2ARemoteSkill';
 export * from './a2AServerConfig';
 export * from './aclOwnerParam';
+export * from './additionalContent';
 export * from './agentNetworkParticipant';
 export * from './agentServiceDescriptor';
 export * from './aggregateRequestBodyConfluenceResultsExtractionData';

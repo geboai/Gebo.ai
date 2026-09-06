@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusListGBedrockChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
 
 public class OperationStatusListGBedrockChatModelChoice {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusListGBedrockChatModelChoice {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusListGBedrockChatModelChoice result(List<GBedrockChatModelChoice> result) {
     this.result = result;
@@ -93,24 +93,6 @@ public class OperationStatusListGBedrockChatModelChoice {
     this.messages = messages;
   }
 
-  public OperationStatusListGBedrockChatModelChoice hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusListGBedrockChatModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -129,6 +111,24 @@ public class OperationStatusListGBedrockChatModelChoice {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusListGBedrockChatModelChoice hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -141,13 +141,13 @@ public class OperationStatusListGBedrockChatModelChoice {
     OperationStatusListGBedrockChatModelChoice operationStatusListGBedrockChatModelChoice = (OperationStatusListGBedrockChatModelChoice) o;
     return Objects.equals(this.result, operationStatusListGBedrockChatModelChoice.result) &&
         Objects.equals(this.messages, operationStatusListGBedrockChatModelChoice.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusListGBedrockChatModelChoice.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusListGBedrockChatModelChoice.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusListGBedrockChatModelChoice.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusListGBedrockChatModelChoice.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -158,8 +158,8 @@ public class OperationStatusListGBedrockChatModelChoice {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

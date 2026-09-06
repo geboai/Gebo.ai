@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AdditionalContent } from './additionalContent';
 import { CalledFunction } from './calledFunction';
 import { ChatModelRequestContextWindowStats } from './chatModelRequestContextWindowStats';
 import { GResponseDocumentRef } from './gResponseDocumentRef';
@@ -34,4 +35,5 @@ export interface GeboChatResponse {
     pipelineRouterDecisionCode?: string;
     pipelineParams?: { [key: string]: any; };
     deepSearchRequestId?: string;
+    additionalContent?: Array<AdditionalContent>;
 }

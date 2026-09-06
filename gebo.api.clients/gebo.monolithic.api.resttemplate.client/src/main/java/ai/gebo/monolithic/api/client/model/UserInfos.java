@@ -24,23 +24,23 @@ import java.util.List;
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
 
 public class UserInfos {
   @JsonProperty("name")
   private String name = null;
+
+  @JsonProperty("username")
+  private String username = null;
+
+  @JsonProperty("roles")
+  private List<String> roles = null;
 
   @JsonProperty("disabled")
   private Boolean disabled = null;
 
   @JsonProperty("sourname")
   private String sourname = null;
-
-  @JsonProperty("roles")
-  private List<String> roles = null;
-
-  @JsonProperty("username")
-  private String username = null;
 
   public UserInfos name(String name) {
     this.name = name;
@@ -58,6 +58,50 @@ public class UserInfos {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public UserInfos username(String username) {
+    this.username = username;
+    return this;
+  }
+
+   /**
+   * Get username
+   * @return username
+  **/
+  @Schema(description = "")
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public UserInfos roles(List<String> roles) {
+    this.roles = roles;
+    return this;
+  }
+
+  public UserInfos addRolesItem(String rolesItem) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(rolesItem);
+    return this;
+  }
+
+   /**
+   * Get roles
+   * @return roles
+  **/
+  @Schema(description = "")
+  public List<String> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<String> roles) {
+    this.roles = roles;
   }
 
   public UserInfos disabled(Boolean disabled) {
@@ -96,50 +140,6 @@ public class UserInfos {
     this.sourname = sourname;
   }
 
-  public UserInfos roles(List<String> roles) {
-    this.roles = roles;
-    return this;
-  }
-
-  public UserInfos addRolesItem(String rolesItem) {
-    if (this.roles == null) {
-      this.roles = new ArrayList<>();
-    }
-    this.roles.add(rolesItem);
-    return this;
-  }
-
-   /**
-   * Get roles
-   * @return roles
-  **/
-  @Schema(description = "")
-  public List<String> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<String> roles) {
-    this.roles = roles;
-  }
-
-  public UserInfos username(String username) {
-    this.username = username;
-    return this;
-  }
-
-   /**
-   * Get username
-   * @return username
-  **/
-  @Schema(description = "")
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -151,15 +151,15 @@ public class UserInfos {
     }
     UserInfos userInfos = (UserInfos) o;
     return Objects.equals(this.name, userInfos.name) &&
-        Objects.equals(this.disabled, userInfos.disabled) &&
-        Objects.equals(this.sourname, userInfos.sourname) &&
+        Objects.equals(this.username, userInfos.username) &&
         Objects.equals(this.roles, userInfos.roles) &&
-        Objects.equals(this.username, userInfos.username);
+        Objects.equals(this.disabled, userInfos.disabled) &&
+        Objects.equals(this.sourname, userInfos.sourname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, disabled, sourname, roles, username);
+    return Objects.hash(name, username, roles, disabled, sourname);
   }
 
 
@@ -169,10 +169,10 @@ public class UserInfos {
     sb.append("class UserInfos {\n");
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
     sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
-    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("}");
     return sb.toString();
   }
