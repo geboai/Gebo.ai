@@ -489,6 +489,53 @@ export class GeboUserChatsControllerService {
     /**
      * 
      * 
+     * @param contextCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMyChatsByContextCode(contextCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GUserChatInfo>>;
+    public getMyChatsByContextCode(contextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GUserChatInfo>>>;
+    public getMyChatsByContextCode(contextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GUserChatInfo>>>;
+    public getMyChatsByContextCode(contextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (contextCode === null || contextCode === undefined) {
+            throw new Error('Required parameter contextCode was null or undefined when calling getMyChatsByContextCode.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (contextCode !== undefined && contextCode !== null) {
+            queryParameters = queryParameters.set('contextCode', <any>contextCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GUserChatInfo>>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChatsByContextCode`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param page 
      * @param pageSize 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

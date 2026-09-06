@@ -9,7 +9,11 @@
 
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import java.util.List;
+
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Gebo.ai comment agent
@@ -19,8 +23,12 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
  * GeboTemplatedChatRequest for a specific type of data (String).
  */
 public class GeboChatRequest extends GeboTemplatedChatRequest<String> implements Cloneable, ITokensCountable {
-	// No additional fields or methods are currently defined for this class,
-	// it simply specializes the base class for use with String-type data.
+
+	/** Additional content attached to the request; the list itself is optional. */
+	@Getter
+	@Setter
+	private List<AdditionalContent> additionalsContent = null;
+
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}

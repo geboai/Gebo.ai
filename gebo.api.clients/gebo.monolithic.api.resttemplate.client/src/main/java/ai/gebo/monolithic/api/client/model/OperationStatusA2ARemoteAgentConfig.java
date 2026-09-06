@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusA2ARemoteAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
 
 public class OperationStatusA2ARemoteAgentConfig {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusA2ARemoteAgentConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusA2ARemoteAgentConfig result(A2ARemoteAgentConfig result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusA2ARemoteAgentConfig {
     this.messages = messages;
   }
 
-  public OperationStatusA2ARemoteAgentConfig hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusA2ARemoteAgentConfig hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusA2ARemoteAgentConfig {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusA2ARemoteAgentConfig hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusA2ARemoteAgentConfig {
     OperationStatusA2ARemoteAgentConfig operationStatusA2ARemoteAgentConfig = (OperationStatusA2ARemoteAgentConfig) o;
     return Objects.equals(this.result, operationStatusA2ARemoteAgentConfig.result) &&
         Objects.equals(this.messages, operationStatusA2ARemoteAgentConfig.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusA2ARemoteAgentConfig.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusA2ARemoteAgentConfig.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusA2ARemoteAgentConfig.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusA2ARemoteAgentConfig.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusA2ARemoteAgentConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

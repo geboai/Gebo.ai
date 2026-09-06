@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **userUploadedContents** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md) |  |  [optional]
 **deepSearchDataSources** | **List&lt;String&gt;** |  |  [optional]
 **userIntent** | [**UserIntentEnum**](#UserIntentEnum) |  |  [optional]
+**additionalsContent** | [**List&lt;AdditionalContent&gt;**](AdditionalContent.md) |  |  [optional]
 **tokensSize** | **Integer** |  |  [optional]
 
 <a name="UserIntentEnum"></a>

@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
 
 public class GeboUserChatsControllerApi {
     private ApiClient apiClient;
@@ -442,6 +442,51 @@ public class GeboUserChatsControllerApi {
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GUserChatInfo>> returnType = new ParameterizedTypeReference<List<GUserChatInfo>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param contextCode  (required)
+     * @return List&lt;GUserChatInfo&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GUserChatInfo> getMyChatsByContextCode(String contextCode) throws RestClientException {
+        return getMyChatsByContextCodeWithHttpInfo(contextCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param contextCode  (required)
+     * @return ResponseEntity&lt;List&lt;GUserChatInfo&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GUserChatInfo>> getMyChatsByContextCodeWithHttpInfo(String contextCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'contextCode' is set
+        if (contextCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'contextCode' when calling getMyChatsByContextCode");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getMyChatsByContextCode").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "contextCode", contextCode));
 
         final String[] accepts = { 
             "application/json"

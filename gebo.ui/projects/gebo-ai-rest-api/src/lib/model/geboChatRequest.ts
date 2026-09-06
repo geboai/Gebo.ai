@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AdditionalContent } from './additionalContent';
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
 import { UserUploadedContent } from './userUploadedContent';
 
@@ -27,6 +28,7 @@ export interface GeboChatRequest {
     userUploadedContents?: Array<UserUploadedContent>;
     deepSearchDataSources?: Array<string>;
     userIntent?: GeboChatRequest.UserIntentEnum;
+    additionalsContent?: Array<AdditionalContent>;
     tokensSize?: number;
 }
 export namespace GeboChatRequest {

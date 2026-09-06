@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.AdditionalContent;
 import ai.gebo.monolithic.api.client.model.CalledFunction;
 import ai.gebo.monolithic.api.client.model.ChatModelRequestContextWindowStats;
 import ai.gebo.monolithic.api.client.model.GResponseDocumentRef;
@@ -32,7 +33,7 @@ import java.util.Map;
  * GeboChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T07:47:46.454799+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
 
 public class GeboChatResponse {
   @JsonProperty("id")
@@ -85,6 +86,9 @@ public class GeboChatResponse {
 
   @JsonProperty("deepSearchRequestId")
   private String deepSearchRequestId = null;
+
+  @JsonProperty("additionalContent")
+  private List<AdditionalContent> additionalContent = null;
 
   public GeboChatResponse id(String id) {
     this.id = id;
@@ -448,6 +452,32 @@ public class GeboChatResponse {
     this.deepSearchRequestId = deepSearchRequestId;
   }
 
+  public GeboChatResponse additionalContent(List<AdditionalContent> additionalContent) {
+    this.additionalContent = additionalContent;
+    return this;
+  }
+
+  public GeboChatResponse addAdditionalContentItem(AdditionalContent additionalContentItem) {
+    if (this.additionalContent == null) {
+      this.additionalContent = new ArrayList<>();
+    }
+    this.additionalContent.add(additionalContentItem);
+    return this;
+  }
+
+   /**
+   * Get additionalContent
+   * @return additionalContent
+  **/
+  @Schema(description = "")
+  public List<AdditionalContent> getAdditionalContent() {
+    return additionalContent;
+  }
+
+  public void setAdditionalContent(List<AdditionalContent> additionalContent) {
+    this.additionalContent = additionalContent;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -474,12 +504,13 @@ public class GeboChatResponse {
         Objects.equals(this.generatedResources, geboChatResponse.generatedResources) &&
         Objects.equals(this.pipelineRouterDecisionCode, geboChatResponse.pipelineRouterDecisionCode) &&
         Objects.equals(this.pipelineParams, geboChatResponse.pipelineParams) &&
-        Objects.equals(this.deepSearchRequestId, geboChatResponse.deepSearchRequestId);
+        Objects.equals(this.deepSearchRequestId, geboChatResponse.deepSearchRequestId) &&
+        Objects.equals(this.additionalContent, geboChatResponse.additionalContent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, additionalContent);
   }
 
 
@@ -505,6 +536,7 @@ public class GeboChatResponse {
     sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
     sb.append("    pipelineParams: ").append(toIndentedString(pipelineParams)).append("\n");
     sb.append("    deepSearchRequestId: ").append(toIndentedString(deepSearchRequestId)).append("\n");
+    sb.append("    additionalContent: ").append(toIndentedString(additionalContent)).append("\n");
     sb.append("}");
     return sb.toString();
   }
