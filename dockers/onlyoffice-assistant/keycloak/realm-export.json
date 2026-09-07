@@ -12,10 +12,13 @@
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "redirectUris": [
-        "http://localhost:4180/oauth2/callback"
+        "http://localhost:4180/oauth2/callback",
+        "http://localhost:12999/login/oauth2/code/*",
+        "http://localhost:12999/*"
       ],
       "webOrigins": [
-        "http://localhost:4180"
+        "http://localhost:4180",
+        "http://localhost:12999"
       ]
     }
   ],

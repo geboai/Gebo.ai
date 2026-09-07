@@ -32,7 +32,17 @@ from `backends.json` (default `http://localhost:12999`). That backend must:
 
 1. **Allow CORS from `http://localhost:4180`** — add it to
    `ai.gebo.security.cors.allowedOrigins`.
-2. **Trust this sandbox's Keycloak realm** as an OAuth2 resource server so the
+2. **Enable the office-assistant chat pipeline.** It is `@ConditionalOnProperty`
+   and it *reuses* the standard agents network, so BOTH flags are required — with
+   only `officeplugin.enabled` the context fails to start (`officeAgentsNetwork…`
+   has no `StandardAgentsInitialization` bean):
+
+   ```
+   ai.gebo.agents.standard.enabled: true
+   ai.gebo.officeplugin.enabled:    true
+   ```
+
+3. **Trust this sandbox's Keycloak realm** as an OAuth2 resource server so the
    token the plugin sends (with `X-AuthType: OAUTH2`) authenticates. Relaxed
    binding means the flat `ai.gebo.security.*` keys in `SPRING_APPLICATION_JSON`
    bind to exactly the same properties as this nested YAML:
@@ -46,19 +56,31 @@ ai.gebo.security:
   oauth2configs:
     - registrationId: keycloakOnlyofficeBearer
       description: ONLYOFFICE sandbox Keycloak resource server
-      provider: oauth2_generic
+      provider: keycloak                       # dedicated Keycloak provider; oauth2_generic
+                                               # also validates JWTs (issuer/JWKS only) but is
+                                               # a less accurate description of the IdP
       configurationType: AUTHENTICATION      # singular; "configurationTypes" binds to null
       client:
         clientId: onlyoffice-plugin-dev
         secret: 42f277af-7919-4edb-a686-a2f40ec4dc87   # keycloak/realm-export.json
       providerConfig:
-        provider: oauth2_generic
+        provider: keycloak
         authorizationUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/auth
         tokenUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/token
         userInfoUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/userinfo
         issuerUri: http://keycloak.localtest.me:8081/realms/onlyoffice-dev
         userNameAttribute: email
 ```
+
+Declaring this `oauth2config` also lights up an interactive "Sign in with
+Keycloak" button on the Gebo.ai UI (`http://localhost:12999`), whose Spring
+callback is `{baseUrl}/login/oauth2/code/{registrationId}` — here
+`http://localhost:12999/login/oauth2/code/keycloakOnlyofficeBearer`. That URI
+(and `http://localhost:12999`) is therefore added to the `onlyoffice-plugin-dev`
+client's **Valid Redirect URIs / Web Origins** in `keycloak/realm-export.json`;
+without it the graphical login fails at Keycloak with *Invalid parameter:
+redirect_uri*. The plugin's own bearer-token path does not use this — it is only
+for logging into the platform UI directly.
 
 An **admin account** is provisioned on first boot from
 `ai.gebo.sysinit.admin.config.{adminUsername,adminPassword}` (set in the compose

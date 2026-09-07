@@ -137,16 +137,18 @@ services:
       # onlyoffice-dev realm as an OAuth2 resource server (issuerUri uses the
       # keycloak.localtest.me alias, resolvable on this shared network).
       SPRING_APPLICATION_JSON: >-
-        {"ai.gebo.security.cors.allowedOrigins":"http://localhost:12999,http://localhost:4200,http://localhost:4180",
+        {"ai.gebo.agents.standard.enabled":"true",
+        "ai.gebo.officeplugin.enabled":"true",
+        "ai.gebo.security.cors.allowedOrigins":"http://localhost:12999,http://localhost:4200,http://localhost:4180",
         "ai.gebo.security.loginPolicy":"TRUST_EVERY_OAUTH_IDENTITY",
         "ai.gebo.security.oauth2configs[0].registrationId":"keycloakOnlyofficeBearer",
         "ai.gebo.security.oauth2configs[0].description":"ONLYOFFICE sandbox Keycloak resource server",
-        "ai.gebo.security.oauth2configs[0].provider":"oauth2_generic",
+        "ai.gebo.security.oauth2configs[0].provider":"keycloak",
         "ai.gebo.security.oauth2configs[0].configurationType":"AUTHENTICATION",
         "ai.gebo.security.oauth2configs[0].client.clientId":"onlyoffice-plugin-dev",
         "ai.gebo.security.oauth2configs[0].client.secret":"42f277af-7919-4edb-a686-a2f40ec4dc87",
         "ai.gebo.security.oauth2configs[0].client.tenantId":"default",
-        "ai.gebo.security.oauth2configs[0].providerConfig.provider":"oauth2_generic",
+        "ai.gebo.security.oauth2configs[0].providerConfig.provider":"keycloak",
         "ai.gebo.security.oauth2configs[0].providerConfig.authorizationUri":"http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/auth",
         "ai.gebo.security.oauth2configs[0].providerConfig.tokenUri":"http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/token",
         "ai.gebo.security.oauth2configs[0].providerConfig.userInfoUri":"http://keycloak.localtest.me:8081/realms/onlyoffice-dev/protocol/openid-connect/userinfo",
