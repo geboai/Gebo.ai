@@ -30,7 +30,7 @@ public class GeboChatResponse extends GeboTemplatedChatResponse<String> implemen
 	/** Additional content attached to the response; the list itself is optional. */
 	@Getter
 	@Setter
-	private List<AdditionalContent> additionalContent = null;
+	private List<AdditionalContent> additionalContents = null;
 
     /**
      * Default constructor for GeboChatResponse. Initializes a new instance

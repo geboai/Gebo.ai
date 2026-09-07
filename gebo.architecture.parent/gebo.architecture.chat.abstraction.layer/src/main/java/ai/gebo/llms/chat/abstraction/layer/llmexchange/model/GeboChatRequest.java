@@ -27,7 +27,7 @@ public class GeboChatRequest extends GeboTemplatedChatRequest<String> implements
 	/** Additional content attached to the request; the list itself is optional. */
 	@Getter
 	@Setter
-	private List<AdditionalContent> additionalsContent = null;
+	private List<AdditionalContent> additionalContents = null;
 
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();

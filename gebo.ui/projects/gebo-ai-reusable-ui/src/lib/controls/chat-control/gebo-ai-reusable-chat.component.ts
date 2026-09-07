@@ -22,10 +22,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { AdditionalContent, BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, Observable, of } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
@@ -40,7 +40,7 @@ const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
 const chat_history_loaded: ToastMessageOptions = { id: "CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
 const clean_chat_loaded: ToastMessageOptions = { id: "NEW_CHAT_LOADED", summary: "New chat loaded", detail: "New chat loaded successfully", severity: "success" };
-const fileExportLoaded:ToastMessageOptions= {id:"fileExportLoaded",summary:"File exported",detail:"Go to browser downloads section",severity:"succcess"};
+const fileExportLoaded: ToastMessageOptions = { id: "fileExportLoaded", summary: "File exported", detail: "Go to browser downloads section", severity: "succcess" };
 /**
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
@@ -121,7 +121,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Determines if any loading operation is currently in progress
      */
     public get loading(): boolean {
-        return this.loadingChatHistory === true || this.loadingChatResponse === true || this.loadingModelMetaInfo === true || this.waitingForTranscript === true;
+        return this.loadingChatHistory === true || this.loadingChatResponse === true || this.loadingModelMetaInfo === true || this.waitingForTranscript === true || this.loadingChatMenu === true;
     }
 
     /**
@@ -144,6 +144,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     private loadingModelMetaInfo: boolean = false;
 
+    private loadingChatMenu: boolean = false;
     /**
      * Flag indicating if waiting for speech-to-text transcript
      */
@@ -209,7 +210,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     /**
      * Time in milliseconds after which streaming is considered failed
      */
-    @Input() streamingTimeout: number = 10*60*1000;
+    @Input() streamingTimeout: number = 10 * 60 * 1000;
 
     /**
      * Flag to use only REST API calls (no WebSockets)
@@ -240,6 +241,28 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Flag indicating if RAG system should be used
      */
     @Input() ragsystem: boolean = false;
+
+    /**
+     * Additional content (e.g. the document fragment(s) the user is editing) to
+     * attach to every outgoing chat request as GeboChatRequest.additionalContents.
+     * Driven by the host; when it changes it is copied into the request form group.
+     */
+    @Input() additionalContents: AdditionalContent[] = [];
+
+    /**
+     * Optional pipeline code to run for the agentic (RAG) chat path. When set it is
+     * passed to the backend as the pipelineCode query parameter of the chat pipeline
+     * stream, selecting a specific pipeline (e.g. "office-assistant"). When unset the
+     * backend uses its default pipeline.
+     */
+    @Input() pipelineId?: string;
+
+    /**
+     * Emits the additionalContent produced by the backend when a chat stream ends:
+     * the last GeboChatResponse of the stream carrying a non-empty additionalContent
+     * list (e.g. the office assistant's document part to insert into the document).
+     */
+    @Output() outputAdditionalContents: EventEmitter<AdditionalContent[]> = new EventEmitter<AdditionalContent[]>();
 
     /**
      * Event emitted when a cancel action is triggered
@@ -276,7 +299,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
         userUploadedContents: new FormControl(),
-        deepSearchDataSources: new FormControl()
+        deepSearchDataSources: new FormControl(),
+        additionalContents: new FormControl([])
     });
     protected currentPipelineRoutingOption?: PipelineRoutingOption;
     /**
@@ -541,14 +565,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             withCredentials: true
         }).subscribe({
             next: (blob: Blob) => {
-                const subscription=this.geboAiTranslationService.translateBackendMessage(fileExportLoaded as GUserMessage).subscribe({
-                    next:(msg)=>{
-                        this.lastInteractionMessages=[msg as ToastMessageOptions];
+                const subscription = this.geboAiTranslationService.translateBackendMessage(fileExportLoaded as GUserMessage).subscribe({
+                    next: (msg) => {
+                        this.lastInteractionMessages = [msg as ToastMessageOptions];
                     },
-                    complete:()=>{
+                    complete: () => {
                         try {
                             subscription.unsubscribe();
-                        }catch(e) {}
+                        } catch (e) { }
                     }
                 });
                 const filename = format === 'PDF' ? 'export.pdf' : 'export.docx';
@@ -572,16 +596,24 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Loads model info and chat history when chatInfo changes
      */
     ngOnChanges(changes: SimpleChanges): void {
+        if (changes["additionalContents"]) {
+            this.formGroup.controls["additionalContents"].setValue(this.additionalContents ?? []);
+        }
+        let menu2BeReloaded: boolean = false;
+        if (changes["pipelineId"]) {
+            menu2BeReloaded = true;
+        }
         if (this.chatInfo && changes["chatInfo"]) {
             this.formGroup.patchValue(this.chatInfo);
             this.chatInfoFormGroup.patchValue(this.chatInfo);
-            let observables: [Observable<GBaseChatModelChoice>, Observable<GeboChatUserInfo>, Observable<PipelineChatMenu[]>] | null = null;
+            let observables: [Observable<GBaseChatModelChoice>, Observable<GeboChatUserInfo>] | null = null;
 
             if (this.chatInfo.chatProfileCode) {
-                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode), this.geboChatPipelineService.getDefaultPersonalPipelinesChatMenu(this.chatInfo.chatProfileCode)];
+                menu2BeReloaded = true;
+                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode)];
             } else
                 if (this.chatInfo.chatModelCode) {
-                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode), of([])];
+                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode)];
                 }
             if (observables) {
                 this.loadingModelMetaInfo = true;
@@ -590,7 +622,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         this.modelMetaInfos = value[0];
                         this.knowledgeBaseCodes = value[1].knowledgeBases?.map(x => x.code).filter(y => y ? true : false) as string[];
                         this.chatUserInfos = value[1];
-                        this.chatPipelinesMenu = value[2];
+
                     },
                     complete: () => {
                         this.loadingModelMetaInfo = false;
@@ -614,6 +646,20 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 });
             }
             this.loadChatHistory();
+
+        }
+        //here we load the proper menu for the actual chat pipeline
+        if (menu2BeReloaded === true && this.chatInfo?.chatProfileCode) {
+            this.loadingChatMenu = true;
+            this.geboChatPipelineService.getPersonalPipelinesChatMenu(this.chatInfo.chatProfileCode, this.pipelineId).subscribe({
+                next: (menu) => {
+                    this.chatPipelinesMenu = menu;
+                    this.loadingChatMenu = false;
+                },
+                complete: () => {
+                    this.loadingChatMenu = false;
+                }
+            });
 
         }
     }
@@ -653,6 +699,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Initializes the component by setting up form value change subscriptions
      */
     ngOnInit(): void {
+        this.formGroup.controls["additionalContents"].setValue(this.additionalContents ?? []);
         this.formGroup.controls["forcedRequestDocuments"].valueChanges.subscribe((selectedDocuments: string[]) => {
             this.docSelectedMap.clear();
             if (selectedDocuments) {
@@ -912,6 +959,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     }
                 }
                 this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
+                // On stream end, surface any additionalContent produced by the backend
+                // (e.g. the office assistant's document part) to the host.
+                if (response.additionalContents && response.additionalContents.length > 0) {
+                    this.outputAdditionalContents.emit(response.additionalContents);
+                }
                 const dataUpdate: any = {
                     chatProfileCode: r.chatProfileCode,
                     chatModelCode: r.chatModelCode,
@@ -977,7 +1029,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         case "GUserMessage": {
                             const message = recvd.content as ToastMessageOptions;
                             this.lastInteractionMessages = [message];
-                            
+
                         } break;
                         case "PipelineRoutingInfos": {
                             const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
@@ -994,7 +1046,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 if (!interaction.response.queryResponse) {
                                     interaction.response.queryResponse = "";
                                 }
-                                
+
                                 let isJson = false;
                                 if (typeof recvd.content === "string" && recvd.content.trim().startsWith("{")) {
                                     try {
@@ -1007,7 +1059,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                         // Ignore, treat as plain string
                                     }
                                 }
-                                
+
                                 if (!isJson) {
                                     interaction.response.queryResponse += recvd.content;
                                     setTimeout(() => this.scrollToBottom(), 10);
@@ -1057,7 +1109,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 agenticChatRequest.environment = this.currentPipelineRoutingOption.pipelineParams;
             }
             //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
-            this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack, onCompleteCallback);
+            this.reactiveChatService.streamAgenticChat(agenticChatRequest, this.pipelineId, messageCallback, errorCallBack, onCompleteCallback);
         } else {
             this.reactiveChatService.streamChat(r, messageCallback, errorCallBack, onCompleteCallback);
         }

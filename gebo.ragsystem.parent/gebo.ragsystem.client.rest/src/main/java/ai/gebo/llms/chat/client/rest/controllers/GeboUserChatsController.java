@@ -219,9 +219,10 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "createCleanChatByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo createCleanChatByChatProfileCode(
-			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode)
+			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode,
+			@RequestParam(value = "contextCode", required = false) String contextCode)
 			throws GeboPersistenceException {
-		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode);
+		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
 	}
 
 	@DeleteMapping("deleteChat")

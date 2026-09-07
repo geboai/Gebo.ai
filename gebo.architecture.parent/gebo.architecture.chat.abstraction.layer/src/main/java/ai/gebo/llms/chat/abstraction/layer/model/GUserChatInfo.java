@@ -37,6 +37,15 @@ public interface GUserChatInfo {
 	Date getChatCreationDateTime();
 
 	/**
+	 * Gets the external context code this chat is bound to (e.g. the office
+	 * document the chat assists), or {@code null} when the chat is not bound to
+	 * any external context.
+	 *
+	 * @return a String representing the external context code, or {@code null}.
+	 */
+	public String getContextCode();
+
+	/**
 	 * Gets the profile code of the chat.
 	 *
 	 * @return a String representing the profile code.

@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class GUserChatInfoData implements GUserChatInfo {
-	private String code, username, description, chatProfileCode, chatModelCode;
+	private String code, username, description, contextCode, chatProfileCode, chatModelCode;
 	private Date chatCreationDateTime;
 	private Boolean ragChat = null;
 
@@ -18,6 +18,7 @@ public class GUserChatInfoData implements GUserChatInfo {
 		this.code = info.getCode();
 		this.username = info.getUsername();
 		this.description = info.getDescription();
+		this.contextCode = info.getContextCode();
 		this.chatProfileCode = info.getChatProfileCode();
 		this.chatModelCode = info.getChatModelCode();
 		this.chatCreationDateTime = info.getChatCreationDateTime();
@@ -28,6 +29,7 @@ public class GUserChatInfoData implements GUserChatInfo {
 		this.code = info.getCode();
 		this.username = info.getUsername();
 		this.description = info.getDescription();
+		this.contextCode = info.getContextCode();
 		this.chatProfileCode = info.getChatProfileCode();
 		this.chatModelCode = info.getChatModelCode();
 		this.chatCreationDateTime = info.getChatCreationDateTime();

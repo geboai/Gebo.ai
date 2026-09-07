@@ -217,11 +217,38 @@ public class StandardAgentsInitialization {
 
 	private GAgentsNetwork createDefaultAgentsNetwork(
 			IGDynamicAgentConfigDataSource internalKnowledgebaseAgentConfigDataSource) {
-		GAgentsNetwork network = new GAgentsNetwork();
-		network.setCode(DEFAULT_AGENTS_NETWORK);
-		network.setDescription(DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES);
-		network.setReadOnly(true);
+		GAgentConfig controller = defaultControllerAgentConfigDataSource().getConfigurations().get(0);
+		GAgentConfig reportWriter = defaultReportWriterConfigDataSource().getConfigurations().get(0);
+		GAgentConfig inputAdapter = defaultInputAdapterConfigDataSource().getConfigurations().get(0);
+		GAgentsNetwork network = createChatAgentsNetwork(DEFAULT_AGENTS_NETWORK, DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES,
+				inputAdapter.getCode(), controller.getCode(), reportWriter.getCode(),
+				internalKnowledgebaseAgentConfigDataSource);
 		network.setDefaultUserInteractionNetwork(true);
+		return network;
+	}
+
+	/**
+	 * Assembles a reactive chat agents network with the standard topology - a
+	 * non-LLM input adapter feeding a coordinator/controller that fans out to the
+	 * internal knowledge-base searcher (when present), every enabled external search
+	 * agent and (when tools exist) the tool-calling agent, all reporting to a single
+	 * output report/answer writer.
+	 *
+	 * <p>
+	 * The input adapter, controller and report-writer nodes are supplied by
+	 * {@code agentConfigCode}, so a second pipeline (e.g. the office assistant) can
+	 * reuse the whole searcher/tool/topology assembly while substituting its own
+	 * input adapter, coordinator prompt and writer. The searcher and tool-calling
+	 * participants are always the standard ones, keeping the two networks in sync.
+	 */
+	public GAgentsNetwork createChatAgentsNetwork(String networkCode, String networkDescription,
+			String inputAdapterConfigCode, String controllerConfigCode, String reportWriterConfigCode,
+			IGDynamicAgentConfigDataSource internalKnowledgebaseAgentConfigDataSource) {
+		GAgentsNetwork network = new GAgentsNetwork();
+		network.setCode(networkCode);
+		network.setDescription(networkDescription);
+		network.setReadOnly(true);
+		network.setDefaultUserInteractionNetwork(false);
 		network.setAgentsNetworkServiceFactoryId(
 				GReactiveChatAgentsNetworkServiceFactoryImpl.REACTIVE_CHAT_AGENTS_NETWORK);
 		// Global safety backstop on TOTAL agent invocations (the controller's own cycle
@@ -229,9 +256,7 @@ public class StandardAgentsInitialization {
 		// gather/finalize run with a wide searcher fan-out is never truncated.
 		network.setMaxLoopIteration(60);
 		network.setScenarioDescription(DEFAULT_NETWORK_SCENARIO_DESCRIPTION);
-		GAgentConfig controller = defaultControllerAgentConfigDataSource().getConfigurations().get(0);
 		List<GAgentConfig> dataSources = externalSourcesAgentConfigDataSource().getConfigurations();
-		GAgentConfig reportWriter = defaultReportWriterConfigDataSource().getConfigurations().get(0);
 		// Tool-calling agent: dynamically added to the network only when at least one
 		// tool is registered; otherwise it would have nothing to operate.
 		GAgentConfig toolCallingAgentConfig = hasToolsAvailable()
@@ -248,13 +273,12 @@ public class StandardAgentsInitialization {
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
 		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String
 		// and forwards it to the String-input controller.
-		GAgentConfig inputAdapter = defaultInputAdapterConfigDataSource().getConfigurations().get(0);
 		AgentNetworkParticipant inputAdapterParticipant = new AgentNetworkParticipant();
-		inputAdapterParticipant.setAgentConfigCode(inputAdapter.getCode());
+		inputAdapterParticipant.setAgentConfigCode(inputAdapterConfigCode);
 		inputAdapterParticipant.setInputNode(true);
 		inputAdapterParticipant.setOutputNode(false);
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
-		controllerParticipant.setAgentConfigCode(controller.getCode());
+		controllerParticipant.setAgentConfigCode(controllerConfigCode);
 		controllerParticipant.setInputNode(false);
 		// maxInvocations is the controller's cycle budget: the maximum number of
 		// gather/finalize cycles it may run before it must deliver the final answer.
@@ -290,7 +314,7 @@ public class StandardAgentsInitialization {
 			workerParticipants.add(toolAgentParticipant);
 		}
 		AgentNetworkParticipant outParticipant = new AgentNetworkParticipant();
-		outParticipant.setAgentConfigCode(reportWriter.getCode());
+		outParticipant.setAgentConfigCode(reportWriterConfigCode);
 		outParticipant.setOutputNode(true);
 		// Communication lists reference the target participants' NETWORK AGENT NAME
 		// (agentConfigCode plus any contextual suffix) - the key the runtime registers
@@ -318,7 +342,7 @@ public class StandardAgentsInitialization {
 		network.setAgents(participants);
 		network.setAccessibleToAll(true);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Assembled default agents network code:" + network.getCode() + " with " + participants.size()
+			LOGGER.debug("Assembled agents network code:" + network.getCode() + " with " + participants.size()
 					+ " participant(s); coordinated agents:" + coordinatedAgentNames);
 		}
 		return network;

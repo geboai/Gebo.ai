@@ -87,8 +87,8 @@ public class GeboChatResponse {
   @JsonProperty("deepSearchRequestId")
   private String deepSearchRequestId = null;
 
-  @JsonProperty("additionalContent")
-  private List<AdditionalContent> additionalContent = null;
+  @JsonProperty("additionalContents")
+  private List<AdditionalContent> additionalContents = null;
 
   public GeboChatResponse id(String id) {
     this.id = id;
@@ -452,30 +452,30 @@ public class GeboChatResponse {
     this.deepSearchRequestId = deepSearchRequestId;
   }
 
-  public GeboChatResponse additionalContent(List<AdditionalContent> additionalContent) {
-    this.additionalContent = additionalContent;
+  public GeboChatResponse additionalContents(List<AdditionalContent> additionalContents) {
+    this.additionalContents = additionalContents;
     return this;
   }
 
-  public GeboChatResponse addAdditionalContentItem(AdditionalContent additionalContentItem) {
-    if (this.additionalContent == null) {
-      this.additionalContent = new ArrayList<>();
+  public GeboChatResponse addAdditionalContentsItem(AdditionalContent additionalContentsItem) {
+    if (this.additionalContents == null) {
+      this.additionalContents = new ArrayList<>();
     }
-    this.additionalContent.add(additionalContentItem);
+    this.additionalContents.add(additionalContentsItem);
     return this;
   }
 
    /**
-   * Get additionalContent
-   * @return additionalContent
+   * Get additionalContents
+   * @return additionalContents
   **/
   @Schema(description = "")
-  public List<AdditionalContent> getAdditionalContent() {
-    return additionalContent;
+  public List<AdditionalContent> getAdditionalContents() {
+    return additionalContents;
   }
 
-  public void setAdditionalContent(List<AdditionalContent> additionalContent) {
-    this.additionalContent = additionalContent;
+  public void setAdditionalContents(List<AdditionalContent> additionalContents) {
+    this.additionalContents = additionalContents;
   }
 
 
@@ -505,12 +505,12 @@ public class GeboChatResponse {
         Objects.equals(this.pipelineRouterDecisionCode, geboChatResponse.pipelineRouterDecisionCode) &&
         Objects.equals(this.pipelineParams, geboChatResponse.pipelineParams) &&
         Objects.equals(this.deepSearchRequestId, geboChatResponse.deepSearchRequestId) &&
-        Objects.equals(this.additionalContent, geboChatResponse.additionalContent);
+        Objects.equals(this.additionalContents, geboChatResponse.additionalContents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, additionalContent);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, additionalContents);
   }
 
 
@@ -536,7 +536,7 @@ public class GeboChatResponse {
     sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
     sb.append("    pipelineParams: ").append(toIndentedString(pipelineParams)).append("\n");
     sb.append("    deepSearchRequestId: ").append(toIndentedString(deepSearchRequestId)).append("\n");
-    sb.append("    additionalContent: ").append(toIndentedString(additionalContent)).append("\n");
+    sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("}");
     return sb.toString();
   }

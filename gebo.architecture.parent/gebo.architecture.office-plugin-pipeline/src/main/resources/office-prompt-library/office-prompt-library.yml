@@ -1,0 +1,26 @@
+ai.gebo.officeplugin.prompts.library:
+  - promptUse: office-assistant-query-rewriting-prompt
+    langCode: en
+    systemReference: /office-prompt-library/en/office-assistant-query-rewriting-prompt-system-prompt.txt
+    userReference: /office-prompt-library/en/office-assistant-query-rewriting-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: NOT_REQUIRED
+  - promptUse: office-assistant-coordinator-agent-prompt
+    langCode: en
+    systemReference: /office-prompt-library/en/office-assistant-coordinator-agent-system-prompt.txt
+    userReference: /office-prompt-library/en/office-assistant-coordinator-agent-user-prompt.txt
+    agentPrompt: true
+    agentId: controllerAgent
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: REQUIRED
+  - promptUse: office-assistant-report-writer-agent-prompt
+    langCode: en
+    systemReference: /office-prompt-library/en/office-assistant-report-writer-agent-system-prompt.txt
+    userReference: /office-prompt-library/en/office-assistant-report-writer-agent-user-prompt.txt
+    agentPrompt: true
+    agentId: OfficeReportWriterNetworkAgentService
+    chatHistory: NOT_REQUIRED
+    contextDocuments: NOT_REQUIRED
+    toolsCalling: NOT_REQUIRED

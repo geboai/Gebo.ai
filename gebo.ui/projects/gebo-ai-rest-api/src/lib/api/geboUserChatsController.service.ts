@@ -31,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboUserChatsControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:12998';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -111,21 +111,26 @@ export class GeboUserChatsControllerService {
      * 
      * 
      * @param chatProfileCode 
+     * @param contextCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createCleanChatByChatProfileCode(chatProfileCode: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
-    public createCleanChatByChatProfileCode(chatProfileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
-    public createCleanChatByChatProfileCode(chatProfileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
-    public createCleanChatByChatProfileCode(chatProfileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling createCleanChatByChatProfileCode.');
         }
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (chatProfileCode !== undefined && chatProfileCode !== null) {
             queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
+        }
+        if (contextCode !== undefined && contextCode !== null) {
+            queryParameters = queryParameters.set('contextCode', <any>contextCode);
         }
 
         let headers = this.defaultHeaders;

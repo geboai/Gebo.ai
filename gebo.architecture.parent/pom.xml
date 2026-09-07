@@ -59,6 +59,7 @@
   	<module>gebo.architecture.redis</module>
   	<module>gebo.architecture.agents.abstraction.layer</module>
   	<module>gebo.architecture.agents.standard</module>
+  	<module>gebo.architecture.office-plugin-pipeline</module>
   	<module>gebo.architecture.environment.monolithic</module>
   	<module>gebo.architecture.documents.cache.impl</module>
   	<module>gebo.architecture.documents.access</module>
