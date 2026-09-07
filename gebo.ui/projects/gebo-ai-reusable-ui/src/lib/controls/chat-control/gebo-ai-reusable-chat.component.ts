@@ -959,11 +959,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     }
                 }
                 this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
-                // On stream end, surface any additionalContent produced by the backend
-                // (e.g. the office assistant's document part) to the host.
-                if (response.additionalContents && response.additionalContents.length > 0) {
-                    this.outputAdditionalContents.emit(response.additionalContents);
-                }
+                // On stream end, always surface the additionalContent produced by the backend
+                // (e.g. the office assistant's document part) to the host: the actual array
+                // when present, or an empty array when nothing was produced, so the host can
+                // react to both cases (show/hide a suggestion).
+                this.outputAdditionalContents.emit(response.additionalContents ?? []);
                 const dataUpdate: any = {
                     chatProfileCode: r.chatProfileCode,
                     chatModelCode: r.chatModelCode,
