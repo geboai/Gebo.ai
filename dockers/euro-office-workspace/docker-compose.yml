@@ -137,6 +137,7 @@ services:
         "ai.gebo.security.oauth2configs[0].providerConfig.tokenUri":"http://keycloak.localtest.me:8083/realms/euro-office-workspace-dev/protocol/openid-connect/token",
         "ai.gebo.security.oauth2configs[0].providerConfig.userInfoUri":"http://keycloak.localtest.me:8083/realms/euro-office-workspace-dev/protocol/openid-connect/userinfo",
         "ai.gebo.security.oauth2configs[0].providerConfig.issuerUri":"http://keycloak.localtest.me:8083/realms/euro-office-workspace-dev",
+        "ai.gebo.security.oauth2configs[0].providerConfig.jwkSetUri":"http://keycloak.localtest.me:8083/realms/euro-office-workspace-dev/protocol/openid-connect/certs",
         "ai.gebo.security.oauth2configs[0].providerConfig.userNameAttribute":"email",
         "ai.gebo.sysinit.admin.config.adminUsername":"admin@gebo.ai",
         "ai.gebo.sysinit.admin.config.adminPassword":"Adm1n-sandbox-2026",
