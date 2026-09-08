@@ -1,0 +1,298 @@
+# ===========================================================================
+# ONLYOFFICE *Workspace-style* sandbox: Nextcloud (the workspace) + ONLYOFFICE
+# Document Server (hosting the Gebo AI Assistant plugin) + a real Gebo.ai
+# backend, all behind one Keycloak realm with UNIFIED SSO.
+#
+# Two things are exercised end to end here:
+#   1. the Angular "Gebo AI Assistant" plugin, inside a real Nextcloud-driven
+#      ONLYOFFICE editing session;
+#   2. the Gebo.ai WebDAV data-source pipeline (gebo.webdav-cms.handler /
+#      WebdavSystemsController) ingesting from Nextcloud's native WebDAV.
+#
+# Topology (this is an INDEPENDENT stack - its own gebo.ai + datastores):
+#   mongo / qdrant / neo4j / opensearch  - platform infrastructure
+#   gebo.ai                              - monolith backend (geboai/gebo.ai),
+#                                          OAuth2 resource server for realm
+#                                          "onlyoffice-workspace-dev"
+#   keycloak                             - IdP, realm onlyoffice-workspace-dev
+#   documentserver + oauth2-proxy        - ONLYOFFICE + the plugin, SSO-gated
+#   nextcloud (+ db + redis)             - the workspace: WebDAV + OIDC login +
+#                                          the ONLYOFFICE connector
+#
+# THE SSO-OVER-HTTP TRICK
+#   Nextcloud, the office proxy, Keycloak and Gebo are all published on
+#   *.localtest.me (which public DNS resolves to 127.0.0.1). Because they share
+#   the registrable domain "localtest.me", the ONLYOFFICE editor iframe that
+#   Nextcloud embeds is SAME-SITE with the office origin, so the oauth2-proxy
+#   session cookie is sent under SameSite=Lax with no TLS. That is what lets the
+#   plugin read the Keycloak token same-origin while embedded, and gives silent
+#   SSO across Nextcloud -> editor -> Gebo.
+#
+#   Browser URLs (all -> 127.0.0.1):
+#     Nextcloud   http://nextcloud.localtest.me:8090/
+#     Editor/SSO  http://office.localtest.me:4280/
+#     Keycloak    http://keycloak.localtest.me:8082/   (admin/admin)
+#     Gebo API    http://gebo.localtest.me:13999/
+#
+# Prerequisite: build the plugin first:
+#     cd ../../../Gebo.ai-offices-plugin && npm ci && npm run build
+#
+# Ports are offset from dockers/onlyoffice-assistant so the two can coexist,
+# but running both plus euro-office-workspace at once is very heavy.
+# ===========================================================================
+services:
+  # --------------------------- platform infrastructure ---------------------------
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - '127.0.0.1:27018:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoroot
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+    command: ['mongod', '--wiredTigerCacheSizeGB=1']
+    volumes:
+      - mongo-data:/data/db
+
+  qdrant:
+    image: qdrant/qdrant
+    restart: always
+    ports:
+      - '127.0.0.1:6335:6333'
+      - '127.0.0.1:6336:6334'
+    environment:
+      QDRANT__SERVICE__API_KEY: ce7c85bc-f037-4c64-91d8-70335638329d
+      QDRANT__STORAGE__OPTIMIZE_INDEXING: 'true'
+      QDRANT__STORAGE__RAM_DISK_SIZE: '256MB'
+      QDRANT__STORAGE__MAX_SEGMENT_SIZE: '1000000'
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  neo4j:
+    image: neo4j:5
+    restart: always
+    ports:
+      - '127.0.0.1:7475:7474'
+      - '127.0.0.1:7688:7687'
+    environment:
+      NEO4J_AUTH: 'neo4j/neo4jmaster'
+      NEO4J_server_memory_heap_initial__size: 1G
+      NEO4J_server_memory_heap_max__size: 2G
+      NEO4J_server_memory_pagecache_size: 512M
+      NEO4JLABS_PLUGINS: '["apoc"]'
+      NEO4J_apoc_export_file_enabled: 'true'
+      NEO4J_apoc_import_file_enabled: 'true'
+      NEO4J_apoc_import_file_use__neo4j__config: 'true'
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
+      - plugins.security.ssl.http.enabled=true
+      - plugins.security.ssl.transport.enabled=true
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+
+  # --------------------------- Gebo.ai backend ---------------------------
+  gebo.ai:
+    image: geboai/gebo.ai
+    restart: always
+    ports:
+      - '13999:12999'
+    depends_on:
+      - mongo
+      - qdrant
+      - neo4j
+      - opensearch
+      - keycloak
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+    volumes:
+      - gebo-work:/opt/gebo.ai/work
+      - gebo-home:/opt/gebo.ai/home
+      - gebo-logs:/opt/gebo.ai/logs
+      - gebo-shares:/opt/gebo.ai/shares
+      - ../gebo.ai/config:/opt/gebo.ai/config:ro
+    environment:
+      JAVA_TOOL_OPTIONS: >-
+        --enable-native-access=ALL-UNNAMED
+        -Dsun.jnu.encoding=UTF-8
+        -Dfile.encoding=UTF-8
+        -Dai.gebo.neo4j.enabled=true
+        -Xms2g
+        -Xmx4g
+        -XX:MaxMetaspaceSize=512m
+        --add-opens=java.base/java.nio.charset=ALL-UNNAMED
+      # NOTE: the server listens on 12999 inside the container; it is published
+      # as 13999 on the host. Browser-facing origins therefore use :13999, while
+      # the issuerUri uses keycloak.localtest.me:8082 (resolvable on this net).
+      SPRING_APPLICATION_JSON: >-
+        {"ai.gebo.agents.standard.enabled":"true",
+        "ai.gebo.officeplugin.enabled":"true",
+        "ai.gebo.security.cors.allowedOrigins":"http://gebo.localtest.me:13999,http://office.localtest.me:4280,http://nextcloud.localtest.me:8090,http://localhost:4200",
+        "ai.gebo.security.loginPolicy":"TRUST_EVERY_OAUTH_IDENTITY",
+        "ai.gebo.security.oauth2configs[0].registrationId":"keycloakWorkspaceBearer",
+        "ai.gebo.security.oauth2configs[0].description":"ONLYOFFICE workspace sandbox Keycloak resource server",
+        "ai.gebo.security.oauth2configs[0].provider":"keycloak",
+        "ai.gebo.security.oauth2configs[0].configurationType":"AUTHENTICATION",
+        "ai.gebo.security.oauth2configs[0].client.clientId":"onlyoffice-plugin-dev",
+        "ai.gebo.security.oauth2configs[0].client.secret":"42f277af-7919-4edb-a686-a2f40ec4dc87",
+        "ai.gebo.security.oauth2configs[0].client.tenantId":"default",
+        "ai.gebo.security.oauth2configs[0].providerConfig.provider":"keycloak",
+        "ai.gebo.security.oauth2configs[0].providerConfig.authorizationUri":"http://keycloak.localtest.me:8082/realms/onlyoffice-workspace-dev/protocol/openid-connect/auth",
+        "ai.gebo.security.oauth2configs[0].providerConfig.tokenUri":"http://keycloak.localtest.me:8082/realms/onlyoffice-workspace-dev/protocol/openid-connect/token",
+        "ai.gebo.security.oauth2configs[0].providerConfig.userInfoUri":"http://keycloak.localtest.me:8082/realms/onlyoffice-workspace-dev/protocol/openid-connect/userinfo",
+        "ai.gebo.security.oauth2configs[0].providerConfig.issuerUri":"http://keycloak.localtest.me:8082/realms/onlyoffice-workspace-dev",
+        "ai.gebo.security.oauth2configs[0].providerConfig.userNameAttribute":"email",
+        "ai.gebo.sysinit.admin.config.adminUsername":"admin@gebo.ai",
+        "ai.gebo.sysinit.admin.config.adminPassword":"Adm1n-sandbox-2026",
+        "management.endpoints.web.exposure.include":"health,metrics,configprops",
+        "logging.level.ai.gebo.security":"DEBUG"}
+
+  # --------------------------- SSO gate (IdP + editor proxy) ---------------------------
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    hostname: keycloak
+    command: ['start-dev', '--http-port=8082', '--import-realm']
+    environment:
+      KC_HTTP_PORT: 8082
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    ports:
+      - '127.0.0.1:8082:8082'
+    networks:
+      default:
+        aliases:
+          - keycloak.localtest.me
+
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.3
+    command: --config /oauth2-proxy.cfg
+    hostname: oauth2-proxy
+    volumes:
+      - ./oauth2-proxy/oauth2-proxy.cfg:/oauth2-proxy.cfg:ro
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:4280:4280'
+    depends_on:
+      - keycloak
+      - documentserver
+    networks:
+      default:
+        aliases:
+          - office.localtest.me
+
+  # --------------------------- ONLYOFFICE + plugin ---------------------------
+  documentserver:
+    image: onlyoffice/documentserver:latest
+    restart: unless-stopped
+    environment:
+      JWT_ENABLED: 'true'
+      JWT_SECRET: 996fc689d30df68745701ec12c0b28e34fb19512c31718d6
+      JWT_HEADER: Authorization
+    volumes:
+      - documentserver-data:/var/www/onlyoffice/Data
+      - documentserver-log:/var/log/onlyoffice
+      - ../../../Gebo.ai-offices-plugin/dist/office-plugin/browser:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant:ro
+      - ./plugin-overrides/runtime-config.js:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant/runtime-config.js:ro
+      - ./plugin-overrides/backends.json:/var/www/onlyoffice/documentserver/sdkjs-plugins/gebo-ai-assistant/assets/backends.json:ro
+
+  # --------------------------- Nextcloud (the workspace) ---------------------------
+  nextcloud-db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloudpwd
+    volumes:
+      - nextcloud-db:/var/lib/postgresql/data
+
+  nextcloud-redis:
+    image: redis:7
+    restart: always
+
+  nextcloud:
+    image: nextcloud:30-apache
+    restart: always
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+      - keycloak
+      - documentserver
+    ports:
+      - '127.0.0.1:8090:80'
+    environment:
+      POSTGRES_HOST: nextcloud-db
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloudpwd
+      REDIS_HOST: nextcloud-redis
+      NEXTCLOUD_ADMIN_USER: ncadmin
+      NEXTCLOUD_ADMIN_PASSWORD: ncadmin-sandbox-2026
+      # localtest.me host the browser uses + the in-network alias.
+      NEXTCLOUD_TRUSTED_DOMAINS: 'nextcloud.localtest.me nextcloud localhost'
+      # Nextcloud generates absolute URLs (OIDC redirect, ONLYOFFICE callbacks)
+      # from this. Must match the browser-facing origin (note the :8090).
+      OVERWRITEHOST: 'nextcloud.localtest.me:8090'
+      OVERWRITEPROTOCOL: 'http'
+      OVERWRITECLIURL: 'http://nextcloud.localtest.me:8090'
+      # Passed through to the provisioning hook (see nextcloud/hooks).
+      ONLYOFFICE_DS_BROWSER_URL: 'http://office.localtest.me:4280/'
+      ONLYOFFICE_DS_INTERNAL_URL: 'http://documentserver/'
+      ONLYOFFICE_STORAGE_URL: 'http://nextcloud/'
+      ONLYOFFICE_JWT_SECRET: '996fc689d30df68745701ec12c0b28e34fb19512c31718d6'
+      OIDC_DISCOVERY_URL: 'http://keycloak.localtest.me:8082/realms/onlyoffice-workspace-dev/.well-known/openid-configuration'
+      OIDC_CLIENT_ID: 'nextcloud'
+      OIDC_CLIENT_SECRET: 'nextcloud-sandbox-secret-2026'
+      WEBDAV_USER: 'webdav'
+      WEBDAV_PASSWORD: 'webdav-sandbox-2026'
+    volumes:
+      - nextcloud-data:/var/www/html
+      # Provisioning hooks run by the official image after first install and on
+      # every start (idempotent). They install + configure the onlyoffice and
+      # user_oidc apps and seed a WebDAV account with sample documents.
+      - ./nextcloud/hooks/post-installation:/docker-entrypoint-hooks.d/post-installation:ro
+      - ./nextcloud/hooks/before-starting:/docker-entrypoint-hooks.d/before-starting:ro
+      - ./nextcloud/sample-docs:/gebo-sample-docs:ro
+    networks:
+      default:
+        aliases:
+          - nextcloud.localtest.me
+
+volumes:
+  mongo-data:
+  qdrant-data:
+  neo4j-data:
+  neo4j-logs:
+  opensearch-data:
+  gebo-work:
+  gebo-home:
+  gebo-logs:
+  gebo-shares:
+  documentserver-data:
+  documentserver-log:
+  nextcloud-db:
+  nextcloud-data:
+
+networks:
+  default:
+    name: gebo-onlyoffice-workspace-dev
