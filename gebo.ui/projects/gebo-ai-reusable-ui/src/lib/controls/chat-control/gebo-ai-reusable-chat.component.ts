@@ -656,6 +656,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.chatPipelinesMenu = menu;
                     this.loadingChatMenu = false;
                 },
+                error: () => {
+                    // Reset on error too, or a failed menu load leaves loading stuck true.
+                    this.loadingChatMenu = false;
+                },
                 complete: () => {
                     this.loadingChatMenu = false;
                 }

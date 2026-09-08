@@ -12,9 +12,13 @@
 
 
 
-<div class="grid">
-  <p-blockUI [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
+<div class="grid" #chooseDocsPanel>
+  <!-- [target] scopes the mask to this panel; without it PrimeNG masks the whole
+       document (and locks body scroll), which left a stuck page-wide lock. -->
+  <p-blockUI [blocked]="loading" [target]="chooseDocsPanel">
+    @if (loading) {
+      <i class="pi pi-lock" style="font-size: 3rem"></i>
+    }
   </p-blockUI>
   <div class="col-12 justify-content-center" style="text-align: center;">
     @for (doc of displayedDocuments; track doc) {
