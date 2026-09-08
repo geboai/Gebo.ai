@@ -47,6 +47,9 @@ OCC config:app:set onlyoffice jwt_header                --value "Authorization"
 # --------------------------- Keycloak SSO (user_oidc) ---------------------------
 log "installing + configuring the user_oidc app"
 OCC app:install user_oidc || OCC app:enable user_oidc
+# The user_oidc app refuses the OIDC flow over plain HTTP unless this dev
+# override is set. This sandbox is HTTP-only (no TLS); never set this in prod.
+OCC config:app:set user_oidc allow_insecure_http --value=1 --type=boolean
 # Recreate the provider idempotently (delete-if-exists then add).
 OCC user_oidc:provider --list 2>/dev/null | grep -qi 'Keycloak' && OCC user_oidc:provider:delete Keycloak || true
 OCC user_oidc:provider Keycloak \
