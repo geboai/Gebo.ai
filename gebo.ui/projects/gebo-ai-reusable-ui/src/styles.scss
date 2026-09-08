@@ -206,6 +206,7 @@ label {
 .pi.pi-slack,
 .pi.pi-microsoft_multitenant,
 .pi.pi-aws_cognito,
+.pi.pi-keycloak,
 
 .pi.pi-oauth2_generic {
   display: inline-block;
@@ -246,6 +247,10 @@ label {
 
 .pi.pi-aws_cognito {
   background-image: url("assets/oauth2/aws-svgrepo-com.svg");
+}
+
+.pi.pi-keycloak {
+  background-image: url("assets/oauth2/keycloak.svg");
 }
 
 .pi.pi-linkedin {
