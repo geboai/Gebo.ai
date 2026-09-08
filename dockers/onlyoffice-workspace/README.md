@@ -100,7 +100,31 @@ The two sample markdown files under `GeboSamples/` should appear and ingest.
 > inspection, but register the **internal** `http://nextcloud/...` URL in Gebo
 > (that is the address the backend container resolves).
 
+## Prime the office session once per browser (important)
+
+The editor is embedded by Nextcloud, and Nextcloud loads the ONLYOFFICE
+`api.js` as a cross-site (but same-site — `localtest.me`) subresource from the
+office origin. oauth2-proxy can 302 a *navigation* to Keycloak for silent SSO,
+but it cannot complete that interactive redirect for a `<script>`/subresource
+load — so the very first editor open hangs unless the office-origin session
+cookie already exists.
+
+Fix (one time per browser session, right after logging into Nextcloud via
+Keycloak): visit **http://office.localtest.me:4280/** once. It silently SSOs
+against the active Keycloak session and sets the office cookie; because office
+and Nextcloud are same-site, every later editor subresource load then carries
+it. After that, open documents from Nextcloud normally.
+
 ## Notes & gotchas
+
+- **user_oidc requires HTTPS** for the OIDC flow unless the dev override
+  `allow_insecure_http` is set on the app — the provisioning hook sets it, since
+  this sandbox is HTTP-only. Never set it in production; put real TLS in front.
+- **oauth2-proxy on the office gate** uses `skip_provider_button=true` (302
+  straight to Keycloak so the embedded iframe authenticates silently) and must
+  NOT set `cookie_domains` — oauth2-proxy matches that against the host
+  *including the port*, never matches `office.localtest.me:4280`, and then 403s
+  every request. A host-only cookie is correct here.
 
 - **Plugin rebuilds** are picked up by recreating just the Document Server:
   `docker compose up -d --force-recreate --no-deps documentserver`.
