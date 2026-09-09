@@ -65,7 +65,7 @@ export interface SuggestionPanelContext {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIOfficeAssistantModule", multi: false },
   {
-    provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAIOfficeAssistantComponent"),
+    provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIOfficeAssistantComponent"),
     multi: false
   }]
 })

@@ -3,9 +3,7 @@
     <button type="button" role="tab" class="tab" [class.active]="activeTab() === 'assistant'"
       [attr.aria-selected]="activeTab() === 'assistant'" (click)="selectTab('assistant')">
       <img class="tab-icon" src="icons/icon.png" alt="" />
-      <span>
-        Gebo AI Assistant
-      </span>
+      <span id="AssistantTab" gebo-ai-text>Gebo AI Assistant</span>
     </button>
     @if (hasSuggestion()) {
     <button type="button" role="tab" class="tab" [class.active]="activeTab() === 'suggestion'"
