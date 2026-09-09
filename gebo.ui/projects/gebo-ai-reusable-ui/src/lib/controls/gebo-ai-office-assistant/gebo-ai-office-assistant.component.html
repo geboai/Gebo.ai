@@ -1,0 +1,112 @@
+<main>
+  <nav class="assistant-tabs" role="tablist">
+    <button
+      type="button"
+      role="tab"
+      class="tab"
+      [class.active]="activeTab() === 'assistant'"
+      [attr.aria-selected]="activeTab() === 'assistant'"
+      (click)="selectTab('assistant')"
+    >
+      <img class="tab-icon" src="icons/icon.png" alt="" />
+      Gebo AI Assistant
+    </button>
+    @if (hasSuggestion()) {
+      <button
+        type="button"
+        role="tab"
+        class="tab"
+        [class.active]="activeTab() === 'suggestion'"
+        [attr.aria-selected]="activeTab() === 'suggestion'"
+        (click)="selectTab('suggestion')"
+      >
+        Assistant suggestion
+      </button>
+    }
+  </nav>
+
+  <section
+    class="assistant"
+    role="tabpanel"
+    aria-live="polite"
+    [hidden]="activeTab() !== 'assistant'"
+  >
+    @if (bootstrapError()) {
+      <p class="assistant-error">{{ bootstrapError() }}</p>
+    } @else if (!authReady() || bootstrapping()) {
+      <p class="assistant-status">Connecting the assistant…</p>
+    } @else if (chatInfo(); as chat) {
+      <gebo-ai-reusable-chat-component
+        [chatInfo]="chat"
+        [ragsystem]="true"
+        [pipelineId]="pipelineId()"
+        [additionalContents]="additionalContents()"
+        (outputAdditionalContents)="outputAdditionalContents.emit($event)"
+      ></gebo-ai-reusable-chat-component>
+    } @else if (profilesToChoose().length) {
+      <p class="assistant-status">Choose a chat profile to start:</p>
+      <div class="assistant-profiles">
+        @for (profile of profilesToChoose(); track profile.code) {
+          <button type="button" (click)="startChatWithProfile.emit(profile.code!)">
+            {{ profile.description || profile.code }}
+          </button>
+        }
+      </div>
+    } @else {
+      <p class="assistant-status">Preparing the assistant…</p>
+    }
+  </section>
+
+  @if (hasSuggestion()) {
+    <section
+      class="suggestion"
+      role="tabpanel"
+      aria-live="polite"
+      [hidden]="activeTab() !== 'suggestion'"
+    >
+      <div class="suggestion-actions">
+        <p-button
+          label="Replace"
+          title="Replace selected text"
+          icon="pi pi-sync"
+          severity="secondary"
+          [outlined]="true"
+          size="small"
+          [disabled]="!hasSelectedText()"
+          (onClick)="replaceSelection.emit()"
+        ></p-button>
+        <p-button
+          label="Insert"
+          title="Insert in document"
+          icon="pi pi-file-import"
+          size="small"
+          [outlined]="true"
+          (onClick)="insertIntoDocument.emit()"
+        ></p-button>
+      </div>
+
+      @if (suggestionPanelTemplate(); as panel) {
+        <ng-container
+          *ngTemplateOutlet="panel; context: { $implicit: suggestion(), suggestion: suggestion() }"
+        ></ng-container>
+      } @else {
+        <div class="suggestion-body">
+          @for (part of suggestion(); track $index) {
+            @if (isMarkdown(part)) {
+              <markdown [data]="part.content"></markdown>
+            } @else if (isHtml(part)) {
+              <div [innerHTML]="previewHtml(part)"></div>
+            } @else {
+              <pre>{{ part.content }}</pre>
+            }
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <footer class="status" aria-live="polite">
+    <span class="dot" [class.ready]="connected()"></span
+    >{{ connected() ? 'Connected to editor' : 'Waiting for editor' }}
+  </footer>
+</main>

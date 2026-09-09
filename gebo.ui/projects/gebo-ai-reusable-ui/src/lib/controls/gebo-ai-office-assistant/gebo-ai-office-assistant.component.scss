@@ -1,0 +1,128 @@
+:host {
+  display: block;
+}
+/* Keep an element with the `hidden` attribute hidden even though class rules
+   below set an explicit `display` (e.g. `.suggestion { display: flex }`). An
+   author `display` declaration otherwise wins over the browser's `[hidden]` UA
+   rule, so the inactive suggestion tab was never really hidden and its action
+   buttons rendered on top of the active assistant tab. */
+[hidden] {
+  display: none !important;
+}
+main {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+}
+p {
+  line-height: 1.6;
+  color: var(--text-secondary, #64748b);
+}
+
+/* Profile-choice buttons (shown only when several chat profiles exist). */
+.assistant-profiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  button {
+    color: inherit;
+    background: var(--background-normal, #fff);
+    border: 1px solid var(--border-regular, #ccd5df);
+    border-radius: 5px;
+    padding: 9px 12px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid #567ddc;
+      outline-offset: 2px;
+    }
+  }
+}
+
+/* Footer status LED, pinned to the bottom of the panel so the tab area gets the height. */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--surface-border, #e2e8f0);
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c59026;
+}
+.dot.ready {
+  background: #25916d;
+}
+
+.assistant-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--surface-border, #ddd);
+  margin: 8px 0;
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font: inherit;
+
+    &.active {
+      border-bottom-color: var(--primary-color, #2b6cb0);
+      font-weight: 600;
+    }
+
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+/* Tab panels take the available height so the tab area is the tallest part. */
+.assistant,
+.suggestion {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.suggestion {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .suggestion-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .suggestion-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    border: 1px solid var(--surface-border, #ddd);
+    border-radius: 6px;
+    padding: 8px;
+    overflow: auto;
+  }
+}
+
+.assistant-selection-hint {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin: 4px 0;
+}
