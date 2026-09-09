@@ -55,6 +55,15 @@ p {
   padding-top: 8px;
   border-top: 1px solid var(--surface-border, #e2e8f0);
 }
+.status-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* The language switcher sits at the far end of the status bar. */
+.status-language {
+  margin-left: auto;
+}
 .dot {
   width: 8px;
   height: 8px;

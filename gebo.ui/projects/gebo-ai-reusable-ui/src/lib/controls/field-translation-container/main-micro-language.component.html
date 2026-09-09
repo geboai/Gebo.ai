@@ -1,0 +1,7 @@
+<button type="button" class="micro-language" id="MicroLanguageBtn" gebo-ai-label title="Change language"
+  (click)="toggle($event)">
+  <span class="micro-language-code">{{ currentLanguageCode().toUpperCase() }}</span>
+  <i class="micro-language-flag" [ngClass]="currentLanguageCode() + '-flag'"></i>
+</button>
+<gebo-ai-main-language-choice [appendTo]="appendTo()"
+  (languageChange)="onLanguageChange($event)"></gebo-ai-main-language-choice>

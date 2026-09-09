@@ -4287,5 +4287,45 @@
         "detail" : "Password cambiata con successo. Ora puoi effettuare il login."
       }
     }
+  },
+  "GeboAIOfficeAssistantModule" : {
+    "GeboAIOfficeAssistantComponent" : {
+      "AssistantTab" : {
+        "label" : "Assistente Gebo AI"
+      },
+      "AssistantSuggestion" : {
+        "label" : "Suggerimento dell'assistente"
+      },
+      "ConnectingTheAssistant" : {
+        "label" : "Connessione all'assistente…"
+      },
+      "ChooseChatProfile" : {
+        "label" : "Scegli un profilo di chat per iniziare:"
+      },
+      "PreparingTheAssistant" : {
+        "label" : "Preparazione dell'assistente…"
+      },
+      "ReplaceButton" : {
+        "label" : "Sostituisci",
+        "help" : "Sostituisci il testo selezionato"
+      },
+      "InsertButton" : {
+        "label" : "Inserisci",
+        "help" : "Inserisci nel documento"
+      },
+      "ConnectedToEditorText" : {
+        "label" : "Connesso all'editor"
+      },
+      "WaitingForEditorText" : {
+        "label" : "In attesa dell'editor"
+      }
+    }
+  },
+  "GeboAIMultilanguageModule" : {
+    "GeboAIMainMicroLanguageComponent" : {
+      "MicroLanguageBtn" : {
+        "help" : "Cambia lingua"
+      }
+    }
   }
 }

@@ -27,6 +27,7 @@ export class GeboAIMainLanguageChoiceComponent implements OnInit, OnChanges {
     @Input() menuItem?: MegaMenuItem;
     @Input() appendTo?: any;
     @Output() languageChange: EventEmitter<string> = new EventEmitter();
+    /** The language popover, present only while `appendTo` is set; hosts toggle it. */
     @ViewChild("languageChoice") languageChoice: any;
     constructor(private geboTranslationService: GeboAITranslationService) {
 
@@ -72,7 +73,9 @@ export class GeboAIMainLanguageChoiceComponent implements OnInit, OnChanges {
         if (this.menuItem) {
             this.menuItem.icon = this.currentLanguageCodeIcon;
         }
-        this.languageChange.emit(this.currentLanguageCodeIcon);
+        // Emit the language code, as the valueChanges branch below does: the icon
+        // class name (<code>-flag) is a rendering detail, not what a host binding wants.
+        this.languageChange.emit(this.currentLanguageCode);
         this.formGroup.setValue(language);
         if (language?.langCode && language?.langCode !== this.geboTranslationService.getActualLanguage()) {
             this.geboTranslationService.changeActualLanguage(language.langCode);

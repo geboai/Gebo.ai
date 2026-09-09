@@ -1,0 +1,53 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Minimal circular button: just the flag of the language in use. */
+.micro-language {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--surface-border, #e2e8f0);
+  border-radius: 50%;
+  background: var(--background-normal, #fff);
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.micro-language:hover {
+  border-color: var(--primary-color, #2b6cb0);
+}
+
+.micro-language:focus-visible {
+  outline: 2px solid #567ddc;
+  outline-offset: 2px;
+}
+
+/* The `<langCode>-flag` class carries the image; these rules make it fill the disc,
+   overriding the inline-block badge geometry of the shared flag stylesheet. */
+.micro-language-flag {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Shown through the flag layer when no image is set for the language — i.e. when the
+   host does not include the flag stylesheet, or the language has no flag asset. */
+.micro-language-code {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
