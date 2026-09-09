@@ -38,6 +38,9 @@ export * from "./lib/controls/relation-list-component/relation-list.component";
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.module';
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.component';
 
+export * from './lib/controls/gebo-ai-office-assistant/gebo-ai-office-assistant.module';
+export * from './lib/controls/gebo-ai-office-assistant/gebo-ai-office-assistant.component';
+
 export * from './lib/controls/browse-content-component/browse-content.module';
 export * from './lib/controls/browse-content-component/browse-content.component';
 export * from './lib/controls/vfilesystem-selector/vfilesystem-selector.component';
