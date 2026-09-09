@@ -82,9 +82,6 @@ public class GOauth2ResourceServerUserProvisioner {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GOauth2ResourceServerUserProvisioner.class);
 
-	// Attribute keys, in preference order, that can carry the identity's username.
-	private static final String[] USERNAME_CLAIMS = { "email", "preferred_username", "upn", "cognito:username", "sub" };
-
 	/** {@code resourceType} of the events raised here: an external identity. */
 	private static final String RESOURCE_TYPE_USER = "user";
 
@@ -179,7 +176,7 @@ public class GOauth2ResourceServerUserProvisioner {
 		event.getDetails().put("authProvider", String.valueOf(runtimeConfig.getProvider()));
 		event.getDetails().put("loginPolicy", String.valueOf(securityConfig.getLoginPolicy()));
 
-		String nameKey = pickUsernameClaim(attributes);
+		String nameKey = OAuth2UsernameClaims.pickClaimName(attributes);
 		if (nameKey == null) {
 			LOGGER.debug("Resource-server token for provider {} carries no username claim; skipping provisioning",
 					runtimeConfig.getProvider());
@@ -226,14 +223,5 @@ public class GOauth2ResourceServerUserProvisioner {
 			logProvisioningEvent(event, username, SecurityAuditTaxonomy.Outcome.FAILURE);
 			return false;
 		}
-	}
-
-	private static String pickUsernameClaim(Map<String, Object> attributes) {
-		for (String claim : USERNAME_CLAIMS) {
-			Object value = attributes.get(claim);
-			if (value != null && !value.toString().trim().isEmpty())
-				return claim;
-		}
-		return null;
 	}
 }

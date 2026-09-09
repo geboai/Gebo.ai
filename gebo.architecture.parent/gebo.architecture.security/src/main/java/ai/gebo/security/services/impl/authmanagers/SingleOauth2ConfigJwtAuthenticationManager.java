@@ -28,9 +28,12 @@ public class SingleOauth2ConfigJwtAuthenticationManager implements Authenticatio
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String issuerUri = oauth2Configuration.getProviderConfig().getIssuerUri();
-		// Reuse a cached decoder per issuer instead of performing OIDC discovery +
-		// JWKS download on every request.
-		JwtDecoder jwtDecoder = decoderCache.forIssuerLocation(issuerUri);
+		// Reuse a cached decoder per (issuer, accepted-audiences) instead of performing
+		// OIDC discovery + JWKS download on every request. When the registration
+		// declares audiences, the cached decoder also rejects tokens addressed to any
+		// other client of the same issuer.
+		JwtDecoder jwtDecoder = decoderCache.forIssuerLocation(issuerUri,
+				oauth2Configuration.getResourceServerAudiences());
 		JwtAuthenticationProvider jwtProvider = new JwtAuthenticationProvider(jwtDecoder);
 		jwtProvider.setJwtAuthenticationConverter(wrapWithProvisioning(converter));
 		return jwtProvider.authenticate(authentication);

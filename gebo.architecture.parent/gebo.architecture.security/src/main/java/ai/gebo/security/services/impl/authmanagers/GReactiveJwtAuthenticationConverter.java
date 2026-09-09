@@ -56,7 +56,11 @@ public class GReactiveJwtAuthenticationConverter implements Converter<Jwt, Mono<
 	}
 
 	private AbstractAuthenticationToken convertBlocking(Jwt source) {
-		String email = source.getClaim("email");
+		// Same shared claim ladder as the servlet converter and the opaque/sync path,
+		// so one identity is never provisioned under two usernames (see
+		// OAuth2UsernameClaims). sub is the ladder's last rung; getSubject() is only a
+		// null-safety net.
+		String email = OAuth2UsernameClaims.resolveUsername(source.getClaims());
 		if (email == null)
 			email = source.getSubject();
 		UserDetails user = loadOrProvision(email, source);
