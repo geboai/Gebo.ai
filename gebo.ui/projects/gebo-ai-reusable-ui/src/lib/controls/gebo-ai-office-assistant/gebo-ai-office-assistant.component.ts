@@ -25,6 +25,7 @@ import type {
   GChatProfileConfiguration,
   GUserChatInfo,
 } from '@Gebo.ai/gebo-ai-rest-api';
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from '../field-host-component-iface/field-host-component-iface';
 
 /** The two tabs the assistant panel exposes. */
 export type AssistantTab = 'assistant' | 'suggestion';
@@ -62,6 +63,11 @@ export interface SuggestionPanelContext {
   templateUrl: './gebo-ai-office-assistant.component.html',
   styleUrl: './gebo-ai-office-assistant.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIOfficeAssistantModule", multi: false },
+  {
+    provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAIOfficeAssistantComponent"),
+    multi: false
+  }]
 })
 export class GeboAIOfficeAssistantComponent {
   /** Bootstrap error to show in the assistant tab, if any. */

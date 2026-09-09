@@ -13,7 +13,8 @@ import { ButtonModule } from 'primeng/button';
 import { MarkdownModule } from 'ngx-markdown';
 import { GeboAIReusableChatModule } from '../chat-control/gebo-ai-reusable-chat.module';
 import { GeboAIOfficeAssistantComponent } from './gebo-ai-office-assistant.component';
-
+import { GeboAIFieldTranslationContainerModule } from '../field-translation-container/field-container.module';
+import { GEBO_AI_MODULE } from '../field-host-component-iface/field-host-component-iface';
 /**
  * Standalone-consumable NgModule for {@link GeboAIOfficeAssistantComponent}. It
  * pulls in everything the assistant panel template needs — the reusable chat
@@ -22,8 +23,9 @@ import { GeboAIOfficeAssistantComponent } from './gebo-ai-office-assistant.compo
  * so a host only has to import this one module to use `<gebo-ai-office-assistant>`.
  */
 @NgModule({
-  imports: [CommonModule, ButtonModule, MarkdownModule.forChild(), GeboAIReusableChatModule],
+  imports: [CommonModule, ButtonModule, MarkdownModule.forChild(), GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule],
   declarations: [GeboAIOfficeAssistantComponent],
   exports: [GeboAIOfficeAssistantComponent],
+  providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIOfficeAssistantModule", multi: false }]
 })
-export class GeboAIOfficeAssistantModule {}
+export class GeboAIOfficeAssistantModule { }
