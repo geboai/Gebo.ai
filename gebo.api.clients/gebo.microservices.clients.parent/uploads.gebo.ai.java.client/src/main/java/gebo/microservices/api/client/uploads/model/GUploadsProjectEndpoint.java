@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GUploadsProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:55.259662693+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:05.518323320+02:00[Europe/Rome]")
 
 public class GUploadsProjectEndpoint {
   @JsonProperty("code")
@@ -78,6 +78,9 @@ public class GUploadsProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private Object aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Object personalData = null;
 
   @JsonProperty("uploadHandshakeCode")
   private Object uploadHandshakeCode = null;
@@ -409,6 +412,24 @@ public class GUploadsProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GUploadsProjectEndpoint personalData(Object personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Object getPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Object personalData) {
+    this.personalData = personalData;
+  }
+
   public GUploadsProjectEndpoint uploadHandshakeCode(Object uploadHandshakeCode) {
     this.uploadHandshakeCode = uploadHandshakeCode;
     return this;
@@ -473,13 +494,14 @@ public class GUploadsProjectEndpoint {
         Objects.equals(this.synchroStrategy, guploadsProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, guploadsProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, guploadsProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, guploadsProjectEndpoint.personalData) &&
         Objects.equals(this.uploadHandshakeCode, guploadsProjectEndpoint.uploadHandshakeCode) &&
         Objects.equals(this.uploadedContents, guploadsProjectEndpoint.uploadedContents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, uploadHandshakeCode, uploadedContents);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, uploadHandshakeCode, uploadedContents);
   }
 
 
@@ -506,6 +528,7 @@ public class GUploadsProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    uploadHandshakeCode: ").append(toIndentedString(uploadHandshakeCode)).append("\n");
     sb.append("    uploadedContents: ").append(toIndentedString(uploadedContents)).append("\n");
     sb.append("}");

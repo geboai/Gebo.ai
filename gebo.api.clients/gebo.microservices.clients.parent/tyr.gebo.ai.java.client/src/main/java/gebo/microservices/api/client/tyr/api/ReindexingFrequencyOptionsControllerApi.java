@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:50.214062072+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
 
 public class ReindexingFrequencyOptionsControllerApi {
     private ApiClient apiClient;
@@ -68,7 +68,7 @@ public class ReindexingFrequencyOptionsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling displayTimeValues");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ReindexingFrequencyOptionsController/displayTimeValues").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ReindexingFrequencyOptionsController/displayTimeValues").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -86,7 +86,7 @@ public class ReindexingFrequencyOptionsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -108,7 +108,7 @@ public class ReindexingFrequencyOptionsControllerApi {
      */
     public ResponseEntity<Object> getAllTimeStructureMetaInfosWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -124,7 +124,7 @@ public class ReindexingFrequencyOptionsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -152,7 +152,7 @@ public class ReindexingFrequencyOptionsControllerApi {
         if (frequency == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'frequency' when calling getTimeStructureMetaInfo");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/ReindexingFrequencyOptionsController/getTimeStructureMetaInfo").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/ReindexingFrequencyOptionsController/getTimeStructureMetaInfo").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -169,6 +169,6 @@ public class ReindexingFrequencyOptionsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ReindexTimeStructureMetaInfo> returnType = new ParameterizedTypeReference<ReindexTimeStructureMetaInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

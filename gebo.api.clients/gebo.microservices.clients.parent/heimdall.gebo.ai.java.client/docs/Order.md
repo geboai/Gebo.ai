@@ -7,5 +7,5 @@ Name | Type | Description | Notes
 **property** | **Object** |  |  [optional]
 **ignoreCase** | **Object** |  |  [optional]
 **nullHandling** | **Object** |  |  [optional]
-**ascending** | **Object** |  |  [optional]
 **descending** | **Object** |  |  [optional]
+**ascending** | **Object** |  |  [optional]

@@ -16,12 +16,12 @@ export interface PageDocumentReferenceView {
     totalPages?: any;
     totalElements?: any;
     pageable?: PageableObject;
-    first?: any;
-    last?: any;
     size?: any;
     content?: any;
     number?: any;
     sort?: SortObject;
+    first?: any;
+    last?: any;
     numberOfElements?: any;
     empty?: any;
 }

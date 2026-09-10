@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:44.609405746+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
 
 public class SharepointBrowsingControllerApi {
     private ApiClient apiClient;
@@ -77,7 +77,7 @@ public class SharepointBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling browseSharepointPath");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointBrowsingController/browseSharepointPath").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointBrowsingController/browseSharepointPath").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -96,7 +96,7 @@ public class SharepointBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -130,7 +130,7 @@ public class SharepointBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling getSharepointNavigationStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointBrowsingController/getSharepointNavigationStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointBrowsingController/getSharepointNavigationStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -149,7 +149,7 @@ public class SharepointBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus> returnType = new ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -177,7 +177,7 @@ public class SharepointBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling getSharepointRoots");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/SharepointBrowsingController/getSharepointRoots").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SharepointBrowsingController/getSharepointRoots").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -194,6 +194,6 @@ public class SharepointBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

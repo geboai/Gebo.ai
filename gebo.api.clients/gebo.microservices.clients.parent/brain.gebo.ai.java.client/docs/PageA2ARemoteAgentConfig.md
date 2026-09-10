@@ -1,0 +1,16 @@
+# PageA2ARemoteAgentConfig
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**totalPages** | **Object** |  |  [optional]
+**totalElements** | **Object** |  |  [optional]
+**pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
+**size** | **Object** |  |  [optional]
+**content** | **Object** |  |  [optional]
+**number** | **Object** |  |  [optional]
+**sort** | [**SortObject**](SortObject.md) |  |  [optional]
+**first** | **Object** |  |  [optional]
+**last** | **Object** |  |  [optional]
+**numberOfElements** | **Object** |  |  [optional]
+**empty** | **Object** |  |  [optional]

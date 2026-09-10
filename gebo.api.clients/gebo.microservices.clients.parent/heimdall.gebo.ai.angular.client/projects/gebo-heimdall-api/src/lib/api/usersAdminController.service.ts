@@ -117,13 +117,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteGroup(body: UsersGroup, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteGroup(body: UsersGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteGroup(body: UsersGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteGroup(body: UsersGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteGroup1(body: UsersGroup, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteGroup1(body: UsersGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteGroup1(body: UsersGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteGroup1(body: UsersGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling deleteGroup.');
+            throw new Error('Required parameter body was null or undefined when calling deleteGroup1.');
         }
 
         let headers = this.defaultHeaders;
@@ -163,13 +163,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUser(body: EditableUser, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteUser(body: EditableUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteUser(body: EditableUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteUser(body: EditableUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteUser1(body: EditableUser, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteUser1(body: EditableUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteUser1(body: EditableUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteUser1(body: EditableUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling deleteUser.');
+            throw new Error('Required parameter body was null or undefined when calling deleteUser1.');
         }
 
         let headers = this.defaultHeaders;
@@ -209,13 +209,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGroupByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
-    public findGroupByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
-    public findGroupByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
-    public findGroupByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGroupByCode1(code: any, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
+    public findGroupByCode1(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
+    public findGroupByCode1(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
+    public findGroupByCode1(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findGroupByCode.');
+            throw new Error('Required parameter code was null or undefined when calling findGroupByCode1.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -256,13 +256,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserByQbe(body: FindUserByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PageUserInfos>;
-    public findUserByQbe(body: FindUserByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageUserInfos>>;
-    public findUserByQbe(body: FindUserByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageUserInfos>>;
-    public findUserByQbe(body: FindUserByQbeParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserByQbe2(body: FindUserByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PageUserInfos>;
+    public findUserByQbe2(body: FindUserByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageUserInfos>>;
+    public findUserByQbe2(body: FindUserByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageUserInfos>>;
+    public findUserByQbe2(body: FindUserByQbeParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling findUserByQbe.');
+            throw new Error('Required parameter body was null or undefined when calling findUserByQbe2.');
         }
 
         let headers = this.defaultHeaders;
@@ -303,13 +303,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserByUsername1(email: any, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
-    public findUserByUsername1(email: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
-    public findUserByUsername1(email: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
-    public findUserByUsername1(email: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserByUsername2(email: any, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
+    public findUserByUsername2(email: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
+    public findUserByUsername2(email: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
+    public findUserByUsername2(email: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (email === null || email === undefined) {
-            throw new Error('Required parameter email was null or undefined when calling findUserByUsername1.');
+            throw new Error('Required parameter email was null or undefined when calling findUserByUsername2.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -350,13 +350,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'body', reportProgress?: boolean): Observable<PageUsersGroup>;
-    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageUsersGroup>>;
-    public findUsersGroupByQbe(body: FindUsersGroupParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageUsersGroup>>;
-    public findUsersGroupByQbe(body: FindUsersGroupParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUsersGroupByQbe1(body: FindUsersGroupParam, observe?: 'body', reportProgress?: boolean): Observable<PageUsersGroup>;
+    public findUsersGroupByQbe1(body: FindUsersGroupParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageUsersGroup>>;
+    public findUsersGroupByQbe1(body: FindUsersGroupParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageUsersGroup>>;
+    public findUsersGroupByQbe1(body: FindUsersGroupParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling findUsersGroupByQbe.');
+            throw new Error('Required parameter body was null or undefined when calling findUsersGroupByQbe1.');
         }
 
         let headers = this.defaultHeaders;
@@ -396,10 +396,10 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllGroups(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getAllGroups(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllGroups1(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public getAllGroups1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public getAllGroups1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllGroups1(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -432,10 +432,10 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllUsers(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllUsers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllUsers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getAllUsers(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllUsers1(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public getAllUsers1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public getAllUsers1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllUsers1(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -469,13 +469,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insertGroup(body: UsersGroup, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
-    public insertGroup(body: UsersGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
-    public insertGroup(body: UsersGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
-    public insertGroup(body: UsersGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertGroup1(body: UsersGroup, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
+    public insertGroup1(body: UsersGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
+    public insertGroup1(body: UsersGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
+    public insertGroup1(body: UsersGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insertGroup.');
+            throw new Error('Required parameter body was null or undefined when calling insertGroup1.');
         }
 
         let headers = this.defaultHeaders;
@@ -516,13 +516,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insertUser(body: InsertUserParam, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
-    public insertUser(body: InsertUserParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
-    public insertUser(body: InsertUserParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
-    public insertUser(body: InsertUserParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertUser1(body: InsertUserParam, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
+    public insertUser1(body: InsertUserParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
+    public insertUser1(body: InsertUserParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
+    public insertUser1(body: InsertUserParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insertUser.');
+            throw new Error('Required parameter body was null or undefined when calling insertUser1.');
         }
 
         let headers = this.defaultHeaders;
@@ -563,13 +563,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateGroup(body: UsersGroup, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
-    public updateGroup(body: UsersGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
-    public updateGroup(body: UsersGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
-    public updateGroup(body: UsersGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateGroup1(body: UsersGroup, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
+    public updateGroup1(body: UsersGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
+    public updateGroup1(body: UsersGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
+    public updateGroup1(body: UsersGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateGroup.');
+            throw new Error('Required parameter body was null or undefined when calling updateGroup1.');
         }
 
         let headers = this.defaultHeaders;
@@ -610,13 +610,13 @@ export class UsersAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateUser(body: EditableUser, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
-    public updateUser(body: EditableUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
-    public updateUser(body: EditableUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
-    public updateUser(body: EditableUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateUser1(body: EditableUser, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
+    public updateUser1(body: EditableUser, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
+    public updateUser1(body: EditableUser, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
+    public updateUser1(body: EditableUser, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateUser.');
+            throw new Error('Required parameter body was null or undefined when calling updateUser1.');
         }
 
         let headers = this.defaultHeaders;

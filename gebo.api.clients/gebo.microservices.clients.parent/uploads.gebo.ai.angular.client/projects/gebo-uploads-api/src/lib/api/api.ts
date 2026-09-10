@@ -14,4 +14,6 @@ export * from './internalMessagingTopologyController.service';
 import { InternalMessagingTopologyControllerService } from './internalMessagingTopologyController.service';
 export * from './jobLauncherController.service';
 import { JobLauncherControllerService } from './jobLauncherController.service';
-export const APIS = [ContentsResetControllerService, DocumentContentStreamerControllerService, FileUploadControllerService, FileUploadsControllerService, GenericalPublisherControllerService, IngestionFileTypesLibraryControllerService, InternalMessagingTopologyControllerService, JobLauncherControllerService];
+export * from './uploadsBrowsingController.service';
+import { UploadsBrowsingControllerService } from './uploadsBrowsingController.service';
+export const APIS = [ContentsResetControllerService, DocumentContentStreamerControllerService, FileUploadControllerService, FileUploadsControllerService, GenericalPublisherControllerService, IngestionFileTypesLibraryControllerService, InternalMessagingTopologyControllerService, JobLauncherControllerService, UploadsBrowsingControllerService];

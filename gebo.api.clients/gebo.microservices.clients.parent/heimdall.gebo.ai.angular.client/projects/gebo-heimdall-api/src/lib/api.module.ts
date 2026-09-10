@@ -17,9 +17,11 @@ import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusCon
 import { SecretsClusterControllerService } from './api/secretsClusterController.service';
 import { SecretsControllerService } from './api/secretsController.service';
 import { SecurityDirectoryClusterControllerService } from './api/securityDirectoryClusterController.service';
+import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
+import { UsersAdminClusterControllerService } from './api/usersAdminClusterController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
 
 @NgModule({
@@ -41,9 +43,11 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     SecretsClusterControllerService,
     SecretsControllerService,
     SecurityDirectoryClusterControllerService,
+    SecurityHeaderDataCompletionControllerService,
     TokenRenewControllerService,
     UserControllerService,
     UserWorkflowsControllerService,
+    UsersAdminClusterControllerService,
     UsersAdminControllerService ]
 })
 export class ApiModule {

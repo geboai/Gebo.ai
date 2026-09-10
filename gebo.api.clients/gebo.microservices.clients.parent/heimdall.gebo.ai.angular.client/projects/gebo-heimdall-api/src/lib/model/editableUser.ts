@@ -18,4 +18,5 @@ export interface EditableUser {
     roles: any;
     authProvider: any;
     langCode?: any;
+    customInfos?: any;
 }

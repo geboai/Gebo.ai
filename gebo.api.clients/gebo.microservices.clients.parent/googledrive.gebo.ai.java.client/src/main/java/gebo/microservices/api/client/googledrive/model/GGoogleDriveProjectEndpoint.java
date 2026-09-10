@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GGoogleDriveProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:12.006082925+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:25.000010563+02:00[Europe/Rome]")
 
 public class GGoogleDriveProjectEndpoint {
   @JsonProperty("code")
@@ -78,6 +78,9 @@ public class GGoogleDriveProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private Object aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Object personalData = null;
 
   @JsonProperty("paths")
   private Object paths = null;
@@ -409,6 +412,24 @@ public class GGoogleDriveProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GGoogleDriveProjectEndpoint personalData(Object personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Object getPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Object personalData) {
+    this.personalData = personalData;
+  }
+
   public GGoogleDriveProjectEndpoint paths(Object paths) {
     this.paths = paths;
     return this;
@@ -473,13 +494,14 @@ public class GGoogleDriveProjectEndpoint {
         Objects.equals(this.synchroStrategy, ggoogleDriveProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, ggoogleDriveProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, ggoogleDriveProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, ggoogleDriveProjectEndpoint.personalData) &&
         Objects.equals(this.paths, ggoogleDriveProjectEndpoint.paths) &&
         Objects.equals(this.driveSystemCode, ggoogleDriveProjectEndpoint.driveSystemCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, driveSystemCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, paths, driveSystemCode);
   }
 
 
@@ -506,6 +528,7 @@ public class GGoogleDriveProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    driveSystemCode: ").append(toIndentedString(driveSystemCode)).append("\n");
     sb.append("}");

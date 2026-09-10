@@ -15,6 +15,6 @@ export interface Order {
     property?: any;
     ignoreCase?: any;
     nullHandling?: any;
-    ascending?: any;
     descending?: any;
+    ascending?: any;
 }

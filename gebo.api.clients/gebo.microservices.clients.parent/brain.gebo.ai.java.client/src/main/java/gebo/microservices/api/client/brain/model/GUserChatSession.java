@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")
@@ -49,6 +49,9 @@ public class GUserChatSession {
 
   @JsonProperty("username")
   private Object username = null;
+
+  @JsonProperty("contextCode")
+  private Object contextCode = null;
 
   @JsonProperty("chatProfileCode")
   private Object chatProfileCode = null;
@@ -215,6 +218,24 @@ public class GUserChatSession {
     this.username = username;
   }
 
+  public GUserChatSession contextCode(Object contextCode) {
+    this.contextCode = contextCode;
+    return this;
+  }
+
+   /**
+   * Get contextCode
+   * @return contextCode
+  **/
+  @Schema(description = "")
+  public Object getContextCode() {
+    return contextCode;
+  }
+
+  public void setContextCode(Object contextCode) {
+    this.contextCode = contextCode;
+  }
+
   public GUserChatSession chatProfileCode(Object chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
     return this;
@@ -359,6 +380,7 @@ public class GUserChatSession {
         Objects.equals(this.dateCreated, guserChatSession.dateCreated) &&
         Objects.equals(this.chatCreationDateTime, guserChatSession.chatCreationDateTime) &&
         Objects.equals(this.username, guserChatSession.username) &&
+        Objects.equals(this.contextCode, guserChatSession.contextCode) &&
         Objects.equals(this.chatProfileCode, guserChatSession.chatProfileCode) &&
         Objects.equals(this.modelReference, guserChatSession.modelReference) &&
         Objects.equals(this.ragChat, guserChatSession.ragChat) &&
@@ -370,7 +392,7 @@ public class GUserChatSession {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, chatProfileCode, modelReference, ragChat, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, contextCode, chatProfileCode, modelReference, ragChat, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases);
   }
 
 
@@ -387,6 +409,7 @@ public class GUserChatSession {
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    modelReference: ").append(toIndentedString(modelReference)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");

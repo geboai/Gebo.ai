@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { GUploadsProjectEndpoint } from '../model/gUploadsProjectEndpoint';
 import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
+import { OperationStatusGUploadsProjectEndpoint } from '../model/operationStatusGUploadsProjectEndpoint';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -55,6 +56,64 @@ export class FileUploadsControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param endpointCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteUploadedFiles(body: any, endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGUploadsProjectEndpoint>;
+    public deleteUploadedFiles(body: any, endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGUploadsProjectEndpoint>>;
+    public deleteUploadedFiles(body: any, endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGUploadsProjectEndpoint>>;
+    public deleteUploadedFiles(body: any, endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling deleteUploadedFiles.');
+        }
+
+        if (endpointCode === null || endpointCode === undefined) {
+            throw new Error('Required parameter endpointCode was null or undefined when calling deleteUploadedFiles.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (endpointCode !== undefined && endpointCode !== null) {
+            queryParameters = queryParameters.set('endpointCode', <any>endpointCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusGUploadsProjectEndpoint>('post',`${this.basePath}/api/admin/FileUploadsController/deleteUploadedFiles`,
+            {
+                body: body,
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 
@@ -351,6 +410,53 @@ export class FileUploadsControllerService {
         return this.httpClient.request<GUploadsProjectEndpoint>('post',`${this.basePath}/api/admin/FileUploadsController/insertUploadsEndpoint`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param endpointCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public listUploadedFiles(endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public listUploadedFiles(endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public listUploadedFiles(endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public listUploadedFiles(endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (endpointCode === null || endpointCode === undefined) {
+            throw new Error('Required parameter endpointCode was null or undefined when calling listUploadedFiles.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (endpointCode !== undefined && endpointCode !== null) {
+            queryParameters = queryParameters.set('endpointCode', <any>endpointCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileUploadsController/listUploadedFiles`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

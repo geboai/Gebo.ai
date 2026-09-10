@@ -18,8 +18,8 @@ microservice** — a Java `resttemplate` client and an Angular/TypeScript librar
 ```
 
 Each microservice **app** lives under
-`gebo.apps.parent/gebo.microservices.apps.parent/<name>.gebo.ai`. There are **20
-services** ↔ 20 Java clients ↔ 20 Angular clients.
+`gebo.apps.parent/gebo.microservices.apps.parent/<name>.gebo.ai`. There are **21
+services** ↔ 21 Java clients ↔ 21 Angular clients.
 
 Alongside them sit **two hand-written aggregators** — not generated, no
 `generate-rest-api` profile, untouched by a regeneration:

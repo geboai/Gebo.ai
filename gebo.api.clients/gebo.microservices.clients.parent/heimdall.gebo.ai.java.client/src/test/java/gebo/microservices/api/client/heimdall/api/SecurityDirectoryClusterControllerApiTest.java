@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.heimdall.api;
 
 import gebo.microservices.api.client.heimdall.model.CheckPasswordRequest;
+import gebo.microservices.api.client.heimdall.model.CreateUserIfNotExistsRequest;
 import gebo.microservices.api.client.heimdall.model.UserInfosImpl;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -42,6 +43,21 @@ public class SecurityDirectoryClusterControllerApiTest {
     public void checkPasswordTest() {
         CheckPasswordRequest body = null;
         Object response = api.checkPassword(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createUserIfNotExistsTest() {
+        CreateUserIfNotExistsRequest body = null;
+        UserInfosImpl response = api.createUserIfNotExists(body);
 
         // TODO: test validations
     }

@@ -3,6 +3,7 @@ package gebo.microservices.api.client.heimdall.api;
 import gebo.microservices.api.client.heimdall.invoker.ApiClient;
 
 import gebo.microservices.api.client.heimdall.model.CheckPasswordRequest;
+import gebo.microservices.api.client.heimdall.model.CreateUserIfNotExistsRequest;
 import gebo.microservices.api.client.heimdall.model.UserInfosImpl;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class SecurityDirectoryClusterControllerApi {
     private ApiClient apiClient;
@@ -69,7 +70,7 @@ public class SecurityDirectoryClusterControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling checkPassword");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/checkPassword").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/checkPassword").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -87,7 +88,53 @@ public class SecurityDirectoryClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return UserInfosImpl
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public UserInfosImpl createUserIfNotExists(CreateUserIfNotExistsRequest body) throws RestClientException {
+        return createUserIfNotExistsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;UserInfosImpl&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<UserInfosImpl> createUserIfNotExistsWithHttpInfo(CreateUserIfNotExistsRequest body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling createUserIfNotExists");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/createUserIfNotExists").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<UserInfosImpl> returnType = new ParameterizedTypeReference<UserInfosImpl>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -109,7 +156,7 @@ public class SecurityDirectoryClusterControllerApi {
      */
     public ResponseEntity<Object> findAllGroupsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findAllGroups").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findAllGroups").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -125,7 +172,7 @@ public class SecurityDirectoryClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -153,7 +200,7 @@ public class SecurityDirectoryClusterControllerApi {
         if (username == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'username' when calling findGroupsOfUser");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findGroupsOfUser").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findGroupsOfUser").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -170,7 +217,7 @@ public class SecurityDirectoryClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -198,7 +245,7 @@ public class SecurityDirectoryClusterControllerApi {
         if (username == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'username' when calling findUserByUsername");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findUserByUsername").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findUserByUsername").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -215,6 +262,6 @@ public class SecurityDirectoryClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserInfosImpl> returnType = new ParameterizedTypeReference<UserInfosImpl>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

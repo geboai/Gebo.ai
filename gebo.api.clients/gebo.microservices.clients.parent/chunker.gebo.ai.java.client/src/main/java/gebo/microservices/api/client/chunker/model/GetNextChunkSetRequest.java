@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GetNextChunkSetRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:46.509035701+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
 
 public class GetNextChunkSetRequest {
   @JsonProperty("document")

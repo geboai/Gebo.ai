@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:56.984278175+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:09.115071854+02:00[Europe/Rome]")
 
 public class FileSystemSharesSettingControllerApi {
     private ApiClient apiClient;
@@ -74,7 +74,7 @@ public class FileSystemSharesSettingControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling checkCanBeInsertedFileSystemShareReference");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/checkCanBeInsertedFileSystemShareReference").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/checkCanBeInsertedFileSystemShareReference").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -92,7 +92,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusGFileSystemShareReference> returnType = new ParameterizedTypeReference<OperationStatusGFileSystemShareReference>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -119,7 +119,7 @@ public class FileSystemSharesSettingControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteFileSystemShareReference");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/deleteFileSystemShareReference").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/deleteFileSystemShareReference").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -135,7 +135,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -163,7 +163,7 @@ public class FileSystemSharesSettingControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getFileSystemShareReferenceByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getFileSystemShareReferenceByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getFileSystemShareReferenceByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -180,7 +180,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GFileSystemShareReference> returnType = new ParameterizedTypeReference<GFileSystemShareReference>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -208,7 +208,7 @@ public class FileSystemSharesSettingControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getGFileSystemNodeChildrens");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getGFileSystemNodeChildrens").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getGFileSystemNodeChildrens").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -226,7 +226,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -254,7 +254,7 @@ public class FileSystemSharesSettingControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getGFileSystemNodeNavigationStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getGFileSystemNodeNavigationStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getGFileSystemNodeNavigationStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -272,7 +272,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus> returnType = new ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -294,7 +294,7 @@ public class FileSystemSharesSettingControllerApi {
      */
     public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getRootGFileSystemNodesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getRootGFileSystemNodes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getRootGFileSystemNodes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -310,7 +310,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -332,7 +332,7 @@ public class FileSystemSharesSettingControllerApi {
      */
     public ResponseEntity<SharedFilesystemUIConfig> getSharedFileSystemsActualConfigurationWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getSharedFileSystemsActualConfiguration").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getSharedFileSystemsActualConfiguration").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -348,7 +348,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SharedFilesystemUIConfig> returnType = new ParameterizedTypeReference<SharedFilesystemUIConfig>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -376,7 +376,7 @@ public class FileSystemSharesSettingControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getUsedFilesystemShares");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getUsedFilesystemShares").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/getUsedFilesystemShares").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -394,7 +394,7 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -422,7 +422,7 @@ public class FileSystemSharesSettingControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertFileSystemShareReference");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/insertFileSystemShareReference").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileSystemSharesSettingController/insertFileSystemShareReference").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -440,6 +440,6 @@ public class FileSystemSharesSettingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GFileSystemShareReference> returnType = new ParameterizedTypeReference<GFileSystemShareReference>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

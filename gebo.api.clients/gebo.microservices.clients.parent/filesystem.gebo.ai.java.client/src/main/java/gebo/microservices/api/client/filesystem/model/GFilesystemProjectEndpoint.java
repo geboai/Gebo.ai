@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GFilesystemProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:56.984278175+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:09.115071854+02:00[Europe/Rome]")
 
 public class GFilesystemProjectEndpoint {
   @JsonProperty("code")
@@ -78,6 +78,9 @@ public class GFilesystemProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private Object aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Object personalData = null;
 
   @JsonProperty("path")
   private Object path = null;
@@ -406,6 +409,24 @@ public class GFilesystemProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GFilesystemProjectEndpoint personalData(Object personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Object getPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Object personalData) {
+    this.personalData = personalData;
+  }
+
   public GFilesystemProjectEndpoint path(Object path) {
     this.path = path;
     return this;
@@ -452,12 +473,13 @@ public class GFilesystemProjectEndpoint {
         Objects.equals(this.synchroStrategy, gfilesystemProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gfilesystemProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gfilesystemProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gfilesystemProjectEndpoint.personalData) &&
         Objects.equals(this.path, gfilesystemProjectEndpoint.path);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, path);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, path);
   }
 
 
@@ -484,6 +506,7 @@ public class GFilesystemProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    path: ").append(toIndentedString(path)).append("\n");
     sb.append("}");
     return sb.toString();

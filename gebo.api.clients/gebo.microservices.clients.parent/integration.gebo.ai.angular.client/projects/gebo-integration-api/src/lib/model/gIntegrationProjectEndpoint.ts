@@ -29,5 +29,6 @@ export interface GIntegrationProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     allowedApplicationUsers?: any;
 }

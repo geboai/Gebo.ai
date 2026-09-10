@@ -29,6 +29,7 @@ export interface GSharepointProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     paths?: any;
     sharePointSystemCode?: any;
 }

@@ -18,4 +18,5 @@ export interface GUserChatInfo {
     chatModelCode?: any;
     ragChat?: any;
     chatCreationDateTime?: any;
+    contextCode?: any;
 }

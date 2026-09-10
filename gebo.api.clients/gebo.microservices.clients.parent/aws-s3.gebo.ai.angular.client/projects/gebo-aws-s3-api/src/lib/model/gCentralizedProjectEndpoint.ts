@@ -30,5 +30,6 @@ export interface GCentralizedProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     remoteProjectReference?: GObjectRefGProjectEndpoint;
 }

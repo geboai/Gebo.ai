@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class AclAliasesClusterControllerApi {
     private ApiClient apiClient;
@@ -68,7 +68,7 @@ public class AclAliasesClusterControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling addAcl");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/addAcl").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/addAcl").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -86,7 +86,7 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -114,7 +114,7 @@ public class AclAliasesClusterControllerApi {
         if (alias == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'alias' when calling findAcl");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAcl").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAcl").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAclEntry> returnType = new ParameterizedTypeReference<GAclEntry>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class AclAliasesClusterControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findAlias");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAlias").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAlias").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,7 +177,7 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -205,7 +205,7 @@ public class AclAliasesClusterControllerApi {
         if (uniqueId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'uniqueId' when calling findAliasesByAclGrantedUniqueId");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -222,7 +222,7 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -256,7 +256,7 @@ public class AclAliasesClusterControllerApi {
         if (grantType == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'grantType' when calling findAliasesByAclGrantedUniqueIdAndAclGrantType");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueIdAndAclGrantType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueIdAndAclGrantType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -274,7 +274,7 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -302,7 +302,7 @@ public class AclAliasesClusterControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling findAliasesByAclGrantedUniqueIdIn");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueIdIn").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueIdIn").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -320,7 +320,7 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -354,7 +354,7 @@ public class AclAliasesClusterControllerApi {
         if (grantType == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'grantType' when calling findAliasesByAclGrantedUniqueIdInAndAclGrantType");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueIdInAndAclGrantType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/findAliasesByAclGrantedUniqueIdInAndAclGrantType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -373,7 +373,7 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -400,7 +400,7 @@ public class AclAliasesClusterControllerApi {
         if (alias == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'alias' when calling removeAcl");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/AclController/removeAcl").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/AclController/removeAcl").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -415,6 +415,6 @@ public class AclAliasesClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

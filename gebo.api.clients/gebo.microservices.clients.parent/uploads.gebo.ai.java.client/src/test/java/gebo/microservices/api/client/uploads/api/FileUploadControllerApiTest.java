@@ -59,4 +59,20 @@ public class FileUploadControllerApiTest {
 
         // TODO: test validations
     }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void uploadToEndpointTest() {
+        Object endpointCode = null;
+        Object files = null;
+        api.uploadToEndpoint(endpointCode, files);
+
+        // TODO: test validations
+    }
 }

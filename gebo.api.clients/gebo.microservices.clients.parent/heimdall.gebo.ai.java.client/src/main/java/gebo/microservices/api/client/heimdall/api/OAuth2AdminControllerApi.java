@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class OAuth2AdminControllerApi {
     private ApiClient apiClient;
@@ -67,7 +67,7 @@ public class OAuth2AdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteOauth2ProviderRegistration");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/deleteOauth2ProviderRegistration").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/deleteOauth2ProviderRegistration").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -83,7 +83,7 @@ public class OAuth2AdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -111,7 +111,7 @@ public class OAuth2AdminControllerApi {
         if (registrationId == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'registrationId' when calling findOauth2ProviderRegistrationByRegistrationId");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/findOauth2ProviderRegistrationByRegistrationId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/findOauth2ProviderRegistrationByRegistrationId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -128,7 +128,7 @@ public class OAuth2AdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Oauth2ProviderModifiableData> returnType = new ParameterizedTypeReference<Oauth2ProviderModifiableData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -150,7 +150,7 @@ public class OAuth2AdminControllerApi {
      */
     public ResponseEntity<Object> getProvidersWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/getProviders").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/getProviders").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -166,7 +166,7 @@ public class OAuth2AdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -194,7 +194,7 @@ public class OAuth2AdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertOauth2ProviderRegistration");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/insertOauth2ProviderRegistration").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/insertOauth2ProviderRegistration").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -212,7 +212,7 @@ public class OAuth2AdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Oauth2ProviderModifiableData> returnType = new ParameterizedTypeReference<Oauth2ProviderModifiableData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -240,7 +240,7 @@ public class OAuth2AdminControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateOauth2ProviderRegistration");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/updateOauth2ProviderRegistration").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/updateOauth2ProviderRegistration").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -258,6 +258,6 @@ public class OAuth2AdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Oauth2ProviderModifiableData> returnType = new ParameterizedTypeReference<Oauth2ProviderModifiableData>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

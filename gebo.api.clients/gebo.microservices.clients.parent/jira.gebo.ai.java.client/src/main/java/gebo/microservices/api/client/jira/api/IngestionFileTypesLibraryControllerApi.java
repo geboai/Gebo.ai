@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:33.251328392+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:45.187682910+02:00[Europe/Rome]")
 
 public class IngestionFileTypesLibraryControllerApi {
     private ApiClient apiClient;
@@ -62,7 +62,7 @@ public class IngestionFileTypesLibraryControllerApi {
      */
     public ResponseEntity<Object> getAllFileTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getAllFileTypes").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getAllFileTypes").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -78,7 +78,7 @@ public class IngestionFileTypesLibraryControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -106,7 +106,7 @@ public class IngestionFileTypesLibraryControllerApi {
         if (extension == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'extension' when calling getIngestionFileTypeByExtension");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -123,7 +123,7 @@ public class IngestionFileTypesLibraryControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<IngestionFileType> returnType = new ParameterizedTypeReference<IngestionFileType>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -145,7 +145,7 @@ public class IngestionFileTypesLibraryControllerApi {
      */
     public ResponseEntity<Object> getIngestionReadingModulesWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -161,6 +161,6 @@ public class IngestionFileTypesLibraryControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

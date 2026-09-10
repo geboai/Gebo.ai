@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GSharepointProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:44.609405746+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
 
 public class GSharepointProjectEndpoint {
   @JsonProperty("code")
@@ -78,6 +78,9 @@ public class GSharepointProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private Object aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Object personalData = null;
 
   @JsonProperty("paths")
   private Object paths = null;
@@ -409,6 +412,24 @@ public class GSharepointProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GSharepointProjectEndpoint personalData(Object personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Object getPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Object personalData) {
+    this.personalData = personalData;
+  }
+
   public GSharepointProjectEndpoint paths(Object paths) {
     this.paths = paths;
     return this;
@@ -473,13 +494,14 @@ public class GSharepointProjectEndpoint {
         Objects.equals(this.synchroStrategy, gsharepointProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gsharepointProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gsharepointProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gsharepointProjectEndpoint.personalData) &&
         Objects.equals(this.paths, gsharepointProjectEndpoint.paths) &&
         Objects.equals(this.sharePointSystemCode, gsharepointProjectEndpoint.sharePointSystemCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, sharePointSystemCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, paths, sharePointSystemCode);
   }
 
 
@@ -506,6 +528,7 @@ public class GSharepointProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    sharePointSystemCode: ").append(toIndentedString(sharePointSystemCode)).append("\n");
     sb.append("}");

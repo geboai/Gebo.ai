@@ -20,6 +20,7 @@ export interface GUserChatSession {
     dateCreated?: any;
     chatCreationDateTime?: any;
     username?: any;
+    contextCode?: any;
     chatProfileCode?: any;
     modelReference?: GObjectRefGBaseChatModelConfig;
     ragChat?: any;

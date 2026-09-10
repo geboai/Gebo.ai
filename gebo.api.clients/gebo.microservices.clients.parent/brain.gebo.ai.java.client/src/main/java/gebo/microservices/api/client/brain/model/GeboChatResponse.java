@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
 
 public class GeboChatResponse {
   @JsonProperty("id")
@@ -77,6 +77,9 @@ public class GeboChatResponse {
 
   @JsonProperty("deepSearchRequestId")
   private Object deepSearchRequestId = null;
+
+  @JsonProperty("additionalContents")
+  private Object additionalContents = null;
 
   public GeboChatResponse id(Object id) {
     this.id = id;
@@ -384,6 +387,24 @@ public class GeboChatResponse {
     this.deepSearchRequestId = deepSearchRequestId;
   }
 
+  public GeboChatResponse additionalContents(Object additionalContents) {
+    this.additionalContents = additionalContents;
+    return this;
+  }
+
+   /**
+   * Get additionalContents
+   * @return additionalContents
+  **/
+  @Schema(description = "")
+  public Object getAdditionalContents() {
+    return additionalContents;
+  }
+
+  public void setAdditionalContents(Object additionalContents) {
+    this.additionalContents = additionalContents;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -410,12 +431,13 @@ public class GeboChatResponse {
         Objects.equals(this.generatedResources, geboChatResponse.generatedResources) &&
         Objects.equals(this.pipelineRouterDecisionCode, geboChatResponse.pipelineRouterDecisionCode) &&
         Objects.equals(this.pipelineParams, geboChatResponse.pipelineParams) &&
-        Objects.equals(this.deepSearchRequestId, geboChatResponse.deepSearchRequestId);
+        Objects.equals(this.deepSearchRequestId, geboChatResponse.deepSearchRequestId) &&
+        Objects.equals(this.additionalContents, geboChatResponse.additionalContents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, additionalContents);
   }
 
 
@@ -441,6 +463,7 @@ public class GeboChatResponse {
     sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
     sb.append("    pipelineParams: ").append(toIndentedString(pipelineParams)).append("\n");
     sb.append("    deepSearchRequestId: ").append(toIndentedString(deepSearchRequestId)).append("\n");
+    sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("}");
     return sb.toString();
   }

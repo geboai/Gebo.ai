@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-09T11:46:07.427269500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:19.127862733+02:00[Europe/Rome]")
 
 public class WebdavBrowsingControllerApi {
     private ApiClient apiClient;
@@ -77,7 +77,7 @@ public class WebdavBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling browseWebdavPath");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavBrowsingController/browseWebdavPath").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavBrowsingController/browseWebdavPath").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -96,7 +96,7 @@ public class WebdavBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListPathInfo> returnType = new ParameterizedTypeReference<OperationStatusListPathInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -130,7 +130,7 @@ public class WebdavBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling getWebdavNavigationStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavBrowsingController/getWebdavNavigationStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavBrowsingController/getWebdavNavigationStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -149,7 +149,7 @@ public class WebdavBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus> returnType = new ParameterizedTypeReference<OperationStatusListVirtualFilesystemNavigationTreeStatus>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -177,7 +177,7 @@ public class WebdavBrowsingControllerApi {
         if (systemCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'systemCode' when calling getWebdavRoots");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/WebdavBrowsingController/getWebdavRoots").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavBrowsingController/getWebdavRoots").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -194,6 +194,6 @@ public class WebdavBrowsingControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot> returnType = new ParameterizedTypeReference<OperationStatusListGVirtualFilesystemRoot>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

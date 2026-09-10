@@ -5,18 +5,18 @@ All URIs are relative to *http://localhost:13018/heimdall*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**changeUserPassword**](UsersAdminControllerApi.md#changeUserPassword) | **POST** /api/admin/UsersAdminController/changeUserPassword | 
-[**deleteGroup**](UsersAdminControllerApi.md#deleteGroup) | **POST** /api/admin/UsersAdminController/deleteGroup | 
-[**deleteUser**](UsersAdminControllerApi.md#deleteUser) | **POST** /api/admin/UsersAdminController/deleteUser | 
-[**findGroupByCode**](UsersAdminControllerApi.md#findGroupByCode) | **GET** /api/admin/UsersAdminController/findGroupByCode | 
-[**findUserByQbe**](UsersAdminControllerApi.md#findUserByQbe) | **POST** /api/admin/UsersAdminController/findUserByQbe | 
-[**findUserByUsername1**](UsersAdminControllerApi.md#findUserByUsername1) | **GET** /api/admin/UsersAdminController/findUserByUsername | 
-[**findUsersGroupByQbe**](UsersAdminControllerApi.md#findUsersGroupByQbe) | **POST** /api/admin/UsersAdminController/findUsersGroupByQbe | 
-[**getAllGroups**](UsersAdminControllerApi.md#getAllGroups) | **GET** /api/admin/UsersAdminController/getAllGroups | 
-[**getAllUsers**](UsersAdminControllerApi.md#getAllUsers) | **GET** /api/admin/UsersAdminController/getAllUsers | 
-[**insertGroup**](UsersAdminControllerApi.md#insertGroup) | **POST** /api/admin/UsersAdminController/insertGroup | 
-[**insertUser**](UsersAdminControllerApi.md#insertUser) | **POST** /api/admin/UsersAdminController/insertUser | 
-[**updateGroup**](UsersAdminControllerApi.md#updateGroup) | **POST** /api/admin/UsersAdminController/updateGroup | 
-[**updateUser**](UsersAdminControllerApi.md#updateUser) | **POST** /api/admin/UsersAdminController/updateUser | 
+[**deleteGroup1**](UsersAdminControllerApi.md#deleteGroup1) | **POST** /api/admin/UsersAdminController/deleteGroup | 
+[**deleteUser1**](UsersAdminControllerApi.md#deleteUser1) | **POST** /api/admin/UsersAdminController/deleteUser | 
+[**findGroupByCode1**](UsersAdminControllerApi.md#findGroupByCode1) | **GET** /api/admin/UsersAdminController/findGroupByCode | 
+[**findUserByQbe2**](UsersAdminControllerApi.md#findUserByQbe2) | **POST** /api/admin/UsersAdminController/findUserByQbe | 
+[**findUserByUsername2**](UsersAdminControllerApi.md#findUserByUsername2) | **GET** /api/admin/UsersAdminController/findUserByUsername | 
+[**findUsersGroupByQbe1**](UsersAdminControllerApi.md#findUsersGroupByQbe1) | **POST** /api/admin/UsersAdminController/findUsersGroupByQbe | 
+[**getAllGroups1**](UsersAdminControllerApi.md#getAllGroups1) | **GET** /api/admin/UsersAdminController/getAllGroups | 
+[**getAllUsers1**](UsersAdminControllerApi.md#getAllUsers1) | **GET** /api/admin/UsersAdminController/getAllUsers | 
+[**insertGroup1**](UsersAdminControllerApi.md#insertGroup1) | **POST** /api/admin/UsersAdminController/insertGroup | 
+[**insertUser1**](UsersAdminControllerApi.md#insertUser1) | **POST** /api/admin/UsersAdminController/insertUser | 
+[**updateGroup1**](UsersAdminControllerApi.md#updateGroup1) | **POST** /api/admin/UsersAdminController/updateGroup | 
+[**updateUser1**](UsersAdminControllerApi.md#updateUser1) | **POST** /api/admin/UsersAdminController/updateUser | 
 
 <a name="changeUserPassword"></a>
 # **changeUserPassword**
@@ -61,9 +61,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="deleteGroup"></a>
-# **deleteGroup**
-> deleteGroup(body)
+<a name="deleteGroup1"></a>
+# **deleteGroup1**
+> deleteGroup1(body)
 
 
 
@@ -77,9 +77,9 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 UsersGroup body = new UsersGroup(); // UsersGroup | 
 try {
-    apiInstance.deleteGroup(body);
+    apiInstance.deleteGroup1(body);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#deleteGroup");
+    System.err.println("Exception when calling UsersAdminControllerApi#deleteGroup1");
     e.printStackTrace();
 }
 ```
@@ -103,9 +103,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-<a name="deleteUser"></a>
-# **deleteUser**
-> deleteUser(body)
+<a name="deleteUser1"></a>
+# **deleteUser1**
+> deleteUser1(body)
 
 
 
@@ -119,9 +119,9 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 EditableUser body = new EditableUser(); // EditableUser | 
 try {
-    apiInstance.deleteUser(body);
+    apiInstance.deleteUser1(body);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#deleteUser");
+    System.err.println("Exception when calling UsersAdminControllerApi#deleteUser1");
     e.printStackTrace();
 }
 ```
@@ -145,9 +145,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-<a name="findGroupByCode"></a>
-# **findGroupByCode**
-> UsersGroup findGroupByCode(code)
+<a name="findGroupByCode1"></a>
+# **findGroupByCode1**
+> UsersGroup findGroupByCode1(code)
 
 
 
@@ -161,10 +161,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 Object code = null; // Object | 
 try {
-    UsersGroup result = apiInstance.findGroupByCode(code);
+    UsersGroup result = apiInstance.findGroupByCode1(code);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#findGroupByCode");
+    System.err.println("Exception when calling UsersAdminControllerApi#findGroupByCode1");
     e.printStackTrace();
 }
 ```
@@ -188,9 +188,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findUserByQbe"></a>
-# **findUserByQbe**
-> PageUserInfos findUserByQbe(body)
+<a name="findUserByQbe2"></a>
+# **findUserByQbe2**
+> PageUserInfos findUserByQbe2(body)
 
 
 
@@ -204,10 +204,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 FindUserByQbeParam body = new FindUserByQbeParam(); // FindUserByQbeParam | 
 try {
-    PageUserInfos result = apiInstance.findUserByQbe(body);
+    PageUserInfos result = apiInstance.findUserByQbe2(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#findUserByQbe");
+    System.err.println("Exception when calling UsersAdminControllerApi#findUserByQbe2");
     e.printStackTrace();
 }
 ```
@@ -231,9 +231,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="findUserByUsername1"></a>
-# **findUserByUsername1**
-> EditableUser findUserByUsername1(email)
+<a name="findUserByUsername2"></a>
+# **findUserByUsername2**
+> EditableUser findUserByUsername2(email)
 
 
 
@@ -247,10 +247,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 Object email = null; // Object | 
 try {
-    EditableUser result = apiInstance.findUserByUsername1(email);
+    EditableUser result = apiInstance.findUserByUsername2(email);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#findUserByUsername1");
+    System.err.println("Exception when calling UsersAdminControllerApi#findUserByUsername2");
     e.printStackTrace();
 }
 ```
@@ -274,9 +274,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="findUsersGroupByQbe"></a>
-# **findUsersGroupByQbe**
-> PageUsersGroup findUsersGroupByQbe(body)
+<a name="findUsersGroupByQbe1"></a>
+# **findUsersGroupByQbe1**
+> PageUsersGroup findUsersGroupByQbe1(body)
 
 
 
@@ -290,10 +290,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 FindUsersGroupParam body = new FindUsersGroupParam(); // FindUsersGroupParam | 
 try {
-    PageUsersGroup result = apiInstance.findUsersGroupByQbe(body);
+    PageUsersGroup result = apiInstance.findUsersGroupByQbe1(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#findUsersGroupByQbe");
+    System.err.println("Exception when calling UsersAdminControllerApi#findUsersGroupByQbe1");
     e.printStackTrace();
 }
 ```
@@ -317,9 +317,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="getAllGroups"></a>
-# **getAllGroups**
-> Object getAllGroups()
+<a name="getAllGroups1"></a>
+# **getAllGroups1**
+> Object getAllGroups1()
 
 
 
@@ -332,10 +332,10 @@ No authorization required
 
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 try {
-    Object result = apiInstance.getAllGroups();
+    Object result = apiInstance.getAllGroups1();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#getAllGroups");
+    System.err.println("Exception when calling UsersAdminControllerApi#getAllGroups1");
     e.printStackTrace();
 }
 ```
@@ -356,9 +356,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="getAllUsers"></a>
-# **getAllUsers**
-> Object getAllUsers()
+<a name="getAllUsers1"></a>
+# **getAllUsers1**
+> Object getAllUsers1()
 
 
 
@@ -371,10 +371,10 @@ No authorization required
 
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 try {
-    Object result = apiInstance.getAllUsers();
+    Object result = apiInstance.getAllUsers1();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#getAllUsers");
+    System.err.println("Exception when calling UsersAdminControllerApi#getAllUsers1");
     e.printStackTrace();
 }
 ```
@@ -395,9 +395,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="insertGroup"></a>
-# **insertGroup**
-> UsersGroup insertGroup(body)
+<a name="insertGroup1"></a>
+# **insertGroup1**
+> UsersGroup insertGroup1(body)
 
 
 
@@ -411,10 +411,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 UsersGroup body = new UsersGroup(); // UsersGroup | 
 try {
-    UsersGroup result = apiInstance.insertGroup(body);
+    UsersGroup result = apiInstance.insertGroup1(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#insertGroup");
+    System.err.println("Exception when calling UsersAdminControllerApi#insertGroup1");
     e.printStackTrace();
 }
 ```
@@ -438,9 +438,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="insertUser"></a>
-# **insertUser**
-> EditableUser insertUser(body)
+<a name="insertUser1"></a>
+# **insertUser1**
+> EditableUser insertUser1(body)
 
 
 
@@ -454,10 +454,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 InsertUserParam body = new InsertUserParam(); // InsertUserParam | 
 try {
-    EditableUser result = apiInstance.insertUser(body);
+    EditableUser result = apiInstance.insertUser1(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#insertUser");
+    System.err.println("Exception when calling UsersAdminControllerApi#insertUser1");
     e.printStackTrace();
 }
 ```
@@ -481,9 +481,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="updateGroup"></a>
-# **updateGroup**
-> UsersGroup updateGroup(body)
+<a name="updateGroup1"></a>
+# **updateGroup1**
+> UsersGroup updateGroup1(body)
 
 
 
@@ -497,10 +497,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 UsersGroup body = new UsersGroup(); // UsersGroup | 
 try {
-    UsersGroup result = apiInstance.updateGroup(body);
+    UsersGroup result = apiInstance.updateGroup1(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#updateGroup");
+    System.err.println("Exception when calling UsersAdminControllerApi#updateGroup1");
     e.printStackTrace();
 }
 ```
@@ -524,9 +524,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="updateUser"></a>
-# **updateUser**
-> EditableUser updateUser(body)
+<a name="updateUser1"></a>
+# **updateUser1**
+> EditableUser updateUser1(body)
 
 
 
@@ -540,10 +540,10 @@ No authorization required
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 EditableUser body = new EditableUser(); // EditableUser | 
 try {
-    EditableUser result = apiInstance.updateUser(body);
+    EditableUser result = apiInstance.updateUser1(body);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling UsersAdminControllerApi#updateUser");
+    System.err.println("Exception when calling UsersAdminControllerApi#updateUser1");
     e.printStackTrace();
 }
 ```
