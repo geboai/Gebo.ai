@@ -12,5 +12,15 @@
 			<artifactId>gebo.architecture.environment</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The live microservices topology (yml-bound GeboMicroservicesTopology +
+		     the GeboStandardMicroservices catalogue): the source
+		     GClientsTopologyProviderImpl derives every published client relative
+		     web context url from, so the clients topology and the gateway routing
+		     table are always the same map read twice. -->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.microservices.topology</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

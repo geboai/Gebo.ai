@@ -19,6 +19,7 @@ import { BraveSearchConfigurationControllerService } from './api/braveSearchConf
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
+import { ClientsTopologyProviderControllerService } from './api/clientsTopologyProviderController.service';
 import { CompanySystemsControllerService } from './api/companySystemsController.service';
 import { ConfluenceBrowsingControllerService } from './api/confluenceBrowsingController.service';
 import { ConfluenceSearchServiceControllerService } from './api/confluenceSearchServiceController.service';
@@ -164,6 +165,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
+    ClientsTopologyProviderControllerService,
     CompanySystemsControllerService,
     ConfluenceBrowsingControllerService,
     ConfluenceSearchServiceControllerService,

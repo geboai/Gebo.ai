@@ -22,8 +22,32 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * built on Spring Cloud Gateway (WebFlux server) and uses Spring Cloud
  * LoadBalancer to distribute traffic across the backend service instances.
  * </p>
+ *
+ * <p>
+ * It also answers the clients-topology bootstrap call
+ * ({@code /public/ClientsTopologyProviderController}) for the whole
+ * microservices installation: being the edge, the gateway is the one url a
+ * client knows, so it is where a client asks what to append to it for each
+ * generated microservice client - the same relative url the monolith answers it
+ * on. That needs two packages outside the gateway's own to be scanned, listed
+ * below.
+ * </p>
  */
-@SpringBootApplication
+// scanBasePackages rather than a bare @SpringBootApplication - and deliberately
+// NOT the "ai.gebo" wildcard the backend services use: the gateway is a thin
+// reactive edge, and blanket-scanning would pull in the servlet-oriented
+// component trees that happen to ride on its classpath. Only the two packages
+// that make up the clients-topology endpoint are added:
+//   ai.gebo.architecture.environment.microservices - MicroservicesArchitectureDeclaration
+//       (this deployable IS the microservices architecture) and the
+//       GClientsTopologyProviderImpl that derives the topology from the
+//       GeboMicroservicesTopology bean;
+//   ai.gebo.topology_provider - the shared ClientsTopologyProviderController.
+// Given as scanBasePackages ON @SpringBootApplication (not a separate
+// @ComponentScan, which would REPLACE the annotation's own scan and drop its
+// TypeExcludeFilter/AutoConfigurationExcludeFilter defaults).
+@SpringBootApplication(scanBasePackages = { "ai.gebo.microservices.gateway",
+		"ai.gebo.architecture.environment.microservices", "ai.gebo.topology_provider" })
 public class GatewayApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GatewayApplication.class);

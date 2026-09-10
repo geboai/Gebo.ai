@@ -4,7 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  |  [optional]
-**username** | **String** |  |  [optional]
+**sourname** | **String** |  |  [optional]
 **disabled** | **Boolean** |  |  [optional]
 **roles** | **List&lt;String&gt;** |  |  [optional]
-**sourname** | **String** |  |  [optional]
+**username** | **String** |  |  [optional]
