@@ -317,7 +317,9 @@ OAuth2 / OpenID Connect integrations include:
 - **Microsoft Entra**
 - **Google**
 - **AWS Cognito**
-- **Keycloak / generic OAuth2**
+- **AWS IAM Identity Center** (ex AWS SSO)
+- **Keycloak**, with its own dedicated single sign on settings
+- **Generic OAuth2** connector, for any other standard OAuth2/OpenID Connect identity provider
 
 Administrators can control access to individual:
 

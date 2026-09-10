@@ -51,7 +51,9 @@ an enterprise version with more feature and support is also available.
  	- **Microsoft Entra**
  	- **Google auth**   
  	- **AWS Cognito**
- 	- **KeyCloak** (as Generic oauth2)
+ 	- **AWS IAM Identity Center** (ex AWS SSO)
+ 	- **KeyCloak**, with its own dedicated single sign on settings
+ 	- Any other standard **oauth2/OpenID Connect** identity provider, through the **generic oauth2** connector
  - Configure **GraphRag** features (experimental)
  	- The software can use cheap models provided (on premise or in cloud) to export knowledge graphs persisted with neo4j. 	
  - Create knowledge bases collectioning documents from the previus mentioned system.  
