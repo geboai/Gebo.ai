@@ -19,7 +19,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -42,7 +41,6 @@ import ai.gebo.config.service.IGGeboConfigService;
 @EnableAsync
 @EnableScheduling
 @EnableMongoRepositories(basePackages = "ai.gebo")
-@EnableNeo4jRepositories(basePackages = "ai.gebo")
 @EnableSpringDataWebSupport(pageSerializationMode = PageSerializationMode.VIA_DTO)
 public class Main implements CommandLineRunner {
 
