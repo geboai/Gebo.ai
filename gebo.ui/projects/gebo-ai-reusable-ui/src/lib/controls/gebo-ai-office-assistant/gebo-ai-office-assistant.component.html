@@ -65,13 +65,15 @@
   </section>
   }
 
-  <footer class="status" aria-live="polite">
-    <span class="dot" [class.ready]="connected()"></span>
-    @if(connected()) {
-    <span id="ConnectedToEditorText" gebo-ai-text>Connected to editor</span>
-    } @else {
-    <span id="WaitingForEditorText" gebo-ai-text>Waiting for editor</span>
-    }
-
+  <footer class="status">
+    <span class="status-state" aria-live="polite">
+      <span class="dot" [class.ready]="connected()"></span>
+      @if(connected()) {
+      <span id="ConnectedToEditorText" gebo-ai-text>Connected to editor</span>
+      } @else {
+      <span id="WaitingForEditorText" gebo-ai-text>Waiting for editor</span>
+      }
+    </span>
+    <gebo-ai-main-micro-language class="status-language"></gebo-ai-main-micro-language>
   </footer>
 </main>

@@ -146,7 +146,10 @@ const GeboAIPreset = definePreset(Aura, {
 
     {
       provide: TRANSLATE_HTTP_LOADER_CONFIG,
-      useValue: { prefix: '/assets/i18n/', suffix: '.json' }
+      // v18 of the loader reads the paths from `resources`; a top-level prefix/suffix is
+      // silently dropped, leaving it with nothing to request - no i18n file was ever
+      // fetched, so switching language changed nothing on screen.
+      useValue: { resources: [{ prefix: '/assets/i18n/', suffix: '.json' }] }
     }
     ,
     ConfirmationService, provideHttpClient(withInterceptorsFromDi())]

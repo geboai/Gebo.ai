@@ -136,6 +136,7 @@ export * from "./lib/controls/field-translation-container/label.directive";
 export * from "./lib/controls/field-translation-container/text.directive";
 export * from "./lib/controls/field-translation-container/language-resources-download.component";
 export * from "./lib/controls/field-translation-container/main-language-choice.component";
+export * from "./lib/controls/field-translation-container/main-micro-language.component";
 export * from "./lib/controls/field-translation-container/primeng-components-obsolete-multilanguage-adapters.directive";
 export * from "./lib/notifications/notification.component";
 export * from "./lib/notifications/display-messages.component";
