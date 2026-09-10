@@ -64,6 +64,11 @@
 			<artifactId>gebo.llms.controllers.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.neo4j.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- LLM fast-setup owner: brain hosts the setup controller/service and the
 		     config-driven bootstrap; created models propagate to the other LLM
 		     microservices via the shared Mongo + Hazelcast models-replication cache. -->

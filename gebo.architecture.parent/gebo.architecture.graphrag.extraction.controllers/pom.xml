@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.3.0-SNAPSHOT</version>
+	</parent>
+	<!--
+	  GraphRagConfigurationController, split out of gebo.architecture.graphrag.extraction.
+	  The extraction module is a dependency of every service that touches graph data
+	  (brain and graphicator both pull it in transitively), so shipping the admin
+	  controller inside it exposed the endpoint wherever the model classes were
+	  needed. Extraction is graphicator's job, so the controller now travels
+	  separately and is added only where it is meant to be served: the monolithic
+	  starter and graphicator.gebo.ai.
+	-->
+	<artifactId>gebo.architecture.graphrag.extraction.controllers</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.graphrag.extraction</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
