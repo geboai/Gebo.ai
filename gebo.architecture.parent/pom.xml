@@ -74,5 +74,6 @@
    	<module>gebo.architecture.fastsetup</module>
    	<module>gebo.architecture.fastsetup.rag</module>
    	<module>gebo.architecture.fastsetup.system</module>
+   	<module>gebo.architecture.topology-provider-controller</module>
   </modules>
 </project>

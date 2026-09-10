@@ -44,6 +44,34 @@
 			<version>${project.version}</version>
 		</dependency>
 		<!--
+		  Declares this deployable AS the microservices architecture
+		  (MicroservicesArchitectureDeclaration -> GeboApplicationArchitecture) and
+		  brings GClientsTopologyProviderImpl, which derives the clients topology
+		  from the SAME GeboMicroservicesTopology bean
+		  GeboTopologyRouteDefinitionLocator builds the routes from - so what the
+		  gateway tells a client to append is, by construction, the path segment it
+		  actually routes.
+		-->
+		<dependency>
+			<groupId>ai.gebo.microservices.architecture</groupId>
+			<artifactId>gebo.architecture.environment.microservices</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  The shared /public/ClientsTopologyProviderController. The gateway is the
+		  edge, so it is the service that answers the clients-topology bootstrap
+		  call in a microservices installation, at exactly the relative url the
+		  monolith answers it on - which is the whole point of the module being
+		  architecture-neutral (it carries spring-web only, never
+		  spring-boot-starter-web, so it does not flip this reactive app to
+		  servlet - see its pom).
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.topology-provider-controller</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
 		  The Angular web UI. The gateway is the edge of the microservices
 		  deployment, so it is the service that serves the UI to the browser:
 		  gebo.ui is a plain jar whose Angular production build

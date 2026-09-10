@@ -1,0 +1,111 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "noImplicitOverride": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "baseUrl": ".",
+    "paths": {
+      "@angular/*": [
+        "./node_modules/@angular/*"
+      ],
+      "rxjs": [
+        "./node_modules/rxjs"
+      ],
+      "rxjs/*": [
+        "./node_modules/rxjs/*"
+      ],
+      "tslib": [
+        "./node_modules/tslib"
+      ],
+      "@Gebo.ai/gateway": [
+        "../gateway.gebo.ai.angular.client/dist/gebo-gateway-api"
+      ],
+      "@Gebo.ai/eureka": [
+        "../eureka.gebo.ai.angular.client/dist/gebo-eureka-api"
+      ],
+      "@Gebo.ai/heimdall": [
+        "../heimdall.gebo.ai.angular.client/dist/gebo-heimdall-api"
+      ],
+      "@Gebo.ai/brain": [
+        "../brain.gebo.ai.angular.client/dist/gebo-brain-api"
+      ],
+      "@Gebo.ai/vectorizator": [
+        "../vectorizator.gebo.ai.angular.client/dist/gebo-vectorizator-api"
+      ],
+      "@Gebo.ai/graphicator": [
+        "../graphicator.gebo.ai.angular.client/dist/gebo-graphicator-api"
+      ],
+      "@Gebo.ai/chunker": [
+        "../chunker.gebo.ai.angular.client/dist/gebo-chunker-api"
+      ],
+      "@Gebo.ai/git": [
+        "../git.gebo.ai.angular.client/dist/gebo-git-api"
+      ],
+      "@Gebo.ai/filesystem": [
+        "../filesystem.gebo.ai.angular.client/dist/gebo-filesystem-api"
+      ],
+      "@Gebo.ai/uploads": [
+        "../uploads.gebo.ai.angular.client/dist/gebo-uploads-api"
+      ],
+      "@Gebo.ai/userspace": [
+        "../userspace.gebo.ai.angular.client/dist/gebo-userspace-api"
+      ],
+      "@Gebo.ai/sharepoint": [
+        "../sharepoint.gebo.ai.angular.client/dist/gebo-sharepoint-api"
+      ],
+      "@Gebo.ai/confluence": [
+        "../confluence.gebo.ai.angular.client/dist/gebo-confluence-api"
+      ],
+      "@Gebo.ai/jira": [
+        "../jira.gebo.ai.angular.client/dist/gebo-jira-api"
+      ],
+      "@Gebo.ai/awss3": [
+        "../aws-s3.gebo.ai.angular.client/dist/gebo-aws-s3-api"
+      ],
+      "@Gebo.ai/googledrive": [
+        "../googledrive.gebo.ai.angular.client/dist/gebo-googledrive-api"
+      ],
+      "@Gebo.ai/mcpclient": [
+        "../mcpclient.gebo.ai.angular.client/dist/gebo-mcpclient-api"
+      ],
+      "@Gebo.ai/webdav": [
+        "../webdav.gebo.ai.angular.client/dist/gebo-webdav-api"
+      ],
+      "@Gebo.ai/integration": [
+        "../integration.gebo.ai.angular.client/dist/gebo-integration-api"
+      ],
+      "@Gebo.ai/fulltextor": [
+        "../fulltextor.gebo.ai.angular.client/dist/gebo-fulltextor-api"
+      ],
+      "@Gebo.ai/tyr": [
+        "../tyr.gebo.ai.angular.client/dist/gebo-tyr-api"
+      ]
+    },
+    "lib": [
+      "ES2022",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

@@ -1,0 +1,156 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gebo.microservices.api.clients</groupId>
+		<artifactId>gebo.microservices.clients.parent</artifactId>
+		<version>1.0.3.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.clients.java.factory</artifactId>
+	<packaging>jar</packaging>
+
+	<!--
+	  The one entry point a Java consumer of the Gebo.ai stubs needs.
+
+	  Every generated <name>.gebo.ai.java.client ships its own ApiClient whose
+	  basePath is hardcoded to the address the spec was scraped from
+	  (http://localhost:13001/brain and friends). Pointing 21 of those at a real
+	  installation by hand means knowing, per service, whether it is reached
+	  through a gateway web context or straight at a monolith - which is exactly
+	  what /public/ClientsTopologyProviderController publishes. This module asks
+	  that endpoint once, with the ONE base url of the installation, and hands
+	  back every ApiClient already based.
+
+	  Unlike the per-service modules this one is NOT generated: it has no
+	  generate-rest-api profile and is written by hand.
+	-->
+	<dependencies>
+		<!-- RestTemplate for the topology call itself + the JSON binding of its
+		     answer. Same stack the generated clients already run on, so this adds
+		     nothing a consumer of them does not already have. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-json</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Every generated client, so the factory can hand back its ApiClient.
+		     Each lives in its own gebo.microservices.api.client.<name> package,
+		     so the 21 ApiClient classes never collide. -->
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>gateway.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>eureka.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>heimdall.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>brain.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>vectorizator.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>graphicator.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>chunker.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>git.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>filesystem.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>uploads.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>userspace.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>sharepoint.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>confluence.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>jira.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>aws-s3.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>googledrive.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>mcpclient.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>webdav.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>integration.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>fulltextor.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>tyr.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

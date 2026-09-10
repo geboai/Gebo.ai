@@ -1,0 +1,33 @@
+{
+  "name": "@Gebo.ai/microservices-clients",
+  "version": "1.0.3.0-SNAPSHOT",
+  "peerDependencies": {
+    "@angular/common": "^21.2.18",
+    "@angular/core": "^21.2.18",
+    "@Gebo.ai/gateway": "*",
+    "@Gebo.ai/eureka": "*",
+    "@Gebo.ai/heimdall": "*",
+    "@Gebo.ai/brain": "*",
+    "@Gebo.ai/vectorizator": "*",
+    "@Gebo.ai/graphicator": "*",
+    "@Gebo.ai/chunker": "*",
+    "@Gebo.ai/git": "*",
+    "@Gebo.ai/filesystem": "*",
+    "@Gebo.ai/uploads": "*",
+    "@Gebo.ai/userspace": "*",
+    "@Gebo.ai/sharepoint": "*",
+    "@Gebo.ai/confluence": "*",
+    "@Gebo.ai/jira": "*",
+    "@Gebo.ai/awss3": "*",
+    "@Gebo.ai/googledrive": "*",
+    "@Gebo.ai/mcpclient": "*",
+    "@Gebo.ai/webdav": "*",
+    "@Gebo.ai/integration": "*",
+    "@Gebo.ai/fulltextor": "*",
+    "@Gebo.ai/tyr": "*"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

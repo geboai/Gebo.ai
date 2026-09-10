@@ -1,0 +1,216 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gebo.microservices.api.clients</groupId>
+		<artifactId>gebo.microservices.clients.parent</artifactId>
+		<version>1.0.3.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.microservices.clients.angular.module</artifactId>
+	<packaging>jar</packaging>
+
+	<!--
+	  The one Angular import that connects an app to a Gebo.ai installation,
+	  monolithic or microservices: MicroservicesClientsModule.forRoot(baseUrl)
+	  asks /public/ClientsTopologyProviderController and provides the BASE_PATH of
+	  all 21 generated ApiModules from the answer. See the module README.
+
+	  Unlike the per-service modules this one is NOT generated: it has no
+	  generate-rest-api profile and is written by hand.
+	-->
+
+	<dependencies>
+		<!--
+		  The 21 generated Angular clients.
+
+		  These jars carry no Java - an angular.client module packages nothing the
+		  classpath cares about. They are declared for their REACTOR EDGE: the
+		  library imports @Gebo.ai/<name> and resolves it, via the tsconfig paths,
+		  against each client's ng-packagr output under
+		  ../<name>.gebo.ai.angular.client/dist/, which their own angular-ui profile
+		  produces during THIS build (dist/ is gitignored, so it does not exist in a
+		  fresh checkout). Without the dependency Maven is free to order these
+		  independent modules any way it likes, and this one could compile against
+		  dists that are not there yet. Scoped 'provided' because that is what they
+		  are - a build-time ordering constraint, never a runtime artifact - and so
+		  they do not travel to anything depending on this module.
+		-->
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>gateway.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>eureka.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>heimdall.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>brain.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>vectorizator.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>graphicator.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>chunker.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>git.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>filesystem.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>uploads.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>userspace.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>sharepoint.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>confluence.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>jira.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>aws-s3.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>googledrive.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>mcpclient.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>webdav.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>integration.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>fulltextor.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>tyr.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>angular-ui</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.7.6</version>
+						<configuration>
+							<workingDirectory>./</workingDirectory>
+							<nodeVersion>v22.14.0</nodeVersion>
+							<npmVersion>10.9.2</npmVersion>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node and npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>npm install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm run build-lib</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>run build-lib</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

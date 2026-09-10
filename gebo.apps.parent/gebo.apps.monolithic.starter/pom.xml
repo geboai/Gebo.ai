@@ -9,7 +9,8 @@
 	</parent>
 	<artifactId>gebo.apps.monolithic.starter</artifactId>
 	<dependencies>
-		<!-- Generated API keys (model + repository + service + the two controllers).
+		<!-- Generated API keys (model + repository + service + the two
+		controllers).
 		     Owner-only: a key IS a LOCAL_JWT, so nothing on the request path needs the
 		     key store - only minting, listing and revoking do, and those are admin acts. -->
 		<dependency>
@@ -17,7 +18,8 @@
 			<artifactId>gebo.architecture.security.apikey</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- The monolith OWNS the ACL store: it reads AND allocates aliases in Mongo.
+		<!-- The monolith OWNS the ACL store: it reads AND allocates aliases in
+		Mongo.
 		     (A microservice that does not own it takes gebo.microservices.acl.client
 		     instead - a service depends on exactly one of the two.) -->
 		<dependency>
@@ -25,7 +27,8 @@
 			<artifactId>gebo.acl.mongo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- The monolith OWNS the user store: it reads the directory from Mongo directly.
+		<!-- The monolith OWNS the user store: it reads the directory from Mongo
+		directly.
 		     (A microservice that does not own it takes gebo.microservices.security.client
 		     instead - a service depends on exactly one of the two.) -->
 		<dependency>
@@ -33,7 +36,8 @@
 			<artifactId>gebo.security.directory.mongo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- The monolith OWNS the GProject/GKnowledgeBase store: it reads it via
+		<!-- The monolith OWNS the GProject/GKnowledgeBase store: it reads it
+		via
 		     IGPersistentObjectManager directly. (A microservice that does not own it
 		     takes gebo.microservices.knowledgebase.client instead - a service depends
 		     on exactly one of the two.) -->
@@ -90,15 +94,17 @@
 			<artifactId>gebo.architecture.llms.abstraction.layer.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Every LLM provider driver's admin controllers (OpenAIChatModelsConfigurationController,
+		<!-- Every LLM provider driver's admin controllers
+		(OpenAIChatModelsConfigurationController,
 		     ...), split out of each gebo.llms.<provider> module the same way. -->
 		<dependency>
 			<groupId>ai.gebo.llms</groupId>
 			<artifactId>gebo.llms.controllers.starter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<!-- LLM fast-setup: NOT part of gebo.llms.starter (it carries a concrete
+
+		<!-- LLM fast-setup: NOT part of gebo.llms.starter (it carries a
+		concrete
 		     @RestController, GeboFastLLMSSetupController, and gebo.llms.starter
 		     is also consumed by every LLM-hosting microservice via
 		     gebo.microservices.llms.starter) - wired directly here instead,
@@ -210,7 +216,8 @@
 			<artifactId>gebo.architecture.mcp-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Agent2Agent (A2A) protocol: integrate external A2A agents as network
+		<!-- Agent2Agent (A2A) protocol: integrate external A2A agents as
+		network
 		     participants (a2a-clients) and export gebo agents/networks as opaque A2A
 		     agents (a2a-server). -->
 		<dependency>
@@ -223,7 +230,8 @@
 			<artifactId>gebo.architecture.a2a-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- user-messages-concentrator-component, externalized out of gebo.core onto
+		<!-- user-messages-concentrator-component, externalized out of gebo.core
+		onto
 		     its own jobs-master-module - see GWorkflowsConcentratorMessagesReceiverFactory.
 		     gebo.core no longer carries it, so this is required, not optional, for
 		     content-processing status/workflow-completion to keep working at all. -->
@@ -232,8 +240,10 @@
 			<artifactId>gebo.architecture.compute.workflow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- MonolithicCentralSchedulingService/MonolithicJobLaunchManager/etc. -
-		     gebo.core only ever carried this transitively for ReindexingFrequencyOptionsController,
+		<!-- MonolithicCentralSchedulingService/MonolithicJobLaunchManager/etc.
+		-
+		     gebo.core only ever carried this transitively for
+		ReindexingFrequencyOptionsController,
 		     which has since moved into this module itself (tyr is its sole owner
 		     under microservices), so the monolith needs it as a direct, explicit
 		     dependency for the scheduler engine to keep running here. -->
@@ -242,7 +252,8 @@
 			<artifactId>gebo.architecture.scheduling</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Config-driven standard-workflow step enablement (monolith variant of the
+		<!-- Config-driven standard-workflow step enablement (monolith variant
+		of the
 		     enablement policy extracted from the perform-modules). -->
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
@@ -252,6 +263,11 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.topology-provider-controller</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- -->

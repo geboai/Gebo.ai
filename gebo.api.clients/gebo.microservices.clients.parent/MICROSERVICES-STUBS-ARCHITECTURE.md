@@ -21,6 +21,41 @@ Each microservice **app** lives under
 `gebo.apps.parent/gebo.microservices.apps.parent/<name>.gebo.ai`. There are **20
 services** ↔ 20 Java clients ↔ 20 Angular clients.
 
+Alongside them sit **two hand-written aggregators** — not generated, no
+`generate-rest-api` profile, untouched by a regeneration:
+
+```
+gebo.microservices.clients.java.factory     -> gebo.microservices.api.client.factory
+gebo.microservices.clients.angular.module   -> projects/gebo-microservices-clients  (@Gebo.ai/microservices-clients)
+```
+
+Both answer the same question, one per language: **a consumer knows ONE url —
+what does each client append to it?** Each generated client hardcodes the address
+its spec was scraped from (`http://localhost:13001/brain`), and the suffix a
+service really answers on is a property of the deployment, not of the client:
+behind the gateway every service owns a web context (`/brain`, `/heimdall`), on a
+monolith they all answer at the root. So the aggregators ask the installation
+itself — `GET <baseUrl>/public/ClientsTopologyProviderController`, which both
+shapes publish at the same relative url (`gebo.architecture.topology-provider-controller`,
+hosted by the monolith and by `gateway.gebo.ai`) — and apply the answer:
+
+- **Java**: `GeboMicroservicesClientsFactory.of(baseUrl)` hands back every
+  `ApiClient` already based (`clients.brain()`, `clients.heimdall()`, ...).
+- **Angular**: `MicroservicesClientsModule.forRoot(baseUrl)` imports all 21
+  `ApiModule`s and provides each one's own `BASE_PATH` token from the topology,
+  so `app.module.ts` gains one import and every generated service is injectable
+  and correctly based.
+
+See each module's `README.md`. Two build notes specific to the Angular one: it
+takes the 21 `@Gebo.ai/*` packages as **peerDependencies** (the consuming app
+installs them) and resolves them at build time through `tsconfig.json` `paths`
+pointing at each sibling's gitignored `dist/`, which their own `angular-ui`
+profile produces earlier in the same reactor — hence the 21 `provided`-scope
+Maven dependencies in its pom, whose only job is to pin that order. Those same
+`paths` also remap `@angular/*` and `rxjs` onto this workspace's copy: without
+that, each sibling `dist`'s `.d.ts` drags in its OWN `node_modules/@angular/core`
+and its `InjectionToken<string>` is not assignable to ours.
+
 ### 1.1 Service ↔ port ↔ client map
 
 Every client pom encodes the OpenAPI URL of its service in `swagger.file`. The ports

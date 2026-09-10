@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.3.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.architecture.topology-provider-controller</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.environment</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!--
+		  spring-web ONLY - deliberately NOT spring-boot-starter-web.
+
+		  This module is shared by the two architectures, and the deployables that
+		  host it do not agree on a web stack: the monolith and the backend
+		  microservices are servlet (Spring MVC), while gateway.gebo.ai is REACTIVE
+		  (Spring Cloud Gateway on WebFlux). Spring Boot deduces the application
+		  type from the classpath, and the mere PRESENCE of spring-webmvc (which
+		  spring-boot-starter-web drags in) makes it pick SERVLET - so pulling the
+		  starter here would silently turn the gateway into a Tomcat app and break
+		  Spring Cloud Gateway.
+
+		  Nothing stack-specific is needed anyway: @RestController/@GetMapping and
+		  MediaType all live in spring-web, and a controller written against them
+		  is mapped identically by Spring MVC and by WebFlux. The host deployable
+		  brings whichever web stack it actually runs on.
+		-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+	</dependencies>
+</project>
