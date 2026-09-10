@@ -6,6 +6,19 @@ spring:
     # lb:// lookups resolve.
     name: brain_gebo_ai
 
+  # ---------------------------------------------------------------------------
+  # Neo4j connection. Unlike mongo/rabbit/qdrant this does NOT come from the
+  # shared config overlay: neo4j belongs to brain and graphicator only, so the
+  # connection lives with the two services that use it. Env-overridable the same
+  # way as the eureka url above - the compose stack points these at the neo4j
+  # container, the defaults keep a standalone run working against localhost.
+  # ---------------------------------------------------------------------------
+  neo4j:
+    uri: ${SPRING_NEO4J_URI:bolt://localhost:7687}
+    authentication:
+      username: ${SPRING_NEO4J_AUTHENTICATION_USERNAME:neo4j}
+      password: ${SPRING_NEO4J_AUTHENTICATION_PASSWORD:neo4jmaster}
+
 # Dedicated HTTP port, from the 13000-13017 block every Gebo microservice draws
 # from (gateway 13000 ... eureka 13017). Each service owns one, so the whole
 # deployment runs side by side on one host and each container publishes it.
@@ -65,3 +78,19 @@ ai:
 # ---------------------------------------------------------------------------
 ai.gebo.mongodb:
   databaseName: brain-gebo
+
+
+# ---------------------------------------------------------------------------
+# GraphRAG / Neo4j master switch. 27 beans across
+# gebo.architecture.neo4j, gebo.architecture.graphrag.persistence,
+# gebo.architecture.graphrag.extraction and
+# gebo.ragsystem.content.graphrag_processor are gated on this single property
+# (@ConditionalOnProperty ai.gebo.neo4j.enabled) - GeboNeojConfig, the graph
+# DAOs and repositories, Neo4jDdlRunner, KnowledgeGraphPersistenceServiceImpl,
+# KnowledgeGraphSearchServiceImpl, GraphDataExtractionServiceImpl,
+# GraphExtractionDisposerMessageReceiverImpl and GraphRagConfigurationController.
+# Unset means every one of them silently does not exist - no error, just no
+# graph capability at all. brain needs it for graph-backed retrieval (KnowledgeGraphSearchServiceImpl).
+# ---------------------------------------------------------------------------
+ai.gebo.neo4j:
+  enabled: true

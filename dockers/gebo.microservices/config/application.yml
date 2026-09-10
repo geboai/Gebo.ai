@@ -43,11 +43,11 @@ spring:
     port: 5672
     username: guest
     password: guest
-  neo4j:
-    uri: bolt://neo4j:7687
-    authentication:
-      username: neo4j
-      password: neo4jmaster
+  # NOTE: no neo4j block here on purpose. Neo4j belongs to brain and graphicator
+  # only, so both the connection and the ai.gebo.neo4j.enabled switch live in
+  # those two services' own application.yml, and the compose stack points them at
+  # the neo4j container via SPRING_NEO4J_* env. Putting it back here would turn
+  # the whole GraphRAG bean set on for every service on the network.
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     serialization:

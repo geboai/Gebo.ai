@@ -231,7 +231,12 @@ services:
       - brain-work:/opt/gebo.ai/work
       - brain-logs:/opt/gebo.ai/logs
     image: geboai/brain.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
-    depends_on: [eureka, rabbit, mongo, qdrant]
+    # Neo4j is configured per service, not in the shared overlay: brain and
+    # graphicator are the only two that own a graph connection.
+    environment:
+      <<: *microservice-env
+      SPRING_NEO4J_URI: bolt://neo4j:7687
+    depends_on: [eureka, rabbit, mongo, qdrant, neo4j]
     ports:
       - "13001:13001"
 
@@ -255,6 +260,11 @@ services:
       - graphicator-work:/opt/gebo.ai/work
       - graphicator-logs:/opt/gebo.ai/logs
     image: geboai/graphicator.gebo.ai:${GEBO_VERSION:-1.0.3.0-SNAPSHOT}
+    # Neo4j is configured per service, not in the shared overlay: brain and
+    # graphicator are the only two that own a graph connection.
+    environment:
+      <<: *microservice-env
+      SPRING_NEO4J_URI: bolt://neo4j:7687
     depends_on: [eureka, rabbit, mongo, neo4j]
     ports:
       - "13003:13003"
