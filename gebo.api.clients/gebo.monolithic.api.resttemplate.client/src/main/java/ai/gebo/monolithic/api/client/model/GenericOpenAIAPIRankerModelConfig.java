@@ -24,7 +24,7 @@ import java.util.Date;
  * GenericOpenAIAPIRankerModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T08:03:04.342188100+02:00[Europe/Rome]")
 
 public class GenericOpenAIAPIRankerModelConfig {
   @JsonProperty("code")

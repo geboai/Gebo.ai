@@ -26,7 +26,7 @@ import java.util.Map;
  * EditableUser
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T08:03:04.342188100+02:00[Europe/Rome]")
 
 public class EditableUser {
   @JsonProperty("name")
@@ -53,6 +53,7 @@ public class EditableUser {
     MICROSOFT("microsoft"),
     MICROSOFT_MULTITENANT("microsoft_multitenant"),
     AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
     KEYCLOAK("keycloak"),
     OAUTH2_GENERIC("oauth2_generic"),
     LDAP("ldap");
