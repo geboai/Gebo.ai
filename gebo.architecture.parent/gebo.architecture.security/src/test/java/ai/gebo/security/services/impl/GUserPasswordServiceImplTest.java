@@ -23,6 +23,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.architecture.environment.ArchitectureType;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
@@ -31,7 +32,6 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import ai.gebo.architecture.environment.GeboApplicationArchitecture.ArchitectureType;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGUserPasswordService;
 import ai.gebo.security.services.SecurityAuditTaxonomy;

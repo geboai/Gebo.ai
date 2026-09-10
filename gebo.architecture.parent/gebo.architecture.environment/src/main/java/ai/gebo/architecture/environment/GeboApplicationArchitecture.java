@@ -7,9 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class GeboApplicationArchitecture {
-	public static enum ArchitectureType {
-		MONOLITHIC, MICROSERVICES
-	}
-
 	private final ArchitectureType architecture;
 }
