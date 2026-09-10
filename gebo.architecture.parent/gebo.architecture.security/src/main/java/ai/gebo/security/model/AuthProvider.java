@@ -50,6 +50,14 @@ public enum AuthProvider {
 			List.of(Oauth2CustomAttribute.of("cognitoDomain", "AWS Cognito domain"),
 					Oauth2CustomAttribute.of("userPoolId", "AWS Cognito uer pool"),
 					Oauth2CustomAttribute.of("region", "AWS Region"))),
+	// Authentication using AWS IAM Identity Center (ex AWS SSO) as an OIDC provider.
+	// The OIDC endpoints are per-instance, so the issuer/authorization/token/userInfo
+	// URIs are templated on {instanceId} (the ssoins-xxxx id) and {region}. They are
+	// instance-specific and must be verified against the instance's
+	// <issuer>/.well-known/openid-configuration (see oauth2-library.yml).
+	aws_identity_center(AuthProviderType.OAUTH2, "AWS IAM Identity Center (SSO) OIDC provider", true,
+			List.of(Oauth2CustomAttribute.of("instanceId", "IAM Identity Center instance id (ssoins-xxxx)"),
+					Oauth2CustomAttribute.of("region", "AWS region of the Identity Center instance"))),
 	// Authentication using a Keycloak realm (OIDC). The realm is carried in the
 	// issuer/authorization/token URIs; expose it as a custom attribute so those
 	// URIs can be templated with {realm}. serverUrl is the Keycloak base/auth-server
