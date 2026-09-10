@@ -20,12 +20,16 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.security.services.impl.authmanagers.IssuerConfigCache;
+import ai.gebo.security.services.impl.authmanagers.OAuth2UsernameClaims;
 import lombok.AllArgsConstructor;
 
 /**
  * Converts a validated external OAuth2 {@link Jwt} into a Gebo authentication,
- * resolving the token's {@code email} (falling back to {@code sub}) to an existing
- * Gebo user via {@code userDetailsService}.
+ * resolving the token's username via the shared {@link OAuth2UsernameClaims} ladder
+ * ({@code email}, then {@code preferred_username}/{@code upn}/{@code cognito:username},
+ * then {@code sub}) to an existing Gebo user via {@code userDetailsService}. Using the
+ * same ladder as the opaque/sync path keeps one identity from being provisioned under
+ * two different usernames depending on which path first validated the token.
  *
  * <p>
  * <b>Auto-provisioning</b>: when that lookup finds no such user, this used to always
@@ -97,7 +101,11 @@ public class GJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthe
 	@Override
 	@Nullable
 	public AbstractAuthenticationToken convert(Jwt source) {
-		String email = source.getClaim("email");
+		// Resolve the username through the shared claim ladder, not email-only: an
+		// issuer whose access token has no email claim (AWS Cognito) must still key on
+		// the same value the opaque/sync path uses, or the same human ends up with two
+		// accounts. sub is the last rung, so getSubject() is only a null-safety net.
+		String email = OAuth2UsernameClaims.resolveUsername(source.getClaims());
 		if (email == null) {
 			email = source.getSubject();
 		}
@@ -121,7 +129,8 @@ public class GJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthe
 			event.getDetails().put("authProvider", String.valueOf(provider));
 			// Claim NAMES, never their values: a token's claims can carry anything the
 			// issuer chose to put in them.
-			event.getDetails().put("usernameFromClaim", source.getClaim("email") != null ? "email" : "sub");
+			String usernameClaim = OAuth2UsernameClaims.pickClaimName(source.getClaims());
+			event.getDetails().put("usernameFromClaim", usernameClaim != null ? usernameClaim : "sub");
 			try {
 				securityDirectory.createUserIfNotExists(email, source.getClaims(), provider);
 				// Re-fetch rather than build UserDetails from the freshly created UserInfos

@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenAuthenticationConverter;
 
+import ai.gebo.security.services.impl.authmanagers.OAuth2UsernameClaims;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -23,7 +24,12 @@ public class GOpaqueTokenAuthenticationConverter implements OpaqueTokenAuthentic
 
 	@Override
 	public Authentication convert(String introspectedToken, OAuth2AuthenticatedPrincipal authenticatedPrincipal) {
-		String username = authenticatedPrincipal.getAttribute("email");
+		// Same shared claim ladder the provisioner uses to CREATE the user, so the
+		// lookup key here matches the create key - otherwise a Cognito identity
+		// (username under cognito:username) provisioned by the manager's not-found
+		// branch could not be re-loaded under sub, and auth would fail after a
+		// successful provisioning.
+		String username = OAuth2UsernameClaims.resolveUsername(authenticatedPrincipal.getAttributes());
 		if (username == null) {
 			username = authenticatedPrincipal.getAttribute("sub");
 		}

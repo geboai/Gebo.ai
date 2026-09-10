@@ -57,7 +57,10 @@ public class GReactiveOpaqueTokenAuthenticationConverter implements ReactiveOpaq
 	}
 
 	private Authentication convertBlocking(String introspectedToken, OAuth2AuthenticatedPrincipal principal) {
-		String username = principal.getAttribute("email");
+		// Shared claim ladder (see OAuth2UsernameClaims): the lookup key must match the
+		// key the provisioner creates under, or a just-provisioned Cognito identity
+		// cannot be re-loaded and auth fails after a successful provisioning.
+		String username = OAuth2UsernameClaims.resolveUsername(principal.getAttributes());
 		if (username == null)
 			username = principal.getAttribute("sub");
 		UserDetails user = loadOrProvision(username, introspectedToken, principal);

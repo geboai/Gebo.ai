@@ -16,6 +16,24 @@ ai.gebo.oauth2.library:
       issuerUri: "https://cognito-idp.{region}.amazonaws.com/{userPoolId}"
       jwkSetUri: "https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json"
       userNameAttribute: sub
+    # AWS IAM Identity Center (ex AWS SSO) as an OIDC provider for a customer-managed
+    # application. The endpoints are per-instance: {instanceId} is the ssoins-xxxx id,
+    # {region} the instance region (both are provider custom attributes).
+    #
+    # VERIFY BEFORE USE: IAM Identity Center's OIDC endpoints are instance-specific and
+    # have changed across AWS releases. Fetch <issuerUri>/.well-known/openid-configuration
+    # for your instance and align the authorization/token/userInfo/jwks URIs below with
+    # what it advertises. The values here follow AWS's documented pattern and are a
+    # starting point, not a guarantee. (The resource-server JWT path derives keys from
+    # issuerUri via OIDC discovery, so once issuerUri is correct, bearer-token validation
+    # works even if an authorization-code sub-endpoint below needs adjustment.)
+    - provider: aws_identity_center
+      authorizationUri: "https://identitycenter.amazonaws.com/ssoins-{instanceId}/oauth2/authorize"
+      tokenUri: "https://identitycenter.amazonaws.com/ssoins-{instanceId}/oauth2/token"
+      userInfoUri: "https://identitycenter.amazonaws.com/ssoins-{instanceId}/oauth2/userInfo"
+      issuerUri: "https://identitycenter.amazonaws.com/ssoins-{instanceId}"
+      jwkSetUri: "https://identitycenter.amazonaws.com/ssoins-{instanceId}/.well-known/jwks.json"
+      userNameAttribute: email
     - provider: microsoft
       authorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
       tokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
