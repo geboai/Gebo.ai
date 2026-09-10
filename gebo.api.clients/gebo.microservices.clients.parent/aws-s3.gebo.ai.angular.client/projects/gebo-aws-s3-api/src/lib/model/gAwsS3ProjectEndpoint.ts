@@ -29,6 +29,7 @@ export interface GAwsS3ProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     paths?: any;
     s3SystemCode?: any;
 }

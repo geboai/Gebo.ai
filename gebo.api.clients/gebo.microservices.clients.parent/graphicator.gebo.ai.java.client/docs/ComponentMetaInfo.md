@@ -8,3 +8,4 @@ Name | Type | Description | Notes
 **receiver** | **Object** |  |  [optional]
 **emitter** | **Object** |  |  [optional]
 **localSystem** | **Object** |  |  [optional]
+**dataFlowMetaInfos** | [**GDataFlowMetaInfos**](GDataFlowMetaInfos.md) |  |  [optional]

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GConfluenceProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:50.343715666+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
 
 public class GConfluenceProjectEndpoint {
   @JsonProperty("code")
@@ -78,6 +78,9 @@ public class GConfluenceProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private Object aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Object personalData = null;
 
   @JsonProperty("paths")
   private Object paths = null;
@@ -418,6 +421,24 @@ public class GConfluenceProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GConfluenceProjectEndpoint personalData(Object personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Object getPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Object personalData) {
+    this.personalData = personalData;
+  }
+
   public GConfluenceProjectEndpoint paths(Object paths) {
     this.paths = paths;
     return this;
@@ -536,6 +557,7 @@ public class GConfluenceProjectEndpoint {
         Objects.equals(this.synchroStrategy, gconfluenceProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gconfluenceProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gconfluenceProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, gconfluenceProjectEndpoint.personalData) &&
         Objects.equals(this.paths, gconfluenceProjectEndpoint.paths) &&
         Objects.equals(this.confluenceSystemCode, gconfluenceProjectEndpoint.confluenceSystemCode) &&
         Objects.equals(this.extractedFormat, gconfluenceProjectEndpoint.extractedFormat) &&
@@ -545,7 +567,7 @@ public class GConfluenceProjectEndpoint {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, confluenceSystemCode, extractedFormat, extractAndSaveContents, confluenceVersion);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, paths, confluenceSystemCode, extractedFormat, extractAndSaveContents, confluenceVersion);
   }
 
 
@@ -572,6 +594,7 @@ public class GConfluenceProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    confluenceSystemCode: ").append(toIndentedString(confluenceSystemCode)).append("\n");
     sb.append("    extractedFormat: ").append(toIndentedString(extractedFormat)).append("\n");

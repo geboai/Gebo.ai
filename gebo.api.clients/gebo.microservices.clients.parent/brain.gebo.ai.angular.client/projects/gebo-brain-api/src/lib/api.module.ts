@@ -3,16 +3,20 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { A2AClientConfigControllerService } from './api/a2AClientConfigController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
+import { BraveSearchConfigurationControllerService } from './api/braveSearchConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
 import { CompanySystemsControllerService } from './api/companySystemsController.service';
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
+import { DataFlowMetaInfoControllerService } from './api/dataFlowMetaInfoController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
+import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
@@ -66,6 +70,9 @@ import { OpenAiTranscriptModelsConfigurationControllerService } from './api/open
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
+import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
+import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
+import { TavilySearchConfigurationControllerService } from './api/tavilySearchConfigurationController.service';
 import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsController.service';
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
@@ -75,16 +82,20 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
   declarations: [],
   exports:      [],
   providers: [
+    A2AClientConfigControllerService,
     AnthropicChatModelsConfigurationControllerService,
+    BraveSearchConfigurationControllerService,
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
     CompanySystemsControllerService,
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
+    DataFlowMetaInfoControllerService,
     DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,
     FunctionsLookupControllerService,
+    GeboA2AServerAdminControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
@@ -138,6 +149,9 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     ProjectsControllerService,
     PromptTemplatesControllerService,
     RankerModelsControllerService,
+    SearxngSearchConfigurationControllerService,
+    SerpapiSearchConfigurationControllerService,
+    TavilySearchConfigurationControllerService,
     TextToSpeechModelsControllerService,
     TranscriptModelsControllerService,
     UserKnowledgeBaseBrowsingControllerService ]

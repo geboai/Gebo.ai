@@ -21,5 +21,6 @@ Name | Type | Description | Notes
 **synchroStrategy** | **Object** |  |  [optional]
 **objectSpaceType** | **Object** |  |  [optional]
 **aclAliases** | **Object** |  |  [optional]
+**personalData** | **Object** |  |  [optional]
 **uploadHandshakeCode** | **Object** |  |  [optional]
 **uploadedContents** | **Object** |  |  [optional]

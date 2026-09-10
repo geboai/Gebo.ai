@@ -30,4 +30,5 @@ export interface GeboChatResponse {
     pipelineRouterDecisionCode?: any;
     pipelineParams?: any;
     deepSearchRequestId?: any;
+    additionalContents?: any;
 }

@@ -17,4 +17,5 @@ Name | Type | Description | Notes
 **userUploadedContents** | **Object** |  |  [optional]
 **deepSearchDataSources** | **Object** |  |  [optional]
 **userIntent** | **Object** |  |  [optional]
+**additionalContents** | **Object** |  |  [optional]
 **tokensSize** | **Object** |  |  [optional]

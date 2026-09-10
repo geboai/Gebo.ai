@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GGitProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:07.116206835+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:20.180928852+02:00[Europe/Rome]")
 
 public class GGitProjectEndpoint {
   @JsonProperty("code")
@@ -78,6 +78,9 @@ public class GGitProjectEndpoint {
 
   @JsonProperty("aclAliases")
   private Object aclAliases = null;
+
+  @JsonProperty("personalData")
+  private Object personalData = null;
 
   @JsonProperty("repositoryUri")
   private Object repositoryUri = null;
@@ -421,6 +424,24 @@ public class GGitProjectEndpoint {
     this.aclAliases = aclAliases;
   }
 
+  public GGitProjectEndpoint personalData(Object personalData) {
+    this.personalData = personalData;
+    return this;
+  }
+
+   /**
+   * Get personalData
+   * @return personalData
+  **/
+  @Schema(description = "")
+  public Object getPersonalData() {
+    return personalData;
+  }
+
+  public void setPersonalData(Object personalData) {
+    this.personalData = personalData;
+  }
+
   public GGitProjectEndpoint repositoryUri(Object repositoryUri) {
     this.repositoryUri = repositoryUri;
     return this;
@@ -557,6 +578,7 @@ public class GGitProjectEndpoint {
         Objects.equals(this.synchroStrategy, ggitProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, ggitProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, ggitProjectEndpoint.aclAliases) &&
+        Objects.equals(this.personalData, ggitProjectEndpoint.personalData) &&
         Objects.equals(this.repositoryUri, ggitProjectEndpoint.repositoryUri) &&
         Objects.equals(this.branch, ggitProjectEndpoint.branch) &&
         Objects.equals(this.identityCode, ggitProjectEndpoint.identityCode) &&
@@ -567,7 +589,7 @@ public class GGitProjectEndpoint {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, repositoryUri, branch, identityCode, alwaysClone, publicAccess, contentManagementSystem);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, repositoryUri, branch, identityCode, alwaysClone, publicAccess, contentManagementSystem);
   }
 
 
@@ -594,6 +616,7 @@ public class GGitProjectEndpoint {
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    repositoryUri: ").append(toIndentedString(repositoryUri)).append("\n");
     sb.append("    branch: ").append(toIndentedString(branch)).append("\n");
     sb.append("    identityCode: ").append(toIndentedString(identityCode)).append("\n");

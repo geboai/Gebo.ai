@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class SecretsClusterControllerApi {
     private ApiClient apiClient;
@@ -69,7 +69,7 @@ public class SecretsClusterControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling deleteSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/deleteSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/deleteSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -84,7 +84,7 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -106,7 +106,7 @@ public class SecretsClusterControllerApi {
      */
     public ResponseEntity<Object> getAllSecretsIdWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getAllSecretsId").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getAllSecretsId").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -122,7 +122,7 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -150,7 +150,7 @@ public class SecretsClusterControllerApi {
         if (id == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'id' when calling getSecretContentById");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretContentById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretContentById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -167,7 +167,7 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeboSecretContentEnvelope> returnType = new ParameterizedTypeReference<GeboSecretContentEnvelope>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -195,7 +195,7 @@ public class SecretsClusterControllerApi {
         if (contextCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'contextCode' when calling getSecretInfoByContextCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoByContextCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoByContextCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -212,7 +212,7 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -240,7 +240,7 @@ public class SecretsClusterControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getSecretInfoById");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoById").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/getSecretInfoById").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -257,7 +257,7 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<SecretInfo> returnType = new ParameterizedTypeReference<SecretInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -285,7 +285,7 @@ public class SecretsClusterControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling storeSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/storeSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/storeSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -303,7 +303,7 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -330,7 +330,7 @@ public class SecretsClusterControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateSecret");
         }
-        String path = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/updateSecret").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecretsController/updateSecret").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -346,6 +346,6 @@ public class SecretsClusterControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

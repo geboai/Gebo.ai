@@ -10,3 +10,4 @@ Name | Type | Description | Notes
 **roles** | **Object** |  | 
 **authProvider** | **Object** |  | 
 **langCode** | **Object** |  |  [optional]
+**customInfos** | **Object** |  |  [optional]

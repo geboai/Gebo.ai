@@ -111,21 +111,26 @@ export class GeboUserChatsControllerService {
      * 
      * 
      * @param chatProfileCode 
+     * @param contextCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createCleanChatByChatProfileCode(chatProfileCode: any, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
-    public createCleanChatByChatProfileCode(chatProfileCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
-    public createCleanChatByChatProfileCode(chatProfileCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
-    public createCleanChatByChatProfileCode(chatProfileCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling createCleanChatByChatProfileCode.');
         }
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (chatProfileCode !== undefined && chatProfileCode !== null) {
             queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
+        }
+        if (contextCode !== undefined && contextCode !== null) {
+            queryParameters = queryParameters.set('contextCode', <any>contextCode);
         }
 
         let headers = this.defaultHeaders;
@@ -478,6 +483,53 @@ export class GeboUserChatsControllerService {
 
         return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChats`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param contextCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMyChatsByContextCode(contextCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public getMyChatsByContextCode(contextCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public getMyChatsByContextCode(contextCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getMyChatsByContextCode(contextCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (contextCode === null || contextCode === undefined) {
+            throw new Error('Required parameter contextCode was null or undefined when calling getMyChatsByContextCode.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (contextCode !== undefined && contextCode !== null) {
+            queryParameters = queryParameters.set('contextCode', <any>contextCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChatsByContextCode`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

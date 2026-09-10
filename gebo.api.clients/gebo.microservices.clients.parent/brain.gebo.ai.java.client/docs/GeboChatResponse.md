@@ -20,3 +20,4 @@ Name | Type | Description | Notes
 **pipelineRouterDecisionCode** | **Object** |  |  [optional]
 **pipelineParams** | **Object** |  |  [optional]
 **deepSearchRequestId** | **Object** |  |  [optional]
+**additionalContents** | **Object** |  |  [optional]

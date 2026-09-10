@@ -11,6 +11,7 @@ import { GenericalPublisherControllerService } from './api/genericalPublisherCon
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
+import { UploadsBrowsingControllerService } from './api/uploadsBrowsingController.service';
 
 @NgModule({
   imports:      [],
@@ -24,7 +25,8 @@ import { JobLauncherControllerService } from './api/jobLauncherController.servic
     GenericalPublisherControllerService,
     IngestionFileTypesLibraryControllerService,
     InternalMessagingTopologyControllerService,
-    JobLauncherControllerService ]
+    JobLauncherControllerService,
+    UploadsBrowsingControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

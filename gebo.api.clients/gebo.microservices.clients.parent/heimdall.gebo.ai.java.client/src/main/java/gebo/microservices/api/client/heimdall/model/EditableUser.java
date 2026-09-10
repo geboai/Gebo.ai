@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * EditableUser
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class EditableUser {
   @JsonProperty("name")
@@ -45,6 +45,9 @@ public class EditableUser {
 
   @JsonProperty("langCode")
   private Object langCode = null;
+
+  @JsonProperty("customInfos")
+  private Object customInfos = null;
 
   public EditableUser name(Object name) {
     this.name = name;
@@ -172,6 +175,24 @@ public class EditableUser {
     this.langCode = langCode;
   }
 
+  public EditableUser customInfos(Object customInfos) {
+    this.customInfos = customInfos;
+    return this;
+  }
+
+   /**
+   * Get customInfos
+   * @return customInfos
+  **/
+  @Schema(description = "")
+  public Object getCustomInfos() {
+    return customInfos;
+  }
+
+  public void setCustomInfos(Object customInfos) {
+    this.customInfos = customInfos;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -188,12 +209,13 @@ public class EditableUser {
         Objects.equals(this.disabled, editableUser.disabled) &&
         Objects.equals(this.roles, editableUser.roles) &&
         Objects.equals(this.authProvider, editableUser.authProvider) &&
-        Objects.equals(this.langCode, editableUser.langCode);
+        Objects.equals(this.langCode, editableUser.langCode) &&
+        Objects.equals(this.customInfos, editableUser.customInfos);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, sourname, username, disabled, roles, authProvider, langCode);
+    return Objects.hash(name, sourname, username, disabled, roles, authProvider, langCode, customInfos);
   }
 
 
@@ -209,6 +231,7 @@ public class EditableUser {
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    authProvider: ").append(toIndentedString(authProvider)).append("\n");
     sb.append("    langCode: ").append(toIndentedString(langCode)).append("\n");
+    sb.append("    customInfos: ").append(toIndentedString(customInfos)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -29,5 +29,6 @@ export interface GUserspaceProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     username: any;
 }

@@ -26,5 +26,6 @@ export interface GeboChatRequest {
     userUploadedContents?: any;
     deepSearchDataSources?: any;
     userIntent?: any;
+    additionalContents?: any;
     tokensSize?: any;
 }

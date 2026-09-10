@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
 
 public class GeboAdminChatProfilesConfigurationControllerApi {
     private ApiClient apiClient;
@@ -70,7 +70,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteChatProfile");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/deleteChatProfile").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/deleteChatProfile").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -86,7 +86,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -114,7 +114,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling findChatProfileConfigurationByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/findChatProfileConfigurationByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/findChatProfileConfigurationByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GChatProfileConfiguration> returnType = new ParameterizedTypeReference<GChatProfileConfiguration>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getAllChatProfileConfiguration");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/getAllChatProfileConfiguration").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,7 +177,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGChatProfileConfiguration> returnType = new ParameterizedTypeReference<PageGChatProfileConfiguration>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -205,7 +205,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getChatProfileConfigurationByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/getChatProfileConfigurationByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/getChatProfileConfigurationByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -223,7 +223,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGChatProfileConfiguration> returnType = new ParameterizedTypeReference<PageGChatProfileConfiguration>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -251,7 +251,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling insertChatProfile");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/insertChatProfile").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/insertChatProfile").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -269,7 +269,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GChatProfileConfiguration> returnType = new ParameterizedTypeReference<GChatProfileConfiguration>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -297,7 +297,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling updateChatProfile");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/updateChatProfile").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminChatProfilesConfigurationController/updateChatProfile").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -315,6 +315,6 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GChatProfileConfiguration> returnType = new ParameterizedTypeReference<GChatProfileConfiguration>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

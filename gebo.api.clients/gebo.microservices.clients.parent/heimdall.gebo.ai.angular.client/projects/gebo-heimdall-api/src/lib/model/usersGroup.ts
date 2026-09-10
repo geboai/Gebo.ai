@@ -14,4 +14,5 @@ export interface UsersGroup {
     code?: any;
     description?: any;
     userIds?: any;
+    extCode?: any;
 }

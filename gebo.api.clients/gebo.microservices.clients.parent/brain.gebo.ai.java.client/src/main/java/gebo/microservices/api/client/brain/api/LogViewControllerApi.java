@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
 
 public class LogViewControllerApi {
     private ApiClient apiClient;
@@ -72,7 +72,7 @@ public class LogViewControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling deleteJobStatus");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/LogViewController/deleteJobStatus").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/LogViewController/deleteJobStatus").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -88,7 +88,7 @@ public class LogViewControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -116,7 +116,7 @@ public class LogViewControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobMessagesPaged");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobMessagesPaged").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobMessagesPaged").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -134,7 +134,7 @@ public class LogViewControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGUserMessage> returnType = new ParameterizedTypeReference<PageGUserMessage>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -162,7 +162,7 @@ public class LogViewControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobsEntriesForClassName");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntriesForClassName").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntriesForClassName").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -180,7 +180,7 @@ public class LogViewControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGJobStatusItem> returnType = new ParameterizedTypeReference<PageGJobStatusItem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -208,7 +208,7 @@ public class LogViewControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobsEntriesForJobType");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntriesForJobType").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntriesForJobType").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -226,7 +226,7 @@ public class LogViewControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGJobStatusItem> returnType = new ParameterizedTypeReference<PageGJobStatusItem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -254,7 +254,7 @@ public class LogViewControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobsEntriesForProjectEndpoint");
         }
-        String path = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntriesForProjectEndpoint").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntriesForProjectEndpoint").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -272,6 +272,6 @@ public class LogViewControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGJobStatusItem> returnType = new ParameterizedTypeReference<PageGJobStatusItem>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

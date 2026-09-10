@@ -29,6 +29,7 @@ export interface GUploadsProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     uploadHandshakeCode?: any;
     uploadedContents?: any;
 }

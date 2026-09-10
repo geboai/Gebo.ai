@@ -21,5 +21,6 @@ Name | Type | Description | Notes
 **synchroStrategy** | **Object** |  |  [optional]
 **objectSpaceType** | **Object** |  |  [optional]
 **aclAliases** | **Object** |  |  [optional]
+**personalData** | **Object** |  |  [optional]
 **paths** | **Object** |  |  [optional]
 **s3SystemCode** | **Object** |  |  [optional]

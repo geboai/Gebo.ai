@@ -29,6 +29,7 @@ export interface GConfluenceProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     paths?: any;
     confluenceSystemCode?: any;
     extractedFormat?: any;

@@ -29,4 +29,5 @@ export interface GProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
 }

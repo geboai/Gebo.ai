@@ -10,3 +10,4 @@ Name | Type | Description | Notes
 **chatModelCode** | **Object** |  |  [optional]
 **ragChat** | **Object** |  |  [optional]
 **chatCreationDateTime** | **Object** |  |  [optional]
+**contextCode** | **Object** |  |  [optional]

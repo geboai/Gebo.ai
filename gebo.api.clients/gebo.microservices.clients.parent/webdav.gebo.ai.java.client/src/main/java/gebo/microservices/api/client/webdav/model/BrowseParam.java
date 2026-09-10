@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * BrowseParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-09T11:46:07.427269500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:19.127862733+02:00[Europe/Rome]")
 
 public class BrowseParam {
   @JsonProperty("root")

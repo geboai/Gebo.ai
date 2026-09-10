@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -67,6 +67,9 @@ public class GeboChatRequest {
 
   @JsonProperty("userIntent")
   private Object userIntent = null;
+
+  @JsonProperty("additionalContents")
+  private Object additionalContents = null;
 
   @JsonProperty("tokensSize")
   private Object tokensSize = null;
@@ -323,6 +326,24 @@ public class GeboChatRequest {
     this.userIntent = userIntent;
   }
 
+  public GeboChatRequest additionalContents(Object additionalContents) {
+    this.additionalContents = additionalContents;
+    return this;
+  }
+
+   /**
+   * Get additionalContents
+   * @return additionalContents
+  **/
+  @Schema(description = "")
+  public Object getAdditionalContents() {
+    return additionalContents;
+  }
+
+  public void setAdditionalContents(Object additionalContents) {
+    this.additionalContents = additionalContents;
+  }
+
   public GeboChatRequest tokensSize(Object tokensSize) {
     this.tokensSize = tokensSize;
     return this;
@@ -365,12 +386,13 @@ public class GeboChatRequest {
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
+        Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, additionalContents, tokensSize);
   }
 
 
@@ -393,6 +415,7 @@ public class GeboChatRequest {
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
+    sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();

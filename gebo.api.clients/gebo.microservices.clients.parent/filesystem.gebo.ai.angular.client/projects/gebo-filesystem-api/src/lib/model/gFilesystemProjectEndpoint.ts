@@ -29,5 +29,6 @@ export interface GFilesystemProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     path?: any;
 }

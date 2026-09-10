@@ -29,6 +29,7 @@ export interface MCPClientProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     paths?: any;
     mcpClientConfigCode?: any;
 }

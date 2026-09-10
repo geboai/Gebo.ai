@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **dateCreated** | **Object** |  |  [optional]
 **chatCreationDateTime** | **Object** |  |  [optional]
 **username** | **Object** |  |  [optional]
+**contextCode** | **Object** |  |  [optional]
 **chatProfileCode** | **Object** |  |  [optional]
 **modelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **ragChat** | **Object** |  |  [optional]

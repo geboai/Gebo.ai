@@ -17,12 +17,13 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.jira.model.GDataFlowMetaInfos;
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * ComponentMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:33.251328392+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:45.187682910+02:00[Europe/Rome]")
 
 public class ComponentMetaInfo {
   @JsonProperty("messagingSystemId")
@@ -39,6 +40,9 @@ public class ComponentMetaInfo {
 
   @JsonProperty("localSystem")
   private Object localSystem = null;
+
+  @JsonProperty("dataFlowMetaInfos")
+  private GDataFlowMetaInfos dataFlowMetaInfos = null;
 
   public ComponentMetaInfo messagingSystemId(Object messagingSystemId) {
     this.messagingSystemId = messagingSystemId;
@@ -130,6 +134,24 @@ public class ComponentMetaInfo {
     this.localSystem = localSystem;
   }
 
+  public ComponentMetaInfo dataFlowMetaInfos(GDataFlowMetaInfos dataFlowMetaInfos) {
+    this.dataFlowMetaInfos = dataFlowMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get dataFlowMetaInfos
+   * @return dataFlowMetaInfos
+  **/
+  @Schema(description = "")
+  public GDataFlowMetaInfos getDataFlowMetaInfos() {
+    return dataFlowMetaInfos;
+  }
+
+  public void setDataFlowMetaInfos(GDataFlowMetaInfos dataFlowMetaInfos) {
+    this.dataFlowMetaInfos = dataFlowMetaInfos;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -144,12 +166,13 @@ public class ComponentMetaInfo {
         Objects.equals(this.messagingModuleId, componentMetaInfo.messagingModuleId) &&
         Objects.equals(this.receiver, componentMetaInfo.receiver) &&
         Objects.equals(this.emitter, componentMetaInfo.emitter) &&
-        Objects.equals(this.localSystem, componentMetaInfo.localSystem);
+        Objects.equals(this.localSystem, componentMetaInfo.localSystem) &&
+        Objects.equals(this.dataFlowMetaInfos, componentMetaInfo.dataFlowMetaInfos);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(messagingSystemId, messagingModuleId, receiver, emitter, localSystem);
+    return Objects.hash(messagingSystemId, messagingModuleId, receiver, emitter, localSystem, dataFlowMetaInfos);
   }
 
 
@@ -163,6 +186,7 @@ public class ComponentMetaInfo {
     sb.append("    receiver: ").append(toIndentedString(receiver)).append("\n");
     sb.append("    emitter: ").append(toIndentedString(emitter)).append("\n");
     sb.append("    localSystem: ").append(toIndentedString(localSystem)).append("\n");
+    sb.append("    dataFlowMetaInfos: ").append(toIndentedString(dataFlowMetaInfos)).append("\n");
     sb.append("}");
     return sb.toString();
   }

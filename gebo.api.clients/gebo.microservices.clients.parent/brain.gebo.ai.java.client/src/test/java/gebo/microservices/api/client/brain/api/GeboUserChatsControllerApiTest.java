@@ -60,7 +60,8 @@ public class GeboUserChatsControllerApiTest {
     @Test
     public void createCleanChatByChatProfileCodeTest() {
         Object chatProfileCode = null;
-        GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode);
+        Object contextCode = null;
+        GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
 
         // TODO: test validations
     }
@@ -167,6 +168,21 @@ public class GeboUserChatsControllerApiTest {
     @Test
     public void getMyChatsTest() {
         Object response = api.getMyChats();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getMyChatsByContextCodeTest() {
+        Object contextCode = null;
+        Object response = api.getMyChatsByContextCode(contextCode);
 
         // TODO: test validations
     }

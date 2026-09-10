@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboSecretStoreRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class GeboSecretStoreRequest {
   @JsonProperty("contextCode")

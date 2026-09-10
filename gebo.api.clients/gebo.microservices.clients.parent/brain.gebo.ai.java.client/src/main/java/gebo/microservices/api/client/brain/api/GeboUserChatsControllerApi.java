@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:42:38.770164403+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
 
 public class GeboUserChatsControllerApi {
     private ApiClient apiClient;
@@ -73,7 +73,7 @@ public class GeboUserChatsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling changeChatDescription");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/changeChatDescription").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/changeChatDescription").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -91,18 +91,19 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GLookupEntry> returnType = new ParameterizedTypeReference<GLookupEntry>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param contextCode  (optional)
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo createCleanChatByChatProfileCode(Object chatProfileCode) throws RestClientException {
-        return createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode).getBody();
+    public GUserChatInfo createCleanChatByChatProfileCode(Object chatProfileCode, Object contextCode) throws RestClientException {
+        return createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode, contextCode).getBody();
     }
 
     /**
@@ -110,21 +111,23 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param contextCode  (optional)
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(Object chatProfileCode) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(Object chatProfileCode, Object contextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'chatProfileCode' when calling createCleanChatByChatProfileCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/createCleanChatByChatProfileCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/createCleanChatByChatProfileCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "contextCode", contextCode));
 
         final String[] accepts = { 
             "application/json"
@@ -136,7 +139,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GUserChatInfo> returnType = new ParameterizedTypeReference<GUserChatInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -164,7 +167,7 @@ public class GeboUserChatsControllerApi {
         if (modelCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'modelCode' when calling createCleanChatByModelCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/createCleanChatByModelCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/createCleanChatByModelCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -181,7 +184,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GUserChatInfo> returnType = new ParameterizedTypeReference<GUserChatInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -208,7 +211,7 @@ public class GeboUserChatsControllerApi {
         if (userChatContextCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userChatContextCode' when calling deleteChat");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/deleteChat").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/deleteChat").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -223,7 +226,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -262,7 +265,7 @@ public class GeboUserChatsControllerApi {
         if (format == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'format' when calling exportResponse2file");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/exportResponse2file").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/exportResponse2file").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -279,7 +282,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -307,7 +310,7 @@ public class GeboUserChatsControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling getChatHistory");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getChatHistory").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getChatHistory").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -324,7 +327,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<UserChatHistory> returnType = new ParameterizedTypeReference<UserChatHistory>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -352,7 +355,7 @@ public class GeboUserChatsControllerApi {
         if (id == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'id' when calling getChatInfosByCode");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getChatInfosByCode").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getChatInfosByCode").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -369,7 +372,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GUserChatInfo> returnType = new ParameterizedTypeReference<GUserChatInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -397,7 +400,7 @@ public class GeboUserChatsControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getChatInfosByQbe");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getChatInfosByQbe").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getChatInfosByQbe").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -415,7 +418,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGUserChatInfo> returnType = new ParameterizedTypeReference<PageGUserChatInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -437,7 +440,7 @@ public class GeboUserChatsControllerApi {
      */
     public ResponseEntity<Object> getMyChatsWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getMyChats").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getMyChats").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -453,7 +456,52 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param contextCode  (required)
+     * @return Object
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public Object getMyChatsByContextCode(Object contextCode) throws RestClientException {
+        return getMyChatsByContextCodeWithHttpInfo(contextCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param contextCode  (required)
+     * @return ResponseEntity&lt;Object&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<Object> getMyChatsByContextCodeWithHttpInfo(Object contextCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'contextCode' is set
+        if (contextCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'contextCode' when calling getMyChatsByContextCode");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getMyChatsByContextCode").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "contextCode", contextCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -487,7 +535,7 @@ public class GeboUserChatsControllerApi {
         if (pageSize == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'pageSize' when calling getMyChatsPaged");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getMyChatsPaged").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getMyChatsPaged").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -505,7 +553,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGUserChatInfo> returnType = new ParameterizedTypeReference<PageGUserChatInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -527,7 +575,7 @@ public class GeboUserChatsControllerApi {
      */
     public ResponseEntity<ChatUIOptions> getUIConfigWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getUIConfig").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getUIConfig").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -543,7 +591,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ChatUIOptions> returnType = new ParameterizedTypeReference<ChatUIOptions>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -565,7 +613,7 @@ public class GeboUserChatsControllerApi {
      */
     public ResponseEntity<Object> isMinimalLLMSSetupDoneWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/isMinimalLLMSSetupDone").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/isMinimalLLMSSetupDone").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -581,7 +629,7 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -609,7 +657,7 @@ public class GeboUserChatsControllerApi {
         if (userChatContextCode == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userChatContextCode' when calling suggestChatDescription");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/suggestChatDescription").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/suggestChatDescription").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -626,6 +674,6 @@ public class GeboUserChatsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GUserChatInfo> returnType = new ParameterizedTypeReference<GUserChatInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

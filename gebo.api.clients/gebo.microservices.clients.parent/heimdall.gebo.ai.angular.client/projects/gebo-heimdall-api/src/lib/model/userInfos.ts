@@ -11,9 +11,9 @@
  */
 
 export interface UserInfos { 
-    username?: any;
     name?: any;
+    sourname?: any;
     roles?: any;
     disabled?: any;
-    sourname?: any;
+    username?: any;
 }

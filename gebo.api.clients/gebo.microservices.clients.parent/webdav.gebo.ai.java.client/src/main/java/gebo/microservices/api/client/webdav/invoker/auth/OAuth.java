@@ -3,7 +3,7 @@ package gebo.microservices.api.client.webdav.invoker.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-08-09T11:46:07.427269500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:19.127862733+02:00[Europe/Rome]")
 public class OAuth implements Authentication {
     private String accessToken;
 

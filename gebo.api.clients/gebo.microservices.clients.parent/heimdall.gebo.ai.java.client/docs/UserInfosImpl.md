@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**username** | **Object** |  |  [optional]
 **name** | **Object** |  |  [optional]
+**sourname** | **Object** |  |  [optional]
 **roles** | **Object** |  |  [optional]
 **disabled** | **Object** |  |  [optional]
-**sourname** | **Object** |  |  [optional]
+**username** | **Object** |  |  [optional]

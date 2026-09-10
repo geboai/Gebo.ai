@@ -29,6 +29,7 @@ export interface GGitProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     repositoryUri?: any;
     branch?: any;
     identityCode?: any;

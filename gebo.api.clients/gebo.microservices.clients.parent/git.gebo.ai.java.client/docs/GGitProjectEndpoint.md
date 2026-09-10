@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **synchroStrategy** | **Object** |  |  [optional]
 **objectSpaceType** | **Object** |  |  [optional]
 **aclAliases** | **Object** |  |  [optional]
+**personalData** | **Object** |  |  [optional]
 **repositoryUri** | **Object** |  |  [optional]
 **branch** | **Object** |  |  [optional]
 **identityCode** | **Object** |  |  [optional]

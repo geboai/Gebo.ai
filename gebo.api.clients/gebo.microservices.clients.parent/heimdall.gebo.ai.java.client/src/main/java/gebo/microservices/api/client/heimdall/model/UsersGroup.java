@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UsersGroup
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class UsersGroup {
   @JsonProperty("code")
@@ -33,6 +33,9 @@ public class UsersGroup {
 
   @JsonProperty("userIds")
   private Object userIds = null;
+
+  @JsonProperty("extCode")
+  private Object extCode = null;
 
   public UsersGroup code(Object code) {
     this.code = code;
@@ -88,6 +91,24 @@ public class UsersGroup {
     this.userIds = userIds;
   }
 
+  public UsersGroup extCode(Object extCode) {
+    this.extCode = extCode;
+    return this;
+  }
+
+   /**
+   * Get extCode
+   * @return extCode
+  **/
+  @Schema(description = "")
+  public Object getExtCode() {
+    return extCode;
+  }
+
+  public void setExtCode(Object extCode) {
+    this.extCode = extCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -100,12 +121,13 @@ public class UsersGroup {
     UsersGroup usersGroup = (UsersGroup) o;
     return Objects.equals(this.code, usersGroup.code) &&
         Objects.equals(this.description, usersGroup.description) &&
-        Objects.equals(this.userIds, usersGroup.userIds);
+        Objects.equals(this.userIds, usersGroup.userIds) &&
+        Objects.equals(this.extCode, usersGroup.extCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userIds);
+    return Objects.hash(code, description, userIds, extCode);
   }
 
 
@@ -117,6 +139,7 @@ public class UsersGroup {
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    userIds: ").append(toIndentedString(userIds)).append("\n");
+    sb.append("    extCode: ").append(toIndentedString(extCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

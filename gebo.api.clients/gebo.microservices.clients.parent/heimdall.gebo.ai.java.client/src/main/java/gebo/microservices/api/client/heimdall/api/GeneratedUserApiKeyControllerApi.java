@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:43:22.156204874+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
 
 public class GeneratedUserApiKeyControllerApi {
     private ApiClient apiClient;
@@ -70,7 +70,7 @@ public class GeneratedUserApiKeyControllerApi {
         if (code == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling deleteUserGeneratedApiKey");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/deleteUserGeneratedApiKey").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/deleteUserGeneratedApiKey").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -85,7 +85,7 @@ public class GeneratedUserApiKeyControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -113,7 +113,7 @@ public class GeneratedUserApiKeyControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling generateUserGeneratedApiKey");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/generateUserGeneratedApiKey").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/generateUserGeneratedApiKey").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -131,7 +131,7 @@ public class GeneratedUserApiKeyControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GeneratedApiKey> returnType = new ParameterizedTypeReference<GeneratedApiKey>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -159,7 +159,7 @@ public class GeneratedUserApiKeyControllerApi {
         if (body == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getUserGeneratedApiKeyPagedList");
         }
-        String path = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/getUserGeneratedApiKeyPagedList").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/getUserGeneratedApiKeyPagedList").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -177,7 +177,7 @@ public class GeneratedUserApiKeyControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGeneratedApiKeyInfo> returnType = new ParameterizedTypeReference<PageGeneratedApiKeyInfo>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -199,7 +199,7 @@ public class GeneratedUserApiKeyControllerApi {
      */
     public ResponseEntity<Object> isUserGeneratedApiKeyGenerationAllowedWithHttpInfo() throws RestClientException {
         Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed").build().toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -215,6 +215,6 @@ public class GeneratedUserApiKeyControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

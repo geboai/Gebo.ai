@@ -14,6 +14,7 @@ package gebo.microservices.api.client.uploads.api;
 
 import gebo.microservices.api.client.uploads.model.GUploadsProjectEndpoint;
 import gebo.microservices.api.client.uploads.model.OperationStatusGJobStatus;
+import gebo.microservices.api.client.uploads.model.OperationStatusGUploadsProjectEndpoint;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -30,6 +31,22 @@ public class FileUploadsControllerApiTest {
 
     private final FileUploadsControllerApi api = new FileUploadsControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void deleteUploadedFilesTest() {
+        Object body = null;
+        Object endpointCode = null;
+        OperationStatusGUploadsProjectEndpoint response = api.deleteUploadedFiles(body, endpointCode);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -130,6 +147,21 @@ public class FileUploadsControllerApiTest {
     public void insertUploadsEndpointTest() {
         GUploadsProjectEndpoint body = null;
         GUploadsProjectEndpoint response = api.insertUploadsEndpoint(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listUploadedFilesTest() {
+        Object endpointCode = null;
+        Object response = api.listUploadedFiles(endpointCode);
 
         // TODO: test validations
     }

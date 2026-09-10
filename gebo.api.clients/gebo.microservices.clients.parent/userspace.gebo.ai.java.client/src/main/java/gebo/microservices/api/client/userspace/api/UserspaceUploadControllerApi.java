@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-07-29T09:44:00.182052971+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:10.490888548+02:00[Europe/Rome]")
 
 public class UserspaceUploadControllerApi {
     private ApiClient apiClient;
@@ -71,7 +71,7 @@ public class UserspaceUploadControllerApi {
         // create path and map variables
         final Map<String, Object> uriVariables = new HashMap<String, Object>();
         uriVariables.put("userspaceFolderCode", userspaceFolderCode);
-        String path = UriComponentsBuilder.fromPath("/api/user/UserspaceUploadController/upload/{userspaceFolderCode}").buildAndExpand(uriVariables).toUriString();
+        String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceUploadController/upload/{userspaceFolderCode}").buildAndExpand(uriVariables).toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
@@ -89,6 +89,6 @@ public class UserspaceUploadControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
-        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

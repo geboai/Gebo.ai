@@ -29,6 +29,7 @@ export interface GJiraProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     paths?: any;
     jiraSystemCode?: any;
 }

@@ -29,6 +29,7 @@ export interface GGoogleDriveProjectEndpoint {
     synchroStrategy?: any;
     objectSpaceType?: any;
     aclAliases?: any;
+    personalData?: any;
     paths?: any;
     driveSystemCode: any;
 }
