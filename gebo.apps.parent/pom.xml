@@ -19,7 +19,7 @@
 		<!-- The microservices apps are intentionally NOT part of the default
 		     gebo.apps.parent reactor: they are built on demand with an explicit
 		     command, e.g.
-		         mvn -f gebo.apps.parent/gebo.microservices.apps.parent/pom.xml -P docker jib:buildTar
+		         mvn -f gebo.apps.parent/gebo.microservices.apps.parent/pom.xml -P docker clean package jib:buildTar
 		     (see MICROSERVICES-STUBS-ARCHITECTURE.md). Re-enable the module to
 		     build them as part of the monolithic build. -->
 		<!-- <module>gebo.microservices.apps.parent</module> -->
