@@ -42,6 +42,10 @@
 		<module>integration.gebo.ai.java.client</module>
 		<module>fulltextor.gebo.ai.java.client</module>
 		<module>tyr.gebo.ai.java.client</module>
+		<!-- Hand-written aggregators over the generated clients: one base url in,
+		     every client already pointing at the right address out. Listed after
+		     the per-service modules they depend on. -->
+		<module>gebo.microservices.clients.java.factory</module>
 		<!-- Angular / TypeScript clients -->
 		<module>eureka.gebo.ai.angular.client</module>
 		<module>gateway.gebo.ai.angular.client</module>
@@ -64,5 +68,6 @@
 		<module>integration.gebo.ai.angular.client</module>
 		<module>fulltextor.gebo.ai.angular.client</module>
 		<module>tyr.gebo.ai.angular.client</module>
+		<module>gebo.microservices.clients.angular.module</module>
 	</modules>
 </project>
