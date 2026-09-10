@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -31,7 +30,6 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class OpenAIImageModelConfigurationSupportService

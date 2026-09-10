@@ -15,7 +15,6 @@ import org.springframework.ai.bedrock.converse.BedrockChatOptions;
 import org.springframework.ai.bedrock.converse.BedrockProxyChatModel;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -44,7 +43,6 @@ import software.amazon.awssdk.services.bedrock.model.ModelModality;
  * Amazon Nova, Meta Llama, Mistral, Cohere Command, AI21 ...) with tool calling
  * and multimodal support.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockChatModelConfigurationSupportService

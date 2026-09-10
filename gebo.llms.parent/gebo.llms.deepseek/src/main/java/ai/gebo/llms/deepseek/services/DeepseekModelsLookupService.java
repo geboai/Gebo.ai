@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +44,6 @@ import lombok.Data;
  * Service responsible for retrieving available models from the Deepseek API.
  * This service is only enabled when the 'deepseekEnabled' property is set to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "deepseekEnabled", havingValue = "true")
 @Service
 public class DeepseekModelsLookupService {
 	/** The URL endpoint for retrieving Deepseek model information */

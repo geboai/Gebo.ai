@@ -9,7 +9,6 @@
 
 package ai.gebo.llms.aws_bedrock.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.aws_bedrock.model.GBedrockTextToSpeechModelConfig;
@@ -17,7 +16,6 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockTextToSpeechModelConfig;
 /**
  * MongoDB repository for AWS (Amazon Polly) text-to-speech model configurations.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 public interface BedrockTextToSpeechModelConfigRepository
 		extends IGBaseMongoDBRepository<GBedrockTextToSpeechModelConfig> {
 	@Override

@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.openai_compat.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelConfig;

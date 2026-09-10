@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -50,7 +49,6 @@ import software.amazon.awssdk.services.transcribestreaming.model.TranscriptEvent
  * other categories. The audio input stream is streamed to Transcribe and the
  * final (non-partial) results are concatenated into the returned transcript.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockTranscriptModelConfigurationSupportService implements

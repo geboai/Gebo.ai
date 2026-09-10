@@ -18,7 +18,6 @@ import org.springframework.ai.bedrock.titan.BedrockTitanEmbeddingModel;
 import org.springframework.ai.bedrock.titan.api.TitanEmbeddingBedrockApi;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.util.JacksonUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -45,7 +44,6 @@ import tools.jackson.databind.json.JsonMapper;
  * {@link BedrockCohereEmbeddingModel} (Cohere) integrations. The proper backend
  * is selected from the chosen model id.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockEmbeddingModelConfigurationSupportService implements

@@ -9,7 +9,6 @@
 
 package ai.gebo.llms.openai.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
@@ -21,7 +20,6 @@ import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
  * MongoDB. This repository is only enabled when the 'openAIEnabled' property is
  * set to 'true' in the application configuration.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 public interface OpenAITranscriptModelConfigRepository extends IGBaseMongoDBRepository<GOpenAITranscriptModelConfig> {
 	/**
 	 * Returns the managed entity type for this repository.

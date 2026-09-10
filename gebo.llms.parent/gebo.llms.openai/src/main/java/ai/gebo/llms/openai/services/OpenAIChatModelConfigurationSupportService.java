@@ -23,7 +23,6 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatOptions.Builder;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -54,7 +53,6 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class OpenAIChatModelConfigurationSupportService

@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.google_vertex.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelConfig;
@@ -23,7 +22,6 @@ import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelConfig;
  * This repository is only enabled when the 'googleVertexEnabled' property is set to 'true'
  * in the application configuration.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 public interface GoogleVertexEmbeddingModelConfigRepository extends IGBaseMongoDBRepository<GGoogleVertexEmbeddingModelConfig> {
 	
 	/**

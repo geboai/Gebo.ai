@@ -11,7 +11,6 @@ package ai.gebo.llms.google_vertex.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +36,6 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
  * 'googleVertexEnabled' property is set to 'true'. Access is restricted to
  * users with the ADMIN role.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/GoogleVertexEmbeddingModelsConfigurationController")

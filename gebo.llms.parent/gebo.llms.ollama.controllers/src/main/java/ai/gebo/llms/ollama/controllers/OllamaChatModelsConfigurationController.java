@@ -11,7 +11,6 @@ package ai.gebo.llms.ollama.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +38,6 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
  * 
  * AI generated comments
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/OllamaChatModelsConfigurationController")

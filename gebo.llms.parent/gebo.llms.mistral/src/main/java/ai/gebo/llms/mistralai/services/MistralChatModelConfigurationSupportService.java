@@ -17,7 +17,6 @@ import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -46,10 +45,8 @@ import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments Service class responsible for configuring and creating
- * Mistral AI chat models. This service is conditional on the
- * 'ai.gebo.llms.config.mistralAIEnabled' property being set to 'true'.
+ * Mistral AI chat models.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class MistralChatModelConfigurationSupportService

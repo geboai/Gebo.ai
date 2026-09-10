@@ -17,7 +17,6 @@ import org.springframework.ai.deepseek.DeepSeekChatOptions;
 import org.springframework.ai.deepseek.api.DeepSeekApi;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -49,7 +48,6 @@ import lombok.AllArgsConstructor;
  * models. This service is only active when the 'deepseekEnabled' property is
  * set to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "deepseekEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class DeepseekChatModelConfigurationSupportService

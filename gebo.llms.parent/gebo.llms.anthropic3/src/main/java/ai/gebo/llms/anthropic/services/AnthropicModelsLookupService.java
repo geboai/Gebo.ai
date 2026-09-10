@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
@@ -29,9 +28,7 @@ import ai.gebo.model.OperationStatus;
  * AI generated comments
  * 
  * Service class for looking up available Anthropic models.
- * This service is only activated when the property 'ai.gebo.llms.config.anthropicEnabled' is set to 'true'.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "anthropicEnabled", havingValue = "true")
 @Service
 public class AnthropicModelsLookupService {
 	/** Service to enrich model choices with additional metadata */

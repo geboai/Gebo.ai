@@ -12,7 +12,6 @@ package ai.gebo.llms.aws_bedrock.services;
 import java.util.List;
 
 import org.springframework.ai.image.ImageModel;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -36,7 +35,6 @@ import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
  * Canvas / Titan Image / Stability), served through the AWS SDK
  * {@code InvokeModel} operation wrapped by {@link BedrockImageModel}.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockImageModelConfigurationSupportService

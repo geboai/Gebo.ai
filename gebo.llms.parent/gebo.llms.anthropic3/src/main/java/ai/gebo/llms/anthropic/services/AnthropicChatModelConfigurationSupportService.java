@@ -17,7 +17,6 @@ import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.anthropic.AnthropicChatOptions.Builder;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.anthropic.http.AnthropicClientCustomizer;
@@ -52,7 +51,6 @@ import lombok.AllArgsConstructor;
  * comments This service is only enabled if the anthropicEnabled property is set
  * to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "anthropicEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class AnthropicChatModelConfigurationSupportService
