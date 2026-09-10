@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -40,14 +40,14 @@ public class DocumentReferenceView {
   @JsonProperty("messagingModuleId")
   private Object messagingModuleId = null;
 
-  @JsonProperty("modificationDate")
-  private Object modificationDate = null;
-
   @JsonProperty("rootKnowledgebaseCode")
   private Object rootKnowledgebaseCode = null;
 
   @JsonProperty("parentProjectCode")
   private Object parentProjectCode = null;
+
+  @JsonProperty("modificationDate")
+  private Object modificationDate = null;
 
   @JsonProperty("relativePath")
   private Object relativePath = null;
@@ -154,24 +154,6 @@ public class DocumentReferenceView {
     this.messagingModuleId = messagingModuleId;
   }
 
-  public DocumentReferenceView modificationDate(Object modificationDate) {
-    this.modificationDate = modificationDate;
-    return this;
-  }
-
-   /**
-   * Get modificationDate
-   * @return modificationDate
-  **/
-  @Schema(description = "")
-  public Object getModificationDate() {
-    return modificationDate;
-  }
-
-  public void setModificationDate(Object modificationDate) {
-    this.modificationDate = modificationDate;
-  }
-
   public DocumentReferenceView rootKnowledgebaseCode(Object rootKnowledgebaseCode) {
     this.rootKnowledgebaseCode = rootKnowledgebaseCode;
     return this;
@@ -206,6 +188,24 @@ public class DocumentReferenceView {
 
   public void setParentProjectCode(Object parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
+  }
+
+  public DocumentReferenceView modificationDate(Object modificationDate) {
+    this.modificationDate = modificationDate;
+    return this;
+  }
+
+   /**
+   * Get modificationDate
+   * @return modificationDate
+  **/
+  @Schema(description = "")
+  public Object getModificationDate() {
+    return modificationDate;
+  }
+
+  public void setModificationDate(Object modificationDate) {
+    this.modificationDate = modificationDate;
   }
 
   public DocumentReferenceView relativePath(Object relativePath) {
@@ -313,9 +313,9 @@ public class DocumentReferenceView {
         Objects.equals(this.description, documentReferenceView.description) &&
         Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
-        Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
+        Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.relativePath, documentReferenceView.relativePath) &&
         Objects.equals(this.parentVirtualFolderCode, documentReferenceView.parentVirtualFolderCode) &&
         Objects.equals(this.deleted, documentReferenceView.deleted) &&
@@ -325,7 +325,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, description, code, messagingModuleId, modificationDate, rootKnowledgebaseCode, parentProjectCode, relativePath, parentVirtualFolderCode, deleted, creationDate, contentType);
+    return Objects.hash(name, extension, description, code, messagingModuleId, rootKnowledgebaseCode, parentProjectCode, modificationDate, relativePath, parentVirtualFolderCode, deleted, creationDate, contentType);
   }
 
 
@@ -339,9 +339,9 @@ public class DocumentReferenceView {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
-    sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
+    sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    relativePath: ").append(toIndentedString(relativePath)).append("\n");
     sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
     sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");

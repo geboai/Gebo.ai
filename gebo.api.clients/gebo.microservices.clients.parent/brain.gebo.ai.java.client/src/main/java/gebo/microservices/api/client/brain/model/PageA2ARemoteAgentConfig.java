@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageA2ARemoteAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
 
 public class PageA2ARemoteAgentConfig {
   @JsonProperty("totalPages")
@@ -35,6 +35,12 @@ public class PageA2ARemoteAgentConfig {
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
+
+  @JsonProperty("first")
+  private Object first = null;
+
+  @JsonProperty("last")
+  private Object last = null;
 
   @JsonProperty("size")
   private Object size = null;
@@ -47,12 +53,6 @@ public class PageA2ARemoteAgentConfig {
 
   @JsonProperty("sort")
   private SortObject sort = null;
-
-  @JsonProperty("first")
-  private Object first = null;
-
-  @JsonProperty("last")
-  private Object last = null;
 
   @JsonProperty("numberOfElements")
   private Object numberOfElements = null;
@@ -112,6 +112,42 @@ public class PageA2ARemoteAgentConfig {
 
   public void setPageable(PageableObject pageable) {
     this.pageable = pageable;
+  }
+
+  public PageA2ARemoteAgentConfig first(Object first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Object getFirst() {
+    return first;
+  }
+
+  public void setFirst(Object first) {
+    this.first = first;
+  }
+
+  public PageA2ARemoteAgentConfig last(Object last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Object getLast() {
+    return last;
+  }
+
+  public void setLast(Object last) {
+    this.last = last;
   }
 
   public PageA2ARemoteAgentConfig size(Object size) {
@@ -186,42 +222,6 @@ public class PageA2ARemoteAgentConfig {
     this.sort = sort;
   }
 
-  public PageA2ARemoteAgentConfig first(Object first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Object getFirst() {
-    return first;
-  }
-
-  public void setFirst(Object first) {
-    this.first = first;
-  }
-
-  public PageA2ARemoteAgentConfig last(Object last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Object getLast() {
-    return last;
-  }
-
-  public void setLast(Object last) {
-    this.last = last;
-  }
-
   public PageA2ARemoteAgentConfig numberOfElements(Object numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -271,19 +271,19 @@ public class PageA2ARemoteAgentConfig {
     return Objects.equals(this.totalPages, pageA2ARemoteAgentConfig.totalPages) &&
         Objects.equals(this.totalElements, pageA2ARemoteAgentConfig.totalElements) &&
         Objects.equals(this.pageable, pageA2ARemoteAgentConfig.pageable) &&
+        Objects.equals(this.first, pageA2ARemoteAgentConfig.first) &&
+        Objects.equals(this.last, pageA2ARemoteAgentConfig.last) &&
         Objects.equals(this.size, pageA2ARemoteAgentConfig.size) &&
         Objects.equals(this.content, pageA2ARemoteAgentConfig.content) &&
         Objects.equals(this.number, pageA2ARemoteAgentConfig.number) &&
         Objects.equals(this.sort, pageA2ARemoteAgentConfig.sort) &&
-        Objects.equals(this.first, pageA2ARemoteAgentConfig.first) &&
-        Objects.equals(this.last, pageA2ARemoteAgentConfig.last) &&
         Objects.equals(this.numberOfElements, pageA2ARemoteAgentConfig.numberOfElements) &&
         Objects.equals(this.empty, pageA2ARemoteAgentConfig.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, size, content, number, sort, first, last, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -295,12 +295,12 @@ public class PageA2ARemoteAgentConfig {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
