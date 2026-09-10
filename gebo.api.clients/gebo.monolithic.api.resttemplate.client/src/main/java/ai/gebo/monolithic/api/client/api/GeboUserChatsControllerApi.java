@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-06T14:48:17.016141500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T08:03:04.342188100+02:00[Europe/Rome]")
 
 public class GeboUserChatsControllerApi {
     private ApiClient apiClient;
@@ -98,11 +98,12 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param contextCode  (optional)
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode) throws RestClientException {
-        return createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode).getBody();
+    public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode) throws RestClientException {
+        return createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode, contextCode).getBody();
     }
 
     /**
@@ -110,10 +111,11 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param contextCode  (optional)
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(String chatProfileCode) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(String chatProfileCode, String contextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
@@ -125,6 +127,7 @@ public class GeboUserChatsControllerApi {
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "contextCode", contextCode));
 
         final String[] accepts = { 
             "application/json"

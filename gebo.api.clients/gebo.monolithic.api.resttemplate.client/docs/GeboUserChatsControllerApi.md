@@ -64,7 +64,7 @@ No authorization required
 
 <a name="createCleanChatByChatProfileCode"></a>
 # **createCleanChatByChatProfileCode**
-> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode)
+> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode, contextCode)
 
 
 
@@ -77,8 +77,9 @@ No authorization required
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 String chatProfileCode = "chatProfileCode_example"; // String | 
+String contextCode = "contextCode_example"; // String | 
 try {
-    GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode);
+    GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByChatProfileCode");
@@ -91,6 +92,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chatProfileCode** | **String**|  |
+ **contextCode** | **String**|  | [optional]
 
 ### Return type
 

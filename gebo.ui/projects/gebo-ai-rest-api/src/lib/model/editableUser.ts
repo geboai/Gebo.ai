@@ -21,13 +21,14 @@ export interface EditableUser {
     customInfos?: { [key: string]: any; };
 }
 export namespace EditableUser {
-    export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'keycloak' | 'oauth2_generic' | 'ldap';
+    export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'aws_identity_center' | 'keycloak' | 'oauth2_generic' | 'ldap';
     export const AuthProviderEnum = {
         Local: 'local' as AuthProviderEnum,
         Google: 'google' as AuthProviderEnum,
         Microsoft: 'microsoft' as AuthProviderEnum,
         MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
         AwsCognito: 'aws_cognito' as AuthProviderEnum,
+        AwsIdentityCenter: 'aws_identity_center' as AuthProviderEnum,
         Keycloak: 'keycloak' as AuthProviderEnum,
         Oauth2Generic: 'oauth2_generic' as AuthProviderEnum,
         Ldap: 'ldap' as AuthProviderEnum
