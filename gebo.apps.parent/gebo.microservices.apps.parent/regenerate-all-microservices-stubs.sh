@@ -2,14 +2,14 @@
 #
 # regenerate-all-microservices-stubs.sh
 # ---------------------------------------------------------------------------
-# Atomic pipeline: either all 40 client stubs regenerate successfully and get
+# Atomic pipeline: either all 42 client stubs regenerate successfully and get
 # committed, or the repository returns to its exact pre-run state.
 #
 # Stages:
-#   1. Rebuild all 20 microservice Docker images (jib:buildTar, swagger-on).
+#   1. Rebuild all 21 microservice Docker images (jib:buildTar, swagger-on).
 #   2. docker compose down + up -d the full stack.
 #   3. Poll /v3/api-docs on all services (skip unready ones after timeout).
-#   4. Git-stash the clients parent, then clean all 40 stubs.
+#   4. Git-stash the clients parent, then clean all 42 stubs.
 #   5. Regenerate each stub from live specs (per-client git restore on failure).
 #   6. Compile to verify.
 #   7. Tear down docker compose.
@@ -74,9 +74,27 @@ restore_snapshot() {
 }
 
 # ---- polling ---------------------------------------------------------------
+# The spec URL a service really answers on is the one its own client pom will
+# fetch in Stage 5 (<swagger.file>) - context path included. Polling a bare
+# http://localhost:$port/v3/api-docs 404s on the 19 services that own a web
+# context (only eureka and gateway answer at the root), so Stage 3 used to
+# "skip" all of them after the full timeout while telling us nothing about
+# readiness - and then Stage 5 fetched a different url anyway.
+spec_url_for() {
+  local svc=$1
+  local pom="$CLIENTS_PARENT/$svc.gebo.ai.java.client/pom.xml"
+  local url=""
+  [ -f "$pom" ] && url=$(grep -oP '<swagger\.file>\K[^<]+' "$pom" | head -1)
+  echo "${url:-http://localhost:${SERVICE_PORTS[$svc]}/v3/api-docs}"
+}
+
 poll_until_200() {
-  local port=$1 svc=$2 max_attempts=36 interval=5 attempt=0
-  local url="http://localhost:$port/v3/api-docs"
+  # 96 x 5s = 8min: filesystem alone has been measured starting in 184s, and the
+  # qdrant/neo4j-backed services (brain, graphicator, vectorizator, fulltextor)
+  # are slower still on a cold volume.
+  local port=$1 svc=$2 max_attempts=96 interval=5 attempt=0
+  local url
+  url=$(spec_url_for "$svc")
   yellow "  Waiting for $svc on $url ..."
   while [ $attempt -lt $max_attempts ]; do
     local code
@@ -168,7 +186,7 @@ docker compose -f "$COMPOSE_FILE" up -d 2>&1 || bail "docker compose up failed"
 
 # ----- Stage 3: Poll /v3/api-docs for every service ------------------------
 yellow ""
-yellow "Stage 3: Polling /v3/api-docs on all 20 services"
+yellow "Stage 3: Polling /v3/api-docs on all 21 services"
 yellow "-------------------------------------------------"
 for svc in "${!SERVICE_PORTS[@]}"; do
   poll_until_200 "${SERVICE_PORTS[$svc]}" "$svc"
@@ -181,17 +199,27 @@ yellow "Snapshot: saving current state of client stubs (git stash)"
 yellow "----------------------------------------------------------"
 STASH_OUT=$(git -C "$REPO_ROOT" stash push --include-untracked \
     -m "pre-regen-snapshot" -- "$CLIENTS_PARENT" 2>&1) || true
+STASH_REF=""
 if echo "$STASH_OUT" | grep -q "No local changes"; then
   yellow "  No changes to stash — working tree was already clean"
-  STASH_REF=""
-else
-  STASH_REF=$(echo "$STASH_OUT" | grep -oP 'stash@\{[0-9]+\}' | head -1)
+elif git -C "$REPO_ROOT" rev-parse -q --verify refs/stash >/dev/null 2>&1; then
+  # `git stash push` prints "Saved working directory and index state ..." and
+  # never a stash@{N} handle - only the retired `git stash save` did. Scraping
+  # one out of its output therefore always came up empty, and an empty `grep`
+  # exits 1, which under `set -e` killed the run right here the moment the tree
+  # was dirty (a clean tree takes the branch above and never reached it). The
+  # entry git just pushed is always at index 0.
+  STASH_REF="stash@{0}"
   green "  Stashed as $STASH_REF"
+else
+  red "  WARNING: stash push reported changes but no stash ref exists"
+  red "  Output was: $STASH_OUT"
+  bail "Refusing to continue without a usable snapshot"
 fi
 
-# ----- Stage 4: Clean all 40 client stubs ----------------------------------
+# ----- Stage 4: Clean all 42 client stubs ----------------------------------
 yellow ""
-yellow "Stage 4: Cleaning previously generated sources from all 40 clients"
+yellow "Stage 4: Cleaning previously generated sources from all 42 clients"
 yellow "-----------------------------------------------------------------"
 for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.client/; do
   base=$(basename "$client_dir")
@@ -203,9 +231,9 @@ for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.c
 done
 green "Stage 4 OK — all stubs cleaned"
 
-# ----- Stage 5: Regenerate all 40 stubs ------------------------------------
+# ----- Stage 5: Regenerate all 42 stubs ------------------------------------
 yellow ""
-yellow "Stage 5: Regenerating all 40 stubs from live specs"
+yellow "Stage 5: Regenerating all 42 stubs from live specs"
 yellow "---------------------------------------------------"
 any_failure=0
 for client_dir in "$CLIENTS_PARENT"/*.java.client/ "$CLIENTS_PARENT"/*.angular.client/; do
@@ -217,7 +245,7 @@ done
 if [ $any_failure -ne 0 ]; then
   bail "One or more client regenerations failed — rolling back via stash pop"
 fi
-green "Stage 5 OK — all 40 stubs regenerated"
+green "Stage 5 OK — all 42 stubs regenerated"
 
 # ----- Stage 6: Compile to verify -----------------------------------------
 yellow ""
