@@ -18,9 +18,9 @@ export interface GJobStatusItem {
     workflowId?: any;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
     error?: any;
+    startDateTime?: any;
+    endDateTime?: any;
     processing?: any;
     finished?: any;
     jobType?: any;
-    startDateTime?: any;
-    endDateTime?: any;
 }

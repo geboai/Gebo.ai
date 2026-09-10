@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.3.0-SNAPSHOT</version>
+	</parent>
+	<!--
+	  GeboNeo4jModuleSetupController, split out of gebo.architecture.neo4j. That
+	  module is on the classpath of anything holding a neo4j connection, while the
+	  controller only answers "is the neo4j module enabled" for a UI. Unlike the
+	  graphrag one it carries NO @ConditionalOnProperty - it reports the flag, so
+	  it has to answer even when the flag is false. Added to the monolithic starter
+	  and to brain.gebo.ai.
+	-->
+	<artifactId>gebo.architecture.neo4j.controllers</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.neo4j</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

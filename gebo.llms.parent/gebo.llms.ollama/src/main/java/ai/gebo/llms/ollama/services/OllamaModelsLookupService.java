@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +41,6 @@ import lombok.AllArgsConstructor;
  * Service for retrieving available model choices from an Ollama server. This
  * service is only activated when the 'ollamaEnabled' property is set to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class OllamaModelsLookupService {

@@ -30,6 +30,11 @@
 			<artifactId>gebo.ragsystem.content.graphrag_processor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.graphrag.extraction.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

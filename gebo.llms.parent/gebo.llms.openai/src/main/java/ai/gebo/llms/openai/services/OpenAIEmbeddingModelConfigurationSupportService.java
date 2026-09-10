@@ -17,7 +17,6 @@ import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
@@ -52,7 +51,6 @@ import lombok.AllArgsConstructor;
  * Service responsible for configuring and managing OpenAI embedding models.
  * Only activated when openAIEnabled property is set to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class OpenAIEmbeddingModelConfigurationSupportService implements

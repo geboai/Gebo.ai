@@ -9,7 +9,6 @@
 
 package ai.gebo.llms.aws_bedrock.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.aws_bedrock.model.GBedrockTranscriptModelConfig;
@@ -18,7 +17,6 @@ import ai.gebo.llms.aws_bedrock.model.GBedrockTranscriptModelConfig;
  * MongoDB repository for AWS (Amazon Transcribe) transcript model
  * configurations.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 public interface BedrockTranscriptModelConfigRepository
 		extends IGBaseMongoDBRepository<GBedrockTranscriptModelConfig> {
 	@Override

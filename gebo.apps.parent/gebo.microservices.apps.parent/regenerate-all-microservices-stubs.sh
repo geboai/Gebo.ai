@@ -165,7 +165,16 @@ echo "========================================================================="
 yellow ""
 yellow "Stage 1: Building microservice Docker images (jib:buildTar, swagger-on)"
 yellow "----------------------------------------------------------------------"
-mvn -f "$MICROSERVICES_PARENT/pom.xml" -P docker,swagger-on jib:buildTar \
+# `package` BEFORE jib:buildTar, not jib:buildTar alone. Invoking the goal
+# directly runs NO lifecycle phase, so jib packages whatever stale
+# target/classes happens to be on disk while resolving dependency jars fresh
+# from ~/.m2. These apps are excluded from the default reactor on purpose, so
+# nothing else ever recompiles them: gateway shipped a GatewayApplication from
+# a week earlier, missing the scanBasePackages that mounts
+# /public/ClientsTopologyProviderController - the endpoint 404'd and its stub
+# generated empty, while every other service looked fine because their
+# controllers come from dependency jars rather than the thin app module.
+mvn -f "$MICROSERVICES_PARENT/pom.xml" -P docker,swagger-on clean package jib:buildTar \
     -DskipTests -q 2>&1 || bail "Docker image build failed"
 
 yellow "Loading images into Docker daemon ..."

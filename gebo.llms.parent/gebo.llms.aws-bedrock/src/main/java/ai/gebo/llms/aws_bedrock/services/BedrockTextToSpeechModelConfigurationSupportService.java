@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -45,7 +44,6 @@ import software.amazon.awssdk.services.polly.model.VoiceId;
  * does not host speech synthesis; on AWS that capability is Amazon Polly, exposed
  * here under the AWS provider module for coherence with the other categories.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockTextToSpeechModelConfigurationSupportService implements

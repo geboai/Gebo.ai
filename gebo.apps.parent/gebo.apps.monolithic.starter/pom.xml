@@ -208,6 +208,16 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.neo4j.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.graphrag.extraction.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.mcp-clients</artifactId>
 			<version>${project.version}</version>
 		</dependency>

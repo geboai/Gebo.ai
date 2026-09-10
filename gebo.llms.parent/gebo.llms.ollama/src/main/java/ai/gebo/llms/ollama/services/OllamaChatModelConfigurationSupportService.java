@@ -18,7 +18,6 @@ import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,6 @@ import lombok.AllArgsConstructor;
  * provided configurations. The service is only active when the 'ollamaEnabled'
  * property is set to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class OllamaChatModelConfigurationSupportService

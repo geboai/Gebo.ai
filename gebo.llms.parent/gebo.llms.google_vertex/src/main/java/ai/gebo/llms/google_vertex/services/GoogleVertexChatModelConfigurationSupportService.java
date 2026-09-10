@@ -16,7 +16,6 @@ import org.springframework.ai.google.genai.GoogleGenAiChatModel.ChatModel;
 import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.google.genai.Client;
@@ -46,7 +45,6 @@ import lombok.AllArgsConstructor;
  * models. This service is only active when googleVertexEnabled property is set
  * to true.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class GoogleVertexChatModelConfigurationSupportService

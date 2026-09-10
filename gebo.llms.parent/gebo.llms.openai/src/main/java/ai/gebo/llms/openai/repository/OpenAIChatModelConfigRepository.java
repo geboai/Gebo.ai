@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.openai.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
@@ -24,7 +23,6 @@ import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
  * This repository is only enabled when the 'openAIEnabled' property is set to 'true'
  * in the application configuration.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 public interface OpenAIChatModelConfigRepository extends IGBaseMongoDBRepository<GOpenAIChatModelConfig> {
 	/**
 	 * Returns the managed entity type for this repository.

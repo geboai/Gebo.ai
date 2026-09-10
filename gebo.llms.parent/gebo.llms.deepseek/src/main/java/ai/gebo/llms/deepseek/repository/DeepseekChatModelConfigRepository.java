@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.deepseek.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig;
@@ -22,7 +21,6 @@ import ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig;
  * Repository interface for managing Deepseek Chat Model configurations in MongoDB.
  * This repository is only created when the 'deepseekEnabled' property is set to 'true'.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "deepseekEnabled", havingValue = "true")
 public interface DeepseekChatModelConfigRepository extends IGBaseMongoDBRepository<GDeepseekChatModelConfig> {
 	/**
 	 * Provides the class type managed by this repository.

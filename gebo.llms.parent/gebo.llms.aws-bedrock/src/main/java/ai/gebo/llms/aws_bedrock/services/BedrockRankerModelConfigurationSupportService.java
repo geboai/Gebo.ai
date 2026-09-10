@@ -12,7 +12,6 @@ package ai.gebo.llms.aws_bedrock.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -35,7 +34,6 @@ import software.amazon.awssdk.services.bedrockagentruntime.BedrockAgentRuntimeCl
  * platform ranker abstraction. Reranking is served through the Bedrock Agent
  * Runtime {@code Rerank} operation (Amazon Rerank / Cohere Rerank).
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "awsBedrockEnabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class BedrockRankerModelConfigurationSupportService

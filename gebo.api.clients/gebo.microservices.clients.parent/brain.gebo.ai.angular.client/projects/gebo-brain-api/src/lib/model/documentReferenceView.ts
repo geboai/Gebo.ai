@@ -16,9 +16,9 @@ export interface DocumentReferenceView {
     description?: any;
     code?: any;
     messagingModuleId?: any;
-    modificationDate?: any;
     rootKnowledgebaseCode?: any;
     parentProjectCode?: any;
+    modificationDate?: any;
     relativePath?: any;
     parentVirtualFolderCode?: any;
     deleted?: any;

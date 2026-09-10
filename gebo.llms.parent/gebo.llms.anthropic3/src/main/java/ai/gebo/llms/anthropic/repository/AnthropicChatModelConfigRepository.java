@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.anthropic.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
@@ -27,7 +26,6 @@ import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
  * Only enabled when the 'anthropicEnabled' property is set to 'true' in the application
  * configuration under the 'ai.gebo.llms.config' prefix.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "anthropicEnabled", havingValue = "true")
 public interface AnthropicChatModelConfigRepository extends IGBaseMongoDBRepository<GAnthropicChatModelConfig> {
 	
 	/**

@@ -177,7 +177,7 @@ the controller's annotations, not in the generator.
 
 ```powershell
 # 1. Build the images WITH the spec (swagger-on is not optional here)
-mvn -f gebo.apps.parent/gebo.microservices.apps.parent/pom.xml -P docker,swagger-on jib:buildTar -DskipTests
+mvn -f gebo.apps.parent/gebo.microservices.apps.parent/pom.xml -P docker,swagger-on clean package jib:buildTar -DskipTests
 docker load -i <each>/target/jib-image.tar
 
 # 2. Up the stack; every port 13000-13018 is published already

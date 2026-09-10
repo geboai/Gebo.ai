@@ -46,9 +46,11 @@
   	<module>gebo.architecture.a2a-clients</module>
   	<module>gebo.architecture.a2a-server</module>
   	<module>gebo.architecture.graphrag.extraction</module>
+  	<module>gebo.architecture.graphrag.extraction.controllers</module>
   	<module>gebo.architecture.graphrag.persistence</module>
   	<module>gebo.architecture.documents.cache</module>
   	<module>gebo.architecture.neo4j</module>
+  	<module>gebo.architecture.neo4j.controllers</module>
   	<module>gebo.architecture.setup</module>
   	<module>gebo.architecture.hazelcast</module>
   	<module>gebo.architecture.search.abstraction.layer</module>

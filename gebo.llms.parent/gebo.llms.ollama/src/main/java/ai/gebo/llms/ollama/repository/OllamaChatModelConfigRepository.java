@@ -12,7 +12,6 @@
 
 package ai.gebo.llms.ollama.repository;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
@@ -21,10 +20,8 @@ import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
  * AI generated comments
  * 
  * Repository interface for Ollama chat model configurations.
- * This repository extends the base MongoDB repository and is conditionally enabled
- * when the "ai.gebo.llms.config.ollamaEnabled" property is set to "true".
+ * This repository extends the base MongoDB repository.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 public interface OllamaChatModelConfigRepository extends IGBaseMongoDBRepository<GOllamaChatModelConfig> {
 	
 	/**

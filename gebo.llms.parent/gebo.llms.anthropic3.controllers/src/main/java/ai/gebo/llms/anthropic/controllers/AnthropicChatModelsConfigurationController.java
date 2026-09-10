@@ -11,7 +11,6 @@ package ai.gebo.llms.anthropic.controllers;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,11 +35,9 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
  * 
  * Controller responsible for managing Anthropic chat model configurations. This
  * REST controller provides endpoints for CRUD operations on Anthropic chat
- * model configurations. It is only enabled when the property
- * 'ai.gebo.llms.config.anthropicEnabled' is set to 'true'. Access to these
- * endpoints is restricted to users with ADMIN role.
+ * model configurations. Access to these endpoints is restricted to users with
+ * ADMIN role.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "anthropicEnabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/AnthropicChatModelsConfigurationController")

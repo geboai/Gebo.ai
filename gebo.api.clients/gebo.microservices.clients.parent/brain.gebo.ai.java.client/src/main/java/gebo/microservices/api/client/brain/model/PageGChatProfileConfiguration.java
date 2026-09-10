@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageGChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:50.755430820+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
 
 public class PageGChatProfileConfiguration {
   @JsonProperty("totalPages")
@@ -35,6 +35,12 @@ public class PageGChatProfileConfiguration {
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
+
+  @JsonProperty("first")
+  private Object first = null;
+
+  @JsonProperty("last")
+  private Object last = null;
 
   @JsonProperty("size")
   private Object size = null;
@@ -47,12 +53,6 @@ public class PageGChatProfileConfiguration {
 
   @JsonProperty("sort")
   private SortObject sort = null;
-
-  @JsonProperty("first")
-  private Object first = null;
-
-  @JsonProperty("last")
-  private Object last = null;
 
   @JsonProperty("numberOfElements")
   private Object numberOfElements = null;
@@ -112,6 +112,42 @@ public class PageGChatProfileConfiguration {
 
   public void setPageable(PageableObject pageable) {
     this.pageable = pageable;
+  }
+
+  public PageGChatProfileConfiguration first(Object first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Object getFirst() {
+    return first;
+  }
+
+  public void setFirst(Object first) {
+    this.first = first;
+  }
+
+  public PageGChatProfileConfiguration last(Object last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Object getLast() {
+    return last;
+  }
+
+  public void setLast(Object last) {
+    this.last = last;
   }
 
   public PageGChatProfileConfiguration size(Object size) {
@@ -186,42 +222,6 @@ public class PageGChatProfileConfiguration {
     this.sort = sort;
   }
 
-  public PageGChatProfileConfiguration first(Object first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Object getFirst() {
-    return first;
-  }
-
-  public void setFirst(Object first) {
-    this.first = first;
-  }
-
-  public PageGChatProfileConfiguration last(Object last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Object getLast() {
-    return last;
-  }
-
-  public void setLast(Object last) {
-    this.last = last;
-  }
-
   public PageGChatProfileConfiguration numberOfElements(Object numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -271,19 +271,19 @@ public class PageGChatProfileConfiguration {
     return Objects.equals(this.totalPages, pageGChatProfileConfiguration.totalPages) &&
         Objects.equals(this.totalElements, pageGChatProfileConfiguration.totalElements) &&
         Objects.equals(this.pageable, pageGChatProfileConfiguration.pageable) &&
+        Objects.equals(this.first, pageGChatProfileConfiguration.first) &&
+        Objects.equals(this.last, pageGChatProfileConfiguration.last) &&
         Objects.equals(this.size, pageGChatProfileConfiguration.size) &&
         Objects.equals(this.content, pageGChatProfileConfiguration.content) &&
         Objects.equals(this.number, pageGChatProfileConfiguration.number) &&
         Objects.equals(this.sort, pageGChatProfileConfiguration.sort) &&
-        Objects.equals(this.first, pageGChatProfileConfiguration.first) &&
-        Objects.equals(this.last, pageGChatProfileConfiguration.last) &&
         Objects.equals(this.numberOfElements, pageGChatProfileConfiguration.numberOfElements) &&
         Objects.equals(this.empty, pageGChatProfileConfiguration.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, size, content, number, sort, first, last, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -295,12 +295,12 @@ public class PageGChatProfileConfiguration {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
