@@ -1,4 +1,4 @@
-# Declaring secrets, content systems and data sources in `application.yml`
+# Declaring the knowledge base hierarchy in `application.yml`
 
 Every content system and data source Gebo.ai can ingest from is normally created by an admin in
 the UI and stored in Mongo. A deployment can instead **declare** them in its own
@@ -6,30 +6,38 @@ the UI and stored in Mongo. A deployment can instead **declare** them in its own
 no click-through, no per-environment manual step, and the whole configuration under review in
 version control alongside the rest of the deployment.
 
-This document covers the three layers that make that work — secrets, systems, data sources — how
-they reference each other, and a complete worked example for every handler that supports it.
+This document covers the whole hierarchy — knowledge bases, projects, secrets, content systems and
+data sources — how they reference each other, and a complete worked example for every handler that
+supports it.
 
 For the shipped defaults and the rest of the file, see
 [`APPLICATION-YML-ADMIN-MANUAL.md`](APPLICATION-YML-ADMIN-MANUAL.md).
 
 ---
 
-## 1. The three layers and how they reference each other
+## 1. The five layers and how they reference each other
 
 ```
-ai.gebo.secrets.config.<type>[].code  ─────┐
-                                           │  referenced by
-ai.gebo.<handler>.systems[].secretCode ◄───┘
-                        │ .code  ──────────┐
-                                           │  referenced by
-ai.gebo.<handler>.datasources[].systemCode ┘
-                            │ .parentProjectCode ──►  a knowledge base project
+ai.gebo.knowledgebases[].code  ◄──────────────────┐
+                                                  │  referenced by
+ai.gebo.projects[].rootKnowledgeBaseCode  ────────┘
+                 │ .code  ◄───────────────────────┐
+                                                  │  referenced by
+ai.gebo.secrets.config.<type>[].code  ─────┐      │
+                                           │      │
+ai.gebo.<handler>.systems[].secretCode ◄───┘      │
+                        │ .code  ──────────┐      │
+                                           │      │
+ai.gebo.<handler>.datasources[].systemCode ┘      │
+                            │ .parentProjectCode ─┘
 ```
 
-Three keys, three layers, each referencing the one above **by code**:
+Five keys, each referencing another **by code**, so a deployment can describe the whole hierarchy:
 
 | Layer | Key | What it holds |
 |---|---|---|
+| **Knowledge base** | `ai.gebo.knowledgebases` | the top of the hierarchy; what a project belongs to |
+| **Project** | `ai.gebo.projects` | what a data source feeds, inside a knowledge base |
 | **Secret** | `ai.gebo.secrets.config.<type>` | the credential itself |
 | **System** | `ai.gebo.<handler>.systems` | the connection — a server, a bucket, a tenant — plus the *code* of the secret it authenticates with |
 | **Data source** | `ai.gebo.<handler>.datasources` | a scoped ingestion against a system: which paths, into which project |
@@ -37,6 +45,18 @@ Three keys, three layers, each referencing the one above **by code**:
 Here is the whole chain for one WebDAV share, end to end:
 
 ```yaml
+# 0. where the documents land
+ai.gebo:
+  knowledgebases:
+    - code: COMPANY-KB
+      description: Company knowledge base
+      accessibleToAll: true
+  projects:
+    - code: COMPANY-DOCS                    # ◄── referenced below
+      description: Corporate documents
+      rootKnowledgeBaseCode: COMPANY-KB     # ──► the knowledge base above
+      accessibleToAll: true
+
 # 1. the credential
 ai.gebo.secrets.config:
   username-password:
@@ -61,7 +81,7 @@ ai.gebo.webdav:
     - code: corporate-policies
       description: Policy library
       systemCode: corporate-dav             # ──► the system above
-      parentProjectCode: COMPANY-KB         # ──► an existing knowledge base project
+      parentProjectCode: COMPANY-DOCS       # ──► the project above
       synchPeriodically: true
       paths:
         - path: https://dav.example.com/remote.php/dav/files/admin/Policies
@@ -76,7 +96,7 @@ one at the point of use.
 **A reference is resolved when it is used, not at startup.** A `secretCode` that names nothing is
 found when the handler opens a connection, and surfaces as
 `Unkown secret with code=>…`, not as a boot failure. A `systemCode` naming no system is found at
-the first ingestion. Only the *shape* of a declaration is checked at startup — see §10. Verify a
+the first ingestion. Only the *shape* of a declaration is checked at startup — see §11. Verify a
 new chain by pressing **Test** or **Publish** on it once, rather than by a clean boot.
 
 ## 2. Why systems and data sources behave differently
@@ -105,10 +125,10 @@ than throwing away work nobody asked to lose.
 
 **Everything declared is read-only.** Save and delete are disabled on it in the admin UI, and the
 backend refuses insert, update and delete regardless of the client. Publish stays enabled — see
-§8. To change a declared entry, edit the file and restart.
+§9. To change a declared entry, edit the file and restart.
 
 **A broken declaration fails the boot, not the first ingestion** — as far as its shape can be
-checked without connecting to anything. See §10.
+checked without connecting to anything. See §11.
 
 **Prefer `${ENV_VAR}` to literals** for anything secret. The value is read by Spring's normal
 property resolution, so a password can come from the environment, a mounted file, or any other
@@ -116,7 +136,42 @@ property source, and the file itself stays safe to commit.
 
 ---
 
-## 4. Declaring secrets — `ai.gebo.secrets.config`
+## 4. The hierarchy — `ai.gebo.knowledgebases` and `ai.gebo.projects`
+
+Both are written into Mongo at startup, exactly like data sources and for the same reason:
+a knowledge base and a project are resolved by code through `IGPersistentObjectManager` from
+everywhere — ingestion, the scheduler, browsing, the ACL resolver — and none of those paths
+consults a configuration bean.
+
+They are seeded **top down**: knowledge bases, then projects, then data sources, since each level
+names the one above it. A declared project may name a knowledge base an admin created, and a
+declared data source may name a project an admin created; the ordering only guarantees that what
+is declared *in the same file* already exists when the level below it is written.
+
+| Key | Fields |
+|---|---|
+| `ai.gebo.knowledgebases` | `code` (required), `description`, `accessibleToAll`, `accessibleUsers`, `accessibleGroups`, `parentKnowledgebaseCode`, `knowledgeBaseReferences`, `projectsReferences`, `embeddingModelReferences`, `objectSpaceType` |
+| `ai.gebo.projects` | `code` (required), `description`, `rootKnowledgeBaseCode`, `parentProjectCode`, `accessibleToAll`, `accessibleUsers`, `accessibleGroups`, `objectSpaceType` |
+
+```yaml
+ai.gebo:
+  knowledgebases:
+    - code: COMPANY-KB
+      description: Company knowledge base
+      accessibleToAll: true
+  projects:
+    - code: COMPANY-DOCS
+      description: Corporate documents
+      rootKnowledgeBaseCode: COMPANY-KB
+      accessibleToAll: true
+```
+
+Both carry `readonly` and follow the rules of §3: an admin-created record of the same code fails
+the startup rather than being overwritten, and a record whose declaration is removed has its
+marker cleared rather than being deleted — deleting a project or knowledge base means disposing of
+everything beneath it, which a repository write at startup cannot do.
+
+## 5. Declaring secrets — `ai.gebo.secrets.config`
 
 One list per secret type. Each entry carries the metadata a stored secret keeps on its record —
 `code`, `description`, `context-code` — plus the credential itself nested under `secret`.
@@ -128,7 +183,7 @@ One list per secret type. Each entry carries the metadata a stored secret keeps 
 | `context-code` | a free-form grouping label, not a fixed vocabulary; `SYSTEMS` is the convention for content-system credentials |
 | `secret` | **required**; the fields depend on the list it is under, below |
 
-### 4.1 The types and their fields
+### 5.1 The types and their fields
 
 | List key | `secret` fields | Used by |
 |---|---|---|
@@ -169,7 +224,7 @@ ai.gebo.secrets.config:
         region: EU_SOUTH_1
 ```
 
-### 4.2 Resolution order, and what it means for you
+### 5.2 Resolution order, and what it means for you
 
 A code is resolved in this order, first hit wins:
 
@@ -181,13 +236,13 @@ Two consequences worth knowing. A declared code cannot be displaced by anything 
 that is the point. And **when an external vault is active the Mongo store is not consulted at
 all**, so in a vault deployment a credential is either declared here or held in the vault.
 
-### 4.3 What cannot be declared
+### 5.3 What cannot be declared
 
 `OAUTH2_AUTHORIZED_CLIENT` has no list. It holds the access and refresh tokens the server obtains
 and renews on a user's behalf — a runtime artefact, not a deployment setting — and a read-only
 declaration of one could never work, because the first refresh would be refused.
 
-### 4.4 Read-only, for real
+### 5.4 Read-only, for real
 
 A declared secret is refused by every write path — create, update and delete alike. Rotation means
 editing this file and restarting, not a UI action. §6.2 of the admin manual covers the cluster
@@ -195,7 +250,7 @@ behaviour and the migration rules in full.
 
 ---
 
-## 5. Fields every system entry accepts
+## 6. Fields every system entry accepts
 
 From `GBaseObject` and `GContentManagementSystem`, in addition to the handler-specific fields
 listed per handler below:
@@ -214,9 +269,9 @@ it. Only Git, which registers several, requires each entry to name its own.
 
 ---
 
-## 6. Content systems, handler by handler
+## 7. Content systems, handler by handler
 
-### 6.1 Confluence — `ai.gebo.confluence.systems`
+### 7.1 Confluence — `ai.gebo.confluence.systems`
 
 Implemented type `ATLASSIAN-CONFLUENCE`. Handler-specific fields: `confluenceVersion` (`CLOUD` or
 `ONPREMISE7X`) and `secretCode`.
@@ -263,7 +318,7 @@ ai.gebo.confluence:
       secretCode: confluence-onprem-account
 ```
 
-### 6.2 Jira — `ai.gebo.jira.systems`
+### 7.2 Jira — `ai.gebo.jira.systems`
 
 Implemented type `ATLASSIAN-JIRA`. Handler-specific field: `secretCode`, always a `token` secret.
 
@@ -284,7 +339,7 @@ ai.gebo.jira:
       secretCode: jira-api-token
 ```
 
-### 6.3 SharePoint and OneDrive — `ai.gebo.sharepoint.systems`
+### 7.3 SharePoint and OneDrive — `ai.gebo.sharepoint.systems`
 
 Implemented type `sharepoint-module`. Handler-specific fields: `sharepointVersion`
 (`CLOUD_VERSION` or `ONPREMISE2019`) and `secretCode` — **both required**, enforced at startup, so
@@ -315,7 +370,7 @@ ai.gebo.sharepoint:
       secretCode: msgraph-application
 ```
 
-### 6.4 WebDAV — `ai.gebo.webdav.systems`
+### 7.4 WebDAV — `ai.gebo.webdav.systems`
 
 Implemented type `WEBDAB-CMS`. Handler-specific fields: `webdavAuthType` (`NONE`, `BASIC`,
 `DIGEST`, `NTLM`, `BEARER_TOKEN`) and `secretCode`.
@@ -341,7 +396,7 @@ ai.gebo.webdav:
       secretCode: webdav-service-account
 ```
 
-### 6.5 AWS S3 — `ai.gebo.awss3.systems`
+### 7.5 AWS S3 — `ai.gebo.awss3.systems`
 
 Implemented type `aws-s3-handler`. Handler-specific fields: `awsEndpoint` and `s3SecretCode`,
 which must name an `aws-connection` secret — the connection factory checks the type explicitly.
@@ -366,7 +421,7 @@ ai.gebo.awss3:
       s3SecretCode: aws-ingestion-account
 ```
 
-### 6.6 Google Drive — `ai.gebo.googleworkspace.systems`
+### 7.6 Google Drive — `ai.gebo.googleworkspace.systems`
 
 Implemented type `google-drive-handler`. Handler-specific field: `driveAccessSecret`, which must
 name a `google-cloud-json-credentials` secret — the credentials factory refuses any other type.
@@ -390,7 +445,7 @@ ai.gebo.googleworkspace:
       driveAccessSecret: google-workspace-service-account
 ```
 
-### 6.7 Git — `ai.gebo.git.config.systems`
+### 7.7 Git — `ai.gebo.git.config.systems`
 
 Note the different key: Git had this capability before the others and keeps its original prefix
 for backward compatibility.
@@ -422,26 +477,45 @@ ai.gebo.git.config:
 
 ---
 
-## 7. Data sources, handler by handler
+## 8. Data sources, handler by handler
 
 Four handlers accept data sources: **WebDAV, AWS S3, SharePoint (OneDrive drives only) and Google
 Drive**. They are the ones whose endpoints extend `GVirtualFilesystemProjectEndpoint` and
 therefore have a list of paths for a declaration to fill.
 
-### 7.1 Fields every data source entry accepts
+### 8.1 Fields every data source entry accepts
 
 | Field | Type | Meaning |
 |---|---|---|
 | `code` | String | **required**, unique per handler |
 | `description` | String | shown in the admin surface |
-| `systemCode` | String | **required**; a system from §6 or one created in the UI |
+| `systemCode` | String | **required**; a system from §7 or one created in the UI |
 | `parentProjectCode` | String | the knowledge base project this source feeds |
 | `paths` | List | **required**, at least one; see below |
 | `published` | boolean | default `true` |
-| `synchPeriodically` | boolean | include in the periodic re-synchronization |
+| `synchPeriodically` | boolean | a marker only; what schedules a source is `programmedTables` |
+| `programmedTables` | List | when the source is re-ingested — see below |
 | `openZips` | boolean | walk into archives found in the source |
 | `personalData` | boolean | marks the source as carrying personal data, for the GDPR data-flow register |
 | `vectorizeOnlyExtensions` | List | restrict vectorization to these extensions |
+
+`programmedTables` is what the central scheduler actually reads. Each entry is a `frequency` and
+a list of `times`, and the shape of a time's `timeComponent` follows the frequency:
+
+| `frequency` | `timeComponent` |
+|---|---|
+| `HOURLY` | `[minutes]` |
+| `DAILY` | `[hour, minutes]` |
+| `WEEKLY` | `[dayOfWeek, hour, minutes]` |
+| `MONTHLY` | `[weekOfMonth, dayOfWeek, hour, minutes]` |
+
+```yaml
+      # every night at 02:30
+      programmedTables:
+        - frequency: DAILY
+          times:
+            - timeComponent: [2, 30]
+```
 
 Each entry of `paths` is:
 
@@ -450,15 +524,16 @@ Each entry of `paths` is:
 | `path` | String | **required**, in the handler's own addressing — see each handler below |
 | `folder` | boolean | `true` to walk a folder's contents, `false` (default) for a single file |
 
-### 7.2 The path is written in the handler's own addressing
+### 8.2 The path is written in the handler's own addressing
 
 A path is **not** a syntax invented for this file: it is the string the handler itself uses, the
 same one the browsing UI stores when an admin assembles a source by clicking. A translation layer
 that pretended every remote system had the same notion of "where" could only have expressed the
 intersection of all of them.
 
-For WebDAV and S3 that reads like a path. **For Google Drive and OneDrive it is a pair of opaque
-ids**, because both address items by id and have no server-side path at all — a folder *name* will
+For WebDAV that is a path under the system's `baseUri`, and for S3 a `bucket/key`. **For Google
+Drive and OneDrive it is a pair of opaque ids**, because both address items by id and have no
+server-side path at all — a folder *name* will
 be refused at startup rather than silently matching nothing. The ids are the ones visible in the
 item's URL, and the ones a source built in the UI already carries.
 
@@ -466,15 +541,20 @@ item's URL, and the ones a source built in the UI already carries.
 configuration — so it is declared. Declaring it wrongly is caught at ingestion, where the
 navigation refuses a node whose kind disagrees with the declaration.
 
-### 7.3 WebDAV — `ai.gebo.webdav.datasources`
+### 8.3 WebDAV — `ai.gebo.webdav.datasources`
 
-**Path syntax:** the resource's full href, `https://host/dav/path/To/Item`. Writing it in full
-rather than relative to the system's `baseUri` is deliberate: it is unambiguous and the entry reads
-on its own. An href with nothing above it — the server origin — means the whole share and must be
-`folder: true`.
+**Path syntax:** a path **relative to the system's `baseUri`** — the connection belongs to the
+system, the data source only says where inside it. A full href is also accepted, for a share that
+lives outside that base. An href with nothing above it — the server origin — means the whole share
+and must be `folder: true`.
 
 ```yaml
 ai.gebo.webdav:
+  systems:
+    - code: corporate-dav
+      baseUri: https://dav.example.com/remote.php/dav     # ◄── the paths below resolve against this
+      webdavAuthType: BASIC
+      secretCode: webdav-service-account
   datasources:
     - code: corporate-policies
       description: Policy library
@@ -482,13 +562,16 @@ ai.gebo.webdav:
       parentProjectCode: COMPANY-KB
       synchPeriodically: true
       paths:
-        - path: https://dav.example.com/remote.php/dav/files/admin/Policies
+        - path: /files/admin/Policies
           folder: true
-        - path: https://dav.example.com/remote.php/dav/files/admin/handbook.pdf
+        - path: /files/admin/handbook.pdf
           folder: false
 ```
 
-### 7.4 AWS S3 — `ai.gebo.awss3.datasources`
+For a Nextcloud server the disk of an account is `/files/<account>`, so declaring that one path
+with `folder: true` ingests everything the account can see.
+
+### 8.4 AWS S3 — `ai.gebo.awss3.datasources`
 
 **Path syntax:** `<bucket>/<key>`, or a bare `<bucket>` for the whole bucket (`folder: true`).
 
@@ -511,7 +594,7 @@ ai.gebo.awss3:
           folder: false
 ```
 
-### 7.5 SharePoint — OneDrive drives only — `ai.gebo.sharepoint.datasources`
+### 8.5 SharePoint — OneDrive drives only — `ai.gebo.sharepoint.datasources`
 
 **Path syntax:** `<driveId>/<itemId>`, or a bare `<driveId>` for the whole drive (`folder: true`).
 These are Microsoft Graph ids.
@@ -534,7 +617,7 @@ ai.gebo.sharepoint:
           folder: true
 ```
 
-### 7.6 Google Drive — `ai.gebo.googleworkspace.datasources`
+### 8.6 Google Drive — `ai.gebo.googleworkspace.datasources`
 
 **Path syntax:** `<driveId>/<fileId>`, or a bare `<driveId>` for the whole shared drive
 (`folder: true`). The drive id is a *shared drive*; the file id is the folder or file inside it.
@@ -551,7 +634,7 @@ ai.gebo.googleworkspace:
           folder: true
 ```
 
-### 7.7 What is not declarable
+### 8.7 What is not declarable
 
 | Handler | Systems | Data sources | Why |
 |---|---|---|---|
@@ -562,17 +645,24 @@ ai.gebo.googleworkspace:
 
 ---
 
-## 8. Publishing and scheduling a declared data source
+## 9. Scheduling and publishing a declared data source
 
-The central scheduler is driven by reschedule requests that only a write path emits. A declaration
-alone therefore does not put a source on the schedule.
+**Nothing has to be clicked.** Every stored endpoint is rescheduled on context refresh, and the
+seeders run before that happens, so a declared source is on the schedule from its first boot. Its
+`programmedTables` govern when it runs — a source declared `DAILY` at `[2, 30]` is re-read every
+night at 02:30 with no further action.
 
-Press **Publish** on it once. Publish stays enabled on a read-only source for exactly this reason:
-it queues the first ingestion and sends the reschedule, and it skips the save, because the stored
-record is already what the file says. After that the source behaves like any other — including
-`synchPeriodically` if you set it.
+If its schedule says it should already have run — which is normally true the first time, since the
+declaration is newer than the time it names — the scheduler notices and programs a **catch-up run
+about 30 seconds out**, so the first ingestion happens shortly after startup rather than waiting
+for the next window.
 
-## 9. Removing a declared entry
+`synchPeriodically` does **not** schedule anything on its own; a source with no `programmedTables`
+is ingested only when someone publishes it. Publish does stay enabled on a read-only source, for
+when you want a run now: it queues the ingestion and skips the save, because the stored record is
+already what the file says.
+
+## 10. Removing a declared entry
 
 **A secret or a system**: delete it from the file and restart. There was never a stored record.
 
@@ -589,12 +679,14 @@ it produced.
 
 Save and delete become available on it again, and an admin removes it the normal way.
 
-## 10. Failures, and when they happen
+## 11. Failures, and when they happen
 
-### 10.1 At startup — the shape of a declaration
+### 11.1 At startup — the shape of a declaration
 
 | Message | Cause |
 |---|---|
+| `A knowledge base declared in the configuration has no code` / `A project …` | an entry of `ai.gebo.knowledgebases` / `ai.gebo.projects` has no `code` |
+| `The knowledge base 'X' is declared in the configuration but one with that code was created through the admin UI` | rename the declaration, or delete the existing record first |
 | `A content management system declared in the configuration has no code` | an entry of a `systems` list has no `code` |
 | `The content management system code 'X' is declared more than once` | two entries share a code, case-insensitively |
 | `A data source declared in the configuration has no code` | an entry of a `datasources` list has no `code` |
@@ -605,7 +697,7 @@ Save and delete become available on it again, and an admin removes it the normal
 | `The data source 'X' is declared in the configuration but a data source with that code was created through the admin UI` | rename the declaration, or delete the UI record first |
 | a bean validation error on `ai.gebo.<handler>.systems` or `ai.gebo.secrets.config` | the entry violates its own model constraints — a SharePoint system without `secretCode`, a `username-password` secret without a password |
 
-### 10.2 At connection time — the references
+### 11.2 At connection time — the references
 
 A code that names nothing is **not** a startup failure, because resolving it means asking a
 service that may legitimately answer later:
@@ -613,22 +705,24 @@ service that may legitimately answer later:
 | Symptom | Cause |
 |---|---|
 | `Unkown secret with code=>X` | a `secretCode` / `s3SecretCode` / `driveAccessSecret` naming no declared, vaulted or stored secret |
-| a class cast or "invalid credentials" on connect | the secret exists but is the wrong *type* for that handler — see §11 |
+| a class cast or "invalid credentials" on connect | the secret exists but is the wrong *type* for that handler — see §12 |
 | the system resolves to nothing at ingestion | a `systemCode` on a data source naming no system |
 
 Test a new chain by pressing **Test** or **Publish** on it, not by watching a clean boot.
 
-### 10.3 At runtime — attempts to edit
+### 11.3 At runtime — attempts to edit
 
 ```
 The content management system 'X' is declared in this deployment's configuration and cannot
 be changed from the UI: edit it in application.yml instead
 ```
 
-## 11. Quick reference
+## 12. Quick reference
 
 | Key | Binding class | Declarable |
 |---|---|---|
+| `ai.gebo.knowledgebases` | `GeboKnowledgeBaseHierarchyConfig` | knowledge bases |
+| `ai.gebo.projects` | `GeboKnowledgeBaseHierarchyConfig` | projects |
 | `ai.gebo.secrets.config.<type>` | `GeboStaticSecretsConfig` | secrets |
 | `ai.gebo.confluence.systems` | `ConfluenceSystemsConfig` | systems |
 | `ai.gebo.jira.systems` | `JiraSystemsConfig` | systems |

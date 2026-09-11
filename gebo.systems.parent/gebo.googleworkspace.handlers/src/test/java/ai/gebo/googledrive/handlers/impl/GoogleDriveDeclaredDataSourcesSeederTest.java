@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import ai.gebo.googledrive.handlers.config.GoogleDriveDataSourcesConfig;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSource;
 import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSourcePath;
 
 /**
@@ -36,9 +37,17 @@ class GoogleDriveDeclaredDataSourcesSeederTest {
 		return declared;
 	}
 
+	/** The declaration a path belongs to; these handlers do not read it. */
+	private static GDeclaredDataSource source() {
+		GDeclaredDataSource declared = new GDeclaredDataSource();
+		declared.setCode("declared-source");
+		declared.setSystemCode("declared-system");
+		return declared;
+	}
+
 	@Test
 	void aFolderBecomesTheDriveRootAndAFolderStep() {
-		VFilesystemReference reference = seeder.toReference(path("0AJv7q2Xk9mLkUk9PVA/1BxY8sQ2fN7pLmRt3KcWv", true));
+		VFilesystemReference reference = seeder.toReference(source(), path("0AJv7q2Xk9mLkUk9PVA/1BxY8sQ2fN7pLmRt3KcWv", true));
 
 		assertThat(reference.root.getCode()).isEqualTo("0AJv7q2Xk9mLkUk9PVA");
 		assertThat(reference.path.folder).isTrue();
@@ -47,7 +56,7 @@ class GoogleDriveDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aFileBecomesAResourceStep() {
-		VFilesystemReference reference = seeder.toReference(path("0AJv7q2Xk9mLkUk9PVA/1BxY8sQ2fN7pLmRt3KcWv", false));
+		VFilesystemReference reference = seeder.toReference(source(), path("0AJv7q2Xk9mLkUk9PVA/1BxY8sQ2fN7pLmRt3KcWv", false));
 
 		assertThat(reference.path.folder).isFalse();
 		assertThat(reference.path.absolutePath)
@@ -57,7 +66,7 @@ class GoogleDriveDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aBareDriveIdIsTheWholeDriveAndHasNoStep() {
-		VFilesystemReference reference = seeder.toReference(path("0AJv7q2Xk9mLkUk9PVA", true));
+		VFilesystemReference reference = seeder.toReference(source(), path("0AJv7q2Xk9mLkUk9PVA", true));
 
 		assertThat(reference.root.getCode()).isEqualTo("0AJv7q2Xk9mLkUk9PVA");
 		assertThat(reference.path).isNull();
@@ -65,13 +74,13 @@ class GoogleDriveDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aDriveDeclaredAsAFileIsRefused() {
-		assertThatThrownBy(() -> seeder.toReference(path("0AJv7q2Xk9mLkUk9PVA", false)))
+		assertThatThrownBy(() -> seeder.toReference(source(), path("0AJv7q2Xk9mLkUk9PVA", false)))
 				.isInstanceOf(IllegalStateException.class).hasMessageContaining("folder: true");
 	}
 
 	@Test
 	void aFolderNameStyledPathIsRefusedBecauseDriveAddressesByIdOnly() {
-		assertThatThrownBy(() -> seeder.toReference(path("0AJv7q2Xk9mLkUk9PVA/Shared/Handbook", true)))
+		assertThatThrownBy(() -> seeder.toReference(source(), path("0AJv7q2Xk9mLkUk9PVA/Shared/Handbook", true)))
 				.isInstanceOf(IllegalStateException.class).hasMessageContaining("by id");
 	}
 }

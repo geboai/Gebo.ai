@@ -110,6 +110,12 @@ services:
       - gebo-logs:/opt/gebo.ai/logs
       - gebo-shares:/opt/gebo.ai/shares
       - ../gebo.ai/config:/opt/gebo.ai/config:ro
+      # Per-workspace overlay MERGED over the shared config above (see
+      # SPRING_CONFIG_ADDITIONAL_LOCATION below). Declares the WebDAV secret,
+      # system and data source pointing at this sandbox's Nextcloud. Kept out of
+      # the shared file because onlyoffice-assistant mounts that one and has no
+      # Nextcloud to point at.
+      - ./gebo.ai:/opt/gebo.ai/config-workspace:ro
     environment:
       JAVA_TOOL_OPTIONS: >-
         --enable-native-access=ALL-UNNAMED
@@ -120,6 +126,10 @@ services:
         -Xmx4g
         -XX:MaxMetaspaceSize=512m
         --add-opens=java.base/java.nio.charset=ALL-UNNAMED
+      # Additional locations are merged over the default ./config/ one, property
+      # by property, with the later location winning - so the overlay adds the
+      # WebDAV keys without restating anything the shared file already sets.
+      SPRING_CONFIG_ADDITIONAL_LOCATION: 'file:/opt/gebo.ai/config-workspace/'
       SPRING_APPLICATION_JSON: >-
         {"ai.gebo.agents.standard.enabled":"true",
         "ai.gebo.officeplugin.enabled":"true",

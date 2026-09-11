@@ -20,6 +20,7 @@ import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.sharepoint.handler.config.SharepointDataSourcesConfig;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphPathComponent;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphPathNodeType;
+import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSource;
 import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSourcePath;
 
 /**
@@ -41,9 +42,17 @@ class SharepointDeclaredDataSourcesSeederTest {
 		return declared;
 	}
 
+	/** The declaration a path belongs to; these handlers do not read it. */
+	private static GDeclaredDataSource source() {
+		GDeclaredDataSource declared = new GDeclaredDataSource();
+		declared.setCode("declared-source");
+		declared.setSystemCode("declared-system");
+		return declared;
+	}
+
 	@Test
 	void aFolderBecomesADriveRootAndAFolderStep() {
-		VFilesystemReference reference = seeder.toReference(path("b!xQ3zDrive/01ABCDEFITEM", true));
+		VFilesystemReference reference = seeder.toReference(source(), path("b!xQ3zDrive/01ABCDEFITEM", true));
 
 		assertThat(GMicrosoftGraphNavigationUtils.isDrive(reference.root)).isTrue();
 		assertThat(GMicrosoftGraphNavigationUtils.getDriveId(reference.root)).isEqualTo("b!xQ3zDrive");
@@ -56,7 +65,7 @@ class SharepointDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aFileBecomesADriveItemStep() {
-		VFilesystemReference reference = seeder.toReference(path("b!xQ3zDrive/01ABCDEFITEM", false));
+		VFilesystemReference reference = seeder.toReference(source(), path("b!xQ3zDrive/01ABCDEFITEM", false));
 
 		List<MicrosoftGraphPathComponent> components = GMicrosoftGraphNavigationUtils.pathComponents(reference.path);
 		assertThat(components.get(0).type).isEqualTo(MicrosoftGraphPathNodeType.DRIVE_ITEM);
@@ -65,7 +74,7 @@ class SharepointDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aBareDriveIdIsTheWholeDriveAndHasNoStep() {
-		VFilesystemReference reference = seeder.toReference(path("b!xQ3zDrive", true));
+		VFilesystemReference reference = seeder.toReference(source(), path("b!xQ3zDrive", true));
 
 		assertThat(GMicrosoftGraphNavigationUtils.getDriveId(reference.root)).isEqualTo("b!xQ3zDrive");
 		assertThat(reference.path).isNull();
@@ -73,13 +82,13 @@ class SharepointDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aSharepointSiteIsRefused() {
-		assertThatThrownBy(() -> seeder.toReference(path("SHAREPOINT-SITE:contoso.sharepoint.com,abc,def", true)))
+		assertThatThrownBy(() -> seeder.toReference(source(), path("SHAREPOINT-SITE:contoso.sharepoint.com,abc,def", true)))
 				.isInstanceOf(IllegalStateException.class).hasMessageContaining("admin UI");
 	}
 
 	@Test
 	void aFolderNameStyledPathIsRefusedBecauseGraphAddressesItemsById() {
-		assertThatThrownBy(() -> seeder.toReference(path("b!xQ3zDrive/Shared/Policies", true)))
+		assertThatThrownBy(() -> seeder.toReference(source(), path("b!xQ3zDrive/Shared/Policies", true)))
 				.isInstanceOf(IllegalStateException.class).hasMessageContaining("by id");
 	}
 }

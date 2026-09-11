@@ -12,6 +12,7 @@ package ai.gebo.systems.abstraction.layer.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.gebo.knlowledgebase.model.scheduling.ReindexingProgrammedTable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -78,8 +79,39 @@ public class GDeclaredDataSource {
 	/** Whether the source is published to the knowledge base. */
 	private Boolean published = true;
 
-	/** Whether the source is re-synchronized on the periodic schedule. */
+	/**
+	 * Whether the source is re-synchronized on the periodic schedule. A marker
+	 * only: what actually puts a source on the scheduler is
+	 * {@link #programmedTables}.
+	 */
 	private Boolean synchPeriodically = null;
+
+	/**
+	 * When the source is re-ingested, which is what the central scheduler reads.
+	 *
+	 * <pre>
+	 * programmedTables:
+	 *   - frequency: DAILY
+	 *     times:
+	 *       - timeComponent: [2, 30]
+	 * </pre>
+	 *
+	 * <p>
+	 * The shape of {@code timeComponent} follows the frequency, as
+	 * {@code ReindexTimeStructureMetaInfo} defines it: {@code [minutes]} for
+	 * {@code HOURLY}, {@code [hour, minutes]} for {@code DAILY},
+	 * {@code [dayOfWeek, hour, minutes]} for {@code WEEKLY},
+	 * {@code [weekOfMonth, dayOfWeek, hour, minutes]} for {@code MONTHLY}.
+	 * </p>
+	 *
+	 * <p>
+	 * A schedule alone does not start anything: the scheduler is driven by
+	 * reschedule requests that only a write path emits, so a declared source joins
+	 * the schedule when it is published once - see the publishing section of the
+	 * configuration guide.
+	 * </p>
+	 */
+	private List<@Valid ReindexingProgrammedTable> programmedTables = null;
 
 	/** Whether archives found in the source are opened and walked. */
 	private Boolean openZips = null;

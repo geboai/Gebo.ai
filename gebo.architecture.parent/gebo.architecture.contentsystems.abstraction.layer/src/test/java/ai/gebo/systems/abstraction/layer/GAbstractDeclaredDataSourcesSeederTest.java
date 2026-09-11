@@ -222,7 +222,8 @@ class GAbstractDeclaredDataSourcesSeederTest {
 		}
 
 		@Override
-		protected VFilesystemReference toReference(GDeclaredDataSourcePath declaredPath) {
+		protected VFilesystemReference toReference(GDeclaredDataSource declaration,
+				GDeclaredDataSourcePath declaredPath) {
 			if (declaredPath.getPath().startsWith("!")) {
 				throw new IllegalStateException("a test path may not start with !");
 			}
@@ -319,22 +320,31 @@ class GAbstractDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aDeclarationWithoutACodeFailsBeforeAnythingIsWritten() {
-		assertThrows(IllegalStateException.class,
-				() -> new TestSeeder(List.of(declaration(" ", "corporate-dav", "KB", "/Policies", true)),
-						new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declaration(" ", "corporate-dav", "KB", "/Policies", true)),
+				repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
 	void aCodeDeclaredTwiceFailsBeforeAnythingIsWritten() {
-		assertThrows(IllegalStateException.class,
-				() -> new TestSeeder(List.of(declaration("twice", "corporate-dav", "KB", "/A", true),
-						declaration("TWICE", "corporate-dav", "KB", "/B", true)), new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declaration("twice", "corporate-dav", "KB", "/A", true),
+				declaration("TWICE", "corporate-dav", "KB", "/B", true)), repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
 	void aDeclarationWithoutASystemFailsBeforeAnythingIsWritten() {
-		assertThrows(IllegalStateException.class, () -> new TestSeeder(
-				List.of(declaration("orphan", " ", "KB", "/Policies", true)), new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declaration("orphan", " ", "KB", "/Policies", true)), repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
@@ -342,17 +352,26 @@ class GAbstractDeclaredDataSourcesSeederTest {
 		GDeclaredDataSource declared = declaration("empty", "corporate-dav", "KB", "/Policies", true);
 		declared.setPaths(List.of());
 
-		assertThrows(IllegalStateException.class, () -> new TestSeeder(List.of(declared), new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declared), repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
 	void aPathTheModuleCannotResolveFailsNamingTheSourceAndThePath() {
-		IllegalStateException thrown = assertThrows(IllegalStateException.class,
-				() -> new TestSeeder(List.of(declaration("broken", "corporate-dav", "KB", "!nonsense", true)),
-						new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(
+				List.of(declaration("ok-one", "corporate-dav", "KB", "/Fine", true),
+						declaration("broken", "corporate-dav", "KB", "!nonsense", true)),
+				repository);
+
+		IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> seeder.seed());
 
 		assertTrue(thrown.getMessage().contains("broken"));
 		assertTrue(thrown.getMessage().contains("!nonsense"));
+		assertEquals(0, repository.count(), "a bad declaration must not leave the repository half seeded");
 	}
 
 	@Test

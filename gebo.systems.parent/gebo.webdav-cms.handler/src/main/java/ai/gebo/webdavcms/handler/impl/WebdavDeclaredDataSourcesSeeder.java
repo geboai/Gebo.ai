@@ -18,6 +18,7 @@ import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.systems.abstraction.layer.GAbstractDeclaredDataSourcesSeeder;
 import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSource;
 import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSourcePath;
+import ai.gebo.webdavcms.handler.GWebdavContentManagementSystem;
 import ai.gebo.webdavcms.handler.GWebdavProjectEndpoint;
 import ai.gebo.webdavcms.handler.config.WebdavDataSourcesConfig;
 import ai.gebo.webdavcms.handler.repositories.WebdavProjectEndpointRepository;
@@ -39,6 +40,13 @@ import ai.gebo.webdavcms.handler.repositories.WebdavProjectEndpointRepository;
  * </p>
  *
  * <p>
+ * A declared path is normally written RELATIVE to the system's {@code baseUri} -
+ * {@code /files/webdav} against {@code https://host/remote.php/dav} - since the
+ * connection is the system's business and the data source only says where inside
+ * it. A full href is still accepted, for a share that lives outside that base.
+ * </p>
+ *
+ * <p>
  * An href with no parent left to take - the server origin itself - becomes a
  * root with no step, meaning the whole share.
  * </p>
@@ -57,9 +65,13 @@ public class WebdavDeclaredDataSourcesSeeder
 	 * @param repository         the WebDAV endpoint repository.
 	 * @param applicationContext this bean's own context.
 	 */
+	/** The systems a declared path is resolved against - declared or stored. */
+	private final WebdavSystemsConfigurationDao systemsDao;
+
 	public WebdavDeclaredDataSourcesSeeder(WebdavDataSourcesConfig config, WebdavProjectEndpointRepository repository,
-			ApplicationContext applicationContext) {
+			WebdavSystemsConfigurationDao systemsDao, ApplicationContext applicationContext) {
 		super(config.getDatasources(), repository, applicationContext);
+		this.systemsDao = systemsDao;
 	}
 
 	@Override
@@ -75,12 +87,9 @@ public class WebdavDeclaredDataSourcesSeeder
 	}
 
 	@Override
-	protected VFilesystemReference toReference(GDeclaredDataSourcePath declaredPath) {
-		String href = declaredPath.getPath().trim();
-		if (!href.startsWith("http://") && !href.startsWith("https://")) {
-			throw new IllegalStateException(
-					"a WebDAV path is the resource full href, starting with http:// or https://");
-		}
+	protected VFilesystemReference toReference(GDeclaredDataSource declaration,
+			GDeclaredDataSourcePath declaredPath) {
+		String href = absoluteHrefOf(declaration, declaredPath.getPath().trim());
 		while (href.length() > 1 && href.endsWith("/")) {
 			href = href.substring(0, href.length() - 1);
 		}
@@ -98,6 +107,42 @@ public class WebdavDeclaredDataSourcesSeeder
 		reference.path = declaredPath.isFolder() ? WebdavNavigationUtil.encodeAsFolder(href, nameOf(href))
 				: WebdavNavigationUtil.encodeAsFile(href, nameOf(href));
 		return reference;
+	}
+
+	/**
+	 * Makes a declared path absolute.
+	 *
+	 * <p>
+	 * The connection belongs to the system, so a data source says only WHERE inside
+	 * it: {@code /files/webdav} is resolved against the {@code baseUri} of the
+	 * system the declaration names. A path that is already a full href is taken as
+	 * it is, which keeps working for anyone who wrote one and covers the case of a
+	 * share that lives outside the system's own base.
+	 * </p>
+	 *
+	 * @param declaration the data source, naming the system to resolve against.
+	 * @param path        the declared path.
+	 * @return an absolute href.
+	 */
+	private String absoluteHrefOf(GDeclaredDataSource declaration, String path) {
+		if (path.startsWith("http://") || path.startsWith("https://")) {
+			return path;
+		}
+		GWebdavContentManagementSystem system = systemsDao.findByCode(declaration.getSystemCode());
+		if (system == null) {
+			throw new IllegalStateException("a relative path is resolved against the baseUri of the system '"
+					+ declaration.getSystemCode() + "', which is not declared in the configuration nor stored");
+		}
+		String baseUri = system.getBaseUri();
+		if (baseUri == null || baseUri.trim().length() == 0) {
+			throw new IllegalStateException("the system '" + declaration.getSystemCode()
+					+ "' declares no baseUri, so a relative path cannot be resolved against it");
+		}
+		baseUri = baseUri.trim();
+		while (baseUri.endsWith("/")) {
+			baseUri = baseUri.substring(0, baseUri.length() - 1);
+		}
+		return path.startsWith("/") ? baseUri + path : baseUri + "/" + path;
 	}
 
 	/**
