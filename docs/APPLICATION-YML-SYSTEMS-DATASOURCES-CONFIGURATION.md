@@ -538,8 +538,20 @@ be refused at startup rather than silently matching nothing. The ids are the one
 item's URL, and the ones a source built in the UI already carries.
 
 `folder` cannot be derived from the string — no remote call is made while reading the
-configuration — so it is declared. Declaring it wrongly is caught at ingestion, where the
-navigation refuses a node whose kind disagrees with the declaration.
+configuration — so it is declared. What it does with it varies by handler, and it is worth knowing
+which:
+
+- **AWS S3** — it selects the encoding, `S3_FOLDER:` against `S3_RESOURCE:`, and those take
+  different paths: a prefix is listed, an object is described. Declaring it wrongly therefore
+  fails that path, or reads nothing.
+- **WebDAV and Google Drive** — the server's own answer decides whether the node is a collection,
+  so a wrong flag is largely absorbed.
+- **SharePoint / OneDrive** — the navigation carries a cross-check that refuses a node whose kind
+  disagrees with the declaration.
+
+That cross-check only runs where the handler attaches a path to its native node, which today is
+SharePoint alone; the others log `does not have an associated path` and skip it. So do not rely on
+a wrong `folder` flag being reported — get it right, and treat an empty ingestion as the symptom.
 
 ### 8.3 WebDAV — `ai.gebo.webdav.datasources`
 
