@@ -312,6 +312,28 @@ ai.gebo.agents.standard.enabled: true
 # the standard searcher/tool agents and the controller service).
 ai.gebo.officeplugin.enabled: true
 ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: true
+# Secrets declared by the configuration instead of created through the admin UI:
+# one list per secret type, each entry with the code the rest of the configuration
+# references plus the content under `secret`. They are resolved BEFORE the vault
+# and before Mongo, and every write path refuses them - create, update and delete
+# alike - so rotation means editing this file, not a UI action. See §6.2 of
+# docs/APPLICATION-YML-ADMIN-MANUAL.md for the full field list per type.
+#
+# Everything here is a credential in plaintext: prefer ${ENV_VAR} over literals.
+#ai.gebo.secrets.config:
+#  username-password:
+#    - code: nightly-ingestion-account
+#      description: Service account of the nightly ingestion
+#      context-code: SYSTEMS
+#      secret:
+#        username: ingestion
+#        password: ${INGESTION_PASSWORD}
+#  token:
+#    - code: my-llm-api-key
+#      context-code: LLMS
+#      secret:
+#        token: ${SOME_API_KEY}
+#        user: gebo
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

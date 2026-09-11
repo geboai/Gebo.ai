@@ -21,6 +21,22 @@ import ai.gebo.secrets.model.SecretInfo;
  * secrets.
  */
 public interface IGeboSecretsAccessService {
+
+	/**
+	 * The message every write refused because the secret is read-only carries.
+	 *
+	 * <p>
+	 * It lives on the interface because more than one implementation has to refuse
+	 * such a write with the same words: the owning implementation, and the REST
+	 * client that stands in for it across the cluster - which must never depend on
+	 * the implementation module (putting it on a client service's classpath is what
+	 * makes its local {@code @Service} win over the client).
+	 * </p>
+	 *
+	 * @see AbstractGeboSecretContent#getReadOnly()
+	 */
+	public static final String READ_ONLY_SECRET_MESSAGE = "A readOnly secret can only being read and not updated/deleted in the implementation of IGeboSecretsAccessService";
+
 	public List<String> getAllSecretsId();
 
 	/**

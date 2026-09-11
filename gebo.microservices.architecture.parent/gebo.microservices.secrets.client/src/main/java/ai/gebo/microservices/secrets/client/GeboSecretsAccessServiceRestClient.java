@@ -84,6 +84,17 @@ import tools.jackson.databind.ObjectMapper;
  * reloads the OAuth2 runtime configuration, not waited out on this TTL.
  * </p>
  *
+ * <h2>A read-only secret is refused here, not at the far end</h2>
+ * <p>
+ * Secrets declared under {@code ai.gebo.secrets.config.*} come back from heimdall with
+ * {@code readOnly == true}, exactly as they would in the monolith, and a write of such a
+ * content is refused before the request is made. Heimdall refuses it too - by code, which
+ * is all it can check, since the content it receives is already encrypted - but a caller
+ * holding the decrypted content is the only place the {@code readOnly} marker itself can
+ * be seen, and a caller should not need a round trip to be told it cannot write what it
+ * was just handed.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessService {
@@ -162,21 +173,34 @@ public class GeboSecretsAccessServiceRestClient implements IGeboSecretsAccessSer
 		}
 	}
 
+	/**
+	 * Refuses a write whose content is a configuration-declared secret, with the same
+	 * message the owning implementation uses, so that a caller sees one contract
+	 * whether the secrets are in-process or behind the network.
+	 */
+	private void checkNotReadOnly(AbstractGeboSecretContent secret) throws GeboCryptSecretException {
+		if (AbstractGeboSecretContent.isReadOnlySecret(secret))
+			throw new GeboCryptSecretException(READ_ONLY_SECRET_MESSAGE);
+	}
+
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> String storeSecret(SecretType secret, String description,
 			String contextCode) throws GeboCryptSecretException {
+		checkNotReadOnly(secret);
 		return store(secret, description, contextCode, null);
 	}
 
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> void storeSecret(SecretType secret, String description,
 			String contextCode, String secretId) throws GeboCryptSecretException {
+		checkNotReadOnly(secret);
 		store(secret, description, contextCode, secretId);
 	}
 
 	@Override
 	public <SecretType extends AbstractGeboSecretContent> void updateSecret(SecretType secret, String description,
 			String contextCode, String code) throws GeboCryptSecretException {
+		checkNotReadOnly(secret);
 		GeboSecretStoreRequest request = storeRequest(secret, description, contextCode, code);
 		call("updateSecret", () -> webClient.post().uri(uri("updateSecret")).headers(this::applyCallerToken)
 				.contentType(MediaType.APPLICATION_JSON).bodyValue(request).retrieve().toBodilessEntity().block());

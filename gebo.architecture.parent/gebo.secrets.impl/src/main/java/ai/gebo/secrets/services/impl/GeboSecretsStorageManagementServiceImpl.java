@@ -24,6 +24,7 @@ import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.secrets.services.IGeboSecretsExternalStorageService;
 import ai.gebo.secrets.services.IGeboSecretsStorageManagementService;
+import ai.gebo.secrets.services.IGSecretsStaticConfigurationDao;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
@@ -31,6 +32,21 @@ import lombok.AllArgsConstructor;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
+/**
+ * Migration of the secrets store between Mongo and an external vault.
+ *
+ * <h2>Declared secrets are not migrated, in either direction</h2>
+ * <p>
+ * A secret declared under {@code ai.gebo.secrets.config.*} has no store record
+ * and must not gain one: it is owned by the configuration, the read chain serves
+ * it from there whichever store is active, and copying it into the vault would
+ * both be dead weight and put a plaintext-declared credential somewhere nobody
+ * asked for it. The ids {@code IGeboSecretsAccessService#getAllSecretsId()}
+ * reports now include the declared ones, so this is filtered explicitly rather
+ * than left to the write guards - which the external storage service does not go
+ * through.
+ * </p>
+ */
 @Service
 @AllArgsConstructor
 public class GeboSecretsStorageManagementServiceImpl implements IGeboSecretsStorageManagementService {
@@ -40,6 +56,7 @@ public class GeboSecretsStorageManagementServiceImpl implements IGeboSecretsStor
 	private final GeboSecretRepository repository;
 	private final GeboCryptingServiceImpl cryptService;
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+	private final IGSecretsStaticConfigurationDao staticConfigurationDao;
 	private static final ObjectMapper mapper = new ObjectMapper();
 
 	// Takes an already-created SecurityEvent - see logSecretEvent's note in
@@ -77,6 +94,8 @@ public class GeboSecretsStorageManagementServiceImpl implements IGeboSecretsStor
 			List<String> allIds = secretsAccessService.getAllSecretsId();
 
 			for (String id : allIds) {
+				if (staticConfigurationDao.isConfiguredCode(id))
+					continue;
 				AbstractGeboSecretContent content = secretsAccessService.getSecretContentById(id);
 				SecretInfo info = secretsAccessService.getSecretInfoById(id);
 				ext.storeSecret(content, info.getDescription(), info.getContextCode(), id);
@@ -101,6 +120,8 @@ public class GeboSecretsStorageManagementServiceImpl implements IGeboSecretsStor
 			List<String> allIds = ext.getAllSecretsId();
 
 			for (String id : allIds) {
+				if (staticConfigurationDao.isConfiguredCode(id))
+					continue;
 				AbstractGeboSecretContent content = ext.getSecretContentById(id);
 				SecretInfo info = ext.getSecretInfoById(id);
 				String serialized;

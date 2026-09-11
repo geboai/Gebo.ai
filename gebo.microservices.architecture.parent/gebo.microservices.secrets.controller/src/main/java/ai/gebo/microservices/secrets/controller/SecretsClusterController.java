@@ -25,17 +25,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.microservices.cluster.ClusterParticipantsGuard;
 import ai.gebo.microservices.cluster.GeboClusterParticipants;
+import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecret;
 import ai.gebo.secrets.model.GeboSecretContentEnvelope;
 import ai.gebo.secrets.model.GeboSecretStoreRequest;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.secrets.services.IGeboSecretsExternalStorageService;
+import ai.gebo.secrets.services.IGSecretsStaticConfigurationDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The secrets store exposed to the other microservices of the cluster.
@@ -64,6 +69,57 @@ import jakarta.validation.constraints.NotNull;
  * <i>decrypted</i> content, which is precisely what must not happen here.
  * </p>
  *
+ * <h2>Not every secret HAS a repository record - and the wire stays ciphertext
+ * regardless</h2>
+ * <p>
+ * Passing the stored ciphertext through works only for the secrets that are in
+ * the Mongo repository. Two sources are not:
+ * </p>
+ * <ul>
+ * <li>a secret declared under {@code ai.gebo.secrets.config.*}
+ * ({@link IGSecretsStaticConfigurationDao}) - it lives in this service's own
+ * configuration and is never written to the store;</li>
+ * <li>every secret, once an {@link IGeboSecretsExternalStorageService} is the
+ * active storage - they live in the vault, and the SPI hands them back
+ * <b>decrypted</b>, which is all its contract offers.</li>
+ * </ul>
+ *
+ * <p>
+ * Both are reached through {@link IGeboSecretsAccessService}, which owns that
+ * resolution order, and what comes back is plaintext - so it is sealed here, with
+ * the shared key, before it is put in the envelope. <b>The policy is not
+ * weakened: no secret leaves this service in the clear, whatever its source.</b>
+ * What is different is only where the plaintext momentarily exists - in this
+ * service, which is the one that holds the crypting keys, holds the declarations
+ * in its own configuration file, and is the only participant trusted with either.
+ * The caller cannot tell, and decrypts exactly as it would for a stored secret.
+ * </p>
+ *
+ * <p>
+ * Without this, a declared secret would work in the monolith and silently not
+ * exist in the cluster, and an externalised store would answer "unknown secret"
+ * for every id - which is the worst shape either could take.
+ * </p>
+ *
+ * <p>
+ * The writes need the mirror of the declared case: they bypass
+ * {@code GeboSecretsAccessServiceImpl}, and with it the guard that refuses a
+ * write to a configuration-declared secret, so they re-apply the code check
+ * themselves, with {@link IGeboSecretsAccessService#READ_ONLY_SECRET_MESSAGE}.
+ * The {@code readOnly} content check cannot be applied here - the content arrives
+ * encrypted, by design - and belongs to the caller, where the client
+ * implementation applies it before the request is ever made.
+ * </p>
+ *
+ * <p>
+ * <b>Known limitation, unchanged here:</b> the writes and
+ * {@code getSecretContentById}'s repository branch address the Mongo repository
+ * directly, so an externalised store is served on the read path only. Routing the
+ * cluster writes through the external SPI is a separate change - it cannot be done
+ * without decrypting the incoming ciphertext, which is the one thing this surface
+ * refuses to do.
+ * </p>
+ *
  * <p>
  * The counterpart of - not a replacement for - {@code api/admin/SecretsController},
  * which stays the ADMIN/UI surface. Reachable only from a microservice currently
@@ -86,19 +142,61 @@ import jakarta.validation.constraints.NotNull;
 @RequestMapping("${ai.gebo.secrets.cluster.base-path:api/cluster/SecretsController}")
 public class SecretsClusterController {
 
+	private static final ObjectMapper mapper = new ObjectMapper();
+
 	private final GeboSecretRepository repository;
 	private final IGeboSecretsAccessService secretsService;
 	private final GeboClusterParticipants participants;
+	private final IGSecretsStaticConfigurationDao staticConfigurationDao;
+	private final Optional<IGeboSecretsExternalStorageService> externalStorage;
+	/**
+	 * Used for one thing only: sealing a content that did NOT come out of the
+	 * repository - a declared one, or one the external vault returned decrypted -
+	 * so that it leaves this service the same way a stored one does. A stored
+	 * secret's ciphertext is never touched.
+	 */
+	private final IGeboCryptingService cryptService;
 
 	public SecretsClusterController(GeboSecretRepository repository, IGeboSecretsAccessService secretsService,
-			GeboClusterParticipants participants) {
+			GeboClusterParticipants participants, IGSecretsStaticConfigurationDao staticConfigurationDao,
+			Optional<IGeboSecretsExternalStorageService> externalStorage, IGeboCryptingService cryptService) {
 		this.repository = repository;
 		this.secretsService = secretsService;
 		this.participants = participants;
+		this.staticConfigurationDao = staticConfigurationDao;
+		this.externalStorage = externalStorage;
+		this.cryptService = cryptService;
+	}
+
+	/**
+	 * Whether the repository is NOT where this id's content lives - the two cases
+	 * {@link IGeboSecretsAccessService} answers from somewhere else, tested in its
+	 * own order so that the two never disagree about which source owns an id.
+	 */
+	private boolean isServedOutsideTheRepository(String id) {
+		return staticConfigurationDao.isConfiguredCode(id) || (externalStorage.isPresent()
+				&& externalStorage.get().isConfigured() && externalStorage.get().isActiveStorage());
+	}
+
+	/**
+	 * Refuses a write or a delete aimed at a code the configuration declares, with
+	 * the interface's own refusal message - these endpoints write through the
+	 * repository and so never reach {@code GeboSecretsAccessServiceImpl}'s guard.
+	 */
+	private void checkCodeNotConfigured(String code) throws GeboCryptSecretException {
+		if (staticConfigurationDao.isConfiguredCode(code))
+			throw new GeboCryptSecretException(IGeboSecretsAccessService.READ_ONLY_SECRET_MESSAGE);
 	}
 
 	/**
 	 * The secret's content <b>as stored</b> - still encrypted - plus its type.
+	 *
+	 * <p>
+	 * A secret that has no repository record - declared in the configuration, or
+	 * held by an active external vault - is sealed on the spot with the shared key,
+	 * so the caller cannot tell, and does not need to, where the ciphertext came
+	 * from.
+	 * </p>
 	 *
 	 * @param id the secret's unique id
 	 * @return the envelope carrying the ciphertext
@@ -108,6 +206,13 @@ public class SecretsClusterController {
 	public GeboSecretContentEnvelope getSecretContentById(@RequestParam("id") String id, HttpServletRequest request)
 			throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
+		if (isServedOutsideTheRepository(id)) {
+			// Plaintext in, ciphertext out: the access service is the only thing that
+			// knows how to resolve these, and it resolves them decrypted.
+			AbstractGeboSecretContent content = secretsService.getSecretContentById(id);
+			return new GeboSecretContentEnvelope(content.type(),
+					cryptService.crypt(mapper.writeValueAsString(content)));
+		}
 		GeboSecret secret = repository.findById(id).orElse(null);
 		if (secret == null) {
 			// Same contract as the local implementation: an unknown id is an error here.
@@ -151,12 +256,13 @@ public class SecretsClusterController {
 	@PostMapping(value = "storeSecret", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	public String storeSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
 		String secretId = storeRequest.getSecretId();
 		if (secretId == null || secretId.isBlank()) {
 			secretId = UUID.randomUUID().toString();
 		}
+		checkCodeNotConfigured(secretId);
 		GeboSecret secret = new GeboSecret();
 		secret.setCode(secretId);
 		secret.setContextCode(storeRequest.getContextCode());
@@ -176,6 +282,7 @@ public class SecretsClusterController {
 	public void updateSecret(@RequestBody @Valid @NotNull GeboSecretStoreRequest storeRequest,
 			HttpServletRequest request) throws GeboCryptSecretException {
 		ClusterParticipantsGuard.check(participants, request);
+		checkCodeNotConfigured(storeRequest.getSecretId());
 		Optional<GeboSecret> found = repository.findById(storeRequest.getSecretId());
 		if (found.isEmpty()) {
 			throw new GeboCryptSecretException("Secret with code=>" + storeRequest.getSecretId() + " not found");
@@ -195,9 +302,19 @@ public class SecretsClusterController {
 		secretsService.deleteSecret(code);
 	}
 
+	/**
+	 * The ids of every secret, declared or stored.
+	 *
+	 * <p>
+	 * Delegated to {@link IGeboSecretsAccessService} rather than read off the
+	 * repository: ids are not secret material, so the "never decrypt on a caller's
+	 * behalf" rule does not apply, and the service is where declared and stored ids
+	 * are merged - and de-duplicated, when a declaration shadows a record.
+	 * </p>
+	 */
 	@GetMapping(value = "getAllSecretsId", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAllSecretsId(HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
-		return repository.findAll().stream().map(GeboSecret::getCode).toList();
+		return secretsService.getAllSecretsId();
 	}
 }
