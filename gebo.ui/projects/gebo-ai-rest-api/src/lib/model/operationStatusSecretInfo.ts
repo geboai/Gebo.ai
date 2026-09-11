@@ -15,6 +15,6 @@ import { SecretInfo } from './secretInfo';
 export interface OperationStatusSecretInfo { 
     result?: SecretInfo;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -11,6 +11,7 @@
  */
 
 export interface GeboAwsConnectionCredentials { 
+    readOnly?: boolean;
     accessKeyId: string;
     secretAccessKey: string;
     region: GeboAwsConnectionCredentials.RegionEnum;

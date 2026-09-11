@@ -2684,6 +2684,26 @@
                 "summary": "Saved with success",
                 "detail": "Update operation done successfully"
             }
+        },
+        "GeboAiSecretsAdminListComponent": {
+            "MainPanel": {
+                "label": "Identities"
+            },
+            "NewIdentityBtn": {
+                "label": "New identity"
+            },
+            "CodeHeader": {
+                "label": "Code"
+            },
+            "DescriptionHeader": {
+                "label": "Description"
+            },
+            "TypeOfIdentityHeader": {
+                "label": "Type of identity"
+            },
+            "DbOrYmlFileConfigHeader": {
+                "label": "db or yml file config"
+            }
         }
     },
     "GeboAIUploadsModule": {
