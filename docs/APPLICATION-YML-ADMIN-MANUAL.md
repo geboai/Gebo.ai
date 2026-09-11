@@ -127,6 +127,10 @@ it can be pre-seeded here.
 
 ### 6.2 `ai.gebo.secrets.config` — declaratively configured read-only secrets (lists)
 
+> For how these are referenced by a declared content system, and which type each connector
+> expects, see
+> [`APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md`](APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md).
+
 Secrets normally live encrypted in the store (Mongo, or an external vault) and are created through
 the admin UI. This section is the alternative for a deployment that wants a credential to come from
 its own configuration — a Kubernetes secret projected into `application.yml`, an env var, a mounted
@@ -336,6 +340,11 @@ Bound by `GeboAiFilesystemsConfig` (`ai.gebo.filesystem`).
 
 These are advanced/integration features (source-code repository ingestion & CI build awareness),
 not required for a standard RAG deployment.
+
+> **Full guide with a worked example per handler** — secrets, systems and data sources, how they
+> reference each other, and which secret type each connector expects:
+> [`APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md`](APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md).
+> The three sections below are the reference tables.
 
 ### 16.1 `ai.gebo.<content handler>.systems` — content management systems declared by the configuration
 
