@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GAbstractDeclaredEntitiesSeeder;
 import ai.gebo.core.config.GeboKnowledgeBaseHierarchyConfig;
+import ai.gebo.acl.GAclEntry;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import java.util.List;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
 
 /**
@@ -70,5 +72,21 @@ public class GeboDeclaredKnowledgeBasesSeeder
 	@Override
 	public int getOrder() {
 		return KNOWLEDGE_BASE_ORDER;
+	}
+
+	/**
+	 * A declared knowledge base is part of the deployment, so it is readable by
+	 * everyone unless the declaration says otherwise: {@code accessibleToAll} and
+	 * an everyone-read ACL entry, both applied only when left unset so an explicit
+	 * restriction in the file is honoured.
+	 */
+	@Override
+	protected void applyDeclarationDefaults(GKnowledgeBase kb) {
+		if (kb.getAccessibleToAll() == null) {
+			kb.setAccessibleToAll(Boolean.TRUE);
+		}
+		if (kb.getAcl() == null) {
+			kb.setAcl(List.of(GAclEntry.EVERYONE_READ_ACCESS));
+		}
 	}
 }

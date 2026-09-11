@@ -138,6 +138,16 @@ property source, and the file itself stays safe to commit.
 
 ## 4. The hierarchy — `ai.gebo.knowledgebases` and `ai.gebo.projects`
 
+> **Default visibility.** Anything declared in the configuration is part of the deployment, so it
+> is opened to everyone by default: a declared knowledge base and project are set
+> `accessibleToAll: true` (the knowledge base also gets an everyone-read ACL entry), and a declared
+> data source is given the everyone-read ACL alias its ingested documents inherit — so the content
+> is searchable by every user without a manual grant. Each default is applied only when the
+> declaration left it unset, so an explicit `accessibleToAll: false` or a set of
+> `accessibleUsers`/`accessibleGroups` in the file is honoured. A data source's own visibility lives
+> in the resolved `aclAliases`, because `GProjectEndpoint` has no `accessibleToAll` flag of its own.
+
+
 Both are written into Mongo at startup, exactly like data sources and for the same reason:
 a knowledge base and a project are resolved by code through `IGPersistentObjectManager` from
 everywhere — ingestion, the scheduler, browsing, the ACL resolver — and none of those paths

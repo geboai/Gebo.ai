@@ -17,11 +17,16 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.GAclEntry;
+import ai.gebo.acl.IAclAliasesDao;
+import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.architecture.persistence.GAbstractDeclaredEntitiesSeeder;
 import ai.gebo.knowledgebase.repositories.IGBaseMongoDBProjectEndpointRepository;
@@ -93,6 +98,18 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	 * reason.
 	 */
 	private final ApplicationContext applicationContext;
+
+	/**
+	 * Resolves the everyone-read ACL alias a declared source is opened up with.
+	 * Field-injected and optional: a deployment without the ACL layer still starts,
+	 * and a declared source then simply carries no aclAliases. The alias ints it
+	 * hands out propagate to every ingested document (the content handler copies
+	 * {@code endpoint.getAclAliases()} onto the ingested root), and a user's read
+	 * accessor always includes the everyone alias - so the content is readable by
+	 * everyone, which is the intent for a deployment-declared source.
+	 */
+	@Autowired(required = false)
+	private IAclAliasesDao aclAliasesDao;
 
 	/**
 	 * Keeps the declarations as they were bound. Validation and translation happen
@@ -289,6 +306,16 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 		// delete in the admin UI, what the controller write paths refuse on, and what
 		// tells a later boot that this record is the seeder's to overwrite.
 		endpoint.setReadonly(true);
+		// A declared source is part of the deployment, so its content is readable by
+		// everyone unless the declaration already set an ACL. The endpoint's aclAliases
+		// are what the ingested documents inherit, so this is where "everyone read" has
+		// to land for a data source - GProjectEndpoint has no accessibleToAll flag.
+		if (endpoint.getAclAliases() == null || endpoint.getAclAliases().isEmpty()) {
+			List<Integer> everyoneRead = everyoneReadAliases();
+			if (everyoneRead != null) {
+				endpoint.setAclAliases(everyoneRead);
+			}
+		}
 		setPaths(endpoint, translatePaths(declaration));
 		return endpoint;
 	}
@@ -300,6 +327,25 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	 * @param declaration the declared data source.
 	 * @return the references to ingest from.
 	 */
+	/**
+	 * The everyone-read alias id(s), resolved once. When the ACL layer has not yet
+	 * seeded the preset - this seeder can run before it - the alias is created here;
+	 * the preset seeder then finds it present and skips, so exactly one exists.
+	 *
+	 * @return the everyone-read aliases, or {@code null} when no ACL DAO is present.
+	 */
+	private List<Integer> everyoneReadAliases() {
+		if (aclAliasesDao == null) {
+			return null;
+		}
+		List<Integer> aliases = aclAliasesDao.findAliasesByAclGrantedUniqueIdAndAclGrantType(
+				IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID, AclGrantType.READ);
+		if (aliases != null && !aliases.isEmpty()) {
+			return aliases;
+		}
+		return List.of(aclAliasesDao.addAcl(GAclEntry.EVERYONE_READ_ACCESS));
+	}
+
 	private List<VFilesystemReference> translatePaths(GDeclaredDataSource declaration) {
 		List<VFilesystemReference> references = new ArrayList<VFilesystemReference>();
 		for (GDeclaredDataSourcePath declaredPath : declaration.getPaths()) {

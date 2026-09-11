@@ -524,6 +524,11 @@ next restart, when the declaration is written back over it.
 The filesystem and MCP handlers already used this flag for their own non-editable singleton
 system, so no new concept was introduced for it.
 
+Declared records are also opened to everyone by default, since they belong to the deployment: a
+knowledge base and project get `accessibleToAll: true` (the knowledge base an everyone-read ACL
+entry too), and a data source gets the everyone-read ACL alias its documents inherit — each only
+when the declaration left visibility unset, so an explicit restriction in the file is kept.
+
 ## 17. Ingestion pipeline tuning — chunking, embedding, GraphRAG
 
 Advanced performance/throughput tuning. Defaults are sane for most installs; only touch these for

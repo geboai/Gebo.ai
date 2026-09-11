@@ -74,4 +74,17 @@ public class GeboDeclaredProjectsSeeder extends GAbstractDeclaredEntitiesSeeder<
 	public int getOrder() {
 		return PROJECT_ORDER;
 	}
+
+	/**
+	 * A declared project is part of the deployment, so it is visible to everyone
+	 * unless the declaration restricts it. {@code GProject} has no ACL entry list
+	 * of its own - the {@code accessibleToAll} flag is what the security predicate
+	 * reads - so that flag is the whole default here.
+	 */
+	@Override
+	protected void applyDeclarationDefaults(GProject project) {
+		if (project.getAccessibleToAll() == null) {
+			project.setAccessibleToAll(Boolean.TRUE);
+		}
+	}
 }

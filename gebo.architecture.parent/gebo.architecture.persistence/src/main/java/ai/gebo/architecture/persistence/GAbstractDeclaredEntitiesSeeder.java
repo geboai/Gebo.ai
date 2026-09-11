@@ -134,6 +134,18 @@ public abstract class GAbstractDeclaredEntitiesSeeder<EntityType extends GBaseOb
 	protected abstract Boolean getReadonly(EntityType entity);
 
 	/**
+	 * Applies the defaults a declared record should carry when the declaration
+	 * left them unset. The base does nothing; a concrete seeder overrides it to
+	 * open the record up - a deployment-declared knowledge base or project is
+	 * visible to everyone by default, since it is part of the deployment rather
+	 * than a user's private space.
+	 *
+	 * @param entity the record about to be written.
+	 */
+	protected void applyDeclarationDefaults(EntityType entity) {
+	}
+
+	/**
 	 * A word for this kind of record, used in the startup messages - "knowledge
 	 * base", "project".
 	 *
@@ -163,6 +175,7 @@ public abstract class GAbstractDeclaredEntitiesSeeder<EntityType extends GBaseOb
 						+ " the configuration will not overwrite it. Rename the declaration, or delete the existing one first.");
 			}
 			setReadonly(entity, Boolean.TRUE);
+			applyDeclarationDefaults(entity);
 			repository.save(entity);
 			LOGGER.info("The {} {} declared in the configuration is available", describeKind(), entity.getCode());
 		}

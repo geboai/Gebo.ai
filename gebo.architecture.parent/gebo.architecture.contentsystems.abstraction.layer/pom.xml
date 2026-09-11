@@ -140,5 +140,15 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 
 		</dependency>
+		<!--
+			IAclAliasesDao, to resolve the everyone-read alias a declared data source
+			is opened up with. Optional at runtime (field-injected required=false), so a
+			deployment without the ACL layer still starts.
+		-->
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.acl.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
