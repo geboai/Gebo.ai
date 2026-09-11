@@ -1,0 +1,96 @@
+# ---------------------------------------------------------------------------
+# Per-workspace Gebo.ai configuration overlay for the Euro-office sandbox.
+#
+# The base configuration is ../gebo.ai/config/application.yml, which this file
+# does NOT replace: it is mounted at a second location and merged over it by
+# SPRING_CONFIG_ADDITIONAL_LOCATION (see docker-compose.yml). It lives here
+# rather than in that shared file because dockers/onlyoffice-assistant mounts
+# the same one and has no Nextcloud - a data source pointing at a host that does
+# not exist there would be seeded into its database and fail at every ingestion.
+#
+# ---------------------------------------------------------------------------
+# THE ROUND TRIP THIS COMPLETES
+# ---------------------------------------------------------------------------
+#
+#   1. a user opens a document from Nextcloud in Euro-Office
+#      (the onlyoffice connector app, SSO-gated through Keycloak)
+#   2. the user edits it and saves; the editor posts the new version back to
+#      Nextcloud, which stores it in the account's own files
+#   3. every night Gebo.ai re-reads that account's whole WebDAV disk and
+#      re-ingests what changed into the knowledge base
+#   4. the updated content is answerable in chat, and through the same
+#      Euro-Office plugin the user is editing in
+#
+# Step 3 is what this file declares, as a complete hierarchy:
+#
+#   knowledge base  sandbox-kb
+#        |
+#   project         nextcloud-documents
+#        |
+#   data source     nextcloud-webdav-disk  ── daily at 02:30
+#        |                 |
+#        |            system nextcloud-dav
+#        |                 |
+#        |            secret nextcloud-webdav-account
+#
+# Everything here is read only in the admin UI: it is owned by this file. See
+# docs/APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md.
+# ---------------------------------------------------------------------------
+
+ai.gebo:
+  knowledgebases:
+    - code: sandbox-kb
+      # Displayed in the admin list, so keep it short.
+      description: Company knowledge base
+      accessibleToAll: true
+  projects:
+    - code: nextcloud-documents
+      description: Nextcloud documents
+      rootKnowledgeBaseCode: sandbox-kb
+      accessibleToAll: true
+
+ai.gebo.secrets.config:
+  username-password:
+    - code: nextcloud-webdav-account
+      description: Nextcloud WebDAV ingestion account
+      # Created by the provisioning hook of the nextcloud service; these values
+      # must match its WEBDAV_USER / WEBDAV_PASSWORD.
+      context-code: SYSTEMS
+      secret:
+        username: webdav
+        password: webdav-sandbox-2026
+
+ai.gebo.webdav:
+  systems:
+    - code: nextcloud-dav
+      description: Sandbox Nextcloud (WebDAV)
+      # Reached server to server on the compose network.
+      # The in-network alias of the nextcloud service, NOT the browser-facing
+      # nextcloud.localtest.me:8091. Nextcloud accepts it because the alias is
+      # listed in NEXTCLOUD_TRUSTED_DOMAINS.
+      baseUri: http://nextcloud/remote.php/dav
+      webdavAuthType: BASIC
+      secretCode: nextcloud-webdav-account
+  datasources:
+    - code: nextcloud-webdav-disk
+      description: Nextcloud disk (nightly)
+      # The whole WebDAV disk of the ingestion account, re-read every night so
+      # documents saved from the editor reach the knowledge base.
+      systemCode: nextcloud-dav
+      parentProjectCode: nextcloud-documents
+      synchPeriodically: true
+      # DAILY takes [hour, minutes]: 02:30, when nobody is editing. Nothing has
+      # to be clicked - every stored endpoint is rescheduled on context refresh
+      # and the seeders run before that, so the first boot also programs a
+      # catch-up run ~30s out because 02:30 is already past.
+      programmedTables:
+        - frequency: DAILY
+          times:
+            - timeComponent: [2, 30]
+      paths:
+        # Relative to the system's baseUri: the files root of the 'webdav'
+        # account, which is the root of its disk. Everything under it is walked,
+        # including the GeboSamples folder the provisioning hook seeds and
+        # anything a user saves from the editor.
+        - path: /files/webdav
+          folder: true

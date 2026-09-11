@@ -341,8 +341,8 @@ Bound by `GeboAiFilesystemsConfig` (`ai.gebo.filesystem`).
 These are advanced/integration features (source-code repository ingestion & CI build awareness),
 not required for a standard RAG deployment.
 
-> **Full guide with a worked example per handler** — secrets, systems and data sources, how they
-> reference each other, and which secret type each connector expects:
+> **Full guide with a worked example per handler** — knowledge bases, projects, secrets, systems
+> and data sources, how they reference each other, and which secret type each connector expects:
 > [`APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md`](APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md).
 > The three sections below are the reference tables.
 
@@ -434,8 +434,9 @@ refuse a source the configuration owns.
 
 Each entry takes: `code` (required, unique), `description`, `systemCode` (required — a system from
 §16.1 or one created in the UI), `parentProjectCode` (the knowledge base project it feeds),
-`published`, `synchPeriodically`, `openZips`, `personalData`, `vectorizeOnlyExtensions`, and
-`paths` (required, at least one). Each path is `path` plus a `folder` flag — `true` for a folder
+`published`, `synchPeriodically`, `openZips`, `personalData`, `vectorizeOnlyExtensions`,
+`programmedTables` (when it is re-ingested — `frequency` plus `times`, where a `DAILY`
+`timeComponent` is `[hour, minutes]`), and `paths` (required, at least one). Each path is `path` plus a `folder` flag — `true` for a folder
 whose contents are walked, `false` (the default) for a single file.
 
 ```yaml
@@ -468,14 +469,49 @@ navigation refuses a node whose kind disagrees.
 lists, list items and site pages, each with its own identity and step type, and a `path`/`folder`
 pair has nothing to say about which is meant. Build site-backed sources in the admin UI.
 
-**Scheduling.** The central scheduler is driven by reschedule requests that only a write path
-emits, so a declared source is registered with it by pressing **Publish** on it once. Publish stays
-enabled on a read-only source for exactly that reason; it queues the ingestion and sends the
-reschedule, and skips the save, since the record is already what the file says.
+**Scheduling.** Nothing has to be clicked: every stored endpoint is rescheduled on context
+refresh and the seeders run before that, so a declared source is on the schedule from its first
+boot, governed by its `programmedTables`. When its schedule says it should already have run — the
+normal case on a first boot — the scheduler programs a catch-up run about 30 seconds out. Publish
+stays enabled on a read-only source for when you want a run immediately; it queues the ingestion
+and skips the save.
 
-### 16.3 What `readonly` means for a declared system or data source
+### 16.3 `ai.gebo.knowledgebases` / `ai.gebo.projects` — the hierarchy above them
 
-Everything declared in §16.1 and §16.2 carries `readonly: true`. The admin UI reads that marker in
+The knowledge base and the project a data source feeds can be declared too, so a deployment comes
+up with the whole hierarchy in place rather than needing an admin to build the top of it by hand.
+
+| Property (list) | Binding class | Fields |
+|---|---|---|
+| `ai.gebo.knowledgebases` | `GeboKnowledgeBaseHierarchyConfig` | `code` (required), `description`, `accessibleToAll`, `accessibleUsers`, `accessibleGroups`, `parentKnowledgebaseCode`, `knowledgeBaseReferences`, `projectsReferences`, `embeddingModelReferences`, `objectSpaceType` |
+| `ai.gebo.projects` | `GeboKnowledgeBaseHierarchyConfig` | `code` (required), `description`, `rootKnowledgeBaseCode`, `parentProjectCode`, `accessibleToAll`, `accessibleUsers`, `accessibleGroups`, `objectSpaceType` |
+
+```yaml
+ai.gebo:
+  knowledgebases:
+    - code: COMPANY-KB
+      description: Company knowledge base
+      accessibleToAll: true
+  projects:
+    - code: COMPANY-DOCS
+      description: Corporate documents
+      rootKnowledgeBaseCode: COMPANY-KB
+      accessibleToAll: true
+```
+
+Like the data sources of §16.2 — and for the same reason, since both are resolved by code through
+`IGPersistentObjectManager` from everywhere — these are **written into Mongo at startup** rather
+than served from the configuration. They are seeded top down: knowledge bases, then projects, then
+data sources, so each level exists before the one that names it.
+
+The overwrite rules of §16.2 apply unchanged: a record an admin created under the same code fails
+the startup rather than being replaced, and a record whose declaration is removed has its
+`readonly` marker cleared rather than being deleted — deleting a project or knowledge base means
+disposing of everything beneath it, which a repository write cannot do.
+
+### 16.4 What `readonly` means for a declared system, data source, project or knowledge base
+
+Everything declared in §16.1, §16.2 and §16.3 carries `readonly: true`. The admin UI reads that marker in
 `BaseEntityEditingComponent` and disables **save and delete**, with a message naming the file;
 `GAbstractSystemsArchitectureController` refuses insert, update and delete regardless of the
 client. Publish is deliberately left enabled — it writes nothing on a read-only entity.
@@ -487,6 +523,11 @@ next restart, when the declaration is written back over it.
 
 The filesystem and MCP handlers already used this flag for their own non-editable singleton
 system, so no new concept was introduced for it.
+
+Declared records are also opened to everyone by default, since they belong to the deployment: a
+knowledge base and project get `accessibleToAll: true` (the knowledge base an everyone-read ACL
+entry too), and a data source gets the everyone-read ACL alias its documents inherit — each only
+when the declaration left visibility unset, so an explicit restriction in the file is kept.
 
 ## 17. Ingestion pipeline tuning — chunking, embedding, GraphRAG
 

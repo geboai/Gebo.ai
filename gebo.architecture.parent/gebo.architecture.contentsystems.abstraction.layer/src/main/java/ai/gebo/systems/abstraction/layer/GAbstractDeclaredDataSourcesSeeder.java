@@ -17,11 +17,18 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.Ordered;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.GAclEntry;
+import ai.gebo.acl.IAclAliasesDao;
+import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.architecture.persistence.GAbstractDeclaredEntitiesSeeder;
 import ai.gebo.knowledgebase.repositories.IGBaseMongoDBProjectEndpointRepository;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSource;
@@ -74,12 +81,12 @@ import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSourcePath;
  * @param <RepositoryType> the module's endpoint repository
  */
 public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GProjectEndpoint, RepositoryType extends IGBaseMongoDBProjectEndpointRepository<EndpointType>>
-		implements ApplicationListener<ContextRefreshedEvent> {
+		implements ApplicationListener<ContextRefreshedEvent>, Ordered {
 
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-	/** The declared sources, already translated into module endpoints. */
-	private final List<EndpointType> declaredEndpoints;
+	/** The declared sources, as the configuration binder produced them. */
+	private final List<GDeclaredDataSource> declarations;
 
 	/** The module's endpoint repository, the one the handler DAO reads. */
 	private final RepositoryType repository;
@@ -93,18 +100,28 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	private final ApplicationContext applicationContext;
 
 	/**
-	 * Validates and translates the declarations. Both happen here rather than at
-	 * seeding time: a declaration the module cannot make sense of is a deployment
-	 * error, and reporting it before anything touches the store keeps a half-seeded
-	 * repository from ever existing.
+	 * Resolves the everyone-read ACL alias a declared source is opened up with.
+	 * Field-injected and optional: a deployment without the ACL layer still starts,
+	 * and a declared source then simply carries no aclAliases. The alias ints it
+	 * hands out propagate to every ingested document (the content handler copies
+	 * {@code endpoint.getAclAliases()} onto the ingested root), and a user's read
+	 * accessor always includes the everyone alias - so the content is readable by
+	 * everyone, which is the intent for a deployment-declared source.
+	 */
+	@Autowired(required = false)
+	private IAclAliasesDao aclAliasesDao;
+
+	/**
+	 * Keeps the declarations as they were bound. Validation and translation happen
+	 * in {@link #seed()}, once the context is up: a module may need to resolve the
+	 * system a declaration names - WebDAV reads its {@code baseUri} to make a
+	 * relative path absolute - and that is not available while beans are still
+	 * being constructed.
 	 *
 	 * <p>
-	 * {@link #newEndpoint(GDeclaredDataSource)} and
-	 * {@link #toReference(GDeclaredDataSourcePath)} therefore run before the
-	 * subclass's own fields are assigned, so an implementation of either must
-	 * depend on nothing but its arguments - which is also why every module's
-	 * translation is a pure function of the declared string rather than a lookup of
-	 * the referenced system.
+	 * Every declaration is translated before ANY of them is written, so a
+	 * declaration the module cannot make sense of still fails the startup with a
+	 * repository untouched, rather than leaving it half seeded.
 	 * </p>
 	 *
 	 * @param declarations       the data sources declared under
@@ -117,7 +134,7 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 			ApplicationContext applicationContext) {
 		this.repository = repository;
 		this.applicationContext = applicationContext;
-		this.declaredEndpoints = translateAll(declarations);
+		this.declarations = declarations;
 	}
 
 	/**
@@ -136,13 +153,16 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	 * understands - the same encoding the browsing UI stores for a source an admin
 	 * assembles by clicking.
 	 *
+	 * @param declaration  the data source the path belongs to, so an implementation
+	 *                     can resolve the system it names.
 	 * @param declaredPath the declared path and its folder flag.
 	 * @return the reference to ingest from.
 	 * @throws IllegalStateException when the path is not valid for this module; the
 	 *                               message is shown as a startup failure, so it
 	 *                               should say what the module expected.
 	 */
-	protected abstract VFilesystemReference toReference(GDeclaredDataSourcePath declaredPath);
+	protected abstract VFilesystemReference toReference(GDeclaredDataSource declaration,
+			GDeclaredDataSourcePath declaredPath);
 
 	/**
 	 * Stores the translated references on the endpoint. Every endpoint this covers
@@ -161,6 +181,17 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	 *
 	 * @param event the refresh event.
 	 */
+	/**
+	 * Last of the hierarchy: a data source names the project it feeds, so the
+	 * projects - and the knowledge bases they belong to - are written first.
+	 *
+	 * @return the seeding order.
+	 */
+	@Override
+	public int getOrder() {
+		return GAbstractDeclaredEntitiesSeeder.DATA_SOURCE_ORDER;
+	}
+
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		if (applicationContext != null && event.getApplicationContext() != applicationContext) {
@@ -174,6 +205,7 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	 * whose declaration is gone.
 	 */
 	protected void seed() {
+		List<EndpointType> declaredEndpoints = translateAll(declarations);
 		for (EndpointType declared : declaredEndpoints) {
 			Optional<EndpointType> existing = repository.findById(declared.getCode());
 			if (existing.isPresent() && !Boolean.TRUE.equals(existing.get().getReadonly())) {
@@ -184,7 +216,7 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 			repository.save(declared);
 			LOGGER.info("Data source {} declared in the configuration is available", declared.getCode());
 		}
-		releaseUndeclared();
+		releaseUndeclared(declaredEndpoints);
 	}
 
 	/**
@@ -192,7 +224,7 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	 * earlier boot and the configuration no longer declares, so an admin can delete
 	 * them through the UI - with the disposal a repository write cannot perform.
 	 */
-	private void releaseUndeclared() {
+	private void releaseUndeclared(List<EndpointType> declaredEndpoints) {
 		List<String> declaredCodes = new ArrayList<String>();
 		for (EndpointType declared : declaredEndpoints) {
 			declaredCodes.add(declared.getCode().toLowerCase());
@@ -264,6 +296,7 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 		endpoint.setParentProjectCode(declaration.getParentProjectCode());
 		endpoint.setPublished(declaration.getPublished());
 		endpoint.setSynchPeriodically(declaration.getSynchPeriodically());
+		endpoint.setProgrammedTables(declaration.getProgrammedTables());
 		endpoint.setOpenZips(declaration.getOpenZips());
 		if (declaration.getPersonalData() != null) {
 			endpoint.setPersonalData(declaration.getPersonalData());
@@ -273,6 +306,16 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 		// delete in the admin UI, what the controller write paths refuse on, and what
 		// tells a later boot that this record is the seeder's to overwrite.
 		endpoint.setReadonly(true);
+		// A declared source is part of the deployment, so its content is readable by
+		// everyone unless the declaration already set an ACL. The endpoint's aclAliases
+		// are what the ingested documents inherit, so this is where "everyone read" has
+		// to land for a data source - GProjectEndpoint has no accessibleToAll flag.
+		if (endpoint.getAclAliases() == null || endpoint.getAclAliases().isEmpty()) {
+			List<Integer> everyoneRead = everyoneReadAliases();
+			if (everyoneRead != null) {
+				endpoint.setAclAliases(everyoneRead);
+			}
+		}
 		setPaths(endpoint, translatePaths(declaration));
 		return endpoint;
 	}
@@ -284,6 +327,25 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 	 * @param declaration the declared data source.
 	 * @return the references to ingest from.
 	 */
+	/**
+	 * The everyone-read alias id(s), resolved once. When the ACL layer has not yet
+	 * seeded the preset - this seeder can run before it - the alias is created here;
+	 * the preset seeder then finds it present and skips, so exactly one exists.
+	 *
+	 * @return the everyone-read aliases, or {@code null} when no ACL DAO is present.
+	 */
+	private List<Integer> everyoneReadAliases() {
+		if (aclAliasesDao == null) {
+			return null;
+		}
+		List<Integer> aliases = aclAliasesDao.findAliasesByAclGrantedUniqueIdAndAclGrantType(
+				IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID, AclGrantType.READ);
+		if (aliases != null && !aliases.isEmpty()) {
+			return aliases;
+		}
+		return List.of(aclAliasesDao.addAcl(GAclEntry.EVERYONE_READ_ACCESS));
+	}
+
 	private List<VFilesystemReference> translatePaths(GDeclaredDataSource declaration) {
 		List<VFilesystemReference> references = new ArrayList<VFilesystemReference>();
 		for (GDeclaredDataSourcePath declaredPath : declaration.getPaths()) {
@@ -293,7 +355,7 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 						"The data source '" + declaration.getCode() + "' declares an entry with no path");
 			}
 			try {
-				references.add(toReference(declaredPath));
+				references.add(toReference(declaration, declaredPath));
 			} catch (RuntimeException e) {
 				throw new IllegalStateException("The data source '" + declaration.getCode() + "' declares the path '"
 						+ declaredPath.getPath() + "' which this content handler cannot resolve: " + e.getMessage(), e);
@@ -302,13 +364,4 @@ public abstract class GAbstractDeclaredDataSourcesSeeder<EndpointType extends GP
 		return references;
 	}
 
-	/**
-	 * The declared sources as they will be stored - what the tests of a concrete
-	 * seeder assert over.
-	 *
-	 * @return the translated endpoints.
-	 */
-	protected List<EndpointType> getDeclaredEndpoints() {
-		return declaredEndpoints;
-	}
 }

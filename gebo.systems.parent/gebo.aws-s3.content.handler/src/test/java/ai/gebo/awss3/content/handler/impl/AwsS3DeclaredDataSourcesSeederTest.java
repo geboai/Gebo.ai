@@ -18,6 +18,7 @@ import ai.gebo.awss3.content.handler.config.AwsS3DataSourcesConfig;
 import ai.gebo.awss3.content.handler.impl.model.AwsS3NavigationCoordinates;
 import ai.gebo.awss3.content.handler.impl.model.AwsS3PathNodeType;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSource;
 import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSourcePath;
 
 /**
@@ -39,8 +40,16 @@ class AwsS3DeclaredDataSourcesSeederTest {
 		return declared;
 	}
 
+	/** The declaration a path belongs to; these handlers do not read it. */
+	private static GDeclaredDataSource source() {
+		GDeclaredDataSource declared = new GDeclaredDataSource();
+		declared.setCode("declared-source");
+		declared.setSystemCode("declared-system");
+		return declared;
+	}
+
 	private AwsS3NavigationCoordinates coordinatesOf(String path, boolean folder) throws Exception {
-		VFilesystemReference reference = seeder.toReference(path(path, folder));
+		VFilesystemReference reference = seeder.toReference(source(), path(path, folder));
 		return AwsS3NavigationUtil.toCoordinates(reference);
 	}
 
@@ -72,7 +81,7 @@ class AwsS3DeclaredDataSourcesSeederTest {
 
 	@Test
 	void aBareBucketIsTheWholeBucketAndHasNoStep() throws Exception {
-		VFilesystemReference reference = seeder.toReference(path("corporate-docs", true));
+		VFilesystemReference reference = seeder.toReference(source(), path("corporate-docs", true));
 
 		assertThat(reference.root.getCode()).isEqualTo("corporate-docs");
 		assertThat(reference.path).isNull();
@@ -80,13 +89,13 @@ class AwsS3DeclaredDataSourcesSeederTest {
 
 	@Test
 	void aBucketDeclaredAsAFileIsRefused() {
-		assertThatThrownBy(() -> seeder.toReference(path("corporate-docs", false)))
+		assertThatThrownBy(() -> seeder.toReference(source(), path("corporate-docs", false)))
 				.isInstanceOf(IllegalStateException.class).hasMessageContaining("folder: true");
 	}
 
 	@Test
 	void aPrefixDeclaredAsAFileIsRefused() {
-		assertThatThrownBy(() -> seeder.toReference(path("corporate-docs/reports/", false)))
+		assertThatThrownBy(() -> seeder.toReference(source(), path("corporate-docs/reports/", false)))
 				.isInstanceOf(IllegalStateException.class).hasMessageContaining("trailing slash");
 	}
 }

@@ -76,7 +76,8 @@ public class SharepointDeclaredDataSourcesSeeder extends
 	}
 
 	@Override
-	protected VFilesystemReference toReference(GDeclaredDataSourcePath declaredPath) {
+	protected VFilesystemReference toReference(GDeclaredDataSource declaration,
+			GDeclaredDataSourcePath declaredPath) {
 		String declared = declaredPath.getPath().trim();
 		while (declared.startsWith("/")) {
 			declared = declared.substring(1);

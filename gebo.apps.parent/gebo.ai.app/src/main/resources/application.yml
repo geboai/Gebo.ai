@@ -254,6 +254,24 @@ ai.gebo.git.config:
       contentManagementSystemType: DEFAULT.GIT.CONTENT.HANDLER
       description: Git/Bitbucket/GitHub contents handler
 
+# The knowledge base hierarchy declared by the configuration: a knowledge base
+# holds projects, a project is what a data source feeds. Both are written into
+# the database at startup and are read only in the admin UI - an existing record
+# an admin created under the same code fails the startup rather than being
+# overwritten, and a record whose declaration is removed is handed back to the UI
+# rather than deleted, since deleting one disposes of everything beneath it.
+# See section 4 of docs/APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md.
+#ai.gebo:
+#  knowledgebases:
+#    - code: COMPANY-KB
+#      description: Company knowledge base
+#      accessibleToAll: true
+#  projects:
+#    - code: COMPANY-DOCS
+#      description: Corporate documents
+#      rootKnowledgeBaseCode: COMPANY-KB
+#      accessibleToAll: true
+
 # Content management systems declared by the configuration instead of created
 # through the admin UI: one `systems` list per content handler, each entry the
 # same object the admin screen edits. They show up in the admin list beside the

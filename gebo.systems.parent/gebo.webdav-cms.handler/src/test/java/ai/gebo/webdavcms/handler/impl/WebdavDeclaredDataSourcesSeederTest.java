@@ -16,7 +16,10 @@ import org.junit.jupiter.api.Test;
 
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSourcePath;
+import ai.gebo.systems.abstraction.layer.config.GDeclaredDataSource;
+import ai.gebo.webdavcms.handler.GWebdavContentManagementSystem;
 import ai.gebo.webdavcms.handler.config.WebdavDataSourcesConfig;
+import ai.gebo.webdavcms.handler.config.WebdavSystemsConfig;
 
 /**
  * That a declared WebDAV path becomes exactly the reference the module's own
@@ -28,8 +31,27 @@ import ai.gebo.webdavcms.handler.config.WebdavDataSourcesConfig;
  */
 class WebdavDeclaredDataSourcesSeederTest {
 
+	private static final String SYSTEM_CODE = "corporate-dav";
+
+	/** A systems DAO holding one declared system, to resolve relative paths. */
+	private static WebdavSystemsConfigurationDao systemsDao(String baseUri) {
+		GWebdavContentManagementSystem system = new GWebdavContentManagementSystem();
+		system.setCode(SYSTEM_CODE);
+		system.setBaseUri(baseUri);
+		WebdavSystemsConfig config = new WebdavSystemsConfig();
+		config.setSystems(java.util.List.of(system));
+		return new WebdavSystemsConfigurationDao(config, null);
+	}
+
 	private final WebdavDeclaredDataSourcesSeeder seeder = new WebdavDeclaredDataSourcesSeeder(
-			new WebdavDataSourcesConfig(), null, null);
+			new WebdavDataSourcesConfig(), null, systemsDao("https://dav.example.com/remote.php/dav"), null);
+
+	private static GDeclaredDataSource source() {
+		GDeclaredDataSource declared = new GDeclaredDataSource();
+		declared.setCode("corporate-policies");
+		declared.setSystemCode(SYSTEM_CODE);
+		return declared;
+	}
 
 	private static GDeclaredDataSourcePath path(String path, boolean folder) {
 		GDeclaredDataSourcePath declared = new GDeclaredDataSourcePath();
@@ -41,7 +63,7 @@ class WebdavDeclaredDataSourcesSeederTest {
 	@Test
 	void aFolderBecomesItsParentAsRootAndItselfAsTheStep() {
 		VFilesystemReference reference = seeder
-				.toReference(path("https://dav.example.com/remote.php/dav/files/admin/Policies", true));
+				.toReference(source(), path("https://dav.example.com/remote.php/dav/files/admin/Policies", true));
 
 		assertThat(WebdavNavigationUtil.decodeRoot(reference.root))
 				.isEqualTo("https://dav.example.com/remote.php/dav/files/admin");
@@ -55,7 +77,7 @@ class WebdavDeclaredDataSourcesSeederTest {
 	@Test
 	void aFileBecomesAFileStep() {
 		VFilesystemReference reference = seeder
-				.toReference(path("https://dav.example.com/remote.php/dav/files/admin/handbook.pdf", false));
+				.toReference(source(), path("https://dav.example.com/remote.php/dav/files/admin/handbook.pdf", false));
 
 		assertThat(reference.path.folder).isFalse();
 		assertThat(reference.path.name).isEqualTo("handbook.pdf");
@@ -66,7 +88,7 @@ class WebdavDeclaredDataSourcesSeederTest {
 	@Test
 	void aTrailingSlashIsNotPartOfTheHref() {
 		VFilesystemReference reference = seeder
-				.toReference(path("https://dav.example.com/remote.php/dav/files/admin/Policies/", true));
+				.toReference(source(), path("https://dav.example.com/remote.php/dav/files/admin/Policies/", true));
 
 		assertThat(WebdavNavigationUtil.decodeFolders(java.util.List.of(reference)))
 				.containsExactly("https://dav.example.com/remote.php/dav/files/admin/Policies");
@@ -74,21 +96,41 @@ class WebdavDeclaredDataSourcesSeederTest {
 
 	@Test
 	void theServerOriginIsTheWholeShareAndHasNoStep() {
-		VFilesystemReference reference = seeder.toReference(path("https://dav.example.com", true));
+		VFilesystemReference reference = seeder.toReference(source(), path("https://dav.example.com", true));
 
 		assertThat(WebdavNavigationUtil.decodeRoot(reference.root)).isEqualTo("https://dav.example.com");
 		assertThat(reference.path).isNull();
 	}
 
 	@Test
-	void aPathThatIsNotAnHrefIsRefused() {
-		assertThatThrownBy(() -> seeder.toReference(path("/remote.php/dav/files/admin/Policies", true)))
-				.isInstanceOf(IllegalStateException.class).hasMessageContaining("full href");
+	void theServerOriginDeclaredAsAFileIsRefused() {
+		assertThatThrownBy(() -> seeder.toReference(source(), path("https://dav.example.com", false)))
+				.isInstanceOf(IllegalStateException.class).hasMessageContaining("folder: true");
+	}
+	@Test
+	void aRelativePathIsResolvedAgainstTheSystemBaseUri() {
+		VFilesystemReference reference = seeder.toReference(source(), path("/files/webdav/Policies", true));
+
+		assertThat(WebdavNavigationUtil.decodeRoot(reference.root))
+				.isEqualTo("https://dav.example.com/remote.php/dav/files/webdav");
+		assertThat(WebdavNavigationUtil.decodeFolders(java.util.List.of(reference)))
+				.containsExactly("https://dav.example.com/remote.php/dav/files/webdav/Policies");
 	}
 
 	@Test
-	void theServerOriginDeclaredAsAFileIsRefused() {
-		assertThatThrownBy(() -> seeder.toReference(path("https://dav.example.com", false)))
-				.isInstanceOf(IllegalStateException.class).hasMessageContaining("folder: true");
+	void aRelativePathWithoutALeadingSlashWorksToo() {
+		VFilesystemReference reference = seeder.toReference(source(), path("files/webdav/Policies", true));
+
+		assertThat(WebdavNavigationUtil.decodeFolders(java.util.List.of(reference)))
+				.containsExactly("https://dav.example.com/remote.php/dav/files/webdav/Policies");
+	}
+
+	@Test
+	void aRelativePathAgainstAnUnknownSystemIsRefused() {
+		GDeclaredDataSource orphan = source();
+		orphan.setSystemCode("not-declared");
+
+		assertThatThrownBy(() -> seeder.toReference(orphan, path("/files/webdav", true)))
+				.isInstanceOf(IllegalStateException.class).hasMessageContaining("not-declared");
 	}
 }

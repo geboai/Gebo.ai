@@ -14,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.GAclEntry;
+import ai.gebo.acl.IAclAliasesDao;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -222,7 +225,8 @@ class GAbstractDeclaredDataSourcesSeederTest {
 		}
 
 		@Override
-		protected VFilesystemReference toReference(GDeclaredDataSourcePath declaredPath) {
+		protected VFilesystemReference toReference(GDeclaredDataSource declaration,
+				GDeclaredDataSourcePath declaredPath) {
 			if (declaredPath.getPath().startsWith("!")) {
 				throw new IllegalStateException("a test path may not start with !");
 			}
@@ -319,22 +323,31 @@ class GAbstractDeclaredDataSourcesSeederTest {
 
 	@Test
 	void aDeclarationWithoutACodeFailsBeforeAnythingIsWritten() {
-		assertThrows(IllegalStateException.class,
-				() -> new TestSeeder(List.of(declaration(" ", "corporate-dav", "KB", "/Policies", true)),
-						new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declaration(" ", "corporate-dav", "KB", "/Policies", true)),
+				repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
 	void aCodeDeclaredTwiceFailsBeforeAnythingIsWritten() {
-		assertThrows(IllegalStateException.class,
-				() -> new TestSeeder(List.of(declaration("twice", "corporate-dav", "KB", "/A", true),
-						declaration("TWICE", "corporate-dav", "KB", "/B", true)), new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declaration("twice", "corporate-dav", "KB", "/A", true),
+				declaration("TWICE", "corporate-dav", "KB", "/B", true)), repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
 	void aDeclarationWithoutASystemFailsBeforeAnythingIsWritten() {
-		assertThrows(IllegalStateException.class, () -> new TestSeeder(
-				List.of(declaration("orphan", " ", "KB", "/Policies", true)), new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declaration("orphan", " ", "KB", "/Policies", true)), repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
@@ -342,17 +355,26 @@ class GAbstractDeclaredDataSourcesSeederTest {
 		GDeclaredDataSource declared = declaration("empty", "corporate-dav", "KB", "/Policies", true);
 		declared.setPaths(List.of());
 
-		assertThrows(IllegalStateException.class, () -> new TestSeeder(List.of(declared), new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declared), repository);
+
+		assertThrows(IllegalStateException.class, () -> seeder.seed());
+		assertEquals(0, repository.count());
 	}
 
 	@Test
 	void aPathTheModuleCannotResolveFailsNamingTheSourceAndThePath() {
-		IllegalStateException thrown = assertThrows(IllegalStateException.class,
-				() -> new TestSeeder(List.of(declaration("broken", "corporate-dav", "KB", "!nonsense", true)),
-						new InMemoryRepository()));
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(
+				List.of(declaration("ok-one", "corporate-dav", "KB", "/Fine", true),
+						declaration("broken", "corporate-dav", "KB", "!nonsense", true)),
+				repository);
+
+		IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> seeder.seed());
 
 		assertTrue(thrown.getMessage().contains("broken"));
 		assertTrue(thrown.getMessage().contains("!nonsense"));
+		assertEquals(0, repository.count(), "a bad declaration must not leave the repository half seeded");
 	}
 
 	@Test
@@ -362,5 +384,81 @@ class GAbstractDeclaredDataSourcesSeederTest {
 		new TestSeeder(null, repository).seed();
 
 		assertEquals(0, repository.count());
+	}
+	@Test
+	void aDeclaredDataSourceIsOpenedToEveryoneRead() throws Exception {
+		InMemoryRepository repository = new InMemoryRepository();
+		TestSeeder seeder = new TestSeeder(List.of(declaration("policies", "corporate-dav", "KB", "/Policies", true)),
+				repository);
+		// The DAO is field-injected in production; inject a fake here.
+		injectAclDao(seeder, new FakeAclAliasesDao(42));
+
+		seeder.seed();
+
+		assertEquals(List.of(42), repository.findById("policies").orElseThrow().getAclAliases());
+	}
+
+	@Test
+	void withNoAclLayerADeclaredSourceSimplyCarriesNoAliases() {
+		InMemoryRepository repository = new InMemoryRepository();
+		// no DAO injected - the field stays null
+		new TestSeeder(List.of(declaration("policies", "corporate-dav", "KB", "/Policies", true)), repository).seed();
+
+		assertNull(repository.findById("policies").orElseThrow().getAclAliases());
+	}
+
+	private static void injectAclDao(Object seeder, IAclAliasesDao dao) throws Exception {
+		java.lang.reflect.Field f = GAbstractDeclaredDataSourcesSeeder.class.getDeclaredField("aclAliasesDao");
+		f.setAccessible(true);
+		f.set(seeder, dao);
+	}
+
+	/** Minimal fake: nothing is pre-seeded, so addAcl mints the everyone-read alias. */
+	private static class FakeAclAliasesDao implements IAclAliasesDao {
+		private final int mintedAlias;
+
+		FakeAclAliasesDao(int mintedAlias) {
+			this.mintedAlias = mintedAlias;
+		}
+
+		@Override
+		public List<Integer> findAliasesByAclGrantedUniqueIdAndAclGrantType(String id, AclGrantType t) {
+			return List.of();
+		}
+
+		@Override
+		public int addAcl(GAclEntry entry) {
+			return mintedAlias;
+		}
+
+		@Override
+		public GAclEntry findAcl(int alias) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public List<Integer> findAliasesByAclGrantedUniqueId(String id) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public List<Integer> findAliasesByAclGrantedUniqueIdIn(List<String> ids) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public List<Integer> findAliasesByAclGrantedUniqueIdInAndAclGrantType(List<String> ids, AclGrantType t) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Integer findAlias(GAclEntry entry) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void removeAcl(int alias) {
+			throw new UnsupportedOperationException();
+		}
 	}
 }

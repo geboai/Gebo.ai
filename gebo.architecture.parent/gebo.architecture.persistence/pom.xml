@@ -43,5 +43,14 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!--
+			Test-only: the declared-entities seeder decides what may overwrite what in
+			the store, which is worth pinning down without a database.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
