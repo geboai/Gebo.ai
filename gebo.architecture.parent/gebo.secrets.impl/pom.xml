@@ -24,6 +24,19 @@
 			<artifactId>gebo.secrets.services</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+			IGRuntimeConfigurationDao / GAbstractRuntimeConfigurationDao, which
+			IGSecretsStaticConfigurationDao is built on. It arrives transitively through
+			gebo.architecture.security anyway, but the declarative-secrets DAO is a
+			first-class use of the pattern here, and this module has no business
+			depending on another module's dependency graph for it. The patterns module
+			itself has no dependencies, so this cannot introduce a cycle.
+		-->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.patterns</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.security</artifactId>
@@ -48,6 +61,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-json</artifactId>
+		</dependency>
+		<!--
+			GeboStaticSecretsConfig is @Validated: the declared secrets are checked
+			against the content models' own constraints at startup, which needs a bean
+			validation provider present and not merely the jakarta.validation API.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

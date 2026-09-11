@@ -23,6 +23,25 @@ public class SecretInfo {
 		this.contextCode = secret.getContextCode();
 	}
 
+	/**
+	 * Constructor for the metadata of a configuration-declared secret, which has no
+	 * {@link GeboSecret} record behind it.
+	 *
+	 * @param code        the unique code of the secret
+	 * @param description the description of the secret
+	 * @param secretType  the type of the secret
+	 * @param contextCode the context the secret belongs to
+	 * @param readOnly    whether the secret may only be read
+	 */
+	public SecretInfo(String code, String description, GeboSecretType secretType, String contextCode,
+			Boolean readOnly) {
+		this.code = code;
+		this.description = description;
+		this.secretType = secretType;
+		this.contextCode = contextCode;
+		this.readOnly = readOnly;
+	}
+
 	// Unique identifier for the secret.
 	private String code = null;
 
@@ -34,6 +53,15 @@ public class SecretInfo {
 
 	// Context code associated with the secret.
 	private String contextCode = null;
+
+	/**
+	 * {@code true} when the secret is declared in the configuration
+	 * ({@code ai.gebo.secrets.config.*}) and therefore cannot be updated or
+	 * deleted; {@code null} for an ordinary stored secret. Mirrors
+	 * {@code AbstractGeboSecretContent#getReadOnly()} so that a client - the admin
+	 * UI in particular - can tell the two apart without fetching the content.
+	 */
+	private Boolean readOnly = null;
 
 	/**
 	 * Retrieves the unique code of the secret.
@@ -95,5 +123,23 @@ public class SecretInfo {
 
 	public void setContextCode(String contextCode) {
 		this.contextCode = contextCode;
+	}
+
+	/**
+	 * Whether this secret is configuration-declared and hence read-only.
+	 *
+	 * @return {@code true} for a read-only secret, {@code null} otherwise.
+	 */
+	public Boolean getReadOnly() {
+		return readOnly;
+	}
+
+	/**
+	 * Sets the read-only marker of the secret.
+	 *
+	 * @param readOnly the marker to set.
+	 */
+	public void setReadOnly(Boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 }

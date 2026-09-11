@@ -15,6 +15,6 @@ import { GenericOpenAIAPIChatModelChoice } from './genericOpenAIAPIChatModelChoi
 export interface OperationStatusListGenericOpenAIAPIChatModelChoice { 
     result?: Array<GenericOpenAIAPIChatModelChoice>;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

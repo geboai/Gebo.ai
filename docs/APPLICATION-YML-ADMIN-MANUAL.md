@@ -125,6 +125,85 @@ it can be pre-seeded here.
 | `authGrantType` | enum | Defaults to `AUTHORIZATION_CODE`. |
 | `providerConfig.*` | object | Only used when `provider: oauth2_generic` — `authorizationUri`, `tokenUri`, `userInfoUri`, `introspectionUri`, `issuerUri`, `jwkSetUri`, `userNameAttribute`. |
 
+### 6.2 `ai.gebo.secrets.config` — declaratively configured read-only secrets (lists)
+
+Secrets normally live encrypted in the store (Mongo, or an external vault) and are created through
+the admin UI. This section is the alternative for a deployment that wants a credential to come from
+its own configuration — a Kubernetes secret projected into `application.yml`, an env var, a mounted
+config file — instead of being typed into the UI and stored.
+
+One **list per secret type**, keyed by the `GeboSecretType` in dashed form. Each entry carries the
+metadata a stored secret would have on its record (`code`, `description`, `context-code`) plus the
+content itself, nested under `secret`:
+
+```yaml
+ai.gebo.secrets.config:
+  username-password:
+    - code: nightly-ingestion-account      # what the rest of the configuration references
+      description: Service account of the nightly ingestion
+      context-code: SYSTEMS
+      secret:
+        username: ingestion
+        password: ${INGESTION_PASSWORD}    # env var / projected k8s secret
+  token:
+    - code: my-llm-api-key
+      context-code: LLMS
+      secret:
+        token: ${SOME_API_KEY}
+        user: gebo
+  aws-connection:
+    - code: aws-main
+      context-code: SYSTEMS
+      secret:
+        access-key-id: ${AWS_ACCESS_KEY_ID}
+        secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+        region: eu-central-1
+```
+
+| Key | Content type | Content fields |
+|---|---|---|
+| `username-password` | `GeboUsernamePasswordContent` | `username`, `password` (both required) |
+| `token` | `GeboTokenContent` | `token`, `user` (both required) |
+| `ssh-key` | `GeboSshKeySecretContent` | `email`, `key` (private key), `pub`, `passphrase` |
+| `custom-secret` | `GeboCustomSecretContent` | `content`, `content-type`, `custom-content-description` |
+| `oauth2-standard` | `GeboOauth2SecretContent` | `provider-name`, `client-id`, `secret` (required), `scopes`, `custom-attributes` |
+| `oauth2-google` | `GeboGoogleOauth2SecretContent` | `uid`, `token`, `location`, `project-id`, `scopes` |
+| `google-cloud-json-credentials` | `GeboGoogleJsonSecretContent` | `json-content`, `delegated-user` |
+| `aws-connection` | `GeboAwsConnectionCredentials` | `access-key-id`, `secret-access-key`, `region` (all required; region as the AWS code, e.g. `eu-central-1`) |
+
+Every entry field: `code` is **required and unique across all the lists**; `description` and
+`context-code` are optional but `context-code` is what the admin UI and the connectors filter on, so
+a secret declared without one will not appear in any per-context picker.
+
+**What "read-only" means.** A declared secret is resolved **before** the external vault and before
+Mongo, so a declared `code` shadows any stored secret of the same code, and the configuration always
+wins. In exchange every write path refuses it — create, update and delete alike — with
+`A readOnly secret can only being read and not updated/deleted in the implementation of
+IGeboSecretsAccessService`. Practical consequences:
+
+- the admin UI can list a declared secret but cannot edit or delete it; rotation means changing the
+  configuration and restarting, not a UI action;
+- an OAuth2 client secret declared here cannot be rotated by the OAuth2 admin screens either;
+- store/vault **migration skips** declared secrets in both directions — they are never copied into
+  the vault;
+- `OAUTH2_AUTHORIZED_CLIENT` is intentionally not configurable: it holds runtime OAuth2 tokens the
+  server refreshes for itself, which a read-only secret could not support.
+
+**Where to put it.** Only the service that owns the secrets store reads this section: the monolith,
+or `heimdall.gebo.ai` in a microservices deployment — and in the latter case it belongs in
+*heimdall's own* configuration, not the shared one, so the plaintext stays on the one service that
+already holds the crypting keys. The other services see declared secrets transparently through the
+cluster secrets endpoints, encrypted on the wire exactly like stored ones.
+
+**Misconfiguration fails the startup.** A missing or duplicated `code`, a missing `secret` block, or
+a content that violates its own required fields (a `username-password` with no `password`, say) stops
+the application from starting. One gap to be aware of: a *mistyped* content property with no required
+constraint behind it (`tokenn:` instead of `token:`) binds to nothing and is only reported when the
+secret is read — Spring Boot's unknown-property check does not reach inside list elements.
+
+🔒 Everything under this section is a credential in plaintext at rest in your configuration. Prefer
+`${ENV_VAR}` placeholders over literals, and treat the file itself as secret material.
+
 ## 7. Async execution
 
 | Property | Type | Shipped default | Description |
@@ -358,6 +437,7 @@ Every value below ships with a non-secret placeholder in the Docker image and **
 for any deployment reachable outside your own machine:
 
 - `ai.gebo.security.auth.tokenSecret`
+- Every value under `ai.gebo.secrets.config.*` (see §6.2) — plaintext credentials in the config file
 - `ai.gebo.mongodb.connectionString` (embedded Mongo password)
 - `ai.gebo.vectorstore.qdrant.apiKey`
 - `ai.gebo.opensearch.password`
