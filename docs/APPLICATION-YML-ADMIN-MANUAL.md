@@ -337,6 +337,10 @@ Bound by `GeboAiFilesystemsConfig` (`ai.gebo.filesystem`).
 These are advanced/integration features (source-code repository ingestion & CI build awareness),
 not required for a standard RAG deployment.
 
+> **Full guide with a worked example per handler**, including which secret type each connector
+> expects: [`APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md`](APPLICATION-YML-SYSTEMS-DATASOURCES-CONFIGURATION.md).
+> The three sections below are the reference tables.
+
 ### 16.1 `ai.gebo.<content handler>.systems` — content management systems declared by the configuration
 
 Every content handler that keeps its systems in Mongo also accepts them from this file, under its
