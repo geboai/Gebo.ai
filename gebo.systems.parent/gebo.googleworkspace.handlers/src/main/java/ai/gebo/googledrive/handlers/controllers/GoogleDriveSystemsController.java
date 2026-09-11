@@ -142,7 +142,7 @@ public class GoogleDriveSystemsController
 	@GetMapping(value = "findGoogleDriveSystemByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GGoogleDriveSystem findGoogleDriveSystemByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
-		return super.persistentObjectManager.findById(GGoogleDriveSystem.class, code);
+		return googleDriveHandler.findConfiguration(code);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class GoogleDriveSystemsController
 	@GetMapping(value = "findGoogleDriveProjectEndpointByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GGoogleDriveProjectEndpoint findGoogleDriveProjectEndpointByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
-		return super.persistentObjectManager.findById(GGoogleDriveProjectEndpoint.class, code);
+		return googleDriveHandler.findDataSource(code);
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class GoogleDriveSystemsController
 	public List<GGoogleDriveProjectEndpoint> findGoogleDriveEndpointsByProject(
 			@RequestParam("parentProjectCode") String parentProjectCode) throws GeboPersistenceException {
 
-		return endpointRepository.findByParentProjectCode(parentProjectCode);
+		return googleDriveHandler.findDataSourcesByProject(parentProjectCode);
 	}
 
 	/**
@@ -316,4 +316,18 @@ public class GoogleDriveSystemsController
 		}
 		return status;
 	}
+
+	/**
+	 * A system declared under {@code ai.gebo.googleworkspace.systems} belongs to the
+	 * configuration, not to the admin UI: the write paths of the base controller
+	 * refuse it.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system is declared in the configuration.
+	 */
+	@Override
+	protected boolean isDeclaredInConfiguration(GGoogleDriveSystem system) {
+		return system != null && googleDriveHandler.isDeclaredInConfiguration(system.getCode());
+	}
 }
+

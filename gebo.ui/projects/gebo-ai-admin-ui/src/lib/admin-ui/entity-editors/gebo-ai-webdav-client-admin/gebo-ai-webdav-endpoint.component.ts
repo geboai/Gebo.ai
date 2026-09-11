@@ -178,6 +178,6 @@ export class GeboAIWebdavEndpointComponent extends BaseEntityEditingComponent<GW
                 }
             });
         }
-        this.doSave(callback);
+        this.saveUnlessReadonly(callback);
     }
 }

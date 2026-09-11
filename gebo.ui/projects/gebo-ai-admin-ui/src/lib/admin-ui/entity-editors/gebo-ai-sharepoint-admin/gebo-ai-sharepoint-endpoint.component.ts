@@ -326,6 +326,6 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
                 }
             });
         }
-        this.doSave(callback);
+        this.saveUnlessReadonly(callback);
     }
 }

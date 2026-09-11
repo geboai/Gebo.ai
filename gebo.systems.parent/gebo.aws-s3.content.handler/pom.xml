@@ -33,5 +33,27 @@
 			<artifactId>s3</artifactId>
 			<version>2.47.1</version>
 		</dependency>
+		<!--
+			The <content handler>.systems declarations are bound into a @Validated
+			@ConfigurationProperties bean, so the declared systems are checked against
+			their model's own constraints at startup. That needs a bean validation
+			provider on the classpath, not merely the jakarta.validation API: it does
+			arrive transitively today, but a silently skipped validation is exactly the
+			failure this dependency exists to prevent.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<!--
+			Test-only: the datasources declared in application.yml are translated here
+			into the module's own VFilesystemReference encoding, and that translation is
+			what these tests pin down.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

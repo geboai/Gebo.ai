@@ -9,7 +9,7 @@
           <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!"
             title="Saves and let these contents be available in knowledge base for LLMs" severity="success"
             icon="pi pi-microchip-ai" (onClick)="doPublish()"
-            [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
+            [disabled]="this.formGroup.invalid || canPublish===false || relatedBackendProcessingRunning===true"
             styleClass="w-full" />
         </div>
         <div class="col-3">

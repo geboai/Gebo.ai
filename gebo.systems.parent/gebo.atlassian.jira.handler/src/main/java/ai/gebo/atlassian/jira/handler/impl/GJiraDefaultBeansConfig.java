@@ -20,7 +20,6 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.atlassian.jira.handler.IGJiraContentManagementHandler;
 import ai.gebo.atlassian.jira.handler.IGJiraVirtualFilesystemConsumingService;
 import ai.gebo.atlassian.jira.handler.repository.JiraProjectEndpointRepository;
-import ai.gebo.atlassian.jira.handler.repository.JiraSystemRepository;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
@@ -47,13 +46,13 @@ public class GJiraDefaultBeansConfig {
 	@ConditionalOnMissingBean(IGJiraContentManagementHandler.class)
 	public IGJiraContentManagementHandler jiraContentManagementHandler(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
-			IGDocumentReferenceFactory contentHandler, JiraSystemRepository systemsRepo,
+			IGDocumentReferenceFactory contentHandler, JiraSystemsConfigurationDao systemsDao,
 			JiraProjectEndpointRepository endpointRepo,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			IGeboSecretsAccessService secretsService, IGJiraVirtualFilesystemConsumingService consumingService,
 			IGDocumentReferenceIngestionHandler ingestionHandler) {
-		return new JiraContentManagementHandlerImpl(buildSystemHandlerRepository, contentHandler, systemsRepo,
+		return new JiraContentManagementHandlerImpl(buildSystemHandlerRepository, contentHandler, systemsDao,
 				endpointRepo, localFolderDiscoveryService, persistentObjectManager, messageBroker, secretsService,
 				consumingService, ingestionHandler);
 	}

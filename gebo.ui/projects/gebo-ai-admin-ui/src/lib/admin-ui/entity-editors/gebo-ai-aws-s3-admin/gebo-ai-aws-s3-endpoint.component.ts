@@ -313,6 +313,6 @@ export class GeboAIAwsS3EndpointComponent extends BaseEntityEditingComponent<GAw
                 }
             });
         }
-        this.doSave(callback);
+        this.saveUnlessReadonly(callback);
     }
 }

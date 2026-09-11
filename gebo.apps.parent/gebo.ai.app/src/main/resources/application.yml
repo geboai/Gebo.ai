@@ -254,6 +254,112 @@ ai.gebo.git.config:
       contentManagementSystemType: DEFAULT.GIT.CONTENT.HANDLER
       description: Git/Bitbucket/GitHub contents handler
 
+# Content management systems declared by the configuration instead of created
+# through the admin UI: one `systems` list per content handler, each entry the
+# same object the admin screen edits. They show up in the admin list beside the
+# stored ones and a declared code always wins over a stored record carrying it,
+# so the deployment's answer cannot be displaced by anything written later - the
+# admin write paths refuse a declared code, create, update and delete alike.
+# `secretCode` (`s3SecretCode`, `driveAccessSecret`) references a credential the
+# secrets management layer holds - declared under ai.gebo.secrets.config or
+# created in the UI - never the credential itself. `contentManagementSystemType`
+# is implied by the handler and only Git, which registers several, requires it.
+# See section 16 of docs/APPLICATION-YML-ADMIN-MANUAL.md for the field list.
+#ai.gebo.confluence:
+#  systems:
+#    - code: corporate-wiki
+#      description: Corporate Confluence
+#      baseUri: https://wiki.example.com
+#      confluenceVersion: CLOUD
+#      secretCode: confluence-service-account
+#ai.gebo.jira:
+#  systems:
+#    - code: corporate-jira
+#      description: Corporate Jira
+#      baseUri: https://jira.example.com
+#      secretCode: jira-service-account
+#ai.gebo.sharepoint:
+#  systems:
+#    - code: corporate-sharepoint
+#      description: Corporate SharePoint Online
+#      baseUri: https://example.sharepoint.com
+#      sharepointVersion: CLOUD_VERSION
+#      secretCode: msgraph-application
+#ai.gebo.webdav:
+#  systems:
+#    - code: corporate-dav
+#      description: Corporate WebDAV share
+#      baseUri: https://dav.example.com/remote.php/dav
+#      webdavAuthType: BASIC
+#      secretCode: webdav-service-account
+#ai.gebo.awss3:
+#  systems:
+#    - code: corporate-buckets
+#      description: Corporate S3 buckets
+#      awsEndpoint: https://s3.eu-south-1.amazonaws.com
+#      s3SecretCode: aws-ingestion-account
+#ai.gebo.googleworkspace:
+#  systems:
+#    - code: corporate-drive
+#      description: Corporate Google Drive
+#      driveAccessSecret: google-workspace-service-account
+
+# Data sources (project endpoints) declared by the configuration, for the four
+# handlers that accept them: WebDAV, AWS S3, SharePoint (OneDrive drives only)
+# and Google Drive. Each entry names the system it reads through, the knowledge
+# base project it feeds, and the paths to ingest - each with a `folder` flag,
+# true for a folder to walk and false for a single file.
+#
+# A path is written in the handler's own addressing: a full href for WebDAV,
+# bucket/key for S3, driveId/itemId for OneDrive and Google Drive, which address
+# items by opaque id and have no server-side path.
+#
+# These are written into the database at startup, so publishing, the scheduler and
+# the job launcher all resolve them like any other data source. They are read only
+# in the admin UI - save and delete are disabled on them - and pressing Publish
+# once is what registers them with the periodic scheduler. A code already used by
+# a data source an admin created in the UI fails the startup instead of being
+# overwritten.
+# See section 16.2 of docs/APPLICATION-YML-ADMIN-MANUAL.md for the full field list.
+#ai.gebo.webdav:
+#  datasources:
+#    - code: corporate-policies
+#      description: Policy library
+#      systemCode: corporate-dav
+#      parentProjectCode: COMPANY-KB
+#      paths:
+#        - path: https://dav.example.com/remote.php/dav/files/admin/Policies
+#          folder: true
+#        - path: https://dav.example.com/remote.php/dav/files/admin/handbook.pdf
+#          folder: false
+#ai.gebo.awss3:
+#  datasources:
+#    - code: corporate-reports
+#      description: Published reports
+#      systemCode: corporate-buckets
+#      parentProjectCode: COMPANY-KB
+#      paths:
+#        - path: corporate-docs/reports/2026/
+#          folder: true
+#ai.gebo.sharepoint:
+#  datasources:
+#    - code: corporate-onedrive-policies
+#      description: Policies on the corporate OneDrive
+#      systemCode: corporate-sharepoint
+#      parentProjectCode: COMPANY-KB
+#      paths:
+#        - path: b!xQ3zDriveId/01ABCDEFITEMID
+#          folder: true
+#ai.gebo.googleworkspace:
+#  datasources:
+#    - code: corporate-handbook
+#      description: Company handbook folder
+#      systemCode: corporate-drive
+#      parentProjectCode: COMPANY-KB
+#      paths:
+#        - path: 0AJv7q2Xk9mLkUk9PVA/1BxY8sQ2fN7pLmRt3KcWv
+#          folder: true
+
 ai.gebo.maven.buildsystems:
   systems:
     - code: DEFAULT_MAVEN

@@ -101,19 +101,19 @@ public class WebdavSystemsController
 	@GetMapping("findWebdavEndpointsByProject")
 	public List<GWebdavProjectEndpoint> findWebdavEndpointsByProject(
 			@RequestParam("parentProjectCode") String parentProjectCode) throws GeboPersistenceException {
-		return endpointRepository.findByParentProjectCode(parentProjectCode);
+		return handler.findDataSourcesByProject(parentProjectCode);
 	}
 
 	@GetMapping("findWebdavEndpointsByCode")
 	public GWebdavProjectEndpoint findWebdavEndpointsByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
-		return persistentObjectManager.findById(GWebdavProjectEndpoint.class, code);
+		return handler.findDataSource(code);
 	}
 
 	@GetMapping("findWebdavSystemByCode")
 	public GWebdavContentManagementSystem findWebdavSystemByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
-		return persistentObjectManager.findById(GWebdavContentManagementSystem.class, code);
+		return handler.findConfiguration(code);
 	}
 
 	@PostMapping(value = "updateWebdavSystem", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -250,4 +250,18 @@ public class WebdavSystemsController
 			return os;
 		}
 	}
+
+	/**
+	 * A system declared under {@code ai.gebo.webdav.systems} belongs to the
+	 * configuration, not to the admin UI: the write paths of the base controller
+	 * refuse it.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system is declared in the configuration.
+	 */
+	@Override
+	protected boolean isDeclaredInConfiguration(GWebdavContentManagementSystem system) {
+		return system != null && handler.isDeclaredInConfiguration(system.getCode());
+	}
 }
+
