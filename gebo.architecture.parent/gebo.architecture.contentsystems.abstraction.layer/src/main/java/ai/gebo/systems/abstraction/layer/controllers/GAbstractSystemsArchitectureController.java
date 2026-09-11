@@ -145,6 +145,53 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 		this.replicationService = replicationService;
 	}
 	/**
+	 * Whether the given data source belongs to this deployment's configuration
+	 * rather than to the admin UI.
+	 *
+	 * <p>
+	 * A declared data source IS a stored record - the seeder writes it into the
+	 * module's repository at startup, which is what lets publishing, the scheduler
+	 * and the job launcher resolve it - so the two are told apart by the
+	 * {@code readonly} marker rather than by asking a DAO. The STORED record is
+	 * what decides: the marker on the incoming object came from a client and can be
+	 * anything, while the one on the record was written by the seeder.
+	 * </p>
+	 *
+	 * @param endpoint The data source a write is being attempted on.
+	 * @return true when the data source belongs to the configuration.
+	 */
+	protected boolean isDeclaredDataSource(EndpointType endpoint) {
+		if (endpoint == null || endpoint.getCode() == null) {
+			return false;
+		}
+		try {
+			@SuppressWarnings("unchecked")
+			Class<EndpointType> type = (Class<EndpointType>) endpoint.getClass();
+			EndpointType stored = persistentObjectManager.findById(type, endpoint.getCode());
+			return stored != null && Boolean.TRUE.equals(stored.getReadonly());
+		} catch (GeboPersistenceException | RuntimeException e) {
+			LOGGER.debug("Cannot tell whether the data source {} is configuration owned", endpoint.getCode(), e);
+			return false;
+		}
+	}
+
+	/**
+	 * Refuses a write addressing a data source the configuration owns, for the same
+	 * reason a declared system is refused: the next startup would write the
+	 * declaration back over it, so the change would not survive a restart.
+	 *
+	 * @param endpoint The data source a write is being attempted on.
+	 * @throws GeboPersistenceException When the data source is declared in the
+	 *                                  configuration.
+	 */
+	private void refuseIfDeclaredDataSource(EndpointType endpoint) throws GeboPersistenceException {
+		if (endpoint != null && isDeclaredDataSource(endpoint)) {
+			throw new GeboPersistenceException("The data source '" + endpoint.getCode()
+					+ "' is declared in this deployment's configuration and cannot be changed from the UI: edit it in application.yml instead");
+		}
+	}
+
+	/**
 	 * Deletes the given endpoint after performing security checks and sends
 	 * appropriate messages.
 	 * 
@@ -166,6 +213,7 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	}
 
 	private void deleteEndpointInternal(EndpointType endpoint) throws GeboPersistenceException {
+		refuseIfDeclaredDataSource(endpoint);
 		if (!securityService.isCurrentUserAdmin())
 			throw new GeboPersistenceException("User without ADMIN role cannot delete contents and endpoints");
 		String userid = securityService.getCurrentUser().getUsername();
@@ -257,6 +305,7 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	}
 
 	private EndpointType insertEndpointInternal(EndpointType endpoint) throws GeboPersistenceException {
+		refuseIfDeclaredDataSource(endpoint);
 		if (endpoint.getObjectSpaceType() == null) {
 			endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
@@ -308,6 +357,7 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	}
 
 	private EndpointType updateEndpointInternal(EndpointType endpoint) throws GeboPersistenceException {
+		refuseIfDeclaredDataSource(endpoint);
 		if (endpoint.getObjectSpaceType() == null) {
 			endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
@@ -319,6 +369,37 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	}
 
 	/**
+	 * Whether the given system is declared in this deployment's configuration,
+	 * under {@code ai.gebo.<content handler>.systems}, rather than created through
+	 * the admin UI. The base implementation answers false; a concrete controller
+	 * whose handler can carry declarations overrides it, usually by delegating to
+	 * {@code IGContentManagementSystemHandler#isDeclaredInConfiguration(String)}.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system belongs to the configuration.
+	 */
+	protected boolean isDeclaredInConfiguration(SystemType system) {
+		return false;
+	}
+
+	/**
+	 * Refuses a write addressing a code the configuration declares. Such a record
+	 * would be persisted and then never read - the declaration always wins - so the
+	 * only honest answer is to say the system is not the UI's to change, and point
+	 * at the file that owns it.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @throws GeboPersistenceException When the system is declared in the
+	 *                                  configuration.
+	 */
+	private void refuseIfDeclaredInConfiguration(SystemType system) throws GeboPersistenceException {
+		if (system != null && isDeclaredInConfiguration(system)) {
+			throw new GeboPersistenceException("The content management system '" + system.getCode()
+					+ "' is declared in this deployment's configuration and cannot be changed from the UI: edit it in application.yml instead");
+		}
+	}
+
+	/**
 	 * Deletes the given system from the persistent storage.
 	 * 
 	 * @param system The system to be deleted.
@@ -327,6 +408,7 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	protected void deleteSystem(SystemType system) throws GeboPersistenceException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
+			refuseIfDeclaredInConfiguration(system);
 			persistentObjectManager.delete(system);
 			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_DELETE, system,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
@@ -347,6 +429,7 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	protected SystemType insertSystem(SystemType endpoint) throws GeboPersistenceException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
+			refuseIfDeclaredInConfiguration(endpoint);
 			SystemType outdata = persistentObjectManager.insert(endpoint);
 			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_INSERT, outdata,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
@@ -368,6 +451,7 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 	protected SystemType updateSystem(SystemType endpoint) throws GeboPersistenceException {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
+			refuseIfDeclaredInConfiguration(endpoint);
 			SystemType outdata = persistentObjectManager.update(endpoint);
 			logIntegrationEvent(event, SecurityAuditTaxonomy.Action.INTEGRATION_SYSTEM_UPDATE, outdata,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
@@ -406,7 +490,21 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 			if (endpoint.getObjectSpaceType() == null) {
 				endpoint.setObjectSpaceType(ObjectSpaceType.COMPANY);
 			}
-			EndpointType outdata = persistentObjectManager.update(endpoint);
+			// A read-only data source is not persisted - the configuration owns it, and a
+			// record written here could never be read back, since the DAO answers from the
+			// declaration first. Publishing it is still meaningful: it is what registers
+			// the source with the central scheduler and queues the first ingestion, the two
+			// things a declaration alone cannot do (the scheduler is driven by reschedule
+			// requests, which only a write path emits).
+			//
+			// The marker is checked first, since it is what the client was served and what
+			// disabled save in its UI; the stored record is consulted as well, so a caller
+			// that clears the marker on the way back still cannot write over a declared
+			// source here - this is a persisting path, and it does not pass through
+			// updateEndpoint's guard.
+			EndpointType outdata = Boolean.TRUE.equals(endpoint.getReadonly()) || isDeclaredDataSource(endpoint)
+					? endpoint
+					: persistentObjectManager.update(endpoint);
 			processReschedule(GCentralizedProjectEndpoint.of(outdata));
 			GJobStatus job = jobQueueService.createNewAsyncJob(outdata, new NoContentConsumingSessionParam(),
 					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());

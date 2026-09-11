@@ -28,13 +28,11 @@ import ai.gebo.atlassian.confluence.handler.IGConfluenceContentManagementHandler
 import ai.gebo.atlassian.confluence.handler.IGConfluenceVirtualFilesystemConsumingService;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResourceReference;
 import ai.gebo.atlassian.confluence.handler.repositories.ConfluenceProjectEndpointRepository;
-import ai.gebo.atlassian.confluence.handler.repositories.ConfluenceSystemRepository;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemContentManagementSystemHandler;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationDao;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
 
@@ -67,7 +65,7 @@ public class ConfluenceContentManagementHandlerImpl extends
 	 *
 	 * @param buildSystemHandlerRepository Repository for build system handlers
 	 * @param contentHandler               Factory for document references
-	 * @param systemsRepo                  Repository for Confluence systems
+	 * @param systemsDao                   Declared and stored Confluence systems
 	 * @param endpointRepo                 Repository for Confluence project
 	 *                                     endpoints
 	 * @param localFolderDiscoveryService  Service for discovering local folders
@@ -79,13 +77,13 @@ public class ConfluenceContentManagementHandlerImpl extends
 	 * @param ingestionHandler             Handler for document reference ingestion
 	 */
 	public ConfluenceContentManagementHandlerImpl(IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
-			IGDocumentReferenceFactory contentHandler, ConfluenceSystemRepository systemsRepo,
+			IGDocumentReferenceFactory contentHandler, ConfluenceSystemsConfigurationDao systemsDao,
 			ConfluenceProjectEndpointRepository endpointRepo,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			IGeboSecretsAccessService secretsService, IGConfluenceVirtualFilesystemConsumingService consumingService,
 			IGDocumentReferenceIngestionHandler ingestionHandler) {
-		super(buildSystemHandlerRepository, contentHandler, IGContentManagementSystemConfigurationDao.of(systemsRepo),
+		super(buildSystemHandlerRepository, contentHandler, systemsDao,
 				IGProjectEndpointRuntimeConfigurationDao.of(endpointRepo), localFolderDiscoveryService,
 				persistentObjectManager, messageBroker, consumingService, ingestionHandler);
 		this.secretsService = secretsService;

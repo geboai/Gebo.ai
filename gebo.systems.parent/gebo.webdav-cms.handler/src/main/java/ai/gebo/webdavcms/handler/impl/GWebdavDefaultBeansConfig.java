@@ -13,8 +13,6 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.webdavcms.handler.IGWebdavContentManagementSystemHandler;
 import ai.gebo.webdavcms.handler.IGWebdavVirtualFilesystemConsumingService;
-import ai.gebo.webdavcms.handler.repositories.WebdavContentManagementSystemRepository;
-import ai.gebo.webdavcms.handler.repositories.WebdavProjectEndpointRepository;
 
 /**
  * Registers the default WebDAV content handlers as beans that a downstream
@@ -35,14 +33,14 @@ public class GWebdavDefaultBeansConfig {
 	@ConditionalOnMissingBean(IGWebdavContentManagementSystemHandler.class)
 	public IGWebdavContentManagementSystemHandler webdavContentManagementHandler(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
-			IGDocumentReferenceFactory contentHandler, WebdavContentManagementSystemRepository systemsRepo,
-			WebdavProjectEndpointRepository endpointRepo,
+			IGDocumentReferenceFactory contentHandler, WebdavSystemsConfigurationDao systemsDao,
+			WebdavProjectEndpointConfigurationDao endpointsDao,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
 			IGeboSecretsAccessService secretsService, IGWebdavVirtualFilesystemConsumingService consumingService,
 			IGDocumentReferenceIngestionHandler ingestionHandler) {
-		return new WebdavContentManagementHandlerImpl(buildSystemHandlerRepository, contentHandler, systemsRepo,
-				endpointRepo, localFolderDiscoveryService, persistentObjectManager, messageBroker, secretsService,
+		return new WebdavContentManagementHandlerImpl(buildSystemHandlerRepository, contentHandler, systemsDao,
+				endpointsDao, localFolderDiscoveryService, persistentObjectManager, messageBroker, secretsService,
 				consumingService, ingestionHandler);
 	}
 

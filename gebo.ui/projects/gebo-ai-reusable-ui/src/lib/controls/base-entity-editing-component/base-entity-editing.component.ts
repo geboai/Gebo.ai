@@ -77,14 +77,87 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   /** Flag to track if code was not present */
   public codeWhasNotPresent: boolean = false;
 
-  /** Flag to determine if entity can be deleted */
-  public canDelete: boolean = false;
+  /** Backing flag for {@link canDelete}, set by the can-be-deleted check */
+  private canDeleteBacking: boolean = false;
+
+  /**
+   * Whether the delete button is enabled.
+   *
+   * An entity the deployment declares in its application.yml carries
+   * readonly===true, and the configuration owns it: the backend refuses every
+   * write addressing it, so offering the action here could only produce an error
+   * toast. The backing flag - what the can-be-deleted check writes - is kept
+   * untouched, so nothing about the existing flow has to know about this.
+   */
+  public get canDelete(): boolean {
+    return this.canDeleteBacking && !this.readonlyEntity;
+  }
+
+  public set canDelete(value: boolean) {
+    this.canDeleteBacking = value;
+  }
+
+  /** Backing flag for {@link canSave}, set by the editing and validation flow */
+  private canSaveBacking: boolean = false;
+
+  /**
+   * Whether the save button is enabled. Disabled for a declared entity, for the
+   * same reason as {@link canDelete}.
+   */
+  public get canSave(): boolean {
+    return this.canSaveBacking && !this.readonlyEntity;
+  }
+
+  public set canSave(value: boolean) {
+    this.canSaveBacking = value;
+  }
+
+  /**
+   * Whether the publish button is enabled: canSave, or the entity being read
+   * only.
+   *
+   * A declared entity has nothing to save - which is exactly why {@link canSave}
+   * is false for it - but publishing it is still the action that registers it
+   * with the scheduler and queues its first ingestion, so the second term puts
+   * the button back. Components whose publish flow saves first should call
+   * {@link saveUnlessReadonly} rather than doSave, so the save is skipped for a
+   * declared entity instead of being refused by the backend.
+   */
+  public get canPublish(): boolean {
+    return this.canSave || this.readonlyEntity;
+  }
+
+  /**
+   * Runs the given continuation after saving, or straight away when the entity is
+   * declared in the configuration and therefore has nothing to save.
+   *
+   * @param callback - what to do once the entity is known to be persisted
+   */
+  protected saveUnlessReadonly(callback: (data: RecordType) => void): void {
+    if (this.readonlyEntity) {
+      callback(this.entity as RecordType);
+      return;
+    }
+    this.doSave(callback);
+  }
+
+  /**
+   * Whether the entity being edited is owned by the deployment configuration
+   * rather than by the admin UI.
+   *
+   * Read off the entity each time rather than latched when it is loaded, so it
+   * cannot go stale when the component is reused for another record. The cast is
+   * needed because the component's type parameter only promises code and
+   * description; readonly is carried by GContentManagementSystem and
+   * GProjectEndpoint, which is every entity this can be true for.
+   */
+  public get readonlyEntity(): boolean {
+    return (this.entity as { readonly?: boolean } | undefined)?.readonly === true;
+  }
 
   /** Collection of messages to display to the user */
   public userMessages: ToastMessageOptions[] = [];
 
-  /** Flag to determine if entity can be saved */
-  public canSave: boolean = false;
 
   /** Reference to the object in the backend */
   public objectReference?: GObjectRef;
@@ -583,7 +656,15 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       next: (returned) => {
         this.canBeDeletedCheckBackend = false;
         this.canDelete = returned.canBeDeleted;
-        if (!this.canDelete) this.userMessages = [{ id: "CANNOT-DELETE", detail: returned.message, severity: "WARN" }];
+        if (this.readonlyEntity) {
+          this.userMessages = [{
+            id: "CANNOT-DELETE",
+            detail: "This configuration is declared in the server's application.yml and is read only here: edit it in that file and restart.",
+            severity: "WARN"
+          }];
+        } else if (!this.canDelete) {
+          this.userMessages = [{ id: "CANNOT-DELETE", detail: returned.message, severity: "WARN" }];
+        }
       },
       error: (error) => {
         this.canBeDeletedCheckBackend = false;

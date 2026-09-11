@@ -668,6 +668,54 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	}
 
 	/**
+	 * Resolves a configuration by code through the DAO, which answers from the
+	 * declared systems before the stored ones.
+	 *
+	 * @param code The system code.
+	 * @return The matching system, or {@code null} when there is none.
+	 */
+	public SystemIntegrationType findConfiguration(String code) {
+		return this.configurationsDao.findByCode(code);
+	}
+
+	/**
+	 * Whether the code is declared in the configuration. Only a DAO built on
+	 * {@link GAbstractContentManagementSystemConfigurationDao} can have
+	 * declarations at all; every other one answers false, which is the truth for a
+	 * handler whose systems only ever come from its repository.
+	 *
+	 * @param code The system code.
+	 * @return true when the code is declared in the configuration.
+	 */
+	public boolean isDeclaredInConfiguration(String code) {
+		return this.configurationsDao instanceof GAbstractContentManagementSystemConfigurationDao<?> declaring
+				&& declaring.isDeclaredInConfiguration(code);
+	}
+
+	/**
+	 * Resolves a data source by code through the endpoint DAO.
+	 *
+	 * @param code The data source code.
+	 * @return The matching data source, or {@code null} when there is none.
+	 */
+	public ProjectEndpointType findDataSource(String code) {
+		return this.endpointsDao.findByCode(code);
+	}
+
+	/**
+	 * The data sources of one project, read through the endpoint DAO so the
+	 * declared ones are listed beside the stored ones.
+	 *
+	 * @param parentProjectCode The project code.
+	 * @return The data sources of that project.
+	 */
+	public List<ProjectEndpointType> findDataSourcesByProject(String parentProjectCode) {
+		return this.endpointsDao.findListByPredicate((x) -> {
+			return parentProjectCode != null && parentProjectCode.equals(x.getParentProjectCode());
+		});
+	}
+
+	/**
 	 * Gets the component type of the system.
 	 *
 	 * @return The component type.

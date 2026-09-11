@@ -84,13 +84,13 @@ public class AwsS3SystemsController
 	@GetMapping(value = "findAwsS3SystemByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GAwsS3System findAwsS3SystemByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
-		return super.persistentObjectManager.findById(GAwsS3System.class, code);
+		return awsS3Handler.findConfiguration(code);
 	}
 
 	@GetMapping(value = "findAwsS3ProjectEndpointByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GAwsS3ProjectEndpoint findAwsS3ProjectEndpointByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
-		return super.persistentObjectManager.findById(GAwsS3ProjectEndpoint.class, code);
+		return awsS3Handler.findDataSource(code);
 	}
 
 	@PostMapping(value = "findAwsS3EndpointsByQbe", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -102,7 +102,7 @@ public class AwsS3SystemsController
 	@GetMapping("findAwsS3EndpointsByProject")
 	public List<GAwsS3ProjectEndpoint> findAwsS3EndpointsByProject(
 			@RequestParam("parentProjectCode") String parentProjectCode) throws GeboPersistenceException {
-		return endpointRepository.findByParentProjectCode(parentProjectCode);
+		return awsS3Handler.findDataSourcesByProject(parentProjectCode);
 	}
 
 	@PostMapping(value = "updateAwsS3System", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -203,4 +203,18 @@ public class AwsS3SystemsController
 			return os;
 		}
 	}
+
+	/**
+	 * A system declared under {@code ai.gebo.awss3.systems} belongs to the
+	 * configuration, not to the admin UI: the write paths of the base controller
+	 * refuse it.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system is declared in the configuration.
+	 */
+	@Override
+	protected boolean isDeclaredInConfiguration(GAwsS3System system) {
+		return system != null && awsS3Handler.isDeclaredInConfiguration(system.getCode());
+	}
 }
+

@@ -284,4 +284,18 @@ public class GITSystemsController
 	protected String resolveContentManagementSystemCode(GGitProjectEndpoint endpoint) {
 		return endpoint != null ? endpoint.getContentManagementSystem() : null;
 	}
+
+	/**
+	 * A system declared under {@code ai.gebo.git.config.systems} belongs to the
+	 * configuration, not to the admin UI: the write paths of the base controller
+	 * refuse it. The DAO is asked directly here rather than a handler, since this
+	 * module registers several Git content handlers over the one systems list.
+	 *
+	 * @param system The system a write is being attempted on.
+	 * @return true when the system is declared in the configuration.
+	 */
+	@Override
+	protected boolean isDeclaredInConfiguration(GGitContentManagementSystem system) {
+		return system != null && dao.isDeclaredInConfiguration(system.getCode());
+	}
 }

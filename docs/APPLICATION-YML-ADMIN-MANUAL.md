@@ -337,6 +337,148 @@ Bound by `GeboAiFilesystemsConfig` (`ai.gebo.filesystem`).
 These are advanced/integration features (source-code repository ingestion & CI build awareness),
 not required for a standard RAG deployment.
 
+### 16.1 `ai.gebo.<content handler>.systems` — content management systems declared by the configuration
+
+Every content handler that keeps its systems in Mongo also accepts them from this file, under its
+own `systems` list. A declared system is the same object the admin screen edits, so it appears in
+the admin list beside the stored ones and every read path — ingestion, browsing, search — resolves
+it exactly like one created in the UI.
+
+The two sources are combined by `GAbstractContentManagementSystemConfigurationDao`, the
+implementation parent of each handler's DAO, which settles what happens when both name the same
+system: **the declaration wins**. A stored record whose code is declared here is dropped from the
+list and never resolved, so what the file says cannot be displaced by anything written later. A
+blank code, or the same code declared twice, fails the startup.
+
+In exchange, the admin write paths refuse a declared code — insert, update and delete alike. A
+record written under a code the file declares could only ever be persisted and then ignored, so
+changing a declared system means editing this file and restarting, not a UI action.
+
+Credentials are never written here. Each entry carries the *code* of a secret the secrets
+management layer holds — declared under `ai.gebo.secrets.config` (§6.2) or created in the admin
+UI. `contentManagementSystemType` is implied by the handler and can be omitted; only `ai.gebo.git`,
+which registers several handler types, requires it.
+
+Every entry also accepts the fields `GContentManagementSystem` carries: `code` (required),
+`description`, `baseUri`, `readonly`, `usedCapabilities`.
+
+| Property (list) | Binding class | Handler-specific fields | Implemented type |
+|---|---|---|---|
+| `ai.gebo.confluence.systems` | `ConfluenceSystemsConfig` | `confluenceVersion` (`ONPREMISE7X`, `CLOUD`), `secretCode` | `ATLASSIAN-CONFLUENCE` |
+| `ai.gebo.jira.systems` | `JiraSystemsConfig` | `secretCode` | `ATLASSIAN-JIRA` |
+| `ai.gebo.sharepoint.systems` | `SharepointSystemsConfig` | `sharepointVersion` (`CLOUD_VERSION`, `ONPREMISE2019`, required), `secretCode` (required) | `sharepoint-module` |
+| `ai.gebo.webdav.systems` | `WebdavSystemsConfig` | `webdavAuthType` (`NONE`, `BASIC`, `DIGEST`, `NTLM`, `BEARER_TOKEN`), `secretCode` | `WEBDAB-CMS` |
+| `ai.gebo.awss3.systems` | `AwsS3SystemsConfig` | `awsEndpoint`, `s3SecretCode` | `aws-s3-handler` |
+| `ai.gebo.googleworkspace.systems` | `GoogleDriveSystemsConfig` | `driveAccessSecret` | `google-drive-handler` |
+
+Each list is `@Validated`: a declaration that violates its own model's constraints — a SharePoint
+system with no `secretCode` or no `sharepointVersion`, say — fails the startup rather than the
+first connection.
+
+```yaml
+ai.gebo.sharepoint:
+  systems:
+    - code: corporate-sharepoint
+      description: Corporate SharePoint Online
+      baseUri: https://example.sharepoint.com
+      sharepointVersion: CLOUD_VERSION
+      secretCode: msgraph-application
+```
+
+### 16.2 `ai.gebo.<content handler>.datasources` — data sources declared by the configuration
+
+Four handlers also accept their **data sources** (project endpoints) from this file: WebDAV,
+AWS S3, SharePoint — OneDrive drives only — and Google Drive. A declared data source is the same
+object the admin screen edits, appears in the project's source list beside the stored ones, and is
+resolved by every read path through the same DAO.
+
+Unlike the systems of §16.1, which are served straight from the configuration, a declared data
+source is **written into the module's endpoint repository at startup**. It has to be: publishing,
+the central scheduler and `JobLauncherController` all resolve an endpoint through
+`IGPersistentObjectManager` — by `GObjectRef`, or through the flattened
+`GCentralizedProjectEndpoint` a reschedule carries — and none of those paths knows about a handler
+DAO. A source that existed only in memory would list and browse, then fail the moment anyone tried
+to ingest it. The handler's endpoint DAO is therefore built over the repository alone, so there is
+exactly one place a data source can come from.
+
+What the seeding may overwrite is limited on purpose:
+
+- a record that is itself `readonly` — one the seeder wrote on an earlier boot — is replaced;
+- a record an admin created through the UI carries no such marker, and **the startup fails**
+  naming the code rather than throwing away work nobody asked to lose. Rename the declaration or
+  delete the UI record first;
+- a `readonly` record whose declaration has since been removed from the file is **not deleted** —
+  deleting an endpoint properly means replicating the removal and dispatching the disposal that
+  clears its documents and vectors, which a repository write cannot do. Its marker is cleared
+  instead, which hands it back to the admin UI so it can be removed there the normal way. It is
+  logged as a warning.
+
+A broken declaration fails the startup before anything is written, and the admin write paths
+refuse a source the configuration owns.
+
+| Property (list) | Binding class | Path syntax |
+|---|---|---|
+| `ai.gebo.webdav.datasources` | `WebdavDataSourcesConfig` | the resource's full href, `https://host/dav/path/To/Folder` |
+| `ai.gebo.awss3.datasources` | `AwsS3DataSourcesConfig` | `<bucket>/<key>`, or a bare `<bucket>` for the whole bucket |
+| `ai.gebo.sharepoint.datasources` | `SharepointDataSourcesConfig` | `<driveId>/<itemId>`, or a bare `<driveId>` for the whole drive |
+| `ai.gebo.googleworkspace.datasources` | `GoogleDriveDataSourcesConfig` | `<driveId>/<fileId>`, or a bare `<driveId>` for the whole shared drive |
+
+Each entry takes: `code` (required, unique), `description`, `systemCode` (required — a system from
+§16.1 or one created in the UI), `parentProjectCode` (the knowledge base project it feeds),
+`published`, `synchPeriodically`, `openZips`, `personalData`, `vectorizeOnlyExtensions`, and
+`paths` (required, at least one). Each path is `path` plus a `folder` flag — `true` for a folder
+whose contents are walked, `false` (the default) for a single file.
+
+```yaml
+ai.gebo.awss3:
+  datasources:
+    - code: corporate-reports
+      description: Published reports
+      systemCode: corporate-buckets
+      parentProjectCode: COMPANY-KB
+      paths:
+        - path: corporate-docs/reports/2026/
+          folder: true
+        - path: corporate-docs/reports/summary.pdf
+          folder: false
+```
+
+**The path is written in the handler's own addressing, not in a syntax invented for this file.**
+That is what a remote system's notion of "where" actually is, and it is the string the browsing UI
+already stores for a source an admin clicks together. For WebDAV and S3 that reads like a path.
+For Google Drive and OneDrive it is a pair of **opaque ids** — both address items by id and have no
+server-side path — so a folder name will be refused at startup rather than silently matching
+nothing. The ids are the ones in the item's URL, and the ones a source built in the UI already
+carries.
+
+`folder` cannot be derived from the string (no remote call is made while reading the
+configuration), so it is declared. Declaring it wrongly is caught at ingestion, where the
+navigation refuses a node whose kind disagrees.
+
+**SharePoint sites are not declarable** — only OneDrive drives. Under a site the module walks
+lists, list items and site pages, each with its own identity and step type, and a `path`/`folder`
+pair has nothing to say about which is meant. Build site-backed sources in the admin UI.
+
+**Scheduling.** The central scheduler is driven by reschedule requests that only a write path
+emits, so a declared source is registered with it by pressing **Publish** on it once. Publish stays
+enabled on a read-only source for exactly that reason; it queues the ingestion and sends the
+reschedule, and skips the save, since the record is already what the file says.
+
+### 16.3 What `readonly` means for a declared system or data source
+
+Everything declared in §16.1 and §16.2 carries `readonly: true`. The admin UI reads that marker in
+`BaseEntityEditingComponent` and disables **save and delete**, with a message naming the file;
+`GAbstractSystemsArchitectureController` refuses insert, update and delete regardless of the
+client. Publish is deliberately left enabled — it writes nothing on a read-only entity.
+
+For a data source the guard reads the marker off the **stored record**, not off the object the
+client sent back: the record's marker was written by the seeder, while the incoming one is
+whatever the caller chose to send. Editing a declared source would in any case not survive the
+next restart, when the declaration is written back over it.
+
+The filesystem and MCP handlers already used this flag for their own non-editable singleton
+system, so no new concept was introduced for it.
+
 ## 17. Ingestion pipeline tuning — chunking, embedding, GraphRAG
 
 Advanced performance/throughput tuning. Defaults are sane for most installs; only touch these for
