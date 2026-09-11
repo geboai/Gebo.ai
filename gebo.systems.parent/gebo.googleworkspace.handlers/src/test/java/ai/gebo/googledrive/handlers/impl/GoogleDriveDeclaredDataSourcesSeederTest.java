@@ -52,6 +52,14 @@ class GoogleDriveDeclaredDataSourcesSeederTest {
 		assertThat(reference.root.getCode()).isEqualTo("0AJv7q2Xk9mLkUk9PVA");
 		assertThat(reference.path.folder).isTrue();
 		assertThat(GoogleDriveNavigationUtil.getDriveFolderId(reference.path)).isEqualTo("1BxY8sQ2fN7pLmRt3KcWv");
+
+		// Through the exact decoder the consuming service's toNavigationPosition
+		// runs, not just the folder-id helper: this is the mapping the ingestion
+		// engine actually reads.
+		var coordinates = GoogleDriveNavigationUtil.toCoordinates(reference);
+		assertThat(coordinates.getRoot().getCode()).isEqualTo("0AJv7q2Xk9mLkUk9PVA");
+		assertThat(coordinates.getBrowsingStepsCustom()).hasSize(1);
+		assertThat(coordinates.getBrowsingStepsCustom().get(0).id).isEqualTo("1BxY8sQ2fN7pLmRt3KcWv");
 	}
 
 	@Test
