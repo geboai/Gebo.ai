@@ -24,7 +24,7 @@
 #      export WAZUH_AGENT_NAME=gebo-ai-prod-01
 #      # export WAZUH_REGISTRATION_PASSWORD=...   # only if authd uses a password
 #
-# 2. Monolith (dockers/gebo.ai/docker-compose.yml already publishes its logs on
+# 2. Monolith (dockers/docker-compose-deploy/docker-compose.yml already publishes its logs on
 #    the host at /home/gebo.ai/logs):
 #
 #      docker compose -f deploy/wazuh/docker/docker-compose.wazuh-agent.yml up -d
@@ -68,7 +68,7 @@ services:
       # init script, which then fills in the CHANGE_* placeholders from the
       # environment above.
       - ../agent/ossec.conf:/wazuh-config-mount/etc/ossec.conf:ro
-      # The monolith's log directory. dockers/gebo.ai/docker-compose.yml now
+      # The monolith's log directory. dockers/docker-compose-deploy/docker-compose.yml now
       # keeps it in the NAMED volume gebo-monolith_gebo-logs (that stack sets
       # `name: gebo-monolith`), which is referenced as an external volume below
       # and mounted here read-only - an audit trail shipper has no business
@@ -87,7 +87,7 @@ services:
       - wazuh-agent-logs:/var/ossec/logs
 
 volumes:
-  # The monolith's audit-trail volume, created by dockers/gebo.ai/docker-compose
+  # The monolith's audit-trail volume, created by dockers/docker-compose-deploy/docker-compose
   # .yml (project name `gebo-monolith`). `external: true` means "use the volume
   # that stack already created" - this file never owns or deletes it. Bring the
   # monolith stack up first, or this reference fails with "volume not found".

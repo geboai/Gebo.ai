@@ -26,7 +26,7 @@ config contains a key that no Java code binds to, it's called out explicitly in
 next to the jar or in the mounted `/opt/gebo.ai/config` → built-in defaults compiled into the jar.
 Any property can also be set as an environment variable using Spring Boot's relaxed-binding rules
 (uppercase, `.`/`-` → `_`) — e.g. `management.otlp.tracing.endpoint` becomes
-`MANAGEMENT_OTLP_TRACING_ENDPOINT`, exactly as `dockers/gebo.ai/docker-compose.yml` already does.
+`MANAGEMENT_OTLP_TRACING_ENDPOINT`, exactly as `dockers/docker-compose-deploy/docker-compose.observability.yml` already does.
 
 **A configuration change requires a restart** of the `gebo.ai` process/container — nothing in this
 document is hot-reloaded. Two standalone settings are supplied separately, not through

@@ -34,7 +34,7 @@ for p in 27017 6334 7687 9200; do timeout 3 bash -c "</dev/tcp/127.0.0.1/$p" 2>/
 ```
 
 If any are closed, ask the user to bring the infra up (the standard stack is
-`dockers/gebo.ai/windows/docker-compose.yml`, services `mongo qdrant neo4j opensearch`).
+`dockers/docker-compose-deploy/docker-compose.yml`, services `mongo qdrant neo4j opensearch`).
 Do **not** stop/remove containers you didn't create — that needs the user's consent.
 Docker Desktop must be running (`docker version`); if not, start it and wait for the daemon.
 

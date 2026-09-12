@@ -1,56 +1,24 @@
-![Gebo.ai image logo](https://raw.githubusercontent.com/geboai/Gebo.ai/develop/gebo.ui/projects/gebo-ai-reusable-ui/src/assets/Gebo-1000.png)
+![Gebo.ai image logo](https://raw.githubusercontent.com/geboai/Gebo.ai/develop/images/gebo-ai-readme-header-home-logo.svg)
 
 # Gebo.ai, The open source Enterprise AI vendor agnostic platform (visit https://gebo.ai)
 
-**Enterprise RAG · AI Agents · A2A & MCP Interoperability · Deep Search · Cloud or On-Premise**
+This software is an open source enterprise AI and retrieve augmented generation platform that can be installed in every company
+to take the most out from their documentation and informations using modern large language models.
+It's a "No AI vendor lock-in"  alternative to cloud vendors platform, it can work with almost all cloud or on premise AI infrastructures and connects to widely used enterprise systems.
 
-Gebo.ai is an open-source Enterprise AI and retrieval-augmented generation platform designed to connect company knowledge, collaboration systems and business information to modern Large Language Models.
+## `geboai/gebo.ai`
 
-It is a **No AI vendor lock-in** alternative to single-vendor AI platforms: Gebo.ai can work with cloud AI services, European AI providers, privately hosted models and OpenAI-compatible inference servers, while connecting to widely used enterprise systems.
+The Gebo.ai application image, to be run with the official Docker Compose stack.
 
-- **Website:** https://gebo.ai
-- **Documentation:** https://gebo.ai/documents/
-- **GitHub:** https://github.com/geboai/Gebo.ai
-- **YouTube:** https://www.youtube.com/@GeboSystem
-- **Downloads:** https://gebo.ai/downloads/
-
----
-
-## About this Docker image
-
-`geboai/gebo.ai` is the main Gebo.ai application image.
-
-It is intended for **Docker Compose and structured deployments**, where Gebo.ai and the required infrastructure services run as separate containers.
-
-For the fastest all-in-one installation, with MongoDB, Qdrant, Neo4j and OpenSearch bundled in a single container, use:
-
-```text
-geboai/easyinstall.gebo.ai
-```
-
-| Image | Recommended use |
-|---|---|
-| `geboai/gebo.ai` | Docker Compose, persistent installations and structured deployments |
-| `geboai/easyinstall.gebo.ai` | Fast evaluation and compact all-in-one installations |
-
----
-
-# Quick start with Docker Compose
-
-Use the **canonical Docker Compose configuration maintained in the Gebo.ai GitHub repository**.
-
-Do not copy an old Compose file from documentation or previous releases: the repository version contains the current persistence, infrastructure and observability configuration.
-
-## Linux
-
-You do not need to clone the whole repository. Create a folder, download the current `docker-compose.yml` into it, and start the stack:
+## How to run
 
 ```bash
-mkdir gebo.ai && cd gebo.ai
-curl -O https://raw.githubusercontent.com/geboai/Gebo.ai/develop/dockers/gebo.ai/docker-compose.yml
+curl -O https://raw.githubusercontent.com/geboai/Gebo.ai/develop/dockers/docker-compose-deploy/docker-compose.yml
 docker compose pull
 docker compose up -d
 ```
+
+On Windows PowerShell, write `curl.exe -O` on the first line.
 
 Then open:
 
@@ -58,465 +26,115 @@ Then open:
 http://<your-server-ip>:12999/
 ```
 
-## Docker Desktop for Windows
+## Gebo.ai features:
+### Administrative features
+ The admin, chat,rag chat,graphrag chat user interfaces are **fully multilanguage** and the application is **fully multiuser**.
+ All the following features are fully configurable using the administrative user interface.
+ - Configure the large language models to use like:
+      - **OpenAI** chatgpt
+      - **Anthropic** Claude
+      - **AWS Bedrock** (Claude, Amazon Nova, Llama, Mistral & more)
+      - **Google** Vertex AI / Gemini (experimental, disabled by default)
+      - **XaI** Grok
+      - **Nvidia** AI provider
+      - **Groq**
+      - **Deepseek**
+      - **MistralAI**
+      - **Regolo.ai** (Italian/European)
+      - **OpenRouter.ai** (multi-model router)
+      - Almost every local large language model using **Ollama** or **vLLM**       
+      - Every provider/local server compatible with **OpenAi API**
+ - Configure tools & functions that each llm configuration can use, including **web search** (**Google Programmable Search**, **Tavily**, **Brave Search**, **SerpApi** or a self-hosted **SearXNG**) — see [Web search & deep search](#web-search--deep-search) below
+ - Configure additional AI model types besides chat & embedding models:
+    - **Image generation** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai & OpenAI-compatible providers)
+    - **Text to speech** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai)
+    - **Speech to text / transcription** models (OpenAI, AWS Bedrock, Regolo.ai, OpenRouter.ai)
+    - **Reranking** models to improve retrieve augmented generation relevance (AWS Bedrock, Regolo.ai, OpenRouter.ai, vLLM & OpenAI-compatible providers)
+ - Most providers support **guided fast-setup** with ready-to-use model presets and automatic models lookup
+ - Connect to **Model Context Protocol (MCP)** servers to give your chatbots extra tools & data sources, or expose Gebo.ai itself as an **MCP server**
+ - **Agent-to-agent interoperability** — through the open **Agent2Agent (A2A) protocol**, Gebo.ai plugs into the wider agentic ecosystem in **both directions**: **connect external A2A agents** — whatever framework or vendor built them — and put them to work as tools and participants inside your own agent networks, or **publish your Gebo.ai agents, a single agent or an entire network of agents, as standards-compliant A2A agents** with their own Agent Card, ready to be consumed by any A2A-capable platform. It is **secure by default**: every import/export is admin-enabled, off and invisible until you switch it on, inbound calls are validated by the platform security chain (self-issued JWT / API key or corporate OAuth2) and run under the caller's own identity, and outbound credentials are handled by the platform secrets vault with OAuth2 token relay. The **"no AI vendor lock-in"** promise now reaches the agents themselves.
+ - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
+    - **Microsoft Onedrive/Sharepoint**
+    - **Atlassian Confluence**
+    - **Atlassian Jira**
+    - **Google Workspaces/Drives** 
+    - **GitHub/GIT/Bitbucket** or other **git** compatible servers
+    - Company shared filesystems
+     - **Amazon AWS S3** buckets
+     - **WebDAV** compatible servers (Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server...)
+ - Configure **company single sign** on (SSO) using one of the following oauth2 providers:
+ 	- **Microsoft Entra**
+ 	- **Google auth**   
+ 	- **AWS Cognito**
+ 	- **AWS IAM Identity Center** (ex AWS SSO)
+ 	- **KeyCloak**, with its own dedicated single sign on settings
+ 	- Any other standard **oauth2/OpenID Connect** identity provider, through the **generic oauth2** connector
+ - Configure **GraphRag** features (experimental)
+ 	- The software can use cheap models provided (on premise or in cloud) to export knowledge graphs persisted with neo4j. 	
+ - Create knowledge bases collectioning documents from the previus mentioned system.  
+ - Schedule document updates for AI reindexing (embedding) on updates.
+ - Monitor embedding batch job.
+ - Monitor **LLM usage** with built-in dashboards (admin: every user; user: own usage only) — drill down by provider, model, model type (chat/embedding/image/reranking/TTS/transcription), user and month to track calls/tokens over time.
+ - **NIS2-oriented security audit logging**: login/logout, LLM configuration changes, LLM invocations, secrets/API-key/3rd-party-integration changes and user administration are all traced to a dedicated, append-only, **Wazuh-compatible JSON** audit trail — see [Security & compliance](https://github.com/geboai/Gebo.ai#security--compliance) below.
+ - **Compliance / data-flow register** (GDPR Art. 30 · NIS2 Art. 21): a live **record of processing activities** built from the components actually running — data sources, transformation engines, retaining stores and external providers, with per-source personal-data scope, retention & erasure per store, an interactive data-flow graph and CSV export, plus the Wazuh/SIEM security-audit-logging status — see [Security & compliance](https://github.com/geboai/Gebo.ai#security--compliance) below.
+ - Configure company users and groups.      
+ - Organize multiple specific Retrieve augmented generation chats for specific company tasks:
+    - Examples:
+       - Customer support **chatbots to support customer support employees or directly the customers**
+       - Tech/Production **productivity chatbots to support employee on mananging internal technical documentation**.
+ - Chatbot access can be granted individually to users/groups
+ - Knowledge bases can be granted individually to users/groups
 
-A Windows-specific Compose configuration is maintained in the repository. As on Linux, you do not need to clone it — create a folder, download the current Windows `docker-compose.yml` into it, and start the stack:
 
-```powershell
-mkdir gebo.ai; cd gebo.ai
-curl.exe -O https://raw.githubusercontent.com/geboai/Gebo.ai/develop/dockers/gebo.ai/windows/docker-compose.yml
-docker compose pull
-docker compose up -d
-```
 
-Then open `http://localhost:12999/`.
+### Users features        
+ - Chat using chatbots without retrieve augmented generation according to admin config.
+ - Chat using chatbots with retrieve augmented generation  according to admin config.
+ - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
+ - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
+ - Generate **images** directly in chat using configured image generation models.
+ - Run a **deep search** from the chat, choosing which sources to work on — company knowledge bases, Confluence, Jira, SharePoint/OneDrive, Google Drive and the web — see [Web search & deep search](#web-search--deep-search) below.
+ - Voice interface (speech to text & text to speech) working with OpenAI provider.   
 
-For complete installation options visit:
+### Web search & deep search
+ - Choose the **web search provider** the chatbots will use, from a guided wizard:
+    - **Google Programmable Search**
+    - **Tavily**
+    - **Brave Search**
+    - **SerpApi** (real Google/Bing/DuckDuckGo results pages)
+    - **SearXNG**, self-hosted, for companies that do not want their queries handled by a search vendor
+ - Only one provider is active at a time: switching provider is just entering the new key, nothing else to reconfigure. Keys are stored as protected secrets and every change to them is traced in the security audit log.
+ - The AI does not just send keywords: depending on the chosen provider it also decides **how** to search — how recent the results must be (last day/week/month/year), whether to look at news or general content, which country or language to favour, the safe-search level, or which underlying search engine to use.
+ - The configured provider is available in three different ways:
+    - as a **tool the chatbot can call** during a normal conversation, to check something on the internet;
+    - as one of the **deep search** sources;
+    - as a dedicated **searching agent** gathering evidences when the chatbot works as a network of agents.
+ - **Deep search** answers a question by working on it instead of replying in one shot: it breaks the question into several searches, runs them **in parallel on all the sources the user is entitled to**, opens and reads what it found, drops what is irrelevant and writes a final analysis with the references it used. Sources are:
+    - the company **knowledge bases**
+    - **Atlassian Confluence** — searched by space, labels, page title & text, authors
+    - **Atlassian Jira** — searched by project, issue type, status, priority, affected/fix versions, labels, people
+    - **Microsoft SharePoint/OneDrive** — searched by site, folder path, document type, title & text, people
+    - **Google Workspaces/Drives**
+    - the **web**, through the configured provider
+ - The user picks which sources to use for each question, and the administrator decides, per data source and per user/group, who is allowed to use them at all.
+ - Web searches leave the company installation, so each active provider is listed among the external providers of the compliance data-flow register — see [Security & compliance](https://github.com/geboai/Gebo.ai#security--compliance).
 
-https://gebo.ai/downloads/
-
-On the first startup, create the local administrative account and then configure AI providers, enterprise data sources, users, groups and chatbots from the Gebo.ai administration interface.
-
-First-start documentation:
-
-https://gebo.ai/first-gebo-ai-server-first-startup-step-creating-admin-account/
-
----
-
-# What the Docker Compose deployment includes
-
-The current monolithic Docker Compose deployment includes:
+## What the Docker Compose deployment contains
 
 - **Gebo.ai**
 - **MongoDB** — application state, users, configuration and chat history
 - **Qdrant** — vector database
 - **Neo4j** — GraphRAG / knowledge graph storage
 - **OpenSearch** — full-text search
-- **OpenTelemetry Collector** — telemetry collection
-- **Prometheus** — metrics
-- **Grafana Tempo** — distributed traces
-- **Grafana** — dashboards
 
-The official Compose configuration uses **Docker named volumes** for persistent application and infrastructure data.
+All data is kept on Docker named volumes, so it survives updates and upgrades — see [dockers/PERSISTENCE.md](https://github.com/geboai/Gebo.ai/blob/develop/dockers/PERSISTENCE.md).
 
----
+Metrics, traces and Grafana dashboards are available as an optional add-on — see [docker-compose.observability.yml](https://github.com/geboai/Gebo.ai/blob/develop/dockers/docker-compose-deploy/docker-compose.observability.yml).
 
-# Enterprise AI without vendor lock-in
+## Gebo.ai licence
 
-Gebo.ai lets organizations choose the AI infrastructure that best fits each workload instead of tying company knowledge to a single AI provider.
+The open source version is available under a variation of the Mozilla Public License Version 2.0 (MPL-2.0),
+an enterprise version with more feature and support is also available.
 
-Supported providers and inference infrastructures include:
-
-- **OpenAI**
-- **Anthropic Claude**
-- **AWS Bedrock**
-- **Google Vertex AI / Gemini** *(experimental / disabled by default where indicated by the application)*
-- **xAI Grok**
-- **NVIDIA AI**
-- **Groq**
-- **DeepSeek**
-- **Mistral AI**
-- **Regolo.ai**
-- **OpenRouter**
-- **Ollama**
-- **vLLM**
-- other **OpenAI API-compatible** providers and local inference servers
-
-Most providers support guided configuration, ready-to-use model presets and/or automatic model lookup.
-
-Gebo.ai supports several model roles, including:
-
-- chat models
-- embedding models
-- reranking models
-- image-generation models
-- speech-to-text / transcription models
-- text-to-speech models
-
-This makes it possible to combine public cloud APIs, private cloud infrastructure, European providers and fully on-premise models in the same platform.
-
----
-
-# Enterprise RAG and company knowledge
-
-Gebo.ai can build AI-searchable knowledge bases from the systems your organization already uses.
-
-Supported information sources include:
-
-- **Microsoft OneDrive / SharePoint**
-- **Atlassian Confluence**
-- **Atlassian Jira**
-- **Google Workspace / Google Drive**
-- **GitHub**
-- **Bitbucket**
-- other **Git-compatible** repositories
-- company shared filesystems
-- **Amazon S3**
-- **WebDAV-compatible** repositories
-
-WebDAV support can be used with platforms such as:
-
-- Nextcloud
-- ownCloud
-- OpenCloud
-- Pydio Cells
-- Seafile / SeafDAV
-- ONLYOFFICE Workspace
-- Synology DSM WebDAV Server
-
-Administrators can create multiple knowledge bases, schedule document discovery and AI re-indexing/embedding jobs, monitor ingestion activity and control access per user or group.
-
----
-
-# AI Agents
-
-Gebo.ai is not limited to conventional RAG chat.
-
-Chatbots can use configurable **tools and functions** and can work with specialized AI agents to combine enterprise knowledge with external capabilities.
-
-Typical capabilities include:
-
-- enterprise knowledge retrieval
-- web search
-- Deep Search
-- MCP tools (call external MCP servers, or expose Gebo.ai as one)
-- **A2A agent interoperability** — import external Agent2Agent agents, and export your own agents or entire agent networks
-- document analysis
-- multimodal interaction
-- specialized searching agents
-- multi-source information gathering
-
-Through the open **Agent2Agent (A2A) protocol**, Gebo.ai interoperates with other agent platforms in **both directions**: it can consume external A2A agents as tools and network participants, and publish its own agents — a single agent or a whole network — as standards-compliant, opaque A2A agents with their own Agent Card. A2A interoperability is **admin-enabled and secure by default**, so nothing is exposed until you choose to expose it.
-
-Access to chatbots and knowledge bases can be granted individually to users and groups.
-
----
-
-# Model Context Protocol — MCP
-
-Gebo.ai supports **Model Context Protocol (MCP)** in both directions.
-
-It can:
-
-- connect to external **MCP servers**
-- expose MCP tools to configured chatbots and agents
-- use MCP tools together with RAG and enterprise knowledge
-- expose Gebo.ai itself as an **MCP server**
-
-This allows Gebo.ai to operate as an integration layer between enterprise information, AI applications and the wider MCP ecosystem.
-
----
-
-# Enterprise Deep Search
-
-Deep Search works on a complex question through multiple research steps instead of relying on a single retrieval.
-
-A Deep Search can:
-
-1. break the question into multiple searches;
-2. execute searches in parallel;
-3. query multiple sources the user is authorized to access;
-4. open and analyze the retrieved information;
-5. discard irrelevant evidence;
-6. consolidate the findings;
-7. produce a final answer with references.
-
-Available sources include:
-
-- Gebo.ai company knowledge bases
-- **Atlassian Confluence**
-- **Atlassian Jira**
-- **Microsoft SharePoint / OneDrive**
-- **Google Workspace / Drive**
-- the **Web**
-
-The user chooses which available sources participate in each search, while the administrator controls which data sources each user or group is allowed to use.
-
----
-
-# Web Search
-
-A web-search provider can be configured from the Gebo.ai administration interface.
-
-Supported providers include:
-
-- **Google Programmable Search**
-- **Tavily**
-- **Brave Search**
-- **SerpApi**
-- **SearXNG**
-
-A self-hosted SearXNG instance can be used by organizations that prefer not to send search queries to an external search vendor.
-
-The configured web-search capability is available:
-
-- as a tool callable during normal chat;
-- as a Deep Search source;
-- to specialized searching agents.
-
-Depending on the selected provider, AI-generated searches can also control parameters such as recency, content type, country, language, safe-search level and underlying search engine.
-
----
-
-# End-user capabilities
-
-Depending on administrator configuration and permissions, users can:
-
-- chat with general-purpose AI assistants;
-- use Enterprise RAG chatbots;
-- work with documents uploaded directly into a chat session;
-- browse authorized company knowledge bases;
-- run Deep Searches;
-- use tools and MCP capabilities;
-- generate images with configured image models;
-- use speech-to-text and text-to-speech capabilities.
-
-Gebo.ai is **multi-user** and its administration and chat interfaces are **multilanguage**.
-
----
-
-# Authentication and access control
-
-Gebo.ai supports local users/groups and enterprise Single Sign-On.
-
-OAuth2 / OpenID Connect integrations include:
-
-- **Microsoft Entra**
-- **Google**
-- **AWS Cognito**
-- **AWS IAM Identity Center** (ex AWS SSO)
-- **Keycloak**, with its own dedicated single sign on settings
-- **Generic OAuth2** connector, for any other standard OAuth2/OpenID Connect identity provider
-
-Administrators can independently grant users and groups access to chatbots, knowledge bases and enterprise information sources.
-
----
-
-# GraphRAG
-
-Gebo.ai includes **experimental GraphRAG capabilities**.
-
-Configured language models can extract knowledge graphs from enterprise information and persist graph data in **Neo4j**, allowing graph-based knowledge representation to complement conventional vector retrieval.
-
----
-
-# LLM usage monitoring
-
-Gebo.ai includes built-in dashboards for AI usage monitoring.
-
-Usage can be analyzed by:
-
-- provider
-- model
-- model type
-- user
-- month
-- number of calls
-- token consumption
-
-Tracked model types include chat, embedding, image generation, reranking, text-to-speech and transcription.
-
-Administrators can inspect organization-wide activity while users can inspect their own usage.
-
----
-
-# Security & compliance capabilities
-
-Gebo.ai includes built-in capabilities designed to assist enterprise security, traceability and compliance workflows.
-
-## Security audit logging — Wazuh / SIEM compatible
-
-Security-relevant events are written to a dedicated append-only JSON Lines audit trail.
-
-Audited activity includes:
-
-- local and SSO login/logout attempts;
-- LLM configuration changes;
-- LLM invocation metadata;
-- API-key and secret lifecycle changes;
-- third-party integration changes;
-- user administration.
-
-LLM audit events record invocation metadata such as model, provider, outcome and latency — **not prompt or response content**.
-
-The audit trail is designed for **Wazuh / SIEM integration**.
-
-## Records of processing and data-flow register
-
-The administration interface includes a live records-of-processing and data-flow register designed to assist with **GDPR and NIS2-related governance workflows**.
-
-It can represent:
-
-- data sources;
-- transformation components;
-- retaining stores;
-- external providers;
-- personal-data scope;
-- retention and erasure information;
-- flows between components;
-- security-audit status.
-
-The register includes an interactive data-flow graph and CSV export.
-
-These capabilities assist compliance activities; using Gebo.ai does not by itself constitute legal or regulatory compliance.
-
-Documentation:
-
-- Security & compliance: https://github.com/geboai/Gebo.ai/blob/develop/docs/security-and-compliance.md
-- Wazuh integration: https://github.com/geboai/Gebo.ai/blob/develop/docs/wazuh-integration.md
-
----
-
-# Observability
-
-The official Docker Compose deployment includes an observability stack based on:
-
-- **OpenTelemetry Collector**
-- **Prometheus**
-- **Grafana Tempo**
-- **Grafana**
-
-Gebo.ai uses **Micrometer** and **Spring Boot Actuator** for metrics and **OpenTelemetry / OTLP** for distributed tracing.
-
-Application and JVM metrics include areas such as:
-
-- JVM health and memory;
-- HTTP traffic;
-- application/service activity;
-- message-routing metrics in distributed deployments.
-
-Grafana is pre-provisioned with Prometheus and Tempo data sources and a starter Gebo.ai dashboard.
-
-With the current monolithic Compose configuration, Grafana is bound to the Docker host loopback interface on port `3000`.
-
-```text
-http://localhost:3000/
-```
-
-Expose or proxy it explicitly if remote access is required.
-
-Infrastructure observability is independent from the built-in Gebo.ai **LLM usage dashboards**.
-
----
-
-# Persistence and backups
-
-The official monolithic Docker Compose configuration uses **named volumes** for the application and infrastructure state that must survive container recreation and upgrades.
-
-Persistent data includes:
-
-- users and application configuration;
-- knowledge-base metadata;
-- chat history;
-- uploaded/session documents;
-- local content mirrors;
-- document caches and chunks;
-- OAuth tokens;
-- vector embeddings;
-- GraphRAG data;
-- OpenSearch indexes;
-- security audit logs;
-- observability history.
-
-## Critical backup rule
-
-`GEBO_WORK_DIRECTORY` and MongoDB form **one logical backup unit**.
-
-The work directory contains durable files and documents while MongoDB contains references and indexes pointing to those files.
-
-> **Always back up and restore the Gebo.ai work volume and MongoDB together.**
-
-For the current volume layout, backup procedures, migration from older anonymous volumes and upgrade instructions, read:
-
-https://github.com/geboai/Gebo.ai/blob/develop/dockers/PERSISTENCE.md
-
-## Updating the Compose deployment
-
-Normally:
-
-```bash
-docker compose pull
-docker compose up -d
-```
-
-Named volumes survive container recreation.
-
-> **Never run `docker compose down -v` on a live installation unless you intentionally want to delete its persistent Docker volumes and data.**
-
----
-
-# Deployment options
-
-Gebo.ai can be deployed in several forms:
-
-| Deployment | Intended scenario |
-|---|---|
-| `easyinstall.gebo.ai` | Single-container evaluation / compact installation |
-| `gebo.ai` + Docker Compose | Persistent monolithic deployment |
-| Docker Compose microservices | Distributed service architecture |
-| Kubernetes / Helm | Orchestrated microservices deployment |
-
-The distributed architecture separates capabilities into independently deployable services for AI orchestration, vectorization, GraphRAG, document processing and enterprise connectors, together with service discovery, gateway and messaging infrastructure.
-
-Current deployment definitions:
-
-- Monolith Docker Compose: https://github.com/geboai/Gebo.ai/tree/develop/dockers/gebo.ai
-- Microservices Docker Compose: https://github.com/geboai/Gebo.ai/tree/develop/dockers/gebo.microservices
-- Kubernetes / Helm: https://github.com/geboai/Gebo.ai/tree/develop/deploy/helm/gebo-microservices
-
-For Kubernetes and microservices deployments, follow the current repository documentation and persistence notes rather than assuming the monolithic Docker Compose storage model applies unchanged.
-
----
-
-# For developers, software architects and software companies
-
-Gebo.ai is also an open-source foundation for companies building Enterprise AI solutions.
-
-The project is built with technologies including:
-
-- **Java**
-- **Spring Boot**
-- **Spring AI**
-- **Angular**
-- **PrimeNG**
-- MongoDB
-- Qdrant
-- Neo4j
-- OpenSearch
-- OpenTelemetry
-
-The same codebase can operate as a monolithic application or as a distributed microservices architecture.
-
-Source code and build information:
-
-https://github.com/geboai/Gebo.ai
-
----
-
-# Gebo.ai licence
-
-The community/open-source edition is distributed under the **Gebo.ai community license based on Mozilla Public License 2.0 (MPL-2.0) with Data Protection Clauses**.
-
-Please review the canonical licensing documents before redistribution or production use:
-
-- Licence: https://github.com/geboai/Gebo.ai/blob/develop/LICENCE.md
-- Origin declaration: https://github.com/geboai/Gebo.ai/blob/develop/ORIGIN.md
-- Licence page: https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
-
-An Enterprise edition with additional capabilities and commercial support is also available.
-
----
-
-# Resources
-
-- **Website:** https://gebo.ai
-- **Documentation:** https://gebo.ai/documents/
-- **Downloads:** https://gebo.ai/downloads/
-- **GitHub:** https://github.com/geboai/Gebo.ai
-- **Docker Hub — main image:** https://hub.docker.com/r/geboai/gebo.ai
-- **Docker Hub — Easy Install:** https://hub.docker.com/r/geboai/easyinstall.gebo.ai
-- **YouTube:** https://www.youtube.com/@GeboSystem
-
----
-
-**Own your data. Choose your models. Connect your enterprise knowledge.**
+- [Click here to see the licence](https://github.com/geboai/Gebo.ai/blob/develop/LICENCE.md)
+- [Click here the ORIGIN declaration](https://github.com/geboai/Gebo.ai/blob/develop/ORIGIN.md)

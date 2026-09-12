@@ -42,7 +42,7 @@ Browser ── HTTP :12999 ──→ gebo.ai.app
                               └── OpenSearch (9200)
 ```
 
-**Docker Compose:** `dockers/gebo.ai/docker-compose.yml`
+**Docker Compose:** `dockers/docker-compose-deploy/docker-compose.yml`
 
 ### Microservices (20 distinct services)
 
@@ -121,7 +121,7 @@ You will be prompted for a keystore password and a key password. Keep these secu
 
 #### Step 2 — Mount the Keystore in Docker
 
-Edit `dockers/gebo.ai/docker-compose.yml` and add a volume mount to the `gebo.ai`
+Edit `dockers/docker-compose-deploy/docker-compose.yml` and add a volume mount to the `gebo.ai`
 service:
 
 ```yaml
@@ -436,7 +436,7 @@ must be **added** explicitly.
 
 #### Step 1 — Mount the Keystore
 
-Edit `dockers/gebo.ai/docker-compose.yml`:
+Edit `dockers/docker-compose-deploy/docker-compose.yml`:
 
 ```yaml
 gebo.ai:

@@ -1,54 +1,80 @@
 #================================================================
-# DEPRECATED LOCATION - kept only so existing links and bookmarks keep working.
-#
-# The maintained file is now:
-#
-#   dockers/docker-compose-deploy/docker-compose.yml
-#   https://raw.githubusercontent.com/geboai/Gebo.ai/develop/dockers/docker-compose-deploy/docker-compose.yml
-#
-# That one file runs unchanged on Linux, macOS and Windows / Docker Desktop, and
-# it is where the optional observability overlay lives.
-#
-# WHY THIS COPY STILL EXISTS, AND WHY IT LOOKS DIFFERENT
-#
-# This file keeps its original compose project name (`gebo-monolith-win`) and its
-# original infrastructure volume keys (mongo-data, qdrant-data, neo4j-data,
-# neo4j-logs, opensearch-data). Those two things together decide which Docker
-# volumes the stack attaches to, so changing them here would point every existing
-# installation made from this URL at a fresh, EMPTY set of volumes - the data
-# would still be on disk, but the stack would come up as if it were a new install.
-#
-# So: if you already run this file, keep running it. You get every fix the
-# maintained file has; only the volume names differ.
-#
-# MOVING TO THE MAINTAINED FILE
-#
-# Your data does not move by itself - the project prefix and the infrastructure
-# volume keys both change. The copy procedure is in dockers/PERSISTENCE.md,
-# section "Migrating from the old Windows file".
-#
-# ---------------------------------------------------------------------------
 # Gebo.ai - enterprise retrieval augmented generation platform.
 #
-# Runs Gebo.ai together with the four data services it needs: MongoDB
-# (application state), Qdrant (vectors), Neo4j (GraphRAG) and OpenSearch (full
-# text). Once started, open http://<your host address>:12999/ with your browser:
-# it will ask you to create the administrative account.
+# This compose file runs Gebo.ai together with the four data services it needs:
+# MongoDB (application state), Qdrant (vectors), Neo4j (GraphRAG) and OpenSearch
+# (full text). Once started, open http://<your host address>:12999/ with your
+# browser: it will ask you to create the administrative account and you are then
+# ready to set the system up and share it with your company or team.
 #
 #   docker compose pull
 #   docker compose up -d
 #
-# There are NO host bind mounts: every persistent path is a named volume, which
-# is what lets this one file run on any operating system. /opt/gebo.ai/config is
-# deliberately left unmounted - the image already ships the application.yml that
-# wires gebo.ai to the four services below.
+# ---------------------------------------------------------------------------
+# RUNS EVERYWHERE - Linux, macOS and Windows / Docker Desktop, unchanged.
 #
-# Memory: roughly 8 GB of JVM/cache heaps across the five containers. On Docker
-# Desktop give the VM at least 10 GB (Settings > Resources > Memory).
+# It is portable because it contains NO host bind mounts at all: every path is a
+# NAMED volume, so there is no host directory to pre-create, no path syntax that
+# differs per operating system, and nothing that goes through the Windows
+# filesystem translation layer whose file-locking and fsync semantics MongoDB,
+# Neo4j and OpenSearch all dislike. It is also self-contained: downloading this
+# one file into an empty directory is a complete install.
+#
+# /opt/gebo.ai/config is deliberately left unmounted. The image already ships
+# the application.yml that wires gebo.ai to the four services below, and Compose
+# silently CREATES a missing bind source - so a ./config that is not there would
+# become an empty directory mounted over the real configuration.
+#
+# ---------------------------------------------------------------------------
+# OPTIONAL DASHBOARDS
+#
+# Metrics, traces and Grafana are a separate overlay in this same directory.
+# Unlike this file it is not self-contained (it mounts prometheus.yml,
+# tempo-config.yaml, otel-collector-config.yaml and grafana/provisioning), so it
+# needs a checkout of the repository:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.observability.yml up -d
+#
+# ---------------------------------------------------------------------------
+# PERSISTENCE - NAMED VOLUMES ONLY
+#
+# Named volumes survive `docker compose down` and every image upgrade; only
+# `docker compose down -v` or an explicit `docker volume rm` removes them. The
+# `name:` below is fixed to `gebo-monolith`, so the volumes have stable,
+# predictable names (`gebo-monolith_<key>`) you can target in backup and restore
+# commands.
+#
+#   gebo-mongo   all application state: users, LLM/KB config, chat history, and
+#                the INDEX of everything in gebo-work
+#   gebo-qdrant  vector store - embeddings; re-ingesting to rebuild costs real
+#                LLM money
+#   gebo-neo4j-* GraphRAG knowledge graphs (data + logs)
+#   gebo-os      OpenSearch full-text index
+#   gebo-work    GEBO_WORK_DIRECTORY - DURABLE user data: chat SESSIONS_AREA,
+#                per-endpoint content mirrors, the document cache, uploads,
+#                Google Workspace OAuth tokens. Mongo only INDEXES it; the bytes
+#                live here, so gebo-mongo and gebo-work are ONE backup unit.
+#   gebo-home    GEBO_HOME
+#   gebo-logs    security-log.jsonl, the append-only GDPR Art.32 / NIS2 Art.21
+#                audit trail, plus gc.log
+#
+# An ANONYMOUS volume is the thing that does NOT survive: it is what you get for
+# any path listed as VOLUME in the image but not mounted here. Every such path in
+# geboai/gebo.ai is mounted below; if you add one, mount it too.
+#
+# Back up (stack stopped, so the copy is consistent):
+#   docker compose stop
+#   docker run --rm -v gebo-monolith_gebo-work:/data -v gebo-monolith_gebo-mongo:/db \
+#     -v "$PWD:/backup" alpine tar czf /backup/gebo.tgz -C / data db
+#   docker compose start
+#
+# Memory: this stack asks for roughly 8 GB of JVM/cache heaps across the five
+# containers. On Docker Desktop give the VM at least 10 GB (Settings >
+# Resources > Memory); on a Linux host that is just free RAM.
 #
 # See dockers/PERSISTENCE.md.
 # ---------------------------------------------------------------------------
-name: gebo-monolith-win
+name: gebo-monolith
 
 services:
   # =======================
@@ -68,13 +94,14 @@ services:
     # history, and the INDEX of every file stored in gebo-work below. Back this
     # up together with gebo-work - one without the other leaves dangling refs.
     volumes:
-      - mongo-data:/data/db
+      - gebo-mongo:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
       interval: 10s
       timeout: 5s
       retries: 12
       start_period: 20s
+    networks: [gebo-monolith-net]
 
   # =======================
   # Qdrant
@@ -94,7 +121,7 @@ services:
     # The vector store. Rebuildable by re-ingesting everything, but re-embedding
     # a corpus costs real money at the LLM provider - treat it as data.
     volumes:
-      - qdrant-data:/qdrant/storage
+      - gebo-qdrant:/qdrant/storage
     # The image carries no curl/wget, but it does carry bash, so the readiness
     # probe is a plain TCP connect through a bash built-in.
     healthcheck:
@@ -103,6 +130,7 @@ services:
       timeout: 5s
       retries: 12
       start_period: 15s
+    networks: [gebo-monolith-net]
 
   neo4j:
     image: neo4j:5
@@ -126,14 +154,15 @@ services:
     # NEO4J_PLUGINS re-resolves APOC for the running Neo4j version at every
     # start, and a stale jar pinned in a volume is what breaks a version bump.
     volumes:
-      - neo4j-data:/data
-      - neo4j-logs:/logs
+      - gebo-neo4j-data:/data
+      - gebo-neo4j-logs:/logs
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:7474"]
       interval: 10s
       timeout: 5s
       retries: 24
       start_period: 30s
+    networks: [gebo-monolith-net]
 
   opensearch:
     image: opensearchproject/opensearch:3
@@ -156,7 +185,7 @@ services:
         hard: 65536
     # Full-text index. Rebuildable by re-ingesting, but not for free.
     volumes:
-      - opensearch-data:/usr/share/opensearch/data
+      - gebo-os:/usr/share/opensearch/data
     # Loopback only, like every other data service: gebo.ai reaches OpenSearch
     # over the compose network, so nothing needs these published to the LAN.
     ports:
@@ -170,6 +199,7 @@ services:
       timeout: 10s
       retries: 30
       start_period: 45s
+    networks: [gebo-monolith-net]
 
   # =======================
   # gebo.ai
@@ -246,21 +276,26 @@ services:
         -XX:MaxMetaspaceSize=512m
         -Xlog:gc:file=/opt/gebo.ai/logs/gc.log:time,uptime:filecount=5,filesize=20M
         --add-opens=java.base/java.nio.charset=ALL-UNNAMED
+    networks: [gebo-monolith-net]
 
 # Named volumes - the whole persistent surface of this stack. They survive
 # `docker compose down` and any image upgrade; only `down -v` / `docker volume
 # rm` destroys them. With `name: gebo-monolith` above, the real names are
-# `gebo-monolith-win_<key>` (see `docker volume ls`).
+# `gebo-monolith_<key>` (see `docker volume ls`).
 volumes:
   # ---- infrastructure ----
-  mongo-data:
-  qdrant-data:
-  neo4j-data:
-  neo4j-logs:
-  opensearch-data:
+  gebo-mongo:
+  gebo-qdrant:
+  gebo-neo4j-data:
+  gebo-neo4j-logs:
+  gebo-os:
   # ---- application ----
-  # gebo-work and mongo-data are one backup unit - see the header.
+  # gebo-work and gebo-mongo are one backup unit - see the header.
   gebo-work:
   gebo-home:
   gebo-logs:
   gebo-shares:
+
+networks:
+  gebo-monolith-net:
+    driver: bridge

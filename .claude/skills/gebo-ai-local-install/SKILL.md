@@ -15,7 +15,7 @@ End-to-end procedure to go from source to a logged-in local admin account on the
 monolithic `geboai/gebo.ai` Docker image, using `dockers/gebo.ai/create-image.bat`
 (translated to shell — this is the canonical recipe, don't use the stale
 `dockers/gebo.ai/create-image.sh`, which skips the artifact copy and tags the image
-differently) and `dockers/gebo.ai/windows/docker-compose.yml`.
+differently) and `dockers/docker-compose-deploy/docker-compose.yml`.
 
 ## 0. Preconditions
 
@@ -76,7 +76,7 @@ Verify both tags landed on the new image:
 ## 3. Bring up the stack
 
 ```bash
-cd dockers/gebo.ai/windows
+cd dockers/docker-compose-deploy
 docker compose up -d
 ```
 

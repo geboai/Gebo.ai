@@ -82,18 +82,29 @@ Infrastructure, in every deployment:
 
 ## 3. Per deployment
 
-### Monolith, Linux — `dockers/gebo.ai/docker-compose.yml`
+### Monolith, any OS — `dockers/docker-compose-deploy/docker-compose.yml`
 
 **Named volumes throughout** (project name `gebo-monolith`, so the real names are
 `gebo-monolith_<key>`): `gebo-mongo`, `gebo-qdrant`, `gebo-neo4j-data`,
 `gebo-neo4j-logs`, `gebo-os`, and the application's `gebo-work`, `gebo-home`,
-`gebo-logs`, `gebo-shares`, plus `prometheus-data` / `grafana-data` /
-`tempo-data`. No host tree to pre-create; Docker creates the volumes on first
-`up`.
+`gebo-logs`, `gebo-shares`. No host tree to pre-create; Docker creates the
+volumes on first `up`.
 
-The only binds are read-only **config files** (`./config`, `./prometheus.yml`,
-`./tempo-config.yaml`, `./otel-collector-config.yaml`, `./grafana/provisioning`)
-— configuration, not data.
+**There are no binds at all**, which is what makes this file self-contained:
+downloading just `docker-compose.yml` into an empty directory is a complete
+install. `/opt/gebo.ai/config` in particular is deliberately left unmounted —
+the image ships the `application.yml` that wires gebo.ai to Mongo, Qdrant, Neo4j
+and OpenSearch, and Compose silently *creates* a missing bind source, so a
+`./config` that is not there becomes an empty directory mounted over the real
+configuration.
+
+The optional observability overlay,
+`dockers/docker-compose-deploy/docker-compose.observability.yml`, adds `prometheus-data` /
+`grafana-data` / `tempo-data` (history only, not part of the backup set) and the
+read-only **config file** binds those services need (`./prometheus.yml`,
+`./tempo-config.yaml`, `./otel-collector-config.yaml`,
+`./grafana/provisioning`) — configuration, not data. Unlike the base file it
+therefore has to be run from a checkout of the repository.
 
 `gebo-shares` (the read-only ingest area, container `/opt/gebo.ai/shares`) is a
 named volume so the image's `VOLUME` does not become anonymous; to expose real
@@ -105,14 +116,37 @@ compose (`deploy/wazuh/docker/docker-compose.wazuh-agent.yml`) mounts it as an
 external volume — see `docs/wazuh-integration.md` for a host agent, which needs
 a host bind instead.
 
-### Monolith, Windows — `dockers/gebo.ai/windows/docker-compose.yml`
+**Why named volumes rather than host binds, on every OS.** A Windows bind mount
+goes through a translation layer whose file-locking and fsync semantics MongoDB,
+Neo4j and OpenSearch all dislike, and a host path is the one thing whose syntax
+differs per operating system. Keeping the whole persistent surface in named
+volumes is what lets a single compose file run unchanged everywhere.
 
-**Named volumes throughout.** This file previously declared *no volumes at all*:
-every container wrote to its throwaway layer, so one `docker compose down` — or
-any image upgrade, which recreates containers — discarded the entire
-installation. Named rather than bind-mounted because a Windows bind mount goes
-through a translation layer whose file-locking and fsync semantics MongoDB,
-Neo4j and OpenSearch all dislike.
+**Migrating from the old Windows file.** This file supersedes
+`dockers/gebo.ai/windows/docker-compose.yml`, which is still in the repository so
+that existing links and bookmarks keep working, and still carries every fix the
+maintained file has. It deliberately keeps its original project name and volume
+keys, so anyone already running it can go on doing so; only the volume names
+differ: its project name is `gebo-monolith-win`, and its infrastructure volume
+keys are `mongo-data`, `qdrant-data`, `neo4j-data`, `neo4j-logs` and
+`opensearch-data`.
+
+Installations made with the former *Linux* file (project `gebo-monolith`,
+`gebo-*` keys) carry over to the maintained file untouched — same project, same
+keys, same volumes. Only if you want to move an old *Windows-file* installation
+onto the maintained file do you have to copy the data across: stop the stack,
+then for each pair, e.g.
+
+```bash
+docker volume create gebo-monolith_gebo-mongo
+docker run --rm -v gebo-monolith-win_mongo-data:/from -v gebo-monolith_gebo-mongo:/to \
+  alpine sh -c 'cd /from && cp -a . /to'
+```
+
+repeating for `qdrant-data`→`gebo-qdrant`, `neo4j-data`→`gebo-neo4j-data`,
+`neo4j-logs`→`gebo-neo4j-logs`, `opensearch-data`→`gebo-os`. The application
+volumes (`gebo-work`, `gebo-home`, `gebo-logs`, `gebo-shares`) keep their keys
+and only change project prefix, so they need the same copy step.
 
 ### Microservices — `dockers/gebo.microservices/docker-compose.yml`
 
