@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 760" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block" role="img" aria-labelledby="home-title home-desc">
+  <title id="home-title">Gebo.ai — open-source, vendor-agnostic enterprise AI platform</title>
+  <desc id="home-desc">The Gebo.ai homepage hero positioning beside its animated enterprise AI architecture.</desc>
+  <defs>
+    <linearGradient id="homeHeadlineAccent" x1="0" x2="1"><stop stop-color="#8b7df7"/><stop offset="1" stop-color="#7067f0"/></linearGradient>
+    <radialGradient id="homeAmbient" cx="78%" cy="42%" r="56%"><stop stop-color="#7067f0" stop-opacity=".12"/><stop offset=".55" stop-color="#22d3ee" stop-opacity=".035"/><stop offset="1" stop-color="#050812" stop-opacity="0"/></radialGradient>
+    <pattern id="homeGrid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#94a0b2" stroke-opacity=".055"/></pattern>
+    <clipPath id="homeArchitectureClip"><rect x="760" y="72" width="810" height="648" rx="22"/></clipPath>
+  </defs>
+  <rect width="1600" height="760" rx="24" fill="#050812"/>
+  <rect width="1600" height="760" rx="24" fill="url(#homeGrid)"/>
+  <rect width="1600" height="760" rx="24" fill="url(#homeAmbient)"/>
+
+  <g transform="translate(60 46) scale(.174)"><g transform="translate(0.000000,500.000000) scale(0.100000,-0.100000)"
+fill="#FFFFFF" stroke="none">
+<path d="M2045 4324 c-385 -58 -662 -194 -929 -453 -218 -213 -366 -450 -464
+-746 -206 -620 -90 -1319 303 -1820 122 -155 307 -319 472 -419 141 -85 332
+-157 508 -193 127 -25 433 -25 560 0 317 64 581 205 819 436 461 450 656 1105
+525 1771 -112 566 -490 1063 -981 1289 -207 95 -369 131 -608 136 -96 2 -188
+1 -205 -1z m400 -210 c582 -96 1062 -596 1202 -1253 25 -117 27 -144 27 -361
+0 -217 -2 -244 -27 -361 -140 -657 -611 -1148 -1202 -1254 -119 -22 -341 -22
+-460 0 -626 112 -1116 658 -1219 1358 -21 135 -21 379 0 514 110 744 650 1304
+1324 1373 102 10 233 4 355 -16z"/>
+<path d="M2943 3499 c-24 -268 -93 -586 -172 -793 l-11 -28 -98 99 c-200 202
+-447 355 -726 449 -170 56 -312 84 -466 90 l-135 5 150 -54 c394 -142 676
+-301 929 -523 100 -88 246 -250 246 -274 0 -20 -84 -161 -157 -262 -70 -98
+-241 -279 -338 -358 -154 -125 -309 -222 -542 -339 -79 -39 -143 -73 -143 -75
+0 -7 181 26 270 50 409 111 753 357 972 696 35 53 67 96 72 94 14 -3 108 -193
+155 -312 48 -120 100 -297 138 -470 26 -118 28 -125 35 -88 12 69 8 326 -7
+433 -29 206 -98 418 -187 579 l-41 74 36 117 c43 138 54 183 72 316 28 194 14
+520 -28 665 -12 43 -13 41 -24 -91z"/>
+<path d="M4632 3857 l-192 -192 0 -1165 0 -1165 192 -192 193 -193 370 0 370
+0 135 134 135 134 205 -134 205 -134 63 0 62 0 0 865 0 865 -270 0 -270 0 0
+-580 0 -580 -415 0 -415 0 0 995 0 995 685 0 685 0 0 78 0 77 -193 193 -192
+192 -580 0 -580 0 -193 -193z"/>
+<path d="M7052 3227 l-192 -192 0 -850 0 -850 193 -193 192 -192 580 0 580 0
+192 192 193 193 0 62 0 63 -685 0 -685 0 0 220 0 220 488 0 487 0 198 198 197
+197 0 365 0 365 -198 198 -197 197 -575 0 -575 0 -193 -193z m1178 -577 l0
+-230 -405 0 -405 0 0 230 0 230 405 0 405 0 0 -230z"/>
+<path d="M9280 2186 l0 -1236 119 0 118 0 771 358 c424 196 770 360 769 364
+-1 4 -159 127 -352 274 -192 146 -351 267 -353 268 -1 2 142 101 318 221 176
+120 320 221 320 225 0 3 -330 175 -732 380 l-733 374 -122 4 -123 4 0 -1236z
+m898 399 c4 -3 -413 -255 -422 -255 -3 0 -6 106 -6 235 l0 235 213 -106 c116
+-58 213 -108 215 -109z m-175 -639 c125 -87 229 -161 232 -165 3 -6 -390 -187
+-476 -219 -5 -2 -9 121 -9 278 0 224 3 280 13 273 6 -5 114 -81 240 -167z"/>
+<path d="M11677 3222 l-197 -197 0 -840 0 -840 198 -198 197 -197 580 0 581 0
+192 193 192 193 0 845 0 844 -198 198 -197 197 -575 0 -575 0 -198 -198z
+m1173 -1037 l0 -695 -400 0 -400 0 0 695 0 695 400 0 400 0 0 -695z"/>
+<path d="M15292 3227 l-192 -192 0 -78 0 -77 660 0 660 0 0 -220 0 -220 -468
+0 -467 0 -218 -218 -217 -217 0 -335 0 -335 193 -193 192 -192 350 0 350 0
+140 140 141 141 217 -141 218 -140 64 0 65 0 0 1043 0 1042 -193 193 -192 192
+-555 0 -555 0 -193 -193z m1128 -1532 l0 -235 -405 0 -405 0 0 235 0 235 405
+0 405 0 0 -235z"/>
+<path d="M18040 3133 l0 -288 -285 285 -285 285 -150 -150 -150 -150 435 -435
+435 -435 0 -648 0 -647 270 0 270 0 0 647 0 648 435 435 435 435 -150 150
+-150 150 -278 -278 c-152 -152 -280 -277 -285 -277 -4 0 -7 126 -7 280 l0 280
+-270 0 -270 0 0 -287z"/>
+<path d="M13950 1265 l0 -315 305 0 305 0 0 315 0 315 -305 0 -305 0 0 -315z"/>
+</g></g>
+
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <text x="62" y="250" font-weight="700" letter-spacing=".78" style="font-size:15px;fill:#22d3ee">OPEN SOURCE, VENDOR-AGNOSTIC ENTERPRISE AI PLATFORM</text>
+    <text x="62" y="368" fill="#f4f6fa" font-weight="760" letter-spacing="-1.8" style="font-size:58px">Enterprise AI platform.</text>
+    <text x="62" y="438" font-weight="760" letter-spacing="-1.8" style="font-size:58px;fill:url(#homeHeadlineAccent)">Any model.</text>
+    <text x="62" y="508" fill="#f4f6fa" font-weight="760" letter-spacing="-1.8" style="font-size:58px">Your infrastructure.</text>
+  </g>
+
+  <g clip-path="url(#homeArchitectureClip)">
+    <rect x="760" y="72" width="810" height="648" rx="22" fill="#050812" stroke="#fff" stroke-opacity=".08"/>
+    <svg x="772" y="82" width="786" height="628" viewBox="0 0 1000 760" aria-hidden="true"><title id="title">Gebo.ai enterprise AI architecture</title>
+  <desc id="desc">Enterprise knowledge, users, identity, monitoring, external tools and agents connect through the Gebo.ai enterprise AI control layer to interchangeable AI models.</desc>
+  <defs>
+    <linearGradient id="leftFlow" x1="0" x2="1"><stop stop-color="#22d3ee" stop-opacity=".18"/><stop offset="1" stop-color="#7067f0"/></linearGradient>
+    <linearGradient id="rightFlow" x1="0" x2="1"><stop stop-color="#7067f0"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+    <radialGradient id="hubFill"><stop stop-color="#101827"/><stop offset="1" stop-color="#07101c"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <style>
+      text{font-family:Inter,"Segoe UI",Arial,sans-serif;fill:#cbd2dd;font-size:12px}.label{fill:#94a0b2;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}.node rect,.target{fill:#0b1120;stroke:#283143;stroke-width:1}.node .mark{fill:#7067f0;filter:url(#glow)}.node.model .mark{fill:#22d3ee}.node{cursor:default}.node:hover rect,.node:focus rect,.target-group:hover .target,.target-group:focus .target{stroke:#8b7df7;fill:#15133a}.node:hover text,.node:focus text,.target-group:hover text,.target-group:focus text{fill:#f4f6fa}.source-line{fill:none;stroke:url(#leftFlow);stroke-width:1.6}.model-line{fill:none;stroke:url(#rightFlow);stroke-width:1.6}.pulse{fill:#8b7df7;filter:url(#glow)}.protocol{fill:#a89eff;font-size:10px;font-weight:700;letter-spacing:.6px}.cap{fill:#b8c1cf;font-size:10px;letter-spacing:.7px}.hub:hover .hub-circle,.hub:focus .hub-circle{stroke:#8b7df7;fill:#15133a}.hub{cursor:default}.fine{fill:none;stroke:#22d3ee;stroke-width:1.2}.fine-purple{fill:none;stroke:#7067f0;stroke-width:1.2}
+    </style>
+  </defs>
+  
+  <g opacity=".9"><circle cx="500" cy="280" r="260" fill="#7067f0" fill-opacity=".025" stroke="#7067f0" stroke-opacity=".18"/><circle cx="500" cy="280" r="205" fill="none" stroke="#22d3ee" stroke-opacity=".12" stroke-dasharray="3 5"/></g>
+  <text class="label" x="20" y="42">ENTERPRISE KNOWLEDGE</text><text class="label" x="980" y="42" text-anchor="end">ANY MODEL</text>
+  <g class="node" tabindex="0"><title>Your authorized users access enterprise AI through the governed Gebo.ai platform.</title><rect x="420" y="8" width="160" height="38" rx="7"/><circle class="mark" cx="438" cy="27" r="4"/><text x="460" y="31">Your users</text></g>
+  <path id="users-line" class="fine" d="M500 46 L500 170"/><circle class="pulse" r="4"><animateMotion dur="2s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1"><mpath href="#users-line"/></animateMotion></circle>
+  <g class="node source" tabindex="0"><title>SharePoint</title><rect x="110" y="82" width="180" height="38" rx="7"/><circle class="mark" cx="127" cy="101" r="4"/><text x="140" y="106">SharePoint</text></g>
+  <g class="node source" tabindex="0"><title>Google Drive</title><rect x="64" y="132" width="180" height="38" rx="7"/><circle class="mark" cx="81" cy="151" r="4"/><text x="94" y="156">Google Drive</text></g>
+  <g class="node source" tabindex="0"><title>Confluence</title><rect x="28" y="182" width="180" height="38" rx="7"/><circle class="mark" cx="45" cy="201" r="4"/><text x="58" y="206">Confluence</text></g>
+  <g class="node source" tabindex="0"><title>GitHub</title><rect x="10" y="232" width="180" height="38" rx="7"/><circle class="mark" cx="27" cy="251" r="4"/><text x="40" y="256">GitHub</text></g>
+  <g class="node source" tabindex="0"><title>Shared files</title><rect x="10" y="282" width="180" height="38" rx="7"/><circle class="mark" cx="27" cy="301" r="4"/><text x="40" y="306">Shared files</text></g>
+  <g class="node source" tabindex="0"><title>Your ERP / MRP</title><rect x="28" y="332" width="180" height="38" rx="7"/><circle class="mark" cx="45" cy="351" r="4"/><text x="58" y="356">Your ERP / MRP</text></g>
+  <g class="node source" tabindex="0"><title>Your business intelligence</title><rect x="64" y="382" width="180" height="38" rx="7"/><circle class="mark" cx="81" cy="401" r="4"/><text x="94" y="398">Your business</text><text x="94" y="413">intelligence</text></g>
+  <g class="node source" tabindex="0"><title>Your databases</title><rect x="110" y="432" width="180" height="38" rx="7"/><circle class="mark" cx="127" cy="451" r="4"/><text x="140" y="456">Your databases</text></g>
+  <g class="node model" tabindex="0"><title>OpenAI</title><rect x="710" y="98" width="180" height="38" rx="7"/><circle class="mark" cx="727" cy="117" r="4"/><text x="740" y="122">OpenAI</text></g>
+  <g class="node model" tabindex="0"><title>Claude</title><rect x="750" y="168" width="180" height="38" rx="7"/><circle class="mark" cx="767" cy="187" r="4"/><text x="780" y="192">Claude</text></g>
+  <g class="node model" tabindex="0"><title>Gemini</title><rect x="770" y="238" width="180" height="38" rx="7"/><circle class="mark" cx="787" cy="257" r="4"/><text x="800" y="262">Gemini</text></g>
+  <g class="node model" tabindex="0"><title>Mistral</title><rect x="750" y="308" width="180" height="38" rx="7"/><circle class="mark" cx="767" cy="327" r="4"/><text x="780" y="332">Mistral</text></g>
+  <g class="node model" tabindex="0"><title>Local AI: Ollama / vLLM / …</title><rect x="710" y="378" width="180" height="38" rx="7"/><circle class="mark" cx="727" cy="397" r="4"/><text x="740" y="394">Local AI: Ollama /</text><text x="740" y="409">vLLM / …</text></g>
+  <path id="source-1" class="source-line" d="M290 101 C360 101 376 205 405 225"/>
+<path id="source-2" class="source-line" d="M244 151 C350 151 374 220 400 240"/>
+<path id="source-3" class="source-line" d="M208 201 C340 201 370 240 396 255"/>
+<path id="source-4" class="source-line" d="M190 251 C330 251 365 260 392 270"/>
+<path id="source-5" class="source-line" d="M190 301 C330 301 365 290 392 288"/>
+<path id="source-6" class="source-line" d="M208 351 C340 351 370 315 396 305"/>
+<path id="source-7" class="source-line" d="M244 401 C350 401 374 335 400 320"/>
+<path id="source-8" class="source-line" d="M290 451 C360 451 376 350 405 335"/>
+<path id="model-1" class="model-line" d="M595 225 C625 205 650 117 710 117"/>
+<path id="model-2" class="model-line" d="M600 245 C650 230 670 187 750 187"/>
+<path id="model-3" class="model-line" d="M610 275 C665 275 690 257 770 257"/>
+<path id="model-4" class="model-line" d="M600 305 C650 315 670 327 750 327"/>
+<path id="model-5" class="model-line" d="M595 325 C625 350 650 397 710 397"/>
+  <circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.00s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-1"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.31s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-2"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.62s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-3"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.93s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-4"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-1.24s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-5"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-1.55s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-6"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-1.86s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-7"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.17s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#source-8"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.48s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#model-1"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.79s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#model-2"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-1.10s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#model-3"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-1.41s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#model-4"/></animateMotion></circle>
+<circle class="pulse" r="4"><animateMotion dur="2s" begin="-1.72s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#model-5"/></animateMotion></circle>
+  <g class="hub" tabindex="0"><title>Gebo.ai is the enterprise AI control layer connecting users, knowledge, models, tools and agents.</title><circle class="hub-circle" cx="500" cy="280" r="110" fill="url(#hubFill)" stroke="#34306e" stroke-width="1.5"/><circle cx="500" cy="280" r="92" fill="none" stroke="#22d3ee" stroke-opacity=".1"/><image href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMjAwMC4wMDAwMDBwdCIgaGVpZ2h0PSI1MDAuMDAwMDAwcHQiIHZpZXdCb3g9IjAgMCAyMDAwLjAwMDAwMCA1MDAuMDAwMDAwIgogcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCI+Cgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw1MDAuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjRkZGRkZGIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjA0NSA0MzI0IGMtMzg1IC01OCAtNjYyIC0xOTQgLTkyOSAtNDUzIC0yMTggLTIxMyAtMzY2IC00NTAgLTQ2NAotNzQ2IC0yMDYgLTYyMCAtOTAgLTEzMTkgMzAzIC0xODIwIDEyMiAtMTU1IDMwNyAtMzE5IDQ3MiAtNDE5IDE0MSAtODUgMzMyCi0xNTcgNTA4IC0xOTMgMTI3IC0yNSA0MzMgLTI1IDU2MCAwIDMxNyA2NCA1ODEgMjA1IDgxOSA0MzYgNDYxIDQ1MCA2NTYgMTEwNQo1MjUgMTc3MSAtMTEyIDU2NiAtNDkwIDEwNjMgLTk4MSAxMjg5IC0yMDcgOTUgLTM2OSAxMzEgLTYwOCAxMzYgLTk2IDIgLTE4OAoxIC0yMDUgLTF6IG00MDAgLTIxMCBjNTgyIC05NiAxMDYyIC01OTYgMTIwMiAtMTI1MyAyNSAtMTE3IDI3IC0xNDQgMjcgLTM2MQowIC0yMTcgLTIgLTI0NCAtMjcgLTM2MSAtMTQwIC02NTcgLTYxMSAtMTE0OCAtMTIwMiAtMTI1NCAtMTE5IC0yMiAtMzQxIC0yMgotNDYwIDAgLTYyNiAxMTIgLTExMTYgNjU4IC0xMjE5IDEzNTggLTIxIDEzNSAtMjEgMzc5IDAgNTE0IDExMCA3NDQgNjUwIDEzMDQKMTMyNCAxMzczIDEwMiAxMCAyMzMgNCAzNTUgLTE2eiIvPgo8cGF0aCBkPSJNMjk0MyAzNDk5IGMtMjQgLTI2OCAtOTMgLTU4NiAtMTcyIC03OTMgbC0xMSAtMjggLTk4IDk5IGMtMjAwIDIwMgotNDQ3IDM1NSAtNzI2IDQ0OSAtMTcwIDU2IC0zMTIgODQgLTQ2NiA5MCBsLTEzNSA1IDE1MCAtNTQgYzM5NCAtMTQyIDY3NgotMzAxIDkyOSAtNTIzIDEwMCAtODggMjQ2IC0yNTAgMjQ2IC0yNzQgMCAtMjAgLTg0IC0xNjEgLTE1NyAtMjYyIC03MCAtOTgKLTI0MSAtMjc5IC0zMzggLTM1OCAtMTU0IC0xMjUgLTMwOSAtMjIyIC01NDIgLTMzOSAtNzkgLTM5IC0xNDMgLTczIC0xNDMgLTc1CjAgLTcgMTgxIDI2IDI3MCA1MCA0MDkgMTExIDc1MyAzNTcgOTcyIDY5NiAzNSA1MyA2NyA5NiA3MiA5NCAxNCAtMyAxMDggLTE5MwoxNTUgLTMxMiA0OCAtMTIwIDEwMCAtMjk3IDEzOCAtNDcwIDI2IC0xMTggMjggLTEyNSAzNSAtODggMTIgNjkgOCAzMjYgLTcKNDMzIC0yOSAyMDYgLTk4IDQxOCAtMTg3IDU3OSBsLTQxIDc0IDM2IDExNyBjNDMgMTM4IDU0IDE4MyA3MiAzMTYgMjggMTk0IDE0CjUyMCAtMjggNjY1IC0xMiA0MyAtMTMgNDEgLTI0IC05MXoiLz4KPHBhdGggZD0iTTQ2MzIgMzg1NyBsLTE5MiAtMTkyIDAgLTExNjUgMCAtMTE2NSAxOTIgLTE5MiAxOTMgLTE5MyAzNzAgMCAzNzAKMCAxMzUgMTM0IDEzNSAxMzQgMjA1IC0xMzQgMjA1IC0xMzQgNjMgMCA2MiAwIDAgODY1IDAgODY1IC0yNzAgMCAtMjcwIDAgMAotNTgwIDAgLTU4MCAtNDE1IDAgLTQxNSAwIDAgOTk1IDAgOTk1IDY4NSAwIDY4NSAwIDAgNzggMCA3NyAtMTkzIDE5MyAtMTkyCjE5MiAtNTgwIDAgLTU4MCAwIC0xOTMgLTE5M3oiLz4KPHBhdGggZD0iTTcwNTIgMzIyNyBsLTE5MiAtMTkyIDAgLTg1MCAwIC04NTAgMTkzIC0xOTMgMTkyIC0xOTIgNTgwIDAgNTgwIDAKMTkyIDE5MiAxOTMgMTkzIDAgNjIgMCA2MyAtNjg1IDAgLTY4NSAwIDAgMjIwIDAgMjIwIDQ4OCAwIDQ4NyAwIDE5OCAxOTggMTk3CjE5NyAwIDM2NSAwIDM2NSAtMTk4IDE5OCAtMTk3IDE5NyAtNTc1IDAgLTU3NSAwIC0xOTMgLTE5M3ogbTExNzggLTU3NyBsMAotMjMwIC00MDUgMCAtNDA1IDAgMCAyMzAgMCAyMzAgNDA1IDAgNDA1IDAgMCAtMjMweiIvPgo8cGF0aCBkPSJNOTI4MCAyMTg2IGwwIC0xMjM2IDExOSAwIDExOCAwIDc3MSAzNTggYzQyNCAxOTYgNzcwIDM2MCA3NjkgMzY0Ci0xIDQgLTE1OSAxMjcgLTM1MiAyNzQgLTE5MiAxNDYgLTM1MSAyNjcgLTM1MyAyNjggLTEgMiAxNDIgMTAxIDMxOCAyMjEgMTc2CjEyMCAzMjAgMjIxIDMyMCAyMjUgMCAzIC0zMzAgMTc1IC03MzIgMzgwIGwtNzMzIDM3NCAtMTIyIDQgLTEyMyA0IDAgLTEyMzZ6Cm04OTggMzk5IGM0IC0zIC00MTMgLTI1NSAtNDIyIC0yNTUgLTMgMCAtNiAxMDYgLTYgMjM1IGwwIDIzNSAyMTMgLTEwNiBjMTE2Ci01OCAyMTMgLTEwOCAyMTUgLTEwOXogbS0xNzUgLTYzOSBjMTI1IC04NyAyMjkgLTE2MSAyMzIgLTE2NSAzIC02IC0zOTAgLTE4NwotNDc2IC0yMTkgLTUgLTIgLTkgMTIxIC05IDI3OCAwIDIyNCAzIDI4MCAxMyAyNzMgNiAtNSAxMTQgLTgxIDI0MCAtMTY3eiIvPgo8cGF0aCBkPSJNMTE2NzcgMzIyMiBsLTE5NyAtMTk3IDAgLTg0MCAwIC04NDAgMTk4IC0xOTggMTk3IC0xOTcgNTgwIDAgNTgxIDAKMTkyIDE5MyAxOTIgMTkzIDAgODQ1IDAgODQ0IC0xOTggMTk4IC0xOTcgMTk3IC01NzUgMCAtNTc1IDAgLTE5OCAtMTk4egptMTE3MyAtMTAzNyBsMCAtNjk1IC00MDAgMCAtNDAwIDAgMCA2OTUgMCA2OTUgNDAwIDAgNDAwIDAgMCAtNjk1eiIvPgo8cGF0aCBkPSJNMTUyOTIgMzIyNyBsLTE5MiAtMTkyIDAgLTc4IDAgLTc3IDY2MCAwIDY2MCAwIDAgLTIyMCAwIC0yMjAgLTQ2OAowIC00NjcgMCAtMjE4IC0yMTggLTIxNyAtMjE3IDAgLTMzNSAwIC0zMzUgMTkzIC0xOTMgMTkyIC0xOTIgMzUwIDAgMzUwIDAKMTQwIDE0MCAxNDEgMTQxIDIxNyAtMTQxIDIxOCAtMTQwIDY0IDAgNjUgMCAwIDEwNDMgMCAxMDQyIC0xOTMgMTkzIC0xOTIgMTkyCi01NTUgMCAtNTU1IDAgLTE5MyAtMTkzeiBtMTEyOCAtMTUzMiBsMCAtMjM1IC00MDUgMCAtNDA1IDAgMCAyMzUgMCAyMzUgNDA1CjAgNDA1IDAgMCAtMjM1eiIvPgo8cGF0aCBkPSJNMTgwNDAgMzEzMyBsMCAtMjg4IC0yODUgMjg1IC0yODUgMjg1IC0xNTAgLTE1MCAtMTUwIC0xNTAgNDM1IC00MzUKNDM1IC00MzUgMCAtNjQ4IDAgLTY0NyAyNzAgMCAyNzAgMCAwIDY0NyAwIDY0OCA0MzUgNDM1IDQzNSA0MzUgLTE1MCAxNTAKLTE1MCAxNTAgLTI3OCAtMjc4IGMtMTUyIC0xNTIgLTI4MCAtMjc3IC0yODUgLTI3NyAtNCAwIC03IDEyNiAtNyAyODAgbDAgMjgwCi0yNzAgMCAtMjcwIDAgMCAtMjg3eiIvPgo8cGF0aCBkPSJNMTM5NTAgMTI2NSBsMCAtMzE1IDMwNSAwIDMwNSAwIDAgMzE1IDAgMzE1IC0zMDUgMCAtMzA1IDAgMCAtMzE1eiIvPgo8L2c+Cjwvc3ZnPgo=" x="405" y="244" width="190" height="48" preserveAspectRatio="xMidYMid meet"/><text class="label" x="500" y="325" text-anchor="middle" font-size="10">ENTERPRISE AI CONTROL LAYER</text></g>
+  <g class="target-group" tabindex="0"><title>Connect enterprise identity providers according to authentication and access policies.</title><rect class="target" x="125" y="520" width="220" height="70" rx="7"/><text x="235" y="542" text-anchor="middle">OAuth2 systems</text><text x="235" y="562" text-anchor="middle" fill="#94a0b2">Microsoft Entra, Google,</text><text x="235" y="580" text-anchor="middle" fill="#94a0b2">AWS Cognito, IAM …</text></g>
+  <path id="identity-line" class="fine" d="M345 555 H500 V390"/><text class="protocol" x="360" y="548">IDENTITY &amp; ACCESS</text><circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.34s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#identity-line"/></animateMotion></circle>
+  <g class="target-group" tabindex="0"><title>Integrate platform monitoring with operational and security visibility systems.</title><rect class="target" x="125" y="615" width="220" height="70" rx="7"/><text x="235" y="637" text-anchor="middle">Monitoring systems</text><text x="235" y="658" text-anchor="middle" fill="#94a0b2">Grafana, Wazuh &amp; others</text></g>
+  <path id="monitor-line" class="fine" d="M345 650 H500 V390"/><text class="protocol" x="382" y="643">MONITORING</text><circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.65s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#monitor-line"/></animateMotion></circle>
+  <g class="target-group" tabindex="0"><title>External tools and systems connect through the Model Context Protocol.</title><rect class="target" x="755" y="520" width="220" height="54" rx="7"/><text x="865" y="552" text-anchor="middle">External AI tools &amp; systems</text></g>
+  <path id="mcp-line" class="fine" d="M500 390 V547 H755"/><text class="protocol" x="610" y="540">MCP PROTOCOL</text><circle class="pulse" r="4"><animateMotion dur="2s" begin="-0.96s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#mcp-line"/></animateMotion></circle>
+  <g class="target-group" tabindex="0"><title>External agent systems connect through the Agent-to-Agent protocol.</title><rect class="target" x="755" y="615" width="220" height="54" rx="7"/><text x="865" y="647" text-anchor="middle">External agent systems</text></g>
+  <path id="a2a-line" class="fine" d="M500 390 V642 H755"/><text class="protocol" x="610" y="635">A2A PROTOCOL</text><circle class="pulse" r="4"><animateMotion dur="2s" begin="-1.27s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"><mpath href="#a2a-line"/></animateMotion></circle>
+  <g transform="translate(282 730)"><text class="cap" x="0">RAG</text><text class="cap" x="68">AGENTS</text><text class="cap" x="155">PROCESSES</text><text class="cap" x="270">GUARDRAILS</text><text class="cap" x="390">OBSERVABILITY</text><text class="cap" x="525">SECURITY</text></g></svg>
+  </g>
+  <rect x="760" y="72" width="810" height="648" rx="22" fill="none" stroke="#fff" stroke-opacity=".09"/>
+</svg>
