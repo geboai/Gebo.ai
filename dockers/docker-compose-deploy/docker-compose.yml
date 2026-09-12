@@ -82,13 +82,23 @@ services:
   # =======================
   # Bound only on loopback interface for security reasons
   mongo:
-    image: mongo:8
+    # Pinned to the 8.2 line on purpose, NOT to :8 / :latest.
+    # MongoDB 8.0+ is incompatible with Linux kernel 6.19 and newer (TCMalloc
+    # violates the upstream rseq ABI - SERVER-121912), and 8.0.30 / 8.3.9 refuse
+    # to start there rather than segfault later. Ubuntu 24.04 LTS ships kernel
+    # 7.0 in its HWE line, so that is a mainstream host, not an edge case.
+    # 8.2.12 is the newest release that still starts on those kernels; the
+    # GLIBC_TUNABLES below disables the rseq fast path the bug lives in.
+    # REVERT TO `mongo:8` once MongoDB ships the TCMalloc fix.
+    image: mongo:8.2
     restart: always
     ports:
       - "127.0.0.1:27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongoroot
       MONGO_INITDB_ROOT_PASSWORD: mongopwd
+      # See the note above the image tag.
+      GLIBC_TUNABLES: glibc.pthread.rseq=0:glibc.cpu.hwcaps=-SHSTK
     command: ["mongod", "--wiredTigerCacheSizeGB=1"]
     # All application state: users, LLM/knowledge-base configuration, chat
     # history, and the INDEX of every file stored in gebo-work below. Back this

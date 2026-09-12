@@ -42,7 +42,18 @@ ENV DEBIAN_FRONTEND=noninteractive \
     OPENSEARCH_HOME=/opt/opensearch \
     OPENSEARCH_DATA=/opt/opensearch/data
 
-ARG MONGO_MAJOR=8.0
+# Pinned to the 8.2 line on purpose, NOT 8.0 or 8.3.
+# MongoDB 8.0+ is incompatible with Linux kernel 6.19 and newer (TCMalloc
+# violates the upstream rseq ABI - SERVER-121912). 8.0.30 and 8.3.9 refuse to
+# start on those kernels rather than segfault later, and Ubuntu 24.04 LTS ships
+# kernel 7.0 in its HWE line, so that is a mainstream host. 8.2.x is the newest
+# line that still starts there; supervisord also sets GLIBC_TUNABLES for mongod.
+# REVERT TO 8.0/8.3 once MongoDB ships the TCMalloc fix.
+ARG MONGO_MAJOR=8.2
+# MongoDB publishes signing keys only for its LTS series (7.0, 8.0); there is no
+# server-8.2.asc. The 8.0 key signs the 8.2 repo too - verified against its
+# InRelease - so the key series and the repo series differ on purpose.
+ARG MONGO_PGP_SERIES=8.0
 ARG QDRANT_VERSION=1.15.3
 ARG OPENSEARCH_VERSION=2.18.0
 ARG TARGETARCH
@@ -51,10 +62,10 @@ RUN apt-get update && apt-get install -y  \
       ca-certificates curl gnupg lsb-release supervisor tini \
     && rm -rf /var/lib/apt/lists/*
 
-RUN    curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-	   gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+RUN    curl -fsSL https://www.mongodb.org/static/pgp/server-${MONGO_PGP_SERIES}.asc | \
+	   gpg -o /usr/share/keyrings/mongodb-server-${MONGO_MAJOR}.gpg \
 	   --dearmor 
-RUN echo  "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" |  tee /etc/apt/sources.list.d/mongodb-org-8.0.list 
+RUN echo  "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-${MONGO_MAJOR}.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/${MONGO_MAJOR} multiverse" |  tee /etc/apt/sources.list.d/mongodb-org-${MONGO_MAJOR}.list 
 	
 RUN apt-get update 
 RUN apt-get install -y  mongodb-org 
