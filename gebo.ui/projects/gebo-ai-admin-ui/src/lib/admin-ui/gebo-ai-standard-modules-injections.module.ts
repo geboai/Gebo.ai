@@ -195,7 +195,12 @@ export class GeboAIUpladsModuleProjectEndpointService implements GeboAIPluggable
         }
 
         const target: GUploadsProjectEndpoint = {
-            parentProjectCode: project.code
+            parentProjectCode: project.code,
+            // Keep the unchecked checkbox explicit in the create payload. Besides
+            // making the form state unambiguous, this keeps a newly saved endpoint
+            // discoverable by older backends whose query-by-example probe still
+            // treated false as a required value.
+            personalData: false
         };
         outAction = {
             actionType: GeboActionType.NEW,

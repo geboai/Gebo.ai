@@ -57,9 +57,12 @@ public class GProjectEndpoint extends GBaseObject implements IAclGrantedResource
 	// Whether this data source is known to hold personal data (GDPR). Set by the
 	// data controller per source; the compliance data-flow register treats a flow
 	// as carrying personal data only when it originates from one or more sources
-	// with this flag set, rather than assuming it. Defaults to false (business /
-	// company data until classified otherwise).
-	private Boolean personalData = false;
+	// with this flag set, rather than assuming it. Null and false both mean that
+	// the source is not classified as holding personal data. Keeping the Java
+	// default null is important because project-endpoint repositories use Spring
+	// Data query-by-example: a default false here would become an unintended query
+	// predicate and hide existing or newly saved endpoints whose field is absent.
+	private Boolean personalData = null;
 
 	/**
 	 * Creates a clone of the GProjectEndpoint object.
