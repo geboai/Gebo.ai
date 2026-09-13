@@ -63,20 +63,117 @@ export const routes: Routes = [
   { path: 'ui/user-workflows', loadChildren: () => import('@Gebo.ai/reusable-ui').then(m => m.GeboAIUserWorkflowsModule) }
 ];
 const GeboAIPreset = definePreset(Aura, {
+  primitive: {
+    borderRadius: {
+      none: '0',
+      xs: '2px',
+      sm: '4px',
+      md: '6px',
+      lg: '8px',
+      xl: '8px'
+    }
+  },
   semantic: {
+    transitionDuration: '0.12s',
+    focusRing: {
+      width: '2px',
+      style: 'solid',
+      color: '{primary.400}',
+      offset: '2px',
+      shadow: 'none'
+    },
     primary: {
-
-      50: '{blue.50}',
-      100: '{blue.100}',
-      200: '{blue.200}',
-      300: '{blue.300}',
-      400: '{blue.400}',
-      500: '{blue.500}',
-      600: '{blue.600}',
-      700: '{blue.700}',
-      800: '{blue.800}',
-      900: '{blue.900}',
-      950: '{blue.950}'
+      50: '#f1f8fa',
+      100: '#dceef3',
+      200: '#b9dce7',
+      300: '#86c1d2',
+      400: '#4e9eb8',
+      500: '#247c9b',
+      600: '#146084',
+      700: '#124f6d',
+      800: '#123f57',
+      900: '#123649',
+      950: '#0a222f'
+    },
+    formField: {
+      paddingX: '0.75rem',
+      paddingY: '0.4375rem',
+      borderRadius: '6px',
+      focusRing: {
+        width: '2px',
+        style: 'solid',
+        color: '{primary.200}',
+        offset: '1px',
+        shadow: 'none'
+      }
+    },
+    content: { borderRadius: '8px' },
+    overlay: {
+      select: { borderRadius: '6px', shadow: '0 8px 24px rgba(17, 24, 39, 0.10)' },
+      popover: { borderRadius: '6px', shadow: '0 8px 24px rgba(17, 24, 39, 0.10)' },
+      modal: { borderRadius: '8px', shadow: '0 16px 40px rgba(17, 24, 39, 0.14)' },
+      navigation: { shadow: '0 8px 24px rgba(17, 24, 39, 0.10)' }
+    },
+    colorScheme: {
+      light: {
+        surface: {
+          0: '#ffffff',
+          50: '#fafafa',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
+          950: '#030712'
+        },
+        primary: {
+          color: '{primary.600}',
+          contrastColor: '#ffffff',
+          hoverColor: '{primary.700}',
+          activeColor: '{primary.800}'
+        },
+        highlight: {
+          background: '{primary.50}',
+          focusBackground: '{primary.100}',
+          color: '{primary.800}',
+          focusColor: '{primary.900}'
+        },
+        formField: {
+          background: '#ffffff',
+          disabledBackground: '{surface.100}',
+          filledBackground: '{surface.50}',
+          filledHoverBackground: '{surface.50}',
+          filledFocusBackground: '#ffffff',
+          borderColor: '{surface.300}',
+          hoverBorderColor: '{surface.400}',
+          focusBorderColor: '{primary.600}',
+          invalidBorderColor: '{red.600}',
+          color: '{surface.800}',
+          disabledColor: '{surface.500}',
+          placeholderColor: '{surface.500}',
+          invalidPlaceholderColor: '{red.700}',
+          iconColor: '{surface.500}',
+          shadow: 'none'
+        },
+        text: {
+          color: '{surface.800}',
+          hoverColor: '{surface.900}',
+          mutedColor: '{surface.600}',
+          hoverMutedColor: '{surface.700}'
+        },
+        content: {
+          background: '#ffffff',
+          hoverBackground: '{surface.100}',
+          borderColor: '{surface.200}',
+          color: '{text.color}',
+          hoverColor: '{text.hover.color}'
+        },
+        mask: { background: 'rgba(17, 24, 39, 0.32)', color: '#ffffff' }
+      }
     }
   },
   extend: {

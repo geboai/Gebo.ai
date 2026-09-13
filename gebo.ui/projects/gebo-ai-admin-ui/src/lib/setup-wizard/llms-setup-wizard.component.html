@@ -19,15 +19,13 @@
               [value]="i">
               <p-accordion-header>
                 @if ((providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)) {
-                  <div style="font-weight: bolder;color:black"
-                    >
+                  <div class="gebo-status-title">
                     {{providerSituation.parentModel?.name}}
                     ({{providerSituation.runtimeConfigs?.length}})
                   </div>
                 }
                 @if (!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)) {
-                  <div style="font-weight: bolder;color:gray"
-                    >
+                  <div class="gebo-status-meta">
                   {{providerSituation.parentModel?.name}}</div>
                 }
               </p-accordion-header>

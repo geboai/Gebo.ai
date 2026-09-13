@@ -39,7 +39,7 @@
     </div>
 
 </p-panel>
-<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="googleSearchConfig?true:false" [modal]="true"
+<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="googleSearchConfig?true:false" [modal]="true" styleClass="gebo-entity-dialog"
     (visibleChange)="googleSearchConfig=undefined">
     <p-blockUI id="BlockUILock"  [target]="createCredentialsUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>

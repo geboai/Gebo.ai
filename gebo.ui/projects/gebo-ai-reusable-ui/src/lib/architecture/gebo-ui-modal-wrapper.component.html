@@ -15,37 +15,34 @@
 <span #ngContainerItem>
   @if (componentType && modal) {
     <span>
-      <div class="grid">
+      <div class="grid gebo-modal-layout">
         @if (isWizardMode ) {
           <div class="col-12">
             <p-steps [model]="items" [readonly]="true" [activeIndex]="activeIndex" />
           </div>
         }
         @if (isWizardMode) {
-          <div class="col-12 grid">
-            <div class="col-3"></div>
-            <div class="col-6 grid">
-              <div class="col-4">
+          <div class="col-12 gebo-modal-wizard-actions">
+            <div class="gebo-modal-wizard-actions__bar">
+              <div class="gebo-modal-wizard-action">
                 @if (wizardButtonsBarData?.hasPreviusStep) {
                   <p-button [icon]="previusStepIcon" iconPos="left"
-                    [outlined]="true" [label]="previusStepLabel" (onClick)="goNext()"
-                  styleClass="w-full"></p-button>
+                    [outlined]="true" [label]="previusStepLabel" (onClick)="goNext()"></p-button>
                 }
               </div>
-              <div class="col-4">
+              <div class="gebo-modal-wizard-action">
                 <p-button [outlined]="true" label="Cancel" severity="contrast"
-                  (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+                  (onClick)="cancelAction.emit(true)" />
                 </div>
-                <div class="col-4">
+                <div class="gebo-modal-wizard-action">
                   @if (wizardButtonsBarData?.hasNextStep) {
                     <p-button [icon]="nextStepIcon" iconPos="right"
                       [outlined]="true" [label]="nextStepLabel" (onClick)="goPrev()"
                       [disabled]="outForwardingService?.actualFormInvalid?true:false"
-                    styleClass="w-full"></p-button>
+                    ></p-button>
                   }
                 </div>
               </div>
-              <div class="col-3"></div>
             </div>
           }
           <div class="col-12">

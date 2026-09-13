@@ -13,7 +13,7 @@
 
 
 @if (modal && componentType) {
-  <p-dialog [visible]="true" [modal]="true" [style]="{width:'98%',height:'98%'}"
+  <p-dialog [visible]="true" [modal]="true" styleClass="gebo-entity-dialog" closeAriaLabel="Close"
     [maximizable]="true" (onHide)="closeModal(modal)"
     (visibleChange)="cancelAction.emit(true);visible=false;closeModal(modal);">
     <gebo-ui-modal-wrapper [componentType]="componentType" [modal]="modal"

@@ -24,7 +24,7 @@
 </div>
 
 
-<p-dialog  [maximizable]="true" [visible]="viewAddWindow" [modal]="true" [style]="{width:'80%',height:'80%'}"
+<p-dialog [maximizable]="true" [visible]="viewAddWindow" [modal]="true" styleClass="gebo-entity-dialog"
   (visibleChange)="viewAddWindow=$event;" (onHide)="viewAddWindow=false" [closable]="true" [showHeader]="true">
   <p-panel #kbCompo header="Adding an element" [formGroup]="formGroup">
 

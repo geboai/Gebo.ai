@@ -12,31 +12,31 @@
     position: relative;
 
     &-input.p-textarea {
-      --p-textarea-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-      --p-textarea-border-radius: 14px;
-      --p-textarea-invalid-placeholder-color: --p-form-field-placeholder-color;
-      font-family: 'Inter';
-      font-size: 14px;
-      font-weight: 400;
-      letter-spacing: 0.2px;
+      --p-textarea-shadow: none;
+      --p-textarea-border-radius: var(--gebo-radius-control, 6px);
+      --p-textarea-invalid-placeholder-color: var(--p-form-field-placeholder-color);
+      font-family: var(--gebo-font-family, 'Inter', sans-serif);
+      font-size: var(--gebo-font-size-md, 14px);
+      font-weight: var(--gebo-font-weight-regular, 400);
+      letter-spacing: 0;
       @media (max-width: 768px) {
-        font-size: 12px;
+        font-size: var(--gebo-font-size-sm, 13px);
       }
 
       width: 100%;
-      min-height: 60px;
+      min-height: 3.75rem;
       max-height: 270px;
 
-      padding: 1.25rem 5rem 1.25rem 4rem;
-      border: 1px solid rgba(0, 0, 0, 0.08) !important;
-      overflow-y: auto !important;
-      overflow-x: hidden !important;
+      padding: 1rem 5rem 1rem 3.75rem;
+      border: 1px solid var(--gebo-border-strong, #d1d5db);
+      overflow-y: auto;
+      overflow-x: hidden;
       resize: none;
 
       &:focus,
       &:hover {
-        border-color: rgba(0, 0, 0, 0.15) !important;
-        ;
+        border-color: var(--gebo-primary-600, #146084);
+        box-shadow: 0 0 0 2px var(--gebo-primary-100, #dceef3);
       }
     }
 
@@ -46,7 +46,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: var(--gebo-space-1, 0.25rem);
 
       top: 50%;
       transform: translateY(-50%);
