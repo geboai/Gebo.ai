@@ -150,6 +150,26 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 		return Path.of(localFolderDiscoveryService.getLocalPersistentFolder(system, endpoint));
 	}
 
+	/**
+	 * Verifies that the query used by the knowledge-base tree can find an upload
+	 * endpoint whose optional personal-data flag is absent.
+	 *
+	 * <p>
+	 * Project endpoints are looked up through Spring Data query-by-example. A
+	 * non-null default on an optional field becomes part of that query even when
+	 * the caller only supplied the parent project, which used to make upload data
+	 * sources saved with an untouched checkbox disappear from the tree.
+	 * </p>
+	 */
+	private void assertDiscoverableByParent(GUploadsProjectEndpoint endpoint, String state)
+			throws GeboPersistenceException {
+		GUploadsProjectEndpoint probe = new GUploadsProjectEndpoint();
+		probe.setParentProjectCode(endpoint.getParentProjectCode());
+		List<GUploadsProjectEndpoint> found = persistentObjectManager.findByQbe(probe);
+		assertTrue(found.stream().anyMatch(x -> endpoint.getCode().equals(x.getCode())),
+				"The upload data source has to remain discoverable " + state);
+	}
+
 	/** How long the disposal of the embeddings of a removed file is awaited. */
 	private static final int DELETED_VECTORS_MAX_WAIT_CYCLES = 12;
 
@@ -189,9 +209,15 @@ public class UploadsEndpointIntegrationTest extends AbstractBaseTestLLmsIntegrat
 			throws InstantiationException, IllegalAccessException, GeboPersistenceException,
 			GeboContentHandlerSystemException, IOException, GeboJobServiceException, InterruptedException {
 		GUploadsProjectEndpoint endpoint = createAndPersist("uploads test data", GUploadsProjectEndpoint.class);
+		// This is the payload produced when the checkbox has not been touched. It
+		// also represents records created before the personalData field existed.
+		endpoint.setPersonalData(null);
+		endpoint = persistentObjectManager.update(endpoint);
+		assertDiscoverableByParent(endpoint, "after saving it without files");
 
 		// --- first batch, the only one the handler used to accept ------------------
 		endpoint = uploadStagedBatch(endpoint, FIRST_BATCH);
+		assertDiscoverableByParent(endpoint, "after saving it with staged files");
 		Path contentsFolder = contentsFolderOf(endpoint);
 		assertNull(endpoint.getUploadHandshakeCode(),
 				"The handshake code has to be consumed, a later save must not re-apply a staging area");
