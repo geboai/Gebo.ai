@@ -13,7 +13,7 @@
 
 
 <p-dialog id="VFileSystemSelector" gebo-ai-label [maximizable]="true" [visible]="openEditWindow" [modal]="true"
-  [style]="{width:'80vw',height:'85vh'}" [contentStyle]="{overflow:'hidden'}" [closable]="true"
+  styleClass="gebo-entity-dialog" [contentStyle]="{overflow:'hidden'}" [closable]="true"
   header="Choose elements" [showHeader]="true" (onHide)="this.openEditWindow=false;"
   (visibleChange)="this.openEditWindow=false;">
   <p-panel #window [showHeader]="false" styleClass="vfs-selector-panel">

@@ -1,0 +1,83 @@
+:root {
+  /* Typography */
+  --gebo-font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --gebo-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --gebo-font-size-2xs: 0.6875rem;
+  --gebo-font-size-xs: 0.75rem;
+  --gebo-font-size-sm: 0.8125rem;
+  --gebo-font-size-md: 0.875rem;
+  --gebo-font-size-lg: 1rem;
+  --gebo-font-size-xl: 1.25rem;
+  --gebo-font-size-2xl: 1.625rem;
+  --gebo-font-weight-regular: 400;
+  --gebo-font-weight-medium: 500;
+  --gebo-font-weight-semibold: 600;
+  --gebo-line-height-tight: 1.25;
+  --gebo-line-height-ui: 1.45;
+  --gebo-line-height-copy: 1.6;
+
+  /* White-first neutral surfaces */
+  --gebo-white: #ffffff;
+  --gebo-surface-subtle: #fafafa;
+  --gebo-surface-muted: #f8f9fa;
+  --gebo-surface-hover: #f3f4f6;
+  --gebo-surface-selected: #eef6f9;
+  --gebo-border-subtle: #e5e7eb;
+  --gebo-border-strong: #d1d5db;
+  --gebo-text: #1f2937;
+  --gebo-text-strong: #111827;
+  --gebo-text-muted: #4b5563;
+  --gebo-text-subtle: #6b7280;
+  --gebo-text-disabled: #9ca3af;
+
+  /* Gebo.ai accent and conventional status colors */
+  --gebo-primary-50: #f1f8fa;
+  --gebo-primary-100: #dceef3;
+  --gebo-primary-200: #b9dce7;
+  --gebo-primary-300: #86c1d2;
+  --gebo-primary-400: #4e9eb8;
+  --gebo-primary-500: #247c9b;
+  --gebo-primary-600: #146084;
+  --gebo-primary-700: #124f6d;
+  --gebo-primary-800: #123f57;
+  --gebo-primary-900: #123649;
+  --gebo-success: #16794a;
+  --gebo-success-bg: #edf8f2;
+  --gebo-warning: #9a6700;
+  --gebo-warning-bg: #fff8e6;
+  --gebo-danger: #b42318;
+  --gebo-danger-bg: #fff1f0;
+  --gebo-info: #175cd3;
+  --gebo-info-bg: #eff6ff;
+
+  /* Layout and geometry */
+  --gebo-space-1: 0.25rem;
+  --gebo-space-2: 0.5rem;
+  --gebo-space-3: 0.75rem;
+  --gebo-space-4: 1rem;
+  --gebo-space-6: 1.5rem;
+  --gebo-space-8: 2rem;
+  --gebo-space-12: 3rem;
+  --gebo-radius-control: 0.375rem;
+  --gebo-radius-panel: 0.5rem;
+  --gebo-radius-dialog: 0.5rem;
+  --gebo-control-height-sm: 2rem;
+  --gebo-control-height: 2.25rem;
+  --gebo-control-height-lg: 2.75rem;
+  --gebo-dialog-header-height: 3rem;
+  --gebo-shell-header-height: 4.5rem;
+  --gebo-page-gutter: 1.5rem;
+  --gebo-dialog-viewport-gutter: 2rem;
+  --gebo-z-sticky: 20;
+  --gebo-z-floating: 30;
+  --gebo-shadow-overlay: 0 8px 24px rgba(17, 24, 39, 0.1);
+  --gebo-shadow-dialog: 0 16px 40px rgba(17, 24, 39, 0.14);
+
+  /* Compatibility aliases used by existing templates and third-party widgets. */
+  --primary-color: var(--gebo-primary-600);
+  --text-color: var(--gebo-text);
+  --text-color-secondary: var(--gebo-text-subtle);
+  --surface-ground: var(--gebo-white);
+  --surface-card: var(--gebo-white);
+  --surface-border: var(--gebo-border-subtle);
+}

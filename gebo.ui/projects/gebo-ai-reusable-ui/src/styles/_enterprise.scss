@@ -1,0 +1,752 @@
+@use 'tokens';
+
+/* Gebo.ai enterprise design system: white canvas, precise hierarchy, compact controls. */
+html,
+body,
+app-root {
+  min-height: 100%;
+}
+
+html {
+  color-scheme: light;
+  background: var(--gebo-white);
+  font-family: var(--gebo-font-family);
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-width: 20rem;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--gebo-white);
+  color: var(--gebo-text);
+  font-family: var(--gebo-font-family);
+  font-size: var(--gebo-font-size-md);
+  font-weight: var(--gebo-font-weight-regular);
+  line-height: var(--gebo-line-height-ui);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--gebo-space-4);
+  color: var(--gebo-text-strong);
+  font-family: var(--gebo-font-family);
+  font-weight: var(--gebo-font-weight-semibold);
+  line-height: var(--gebo-line-height-tight);
+  letter-spacing: -0.012em;
+}
+
+h1 { font-size: var(--gebo-font-size-2xl); }
+h2 { font-size: var(--gebo-font-size-xl); }
+h3 { font-size: 1.125rem; }
+h4,
+h5,
+h6 { font-size: var(--gebo-font-size-lg); }
+
+p { margin: 0 0 var(--gebo-space-4); }
+
+small {
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-xs);
+  line-height: var(--gebo-line-height-ui);
+}
+
+label {
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+  font-weight: var(--gebo-font-weight-medium);
+  line-height: var(--gebo-line-height-ui);
+}
+
+label > [aria-hidden="true"] {
+  margin-right: 0.1875rem;
+  color: var(--gebo-danger);
+}
+
+a {
+  color: var(--gebo-primary-700);
+  text-decoration-color: transparent;
+  text-underline-offset: 0.16em;
+}
+
+a:hover {
+  color: var(--gebo-primary-800);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gebo-primary-400);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--gebo-primary-100);
+  color: var(--gebo-text-strong);
+}
+
+.geboButtonsBar,
+.geboLargeButtonsBar,
+.geboVeryLargeButtonsBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gebo-space-2);
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 var(--gebo-space-3);
+  padding: 0;
+}
+
+:is(.geboButtonsBar, .geboLargeButtonsBar, .geboVeryLargeButtonsBar).grid {
+  margin-inline: 0;
+}
+
+/* Several reusable editors wrap their legacy PrimeFlex columns in an extra
+   .grid inside the semantic action bar. Collapse that intermediate grid too;
+   otherwise col-4 becomes narrower than the 6.5rem button and adjacent
+   actions overlap at desktop widths below Full HD. */
+:is(.geboButtonsBar, .geboLargeButtonsBar, .geboVeryLargeButtonsBar) > .grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gebo-space-2);
+  width: auto;
+  margin: 0;
+}
+
+:is(.geboButtonsBar, .geboLargeButtonsBar, .geboVeryLargeButtonsBar) > [class*="col-"] {
+  flex: 0 0 auto;
+  width: auto;
+  padding: 0;
+}
+
+:is(.geboButtonsBar, .geboLargeButtonsBar, .geboVeryLargeButtonsBar) > .grid > [class*="col-"] {
+  flex: 0 0 auto;
+  width: auto;
+  padding: 0;
+}
+
+:is(.geboButtonsBar, .geboLargeButtonsBar, .geboVeryLargeButtonsBar) p-button {
+  display: inline-flex;
+}
+
+:is(.geboButtonsBar, .geboLargeButtonsBar, .geboVeryLargeButtonsBar) .p-button {
+  width: auto;
+  min-width: 6.5rem;
+}
+
+/* Setup sections are dynamically supplied by other libraries. Keep their actions
+   compact at the reusable wizard boundary even when legacy templates request w-full. */
+gebo-setup-wizard-panel-component p-button .p-button.w-full,
+gebo-setup-wizards p-button .p-button.w-full,
+.gebo-entity-dialog p-button .p-button.w-full {
+  // PrimeFlex defines .w-full with !important; keep this narrow override at the
+  // wizard/dialog boundary so action buttons do not expand into data columns.
+  width: auto !important;
+  min-width: 6.5rem;
+}
+
+.geboDialogContent,
+.geboDialogMidContent {
+  min-height: min(32rem, 70vh);
+  height: auto;
+}
+
+.geboMinHeight { min-height: min(48rem, calc(100vh - 8rem)); }
+.geboFullHeight { min-height: min(36rem, calc(100vh - 8rem)); height: 100%; }
+.geboHalfHeight { height: 50%; }
+.geboThirdHeight { height: 33.333%; }
+
+/* PrimeNG typography baseline */
+.p-component,
+.p-inputtext,
+.p-textarea,
+.p-select,
+.p-multiselect,
+.p-autocomplete,
+.p-button,
+.p-menu,
+.p-megamenu,
+.p-dialog,
+.p-drawer,
+.p-table,
+.p-tree,
+.p-treetable {
+  font-family: var(--gebo-font-family);
+  font-size: var(--gebo-font-size-md);
+}
+
+/* Buttons and action hierarchy */
+.p-button {
+  min-height: var(--gebo-control-height);
+  border-radius: var(--gebo-radius-control);
+  box-shadow: none;
+  font-weight: var(--gebo-font-weight-medium);
+  letter-spacing: 0;
+  padding-block: 0.4375rem;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.p-button:not(.p-button-icon-only) { padding-inline: var(--gebo-space-3); }
+.p-button-sm,
+.p-button.p-button-sm { min-height: var(--gebo-control-height-sm); font-size: var(--gebo-font-size-sm); padding-block: 0.3125rem; }
+.p-button-lg,
+.p-button.p-button-lg { min-height: var(--gebo-control-height-lg); }
+.p-button-icon-only { width: var(--gebo-control-height); min-width: var(--gebo-control-height); }
+
+.p-button.p-button-outlined {
+  background: var(--gebo-white);
+  border-color: var(--gebo-border-strong);
+  color: var(--gebo-text-muted);
+}
+
+.p-button.p-button-outlined:not(:disabled):hover {
+  background: var(--gebo-surface-hover);
+  border-color: var(--gebo-primary-500);
+  color: var(--gebo-primary-700);
+}
+
+.p-button.p-button-text { color: var(--gebo-primary-700); }
+.p-button:disabled,
+.p-disabled { cursor: not-allowed; opacity: 0.56; }
+
+.custom-blue-btn,
+.custom-blue-btn .pi,
+.custom-blue-btn .p-button-text { color: var(--gebo-primary-700); }
+
+.custom-bg-blue-btn .p-button { background: var(--gebo-primary-600); border-color: var(--gebo-primary-600); }
+.custom-bg-blue-btn .p-button:not(:disabled):hover { background: var(--gebo-primary-700); border-color: var(--gebo-primary-700); }
+
+.anchorButton {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  height: auto;
+  min-height: 1.75rem;
+  margin-inline-start: var(--gebo-space-2);
+  padding: 0.1875rem 0.4375rem;
+  border: 1px solid transparent;
+  border-radius: var(--gebo-radius-control);
+  background: transparent;
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+  font-weight: var(--gebo-font-weight-medium);
+  line-height: 1.25;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.anchorButton:hover {
+  border-color: var(--gebo-border-subtle);
+  background: var(--gebo-surface-hover);
+  color: var(--gebo-primary-700);
+}
+
+/* Form controls */
+.p-inputtext,
+.p-textarea,
+.p-select,
+.p-multiselect,
+.p-autocomplete-input,
+.p-inputnumber-input,
+.p-datepicker-input,
+.p-password-input,
+textarea.p-inputtextarea {
+  min-height: var(--gebo-control-height);
+  border: 1px solid var(--gebo-border-strong);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-white);
+  color: var(--gebo-text);
+  box-shadow: none;
+}
+
+.p-inputtext:hover,
+.p-textarea:hover,
+.p-select:not(.p-disabled):hover,
+.p-multiselect:not(.p-disabled):hover,
+.p-autocomplete:not(.p-disabled):hover .p-autocomplete-input { border-color: var(--gebo-text-disabled); }
+
+.p-inputtext:focus,
+.p-textarea:focus,
+.p-select.p-focus,
+.p-multiselect.p-focus,
+.p-autocomplete.p-focus .p-autocomplete-input {
+  border-color: var(--gebo-primary-600);
+  box-shadow: 0 0 0 2px var(--gebo-primary-100);
+  outline: 0;
+}
+
+.p-inputtext::placeholder,
+.p-textarea::placeholder { color: var(--gebo-text-disabled); }
+
+.p-inputtext[readonly],
+.p-inputtextarea[readonly],
+input.p-inputtext:read-only,
+textarea.p-inputtextarea:read-only {
+  border-color: var(--gebo-border-subtle);
+  background: var(--gebo-surface-muted);
+  color: var(--gebo-text-muted);
+  cursor: default;
+}
+
+.p-inputtext.ng-invalid.ng-touched,
+.p-inputtext.ng-invalid.ng-dirty,
+.p-inputtext.p-invalid,
+.p-select.p-invalid,
+.p-multiselect.p-invalid,
+.p-textarea.p-invalid,
+.gebo-ai-invalid-underline { border-color: var(--gebo-danger); }
+
+.p-inputtext.ng-invalid:focus,
+.p-inputtext.p-invalid:focus,
+.p-textarea.p-invalid:focus { box-shadow: 0 0 0 2px var(--gebo-danger-bg); }
+
+.p-checkbox-box,
+.p-radiobutton-box { border-color: var(--gebo-border-strong); }
+.p-toggleswitch { transform: scale(0.92); transform-origin: left center; }
+
+/* Panels, fieldsets and cards */
+.p-panel {
+  margin-bottom: var(--gebo-space-4);
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-white);
+  box-shadow: none;
+  overflow: clip;
+}
+
+.p-panel .p-panel-header {
+  min-height: 2.75rem;
+  padding: 0.625rem var(--gebo-space-4);
+  border: 0;
+  border-bottom: 1px solid var(--gebo-border-subtle);
+  border-radius: 0;
+  background: var(--gebo-white);
+  color: var(--gebo-text-strong);
+}
+
+.p-panel .p-panel-title {
+  color: var(--gebo-text-strong);
+  font-size: var(--gebo-font-size-lg);
+  font-weight: var(--gebo-font-weight-semibold);
+  letter-spacing: -0.006em;
+}
+
+.p-panel .p-panel-content { padding: var(--gebo-space-4); border: 0; background: var(--gebo-white); }
+
+.p-card {
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-white);
+  box-shadow: none;
+}
+
+.p-card-title { color: var(--gebo-text-strong); font-size: var(--gebo-font-size-lg); font-weight: var(--gebo-font-weight-semibold); }
+
+.p-fieldset {
+  border-color: var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-white);
+}
+
+.p-fieldset .p-fieldset-legend {
+  padding: 0 var(--gebo-space-2);
+  border: 0;
+  background: var(--gebo-white);
+  color: var(--gebo-text-strong);
+  font-size: var(--gebo-font-size-sm);
+  font-weight: var(--gebo-font-weight-semibold);
+  text-align: left;
+}
+
+.p-fieldset .p-fieldset-content { padding: var(--gebo-space-3) var(--gebo-space-4) var(--gebo-space-4); }
+
+/* Tabs and menus */
+.p-tabs { background: var(--gebo-white); }
+.p-tablist { border-bottom: 1px solid var(--gebo-border-subtle); background: var(--gebo-white); }
+.p-tablist-content { scrollbar-width: thin; }
+
+.p-tab {
+  min-height: 2.75rem;
+  padding: 0.6875rem var(--gebo-space-4);
+  border-width: 0 0 2px;
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+  font-weight: var(--gebo-font-weight-medium);
+  white-space: nowrap;
+}
+
+.p-tab:not(.p-tab-active):hover { background: var(--gebo-surface-subtle); color: var(--gebo-text-strong); }
+.p-tab-active { color: var(--gebo-primary-700); }
+.p-tabpanels { padding: var(--gebo-space-6) 0 0; background: var(--gebo-white); }
+
+.p-megamenu,
+.p-menubar,
+.p-menu,
+.p-tieredmenu,
+.p-contextmenu {
+  border-color: var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-white);
+  box-shadow: none;
+}
+
+.p-megamenu-item-link,
+.p-menu-item-link,
+.p-tieredmenu-item-link,
+.p-contextmenu-item-link {
+  border-radius: var(--gebo-radius-control);
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+  font-weight: var(--gebo-font-weight-medium);
+}
+
+.p-megamenu-item-link:hover,
+.p-menu-item-link:hover,
+.p-tieredmenu-item-link:hover,
+.p-contextmenu-item-link:hover { background: var(--gebo-surface-hover); color: var(--gebo-text-strong); }
+
+.p-megamenu-item-label,
+.p-menu-item-label { color: inherit; }
+
+.p-megamenu-item-icon,
+.p-menu-item-icon,
+.p-contextmenu-item-icon { color: var(--gebo-text-subtle); }
+
+.gebo-app-nav .p-megamenu {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.gebo-app-nav .p-megamenu-root-list {
+  flex-wrap: nowrap;
+  gap: var(--gebo-space-1);
+}
+
+.gebo-app-nav .p-megamenu-item-link {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+#setupMenuItem {
+  background: transparent !important;
+}
+
+#setupMenuItem[title] .p-megamenu-item-link {
+  color: var(--gebo-warning);
+}
+
+.p-breadcrumb {
+  padding: var(--gebo-space-2) 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: var(--gebo-font-size-xs);
+}
+
+/* Dense enterprise tables */
+.p-datatable {
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-white);
+  overflow: auto;
+}
+
+.p-datatable-table { border-collapse: collapse; font-size: var(--gebo-font-size-sm); }
+
+.p-datatable-thead > tr > th {
+  padding: 0.625rem var(--gebo-space-3);
+  border-color: var(--gebo-border-subtle);
+  background: var(--gebo-surface-muted);
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-xs);
+  font-weight: var(--gebo-font-weight-semibold);
+  line-height: var(--gebo-line-height-tight);
+  letter-spacing: 0.025em;
+  text-transform: none;
+}
+
+.p-datatable-thead > tr:first-child:has(.p-inputtext, .p-select, .p-multiselect) > th {
+  padding-block: var(--gebo-space-2);
+  background: var(--gebo-white);
+}
+
+.p-datatable-tbody > tr { background: var(--gebo-white); color: var(--gebo-text); }
+
+.p-datatable-tbody > tr > td {
+  padding: 0.5625rem var(--gebo-space-3);
+  border-color: var(--gebo-border-subtle);
+  line-height: var(--gebo-line-height-ui);
+  vertical-align: middle;
+}
+
+.p-datatable-tbody > tr:not(.p-highlight):hover { background: var(--gebo-surface-subtle); }
+.p-datatable-tbody > tr.p-highlight { background: var(--gebo-surface-selected); color: var(--gebo-text-strong); }
+.p-datatable-sort-icon { width: 0.75rem; height: 0.75rem; color: var(--gebo-text-subtle); }
+.p-datatable-emptymessage > td { padding: var(--gebo-space-8); color: var(--gebo-text-subtle); text-align: center; }
+
+.p-paginator {
+  min-height: 2.75rem;
+  padding: var(--gebo-space-1) var(--gebo-space-2);
+  border: 1px solid var(--gebo-border-subtle);
+  border-top: 0;
+  border-radius: 0 0 var(--gebo-radius-panel) var(--gebo-radius-panel);
+  background: var(--gebo-white);
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+}
+
+.p-paginator-page,
+.p-paginator-next,
+.p-paginator-prev,
+.p-paginator-first,
+.p-paginator-last { min-width: 2rem; height: 2rem; border-radius: var(--gebo-radius-control); }
+
+/* Trees and list controls */
+.p-tree,
+.p-tree-table,
+.p-listbox {
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-panel);
+  background: var(--gebo-white);
+}
+
+.p-tree { padding: var(--gebo-space-2); }
+
+.p-tree-node-content,
+.p-listbox-option {
+  min-height: 2.25rem;
+  border-radius: var(--gebo-radius-control);
+  color: var(--gebo-text);
+  font-size: var(--gebo-font-size-sm);
+}
+
+.p-tree-node-content:hover,
+.p-listbox-option:hover { background: var(--gebo-surface-hover); }
+
+.p-tree-node-content.p-tree-node-selected,
+.p-listbox-option.p-listbox-option-selected { background: var(--gebo-surface-selected); color: var(--gebo-primary-800); }
+
+/* Dialogs, drawers and overlays */
+.p-dialog,
+.p-drawer {
+  border: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-dialog);
+  background: var(--gebo-white);
+  box-shadow: var(--gebo-shadow-dialog);
+}
+
+.p-dialog.gebo-entity-dialog {
+  width: calc(100vw - (2 * var(--gebo-dialog-viewport-gutter)));
+  height: calc(100vh - (2 * var(--gebo-dialog-viewport-gutter)));
+  max-width: none;
+  max-height: none;
+
+  .p-dialog-content {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .p-panel { margin-bottom: 0; }
+
+  .gebo-modal-layout {
+    width: 100%;
+    margin: 0;
+  }
+
+  .gebo-modal-wizard-actions {
+    padding-top: 0;
+  }
+
+  .gebo-modal-wizard-actions__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--gebo-space-2);
+    padding-bottom: var(--gebo-space-3);
+    border-bottom: 1px solid var(--gebo-border-subtle);
+  }
+
+  .gebo-modal-wizard-action {
+    display: inline-flex;
+  }
+}
+
+.p-dialog.gebo-entity-dialog.p-dialog-maximized {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  margin: 0;
+  border-width: 0;
+  border-radius: 0;
+}
+
+.p-dialog .p-dialog-header {
+  min-height: var(--gebo-dialog-header-height);
+  padding: 0.375rem var(--gebo-space-3);
+  border-bottom: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-dialog) var(--gebo-radius-dialog) 0 0;
+  background: var(--gebo-white);
+}
+
+.p-dialog .p-dialog-header-actions { gap: var(--gebo-space-1); }
+
+.p-dialog .p-dialog-header :is(.p-dialog-maximize-button, .p-dialog-close-button) {
+  width: var(--gebo-control-height);
+  min-width: var(--gebo-control-height);
+  height: var(--gebo-control-height);
+  min-height: var(--gebo-control-height);
+  padding: 0;
+}
+
+.p-drawer-header {
+  min-height: 3.5rem;
+  padding: var(--gebo-space-4) var(--gebo-space-6);
+  border-bottom: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-dialog) var(--gebo-radius-dialog) 0 0;
+  background: var(--gebo-white);
+}
+
+.p-dialog-title { color: var(--gebo-text-strong); font-size: var(--gebo-font-size-lg); font-weight: var(--gebo-font-weight-semibold); line-height: var(--gebo-line-height-tight); }
+.p-drawer-title { color: var(--gebo-text-strong); font-size: 1.125rem; font-weight: var(--gebo-font-weight-semibold); }
+.p-dialog-content,
+.p-drawer-content { padding: var(--gebo-space-6); background: var(--gebo-white); color: var(--gebo-text); }
+
+.p-dialog-footer {
+  padding: var(--gebo-space-3) var(--gebo-space-6);
+  border-top: 1px solid var(--gebo-border-subtle);
+  background: var(--gebo-surface-subtle);
+}
+
+.p-dialog-mask,
+.p-drawer-mask { background: rgba(17, 24, 39, 0.32); }
+
+/* Shell chrome must never establish a layer above an active modal surface. */
+body:has(.p-dialog-mask, .p-drawer-mask) :is(
+  .gebo-app-header,
+  .gebo-ai-rag-chat-section__menu,
+  .version-display
+) {
+  z-index: 0;
+}
+
+.p-popover,
+.p-select-overlay,
+.p-multiselect-overlay,
+.p-autocomplete-overlay {
+  border-color: var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-white);
+  box-shadow: var(--gebo-shadow-overlay);
+}
+
+.p-tooltip-text {
+  max-width: 18rem;
+  padding: 0.4375rem 0.625rem;
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-text-strong);
+  color: var(--gebo-white);
+  font-size: var(--gebo-font-size-xs);
+  line-height: var(--gebo-line-height-ui);
+}
+
+/* Status and feedback */
+.p-tag,
+.p-badge,
+.p-chip { font-size: var(--gebo-font-size-xs); font-weight: var(--gebo-font-weight-medium); }
+.p-tag { border-radius: 999px; padding: 0.1875rem 0.5rem; }
+.p-message,
+.p-toast-message { border-width: 1px; border-radius: var(--gebo-radius-panel); box-shadow: none; }
+
+.p-progressbar { height: 0.5rem; border-radius: 999px; background: var(--gebo-surface-hover); }
+.p-progressbar-value { background: var(--gebo-primary-600); }
+.p-progressbar-label { font-size: var(--gebo-font-size-2xs); }
+
+.p-blockui { background: rgba(255, 255, 255, 0.82); color: var(--gebo-primary-700); backdrop-filter: none; }
+.p-blockui .pi { font-size: 1.5rem !important; }
+
+.gebo-status-title { color: var(--gebo-text-strong); font-weight: var(--gebo-font-weight-semibold); }
+.gebo-status-meta,
+.gebo-inline-meta { color: var(--gebo-text-subtle); font-size: var(--gebo-font-size-xs); font-weight: var(--gebo-font-weight-regular); }
+.gebo-monospace-value { font-family: var(--gebo-font-mono); font-weight: var(--gebo-font-weight-medium); }
+
+.uploads-contents-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--gebo-space-2);
+  padding-bottom: var(--gebo-space-2);
+  color: var(--gebo-text-subtle);
+  font-size: var(--gebo-font-size-sm);
+}
+
+/* AI interactions follow the same information hierarchy as the administration UI. */
+.gebo-ai-reusable-chat__interaction-request-item {
+  padding: var(--gebo-space-3) 0;
+}
+
+.gebo-ai-reusable-chat__interaction-request-item-text {
+  max-width: min(75%, 46rem);
+  margin: 0;
+  padding: var(--gebo-space-2) var(--gebo-space-3);
+  border-left: 3px solid var(--gebo-primary-500);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-surface-muted);
+  color: var(--gebo-text);
+}
+
+.gebo-ai-reusable-chat__interaction-item {
+  padding: var(--gebo-space-2) 0 var(--gebo-space-4);
+  border-bottom: 1px solid var(--gebo-border-subtle);
+}
+
+@media (max-width: 64rem) {
+  .p-tab { padding-inline: var(--gebo-space-3); }
+  .p-dialog-content,
+  .p-drawer-content { padding: var(--gebo-space-4); }
+}
+
+@media (max-width: 48rem) {
+  body { font-size: var(--gebo-font-size-sm); }
+  .p-dialog.gebo-entity-dialog {
+    width: calc(100vw - var(--gebo-space-3));
+    height: calc(100vh - var(--gebo-space-3));
+  }
+  .p-panel .p-panel-content,
+  .p-tabpanels { padding: var(--gebo-space-3); }
+  .geboDialogContent,
+  .geboDialogMidContent { min-height: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}

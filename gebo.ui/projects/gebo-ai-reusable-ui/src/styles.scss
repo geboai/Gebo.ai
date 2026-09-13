@@ -1,7 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'sass:meta';
+@use 'styles/fonts';
+@use 'styles/flags';
+
+/* Vendor styles that intentionally remain plain CSS imports. */
 @import "primeicons/primeicons.css";
-@import 'primeflex/primeflex.scss';
-@import 'styles/fonts.scss';
 @import 'ng-diagram/styles.css';
 //@import "primeng/resources/themes/lara-light-blue/theme.css";
 //@import "primeng/resources/themes/bootstrap4-light-blue/theme.css";
@@ -27,10 +29,6 @@ p-block-ui {
 
 .geboVeryLargeButtonsBar {
   width: 600px;
-}
-
-label {
-  font-weight: bold;
 }
 
 .geboDialogContent {
@@ -61,39 +59,6 @@ label {
   height: 33%;
 }
 
-.anchorButton {
-  border: 0px solid #146084;
-  border-radius: 20%;
-  padding: 10px;
-  height: 100%;
-  width: 100%;
-}
-
-.anchorButton:hover {
-  border: 0px solid#146084;
-  border-radius: 20%;
-  color: #146084;
-  padding: 10px;
-  height: 100%;
-  width: 100%;
-}
-.p-panel .p-panel-header {
-    color: #146084;
-    //background-color: #FAFAFA;
-    //padding: 0px;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-}
-.p-panel .p-panel-header .p-panel-title {
-    font-size: 1.25rem;     /* Aumenta la dimensione del testo */
-    padding: 0.25rem 0;     /* Padding verticale se serve */
-  }
-.p-panel.p-component {
-  border: none
-}
-
 .p-progressbar-determinate {
   .p-progressbar-value {
     background-color: #136084;
@@ -116,10 +81,6 @@ label {
   border: 0px;
   background: transparent;
   padding: 0.5em;
-}
-
-.p-dialog .p-dialog-header {
-  padding: 0.1rem 0.1rem !important;
 }
 
 .pi.p-contextmenu-item-icon {
@@ -283,77 +244,6 @@ label {
   background-image: url("assets/oauth2/oauth-svgrepo-com.svg");
 }
 
-/* Stato normale: solo underline leggera */
-.p-inputtext,
-.p-dropdown .p-dropdown-label,
-.p-calendar .p-inputtext,
-.p-inputnumber .p-inputtext,
-.p-textarea {
-  //border: 0 !important;
-  border-bottom: 1px solid var(--surface-400, #ced4da) !important;
-  border-radius: 3 !important;
-  box-shadow: none !important;
-}
-
-/* Stato invalido: underline rossa */
-.p-inputtext.ng-invalid.ng-touched,
-.p-inputtext.ng-invalid.ng-dirty,
-.p-inputtext.p-invalid,
-.p-dropdown.p-invalid .p-dropdown-label,
-.p-calendar.p-invalid .p-inputtext,
-.p-inputnumber.p-invalid .p-inputtext,
-.p-textarea.p-invalid {
-  //border: 0 !important;
-  border-bottom: 2px solid var(--red-500, #ef4444) !important;
-  box-shadow: none !important;
-}
-
-/* Focus su invalido: rinforza l'underline */
-.p-inputtext.ng-invalid:focus,
-.p-inputtext.p-invalid:focus,
-.p-dropdown.p-invalid .p-dropdown-label:focus,
-.p-calendar.p-invalid .p-inputtext:focus,
-.p-inputnumber.p-invalid .p-inputtext:focus {
-  outline: 0;
-  box-shadow: 0 1px 0 0 var(--red-500, #ef4444) !important;
-}
-
-.gebo-ai-invalid-underline {
-  border-bottom: 2px solid #f44336 !important;
-  outline: none;
-}
-
-//READONLY
-.p-inputtext[readonly],
-.p-inputtextarea[readonly],
-input.p-inputtext:read-only,
-textarea.p-inputtextarea:read-only {
-  background: var(--p-content-background, #C0C0C0);
-  background-color: #C0C0C0;
-  color: var(--p-content-color, #666);
-  border-style: dashed;
-  cursor: default;
-}
-
-/* InputNumber renders an input with .p-inputtext too */
-.p-inputnumber input.p-inputtext[readonly] {
-  /* your styles */
-}
-
-/* Calendar when using [readonlyInput]="true" */
-.p-calendar input.p-inputtext[readonly] {
-  /* your styles */
-}
-
-/* If you use a wrapper and want to dim the whole control area */
-:has(> .p-inputtext[readonly]),
-:has(> .p-inputtextarea[readonly]) {
-  /* optional wrapper styling if your browser supports :has */
-  opacity: 0.8;
-}
-
-@import 'styles/flags.scss';
-
 // Buttons
 .custom-blue-btn .pi {
   color: #136084;
@@ -391,3 +281,6 @@ textarea.p-inputtextarea:read-only {
   padding-bottom: 0.5rem;
   color: var(--text-color-secondary, #6c757d);
 }
+
+/* Keep the design-system normalization last in the cascade. */
+@include meta.load-css('styles/enterprise');

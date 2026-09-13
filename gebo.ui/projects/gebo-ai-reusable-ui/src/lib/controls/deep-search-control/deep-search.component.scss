@@ -1,7 +1,7 @@
 .deep-search {
   &__label {
-    font-weight: 400;
-    font-size: 10px;
-    color: #94a3b8;
+    font-weight: var(--gebo-font-weight-medium, 500);
+    font-size: var(--gebo-font-size-2xs, 11px);
+    color: var(--gebo-text-subtle, #6b7280);
   }
 }

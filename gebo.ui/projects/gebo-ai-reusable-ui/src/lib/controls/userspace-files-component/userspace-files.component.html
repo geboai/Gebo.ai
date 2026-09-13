@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<p-dialog id="ChooseUserFilesDialog" gebo-ai-label  [maximizable]="true" [visible]="openedUserspaceBrowseWindow" [modal]="true" [style]="{width:'95%',height:'95%'}" [closable]="true"
+<p-dialog id="ChooseUserFilesDialog" gebo-ai-label [maximizable]="true" [visible]="openedUserspaceBrowseWindow" [modal]="true" styleClass="gebo-entity-dialog" [closable]="true"
   header="Choose users files" [showHeader]="true" (onHide)="this.openedUserspaceBrowseWindow=false;"
   (visibleChange)="this.openedUserspaceBrowseWindow=false;">
   <form [formGroup]="editingFormGroup">

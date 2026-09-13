@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.gebo-setup-section-list {
+  display: grid;
+  width: 100%;
+}
+
+.gebo-setup-section-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(12rem, 18rem) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--gebo-space-3, 0.75rem);
+  min-height: 3.5rem;
+  padding: var(--gebo-space-3, 0.75rem) 0;
+  border-bottom: 1px solid var(--gebo-border-subtle, #e5e7eb);
+}
+
+.gebo-setup-section-row:last-child {
+  border-bottom: 0;
+}
+
+.gebo-setup-section-status {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.gebo-setup-section-label {
+  padding-top: 0.45rem;
+  color: var(--gebo-text-strong, #111827);
+  font-size: var(--gebo-font-size-sm, 0.8125rem);
+  font-weight: var(--gebo-font-weight-semibold, 600);
+}
+
+.gebo-setup-section-description {
+  padding-top: 0.45rem;
+  color: var(--gebo-text-muted, #4b5563);
+  font-size: var(--gebo-font-size-sm, 0.8125rem);
+  line-height: var(--gebo-line-height-ui, 1.45);
+}
+
+.gebo-setup-section-preview {
+  margin-left: var(--gebo-space-2, 0.5rem);
+  color: var(--gebo-warning, #9a6700);
+  font-size: var(--gebo-font-size-xs, 0.75rem);
+  font-weight: var(--gebo-font-weight-medium, 500);
+}
+
+@media (max-width: 48rem) {
+  .gebo-setup-section-row {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+
+  .gebo-setup-section-description {
+    grid-column: 2;
+    padding-top: 0;
+  }
+}

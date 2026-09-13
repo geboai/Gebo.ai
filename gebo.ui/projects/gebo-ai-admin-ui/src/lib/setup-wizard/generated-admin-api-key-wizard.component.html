@@ -44,7 +44,7 @@
     </div>
   </p-panel>
 
-  <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="showCreateDialog" [modal]="true"
+  <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="showCreateDialog" [modal]="true" styleClass="gebo-entity-dialog"
     (visibleChange)="closeDialog()">
     <p-blockUI id="BlockUILock"  [target]="createApiKeyUI" [blocked]="loading">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -69,7 +69,7 @@
               help="This key has been successfully generated. Copy it now.">
               <div class="p-inputgroup" style="display: flex; width: 100%;">
                 <input pInputText id="generatedKeyValue" [value]="newGeneratedApiKey.apiKey" readonly
-                  style="font-family: monospace; font-weight: bold; flex-grow: 1;" gebo-ai-field-element />
+                  class="gebo-monospace-value" style="flex-grow: 1;" gebo-ai-field-element />
                   <button type="button" pButton label="Copy" icon="pi pi-copy" class="p-button-secondary"
                   (click)="copyToClipboard(newGeneratedApiKey.apiKey)"></button>
                 </div>

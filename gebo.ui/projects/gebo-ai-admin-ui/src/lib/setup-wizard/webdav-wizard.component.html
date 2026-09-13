@@ -31,7 +31,7 @@
       </p-table></div>
   </div>
 </p-panel>
-<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="createWebdavWindowOpen" [modal]="true" (visibleChange)="closeDialog()">
+<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="createWebdavWindowOpen" [modal]="true" styleClass="gebo-entity-dialog" (visibleChange)="closeDialog()">
   <gebo-ai-webdav-system-fast-component (cancelAction)="closeDialog()"
     (newWebdavSystemEvent)="this.closeWizard()"></gebo-ai-webdav-system-fast-component>
 </p-dialog>

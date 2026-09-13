@@ -24,7 +24,7 @@
     </gebo-ai-upload-chat-documents-files>
     <div class="chat-input-shell__frame">
       <div class="chat-input-shell__frame-buttons button-left">
-        <p-button icon="pi pi-plus-circle" text rounded class="custom-blue-btn"
+        <p-button icon="pi pi-plus-circle" text rounded class="custom-blue-btn" ariaLabel="Add chat context"
           (click)="contextAddChatBehaviorMenu1.toggle($event)" [disabled]="loading">
         </p-button>
 
@@ -42,13 +42,13 @@
         </gebo-ai-audio-component>
 
         @if (!streaming) {
-          <p-button [icon]="submitIcon" rounded type="submit" class="custom-bg-blue-btn"
+          <p-button [icon]="submitIcon" rounded type="submit" class="custom-bg-blue-btn" ariaLabel="Send message"
             [disabled]="formGroup.invalid || loading">
           </p-button>
         }
 
         @if (streaming) {
-          <p-button icon="pi pi-stop-circle" rounded class="custom-bg-red-btn" severity="danger"
+          <p-button icon="pi pi-stop-circle" rounded class="custom-bg-red-btn" severity="danger" ariaLabel="Stop response"
             (onClick)="stopReactiveChat.emit(userChatContextCode)" type="button">
           </p-button>
         }

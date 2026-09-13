@@ -51,7 +51,7 @@
 
 </p-panel>
 <p-dialog [maximizable]="true" [visible]="addFolderOpened" [modal]="true" header="Add a shared filesystem root path"
-    [style]="{width:'95%',height:'95%'}" (visibleChange)="addFolderOpened=false">
+    styleClass="gebo-entity-dialog" (visibleChange)="addFolderOpened=false">
     <form [formGroup]="formGroup">
         <div class="grid geboLargeButtonsBar">
             <div class="col-6">

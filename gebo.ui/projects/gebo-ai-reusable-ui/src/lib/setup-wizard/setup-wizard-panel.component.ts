@@ -46,6 +46,7 @@ interface MandatoryUIEntry { config: SetupWizardItem, wizardComponent: Type<Base
 @Component({
     selector: "gebo-setup-wizard-panel-component",
     templateUrl: "setup-wizard-panel.component.html",
+    styleUrl: "setup-wizard-panel.component.scss",
     providers: [SetupWizardComunicationService, {
         provide: GEBO_AI_MODULE, useValue: "SetupWizardPanelModule", multi: false
     }, {

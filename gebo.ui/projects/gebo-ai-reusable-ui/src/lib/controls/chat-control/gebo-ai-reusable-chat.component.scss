@@ -4,18 +4,18 @@
     width: 100%;
   }
 
-  font-family: 'Inter';
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.2px;
-  padding: 20px;
+  font-family: var(--gebo-font-family, 'Inter', sans-serif);
+  font-size: var(--gebo-font-size-md, 14px);
+  font-weight: var(--gebo-font-weight-regular, 400);
+  letter-spacing: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 200px);
+  min-height: calc(100vh - 8rem);
   justify-content: space-between;
 
   @media (max-width: 768px) {
-    font-size: 12px;
+    font-size: var(--gebo-font-size-sm, 13px);
   }
 
   &__header {
@@ -23,13 +23,15 @@
     display: flex;
     height: fit-content;
     justify-content: space-between;
-    border-bottom: 1px solid #e0e0e080;
+    min-height: 3rem;
+    border-bottom: 1px solid var(--gebo-border-subtle, #e5e7eb);
     position: relative;
 
     &-title {
-      color: #136084;
-      font-weight: 600;
-      margin-bottom: 10px;
+      color: var(--gebo-text-strong, #111827);
+      font-size: var(--gebo-font-size-lg, 16px);
+      font-weight: var(--gebo-font-weight-semibold, 600);
+      margin-bottom: 0;
     }
 
     &-icons {
@@ -51,11 +53,11 @@
 
     &-img {
       max-width: 100%;
-      max-height: 420px;
+      max-height: 26rem;
       width: auto;
       height: auto;
-      border-radius: 8px;
-      border: 1px solid #e0e0e080;
+      border-radius: var(--gebo-radius-control, 6px);
+      border: 1px solid var(--gebo-border-subtle, #e5e7eb);
       object-fit: contain;
     }
 
@@ -63,8 +65,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
-      color: #136084;
+      font-size: var(--gebo-font-size-xs, 12px);
+      color: var(--gebo-primary-700, #124f6d);
       text-decoration: none;
     }
   }
@@ -74,7 +76,7 @@
     align-items: center;
     gap: 6px;
     margin-top: 6px;
-    color: #136084;
+    color: var(--gebo-primary-700, #124f6d);
     text-decoration: none;
   }
 
@@ -82,38 +84,33 @@
     &-request-item {
       display: flex;
       justify-content: flex-end;
-
-      &-text {
-        background-color: #e9e9e980;
-        border-radius: 16px;
-        margin: 10px 0;
-        padding: 6px 16px;
-      }
     }
 
     &-item-title {
-      margin-top: 1.2rem;
-      font-weight: 600;
+      margin: var(--gebo-space-2, 0.5rem) 0;
+      color: var(--gebo-text-muted, #4b5563);
+      font-size: var(--gebo-font-size-sm, 13px);
+      font-weight: var(--gebo-font-weight-semibold, 600);
     }
 
     &-item-icon {
-      margin-right: 5px;
+      margin-right: var(--gebo-space-1, 0.25rem);
+      color: var(--gebo-text-subtle, #6b7280);
     }
 
     &-spinner {
       position: absolute;
       left: 50%;
       bottom: 50%;
-      opacity: 0.5;
+      opacity: 0.72;
     }
 
     &-empty {
-      position: absolute;
-      left: 50%;
-      top: 40%;
-      color: #94a3b8;
-      margin-top: 1rem;
-      transform: translateX(-50%);
+      display: grid;
+      min-height: 18rem;
+      place-items: center;
+      color: var(--gebo-text-subtle, #6b7280);
+      font-size: var(--gebo-font-size-sm, 13px);
     }
 
     &-export-buttons {
@@ -137,8 +134,9 @@
     position: sticky;
     bottom: 0;
     z-index: 1;
-    padding-bottom: 0.5rem;
-    background-color: #fff;
+    padding: var(--gebo-space-3, 0.75rem) 0 var(--gebo-space-2, 0.5rem);
+    border-top: 1px solid var(--gebo-border-subtle, #e5e7eb);
+    background-color: var(--gebo-white, #fff);
   }
   &__disclaimer {
     display: flex;
@@ -147,13 +145,13 @@
     gap: 0.35rem;
     width: 100%;
     padding: 0.25rem 0.75rem 0;
-    font-size: 0.72rem;
-    line-height: 1.25;
-    color: #6b7280;
+    font-size: var(--gebo-font-size-2xs, 0.6875rem);
+    line-height: var(--gebo-line-height-ui, 1.45);
+    color: var(--gebo-text-subtle, #6b7280);
     text-align: center;
 
     i {
-      font-size: 0.72rem;
+      font-size: var(--gebo-font-size-2xs, 0.6875rem);
       line-height: 1.4;
       opacity: 0.8;
       flex: 0 0 auto;
@@ -165,7 +163,7 @@
     margin-top: auto;
     margin-bottom: auto;
     z-index: 1;
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--gebo-space-2, 0.5rem);
     background-color: transparent;
   }
   &__error {
@@ -182,8 +180,8 @@
     flex-direction: column;
     height: 100%;
     align-items: end;
-    gap: 10px;
-    opacity: 0.8;
+    gap: var(--gebo-space-2, 0.5rem);
+    opacity: 0.9;
     pointer-events: none;
     
     > * {

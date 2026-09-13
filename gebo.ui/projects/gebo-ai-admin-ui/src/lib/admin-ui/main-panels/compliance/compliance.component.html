@@ -137,8 +137,8 @@
 </p-panel>
 
 <p-dialog id="DataFlowRegisterDialog" [(visible)]="showDataFlowDialog" (onShow)="onDialogShow()"
-  [modal]="true" [maximizable]="true" [draggable]="false" [style]="{ width: '92vw', height: '88vh' }"
-  [contentStyle]="{ height: 'calc(88vh - 10rem)', overflow: 'hidden' }">
+  [modal]="true" [maximizable]="true" [draggable]="false" styleClass="gebo-entity-dialog"
+  [contentStyle]="{ overflow: 'hidden' }">
 
   <ng-template pTemplate="header">
     <div class="flex flex-column">
