@@ -23,5 +23,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit() { }
 
-  title = 'Gebo.ai, the RAG system for software developers';
+  title = 'Gebo.ai, the open source, vendor-agnostic enterprise AI platform';
 }

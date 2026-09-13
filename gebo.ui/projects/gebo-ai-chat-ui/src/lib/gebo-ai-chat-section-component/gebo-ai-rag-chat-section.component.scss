@@ -14,7 +14,7 @@
     position: fixed;
     left: var(--gebo-space-2, 0.5rem);
     top: calc(var(--gebo-shell-header-height, 4.5rem) + var(--gebo-space-3, 0.75rem));
-    z-index: 20;
+    z-index: var(--gebo-z-floating, 30);
   }
 
   &__content {

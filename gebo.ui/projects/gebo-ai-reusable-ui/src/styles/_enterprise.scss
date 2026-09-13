@@ -604,7 +604,24 @@ textarea.p-inputtextarea:read-only {
   border-radius: 0;
 }
 
-.p-dialog-header,
+.p-dialog .p-dialog-header {
+  min-height: var(--gebo-dialog-header-height);
+  padding: 0.375rem var(--gebo-space-3);
+  border-bottom: 1px solid var(--gebo-border-subtle);
+  border-radius: var(--gebo-radius-dialog) var(--gebo-radius-dialog) 0 0;
+  background: var(--gebo-white);
+}
+
+.p-dialog .p-dialog-header-actions { gap: var(--gebo-space-1); }
+
+.p-dialog .p-dialog-header :is(.p-dialog-maximize-button, .p-dialog-close-button) {
+  width: var(--gebo-control-height);
+  min-width: var(--gebo-control-height);
+  height: var(--gebo-control-height);
+  min-height: var(--gebo-control-height);
+  padding: 0;
+}
+
 .p-drawer-header {
   min-height: 3.5rem;
   padding: var(--gebo-space-4) var(--gebo-space-6);
@@ -613,7 +630,7 @@ textarea.p-inputtextarea:read-only {
   background: var(--gebo-white);
 }
 
-.p-dialog-title,
+.p-dialog-title { color: var(--gebo-text-strong); font-size: var(--gebo-font-size-lg); font-weight: var(--gebo-font-weight-semibold); line-height: var(--gebo-line-height-tight); }
 .p-drawer-title { color: var(--gebo-text-strong); font-size: 1.125rem; font-weight: var(--gebo-font-weight-semibold); }
 .p-dialog-content,
 .p-drawer-content { padding: var(--gebo-space-6); background: var(--gebo-white); color: var(--gebo-text); }
@@ -626,6 +643,15 @@ textarea.p-inputtextarea:read-only {
 
 .p-dialog-mask,
 .p-drawer-mask { background: rgba(17, 24, 39, 0.32); }
+
+/* Shell chrome must never establish a layer above an active modal surface. */
+body:has(.p-dialog-mask, .p-drawer-mask) :is(
+  .gebo-app-header,
+  .gebo-ai-rag-chat-section__menu,
+  .version-display
+) {
+  z-index: 0;
+}
 
 .p-popover,
 .p-select-overlay,
