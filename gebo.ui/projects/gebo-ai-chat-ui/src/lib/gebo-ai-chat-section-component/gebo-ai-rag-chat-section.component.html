@@ -113,11 +113,13 @@
   <div class="gebo-ai-rag-chat-section__content">
     @if (openRagChat===true) {
     <gebo-ai-reusable-chat-component [ragsystem]="true" [chatInfo]="currentChat"
+      [disableFilesBrowsers]="disableFilesBrowsers"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
       (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
     }
     @if (openChat===true) {
     <gebo-ai-reusable-chat-component [ragsystem]="false" [chatInfo]="currentChat"
+      [disableFilesBrowsers]="disableFilesBrowsers"
       (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
       (updatedChatAction)="onUpdatedChat($event)" [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
     }
