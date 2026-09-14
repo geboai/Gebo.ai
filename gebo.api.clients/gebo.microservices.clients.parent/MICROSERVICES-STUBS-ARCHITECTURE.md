@@ -161,6 +161,46 @@ Two prerequisites, and one of them is easy to get wrong:
    brings up mongo, rabbit, qdrant, neo4j, opensearch, eureka and the gateway. There is
    no `docker-compose.regen.yml` and none is needed.
 
+### The spec is pinned to OpenAPI 3.0 — on purpose
+
+`gebo.architecture.swagger` contributes `springdoc.api-docs.version=OPENAPI_3_0`
+(`gebo-openapi-defaults.properties`, wired through `@PropertySource` on
+`GeboOpenApiDefaultsAutoConfiguration` and registered in
+`META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`),
+so every swagger-on service serves **3.0.1** rather than springdoc's own 3.1.0 default.
+
+This is not cosmetic. The specs are the *input of swagger-codegen v3*, which does not
+understand the 3.1 type syntax: against a 3.1 spec every scalar it meets degrades to
+`Object` / `any`, taking the enums, the dates and the collection item types with it —
+the `$ref` properties survive, which is what makes the damage easy to miss. Brain's
+committed client carried **2335** `?: any;` properties for exactly this reason; pinning
+3.0 and regenerating brought that down to 36, all of them genuinely `Object`-typed
+fields.
+
+Because it arrives via `@PropertySource`, it sits *below* an application's own
+configuration in the Spring Boot precedence order — `gebo.ai.app`'s `application.yml`
+sets the same value explicitly and simply keeps winning.
+
+**It has to be an auto configuration, not a scanned `@Configuration`.** `SwaggerConfig`
+lives in `ai.gebo.webconfig.openapi`, so hanging the defaults off it only reaches the
+services that component scan the whole of `ai.gebo`. `eureka.gebo.ai` declares a bare
+`@SpringBootApplication` and silently kept serving 3.1 — which is invisible in a regen,
+because a spec that answers 200 looks exactly like a correct one. Assert the **version**
+of every spec in stage 3, not just that it answers.
+
+**`gateway.gebo.ai` is the one service that cannot inherit it.** It ships springdoc's
+**webflux** starter rather than this module (the webmvc one cannot drive the reactive
+Spring Cloud Gateway — see the comment in its own pom), so the module is not on its
+classpath at all. It sets `springdoc.api-docs.version: OPENAPI_3_0` in its own
+`application.yml`, the same way the monolith does. Any future reactive service has to do
+the same.
+
+**Consequence for a regeneration:** a client regenerated before this pin still carries
+the degraded typing until it is regenerated again. All 21 were redone in the change that
+introduced the pin, taking the angular clients from **5810** `?: any;` properties to 57
+and the java clients from **6635** `Object` fields to 58 — what remains is genuinely
+`Object`-typed in the APIs.
+
 ### Cluster endpoints never appear in a spec — by design
 
 The service-to-service surfaces (`api/cluster/SecretsController`,
@@ -222,16 +262,28 @@ The generated sources **are tracked** and must be committed; build artifacts are
    silently ships a lie.
 2. **A default image serves no spec.** `swagger-on` is disabled by default (§3.1); build
    regen images with `-P docker,swagger-on` or you will regenerate against nothing.
-3. **`encoder.ts` needs no post-patch.** swagger-codegen's stock `typescript-angular`
+3. **`pipelineEnvironment.ts` needs one post-patch.** For a free-form map model
+   swagger-codegen sets `parent` to the literal string `null<String, any>`, and the stock
+   `modelGeneric.mustache` emits it unguarded as
+   `export interface PipelineEnvironment extends null<String, any> {`, which is not valid
+   TypeScript and fails the ng-packagr build. Strip the `extends` clause and keep the body
+   (`[key: string]: any;`) — that is exactly the shape of the committed monolith copy at
+   `gebo.ui/projects/gebo-ai-rest-api/src/lib/model/pipelineEnvironment.ts`. A guard in an
+   overridden `modelGeneric.mustache` would fix it at the source for all 22 angular clients;
+   it has not been done because `{{#parent}}` would have to become a test that still emits
+   a genuine `extends`, and that needs verifying against every client that really does have
+   a parent model. Note this surfaces only against a 3.0 spec: under 3.1 the same model
+   degraded to an empty `{}` and compiled.
+4. **`encoder.ts` needs no post-patch.** swagger-codegen's stock `typescript-angular`
    template emits `CustomHttpUrlEncodingCodec.encodeKey/encodeValue` *without* the
    `override` keyword, which is a hard error under this project's
    `noImplicitOverride: true`. That is fixed **in our custom template**, so the
    generator now emits correct code in the first place. Do not re-introduce a
    post-regen patch step.
-4. **`jib:dockerBuild` hangs on Docker 29.** Use `jib:buildTar` + `docker load`.
-5. **Native crash exit codes** (`-1073741819` / `0xC0000005`) during a Maven build are
+5. **`jib:dockerBuild` hangs on Docker 29.** Use `jib:buildTar` + `docker load`.
+6. **Native crash exit codes** (`-1073741819` / `0xC0000005`) during a Maven build are
    known local hardware flakiness, not a regression — just re-run.
-6. **"Running" ≠ "serving".** Compose `depends_on` waits for container *start*. Poll
+7. **"Running" ≠ "serving".** Compose `depends_on` waits for container *start*. Poll
    `/v3/api-docs` until it answers or the regen races the services and pulls empty specs.
 
 ---

@@ -21,6 +21,11 @@ import ai.gebo.openapi.GeboOpenAITypeDecoration;
 /**
  * Gebo.ai comment agent
  * Configuration class for Swagger to customize operation IDs in API documentation.
+ *
+ * <p>
+ * The OpenAPI defaults shared by every application shipping this module live in
+ * {@link GeboOpenApiDefaultsAutoConfiguration} instead, so that they reach even
+ * the services which do not component scan this package.
  */
 @Configuration
 public class SwaggerConfig {
