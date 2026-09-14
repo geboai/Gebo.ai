@@ -48,7 +48,7 @@ import lombok.AllArgsConstructor;
  * selection and no heavy-document branch: the office assistant always answers
  * through its network of agents.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Component
 @AllArgsConstructor
 public class OfficeAssistantRoutingStepService extends BaseLLMSInvokingService

@@ -31,7 +31,7 @@ import lombok.Data;
  * prompt (which knows the {@code <GEBO-DOCUMENT>} escape). Mirrors
  * {@code StandardAgentsPromptsLibraryConfig}.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.officeplugin.prompts")
 @Data

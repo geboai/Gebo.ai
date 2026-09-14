@@ -275,9 +275,9 @@ ai.gebo.opensearch:
     password: dothesearch1973-Advanced		
 
 ai.gebo.rag-threashold-autotune.config.enabled: true	
-ai.gebo.agents.standard.enabled: false
-ai.gebo.officeplugin.enabled: false
-ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: false
+ai.gebo.agents.standard.enabled: true
+ai.gebo.officeplugin.enabled: true
+ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: true
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

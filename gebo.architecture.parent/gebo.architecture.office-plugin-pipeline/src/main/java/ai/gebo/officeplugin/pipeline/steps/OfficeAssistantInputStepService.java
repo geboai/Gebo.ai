@@ -38,7 +38,7 @@ import ai.gebo.officeplugin.pipeline.agents.OfficeFragments;
  * network streaming step and the network input node all see the same normalised
  * list.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Component
 public class OfficeAssistantInputStepService implements IInputChatPipelineStepService {
 

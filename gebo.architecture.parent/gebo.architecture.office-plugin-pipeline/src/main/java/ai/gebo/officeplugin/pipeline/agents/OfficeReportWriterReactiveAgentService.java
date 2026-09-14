@@ -43,7 +43,7 @@ import reactor.core.publisher.Flux;
  * attached to {@link GeboChatResponse#setAdditionalContents} for the office plugin
  * to insert into the document the user is working on.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
 public class OfficeReportWriterReactiveAgentService extends ReportWriterReactiveAgentServiceImpl {
 

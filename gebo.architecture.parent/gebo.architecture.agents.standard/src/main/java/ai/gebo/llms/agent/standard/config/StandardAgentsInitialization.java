@@ -65,7 +65,7 @@ import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.security.services.IGSecurityService;
 
-@ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 public class StandardAgentsInitialization {
 	private static final String INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT = "*             Initializing standard agents network for reactive chat                 *";

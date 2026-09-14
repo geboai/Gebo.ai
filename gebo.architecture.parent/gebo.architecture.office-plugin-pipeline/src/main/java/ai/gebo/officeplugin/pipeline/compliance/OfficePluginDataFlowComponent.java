@@ -41,7 +41,7 @@ import ai.gebo.officeplugin.pipeline.OfficeAssistantConstants;
  * feeding the network's query endpoint - so the register shows where the user's
  * document content enters the system.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Component
 public class OfficePluginDataFlowComponent implements IGMessageEmitter {
 
