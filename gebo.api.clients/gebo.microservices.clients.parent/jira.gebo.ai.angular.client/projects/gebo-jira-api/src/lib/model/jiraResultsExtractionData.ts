@@ -12,8 +12,8 @@
 import { JiraAdditionalSearchFilter } from './jiraAdditionalSearchFilter';
 
 export interface JiraResultsExtractionData { 
-    extractedRelevantContent?: any;
-    contentIsRelevant?: any;
-    satisfactoryAnswer?: any;
+    extractedRelevantContent?: string;
+    contentIsRelevant?: boolean;
+    satisfactoryAnswer?: boolean;
     additionalJiraSearchIdeas?: JiraAdditionalSearchFilter;
 }

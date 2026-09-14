@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**fileName** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
+**fileName** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]

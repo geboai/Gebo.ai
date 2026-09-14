@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**monthly** | **Object** |  |  [optional]
+**monthly** | [**List&lt;LLMUsageAggregationBucket&gt;**](LLMUsageAggregationBucket.md) |  |  [optional]
 **monthlySubdimensions** | [**LLMUsageDrillDownLevelSubdimensions**](LLMUsageDrillDownLevelSubdimensions.md) |  |  [optional]
-**currentMonthDaily** | **Object** |  |  [optional]
+**currentMonthDaily** | [**List&lt;LLMUsageAggregationBucket&gt;**](LLMUsageAggregationBucket.md) |  |  [optional]
 **currentMonthDailySubdimensions** | [**LLMUsageDrillDownLevelSubdimensions**](LLMUsageDrillDownLevelSubdimensions.md) |  |  [optional]

@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.git.api;
 
+import gebo.microservices.api.client.git.model.GContentManagementSystemType;
 import gebo.microservices.api.client.git.model.GGitContentManagementSystem;
 import gebo.microservices.api.client.git.model.GGitProjectEndpoint;
 import gebo.microservices.api.client.git.model.OperationStatusGGitProjectEndpoint;
@@ -73,8 +74,8 @@ public class GitSystemsControllerApiTest {
      */
     @Test
     public void findGitEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findGitEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GGitProjectEndpoint> response = api.findGitEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -89,7 +90,7 @@ public class GitSystemsControllerApiTest {
     @Test
     public void findGitEndpointsByQbeTest() {
         GGitProjectEndpoint body = null;
-        Object response = api.findGitEndpointsByQbe(body);
+        List<GGitProjectEndpoint> response = api.findGitEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -118,7 +119,7 @@ public class GitSystemsControllerApiTest {
      */
     @Test
     public void getGitSystemTypesTest() {
-        Object response = api.getGitSystemTypes();
+        List<GContentManagementSystemType> response = api.getGitSystemTypes();
 
         // TODO: test validations
     }
@@ -132,8 +133,8 @@ public class GitSystemsControllerApiTest {
      */
     @Test
     public void getGitSystemsTest() {
-        Object handlerCode = null;
-        Object response = api.getGitSystems(handlerCode);
+        String handlerCode = null;
+        List<GGitContentManagementSystem> response = api.getGitSystems(handlerCode);
 
         // TODO: test validations
     }

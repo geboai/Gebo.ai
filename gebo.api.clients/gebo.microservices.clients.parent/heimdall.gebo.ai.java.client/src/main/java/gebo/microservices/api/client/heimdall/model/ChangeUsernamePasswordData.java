@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChangeUsernamePasswordData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class ChangeUsernamePasswordData {
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
   @JsonProperty("confirmpassword")
-  private Object confirmpassword = null;
+  private String confirmpassword = null;
 
   @JsonProperty("currentUserPassword")
-  private Object currentUserPassword = null;
+  private String currentUserPassword = null;
 
-  public ChangeUsernamePasswordData username(Object username) {
+  public ChangeUsernamePasswordData username(String username) {
     this.username = username;
     return this;
   }
@@ -47,15 +47,15 @@ public class ChangeUsernamePasswordData {
    * @return username
   **/
   @Schema(required = true, description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public ChangeUsernamePasswordData password(Object password) {
+  public ChangeUsernamePasswordData password(String password) {
     this.password = password;
     return this;
   }
@@ -65,15 +65,15 @@ public class ChangeUsernamePasswordData {
    * @return password
   **/
   @Schema(required = true, description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
-  public ChangeUsernamePasswordData confirmpassword(Object confirmpassword) {
+  public ChangeUsernamePasswordData confirmpassword(String confirmpassword) {
     this.confirmpassword = confirmpassword;
     return this;
   }
@@ -83,15 +83,15 @@ public class ChangeUsernamePasswordData {
    * @return confirmpassword
   **/
   @Schema(required = true, description = "")
-  public Object getConfirmpassword() {
+  public String getConfirmpassword() {
     return confirmpassword;
   }
 
-  public void setConfirmpassword(Object confirmpassword) {
+  public void setConfirmpassword(String confirmpassword) {
     this.confirmpassword = confirmpassword;
   }
 
-  public ChangeUsernamePasswordData currentUserPassword(Object currentUserPassword) {
+  public ChangeUsernamePasswordData currentUserPassword(String currentUserPassword) {
     this.currentUserPassword = currentUserPassword;
     return this;
   }
@@ -101,11 +101,11 @@ public class ChangeUsernamePasswordData {
    * @return currentUserPassword
   **/
   @Schema(required = true, description = "")
-  public Object getCurrentUserPassword() {
+  public String getCurrentUserPassword() {
     return currentUserPassword;
   }
 
-  public void setCurrentUserPassword(Object currentUserPassword) {
+  public void setCurrentUserPassword(String currentUserPassword) {
     this.currentUserPassword = currentUserPassword;
   }
 

@@ -3,18 +3,29 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**providerId** | **Object** |  |  [optional]
-**username** | **Object** |  |  [optional]
-**model** | **Object** |  |  [optional]
-**callerStack** | **Object** |  |  [optional]
-**modelType** | **Object** |  |  [optional]
-**year** | **Object** |  |  [optional]
-**month** | **Object** |  |  [optional]
-**day** | **Object** |  |  [optional]
-**inputToken** | **Object** |  |  [optional]
-**outputToken** | **Object** |  |  [optional]
-**totalToken** | **Object** |  |  [optional]
-**nrRequests** | **Object** |  |  [optional]
-**latencyMin** | **Object** |  |  [optional]
-**latencyMax** | **Object** |  |  [optional]
-**latencyAvg** | **Object** |  |  [optional]
+**providerId** | **String** |  |  [optional]
+**username** | **String** |  |  [optional]
+**model** | **String** |  |  [optional]
+**callerStack** | **String** |  |  [optional]
+**modelType** | [**ModelTypeEnum**](#ModelTypeEnum) |  |  [optional]
+**year** | **Integer** |  |  [optional]
+**month** | **Integer** |  |  [optional]
+**day** | **Integer** |  |  [optional]
+**inputToken** | **Long** |  |  [optional]
+**outputToken** | **Long** |  |  [optional]
+**totalToken** | **Long** |  |  [optional]
+**nrRequests** | **Long** |  |  [optional]
+**latencyMin** | **Long** |  |  [optional]
+**latencyMax** | **Long** |  |  [optional]
+**latencyAvg** | **Long** |  |  [optional]
+
+<a name="ModelTypeEnum"></a>
+## Enum: ModelTypeEnum
+Name | Value
+---- | -----
+CHAT | &quot;CHAT&quot;
+EMBEDDING | &quot;EMBEDDING&quot;
+IMAGE | &quot;IMAGE&quot;
+RANKER | &quot;RANKER&quot;
+TTS | &quot;TTS&quot;
+TRANSCRIPT | &quot;TRANSCRIPT&quot;

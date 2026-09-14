@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GObjectRefGBaseTranscriptModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GObjectRefGBaseTranscriptModelConfig {
   @JsonProperty("className")
-  private Object className = null;
+  private String className = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public GObjectRefGBaseTranscriptModelConfig className(Object className) {
+  public GObjectRefGBaseTranscriptModelConfig className(String className) {
     this.className = className;
     return this;
   }
@@ -44,15 +44,15 @@ public class GObjectRefGBaseTranscriptModelConfig {
    * @return className
   **/
   @Schema(description = "")
-  public Object getClassName() {
+  public String getClassName() {
     return className;
   }
 
-  public void setClassName(Object className) {
+  public void setClassName(String className) {
     this.className = className;
   }
 
-  public GObjectRefGBaseTranscriptModelConfig code(Object code) {
+  public GObjectRefGBaseTranscriptModelConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -62,15 +62,15 @@ public class GObjectRefGBaseTranscriptModelConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GObjectRefGBaseTranscriptModelConfig description(Object description) {
+  public GObjectRefGBaseTranscriptModelConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -80,11 +80,11 @@ public class GObjectRefGBaseTranscriptModelConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

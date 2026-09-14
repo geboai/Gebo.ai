@@ -16,6 +16,7 @@ import gebo.microservices.api.client.chunker.model.DocumentChunkingResponse;
 import gebo.microservices.api.client.chunker.model.GetCachedChunkSetRequest;
 import gebo.microservices.api.client.chunker.model.GetChunkSetRequest;
 import gebo.microservices.api.client.chunker.model.GetNextChunkSetRequest;
+import gebo.microservices.api.client.chunker.model.IDocumentChunkWithRef;
 import gebo.microservices.api.client.chunker.model.PrepareChunksRequest;
 import gebo.microservices.api.client.chunker.model.StreamChunksBatchRequest;
 import gebo.microservices.api.client.chunker.model.StreamChunksReactiveRequest;
@@ -46,8 +47,8 @@ public class DocumentsChunkServiceControllerApiTest {
      */
     @Test
     public void createChunkingSessionTest() {
-        Object reference = null;
-        Object response = api.createChunkingSession(reference);
+        String reference = null;
+        String response = api.createChunkingSession(reference);
 
         // TODO: test validations
     }
@@ -61,7 +62,7 @@ public class DocumentsChunkServiceControllerApiTest {
      */
     @Test
     public void disposeChunkingSessionTest() {
-        Object chunkSessionId = null;
+        String chunkSessionId = null;
         api.disposeChunkingSession(chunkSessionId);
 
         // TODO: test validations
@@ -136,8 +137,8 @@ public class DocumentsChunkServiceControllerApiTest {
      */
     @Test
     public void retrieveChunkingSessionTest() {
-        Object reference = null;
-        Object response = api.retrieveChunkingSession(reference);
+        String reference = null;
+        String response = api.retrieveChunkingSession(reference);
 
         // TODO: test validations
     }
@@ -152,7 +153,7 @@ public class DocumentsChunkServiceControllerApiTest {
     @Test
     public void streamChunksTest() {
         StreamChunksRequest body = null;
-        Object response = api.streamChunks(body);
+        List<IDocumentChunkWithRef> response = api.streamChunks(body);
 
         // TODO: test validations
     }
@@ -167,7 +168,7 @@ public class DocumentsChunkServiceControllerApiTest {
     @Test
     public void streamChunksBatchTest() {
         StreamChunksBatchRequest body = null;
-        Object response = api.streamChunksBatch(body);
+        List<IDocumentChunkWithRef> response = api.streamChunksBatch(body);
 
         // TODO: test validations
     }
@@ -182,7 +183,7 @@ public class DocumentsChunkServiceControllerApiTest {
     @Test
     public void streamChunksReactiveTest() {
         StreamChunksReactiveRequest body = null;
-        Object response = api.streamChunksReactive(body);
+        List<IDocumentChunkWithRef> response = api.streamChunksReactive(body);
 
         // TODO: test validations
     }

@@ -190,6 +190,7 @@ export * from './googleSearchResults';
 export * from './hasRunningJobs';
 export * from './ingestionFileType';
 export * from './ingestionHandlerConfig';
+export * from './jobsEntriesFilter';
 export * from './jobsEntriesForClassNameFilter';
 export * from './jobsEntriesForJobType';
 export * from './jobsEntriesForProjectEndpointFilter';

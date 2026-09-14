@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseRankerModelConfig;
+import gebo.microservices.api.client.brain.model.GRankerModelType;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +40,7 @@ public class RankerModelsControllerApiTest {
      */
     @Test
     public void getRankerModelTypesTest() {
-        Object response = api.getRankerModelTypes();
+        List<GRankerModelType> response = api.getRankerModelTypes();
 
         // TODO: test validations
     }
@@ -52,8 +54,8 @@ public class RankerModelsControllerApiTest {
      */
     @Test
     public void getRuntimeConfiguredRankerModelsTest() {
-        Object modelTypeCode = null;
-        Object response = api.getRuntimeConfiguredRankerModels(modelTypeCode);
+        String modelTypeCode = null;
+        List<ConfigurationEntryGBaseRankerModelConfig> response = api.getRuntimeConfiguredRankerModels(modelTypeCode);
 
         // TODO: test validations
     }

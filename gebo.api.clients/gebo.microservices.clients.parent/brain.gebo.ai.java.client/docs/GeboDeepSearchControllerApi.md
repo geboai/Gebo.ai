@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="getDeepSearchDataSources"></a>
 # **getDeepSearchDataSources**
-> Object getDeepSearchDataSources()
+> List&lt;GBaseObject&gt; getDeepSearchDataSources()
 
 
 
@@ -21,7 +21,7 @@ Method | HTTP request | Description
 
 GeboDeepSearchControllerApi apiInstance = new GeboDeepSearchControllerApi();
 try {
-    Object result = apiInstance.getDeepSearchDataSources();
+    List<GBaseObject> result = apiInstance.getDeepSearchDataSources();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboDeepSearchControllerApi#getDeepSearchDataSources");
@@ -34,7 +34,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 

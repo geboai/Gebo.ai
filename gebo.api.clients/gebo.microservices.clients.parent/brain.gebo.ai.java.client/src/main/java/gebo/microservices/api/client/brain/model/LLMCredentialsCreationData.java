@@ -22,31 +22,66 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMCredentialsCreationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMCredentialsCreationData {
-  @JsonProperty("type")
-  private Object type = null;
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    RANKING("RANKING"),
+    IMAGESGEN("IMAGESGEN"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypeEnum fromValue(String input) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("type")
+  private TypeEnum type = null;
 
   @JsonProperty("doModelsLookup")
-  private Object doModelsLookup = null;
+  private Boolean doModelsLookup = null;
 
   @JsonProperty("serviceHandler")
-  private Object serviceHandler = null;
+  private String serviceHandler = null;
 
   @JsonProperty("apiKeySecretContext")
-  private Object apiKeySecretContext = null;
+  private String apiKeySecretContext = null;
 
   @JsonProperty("newApiSecret")
-  private Object newApiSecret = null;
+  private String newApiSecret = null;
 
   @JsonProperty("newUserName")
-  private Object newUserName = null;
+  private String newUserName = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
-  public LLMCredentialsCreationData type(Object type) {
+  public LLMCredentialsCreationData type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -56,15 +91,15 @@ public class LLMCredentialsCreationData {
    * @return type
   **/
   @Schema(required = true, description = "")
-  public Object getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(Object type) {
+  public void setType(TypeEnum type) {
     this.type = type;
   }
 
-  public LLMCredentialsCreationData doModelsLookup(Object doModelsLookup) {
+  public LLMCredentialsCreationData doModelsLookup(Boolean doModelsLookup) {
     this.doModelsLookup = doModelsLookup;
     return this;
   }
@@ -74,15 +109,15 @@ public class LLMCredentialsCreationData {
    * @return doModelsLookup
   **/
   @Schema(description = "")
-  public Object getDoModelsLookup() {
+  public Boolean isDoModelsLookup() {
     return doModelsLookup;
   }
 
-  public void setDoModelsLookup(Object doModelsLookup) {
+  public void setDoModelsLookup(Boolean doModelsLookup) {
     this.doModelsLookup = doModelsLookup;
   }
 
-  public LLMCredentialsCreationData serviceHandler(Object serviceHandler) {
+  public LLMCredentialsCreationData serviceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
     return this;
   }
@@ -92,15 +127,15 @@ public class LLMCredentialsCreationData {
    * @return serviceHandler
   **/
   @Schema(required = true, description = "")
-  public Object getServiceHandler() {
+  public String getServiceHandler() {
     return serviceHandler;
   }
 
-  public void setServiceHandler(Object serviceHandler) {
+  public void setServiceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
   }
 
-  public LLMCredentialsCreationData apiKeySecretContext(Object apiKeySecretContext) {
+  public LLMCredentialsCreationData apiKeySecretContext(String apiKeySecretContext) {
     this.apiKeySecretContext = apiKeySecretContext;
     return this;
   }
@@ -110,15 +145,15 @@ public class LLMCredentialsCreationData {
    * @return apiKeySecretContext
   **/
   @Schema(required = true, description = "")
-  public Object getApiKeySecretContext() {
+  public String getApiKeySecretContext() {
     return apiKeySecretContext;
   }
 
-  public void setApiKeySecretContext(Object apiKeySecretContext) {
+  public void setApiKeySecretContext(String apiKeySecretContext) {
     this.apiKeySecretContext = apiKeySecretContext;
   }
 
-  public LLMCredentialsCreationData newApiSecret(Object newApiSecret) {
+  public LLMCredentialsCreationData newApiSecret(String newApiSecret) {
     this.newApiSecret = newApiSecret;
     return this;
   }
@@ -128,15 +163,15 @@ public class LLMCredentialsCreationData {
    * @return newApiSecret
   **/
   @Schema(required = true, description = "")
-  public Object getNewApiSecret() {
+  public String getNewApiSecret() {
     return newApiSecret;
   }
 
-  public void setNewApiSecret(Object newApiSecret) {
+  public void setNewApiSecret(String newApiSecret) {
     this.newApiSecret = newApiSecret;
   }
 
-  public LLMCredentialsCreationData newUserName(Object newUserName) {
+  public LLMCredentialsCreationData newUserName(String newUserName) {
     this.newUserName = newUserName;
     return this;
   }
@@ -146,15 +181,15 @@ public class LLMCredentialsCreationData {
    * @return newUserName
   **/
   @Schema(required = true, description = "")
-  public Object getNewUserName() {
+  public String getNewUserName() {
     return newUserName;
   }
 
-  public void setNewUserName(Object newUserName) {
+  public void setNewUserName(String newUserName) {
     this.newUserName = newUserName;
   }
 
-  public LLMCredentialsCreationData baseUrl(Object baseUrl) {
+  public LLMCredentialsCreationData baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -164,11 +199,11 @@ public class LLMCredentialsCreationData {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 

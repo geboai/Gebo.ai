@@ -67,10 +67,10 @@ export class CompanySystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContentSystem(systemTypeCode: any, systemCode: any, observe?: 'body', reportProgress?: boolean): Observable<GContentManagementSystem>;
-    public getContentSystem(systemTypeCode: any, systemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GContentManagementSystem>>;
-    public getContentSystem(systemTypeCode: any, systemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GContentManagementSystem>>;
-    public getContentSystem(systemTypeCode: any, systemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getContentSystem(systemTypeCode: string, systemCode: string, observe?: 'body', reportProgress?: boolean): Observable<GContentManagementSystem>;
+    public getContentSystem(systemTypeCode: string, systemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GContentManagementSystem>>;
+    public getContentSystem(systemTypeCode: string, systemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GContentManagementSystem>>;
+    public getContentSystem(systemTypeCode: string, systemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemTypeCode === null || systemTypeCode === undefined) {
             throw new Error('Required parameter systemTypeCode was null or undefined when calling getContentSystem.');
@@ -121,10 +121,10 @@ export class CompanySystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContentSystemType(systemTypeCode: any, observe?: 'body', reportProgress?: boolean): Observable<GContentManagementSystemType>;
-    public getContentSystemType(systemTypeCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GContentManagementSystemType>>;
-    public getContentSystemType(systemTypeCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GContentManagementSystemType>>;
-    public getContentSystemType(systemTypeCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getContentSystemType(systemTypeCode: string, observe?: 'body', reportProgress?: boolean): Observable<GContentManagementSystemType>;
+    public getContentSystemType(systemTypeCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GContentManagementSystemType>>;
+    public getContentSystemType(systemTypeCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GContentManagementSystemType>>;
+    public getContentSystemType(systemTypeCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemTypeCode === null || systemTypeCode === undefined) {
             throw new Error('Required parameter systemTypeCode was null or undefined when calling getContentSystemType.');
@@ -167,9 +167,9 @@ export class CompanySystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContentSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getContentSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getContentSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getContentSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GContentManagementSystemType>>;
+    public getContentSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GContentManagementSystemType>>>;
+    public getContentSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GContentManagementSystemType>>>;
     public getContentSystemTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -187,7 +187,7 @@ export class CompanySystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/CompanySystemsController/getContentSystemTypes()`,
+        return this.httpClient.request<Array<GContentManagementSystemType>>('get',`${this.basePath}/api/admin/CompanySystemsController/getContentSystemTypes()`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -203,9 +203,9 @@ export class CompanySystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContentSystems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getContentSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getContentSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getContentSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<GContentManagementSystem>>;
+    public getContentSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GContentManagementSystem>>>;
+    public getContentSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GContentManagementSystem>>>;
     public getContentSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -223,7 +223,7 @@ export class CompanySystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/CompanySystemsController/getContentSystems`,
+        return this.httpClient.request<Array<GContentManagementSystem>>('get',`${this.basePath}/api/admin/CompanySystemsController/getContentSystems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -242,10 +242,10 @@ export class CompanySystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectEndpoint(systemTypeCode: any, systemCode: any, projectEndpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<GProjectEndpoint>;
-    public getProjectEndpoint(systemTypeCode: any, systemCode: any, projectEndpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GProjectEndpoint>>;
-    public getProjectEndpoint(systemTypeCode: any, systemCode: any, projectEndpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GProjectEndpoint>>;
-    public getProjectEndpoint(systemTypeCode: any, systemCode: any, projectEndpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getProjectEndpoint(systemTypeCode: string, systemCode: string, projectEndpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<GProjectEndpoint>;
+    public getProjectEndpoint(systemTypeCode: string, systemCode: string, projectEndpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GProjectEndpoint>>;
+    public getProjectEndpoint(systemTypeCode: string, systemCode: string, projectEndpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GProjectEndpoint>>;
+    public getProjectEndpoint(systemTypeCode: string, systemCode: string, projectEndpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemTypeCode === null || systemTypeCode === undefined) {
             throw new Error('Required parameter systemTypeCode was null or undefined when calling getProjectEndpoint.');

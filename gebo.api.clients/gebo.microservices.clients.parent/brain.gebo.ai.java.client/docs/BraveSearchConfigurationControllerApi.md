@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getBraveSearchApiCredentials"></a>
 # **getBraveSearchApiCredentials**
-> Object getBraveSearchApiCredentials()
+> List&lt;GBraveSearchApiCredentials&gt; getBraveSearchApiCredentials()
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 
 BraveSearchConfigurationControllerApi apiInstance = new BraveSearchConfigurationControllerApi();
 try {
-    Object result = apiInstance.getBraveSearchApiCredentials();
+    List<GBraveSearchApiCredentials> result = apiInstance.getBraveSearchApiCredentials();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling BraveSearchConfigurationControllerApi#getBraveSearchApiCredentials");
@@ -125,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBraveSearchApiCredentials&gt;**](GBraveSearchApiCredentials.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ No authorization required
 
 
 BraveSearchConfigurationControllerApi apiInstance = new BraveSearchConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GBraveSearchApiCredentials result = apiInstance.searchGBraveSearchApiCredentialsByCode(code);
     System.out.println(result);
@@ -246,7 +246,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

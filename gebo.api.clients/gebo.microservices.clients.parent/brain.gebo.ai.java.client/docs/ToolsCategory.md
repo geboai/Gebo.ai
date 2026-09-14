@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**knowledgeBaseRelative** | **Object** |  |  [optional]
-**code** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
+**knowledgeBaseRelative** | **Boolean** |  |  [optional]
+**code** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]

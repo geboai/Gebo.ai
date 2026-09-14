@@ -18,20 +18,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GenerateUserGeneratedApiKeyParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GenerateUserGeneratedApiKeyParam {
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("expiration")
-  private Object expiration = null;
+  private Date expiration = null;
 
-  public GenerateUserGeneratedApiKeyParam description(Object description) {
+  public GenerateUserGeneratedApiKeyParam description(String description) {
     this.description = description;
     return this;
   }
@@ -41,15 +42,15 @@ public class GenerateUserGeneratedApiKeyParam {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GenerateUserGeneratedApiKeyParam expiration(Object expiration) {
+  public GenerateUserGeneratedApiKeyParam expiration(Date expiration) {
     this.expiration = expiration;
     return this;
   }
@@ -59,11 +60,11 @@ public class GenerateUserGeneratedApiKeyParam {
    * @return expiration
   **/
   @Schema(required = true, description = "")
-  public Object getExpiration() {
+  public Date getExpiration() {
     return expiration;
   }
 
-  public void setExpiration(Object expiration) {
+  public void setExpiration(Date expiration) {
     this.expiration = expiration;
   }
 

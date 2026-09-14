@@ -206,10 +206,10 @@ export class AwsS3SystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAwsS3EndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findAwsS3EndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findAwsS3EndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findAwsS3EndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAwsS3EndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GAwsS3ProjectEndpoint>>;
+    public findAwsS3EndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GAwsS3ProjectEndpoint>>>;
+    public findAwsS3EndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GAwsS3ProjectEndpoint>>>;
+    public findAwsS3EndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findAwsS3EndpointsByProject.');
@@ -235,7 +235,7 @@ export class AwsS3SystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/AwsS3SystemsController/findAwsS3EndpointsByProject`,
+        return this.httpClient.request<Array<GAwsS3ProjectEndpoint>>('get',`${this.basePath}/api/admin/AwsS3SystemsController/findAwsS3EndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -253,9 +253,9 @@ export class AwsS3SystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAwsS3EndpointsByQbe(body: GAwsS3ProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findAwsS3EndpointsByQbe(body: GAwsS3ProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findAwsS3EndpointsByQbe(body: GAwsS3ProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findAwsS3EndpointsByQbe(body: GAwsS3ProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GAwsS3ProjectEndpoint>>;
+    public findAwsS3EndpointsByQbe(body: GAwsS3ProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GAwsS3ProjectEndpoint>>>;
+    public findAwsS3EndpointsByQbe(body: GAwsS3ProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GAwsS3ProjectEndpoint>>>;
     public findAwsS3EndpointsByQbe(body: GAwsS3ProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -282,7 +282,7 @@ export class AwsS3SystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/AwsS3SystemsController/findAwsS3EndpointsByQbe`,
+        return this.httpClient.request<Array<GAwsS3ProjectEndpoint>>('post',`${this.basePath}/api/admin/AwsS3SystemsController/findAwsS3EndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -300,10 +300,10 @@ export class AwsS3SystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAwsS3ProjectEndpointByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GAwsS3ProjectEndpoint>;
-    public findAwsS3ProjectEndpointByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAwsS3ProjectEndpoint>>;
-    public findAwsS3ProjectEndpointByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAwsS3ProjectEndpoint>>;
-    public findAwsS3ProjectEndpointByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAwsS3ProjectEndpointByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAwsS3ProjectEndpoint>;
+    public findAwsS3ProjectEndpointByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAwsS3ProjectEndpoint>>;
+    public findAwsS3ProjectEndpointByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAwsS3ProjectEndpoint>>;
+    public findAwsS3ProjectEndpointByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findAwsS3ProjectEndpointByCode.');
@@ -347,10 +347,10 @@ export class AwsS3SystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAwsS3SystemByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GAwsS3System>;
-    public findAwsS3SystemByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAwsS3System>>;
-    public findAwsS3SystemByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAwsS3System>>;
-    public findAwsS3SystemByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAwsS3SystemByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAwsS3System>;
+    public findAwsS3SystemByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAwsS3System>>;
+    public findAwsS3SystemByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAwsS3System>>;
+    public findAwsS3SystemByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findAwsS3SystemByCode.');
@@ -429,9 +429,9 @@ export class AwsS3SystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAwsS3Systems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAwsS3Systems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAwsS3Systems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAwsS3Systems(observe?: 'body', reportProgress?: boolean): Observable<Array<GAwsS3System>>;
+    public getAwsS3Systems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GAwsS3System>>>;
+    public getAwsS3Systems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GAwsS3System>>>;
     public getAwsS3Systems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -449,7 +449,7 @@ export class AwsS3SystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/AwsS3SystemsController/getAwsS3Systems`,
+        return this.httpClient.request<Array<GAwsS3System>>('get',`${this.basePath}/api/admin/AwsS3SystemsController/getAwsS3Systems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

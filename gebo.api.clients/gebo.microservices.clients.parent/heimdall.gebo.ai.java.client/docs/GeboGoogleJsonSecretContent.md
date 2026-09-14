@@ -3,5 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**jsonContent** | **Object** |  | 
-**delegatedUser** | **Object** |  | 
+**readOnly** | **Boolean** |  |  [optional]
+**jsonContent** | **String** |  | 
+**delegatedUser** | **String** |  | 

@@ -11,5 +11,5 @@
  */
 
 export interface ComponentEnabledStatus { 
-    isEnabled?: any;
+    isEnabled?: boolean;
 }

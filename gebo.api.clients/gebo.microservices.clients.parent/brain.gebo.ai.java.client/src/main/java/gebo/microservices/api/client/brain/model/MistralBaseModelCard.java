@@ -19,59 +19,61 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.MistralModelCapabilities;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * MistralBaseModelCard
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class MistralBaseModelCard {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("capabilities")
   private MistralModelCapabilities capabilities = null;
 
   @JsonProperty("job")
-  private Object job = null;
+  private String job = null;
 
   @JsonProperty("root")
-  private Object root = null;
+  private String root = null;
 
   @JsonProperty("object")
-  private Object object = null;
+  private String object = null;
 
   @JsonProperty("created")
-  private Object created = null;
+  private Long created = null;
 
   @JsonProperty("owned_by")
-  private Object ownedBy = null;
+  private String ownedBy = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("max_context_length")
-  private Object maxContextLength = null;
+  private Integer maxContextLength = null;
 
   @JsonProperty("aliases")
-  private Object aliases = null;
+  private List<String> aliases = null;
 
   @JsonProperty("deprecation")
-  private Object deprecation = null;
+  private String deprecation = null;
 
   @JsonProperty("deprecation_replacement_model")
-  private Object deprecationReplacementModel = null;
+  private String deprecationReplacementModel = null;
 
   @JsonProperty("default_model_temperature")
-  private Object defaultModelTemperature = null;
+  private Double defaultModelTemperature = null;
 
   @JsonProperty("archived")
-  private Object archived = null;
+  private Boolean archived = null;
 
-  public MistralBaseModelCard id(Object id) {
+  public MistralBaseModelCard id(String id) {
     this.id = id;
     return this;
   }
@@ -81,11 +83,11 @@ public class MistralBaseModelCard {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -107,7 +109,7 @@ public class MistralBaseModelCard {
     this.capabilities = capabilities;
   }
 
-  public MistralBaseModelCard job(Object job) {
+  public MistralBaseModelCard job(String job) {
     this.job = job;
     return this;
   }
@@ -117,15 +119,15 @@ public class MistralBaseModelCard {
    * @return job
   **/
   @Schema(description = "")
-  public Object getJob() {
+  public String getJob() {
     return job;
   }
 
-  public void setJob(Object job) {
+  public void setJob(String job) {
     this.job = job;
   }
 
-  public MistralBaseModelCard root(Object root) {
+  public MistralBaseModelCard root(String root) {
     this.root = root;
     return this;
   }
@@ -135,15 +137,15 @@ public class MistralBaseModelCard {
    * @return root
   **/
   @Schema(description = "")
-  public Object getRoot() {
+  public String getRoot() {
     return root;
   }
 
-  public void setRoot(Object root) {
+  public void setRoot(String root) {
     this.root = root;
   }
 
-  public MistralBaseModelCard object(Object object) {
+  public MistralBaseModelCard object(String object) {
     this.object = object;
     return this;
   }
@@ -153,15 +155,15 @@ public class MistralBaseModelCard {
    * @return object
   **/
   @Schema(description = "")
-  public Object getObject() {
+  public String getObject() {
     return object;
   }
 
-  public void setObject(Object object) {
+  public void setObject(String object) {
     this.object = object;
   }
 
-  public MistralBaseModelCard created(Object created) {
+  public MistralBaseModelCard created(Long created) {
     this.created = created;
     return this;
   }
@@ -171,15 +173,15 @@ public class MistralBaseModelCard {
    * @return created
   **/
   @Schema(description = "")
-  public Object getCreated() {
+  public Long getCreated() {
     return created;
   }
 
-  public void setCreated(Object created) {
+  public void setCreated(Long created) {
     this.created = created;
   }
 
-  public MistralBaseModelCard ownedBy(Object ownedBy) {
+  public MistralBaseModelCard ownedBy(String ownedBy) {
     this.ownedBy = ownedBy;
     return this;
   }
@@ -189,15 +191,15 @@ public class MistralBaseModelCard {
    * @return ownedBy
   **/
   @Schema(description = "")
-  public Object getOwnedBy() {
+  public String getOwnedBy() {
     return ownedBy;
   }
 
-  public void setOwnedBy(Object ownedBy) {
+  public void setOwnedBy(String ownedBy) {
     this.ownedBy = ownedBy;
   }
 
-  public MistralBaseModelCard name(Object name) {
+  public MistralBaseModelCard name(String name) {
     this.name = name;
     return this;
   }
@@ -207,15 +209,15 @@ public class MistralBaseModelCard {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public MistralBaseModelCard description(Object description) {
+  public MistralBaseModelCard description(String description) {
     this.description = description;
     return this;
   }
@@ -225,15 +227,15 @@ public class MistralBaseModelCard {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public MistralBaseModelCard maxContextLength(Object maxContextLength) {
+  public MistralBaseModelCard maxContextLength(Integer maxContextLength) {
     this.maxContextLength = maxContextLength;
     return this;
   }
@@ -243,16 +245,24 @@ public class MistralBaseModelCard {
    * @return maxContextLength
   **/
   @Schema(description = "")
-  public Object getMaxContextLength() {
+  public Integer getMaxContextLength() {
     return maxContextLength;
   }
 
-  public void setMaxContextLength(Object maxContextLength) {
+  public void setMaxContextLength(Integer maxContextLength) {
     this.maxContextLength = maxContextLength;
   }
 
-  public MistralBaseModelCard aliases(Object aliases) {
+  public MistralBaseModelCard aliases(List<String> aliases) {
     this.aliases = aliases;
+    return this;
+  }
+
+  public MistralBaseModelCard addAliasesItem(String aliasesItem) {
+    if (this.aliases == null) {
+      this.aliases = new ArrayList<>();
+    }
+    this.aliases.add(aliasesItem);
     return this;
   }
 
@@ -261,15 +271,15 @@ public class MistralBaseModelCard {
    * @return aliases
   **/
   @Schema(description = "")
-  public Object getAliases() {
+  public List<String> getAliases() {
     return aliases;
   }
 
-  public void setAliases(Object aliases) {
+  public void setAliases(List<String> aliases) {
     this.aliases = aliases;
   }
 
-  public MistralBaseModelCard deprecation(Object deprecation) {
+  public MistralBaseModelCard deprecation(String deprecation) {
     this.deprecation = deprecation;
     return this;
   }
@@ -279,15 +289,15 @@ public class MistralBaseModelCard {
    * @return deprecation
   **/
   @Schema(description = "")
-  public Object getDeprecation() {
+  public String getDeprecation() {
     return deprecation;
   }
 
-  public void setDeprecation(Object deprecation) {
+  public void setDeprecation(String deprecation) {
     this.deprecation = deprecation;
   }
 
-  public MistralBaseModelCard deprecationReplacementModel(Object deprecationReplacementModel) {
+  public MistralBaseModelCard deprecationReplacementModel(String deprecationReplacementModel) {
     this.deprecationReplacementModel = deprecationReplacementModel;
     return this;
   }
@@ -297,15 +307,15 @@ public class MistralBaseModelCard {
    * @return deprecationReplacementModel
   **/
   @Schema(description = "")
-  public Object getDeprecationReplacementModel() {
+  public String getDeprecationReplacementModel() {
     return deprecationReplacementModel;
   }
 
-  public void setDeprecationReplacementModel(Object deprecationReplacementModel) {
+  public void setDeprecationReplacementModel(String deprecationReplacementModel) {
     this.deprecationReplacementModel = deprecationReplacementModel;
   }
 
-  public MistralBaseModelCard defaultModelTemperature(Object defaultModelTemperature) {
+  public MistralBaseModelCard defaultModelTemperature(Double defaultModelTemperature) {
     this.defaultModelTemperature = defaultModelTemperature;
     return this;
   }
@@ -315,15 +325,15 @@ public class MistralBaseModelCard {
    * @return defaultModelTemperature
   **/
   @Schema(description = "")
-  public Object getDefaultModelTemperature() {
+  public Double getDefaultModelTemperature() {
     return defaultModelTemperature;
   }
 
-  public void setDefaultModelTemperature(Object defaultModelTemperature) {
+  public void setDefaultModelTemperature(Double defaultModelTemperature) {
     this.defaultModelTemperature = defaultModelTemperature;
   }
 
-  public MistralBaseModelCard archived(Object archived) {
+  public MistralBaseModelCard archived(Boolean archived) {
     this.archived = archived;
     return this;
   }
@@ -333,11 +343,11 @@ public class MistralBaseModelCard {
    * @return archived
   **/
   @Schema(description = "")
-  public Object getArchived() {
+  public Boolean isArchived() {
     return archived;
   }
 
-  public void setArchived(Object archived) {
+  public void setArchived(Boolean archived) {
     this.archived = archived;
   }
 

@@ -11,7 +11,7 @@
  */
 
 export interface UserWorkFlowStartResponse { 
-    ok?: any;
-    mailSent?: any;
-    invalidAccountState?: any;
+    ok?: boolean;
+    mailSent?: boolean;
+    invalidAccountState?: boolean;
 }

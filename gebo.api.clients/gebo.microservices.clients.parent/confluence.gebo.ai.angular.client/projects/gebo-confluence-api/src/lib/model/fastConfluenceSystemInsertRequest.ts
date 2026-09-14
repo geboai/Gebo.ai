@@ -11,10 +11,17 @@
  */
 
 export interface FastConfluenceSystemInsertRequest { 
-    baseUri: any;
-    description: any;
-    username: any;
-    password?: any;
-    token?: any;
-    confluenceVersion: any;
+    baseUri: string;
+    description: string;
+    username: string;
+    password?: string;
+    token?: string;
+    confluenceVersion: FastConfluenceSystemInsertRequest.ConfluenceVersionEnum;
+}
+export namespace FastConfluenceSystemInsertRequest {
+    export type ConfluenceVersionEnum = 'ONPREMISE7X' | 'CLOUD';
+    export const ConfluenceVersionEnum = {
+        ONPREMISE7X: 'ONPREMISE7X' as ConfluenceVersionEnum,
+        CLOUD: 'CLOUD' as ConfluenceVersionEnum
+    };
 }

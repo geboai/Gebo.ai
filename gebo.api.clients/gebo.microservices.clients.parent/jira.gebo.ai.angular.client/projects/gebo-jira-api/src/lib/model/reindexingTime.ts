@@ -11,6 +11,6 @@
  */
 
 export interface ReindexingTime { 
-    createdTime?: any;
-    timeComponent?: any;
+    createdTime?: number;
+    timeComponent?: Array<number>;
 }

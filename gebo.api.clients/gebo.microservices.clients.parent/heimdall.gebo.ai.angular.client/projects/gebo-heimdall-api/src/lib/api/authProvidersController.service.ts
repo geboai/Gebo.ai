@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AuthProviderDto } from '../model/authProviderDto';
+import { Oauth2ClientAuthorizativeInfo } from '../model/oauth2ClientAuthorizativeInfo';
 import { Oauth2ClientConfig } from '../model/oauth2ClientConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -62,10 +64,10 @@ export class AuthProvidersControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProviderClientConfig(registrationId: any, observe?: 'body', reportProgress?: boolean): Observable<Oauth2ClientConfig>;
-    public getProviderClientConfig(registrationId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Oauth2ClientConfig>>;
-    public getProviderClientConfig(registrationId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Oauth2ClientConfig>>;
-    public getProviderClientConfig(registrationId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getProviderClientConfig(registrationId: string, observe?: 'body', reportProgress?: boolean): Observable<Oauth2ClientConfig>;
+    public getProviderClientConfig(registrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Oauth2ClientConfig>>;
+    public getProviderClientConfig(registrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Oauth2ClientConfig>>;
+    public getProviderClientConfig(registrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (registrationId === null || registrationId === undefined) {
             throw new Error('Required parameter registrationId was null or undefined when calling getProviderClientConfig.');
@@ -108,9 +110,9 @@ export class AuthProvidersControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listAuthProviders(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public listAuthProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public listAuthProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public listAuthProviders(observe?: 'body', reportProgress?: boolean): Observable<Array<AuthProviderDto>>;
+    public listAuthProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AuthProviderDto>>>;
+    public listAuthProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AuthProviderDto>>>;
     public listAuthProviders(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -128,7 +130,7 @@ export class AuthProvidersControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/public/AuthProvidersController/listAuthProviders`,
+        return this.httpClient.request<Array<AuthProviderDto>>('get',`${this.basePath}/public/AuthProvidersController/listAuthProviders`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -144,9 +146,9 @@ export class AuthProvidersControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listAvailableProvidersConfig(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public listAvailableProvidersConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public listAvailableProvidersConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public listAvailableProvidersConfig(observe?: 'body', reportProgress?: boolean): Observable<Array<Oauth2ClientAuthorizativeInfo>>;
+    public listAvailableProvidersConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Oauth2ClientAuthorizativeInfo>>>;
+    public listAvailableProvidersConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Oauth2ClientAuthorizativeInfo>>>;
     public listAvailableProvidersConfig(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -164,7 +166,7 @@ export class AuthProvidersControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/public/AuthProvidersController/listAvailableProvidersConfig`,
+        return this.httpClient.request<Array<Oauth2ClientAuthorizativeInfo>>('get',`${this.basePath}/public/AuthProvidersController/listAvailableProvidersConfig`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

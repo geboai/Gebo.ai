@@ -11,6 +11,6 @@
  */
 
 export interface FSReference { 
-    code: any;
-    used: any;
+    code: string;
+    used: number;
 }

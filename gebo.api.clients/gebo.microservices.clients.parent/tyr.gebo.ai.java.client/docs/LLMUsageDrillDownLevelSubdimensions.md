@@ -3,10 +3,21 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**providerId** | **Object** |  |  [optional]
-**username** | **Object** |  |  [optional]
-**model** | **Object** |  |  [optional]
-**callerStack** | **Object** |  |  [optional]
-**modelType** | **Object** |  |  [optional]
-**year** | **Object** |  |  [optional]
-**month** | **Object** |  |  [optional]
+**providerId** | **List&lt;String&gt;** |  |  [optional]
+**username** | **List&lt;String&gt;** |  |  [optional]
+**model** | **List&lt;String&gt;** |  |  [optional]
+**callerStack** | **List&lt;String&gt;** |  |  [optional]
+**modelType** | [**List&lt;ModelTypeEnum&gt;**](#List&lt;ModelTypeEnum&gt;) |  |  [optional]
+**year** | **List&lt;Integer&gt;** |  |  [optional]
+**month** | **List&lt;Integer&gt;** |  |  [optional]
+
+<a name="List<ModelTypeEnum>"></a>
+## Enum: List&lt;ModelTypeEnum&gt;
+Name | Value
+---- | -----
+CHAT | &quot;CHAT&quot;
+EMBEDDING | &quot;EMBEDDING&quot;
+IMAGE | &quot;IMAGE&quot;
+RANKER | &quot;RANKER&quot;
+TTS | &quot;TTS&quot;
+TRANSCRIPT | &quot;TRANSCRIPT&quot;

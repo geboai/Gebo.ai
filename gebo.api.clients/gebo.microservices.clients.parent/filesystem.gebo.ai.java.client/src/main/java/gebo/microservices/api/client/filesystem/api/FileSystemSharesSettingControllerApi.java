@@ -3,12 +3,14 @@ package gebo.microservices.api.client.filesystem.api;
 import gebo.microservices.api.client.filesystem.invoker.ApiClient;
 
 import gebo.microservices.api.client.filesystem.model.BrowseParam;
+import gebo.microservices.api.client.filesystem.model.FSReference;
 import gebo.microservices.api.client.filesystem.model.GFileSystemShareReference;
 import gebo.microservices.api.client.filesystem.model.OperationStatusGFileSystemShareReference;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
 import gebo.microservices.api.client.filesystem.model.SharedFilesystemUIConfig;
+import gebo.microservices.api.client.filesystem.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:09.115071854+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
 
 public class FileSystemSharesSettingControllerApi {
     private ApiClient apiClient;
@@ -145,7 +147,7 @@ public class FileSystemSharesSettingControllerApi {
      * @return GFileSystemShareReference
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GFileSystemShareReference getFileSystemShareReferenceByCode(Object code) throws RestClientException {
+    public GFileSystemShareReference getFileSystemShareReferenceByCode(String code) throws RestClientException {
         return getFileSystemShareReferenceByCodeWithHttpInfo(code).getBody();
     }
 
@@ -157,7 +159,7 @@ public class FileSystemSharesSettingControllerApi {
      * @return ResponseEntity&lt;GFileSystemShareReference&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GFileSystemShareReference> getFileSystemShareReferenceByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GFileSystemShareReference> getFileSystemShareReferenceByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -236,7 +238,7 @@ public class FileSystemSharesSettingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getGFileSystemNodeNavigationStatus(Object body) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getGFileSystemNodeNavigationStatus(List<VFilesystemReference> body) throws RestClientException {
         return getGFileSystemNodeNavigationStatusWithHttpInfo(body).getBody();
     }
 
@@ -248,7 +250,7 @@ public class FileSystemSharesSettingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getGFileSystemNodeNavigationStatusWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getGFileSystemNodeNavigationStatusWithHttpInfo(List<VFilesystemReference> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -355,10 +357,10 @@ public class FileSystemSharesSettingControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;FSReference&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getUsedFilesystemShares(Object body) throws RestClientException {
+    public List<FSReference> getUsedFilesystemShares(List<String> body) throws RestClientException {
         return getUsedFilesystemSharesWithHttpInfo(body).getBody();
     }
 
@@ -367,10 +369,10 @@ public class FileSystemSharesSettingControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;FSReference&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getUsedFilesystemSharesWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<List<FSReference>> getUsedFilesystemSharesWithHttpInfo(List<String> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -393,7 +395,7 @@ public class FileSystemSharesSettingControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<FSReference>> returnType = new ParameterizedTypeReference<List<FSReference>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

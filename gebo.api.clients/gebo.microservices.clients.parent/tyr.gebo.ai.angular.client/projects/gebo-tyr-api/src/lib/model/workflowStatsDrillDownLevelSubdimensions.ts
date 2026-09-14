@@ -9,14 +9,17 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GObjectRefGKnowledgeBase } from './gObjectRefGKnowledgeBase';
+import { GObjectRefGProject } from './gObjectRefGProject';
+import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface WorkflowStatsDrillDownLevelSubdimensions { 
-    knowledgeBaseReference?: any;
-    projectReference?: any;
-    projectEndpointReference?: any;
-    workflowType?: any;
-    workflowId?: any;
-    workflowStepId?: any;
-    year?: any;
-    month?: any;
+    knowledgeBaseReference?: Array<GObjectRefGKnowledgeBase>;
+    projectReference?: Array<GObjectRefGProject>;
+    projectEndpointReference?: Array<GObjectRefGProjectEndpoint>;
+    workflowType?: Array<string>;
+    workflowId?: Array<string>;
+    workflowStepId?: Array<string>;
+    year?: Array<number>;
+    month?: Array<number>;
 }

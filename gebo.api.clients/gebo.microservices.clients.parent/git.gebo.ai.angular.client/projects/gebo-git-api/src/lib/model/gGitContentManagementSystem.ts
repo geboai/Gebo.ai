@@ -11,20 +11,29 @@
  */
 
 export interface GGitContentManagementSystem { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    contentManagementSystemType?: any;
-    readonly?: any;
-    baseUri?: any;
-    usedCapabilities?: any;
-    aclAliases?: any;
-    publicAccess?: any;
-    defaultIdentityCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    contentManagementSystemType?: string;
+    readonly?: boolean;
+    baseUri?: string;
+    usedCapabilities?: Array<GGitContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
+    publicAccess?: boolean;
+    defaultIdentityCode?: string;
+}
+export namespace GGitContentManagementSystem {
+    export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';
+    export const UsedCapabilitiesEnum = {
+        TICKETSMANAGEMENT: 'TICKETS_MANAGEMENT' as UsedCapabilitiesEnum,
+        DOCUMENTSMANAGEMENT: 'DOCUMENTS_MANAGEMENT' as UsedCapabilitiesEnum,
+        SOURCEMANAGEMENT: 'SOURCE_MANAGEMENT' as UsedCapabilitiesEnum,
+        ARTIFACTSREPOSITORYMANAGEMENT: 'ARTIFACTS_REPOSITORY_MANAGEMENT' as UsedCapabilitiesEnum
+    };
 }

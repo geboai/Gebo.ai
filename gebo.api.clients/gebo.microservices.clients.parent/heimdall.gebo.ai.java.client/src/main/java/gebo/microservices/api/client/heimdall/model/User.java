@@ -18,41 +18,81 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * User
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class User {
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("sourname")
-  private Object sourname = null;
+  private String sourname = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("imageUrl")
-  private Object imageUrl = null;
+  private String imageUrl = null;
 
   @JsonProperty("emailVerified")
-  private Object emailVerified = null;
+  private Boolean emailVerified = null;
 
   @JsonProperty("disabled")
-  private Object disabled = null;
+  private Boolean disabled = null;
 
-  @JsonProperty("provider")
-  private Object provider = null;
+  /**
+   * Gets or Sets provider
+   */
+  public enum ProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
+
+    private String value;
+
+    ProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ProviderEnum fromValue(String input) {
+      for (ProviderEnum b : ProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("provider")
+  private ProviderEnum provider = null;
 
   @JsonProperty("roles")
-  private Object roles = null;
+  private List<String> roles = null;
 
   @JsonProperty("langCode")
-  private Object langCode = null;
+  private String langCode = null;
 
-  public User name(Object name) {
+  public User name(String name) {
     this.name = name;
     return this;
   }
@@ -62,15 +102,15 @@ public class User {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public User sourname(Object sourname) {
+  public User sourname(String sourname) {
     this.sourname = sourname;
     return this;
   }
@@ -80,15 +120,15 @@ public class User {
    * @return sourname
   **/
   @Schema(description = "")
-  public Object getSourname() {
+  public String getSourname() {
     return sourname;
   }
 
-  public void setSourname(Object sourname) {
+  public void setSourname(String sourname) {
     this.sourname = sourname;
   }
 
-  public User username(Object username) {
+  public User username(String username) {
     this.username = username;
     return this;
   }
@@ -98,15 +138,15 @@ public class User {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public User imageUrl(Object imageUrl) {
+  public User imageUrl(String imageUrl) {
     this.imageUrl = imageUrl;
     return this;
   }
@@ -116,15 +156,15 @@ public class User {
    * @return imageUrl
   **/
   @Schema(description = "")
-  public Object getImageUrl() {
+  public String getImageUrl() {
     return imageUrl;
   }
 
-  public void setImageUrl(Object imageUrl) {
+  public void setImageUrl(String imageUrl) {
     this.imageUrl = imageUrl;
   }
 
-  public User emailVerified(Object emailVerified) {
+  public User emailVerified(Boolean emailVerified) {
     this.emailVerified = emailVerified;
     return this;
   }
@@ -134,15 +174,15 @@ public class User {
    * @return emailVerified
   **/
   @Schema(description = "")
-  public Object getEmailVerified() {
+  public Boolean isEmailVerified() {
     return emailVerified;
   }
 
-  public void setEmailVerified(Object emailVerified) {
+  public void setEmailVerified(Boolean emailVerified) {
     this.emailVerified = emailVerified;
   }
 
-  public User disabled(Object disabled) {
+  public User disabled(Boolean disabled) {
     this.disabled = disabled;
     return this;
   }
@@ -152,15 +192,15 @@ public class User {
    * @return disabled
   **/
   @Schema(description = "")
-  public Object getDisabled() {
+  public Boolean isDisabled() {
     return disabled;
   }
 
-  public void setDisabled(Object disabled) {
+  public void setDisabled(Boolean disabled) {
     this.disabled = disabled;
   }
 
-  public User provider(Object provider) {
+  public User provider(ProviderEnum provider) {
     this.provider = provider;
     return this;
   }
@@ -170,16 +210,24 @@ public class User {
    * @return provider
   **/
   @Schema(required = true, description = "")
-  public Object getProvider() {
+  public ProviderEnum getProvider() {
     return provider;
   }
 
-  public void setProvider(Object provider) {
+  public void setProvider(ProviderEnum provider) {
     this.provider = provider;
   }
 
-  public User roles(Object roles) {
+  public User roles(List<String> roles) {
     this.roles = roles;
+    return this;
+  }
+
+  public User addRolesItem(String rolesItem) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(rolesItem);
     return this;
   }
 
@@ -188,15 +236,15 @@ public class User {
    * @return roles
   **/
   @Schema(description = "")
-  public Object getRoles() {
+  public List<String> getRoles() {
     return roles;
   }
 
-  public void setRoles(Object roles) {
+  public void setRoles(List<String> roles) {
     this.roles = roles;
   }
 
-  public User langCode(Object langCode) {
+  public User langCode(String langCode) {
     this.langCode = langCode;
     return this;
   }
@@ -206,11 +254,11 @@ public class User {
    * @return langCode
   **/
   @Schema(description = "")
-  public Object getLangCode() {
+  public String getLangCode() {
     return langCode;
   }
 
-  public void setLangCode(Object langCode) {
+  public void setLangCode(String langCode) {
     this.langCode = langCode;
   }
 

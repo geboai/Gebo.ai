@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**activationWorkflowEnabled** | **Object** |  |  [optional]
-**forgotPasswordWorkflowEnabled** | **Object** |  |  [optional]
+**activationWorkflowEnabled** | **Boolean** |  |  [optional]
+**forgotPasswordWorkflowEnabled** | **Boolean** |  |  [optional]

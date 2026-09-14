@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GenericOpenAIAPIImageModelConfig } from '../model/genericOpenAIAPIImageModelConfig';
+import { GenericOpenAIImageModelTypeConfig } from '../model/genericOpenAIImageModelTypeConfig';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
 import { OperationStatusGenericOpenAIAPIImageModelConfig } from '../model/operationStatusGenericOpenAIAPIImageModelConfig';
 import { OperationStatusListGenericOpenAIAPIImageModelChoice } from '../model/operationStatusListGenericOpenAIAPIImageModelChoice';
@@ -112,10 +113,10 @@ export class GenericOpenAiapiImageModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGenericOpenAIAPIImageModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIImageModelConfig>;
-    public findGenericOpenAIAPIImageModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIImageModelConfig>>;
-    public findGenericOpenAIAPIImageModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIImageModelConfig>>;
-    public findGenericOpenAIAPIImageModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGenericOpenAIAPIImageModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIImageModelConfig>;
+    public findGenericOpenAIAPIImageModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIImageModelConfig>>;
+    public findGenericOpenAIAPIImageModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIImageModelConfig>>;
+    public findGenericOpenAIAPIImageModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGenericOpenAIAPIImageModelConfigByCode.');
@@ -205,9 +206,9 @@ export class GenericOpenAiapiImageModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAIImageModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAIImageModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAIImageModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAIImageModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIAPIImageModelConfig>>;
+    public getGenericOpenAIImageModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIAPIImageModelConfig>>>;
+    public getGenericOpenAIImageModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIAPIImageModelConfig>>>;
     public getGenericOpenAIImageModelConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -225,7 +226,7 @@ export class GenericOpenAiapiImageModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelConfigs`,
+        return this.httpClient.request<Array<GenericOpenAIAPIImageModelConfig>>('get',`${this.basePath}/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelConfigs`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -241,9 +242,9 @@ export class GenericOpenAiapiImageModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAIImageModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAIImageModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAIImageModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAIImageModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIImageModelTypeConfig>>;
+    public getGenericOpenAIImageModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIImageModelTypeConfig>>>;
+    public getGenericOpenAIImageModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIImageModelTypeConfig>>>;
     public getGenericOpenAIImageModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -261,7 +262,7 @@ export class GenericOpenAiapiImageModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelTypes`,
+        return this.httpClient.request<Array<GenericOpenAIImageModelTypeConfig>>('get',`${this.basePath}/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

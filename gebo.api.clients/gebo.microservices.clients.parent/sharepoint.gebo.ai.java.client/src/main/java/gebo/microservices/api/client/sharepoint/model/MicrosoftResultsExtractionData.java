@@ -23,22 +23,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * MicrosoftResultsExtractionData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class MicrosoftResultsExtractionData {
   @JsonProperty("extractedRelevantContent")
-  private Object extractedRelevantContent = null;
+  private String extractedRelevantContent = null;
 
   @JsonProperty("contentIsRelevant")
-  private Object contentIsRelevant = null;
+  private Boolean contentIsRelevant = null;
 
   @JsonProperty("satisfactoryAnswer")
-  private Object satisfactoryAnswer = null;
+  private Boolean satisfactoryAnswer = null;
 
   @JsonProperty("additionalSharepointSearchIdeas")
   private SharepointAdditionalSearchFilter additionalSharepointSearchIdeas = null;
 
-  public MicrosoftResultsExtractionData extractedRelevantContent(Object extractedRelevantContent) {
+  public MicrosoftResultsExtractionData extractedRelevantContent(String extractedRelevantContent) {
     this.extractedRelevantContent = extractedRelevantContent;
     return this;
   }
@@ -48,15 +48,15 @@ public class MicrosoftResultsExtractionData {
    * @return extractedRelevantContent
   **/
   @Schema(description = "")
-  public Object getExtractedRelevantContent() {
+  public String getExtractedRelevantContent() {
     return extractedRelevantContent;
   }
 
-  public void setExtractedRelevantContent(Object extractedRelevantContent) {
+  public void setExtractedRelevantContent(String extractedRelevantContent) {
     this.extractedRelevantContent = extractedRelevantContent;
   }
 
-  public MicrosoftResultsExtractionData contentIsRelevant(Object contentIsRelevant) {
+  public MicrosoftResultsExtractionData contentIsRelevant(Boolean contentIsRelevant) {
     this.contentIsRelevant = contentIsRelevant;
     return this;
   }
@@ -66,15 +66,15 @@ public class MicrosoftResultsExtractionData {
    * @return contentIsRelevant
   **/
   @Schema(description = "")
-  public Object getContentIsRelevant() {
+  public Boolean isContentIsRelevant() {
     return contentIsRelevant;
   }
 
-  public void setContentIsRelevant(Object contentIsRelevant) {
+  public void setContentIsRelevant(Boolean contentIsRelevant) {
     this.contentIsRelevant = contentIsRelevant;
   }
 
-  public MicrosoftResultsExtractionData satisfactoryAnswer(Object satisfactoryAnswer) {
+  public MicrosoftResultsExtractionData satisfactoryAnswer(Boolean satisfactoryAnswer) {
     this.satisfactoryAnswer = satisfactoryAnswer;
     return this;
   }
@@ -84,11 +84,11 @@ public class MicrosoftResultsExtractionData {
    * @return satisfactoryAnswer
   **/
   @Schema(description = "")
-  public Object getSatisfactoryAnswer() {
+  public Boolean isSatisfactoryAnswer() {
     return satisfactoryAnswer;
   }
 
-  public void setSatisfactoryAnswer(Object satisfactoryAnswer) {
+  public void setSatisfactoryAnswer(Boolean satisfactoryAnswer) {
     this.satisfactoryAnswer = satisfactoryAnswer;
   }
 

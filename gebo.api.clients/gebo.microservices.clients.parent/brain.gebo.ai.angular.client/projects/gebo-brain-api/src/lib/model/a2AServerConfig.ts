@@ -9,20 +9,21 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { A2AExportedAgent } from './a2AExportedAgent';
 
 export interface A2AServerConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    exportedRelativeUrl: any;
-    enabled?: any;
-    exportedAgents?: any;
-    securitySchemeName?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    aclAliases?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    exportedRelativeUrl: string;
+    enabled?: boolean;
+    exportedAgents?: Array<A2AExportedAgent>;
+    securitySchemeName?: string;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
 }

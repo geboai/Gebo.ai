@@ -67,7 +67,7 @@ No authorization required
 
 
 MistralAiEmbeddingModelsConfigurationControllerApi apiInstance = new MistralAiEmbeddingModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GMistralEmbeddingModelConfig result = apiInstance.findMistralAIEmbeddingModelConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

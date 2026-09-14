@@ -66,7 +66,7 @@ No authorization required
 
 
 OAuth2AdminControllerApi apiInstance = new OAuth2AdminControllerApi();
-Object registrationId = null; // Object | 
+String registrationId = "registrationId_example"; // String | 
 try {
     Oauth2ProviderModifiableData result = apiInstance.findOauth2ProviderRegistrationByRegistrationId(registrationId);
     System.out.println(result);
@@ -80,7 +80,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **registrationId** | [**Object**](.md)|  |
+ **registrationId** | **String**|  |
 
 ### Return type
 
@@ -97,7 +97,7 @@ No authorization required
 
 <a name="getProviders"></a>
 # **getProviders**
-> Object getProviders()
+> List&lt;AuthProviderDto&gt; getProviders()
 
 
 
@@ -110,7 +110,7 @@ No authorization required
 
 OAuth2AdminControllerApi apiInstance = new OAuth2AdminControllerApi();
 try {
-    Object result = apiInstance.getProviders();
+    List<AuthProviderDto> result = apiInstance.getProviders();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling OAuth2AdminControllerApi#getProviders");
@@ -123,7 +123,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;AuthProviderDto&gt;**](AuthProviderDto.md)
 
 ### Authorization
 

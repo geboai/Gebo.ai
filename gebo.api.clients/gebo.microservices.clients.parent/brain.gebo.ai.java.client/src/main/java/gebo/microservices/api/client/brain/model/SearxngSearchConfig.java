@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SearxngSearchConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class SearxngSearchConfig {
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("apiKey")
-  private Object apiKey = null;
+  private String apiKey = null;
 
   @JsonProperty("enabled")
-  private Object enabled = null;
+  private Boolean enabled = null;
 
-  public SearxngSearchConfig baseUrl(Object baseUrl) {
+  public SearxngSearchConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -44,15 +44,15 @@ public class SearxngSearchConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public SearxngSearchConfig apiKey(Object apiKey) {
+  public SearxngSearchConfig apiKey(String apiKey) {
     this.apiKey = apiKey;
     return this;
   }
@@ -62,15 +62,15 @@ public class SearxngSearchConfig {
    * @return apiKey
   **/
   @Schema(description = "")
-  public Object getApiKey() {
+  public String getApiKey() {
     return apiKey;
   }
 
-  public void setApiKey(Object apiKey) {
+  public void setApiKey(String apiKey) {
     this.apiKey = apiKey;
   }
 
-  public SearxngSearchConfig enabled(Object enabled) {
+  public SearxngSearchConfig enabled(Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -80,11 +80,11 @@ public class SearxngSearchConfig {
    * @return enabled
   **/
   @Schema(description = "")
-  public Object getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Object enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 

@@ -3,11 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Object** |  |  [optional]
-**name** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**tags** | **Object** |  |  [optional]
-**inputModes** | **Object** |  |  [optional]
-**outputModes** | **Object** |  |  [optional]
-**addedOnRemote** | **Object** |  |  [optional]
-**deletedOnRemote** | **Object** |  |  [optional]
+**id** | **String** |  |  [optional]
+**name** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**tags** | **List&lt;String&gt;** |  |  [optional]
+**inputModes** | **List&lt;String&gt;** |  |  [optional]
+**outputModes** | **List&lt;String&gt;** |  |  [optional]
+**addedOnRemote** | **Boolean** |  |  [optional]
+**deletedOnRemote** | **Boolean** |  |  [optional]

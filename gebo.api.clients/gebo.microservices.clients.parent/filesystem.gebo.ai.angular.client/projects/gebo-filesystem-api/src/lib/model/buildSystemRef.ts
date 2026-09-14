@@ -11,6 +11,6 @@
  */
 
 export interface BuildSystemRef { 
-    buildSystemTypeCode?: any;
-    buildSystemConfigCode?: any;
+    buildSystemTypeCode?: string;
+    buildSystemConfigCode?: string;
 }

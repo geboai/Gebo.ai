@@ -9,10 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { UsersGroup } from './usersGroup';
 
 export interface PageResultUsersGroup { 
-    content?: any;
-    totalElements?: any;
-    number?: any;
-    size?: any;
+    content?: Array<UsersGroup>;
+    totalElements?: number;
+    number?: number;
+    size?: number;
 }

@@ -9,12 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ToolCategoriesTree } from './toolCategoriesTree';
 
 export interface ModelProviderCapabilities { 
-    configurationCode?: any;
-    supportsTranscript?: any;
-    supportsSpeech?: any;
-    supportsStructuredOutput?: any;
-    supportsFunctionCalls?: any;
-    functionsTreeList?: any;
+    configurationCode?: string;
+    supportsTranscript?: boolean;
+    supportsSpeech?: boolean;
+    supportsStructuredOutput?: boolean;
+    supportsFunctionCalls?: boolean;
+    functionsTreeList?: Array<ToolCategoriesTree>;
 }

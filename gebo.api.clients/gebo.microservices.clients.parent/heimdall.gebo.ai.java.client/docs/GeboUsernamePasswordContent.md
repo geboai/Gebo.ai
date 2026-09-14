@@ -3,5 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**username** | **Object** |  | 
-**password** | **Object** |  | 
+**readOnly** | **Boolean** |  |  [optional]
+**username** | **String** |  | 
+**password** | **String** |  | 

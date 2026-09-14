@@ -22,13 +22,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * HandShakeToken
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:05.518323320+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class HandShakeToken {
   @JsonProperty("token")
-  private Object token = null;
+  private String token = null;
 
-  public HandShakeToken token(Object token) {
+  public HandShakeToken token(String token) {
     this.token = token;
     return this;
   }
@@ -38,11 +38,11 @@ public class HandShakeToken {
    * @return token
   **/
   @Schema(description = "")
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(Object token) {
+  public void setToken(String token) {
     this.token = token;
   }
 

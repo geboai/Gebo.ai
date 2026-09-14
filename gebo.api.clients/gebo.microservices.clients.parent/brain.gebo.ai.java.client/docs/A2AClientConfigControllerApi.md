@@ -68,7 +68,7 @@ No authorization required
 
 
 A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     OperationStatusA2ARemoteAgentConfig result = apiInstance.findByCode2(code);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -154,8 +154,8 @@ No authorization required
 
 
 A2AClientConfigControllerApi apiInstance = new A2AClientConfigControllerApi();
-Object page = 0; // Object | 
-Object size = 20; // Object | 
+Integer page = 0; // Integer | 
+Integer size = 20; // Integer | 
 try {
     PageA2ARemoteAgentConfig result = apiInstance.list(page, size);
     System.out.println(result);
@@ -169,8 +169,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | [**Object**](.md)|  | [optional] [default to 0]
- **size** | [**Object**](.md)|  | [optional] [default to 20]
+ **page** | **Integer**|  | [optional] [default to 0]
+ **size** | **Integer**|  | [optional] [default to 20]
 
 ### Return type
 

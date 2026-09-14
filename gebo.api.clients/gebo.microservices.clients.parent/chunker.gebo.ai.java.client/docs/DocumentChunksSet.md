@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Object** |  |  [optional]
-**totalTokens** | **Object** |  |  [optional]
-**totalBytes** | **Object** |  |  [optional]
-**chunks** | **Object** |  |  [optional]
-**chunkingSessionId** | **Object** |  |  [optional]
+**id** | **String** |  |  [optional]
+**totalTokens** | **Long** |  |  [optional]
+**totalBytes** | **Long** |  |  [optional]
+**chunks** | [**List&lt;DocumentChunk&gt;**](DocumentChunk.md) |  |  [optional]
+**chunkingSessionId** | **String** |  |  [optional]

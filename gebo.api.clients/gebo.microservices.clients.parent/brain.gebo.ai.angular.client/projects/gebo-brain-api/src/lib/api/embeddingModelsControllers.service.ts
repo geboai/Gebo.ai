@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ConfigurationEntryGBaseEmbeddingModelConfig } from '../model/configurationEntryGBaseEmbeddingModelConfig';
+import { GEmbeddingModelType } from '../model/gEmbeddingModelType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +62,9 @@ export class EmbeddingModelsControllersService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEmbeddingModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getEmbeddingModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getEmbeddingModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getEmbeddingModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GEmbeddingModelType>>;
+    public getEmbeddingModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GEmbeddingModelType>>>;
+    public getEmbeddingModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GEmbeddingModelType>>>;
     public getEmbeddingModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +82,7 @@ export class EmbeddingModelsControllersService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes`,
+        return this.httpClient.request<Array<GEmbeddingModelType>>('get',`${this.basePath}/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -97,10 +99,10 @@ export class EmbeddingModelsControllersService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntryGBaseEmbeddingModelConfig>>;
+    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntryGBaseEmbeddingModelConfig>>>;
+    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntryGBaseEmbeddingModelConfig>>>;
+    public getRuntimeConfiguredEmbeddingModels(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -123,7 +125,7 @@ export class EmbeddingModelsControllersService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels`,
+        return this.httpClient.request<Array<ConfigurationEntryGBaseEmbeddingModelConfig>>('get',`${this.basePath}/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

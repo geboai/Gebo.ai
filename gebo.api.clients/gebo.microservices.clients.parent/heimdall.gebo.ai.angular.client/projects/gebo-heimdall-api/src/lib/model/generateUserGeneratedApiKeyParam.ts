@@ -11,6 +11,6 @@
  */
 
 export interface GenerateUserGeneratedApiKeyParam { 
-    description: any;
-    expiration: any;
+    description: string;
+    expiration: Date;
 }

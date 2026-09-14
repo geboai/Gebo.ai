@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GDeepseekChatModelConfig } from './gDeepseekChatModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGDeepseekChatModelConfig { 
     result?: GDeepseekChatModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

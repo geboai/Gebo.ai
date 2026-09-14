@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**jobId** | **Object** |  | 
+**jobId** | **String** |  | 
 **dataPage** | [**DataPage**](DataPage.md) |  | 

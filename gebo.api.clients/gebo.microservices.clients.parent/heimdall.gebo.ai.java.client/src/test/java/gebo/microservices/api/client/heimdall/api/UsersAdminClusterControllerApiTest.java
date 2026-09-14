@@ -20,6 +20,7 @@ import gebo.microservices.api.client.heimdall.model.GroupQbeRequest;
 import gebo.microservices.api.client.heimdall.model.InsertUserRequest;
 import gebo.microservices.api.client.heimdall.model.PageResultUserInfos;
 import gebo.microservices.api.client.heimdall.model.PageResultUsersGroup;
+import gebo.microservices.api.client.heimdall.model.UserInfos;
 import gebo.microservices.api.client.heimdall.model.UserQbeRequest;
 import gebo.microservices.api.client.heimdall.model.UsersGroup;
 import org.junit.Test;
@@ -108,7 +109,7 @@ public class UsersAdminClusterControllerApiTest {
      */
     @Test
     public void findGroupByCodeTest() {
-        Object code = null;
+        String code = null;
         UsersGroup response = api.findGroupByCode(code);
 
         // TODO: test validations
@@ -153,7 +154,7 @@ public class UsersAdminClusterControllerApiTest {
      */
     @Test
     public void findUserByUsername1Test() {
-        Object email = null;
+        String email = null;
         EditableUser response = api.findUserByUsername1(email);
 
         // TODO: test validations
@@ -183,7 +184,7 @@ public class UsersAdminClusterControllerApiTest {
      */
     @Test
     public void getAllGroupsTest() {
-        Object response = api.getAllGroups();
+        List<UsersGroup> response = api.getAllGroups();
 
         // TODO: test validations
     }
@@ -197,7 +198,7 @@ public class UsersAdminClusterControllerApiTest {
      */
     @Test
     public void getAllUsersTest() {
-        Object response = api.getAllUsers();
+        List<UserInfos> response = api.getAllUsers();
 
         // TODO: test validations
     }

@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GPromptPlaceholderInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GPromptPlaceholderInfo {
   @JsonProperty("placeholder")
-  private Object placeholder = null;
+  private String placeholder = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public GPromptPlaceholderInfo placeholder(Object placeholder) {
+  public GPromptPlaceholderInfo placeholder(String placeholder) {
     this.placeholder = placeholder;
     return this;
   }
@@ -41,15 +41,15 @@ public class GPromptPlaceholderInfo {
    * @return placeholder
   **/
   @Schema(description = "")
-  public Object getPlaceholder() {
+  public String getPlaceholder() {
     return placeholder;
   }
 
-  public void setPlaceholder(Object placeholder) {
+  public void setPlaceholder(String placeholder) {
     this.placeholder = placeholder;
   }
 
-  public GPromptPlaceholderInfo description(Object description) {
+  public GPromptPlaceholderInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -59,11 +59,11 @@ public class GPromptPlaceholderInfo {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

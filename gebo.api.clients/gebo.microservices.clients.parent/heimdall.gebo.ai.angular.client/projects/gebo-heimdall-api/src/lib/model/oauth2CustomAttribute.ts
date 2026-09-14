@@ -11,6 +11,6 @@
  */
 
 export interface Oauth2CustomAttribute { 
-    attributeName?: any;
-    attributeDescription?: any;
+    attributeName?: string;
+    attributeDescription?: string;
 }

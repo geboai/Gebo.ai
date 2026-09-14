@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GBedrockEmbeddingModelConfig } from './gBedrockEmbeddingModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGBedrockEmbeddingModelConfig { 
     result?: GBedrockEmbeddingModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -11,5 +11,5 @@
  */
 
 export interface GeboNeo4jModuleConfigDto { 
-    enabled?: any;
+    enabled?: boolean;
 }

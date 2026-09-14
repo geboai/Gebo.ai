@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UserWorkFlowStartResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserWorkFlowStartResponse {
   @JsonProperty("ok")
-  private Object ok = null;
+  private Boolean ok = null;
 
   @JsonProperty("mailSent")
-  private Object mailSent = null;
+  private Boolean mailSent = null;
 
   @JsonProperty("invalidAccountState")
-  private Object invalidAccountState = null;
+  private Boolean invalidAccountState = null;
 
-  public UserWorkFlowStartResponse ok(Object ok) {
+  public UserWorkFlowStartResponse ok(Boolean ok) {
     this.ok = ok;
     return this;
   }
@@ -44,15 +44,15 @@ public class UserWorkFlowStartResponse {
    * @return ok
   **/
   @Schema(description = "")
-  public Object getOk() {
+  public Boolean isOk() {
     return ok;
   }
 
-  public void setOk(Object ok) {
+  public void setOk(Boolean ok) {
     this.ok = ok;
   }
 
-  public UserWorkFlowStartResponse mailSent(Object mailSent) {
+  public UserWorkFlowStartResponse mailSent(Boolean mailSent) {
     this.mailSent = mailSent;
     return this;
   }
@@ -62,15 +62,15 @@ public class UserWorkFlowStartResponse {
    * @return mailSent
   **/
   @Schema(description = "")
-  public Object getMailSent() {
+  public Boolean isMailSent() {
     return mailSent;
   }
 
-  public void setMailSent(Object mailSent) {
+  public void setMailSent(Boolean mailSent) {
     this.mailSent = mailSent;
   }
 
-  public UserWorkFlowStartResponse invalidAccountState(Object invalidAccountState) {
+  public UserWorkFlowStartResponse invalidAccountState(Boolean invalidAccountState) {
     this.invalidAccountState = invalidAccountState;
     return this;
   }
@@ -80,11 +80,11 @@ public class UserWorkFlowStartResponse {
    * @return invalidAccountState
   **/
   @Schema(description = "")
-  public Object getInvalidAccountState() {
+  public Boolean isInvalidAccountState() {
     return invalidAccountState;
   }
 
-  public void setInvalidAccountState(Object invalidAccountState) {
+  public void setInvalidAccountState(Boolean invalidAccountState) {
     this.invalidAccountState = invalidAccountState;
   }
 

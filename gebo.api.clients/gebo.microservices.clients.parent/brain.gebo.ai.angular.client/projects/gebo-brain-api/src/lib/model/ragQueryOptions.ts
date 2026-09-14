@@ -11,8 +11,16 @@
  */
 
 export interface RagQueryOptions { 
-    topK?: any;
-    similarityThreashold?: any;
-    maxTokens?: any;
-    completeness?: any;
+    topK?: number;
+    similarityThreashold?: number;
+    maxTokens?: number;
+    completeness?: RagQueryOptions.CompletenessEnum;
+}
+export namespace RagQueryOptions {
+    export type CompletenessEnum = 'STRICT_QUERY_RELATED' | 'FULL_DOCUMENTS' | 'MAX_TOKENS';
+    export const CompletenessEnum = {
+        STRICTQUERYRELATED: 'STRICT_QUERY_RELATED' as CompletenessEnum,
+        FULLDOCUMENTS: 'FULL_DOCUMENTS' as CompletenessEnum,
+        MAXTOKENS: 'MAX_TOKENS' as CompletenessEnum
+    };
 }

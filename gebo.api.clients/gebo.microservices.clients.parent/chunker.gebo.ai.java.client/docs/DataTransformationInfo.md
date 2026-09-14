@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Object** |  | 
-**description** | **Object** |  | 
+**id** | **String** |  | 
+**description** | **String** |  | 
 **transformationInfo** | [**DataTransformationMetaInfo**](DataTransformationMetaInfo.md) |  | 
-**dataSourceId** | **Object** |  | 
-**dataDestinationId** | **Object** |  | 
+**dataSourceId** | **String** |  | 
+**dataDestinationId** | **String** |  | 

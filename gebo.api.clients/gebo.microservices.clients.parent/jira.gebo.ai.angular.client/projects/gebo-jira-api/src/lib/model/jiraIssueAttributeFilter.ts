@@ -11,17 +11,34 @@
  */
 
 export interface JiraIssueAttributeFilter { 
-    projectCodes?: any;
-    issuetypeCodes?: any;
-    issueKeys?: any;
-    summaryTerms?: any;
-    summaryTermsMatchMode?: any;
-    descriptionTerms?: any;
-    descriptionTermsMatchMode?: any;
-    labels?: any;
-    labelsMatchMode?: any;
-    priorityCodes?: any;
-    statusCodes?: any;
-    affectedVersions?: any;
-    fixVersions?: any;
+    projectCodes?: Array<string>;
+    issuetypeCodes?: Array<string>;
+    issueKeys?: Array<string>;
+    summaryTerms?: Array<string>;
+    summaryTermsMatchMode?: JiraIssueAttributeFilter.SummaryTermsMatchModeEnum;
+    descriptionTerms?: Array<string>;
+    descriptionTermsMatchMode?: JiraIssueAttributeFilter.DescriptionTermsMatchModeEnum;
+    labels?: Array<string>;
+    labelsMatchMode?: JiraIssueAttributeFilter.LabelsMatchModeEnum;
+    priorityCodes?: Array<string>;
+    statusCodes?: Array<string>;
+    affectedVersions?: Array<string>;
+    fixVersions?: Array<string>;
+}
+export namespace JiraIssueAttributeFilter {
+    export type SummaryTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const SummaryTermsMatchModeEnum = {
+        ANY: 'ANY' as SummaryTermsMatchModeEnum,
+        ALL: 'ALL' as SummaryTermsMatchModeEnum
+    };
+    export type DescriptionTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const DescriptionTermsMatchModeEnum = {
+        ANY: 'ANY' as DescriptionTermsMatchModeEnum,
+        ALL: 'ALL' as DescriptionTermsMatchModeEnum
+    };
+    export type LabelsMatchModeEnum = 'ANY' | 'ALL';
+    export const LabelsMatchModeEnum = {
+        ANY: 'ANY' as LabelsMatchModeEnum,
+        ALL: 'ALL' as LabelsMatchModeEnum
+    };
 }

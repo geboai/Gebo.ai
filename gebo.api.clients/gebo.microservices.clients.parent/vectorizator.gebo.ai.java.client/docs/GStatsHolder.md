@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**levelKey** | **Object** |  |  [optional]
+**levelKey** | **String** |  |  [optional]
 **dimensionValue** | [**GLookupEntry**](GLookupEntry.md) |  |  [optional]
-**canDrillDown** | **Object** |  |  [optional]
-**statsContainer** | **Object** |  |  [optional]
-**statsLines** | **Object** |  |  [optional]
+**canDrillDown** | **Boolean** |  |  [optional]
+**statsContainer** | [**Map&lt;String, List&lt;GStatsLabelValue&gt;&gt;**](List.md) |  |  [optional]
+**statsLines** | [**List&lt;GStatsLine&gt;**](GStatsLine.md) |  |  [optional]

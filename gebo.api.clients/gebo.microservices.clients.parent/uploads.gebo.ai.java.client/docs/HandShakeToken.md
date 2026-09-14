@@ -3,4 +3,4 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**token** | **Object** |  |  [optional]
+**token** | **String** |  |  [optional]

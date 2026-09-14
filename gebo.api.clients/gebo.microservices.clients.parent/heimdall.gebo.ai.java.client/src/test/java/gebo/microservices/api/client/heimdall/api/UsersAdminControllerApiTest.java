@@ -20,6 +20,7 @@ import gebo.microservices.api.client.heimdall.model.GUserMessage;
 import gebo.microservices.api.client.heimdall.model.InsertUserParam;
 import gebo.microservices.api.client.heimdall.model.PageUserInfos;
 import gebo.microservices.api.client.heimdall.model.PageUsersGroup;
+import gebo.microservices.api.client.heimdall.model.UserInfos;
 import gebo.microservices.api.client.heimdall.model.UsersGroup;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -92,7 +93,7 @@ public class UsersAdminControllerApiTest {
      */
     @Test
     public void findGroupByCode1Test() {
-        Object code = null;
+        String code = null;
         UsersGroup response = api.findGroupByCode1(code);
 
         // TODO: test validations
@@ -122,7 +123,7 @@ public class UsersAdminControllerApiTest {
      */
     @Test
     public void findUserByUsername2Test() {
-        Object email = null;
+        String email = null;
         EditableUser response = api.findUserByUsername2(email);
 
         // TODO: test validations
@@ -152,7 +153,7 @@ public class UsersAdminControllerApiTest {
      */
     @Test
     public void getAllGroups1Test() {
-        Object response = api.getAllGroups1();
+        List<UsersGroup> response = api.getAllGroups1();
 
         // TODO: test validations
     }
@@ -166,7 +167,7 @@ public class UsersAdminControllerApiTest {
      */
     @Test
     public void getAllUsers1Test() {
-        Object response = api.getAllUsers1();
+        List<UserInfos> response = api.getAllUsers1();
 
         // TODO: test validations
     }

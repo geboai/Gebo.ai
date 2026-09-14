@@ -12,6 +12,13 @@
 import { IGComponentOriginatedDocument } from './iGComponentOriginatedDocument';
 
 export interface StreamDocumentRequest { 
-    streamingPurpose?: any;
+    streamingPurpose?: StreamDocumentRequest.StreamingPurposeEnum;
     reference?: IGComponentOriginatedDocument;
+}
+export namespace StreamDocumentRequest {
+    export type StreamingPurposeEnum = 'SERVING' | 'INGESTING';
+    export const StreamingPurposeEnum = {
+        SERVING: 'SERVING' as StreamingPurposeEnum,
+        INGESTING: 'INGESTING' as StreamingPurposeEnum
+    };
 }

@@ -11,7 +11,7 @@
  */
 
 export interface Oauth2ClientAuthorizativeInfo { 
-    registrationId?: any;
-    providerName?: any;
-    description?: any;
+    registrationId?: string;
+    providerName?: string;
+    description?: string;
 }

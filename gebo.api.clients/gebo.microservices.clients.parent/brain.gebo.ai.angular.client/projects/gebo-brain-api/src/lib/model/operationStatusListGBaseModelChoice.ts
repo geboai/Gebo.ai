@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GBaseModelChoice } from './gBaseModelChoice';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusListGBaseModelChoice { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<GBaseModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -11,14 +11,31 @@
  */
 
 export interface ConfluenceContentAttributeFilter { 
-    spaceKeys?: any;
-    contentTypes?: any;
-    contentIds?: any;
-    titleTerms?: any;
-    titleTermsMatchMode?: any;
-    textTerms?: any;
-    textTermsMatchMode?: any;
-    labels?: any;
-    labelsMatchMode?: any;
-    ancestorIds?: any;
+    spaceKeys?: Array<string>;
+    contentTypes?: Array<string>;
+    contentIds?: Array<number>;
+    titleTerms?: Array<string>;
+    titleTermsMatchMode?: ConfluenceContentAttributeFilter.TitleTermsMatchModeEnum;
+    textTerms?: Array<string>;
+    textTermsMatchMode?: ConfluenceContentAttributeFilter.TextTermsMatchModeEnum;
+    labels?: Array<string>;
+    labelsMatchMode?: ConfluenceContentAttributeFilter.LabelsMatchModeEnum;
+    ancestorIds?: Array<number>;
+}
+export namespace ConfluenceContentAttributeFilter {
+    export type TitleTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TitleTermsMatchModeEnum = {
+        ANY: 'ANY' as TitleTermsMatchModeEnum,
+        ALL: 'ALL' as TitleTermsMatchModeEnum
+    };
+    export type TextTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TextTermsMatchModeEnum = {
+        ANY: 'ANY' as TextTermsMatchModeEnum,
+        ALL: 'ALL' as TextTermsMatchModeEnum
+    };
+    export type LabelsMatchModeEnum = 'ANY' | 'ALL';
+    export const LabelsMatchModeEnum = {
+        ANY: 'ANY' as LabelsMatchModeEnum,
+        ALL: 'ALL' as LabelsMatchModeEnum
+    };
 }

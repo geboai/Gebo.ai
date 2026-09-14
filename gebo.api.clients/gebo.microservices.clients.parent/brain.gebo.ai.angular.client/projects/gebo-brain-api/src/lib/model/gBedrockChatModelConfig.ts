@@ -12,26 +12,49 @@
 import { GBedrockChatModelChoice } from './gBedrockChatModelChoice';
 
 export interface GBedrockChatModelConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelTypeCode?: any;
-    defaultModel?: any;
-    apiSecretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
     choosedModel?: GBedrockChatModelChoice;
-    baseUrl?: any;
-    contextLength?: any;
-    topP?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    enabledFunctions?: any;
-    temperature?: any;
-    forUses?: any;
-    features?: any;
-    thinking?: any;
-    maxGeneratedTokens?: any;
+    baseUrl?: string;
+    contextLength?: number;
+    topP?: number;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    enabledFunctions?: Array<string>;
+    temperature?: number;
+    forUses?: Array<GBedrockChatModelConfig.ForUsesEnum>;
+    features?: Array<GBedrockChatModelConfig.FeaturesEnum>;
+    thinking?: GBedrockChatModelConfig.ThinkingEnum;
+    maxGeneratedTokens?: number;
+}
+export namespace GBedrockChatModelConfig {
+    export type ForUsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
+    export const ForUsesEnum = {
+        CHAT: 'CHAT' as ForUsesEnum,
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as ForUsesEnum
+    };
+    export type FeaturesEnum = 'CHAT' | 'REASONING' | 'STRUCTURED_OUTPUT' | 'MULTIMEDIA' | 'FUNCTION_CALLING';
+    export const FeaturesEnum = {
+        CHAT: 'CHAT' as FeaturesEnum,
+        REASONING: 'REASONING' as FeaturesEnum,
+        STRUCTUREDOUTPUT: 'STRUCTURED_OUTPUT' as FeaturesEnum,
+        MULTIMEDIA: 'MULTIMEDIA' as FeaturesEnum,
+        FUNCTIONCALLING: 'FUNCTION_CALLING' as FeaturesEnum
+    };
+    export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const ThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as ThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as ThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
+        AUTO: 'AUTO' as ThinkingEnum
+    };
 }

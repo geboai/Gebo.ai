@@ -18,32 +18,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GVirtualFilesystemRoot
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class GVirtualFilesystemRoot {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("absolutePath")
-  private Object absolutePath = null;
+  private String absolutePath = null;
 
   @JsonProperty("uri")
-  private Object uri = null;
+  private String uri = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("iconKey")
-  private Object iconKey = null;
+  private String iconKey = null;
 
-  public GVirtualFilesystemRoot code(Object code) {
+  public GVirtualFilesystemRoot code(String code) {
     this.code = code;
     return this;
   }
@@ -53,15 +54,15 @@ public class GVirtualFilesystemRoot {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GVirtualFilesystemRoot description(Object description) {
+  public GVirtualFilesystemRoot description(String description) {
     this.description = description;
     return this;
   }
@@ -71,15 +72,15 @@ public class GVirtualFilesystemRoot {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GVirtualFilesystemRoot absolutePath(Object absolutePath) {
+  public GVirtualFilesystemRoot absolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
     return this;
   }
@@ -89,15 +90,15 @@ public class GVirtualFilesystemRoot {
    * @return absolutePath
   **/
   @Schema(description = "")
-  public Object getAbsolutePath() {
+  public String getAbsolutePath() {
     return absolutePath;
   }
 
-  public void setAbsolutePath(Object absolutePath) {
+  public void setAbsolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
   }
 
-  public GVirtualFilesystemRoot uri(Object uri) {
+  public GVirtualFilesystemRoot uri(String uri) {
     this.uri = uri;
     return this;
   }
@@ -107,15 +108,15 @@ public class GVirtualFilesystemRoot {
    * @return uri
   **/
   @Schema(description = "")
-  public Object getUri() {
+  public String getUri() {
     return uri;
   }
 
-  public void setUri(Object uri) {
+  public void setUri(String uri) {
     this.uri = uri;
   }
 
-  public GVirtualFilesystemRoot dateModified(Object dateModified) {
+  public GVirtualFilesystemRoot dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -125,15 +126,15 @@ public class GVirtualFilesystemRoot {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GVirtualFilesystemRoot iconKey(Object iconKey) {
+  public GVirtualFilesystemRoot iconKey(String iconKey) {
     this.iconKey = iconKey;
     return this;
   }
@@ -143,11 +144,11 @@ public class GVirtualFilesystemRoot {
    * @return iconKey
   **/
   @Schema(description = "")
-  public Object getIconKey() {
+  public String getIconKey() {
     return iconKey;
   }
 
-  public void setIconKey(Object iconKey) {
+  public void setIconKey(String iconKey) {
     this.iconKey = iconKey;
   }
 

@@ -11,10 +11,10 @@
  */
 
 export interface GeboWorkingMemoryWindowOccupation { 
-    historyTokens?: any;
-    documentsTokens?: any;
-    queryTokens?: any;
-    historyPercentage?: any;
-    documentsPercentage?: any;
-    totalWindowUsePercentage?: any;
+    historyTokens?: number;
+    documentsTokens?: number;
+    queryTokens?: number;
+    historyPercentage?: number;
+    documentsPercentage?: number;
+    totalWindowUsePercentage?: number;
 }

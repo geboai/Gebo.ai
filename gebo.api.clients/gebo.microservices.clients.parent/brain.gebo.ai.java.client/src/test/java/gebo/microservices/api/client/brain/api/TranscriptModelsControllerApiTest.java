@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseTranscriptModelConfig;
+import gebo.microservices.api.client.brain.model.GTranscriptModelType;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,8 +40,8 @@ public class TranscriptModelsControllerApiTest {
      */
     @Test
     public void getRuntimeConfiguredTranscriptModelsTest() {
-        Object modelTypeCode = null;
-        Object response = api.getRuntimeConfiguredTranscriptModels(modelTypeCode);
+        String modelTypeCode = null;
+        List<ConfigurationEntryGBaseTranscriptModelConfig> response = api.getRuntimeConfiguredTranscriptModels(modelTypeCode);
 
         // TODO: test validations
     }
@@ -53,7 +55,7 @@ public class TranscriptModelsControllerApiTest {
      */
     @Test
     public void getTranscriptModelTypesTest() {
-        Object response = api.getTranscriptModelTypes();
+        List<GTranscriptModelType> response = api.getTranscriptModelTypes();
 
         // TODO: test validations
     }

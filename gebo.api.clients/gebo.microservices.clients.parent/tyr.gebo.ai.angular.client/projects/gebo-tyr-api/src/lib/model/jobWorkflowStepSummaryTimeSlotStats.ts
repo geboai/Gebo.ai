@@ -11,15 +11,15 @@
  */
 
 export interface JobWorkflowStepSummaryTimeSlotStats { 
-    startDateTime?: any;
-    endDateTime?: any;
-    batchDocumentsInput?: any;
-    batchDiscardedInput?: any;
-    batchSentToNextStep?: any;
-    chunksProcessed?: any;
-    tokensProcessed?: any;
-    batchDocumentsProcessingErrors?: any;
-    batchDocumentsProcessed?: any;
-    errorChunks?: any;
-    errorTokens?: any;
+    startDateTime?: Date;
+    endDateTime?: Date;
+    batchDocumentsInput?: number;
+    batchDiscardedInput?: number;
+    batchSentToNextStep?: number;
+    chunksProcessed?: number;
+    tokensProcessed?: number;
+    batchDocumentsProcessingErrors?: number;
+    batchDocumentsProcessed?: number;
+    errorChunks?: number;
+    errorTokens?: number;
 }

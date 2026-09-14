@@ -11,21 +11,38 @@
  */
 
 export interface GPromptTemplateConfig { 
-    code?: any;
-    description?: any;
-    systemPromptTemplate?: any;
-    userPromptTemplate: any;
-    chatHistory: any;
-    contextDocuments: any;
-    toolsCalling: any;
-    langCode?: any;
-    promptUse: any;
-    modelProvider?: any;
-    modelCode?: any;
-    promptCategory?: any;
-    tokensSize?: any;
-    configDeclarated?: any;
-    agentPrompt?: any;
-    agentId?: any;
-    placeholders?: any;
+    code?: string;
+    description?: string;
+    systemPromptTemplate?: string;
+    userPromptTemplate: string;
+    chatHistory: GPromptTemplateConfig.ChatHistoryEnum;
+    contextDocuments: GPromptTemplateConfig.ContextDocumentsEnum;
+    toolsCalling: GPromptTemplateConfig.ToolsCallingEnum;
+    langCode?: string;
+    promptUse: string;
+    modelProvider?: string;
+    modelCode?: string;
+    promptCategory?: string;
+    tokensSize?: number;
+    configDeclarated?: boolean;
+    agentPrompt?: boolean;
+    agentId?: string;
+    placeholders?: { [key: string]: boolean; };
+}
+export namespace GPromptTemplateConfig {
+    export type ChatHistoryEnum = 'REQUIRED' | 'NOT_REQUIRED';
+    export const ChatHistoryEnum = {
+        REQUIRED: 'REQUIRED' as ChatHistoryEnum,
+        NOTREQUIRED: 'NOT_REQUIRED' as ChatHistoryEnum
+    };
+    export type ContextDocumentsEnum = 'REQUIRED' | 'NOT_REQUIRED';
+    export const ContextDocumentsEnum = {
+        REQUIRED: 'REQUIRED' as ContextDocumentsEnum,
+        NOTREQUIRED: 'NOT_REQUIRED' as ContextDocumentsEnum
+    };
+    export type ToolsCallingEnum = 'REQUIRED' | 'NOT_REQUIRED';
+    export const ToolsCallingEnum = {
+        REQUIRED: 'REQUIRED' as ToolsCallingEnum,
+        NOTREQUIRED: 'NOT_REQUIRED' as ToolsCallingEnum
+    };
 }

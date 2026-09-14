@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GContentManagementSystemType } from '../model/gContentManagementSystemType';
 import { GGitContentManagementSystem } from '../model/gGitContentManagementSystem';
 import { GGitProjectEndpoint } from '../model/gGitProjectEndpoint';
 import { OperationStatusGGitProjectEndpoint } from '../model/operationStatusGGitProjectEndpoint';
@@ -158,10 +159,10 @@ export class GitSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGitEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGitEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGitEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findGitEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGitEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GGitProjectEndpoint>>;
+    public findGitEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGitProjectEndpoint>>>;
+    public findGitEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGitProjectEndpoint>>>;
+    public findGitEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findGitEndpointsByProject.');
@@ -187,7 +188,7 @@ export class GitSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GITSystemsController/findGitEndpointsByProject`,
+        return this.httpClient.request<Array<GGitProjectEndpoint>>('get',`${this.basePath}/api/admin/GITSystemsController/findGitEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -205,9 +206,9 @@ export class GitSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGitEndpointsByQbe(body: GGitProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGitEndpointsByQbe(body: GGitProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGitEndpointsByQbe(body: GGitProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findGitEndpointsByQbe(body: GGitProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GGitProjectEndpoint>>;
+    public findGitEndpointsByQbe(body: GGitProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGitProjectEndpoint>>>;
+    public findGitEndpointsByQbe(body: GGitProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGitProjectEndpoint>>>;
     public findGitEndpointsByQbe(body: GGitProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -234,7 +235,7 @@ export class GitSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/GITSystemsController/findGitEndpointsByQbe`,
+        return this.httpClient.request<Array<GGitProjectEndpoint>>('post',`${this.basePath}/api/admin/GITSystemsController/findGitEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -298,9 +299,9 @@ export class GitSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGitSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGitSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGitSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGitSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GContentManagementSystemType>>;
+    public getGitSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GContentManagementSystemType>>>;
+    public getGitSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GContentManagementSystemType>>>;
     public getGitSystemTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -318,7 +319,7 @@ export class GitSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GITSystemsController/getGitSystemTypes`,
+        return this.httpClient.request<Array<GContentManagementSystemType>>('get',`${this.basePath}/api/admin/GITSystemsController/getGitSystemTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -335,10 +336,10 @@ export class GitSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGitSystems(handlerCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGitSystems(handlerCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGitSystems(handlerCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getGitSystems(handlerCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getGitSystems(handlerCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GGitContentManagementSystem>>;
+    public getGitSystems(handlerCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGitContentManagementSystem>>>;
+    public getGitSystems(handlerCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGitContentManagementSystem>>>;
+    public getGitSystems(handlerCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -361,7 +362,7 @@ export class GitSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GITSystemsController/getGitSystems`,
+        return this.httpClient.request<Array<GGitContentManagementSystem>>('get',`${this.basePath}/api/admin/GITSystemsController/getGitSystems`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

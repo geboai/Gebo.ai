@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**contentType** | **Object** |  | 
-**name** | **Object** |  | 
-**content** | **Object** |  | 
+**contentType** | **String** |  | 
+**name** | **String** |  | 
+**content** | **String** |  | 

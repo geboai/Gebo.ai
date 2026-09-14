@@ -17,30 +17,33 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.chunker.model.DocumentChunk;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * DocumentChunksSet
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class DocumentChunksSet {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("totalTokens")
-  private Object totalTokens = null;
+  private Long totalTokens = null;
 
   @JsonProperty("totalBytes")
-  private Object totalBytes = null;
+  private Long totalBytes = null;
 
   @JsonProperty("chunks")
-  private Object chunks = null;
+  private List<DocumentChunk> chunks = null;
 
   @JsonProperty("chunkingSessionId")
-  private Object chunkingSessionId = null;
+  private String chunkingSessionId = null;
 
-  public DocumentChunksSet id(Object id) {
+  public DocumentChunksSet id(String id) {
     this.id = id;
     return this;
   }
@@ -50,15 +53,15 @@ public class DocumentChunksSet {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public DocumentChunksSet totalTokens(Object totalTokens) {
+  public DocumentChunksSet totalTokens(Long totalTokens) {
     this.totalTokens = totalTokens;
     return this;
   }
@@ -68,15 +71,15 @@ public class DocumentChunksSet {
    * @return totalTokens
   **/
   @Schema(description = "")
-  public Object getTotalTokens() {
+  public Long getTotalTokens() {
     return totalTokens;
   }
 
-  public void setTotalTokens(Object totalTokens) {
+  public void setTotalTokens(Long totalTokens) {
     this.totalTokens = totalTokens;
   }
 
-  public DocumentChunksSet totalBytes(Object totalBytes) {
+  public DocumentChunksSet totalBytes(Long totalBytes) {
     this.totalBytes = totalBytes;
     return this;
   }
@@ -86,16 +89,24 @@ public class DocumentChunksSet {
    * @return totalBytes
   **/
   @Schema(description = "")
-  public Object getTotalBytes() {
+  public Long getTotalBytes() {
     return totalBytes;
   }
 
-  public void setTotalBytes(Object totalBytes) {
+  public void setTotalBytes(Long totalBytes) {
     this.totalBytes = totalBytes;
   }
 
-  public DocumentChunksSet chunks(Object chunks) {
+  public DocumentChunksSet chunks(List<DocumentChunk> chunks) {
     this.chunks = chunks;
+    return this;
+  }
+
+  public DocumentChunksSet addChunksItem(DocumentChunk chunksItem) {
+    if (this.chunks == null) {
+      this.chunks = new ArrayList<>();
+    }
+    this.chunks.add(chunksItem);
     return this;
   }
 
@@ -104,15 +115,15 @@ public class DocumentChunksSet {
    * @return chunks
   **/
   @Schema(description = "")
-  public Object getChunks() {
+  public List<DocumentChunk> getChunks() {
     return chunks;
   }
 
-  public void setChunks(Object chunks) {
+  public void setChunks(List<DocumentChunk> chunks) {
     this.chunks = chunks;
   }
 
-  public DocumentChunksSet chunkingSessionId(Object chunkingSessionId) {
+  public DocumentChunksSet chunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
     return this;
   }
@@ -122,11 +133,11 @@ public class DocumentChunksSet {
    * @return chunkingSessionId
   **/
   @Schema(description = "")
-  public Object getChunkingSessionId() {
+  public String getChunkingSessionId() {
     return chunkingSessionId;
   }
 
-  public void setChunkingSessionId(Object chunkingSessionId) {
+  public void setChunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
   }
 

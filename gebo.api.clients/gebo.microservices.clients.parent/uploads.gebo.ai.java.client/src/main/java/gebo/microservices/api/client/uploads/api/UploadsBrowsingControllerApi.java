@@ -3,9 +3,11 @@ package gebo.microservices.api.client.uploads.api;
 import gebo.microservices.api.client.uploads.invoker.ApiClient;
 
 import gebo.microservices.api.client.uploads.model.BrowseParam;
+import java.io.File;
 import gebo.microservices.api.client.uploads.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.uploads.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.uploads.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.uploads.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:05.518323320+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class UploadsBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +56,7 @@ public class UploadsBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseUploadsEndpointPath(BrowseParam body, Object endpointCode) throws RestClientException {
+    public OperationStatusListPathInfo browseUploadsEndpointPath(BrowseParam body, String endpointCode) throws RestClientException {
         return browseUploadsEndpointPathWithHttpInfo(body, endpointCode).getBody();
     }
 
@@ -67,7 +69,7 @@ public class UploadsBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseUploadsEndpointPathWithHttpInfo(BrowseParam body, Object endpointCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseUploadsEndpointPathWithHttpInfo(BrowseParam body, String endpointCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -107,7 +109,7 @@ public class UploadsBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getUploadsEndpointNavigationStatus(Object body, Object endpointCode) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getUploadsEndpointNavigationStatus(List<VFilesystemReference> body, String endpointCode) throws RestClientException {
         return getUploadsEndpointNavigationStatusWithHttpInfo(body, endpointCode).getBody();
     }
 
@@ -120,7 +122,7 @@ public class UploadsBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getUploadsEndpointNavigationStatusWithHttpInfo(Object body, Object endpointCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getUploadsEndpointNavigationStatusWithHttpInfo(List<VFilesystemReference> body, String endpointCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -159,7 +161,7 @@ public class UploadsBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getUploadsEndpointRoots(Object endpointCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getUploadsEndpointRoots(String endpointCode) throws RestClientException {
         return getUploadsEndpointRootsWithHttpInfo(endpointCode).getBody();
     }
 
@@ -171,7 +173,7 @@ public class UploadsBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getUploadsEndpointRootsWithHttpInfo(Object endpointCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getUploadsEndpointRootsWithHttpInfo(String endpointCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {
@@ -202,10 +204,10 @@ public class UploadsBrowsingControllerApi {
      * <p><b>200</b> - OK
      * @param endpointCode  (required)
      * @param path  (required)
-     * @return Object
+     * @return File
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object serveUploadsEndpointFile(Object endpointCode, Object path) throws RestClientException {
+    public File serveUploadsEndpointFile(String endpointCode, String path) throws RestClientException {
         return serveUploadsEndpointFileWithHttpInfo(endpointCode, path).getBody();
     }
 
@@ -215,10 +217,10 @@ public class UploadsBrowsingControllerApi {
      * <p><b>200</b> - OK
      * @param endpointCode  (required)
      * @param path  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;File&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> serveUploadsEndpointFileWithHttpInfo(Object endpointCode, Object path) throws RestClientException {
+    public ResponseEntity<File> serveUploadsEndpointFileWithHttpInfo(String endpointCode, String path) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {
@@ -245,7 +247,7 @@ public class UploadsBrowsingControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<File> returnType = new ParameterizedTypeReference<File>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

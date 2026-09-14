@@ -67,7 +67,7 @@ No authorization required
 
 
 BedrockTranscriptModelsConfigurationControllerApi apiInstance = new BedrockTranscriptModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GBedrockTranscriptModelConfig result = apiInstance.findBedrockTranscriptModelConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

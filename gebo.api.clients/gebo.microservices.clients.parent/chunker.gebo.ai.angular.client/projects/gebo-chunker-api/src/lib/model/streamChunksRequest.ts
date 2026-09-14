@@ -15,5 +15,5 @@ import { IGComponentOriginatedDocument } from './iGComponentOriginatedDocument';
 export interface StreamChunksRequest { 
     document?: IGComponentOriginatedDocument;
     chunkingSpecs?: ChunkingParams;
-    chunkSessionId?: any;
+    chunkSessionId?: string;
 }

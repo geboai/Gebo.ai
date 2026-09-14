@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="isEnabled"></a>
 # **isEnabled**
-> Object isEnabled()
+> Boolean isEnabled()
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 GeboTranscriptControllerApi apiInstance = new GeboTranscriptControllerApi();
 try {
-    Object result = apiInstance.isEnabled();
+    Boolean result = apiInstance.isEnabled();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboTranscriptControllerApi#isEnabled");
@@ -35,7 +35,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 

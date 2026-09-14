@@ -22,16 +22,54 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboSecretContentEnvelope
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeboSecretContentEnvelope {
-  @JsonProperty("secretType")
-  private Object secretType = null;
+  /**
+   * Gets or Sets secretType
+   */
+  public enum SecretTypeEnum {
+    USERNAME_PASSWORD("USERNAME_PASSWORD"),
+    TOKEN("TOKEN"),
+    SSH_KEY("SSH_KEY"),
+    CUSTOM_SECRET("CUSTOM_SECRET"),
+    OAUTH2_STANDARD("OAUTH2_STANDARD"),
+    OAUTH2_GOOGLE("OAUTH2_GOOGLE"),
+    GOOGLE_CLOUD_JSON_CREDENTIALS("GOOGLE_CLOUD_JSON_CREDENTIALS"),
+    OAUTH2_AUTHORIZED_CLIENT("OAUTH2_AUTHORIZED_CLIENT"),
+    AWS_CONNECTION("AWS_CONNECTION");
+
+    private String value;
+
+    SecretTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SecretTypeEnum fromValue(String input) {
+      for (SecretTypeEnum b : SecretTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("secretType")
+  private SecretTypeEnum secretType = null;
 
   @JsonProperty("cryptedContent")
-  private Object cryptedContent = null;
+  private String cryptedContent = null;
 
-  public GeboSecretContentEnvelope secretType(Object secretType) {
+  public GeboSecretContentEnvelope secretType(SecretTypeEnum secretType) {
     this.secretType = secretType;
     return this;
   }
@@ -41,15 +79,15 @@ public class GeboSecretContentEnvelope {
    * @return secretType
   **/
   @Schema(description = "")
-  public Object getSecretType() {
+  public SecretTypeEnum getSecretType() {
     return secretType;
   }
 
-  public void setSecretType(Object secretType) {
+  public void setSecretType(SecretTypeEnum secretType) {
     this.secretType = secretType;
   }
 
-  public GeboSecretContentEnvelope cryptedContent(Object cryptedContent) {
+  public GeboSecretContentEnvelope cryptedContent(String cryptedContent) {
     this.cryptedContent = cryptedContent;
     return this;
   }
@@ -59,11 +97,11 @@ public class GeboSecretContentEnvelope {
    * @return cryptedContent
   **/
   @Schema(description = "")
-  public Object getCryptedContent() {
+  public String getCryptedContent() {
     return cryptedContent;
   }
 
-  public void setCryptedContent(Object cryptedContent) {
+  public void setCryptedContent(String cryptedContent) {
     this.cryptedContent = cryptedContent;
   }
 

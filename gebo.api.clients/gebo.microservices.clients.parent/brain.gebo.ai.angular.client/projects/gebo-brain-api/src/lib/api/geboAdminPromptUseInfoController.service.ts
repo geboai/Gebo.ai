@@ -61,9 +61,9 @@ export class GeboAdminPromptUseInfoControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAll(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findAll(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findAll(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findAll(observe?: 'body', reportProgress?: boolean): Observable<Array<GPromptUseInfo>>;
+    public findAll(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GPromptUseInfo>>>;
+    public findAll(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GPromptUseInfo>>>;
     public findAll(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -81,7 +81,7 @@ export class GeboAdminPromptUseInfoControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAdminPromptUseController/findAll`,
+        return this.httpClient.request<Array<GPromptUseInfo>>('get',`${this.basePath}/api/admin/GeboAdminPromptUseController/findAll`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -98,10 +98,10 @@ export class GeboAdminPromptUseInfoControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GPromptUseInfo>;
-    public findByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptUseInfo>>;
-    public findByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptUseInfo>>;
-    public findByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GPromptUseInfo>;
+    public findByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptUseInfo>>;
+    public findByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptUseInfo>>;
+    public findByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findByCode.');
@@ -145,10 +145,10 @@ export class GeboAdminPromptUseInfoControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findByModule(module: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findByModule(module: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findByModule(module: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findByModule(module: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findByModule(module: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GPromptUseInfo>>;
+    public findByModule(module: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GPromptUseInfo>>>;
+    public findByModule(module: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GPromptUseInfo>>>;
+    public findByModule(module: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (module === null || module === undefined) {
             throw new Error('Required parameter module was null or undefined when calling findByModule.');
@@ -174,7 +174,7 @@ export class GeboAdminPromptUseInfoControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAdminPromptUseController/findByModule`,
+        return this.httpClient.request<Array<GPromptUseInfo>>('get',`${this.basePath}/api/admin/GeboAdminPromptUseController/findByModule`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

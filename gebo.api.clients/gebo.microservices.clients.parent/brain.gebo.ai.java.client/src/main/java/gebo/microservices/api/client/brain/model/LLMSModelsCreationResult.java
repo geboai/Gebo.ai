@@ -17,22 +17,34 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GBaseModelConfig;
+import gebo.microservices.api.client.brain.model.LLMUnresolvedModel;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMSModelsCreationResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMSModelsCreationResult {
   @JsonProperty("created")
-  private Object created = null;
+  private List<GBaseModelConfig> created = null;
 
   @JsonProperty("unresolved")
-  private Object unresolved = null;
+  private List<LLMUnresolvedModel> unresolved = null;
 
-  public LLMSModelsCreationResult created(Object created) {
+  public LLMSModelsCreationResult created(List<GBaseModelConfig> created) {
     this.created = created;
+    return this;
+  }
+
+  public LLMSModelsCreationResult addCreatedItem(GBaseModelConfig createdItem) {
+    if (this.created == null) {
+      this.created = new ArrayList<>();
+    }
+    this.created.add(createdItem);
     return this;
   }
 
@@ -41,16 +53,24 @@ public class LLMSModelsCreationResult {
    * @return created
   **/
   @Schema(description = "")
-  public Object getCreated() {
+  public List<GBaseModelConfig> getCreated() {
     return created;
   }
 
-  public void setCreated(Object created) {
+  public void setCreated(List<GBaseModelConfig> created) {
     this.created = created;
   }
 
-  public LLMSModelsCreationResult unresolved(Object unresolved) {
+  public LLMSModelsCreationResult unresolved(List<LLMUnresolvedModel> unresolved) {
     this.unresolved = unresolved;
+    return this;
+  }
+
+  public LLMSModelsCreationResult addUnresolvedItem(LLMUnresolvedModel unresolvedItem) {
+    if (this.unresolved == null) {
+      this.unresolved = new ArrayList<>();
+    }
+    this.unresolved.add(unresolvedItem);
     return this;
   }
 
@@ -59,11 +79,11 @@ public class LLMSModelsCreationResult {
    * @return unresolved
   **/
   @Schema(description = "")
-  public Object getUnresolved() {
+  public List<LLMUnresolvedModel> getUnresolved() {
     return unresolved;
   }
 
-  public void setUnresolved(Object unresolved) {
+  public void setUnresolved(List<LLMUnresolvedModel> unresolved) {
     this.unresolved = unresolved;
   }
 

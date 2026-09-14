@@ -17,25 +17,37 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.sharepoint.model.SearchQuery;
+import gebo.microservices.api.client.sharepoint.model.SearchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SearchResultAnalisysOutcome
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class SearchResultAnalisysOutcome {
   @JsonProperty("searchQueries")
-  private Object searchQueries = null;
+  private List<SearchQuery> searchQueries = null;
 
   @JsonProperty("relatedResults")
-  private Object relatedResults = null;
+  private List<SearchResult> relatedResults = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
-  public SearchResultAnalisysOutcome searchQueries(Object searchQueries) {
+  public SearchResultAnalisysOutcome searchQueries(List<SearchQuery> searchQueries) {
     this.searchQueries = searchQueries;
+    return this;
+  }
+
+  public SearchResultAnalisysOutcome addSearchQueriesItem(SearchQuery searchQueriesItem) {
+    if (this.searchQueries == null) {
+      this.searchQueries = new ArrayList<>();
+    }
+    this.searchQueries.add(searchQueriesItem);
     return this;
   }
 
@@ -44,16 +56,24 @@ public class SearchResultAnalisysOutcome {
    * @return searchQueries
   **/
   @Schema(description = "")
-  public Object getSearchQueries() {
+  public List<SearchQuery> getSearchQueries() {
     return searchQueries;
   }
 
-  public void setSearchQueries(Object searchQueries) {
+  public void setSearchQueries(List<SearchQuery> searchQueries) {
     this.searchQueries = searchQueries;
   }
 
-  public SearchResultAnalisysOutcome relatedResults(Object relatedResults) {
+  public SearchResultAnalisysOutcome relatedResults(List<SearchResult> relatedResults) {
     this.relatedResults = relatedResults;
+    return this;
+  }
+
+  public SearchResultAnalisysOutcome addRelatedResultsItem(SearchResult relatedResultsItem) {
+    if (this.relatedResults == null) {
+      this.relatedResults = new ArrayList<>();
+    }
+    this.relatedResults.add(relatedResultsItem);
     return this;
   }
 
@@ -62,15 +82,15 @@ public class SearchResultAnalisysOutcome {
    * @return relatedResults
   **/
   @Schema(description = "")
-  public Object getRelatedResults() {
+  public List<SearchResult> getRelatedResults() {
     return relatedResults;
   }
 
-  public void setRelatedResults(Object relatedResults) {
+  public void setRelatedResults(List<SearchResult> relatedResults) {
     this.relatedResults = relatedResults;
   }
 
-  public SearchResultAnalisysOutcome empty(Object empty) {
+  public SearchResultAnalisysOutcome empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -80,11 +100,11 @@ public class SearchResultAnalisysOutcome {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 

@@ -19,59 +19,60 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GBedrockTranscriptModelChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GBedrockTranscriptModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GBedrockTranscriptModelConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("modelTypeCode")
-  private Object modelTypeCode = null;
+  private String modelTypeCode = null;
 
   @JsonProperty("defaultModel")
-  private Object defaultModel = null;
+  private Boolean defaultModel = null;
 
   @JsonProperty("apiSecretCode")
-  private Object apiSecretCode = null;
+  private String apiSecretCode = null;
 
   @JsonProperty("choosedModel")
   private GBedrockTranscriptModelChoice choosedModel = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("languageCode")
-  private Object languageCode = null;
+  private String languageCode = null;
 
   @JsonProperty("sampleRateHertz")
-  private Object sampleRateHertz = null;
+  private Integer sampleRateHertz = null;
 
   @JsonProperty("mediaEncoding")
-  private Object mediaEncoding = null;
+  private String mediaEncoding = null;
 
-  public GBedrockTranscriptModelConfig code(Object code) {
+  public GBedrockTranscriptModelConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -81,15 +82,15 @@ public class GBedrockTranscriptModelConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GBedrockTranscriptModelConfig description(Object description) {
+  public GBedrockTranscriptModelConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -99,15 +100,15 @@ public class GBedrockTranscriptModelConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GBedrockTranscriptModelConfig userModified(Object userModified) {
+  public GBedrockTranscriptModelConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -117,15 +118,15 @@ public class GBedrockTranscriptModelConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GBedrockTranscriptModelConfig userCreated(Object userCreated) {
+  public GBedrockTranscriptModelConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -135,15 +136,15 @@ public class GBedrockTranscriptModelConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GBedrockTranscriptModelConfig dateModified(Object dateModified) {
+  public GBedrockTranscriptModelConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -153,15 +154,15 @@ public class GBedrockTranscriptModelConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GBedrockTranscriptModelConfig dateCreated(Object dateCreated) {
+  public GBedrockTranscriptModelConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -171,15 +172,15 @@ public class GBedrockTranscriptModelConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GBedrockTranscriptModelConfig modelTypeCode(Object modelTypeCode) {
+  public GBedrockTranscriptModelConfig modelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
     return this;
   }
@@ -189,15 +190,15 @@ public class GBedrockTranscriptModelConfig {
    * @return modelTypeCode
   **/
   @Schema(description = "")
-  public Object getModelTypeCode() {
+  public String getModelTypeCode() {
     return modelTypeCode;
   }
 
-  public void setModelTypeCode(Object modelTypeCode) {
+  public void setModelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
   }
 
-  public GBedrockTranscriptModelConfig defaultModel(Object defaultModel) {
+  public GBedrockTranscriptModelConfig defaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
     return this;
   }
@@ -207,15 +208,15 @@ public class GBedrockTranscriptModelConfig {
    * @return defaultModel
   **/
   @Schema(description = "")
-  public Object getDefaultModel() {
+  public Boolean isDefaultModel() {
     return defaultModel;
   }
 
-  public void setDefaultModel(Object defaultModel) {
+  public void setDefaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
   }
 
-  public GBedrockTranscriptModelConfig apiSecretCode(Object apiSecretCode) {
+  public GBedrockTranscriptModelConfig apiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
     return this;
   }
@@ -225,11 +226,11 @@ public class GBedrockTranscriptModelConfig {
    * @return apiSecretCode
   **/
   @Schema(description = "")
-  public Object getApiSecretCode() {
+  public String getApiSecretCode() {
     return apiSecretCode;
   }
 
-  public void setApiSecretCode(Object apiSecretCode) {
+  public void setApiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
   }
 
@@ -251,7 +252,7 @@ public class GBedrockTranscriptModelConfig {
     this.choosedModel = choosedModel;
   }
 
-  public GBedrockTranscriptModelConfig baseUrl(Object baseUrl) {
+  public GBedrockTranscriptModelConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -261,15 +262,15 @@ public class GBedrockTranscriptModelConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public GBedrockTranscriptModelConfig contextLength(Object contextLength) {
+  public GBedrockTranscriptModelConfig contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -279,15 +280,15 @@ public class GBedrockTranscriptModelConfig {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
-  public GBedrockTranscriptModelConfig languageCode(Object languageCode) {
+  public GBedrockTranscriptModelConfig languageCode(String languageCode) {
     this.languageCode = languageCode;
     return this;
   }
@@ -297,15 +298,15 @@ public class GBedrockTranscriptModelConfig {
    * @return languageCode
   **/
   @Schema(description = "")
-  public Object getLanguageCode() {
+  public String getLanguageCode() {
     return languageCode;
   }
 
-  public void setLanguageCode(Object languageCode) {
+  public void setLanguageCode(String languageCode) {
     this.languageCode = languageCode;
   }
 
-  public GBedrockTranscriptModelConfig sampleRateHertz(Object sampleRateHertz) {
+  public GBedrockTranscriptModelConfig sampleRateHertz(Integer sampleRateHertz) {
     this.sampleRateHertz = sampleRateHertz;
     return this;
   }
@@ -315,15 +316,15 @@ public class GBedrockTranscriptModelConfig {
    * @return sampleRateHertz
   **/
   @Schema(description = "")
-  public Object getSampleRateHertz() {
+  public Integer getSampleRateHertz() {
     return sampleRateHertz;
   }
 
-  public void setSampleRateHertz(Object sampleRateHertz) {
+  public void setSampleRateHertz(Integer sampleRateHertz) {
     this.sampleRateHertz = sampleRateHertz;
   }
 
-  public GBedrockTranscriptModelConfig mediaEncoding(Object mediaEncoding) {
+  public GBedrockTranscriptModelConfig mediaEncoding(String mediaEncoding) {
     this.mediaEncoding = mediaEncoding;
     return this;
   }
@@ -333,11 +334,11 @@ public class GBedrockTranscriptModelConfig {
    * @return mediaEncoding
   **/
   @Schema(description = "")
-  public Object getMediaEncoding() {
+  public String getMediaEncoding() {
     return mediaEncoding;
   }
 
-  public void setMediaEncoding(Object mediaEncoding) {
+  public void setMediaEncoding(String mediaEncoding) {
     this.mediaEncoding = mediaEncoding;
   }
 

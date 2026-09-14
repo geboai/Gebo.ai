@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**completionChat** | **Object** |  |  [optional]
-**completionFim** | **Object** |  |  [optional]
-**functionCalling** | **Object** |  |  [optional]
-**fineTuning** | **Object** |  |  [optional]
-**vision** | **Object** |  |  [optional]
-**classification** | **Object** |  |  [optional]
+**completionChat** | **Boolean** |  |  [optional]
+**completionFim** | **Boolean** |  |  [optional]
+**functionCalling** | **Boolean** |  |  [optional]
+**fineTuning** | **Boolean** |  |  [optional]
+**vision** | **Boolean** |  |  [optional]
+**classification** | **Boolean** |  |  [optional]

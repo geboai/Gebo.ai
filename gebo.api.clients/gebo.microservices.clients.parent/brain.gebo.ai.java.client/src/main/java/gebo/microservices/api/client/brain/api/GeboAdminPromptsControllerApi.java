@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboAdminPromptsControllerApi {
     private ApiClient apiClient;
@@ -94,7 +94,7 @@ public class GeboAdminPromptsControllerApi {
      * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptTemplateConfig findPromptConfigByCode(Object code) throws RestClientException {
+    public GPromptTemplateConfig findPromptConfigByCode(String code) throws RestClientException {
         return findPromptConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -106,7 +106,7 @@ public class GeboAdminPromptsControllerApi {
      * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptTemplateConfig> findPromptConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> findPromptConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -135,10 +135,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getPromptCategories() throws RestClientException {
+    public List<String> getPromptCategories() throws RestClientException {
         return getPromptCategoriesWithHttpInfo().getBody();
     }
 
@@ -146,10 +146,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;String&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getPromptCategoriesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<String>> getPromptCategoriesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getPromptCategories").build().toUriString();
         
@@ -166,7 +166,7 @@ public class GeboAdminPromptsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

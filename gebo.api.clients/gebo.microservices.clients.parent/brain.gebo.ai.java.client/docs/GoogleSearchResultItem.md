@@ -3,10 +3,10 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**kind** | **Object** |  |  [optional]
-**title** | **Object** |  |  [optional]
-**htmlTitle** | **Object** |  |  [optional]
-**link** | **Object** |  |  [optional]
-**displayLink** | **Object** |  |  [optional]
-**snippet** | **Object** |  |  [optional]
-**htmlSnippet** | **Object** |  |  [optional]
+**kind** | **String** |  |  [optional]
+**title** | **String** |  |  [optional]
+**htmlTitle** | **String** |  |  [optional]
+**link** | **String** |  |  [optional]
+**displayLink** | **String** |  |  [optional]
+**snippet** | **String** |  |  [optional]
+**htmlSnippet** | **String** |  |  [optional]

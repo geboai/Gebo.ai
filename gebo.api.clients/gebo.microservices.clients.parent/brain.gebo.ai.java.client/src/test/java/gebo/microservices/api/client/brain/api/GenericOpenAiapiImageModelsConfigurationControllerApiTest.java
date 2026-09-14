@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIImageModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIImageModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIImageModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIImageModelChoice;
@@ -57,7 +58,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGenericOpenAIAPIImageModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GenericOpenAIAPIImageModelConfig response = api.findGenericOpenAIAPIImageModelConfigByCode(code);
 
         // TODO: test validations
@@ -87,7 +88,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAIImageModelConfigsTest() {
-        Object response = api.getGenericOpenAIImageModelConfigs();
+        List<GenericOpenAIAPIImageModelConfig> response = api.getGenericOpenAIImageModelConfigs();
 
         // TODO: test validations
     }
@@ -101,7 +102,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAIImageModelTypesTest() {
-        Object response = api.getGenericOpenAIImageModelTypes();
+        List<GenericOpenAIImageModelTypeConfig> response = api.getGenericOpenAIImageModelTypes();
 
         // TODO: test validations
     }

@@ -67,7 +67,7 @@ No authorization required
 
 <a name="restCreateCustomTemplateParamsMap"></a>
 # **restCreateCustomTemplateParamsMap**
-> Object restCreateCustomTemplateParamsMap(body)
+> Map&lt;String, Object&gt; restCreateCustomTemplateParamsMap(body)
 
 
 
@@ -81,7 +81,7 @@ No authorization required
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 CustomTemplateParamsRequestBody body = new CustomTemplateParamsRequestBody(); // CustomTemplateParamsRequestBody | 
 try {
-    Object result = apiInstance.restCreateCustomTemplateParamsMap(body);
+    Map<String, Object> result = apiInstance.restCreateCustomTemplateParamsMap(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restCreateCustomTemplateParamsMap");
@@ -97,7 +97,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**Map&lt;String, Object&gt;**
 
 ### Authorization
 
@@ -123,7 +123,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 JiraResultsExtractionData body = new JiraResultsExtractionData(); // JiraResultsExtractionData | 
-Object systemId = null; // Object | 
+String systemId = "systemId_example"; // String | 
 try {
     SearchResultAnalisysOutcome result = apiInstance.restExtractRelatedAnalisysReferences(body, systemId);
     System.out.println(result);
@@ -138,7 +138,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**JiraResultsExtractionData**](JiraResultsExtractionData.md)|  |
- **systemId** | [**Object**](.md)|  |
+ **systemId** | **String**|  |
 
 ### Return type
 
@@ -167,7 +167,7 @@ No authorization required
 
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
-Object systemId = null; // Object | 
+String systemId = "systemId_example"; // String | 
 try {
     SearchableSystemMetaData result = apiInstance.restFindSystemById(systemId);
     System.out.println(result);
@@ -181,7 +181,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemId** | [**Object**](.md)|  |
+ **systemId** | **String**|  |
 
 ### Return type
 
@@ -241,7 +241,7 @@ No authorization required
 
 <a name="restGetCachedCatalogues"></a>
 # **restGetCachedCatalogues**
-> Object restGetCachedCatalogues(systemConfigurationCode)
+> List&lt;CatalogueSample&gt; restGetCachedCatalogues(systemConfigurationCode)
 
 
 
@@ -253,9 +253,9 @@ No authorization required
 
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
-Object systemConfigurationCode = null; // Object | 
+String systemConfigurationCode = "systemConfigurationCode_example"; // String | 
 try {
-    Object result = apiInstance.restGetCachedCatalogues(systemConfigurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCachedCatalogues(systemConfigurationCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetCachedCatalogues");
@@ -267,11 +267,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemConfigurationCode** | [**Object**](.md)|  | [optional]
+ **systemConfigurationCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;CatalogueSample&gt;**](CatalogueSample.md)
 
 ### Authorization
 
@@ -284,7 +284,7 @@ No authorization required
 
 <a name="restGetCataloguesListSample"></a>
 # **restGetCataloguesListSample**
-> Object restGetCataloguesListSample(configurationCode)
+> List&lt;CatalogueSample&gt; restGetCataloguesListSample(configurationCode)
 
 
 
@@ -296,9 +296,9 @@ No authorization required
 
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
-Object configurationCode = null; // Object | 
+String configurationCode = "configurationCode_example"; // String | 
 try {
-    Object result = apiInstance.restGetCataloguesListSample(configurationCode);
+    List<CatalogueSample> result = apiInstance.restGetCataloguesListSample(configurationCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetCataloguesListSample");
@@ -310,11 +310,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **configurationCode** | [**Object**](.md)|  |
+ **configurationCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;CatalogueSample&gt;**](CatalogueSample.md)
 
 ### Authorization
 
@@ -327,7 +327,7 @@ No authorization required
 
 <a name="restGetDescription"></a>
 # **restGetDescription**
-> Object restGetDescription()
+> String restGetDescription()
 
 
 
@@ -340,7 +340,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restGetDescription();
+    String result = apiInstance.restGetDescription();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetDescription");
@@ -353,7 +353,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -366,7 +366,7 @@ No authorization required
 
 <a name="restGetId"></a>
 # **restGetId**
-> Object restGetId()
+> String restGetId()
 
 
 
@@ -379,7 +379,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restGetId();
+    String result = apiInstance.restGetId();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetId");
@@ -392,7 +392,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -405,7 +405,7 @@ No authorization required
 
 <a name="restGetMessagingModuleId"></a>
 # **restGetMessagingModuleId**
-> Object restGetMessagingModuleId()
+> String restGetMessagingModuleId()
 
 
 
@@ -418,7 +418,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restGetMessagingModuleId();
+    String result = apiInstance.restGetMessagingModuleId();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetMessagingModuleId");
@@ -431,7 +431,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -444,7 +444,7 @@ No authorization required
 
 <a name="restGetNativePromptTemplateUseCode"></a>
 # **restGetNativePromptTemplateUseCode**
-> Object restGetNativePromptTemplateUseCode()
+> String restGetNativePromptTemplateUseCode()
 
 
 
@@ -457,7 +457,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restGetNativePromptTemplateUseCode();
+    String result = apiInstance.restGetNativePromptTemplateUseCode();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetNativePromptTemplateUseCode");
@@ -470,7 +470,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -483,7 +483,7 @@ No authorization required
 
 <a name="restGetProductId"></a>
 # **restGetProductId**
-> Object restGetProductId()
+> String restGetProductId()
 
 
 
@@ -496,7 +496,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restGetProductId();
+    String result = apiInstance.restGetProductId();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetProductId");
@@ -509,7 +509,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -522,7 +522,7 @@ No authorization required
 
 <a name="restGetQueriesGenerationPromptUseCode"></a>
 # **restGetQueriesGenerationPromptUseCode**
-> Object restGetQueriesGenerationPromptUseCode()
+> String restGetQueriesGenerationPromptUseCode()
 
 
 
@@ -535,7 +535,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restGetQueriesGenerationPromptUseCode();
+    String result = apiInstance.restGetQueriesGenerationPromptUseCode();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetQueriesGenerationPromptUseCode");
@@ -548,7 +548,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -561,7 +561,7 @@ No authorization required
 
 <a name="restGetSearchableSystems"></a>
 # **restGetSearchableSystems**
-> Object restGetSearchableSystems()
+> List&lt;SearchableSystemMetaData&gt; restGetSearchableSystems()
 
 
 
@@ -574,7 +574,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restGetSearchableSystems();
+    List<SearchableSystemMetaData> result = apiInstance.restGetSearchableSystems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restGetSearchableSystems");
@@ -587,7 +587,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;SearchableSystemMetaData&gt;**](SearchableSystemMetaData.md)
 
 ### Authorization
 
@@ -600,7 +600,7 @@ No authorization required
 
 <a name="restIsEnabled"></a>
 # **restIsEnabled**
-> Object restIsEnabled()
+> Boolean restIsEnabled()
 
 
 
@@ -613,7 +613,7 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 try {
-    Object result = apiInstance.restIsEnabled();
+    Boolean result = apiInstance.restIsEnabled();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restIsEnabled");
@@ -626,7 +626,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 
@@ -639,7 +639,7 @@ No authorization required
 
 <a name="restNativeSearch"></a>
 # **restNativeSearch**
-> Object restNativeSearch(body, systemId, nEntryLimit)
+> List&lt;SearchResult&gt; restNativeSearch(body, systemId, nEntryLimit)
 
 
 
@@ -652,10 +652,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 JiraIssuesSearchFilter body = new JiraIssuesSearchFilter(); // JiraIssuesSearchFilter | 
-Object systemId = null; // Object | 
-Object nEntryLimit = null; // Object | 
+String systemId = "systemId_example"; // String | 
+Integer nEntryLimit = 56; // Integer | 
 try {
-    Object result = apiInstance.restNativeSearch(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restNativeSearch(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restNativeSearch");
@@ -668,12 +668,12 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**JiraIssuesSearchFilter**](JiraIssuesSearchFilter.md)|  |
- **systemId** | [**Object**](.md)|  |
- **nEntryLimit** | [**Object**](.md)|  |
+ **systemId** | **String**|  |
+ **nEntryLimit** | **Integer**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;SearchResult&gt;**](SearchResult.md)
 
 ### Authorization
 
@@ -686,7 +686,7 @@ No authorization required
 
 <a name="restSearch"></a>
 # **restSearch**
-> Object restSearch(body, systemId, nEntryLimit)
+> List&lt;SearchResult&gt; restSearch(body, systemId, nEntryLimit)
 
 
 
@@ -699,10 +699,10 @@ No authorization required
 
 JiraSearchServiceControllerApi apiInstance = new JiraSearchServiceControllerApi();
 SearchQuery body = new SearchQuery(); // SearchQuery | 
-Object systemId = null; // Object | 
-Object nEntryLimit = null; // Object | 
+String systemId = "systemId_example"; // String | 
+Integer nEntryLimit = 56; // Integer | 
 try {
-    Object result = apiInstance.restSearch(body, systemId, nEntryLimit);
+    List<SearchResult> result = apiInstance.restSearch(body, systemId, nEntryLimit);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling JiraSearchServiceControllerApi#restSearch");
@@ -715,12 +715,12 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**SearchQuery**](SearchQuery.md)|  |
- **systemId** | [**Object**](.md)|  |
- **nEntryLimit** | [**Object**](.md)|  |
+ **systemId** | **String**|  |
+ **nEntryLimit** | **Integer**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;SearchResult&gt;**](SearchResult.md)
 
 ### Authorization
 

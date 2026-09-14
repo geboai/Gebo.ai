@@ -21,6 +21,7 @@ import { BrowseParam } from '../model/browseParam';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
+import { VFilesystemReference } from '../model/vFilesystemReference';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -112,10 +113,10 @@ export class FileSystemsBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSharedFilesystemNavigationStatus(body: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
-    public getSharedFilesystemNavigationStatus(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getSharedFilesystemNavigationStatus(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getSharedFilesystemNavigationStatus(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSharedFilesystemNavigationStatus(body: Array<VFilesystemReference>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
+    public getSharedFilesystemNavigationStatus(body: Array<VFilesystemReference>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getSharedFilesystemNavigationStatus(body: Array<VFilesystemReference>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getSharedFilesystemNavigationStatus(body: Array<VFilesystemReference>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getSharedFilesystemNavigationStatus.');

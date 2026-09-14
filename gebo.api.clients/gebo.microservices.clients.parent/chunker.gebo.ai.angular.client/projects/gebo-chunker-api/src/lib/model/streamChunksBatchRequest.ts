@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { ChunkingParams } from './chunkingParams';
+import { IGComponentOriginatedDocument } from './iGComponentOriginatedDocument';
 
 export interface StreamChunksBatchRequest { 
-    documents?: any;
+    documents?: Array<IGComponentOriginatedDocument>;
     chunkingSpecs?: ChunkingParams;
-    chunkSessionId?: any;
-    docConcurrency?: any;
+    chunkSessionId?: string;
+    docConcurrency?: number;
 }

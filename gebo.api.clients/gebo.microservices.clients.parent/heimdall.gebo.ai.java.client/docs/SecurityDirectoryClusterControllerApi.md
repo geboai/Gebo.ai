@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 <a name="checkPassword"></a>
 # **checkPassword**
-> Object checkPassword(body)
+> Boolean checkPassword(body)
 
 
 
@@ -26,7 +26,7 @@ Method | HTTP request | Description
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
 CheckPasswordRequest body = new CheckPasswordRequest(); // CheckPasswordRequest | 
 try {
-    Object result = apiInstance.checkPassword(body);
+    Boolean result = apiInstance.checkPassword(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecurityDirectoryClusterControllerApi#checkPassword");
@@ -42,7 +42,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 
@@ -98,7 +98,7 @@ No authorization required
 
 <a name="findAllGroups"></a>
 # **findAllGroups**
-> Object findAllGroups()
+> List&lt;UsersGroup&gt; findAllGroups()
 
 
 
@@ -111,7 +111,7 @@ No authorization required
 
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
 try {
-    Object result = apiInstance.findAllGroups();
+    List<UsersGroup> result = apiInstance.findAllGroups();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecurityDirectoryClusterControllerApi#findAllGroups");
@@ -124,7 +124,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UsersGroup&gt;**](UsersGroup.md)
 
 ### Authorization
 
@@ -137,7 +137,7 @@ No authorization required
 
 <a name="findGroupsOfUser"></a>
 # **findGroupsOfUser**
-> Object findGroupsOfUser(username)
+> List&lt;UsersGroup&gt; findGroupsOfUser(username)
 
 
 
@@ -149,9 +149,9 @@ No authorization required
 
 
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
-Object username = null; // Object | 
+String username = "username_example"; // String | 
 try {
-    Object result = apiInstance.findGroupsOfUser(username);
+    List<UsersGroup> result = apiInstance.findGroupsOfUser(username);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SecurityDirectoryClusterControllerApi#findGroupsOfUser");
@@ -163,11 +163,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **username** | [**Object**](.md)|  |
+ **username** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;UsersGroup&gt;**](UsersGroup.md)
 
 ### Authorization
 
@@ -192,7 +192,7 @@ No authorization required
 
 
 SecurityDirectoryClusterControllerApi apiInstance = new SecurityDirectoryClusterControllerApi();
-Object username = null; // Object | 
+String username = "username_example"; // String | 
 try {
     UserInfosImpl result = apiInstance.findUserByUsername(username);
     System.out.println(result);
@@ -206,7 +206,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **username** | [**Object**](.md)|  |
+ **username** | **String**|  |
 
 ### Return type
 

@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DocumentChunk } from './documentChunk';
 
 export interface DocumentChunksSet { 
-    id?: any;
-    totalTokens?: any;
-    totalBytes?: any;
-    chunks?: any;
-    chunkingSessionId?: any;
+    id?: string;
+    totalTokens?: number;
+    totalBytes?: number;
+    chunks?: Array<DocumentChunk>;
+    chunkingSessionId?: string;
 }

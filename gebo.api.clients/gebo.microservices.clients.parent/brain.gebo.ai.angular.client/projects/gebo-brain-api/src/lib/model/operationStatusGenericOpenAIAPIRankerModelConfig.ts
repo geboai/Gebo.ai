@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
 import { GenericOpenAIAPIRankerModelConfig } from './genericOpenAIAPIRankerModelConfig';
 
 export interface OperationStatusGenericOpenAIAPIRankerModelConfig { 
     result?: GenericOpenAIAPIRankerModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

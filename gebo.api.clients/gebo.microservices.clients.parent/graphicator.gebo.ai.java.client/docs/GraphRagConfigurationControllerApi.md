@@ -70,7 +70,7 @@ No authorization required
 
 
 GraphRagConfigurationControllerApi apiInstance = new GraphRagConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GraphRagExtractionConfig result = apiInstance.findGraphRagExtractionConfigByCode(code);
     System.out.println(result);
@@ -84,7 +84,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -101,7 +101,7 @@ No authorization required
 
 <a name="findGraphRagExtractionConfigByKnowledgeBase"></a>
 # **findGraphRagExtractionConfigByKnowledgeBase**
-> Object findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode)
+> List&lt;GraphRagExtractionConfig&gt; findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode)
 
 
 
@@ -113,9 +113,9 @@ No authorization required
 
 
 GraphRagConfigurationControllerApi apiInstance = new GraphRagConfigurationControllerApi();
-Object knowledgeBaseCode = null; // Object | 
+String knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
 try {
-    Object result = apiInstance.findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode);
+    List<GraphRagExtractionConfig> result = apiInstance.findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GraphRagConfigurationControllerApi#findGraphRagExtractionConfigByKnowledgeBase");
@@ -127,11 +127,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  |
+ **knowledgeBaseCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GraphRagExtractionConfig&gt;**](GraphRagExtractionConfig.md)
 
 ### Authorization
 
@@ -144,7 +144,7 @@ No authorization required
 
 <a name="findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode"></a>
 # **findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode**
-> Object findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode, projectCode)
+> List&lt;GraphRagExtractionConfig&gt; findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode, projectCode)
 
 
 
@@ -156,10 +156,10 @@ No authorization required
 
 
 GraphRagConfigurationControllerApi apiInstance = new GraphRagConfigurationControllerApi();
-Object knowledgeBaseCode = null; // Object | 
-Object projectCode = null; // Object | 
+String knowledgeBaseCode = "knowledgeBaseCode_example"; // String | 
+String projectCode = "projectCode_example"; // String | 
 try {
-    Object result = apiInstance.findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode, projectCode);
+    List<GraphRagExtractionConfig> result = apiInstance.findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode, projectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GraphRagConfigurationControllerApi#findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode");
@@ -171,12 +171,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **knowledgeBaseCode** | [**Object**](.md)|  |
- **projectCode** | [**Object**](.md)|  |
+ **knowledgeBaseCode** | **String**|  |
+ **projectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GraphRagExtractionConfig&gt;**](GraphRagExtractionConfig.md)
 
 ### Authorization
 
@@ -189,7 +189,7 @@ No authorization required
 
 <a name="findGraphRagExtractionConfigByProjectEndpointGObjectRef"></a>
 # **findGraphRagExtractionConfigByProjectEndpointGObjectRef**
-> Object findGraphRagExtractionConfigByProjectEndpointGObjectRef(body)
+> List&lt;GraphRagExtractionConfig&gt; findGraphRagExtractionConfigByProjectEndpointGObjectRef(body)
 
 
 
@@ -203,7 +203,7 @@ No authorization required
 GraphRagConfigurationControllerApi apiInstance = new GraphRagConfigurationControllerApi();
 GObjectRefGProjectEndpoint body = new GObjectRefGProjectEndpoint(); // GObjectRefGProjectEndpoint | 
 try {
-    Object result = apiInstance.findGraphRagExtractionConfigByProjectEndpointGObjectRef(body);
+    List<GraphRagExtractionConfig> result = apiInstance.findGraphRagExtractionConfigByProjectEndpointGObjectRef(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GraphRagConfigurationControllerApi#findGraphRagExtractionConfigByProjectEndpointGObjectRef");
@@ -219,7 +219,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GraphRagExtractionConfig&gt;**](GraphRagExtractionConfig.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ No authorization required
 
 <a name="getDefaultGraphRagExtractionConfig"></a>
 # **getDefaultGraphRagExtractionConfig**
-> Object getDefaultGraphRagExtractionConfig()
+> List&lt;GraphRagExtractionConfig&gt; getDefaultGraphRagExtractionConfig()
 
 
 
@@ -245,7 +245,7 @@ No authorization required
 
 GraphRagConfigurationControllerApi apiInstance = new GraphRagConfigurationControllerApi();
 try {
-    Object result = apiInstance.getDefaultGraphRagExtractionConfig();
+    List<GraphRagExtractionConfig> result = apiInstance.getDefaultGraphRagExtractionConfig();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GraphRagConfigurationControllerApi#getDefaultGraphRagExtractionConfig");
@@ -258,7 +258,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GraphRagExtractionConfig&gt;**](GraphRagExtractionConfig.md)
 
 ### Authorization
 
@@ -283,7 +283,7 @@ No authorization required
 
 
 GraphRagConfigurationControllerApi apiInstance = new GraphRagConfigurationControllerApi();
-Object format = null; // Object | 
+String format = "format_example"; // String | 
 try {
     GraphRagExtractionConfig result = apiInstance.getSystemGraphRagExtractionConfig(format);
     System.out.println(result);
@@ -297,7 +297,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **format** | [**Object**](.md)|  |
+ **format** | **String**|  | [enum: JSON, CSV]
 
 ### Return type
 

@@ -9,15 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { LLMSSetupConfiguration } from './lLMSSetupConfiguration';
 
 export interface LLMSSetupConfigurationData { 
-    configurations?: any;
-    canRunAutoconfigure?: any;
-    embeddingModelExists?: any;
-    defaultChatModelExists?: any;
-    internalServicesChatModelExists?: any;
-    rankerModelExists?: any;
-    imagesModelExists?: any;
-    ttsModelExists?: any;
-    transcriptModelExists?: any;
+    configurations?: Array<LLMSSetupConfiguration>;
+    canRunAutoconfigure?: boolean;
+    embeddingModelExists?: boolean;
+    defaultChatModelExists?: boolean;
+    internalServicesChatModelExists?: boolean;
+    rankerModelExists?: boolean;
+    imagesModelExists?: boolean;
+    ttsModelExists?: boolean;
+    transcriptModelExists?: boolean;
 }

@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:25.000010563+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class GoogleDriveSystemsControllerApi {
     private ApiClient apiClient;
@@ -184,10 +184,10 @@ public class GoogleDriveSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GGoogleDriveProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGoogleDriveEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GGoogleDriveProjectEndpoint> findGoogleDriveEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findGoogleDriveEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -196,10 +196,10 @@ public class GoogleDriveSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGoogleDriveProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGoogleDriveEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GGoogleDriveProjectEndpoint>> findGoogleDriveEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
@@ -221,7 +221,7 @@ public class GoogleDriveSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GGoogleDriveProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GGoogleDriveProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -229,10 +229,10 @@ public class GoogleDriveSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GGoogleDriveProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGoogleDriveEndpointsByQbe(GGoogleDriveProjectEndpoint body) throws RestClientException {
+    public List<GGoogleDriveProjectEndpoint> findGoogleDriveEndpointsByQbe(GGoogleDriveProjectEndpoint body) throws RestClientException {
         return findGoogleDriveEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -241,10 +241,10 @@ public class GoogleDriveSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGoogleDriveProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGoogleDriveEndpointsByQbeWithHttpInfo(GGoogleDriveProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GGoogleDriveProjectEndpoint>> findGoogleDriveEndpointsByQbeWithHttpInfo(GGoogleDriveProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -267,7 +267,7 @@ public class GoogleDriveSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GGoogleDriveProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GGoogleDriveProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -278,7 +278,7 @@ public class GoogleDriveSystemsControllerApi {
      * @return GGoogleDriveProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GGoogleDriveProjectEndpoint findGoogleDriveProjectEndpointByCode(Object code) throws RestClientException {
+    public GGoogleDriveProjectEndpoint findGoogleDriveProjectEndpointByCode(String code) throws RestClientException {
         return findGoogleDriveProjectEndpointByCodeWithHttpInfo(code).getBody();
     }
 
@@ -290,7 +290,7 @@ public class GoogleDriveSystemsControllerApi {
      * @return ResponseEntity&lt;GGoogleDriveProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GGoogleDriveProjectEndpoint> findGoogleDriveProjectEndpointByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GGoogleDriveProjectEndpoint> findGoogleDriveProjectEndpointByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -323,7 +323,7 @@ public class GoogleDriveSystemsControllerApi {
      * @return GGoogleDriveSystem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GGoogleDriveSystem findGoogleDriveSystemByCode(Object code) throws RestClientException {
+    public GGoogleDriveSystem findGoogleDriveSystemByCode(String code) throws RestClientException {
         return findGoogleDriveSystemByCodeWithHttpInfo(code).getBody();
     }
 
@@ -335,7 +335,7 @@ public class GoogleDriveSystemsControllerApi {
      * @return ResponseEntity&lt;GGoogleDriveSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GGoogleDriveSystem> findGoogleDriveSystemByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GGoogleDriveSystem> findGoogleDriveSystemByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -402,10 +402,10 @@ public class GoogleDriveSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GGoogleDriveSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGoogleDriveSystems() throws RestClientException {
+    public List<GGoogleDriveSystem> getGoogleDriveSystems() throws RestClientException {
         return getGoogleDriveSystemsWithHttpInfo().getBody();
     }
 
@@ -413,10 +413,10 @@ public class GoogleDriveSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGoogleDriveSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGoogleDriveSystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GGoogleDriveSystem>> getGoogleDriveSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GoogleDriveSystemsController/getGoogleDriveSystems").build().toUriString();
         
@@ -433,7 +433,7 @@ public class GoogleDriveSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GGoogleDriveSystem>> returnType = new ParameterizedTypeReference<List<GGoogleDriveSystem>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

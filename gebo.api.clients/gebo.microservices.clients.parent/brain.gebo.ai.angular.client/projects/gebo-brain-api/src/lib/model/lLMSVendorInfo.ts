@@ -11,17 +11,43 @@
  */
 
 export interface LLMSVendorInfo { 
-    vendorId: any;
-    requiresCustomUrl?: any;
-    defaultCustomUrl?: any;
-    requiresApiKey?: any;
-    secretType?: any;
-    authProvider?: any;
-    description: any;
-    name: any;
-    webSite: any;
-    acquireKeyUrl?: any;
-    apiKeySecretContext: any;
-    minContextWindow?: any;
-    supportsAutoconfig?: any;
+    vendorId: string;
+    requiresCustomUrl?: boolean;
+    defaultCustomUrl?: string;
+    requiresApiKey?: boolean;
+    secretType?: LLMSVendorInfo.SecretTypeEnum;
+    authProvider?: LLMSVendorInfo.AuthProviderEnum;
+    description: string;
+    name: string;
+    webSite: string;
+    acquireKeyUrl?: string;
+    apiKeySecretContext: string;
+    minContextWindow?: number;
+    supportsAutoconfig?: boolean;
+}
+export namespace LLMSVendorInfo {
+    export type SecretTypeEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT' | 'AWS_CONNECTION';
+    export const SecretTypeEnum = {
+        USERNAMEPASSWORD: 'USERNAME_PASSWORD' as SecretTypeEnum,
+        TOKEN: 'TOKEN' as SecretTypeEnum,
+        SSHKEY: 'SSH_KEY' as SecretTypeEnum,
+        CUSTOMSECRET: 'CUSTOM_SECRET' as SecretTypeEnum,
+        OAUTH2STANDARD: 'OAUTH2_STANDARD' as SecretTypeEnum,
+        OAUTH2GOOGLE: 'OAUTH2_GOOGLE' as SecretTypeEnum,
+        GOOGLECLOUDJSONCREDENTIALS: 'GOOGLE_CLOUD_JSON_CREDENTIALS' as SecretTypeEnum,
+        OAUTH2AUTHORIZEDCLIENT: 'OAUTH2_AUTHORIZED_CLIENT' as SecretTypeEnum,
+        AWSCONNECTION: 'AWS_CONNECTION' as SecretTypeEnum
+    };
+    export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'aws_identity_center' | 'keycloak' | 'oauth2_generic' | 'ldap';
+    export const AuthProviderEnum = {
+        Local: 'local' as AuthProviderEnum,
+        Google: 'google' as AuthProviderEnum,
+        Microsoft: 'microsoft' as AuthProviderEnum,
+        MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
+        AwsCognito: 'aws_cognito' as AuthProviderEnum,
+        AwsIdentityCenter: 'aws_identity_center' as AuthProviderEnum,
+        Keycloak: 'keycloak' as AuthProviderEnum,
+        Oauth2Generic: 'oauth2_generic' as AuthProviderEnum,
+        Ldap: 'ldap' as AuthProviderEnum
+    };
 }

@@ -12,19 +12,19 @@
 import { OptimizedThreashold } from './optimizedThreashold';
 
 export interface ThreasholdAutotuneProcessResult { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
     threasholds?: OptimizedThreashold;
-    rootKnowledgeBase?: any;
-    vectorStoreId?: any;
-    embeddingModelCode?: any;
-    vectorStoreVectorizedCount?: any;
-    evaluationPoints?: any;
-    score?: any;
-    processedDateTime?: any;
-    computedElements?: any;
+    rootKnowledgeBase?: string;
+    vectorStoreId?: string;
+    embeddingModelCode?: string;
+    vectorStoreVectorizedCount?: number;
+    evaluationPoints?: number;
+    score?: number;
+    processedDateTime?: Date;
+    computedElements?: Array<{ [key: string]: any; }>;
 }

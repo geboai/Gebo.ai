@@ -17,143 +17,180 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.sharepoint.model.GDocumentAttributeValue;
 import gebo.microservices.api.client.sharepoint.model.GObjectRefGProjectEndpoint;
 import gebo.microservices.api.client.sharepoint.model.GeboComponentInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GDocumentReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class GDocumentReference {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("version")
-  private Object version = null;
+  private String version = null;
 
   @JsonProperty("parentVirtualFolderCode")
-  private Object parentVirtualFolderCode = null;
+  private String parentVirtualFolderCode = null;
 
   @JsonProperty("absolutePath")
-  private Object absolutePath = null;
+  private String absolutePath = null;
 
   @JsonProperty("parentProjectCode")
-  private Object parentProjectCode = null;
+  private String parentProjectCode = null;
 
   @JsonProperty("rootKnowledgebaseCode")
-  private Object rootKnowledgebaseCode = null;
+  private String rootKnowledgebaseCode = null;
 
   @JsonProperty("uri")
-  private Object uri = null;
+  private String uri = null;
 
   @JsonProperty("relativePath")
-  private Object relativePath = null;
+  private String relativePath = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("deleted")
-  private Object deleted = null;
+  private Boolean deleted = null;
 
   @JsonProperty("messagingModuleId")
-  private Object messagingModuleId = null;
+  private String messagingModuleId = null;
 
   @JsonProperty("projectEndpointReference")
   private GObjectRefGProjectEndpoint projectEndpointReference = null;
 
   @JsonProperty("nestedInArchive")
-  private Object nestedInArchive = null;
+  private Boolean nestedInArchive = null;
 
   @JsonProperty("absoluteArchivePath")
-  private Object absoluteArchivePath = null;
+  private String absoluteArchivePath = null;
 
   @JsonProperty("archiveInternalPath")
-  private Object archiveInternalPath = null;
+  private String archiveInternalPath = null;
 
   @JsonProperty("customMetaInfos")
-  private Object customMetaInfos = null;
+  private Map<String, Object> customMetaInfos = null;
 
   @JsonProperty("lastesJobId")
-  private Object lastesJobId = null;
+  private String lastesJobId = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("extIntegrationCode")
-  private Object extIntegrationCode = null;
+  private String extIntegrationCode = null;
 
   @JsonProperty("synchronizationUUID")
-  private Object synchronizationUUID = null;
+  private String synchronizationUUID = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("geboFileArchetypeId")
-  private Object geboFileArchetypeId = null;
+  private String geboFileArchetypeId = null;
 
   @JsonProperty("fileSize")
-  private Object fileSize = null;
+  private Long fileSize = null;
 
   @JsonProperty("unmanagedContentType")
-  private Object unmanagedContentType = null;
+  private Boolean unmanagedContentType = null;
 
-  @JsonProperty("referenceType")
-  private Object referenceType = null;
+  /**
+   * Gets or Sets referenceType
+   */
+  public enum ReferenceTypeEnum {
+    FILE("FILE"),
+    WEB("WEB");
+
+    private String value;
+
+    ReferenceTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ReferenceTypeEnum fromValue(String input) {
+      for (ReferenceTypeEnum b : ReferenceTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("referenceType")
+  private ReferenceTypeEnum referenceType = null;
 
   @JsonProperty("skippedVectorizationContent")
-  private Object skippedVectorizationContent = null;
+  private Boolean skippedVectorizationContent = null;
 
   @JsonProperty("artificiallyGeneratedContent")
-  private Object artificiallyGeneratedContent = null;
+  private String artificiallyGeneratedContent = null;
 
   @JsonProperty("originComponent")
   private GeboComponentInfo originComponent = null;
 
   @JsonProperty("attributesValues")
-  private Object attributesValues = null;
+  private List<GDocumentAttributeValue> attributesValues = null;
 
   @JsonProperty("langCode")
-  private Object langCode = null;
+  private String langCode = null;
 
   @JsonProperty("translationOfDocumentCode")
-  private Object translationOfDocumentCode = null;
+  private String translationOfDocumentCode = null;
 
   @JsonProperty("categoryCodes")
-  private Object categoryCodes = null;
+  private List<String> categoryCodes = null;
 
   @JsonProperty("publishedDate")
-  private Object publishedDate = null;
+  private Date publishedDate = null;
 
   @JsonProperty("author")
-  private Object author = null;
+  private String author = null;
 
-  public GDocumentReference code(Object code) {
+  public GDocumentReference code(String code) {
     this.code = code;
     return this;
   }
@@ -163,15 +200,15 @@ public class GDocumentReference {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GDocumentReference description(Object description) {
+  public GDocumentReference description(String description) {
     this.description = description;
     return this;
   }
@@ -181,15 +218,15 @@ public class GDocumentReference {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GDocumentReference userModified(Object userModified) {
+  public GDocumentReference userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -199,15 +236,15 @@ public class GDocumentReference {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GDocumentReference userCreated(Object userCreated) {
+  public GDocumentReference userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -217,15 +254,15 @@ public class GDocumentReference {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GDocumentReference dateModified(Object dateModified) {
+  public GDocumentReference dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -235,15 +272,15 @@ public class GDocumentReference {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GDocumentReference dateCreated(Object dateCreated) {
+  public GDocumentReference dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -253,15 +290,15 @@ public class GDocumentReference {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GDocumentReference creationDate(Object creationDate) {
+  public GDocumentReference creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -271,15 +308,15 @@ public class GDocumentReference {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public GDocumentReference modificationDate(Object modificationDate) {
+  public GDocumentReference modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -289,15 +326,15 @@ public class GDocumentReference {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public GDocumentReference version(Object version) {
+  public GDocumentReference version(String version) {
     this.version = version;
     return this;
   }
@@ -307,15 +344,15 @@ public class GDocumentReference {
    * @return version
   **/
   @Schema(description = "")
-  public Object getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(Object version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
-  public GDocumentReference parentVirtualFolderCode(Object parentVirtualFolderCode) {
+  public GDocumentReference parentVirtualFolderCode(String parentVirtualFolderCode) {
     this.parentVirtualFolderCode = parentVirtualFolderCode;
     return this;
   }
@@ -325,15 +362,15 @@ public class GDocumentReference {
    * @return parentVirtualFolderCode
   **/
   @Schema(description = "")
-  public Object getParentVirtualFolderCode() {
+  public String getParentVirtualFolderCode() {
     return parentVirtualFolderCode;
   }
 
-  public void setParentVirtualFolderCode(Object parentVirtualFolderCode) {
+  public void setParentVirtualFolderCode(String parentVirtualFolderCode) {
     this.parentVirtualFolderCode = parentVirtualFolderCode;
   }
 
-  public GDocumentReference absolutePath(Object absolutePath) {
+  public GDocumentReference absolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
     return this;
   }
@@ -343,15 +380,15 @@ public class GDocumentReference {
    * @return absolutePath
   **/
   @Schema(description = "")
-  public Object getAbsolutePath() {
+  public String getAbsolutePath() {
     return absolutePath;
   }
 
-  public void setAbsolutePath(Object absolutePath) {
+  public void setAbsolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
   }
 
-  public GDocumentReference parentProjectCode(Object parentProjectCode) {
+  public GDocumentReference parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -361,15 +398,15 @@ public class GDocumentReference {
    * @return parentProjectCode
   **/
   @Schema(description = "")
-  public Object getParentProjectCode() {
+  public String getParentProjectCode() {
     return parentProjectCode;
   }
 
-  public void setParentProjectCode(Object parentProjectCode) {
+  public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
   }
 
-  public GDocumentReference rootKnowledgebaseCode(Object rootKnowledgebaseCode) {
+  public GDocumentReference rootKnowledgebaseCode(String rootKnowledgebaseCode) {
     this.rootKnowledgebaseCode = rootKnowledgebaseCode;
     return this;
   }
@@ -379,15 +416,15 @@ public class GDocumentReference {
    * @return rootKnowledgebaseCode
   **/
   @Schema(description = "")
-  public Object getRootKnowledgebaseCode() {
+  public String getRootKnowledgebaseCode() {
     return rootKnowledgebaseCode;
   }
 
-  public void setRootKnowledgebaseCode(Object rootKnowledgebaseCode) {
+  public void setRootKnowledgebaseCode(String rootKnowledgebaseCode) {
     this.rootKnowledgebaseCode = rootKnowledgebaseCode;
   }
 
-  public GDocumentReference uri(Object uri) {
+  public GDocumentReference uri(String uri) {
     this.uri = uri;
     return this;
   }
@@ -397,15 +434,15 @@ public class GDocumentReference {
    * @return uri
   **/
   @Schema(description = "")
-  public Object getUri() {
+  public String getUri() {
     return uri;
   }
 
-  public void setUri(Object uri) {
+  public void setUri(String uri) {
     this.uri = uri;
   }
 
-  public GDocumentReference relativePath(Object relativePath) {
+  public GDocumentReference relativePath(String relativePath) {
     this.relativePath = relativePath;
     return this;
   }
@@ -415,15 +452,15 @@ public class GDocumentReference {
    * @return relativePath
   **/
   @Schema(description = "")
-  public Object getRelativePath() {
+  public String getRelativePath() {
     return relativePath;
   }
 
-  public void setRelativePath(Object relativePath) {
+  public void setRelativePath(String relativePath) {
     this.relativePath = relativePath;
   }
 
-  public GDocumentReference name(Object name) {
+  public GDocumentReference name(String name) {
     this.name = name;
     return this;
   }
@@ -433,15 +470,15 @@ public class GDocumentReference {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public GDocumentReference deleted(Object deleted) {
+  public GDocumentReference deleted(Boolean deleted) {
     this.deleted = deleted;
     return this;
   }
@@ -451,15 +488,15 @@ public class GDocumentReference {
    * @return deleted
   **/
   @Schema(description = "")
-  public Object getDeleted() {
+  public Boolean isDeleted() {
     return deleted;
   }
 
-  public void setDeleted(Object deleted) {
+  public void setDeleted(Boolean deleted) {
     this.deleted = deleted;
   }
 
-  public GDocumentReference messagingModuleId(Object messagingModuleId) {
+  public GDocumentReference messagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
     return this;
   }
@@ -469,11 +506,11 @@ public class GDocumentReference {
    * @return messagingModuleId
   **/
   @Schema(description = "")
-  public Object getMessagingModuleId() {
+  public String getMessagingModuleId() {
     return messagingModuleId;
   }
 
-  public void setMessagingModuleId(Object messagingModuleId) {
+  public void setMessagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
   }
 
@@ -495,7 +532,7 @@ public class GDocumentReference {
     this.projectEndpointReference = projectEndpointReference;
   }
 
-  public GDocumentReference nestedInArchive(Object nestedInArchive) {
+  public GDocumentReference nestedInArchive(Boolean nestedInArchive) {
     this.nestedInArchive = nestedInArchive;
     return this;
   }
@@ -505,15 +542,15 @@ public class GDocumentReference {
    * @return nestedInArchive
   **/
   @Schema(description = "")
-  public Object getNestedInArchive() {
+  public Boolean isNestedInArchive() {
     return nestedInArchive;
   }
 
-  public void setNestedInArchive(Object nestedInArchive) {
+  public void setNestedInArchive(Boolean nestedInArchive) {
     this.nestedInArchive = nestedInArchive;
   }
 
-  public GDocumentReference absoluteArchivePath(Object absoluteArchivePath) {
+  public GDocumentReference absoluteArchivePath(String absoluteArchivePath) {
     this.absoluteArchivePath = absoluteArchivePath;
     return this;
   }
@@ -523,15 +560,15 @@ public class GDocumentReference {
    * @return absoluteArchivePath
   **/
   @Schema(description = "")
-  public Object getAbsoluteArchivePath() {
+  public String getAbsoluteArchivePath() {
     return absoluteArchivePath;
   }
 
-  public void setAbsoluteArchivePath(Object absoluteArchivePath) {
+  public void setAbsoluteArchivePath(String absoluteArchivePath) {
     this.absoluteArchivePath = absoluteArchivePath;
   }
 
-  public GDocumentReference archiveInternalPath(Object archiveInternalPath) {
+  public GDocumentReference archiveInternalPath(String archiveInternalPath) {
     this.archiveInternalPath = archiveInternalPath;
     return this;
   }
@@ -541,16 +578,24 @@ public class GDocumentReference {
    * @return archiveInternalPath
   **/
   @Schema(description = "")
-  public Object getArchiveInternalPath() {
+  public String getArchiveInternalPath() {
     return archiveInternalPath;
   }
 
-  public void setArchiveInternalPath(Object archiveInternalPath) {
+  public void setArchiveInternalPath(String archiveInternalPath) {
     this.archiveInternalPath = archiveInternalPath;
   }
 
-  public GDocumentReference customMetaInfos(Object customMetaInfos) {
+  public GDocumentReference customMetaInfos(Map<String, Object> customMetaInfos) {
     this.customMetaInfos = customMetaInfos;
+    return this;
+  }
+
+  public GDocumentReference putCustomMetaInfosItem(String key, Object customMetaInfosItem) {
+    if (this.customMetaInfos == null) {
+      this.customMetaInfos = new HashMap<>();
+    }
+    this.customMetaInfos.put(key, customMetaInfosItem);
     return this;
   }
 
@@ -559,15 +604,15 @@ public class GDocumentReference {
    * @return customMetaInfos
   **/
   @Schema(description = "")
-  public Object getCustomMetaInfos() {
+  public Map<String, Object> getCustomMetaInfos() {
     return customMetaInfos;
   }
 
-  public void setCustomMetaInfos(Object customMetaInfos) {
+  public void setCustomMetaInfos(Map<String, Object> customMetaInfos) {
     this.customMetaInfos = customMetaInfos;
   }
 
-  public GDocumentReference lastesJobId(Object lastesJobId) {
+  public GDocumentReference lastesJobId(String lastesJobId) {
     this.lastesJobId = lastesJobId;
     return this;
   }
@@ -577,16 +622,24 @@ public class GDocumentReference {
    * @return lastesJobId
   **/
   @Schema(description = "")
-  public Object getLastesJobId() {
+  public String getLastesJobId() {
     return lastesJobId;
   }
 
-  public void setLastesJobId(Object lastesJobId) {
+  public void setLastesJobId(String lastesJobId) {
     this.lastesJobId = lastesJobId;
   }
 
-  public GDocumentReference aclAliases(Object aclAliases) {
+  public GDocumentReference aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GDocumentReference addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -595,15 +648,15 @@ public class GDocumentReference {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GDocumentReference extIntegrationCode(Object extIntegrationCode) {
+  public GDocumentReference extIntegrationCode(String extIntegrationCode) {
     this.extIntegrationCode = extIntegrationCode;
     return this;
   }
@@ -613,15 +666,15 @@ public class GDocumentReference {
    * @return extIntegrationCode
   **/
   @Schema(description = "")
-  public Object getExtIntegrationCode() {
+  public String getExtIntegrationCode() {
     return extIntegrationCode;
   }
 
-  public void setExtIntegrationCode(Object extIntegrationCode) {
+  public void setExtIntegrationCode(String extIntegrationCode) {
     this.extIntegrationCode = extIntegrationCode;
   }
 
-  public GDocumentReference synchronizationUUID(Object synchronizationUUID) {
+  public GDocumentReference synchronizationUUID(String synchronizationUUID) {
     this.synchronizationUUID = synchronizationUUID;
     return this;
   }
@@ -631,15 +684,15 @@ public class GDocumentReference {
    * @return synchronizationUUID
   **/
   @Schema(description = "")
-  public Object getSynchronizationUUID() {
+  public String getSynchronizationUUID() {
     return synchronizationUUID;
   }
 
-  public void setSynchronizationUUID(Object synchronizationUUID) {
+  public void setSynchronizationUUID(String synchronizationUUID) {
     this.synchronizationUUID = synchronizationUUID;
   }
 
-  public GDocumentReference extension(Object extension) {
+  public GDocumentReference extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -649,15 +702,15 @@ public class GDocumentReference {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public GDocumentReference contentType(Object contentType) {
+  public GDocumentReference contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -667,15 +720,15 @@ public class GDocumentReference {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public GDocumentReference geboFileArchetypeId(Object geboFileArchetypeId) {
+  public GDocumentReference geboFileArchetypeId(String geboFileArchetypeId) {
     this.geboFileArchetypeId = geboFileArchetypeId;
     return this;
   }
@@ -685,15 +738,15 @@ public class GDocumentReference {
    * @return geboFileArchetypeId
   **/
   @Schema(description = "")
-  public Object getGeboFileArchetypeId() {
+  public String getGeboFileArchetypeId() {
     return geboFileArchetypeId;
   }
 
-  public void setGeboFileArchetypeId(Object geboFileArchetypeId) {
+  public void setGeboFileArchetypeId(String geboFileArchetypeId) {
     this.geboFileArchetypeId = geboFileArchetypeId;
   }
 
-  public GDocumentReference fileSize(Object fileSize) {
+  public GDocumentReference fileSize(Long fileSize) {
     this.fileSize = fileSize;
     return this;
   }
@@ -703,15 +756,15 @@ public class GDocumentReference {
    * @return fileSize
   **/
   @Schema(description = "")
-  public Object getFileSize() {
+  public Long getFileSize() {
     return fileSize;
   }
 
-  public void setFileSize(Object fileSize) {
+  public void setFileSize(Long fileSize) {
     this.fileSize = fileSize;
   }
 
-  public GDocumentReference unmanagedContentType(Object unmanagedContentType) {
+  public GDocumentReference unmanagedContentType(Boolean unmanagedContentType) {
     this.unmanagedContentType = unmanagedContentType;
     return this;
   }
@@ -721,15 +774,15 @@ public class GDocumentReference {
    * @return unmanagedContentType
   **/
   @Schema(description = "")
-  public Object getUnmanagedContentType() {
+  public Boolean isUnmanagedContentType() {
     return unmanagedContentType;
   }
 
-  public void setUnmanagedContentType(Object unmanagedContentType) {
+  public void setUnmanagedContentType(Boolean unmanagedContentType) {
     this.unmanagedContentType = unmanagedContentType;
   }
 
-  public GDocumentReference referenceType(Object referenceType) {
+  public GDocumentReference referenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
     return this;
   }
@@ -739,15 +792,15 @@ public class GDocumentReference {
    * @return referenceType
   **/
   @Schema(description = "")
-  public Object getReferenceType() {
+  public ReferenceTypeEnum getReferenceType() {
     return referenceType;
   }
 
-  public void setReferenceType(Object referenceType) {
+  public void setReferenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
   }
 
-  public GDocumentReference skippedVectorizationContent(Object skippedVectorizationContent) {
+  public GDocumentReference skippedVectorizationContent(Boolean skippedVectorizationContent) {
     this.skippedVectorizationContent = skippedVectorizationContent;
     return this;
   }
@@ -757,15 +810,15 @@ public class GDocumentReference {
    * @return skippedVectorizationContent
   **/
   @Schema(description = "")
-  public Object getSkippedVectorizationContent() {
+  public Boolean isSkippedVectorizationContent() {
     return skippedVectorizationContent;
   }
 
-  public void setSkippedVectorizationContent(Object skippedVectorizationContent) {
+  public void setSkippedVectorizationContent(Boolean skippedVectorizationContent) {
     this.skippedVectorizationContent = skippedVectorizationContent;
   }
 
-  public GDocumentReference artificiallyGeneratedContent(Object artificiallyGeneratedContent) {
+  public GDocumentReference artificiallyGeneratedContent(String artificiallyGeneratedContent) {
     this.artificiallyGeneratedContent = artificiallyGeneratedContent;
     return this;
   }
@@ -775,11 +828,11 @@ public class GDocumentReference {
    * @return artificiallyGeneratedContent
   **/
   @Schema(description = "")
-  public Object getArtificiallyGeneratedContent() {
+  public String getArtificiallyGeneratedContent() {
     return artificiallyGeneratedContent;
   }
 
-  public void setArtificiallyGeneratedContent(Object artificiallyGeneratedContent) {
+  public void setArtificiallyGeneratedContent(String artificiallyGeneratedContent) {
     this.artificiallyGeneratedContent = artificiallyGeneratedContent;
   }
 
@@ -801,8 +854,16 @@ public class GDocumentReference {
     this.originComponent = originComponent;
   }
 
-  public GDocumentReference attributesValues(Object attributesValues) {
+  public GDocumentReference attributesValues(List<GDocumentAttributeValue> attributesValues) {
     this.attributesValues = attributesValues;
+    return this;
+  }
+
+  public GDocumentReference addAttributesValuesItem(GDocumentAttributeValue attributesValuesItem) {
+    if (this.attributesValues == null) {
+      this.attributesValues = new ArrayList<>();
+    }
+    this.attributesValues.add(attributesValuesItem);
     return this;
   }
 
@@ -811,15 +872,15 @@ public class GDocumentReference {
    * @return attributesValues
   **/
   @Schema(description = "")
-  public Object getAttributesValues() {
+  public List<GDocumentAttributeValue> getAttributesValues() {
     return attributesValues;
   }
 
-  public void setAttributesValues(Object attributesValues) {
+  public void setAttributesValues(List<GDocumentAttributeValue> attributesValues) {
     this.attributesValues = attributesValues;
   }
 
-  public GDocumentReference langCode(Object langCode) {
+  public GDocumentReference langCode(String langCode) {
     this.langCode = langCode;
     return this;
   }
@@ -829,15 +890,15 @@ public class GDocumentReference {
    * @return langCode
   **/
   @Schema(description = "")
-  public Object getLangCode() {
+  public String getLangCode() {
     return langCode;
   }
 
-  public void setLangCode(Object langCode) {
+  public void setLangCode(String langCode) {
     this.langCode = langCode;
   }
 
-  public GDocumentReference translationOfDocumentCode(Object translationOfDocumentCode) {
+  public GDocumentReference translationOfDocumentCode(String translationOfDocumentCode) {
     this.translationOfDocumentCode = translationOfDocumentCode;
     return this;
   }
@@ -847,16 +908,24 @@ public class GDocumentReference {
    * @return translationOfDocumentCode
   **/
   @Schema(description = "")
-  public Object getTranslationOfDocumentCode() {
+  public String getTranslationOfDocumentCode() {
     return translationOfDocumentCode;
   }
 
-  public void setTranslationOfDocumentCode(Object translationOfDocumentCode) {
+  public void setTranslationOfDocumentCode(String translationOfDocumentCode) {
     this.translationOfDocumentCode = translationOfDocumentCode;
   }
 
-  public GDocumentReference categoryCodes(Object categoryCodes) {
+  public GDocumentReference categoryCodes(List<String> categoryCodes) {
     this.categoryCodes = categoryCodes;
+    return this;
+  }
+
+  public GDocumentReference addCategoryCodesItem(String categoryCodesItem) {
+    if (this.categoryCodes == null) {
+      this.categoryCodes = new ArrayList<>();
+    }
+    this.categoryCodes.add(categoryCodesItem);
     return this;
   }
 
@@ -865,15 +934,15 @@ public class GDocumentReference {
    * @return categoryCodes
   **/
   @Schema(description = "")
-  public Object getCategoryCodes() {
+  public List<String> getCategoryCodes() {
     return categoryCodes;
   }
 
-  public void setCategoryCodes(Object categoryCodes) {
+  public void setCategoryCodes(List<String> categoryCodes) {
     this.categoryCodes = categoryCodes;
   }
 
-  public GDocumentReference publishedDate(Object publishedDate) {
+  public GDocumentReference publishedDate(Date publishedDate) {
     this.publishedDate = publishedDate;
     return this;
   }
@@ -883,15 +952,15 @@ public class GDocumentReference {
    * @return publishedDate
   **/
   @Schema(description = "")
-  public Object getPublishedDate() {
+  public Date getPublishedDate() {
     return publishedDate;
   }
 
-  public void setPublishedDate(Object publishedDate) {
+  public void setPublishedDate(Date publishedDate) {
     this.publishedDate = publishedDate;
   }
 
-  public GDocumentReference author(Object author) {
+  public GDocumentReference author(String author) {
     this.author = author;
     return this;
   }
@@ -901,11 +970,11 @@ public class GDocumentReference {
    * @return author
   **/
   @Schema(description = "")
-  public Object getAuthor() {
+  public String getAuthor() {
     return author;
   }
 
-  public void setAuthor(Object author) {
+  public void setAuthor(String author) {
     this.author = author;
   }
 

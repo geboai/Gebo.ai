@@ -41,7 +41,7 @@ public class GeboA2AServerAdminControllerApiTest {
      */
     @Test
     public void deleteTest() {
-        Object code = null;
+        String code = null;
         OperationStatusBoolean response = api.delete(code);
 
         // TODO: test validations
@@ -56,7 +56,7 @@ public class GeboA2AServerAdminControllerApiTest {
      */
     @Test
     public void findAll1Test() {
-        Object response = api.findAll1();
+        List<A2AServerConfig> response = api.findAll1();
 
         // TODO: test validations
     }
@@ -70,7 +70,7 @@ public class GeboA2AServerAdminControllerApiTest {
      */
     @Test
     public void findByCode1Test() {
-        Object code = null;
+        String code = null;
         OperationStatusA2AServerConfig response = api.findByCode1(code);
 
         // TODO: test validations

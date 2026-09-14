@@ -23,14 +23,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DefaultPromptForChatModelParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class DefaultPromptForChatModelParam {
   @JsonProperty("chatModelConfig")
   private GBaseChatModelConfig chatModelConfig = null;
 
   @JsonProperty("ragPrompt")
-  private Object ragPrompt = null;
+  private Boolean ragPrompt = null;
 
   public DefaultPromptForChatModelParam chatModelConfig(GBaseChatModelConfig chatModelConfig) {
     this.chatModelConfig = chatModelConfig;
@@ -50,7 +50,7 @@ public class DefaultPromptForChatModelParam {
     this.chatModelConfig = chatModelConfig;
   }
 
-  public DefaultPromptForChatModelParam ragPrompt(Object ragPrompt) {
+  public DefaultPromptForChatModelParam ragPrompt(Boolean ragPrompt) {
     this.ragPrompt = ragPrompt;
     return this;
   }
@@ -60,11 +60,11 @@ public class DefaultPromptForChatModelParam {
    * @return ragPrompt
   **/
   @Schema(required = true, description = "")
-  public Object getRagPrompt() {
+  public Boolean isRagPrompt() {
     return ragPrompt;
   }
 
-  public void setRagPrompt(Object ragPrompt) {
+  public void setRagPrompt(Boolean ragPrompt) {
     this.ragPrompt = ragPrompt;
   }
 

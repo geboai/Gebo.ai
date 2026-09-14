@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**name** | **Object** |  |  [optional]
-**parentFolderCode** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**name** | **String** |  |  [optional]
+**parentFolderCode** | **String** |  |  [optional]
 **endpointRef** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]

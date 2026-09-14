@@ -19,23 +19,24 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.chunker.model.GeboComponentInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * IGComponentOriginatedDocument
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class IGComponentOriginatedDocument {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("originComponent")
   private GeboComponentInfo originComponent = null;
 
-  public IGComponentOriginatedDocument code(Object code) {
+  public IGComponentOriginatedDocument code(String code) {
     this.code = code;
     return this;
   }
@@ -45,15 +46,15 @@ public class IGComponentOriginatedDocument {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public IGComponentOriginatedDocument modificationDate(Object modificationDate) {
+  public IGComponentOriginatedDocument modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -63,11 +64,11 @@ public class IGComponentOriginatedDocument {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 

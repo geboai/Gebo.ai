@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getGoogleSearchApiCredentials"></a>
 # **getGoogleSearchApiCredentials**
-> Object getGoogleSearchApiCredentials()
+> List&lt;GGoogleSearchApiCredentials&gt; getGoogleSearchApiCredentials()
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 
 GoogleSearchConfigurationControllerApi apiInstance = new GoogleSearchConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGoogleSearchApiCredentials();
+    List<GGoogleSearchApiCredentials> result = apiInstance.getGoogleSearchApiCredentials();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GoogleSearchConfigurationControllerApi#getGoogleSearchApiCredentials");
@@ -125,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GGoogleSearchApiCredentials&gt;**](GGoogleSearchApiCredentials.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ No authorization required
 
 
 GoogleSearchConfigurationControllerApi apiInstance = new GoogleSearchConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GGoogleSearchApiCredentials result = apiInstance.searchGGoogleSearchApiCredentialsByCode(code);
     System.out.println(result);
@@ -246,7 +246,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

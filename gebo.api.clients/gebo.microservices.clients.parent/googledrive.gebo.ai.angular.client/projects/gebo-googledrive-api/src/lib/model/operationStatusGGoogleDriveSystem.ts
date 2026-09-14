@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GGoogleDriveSystem } from './gGoogleDriveSystem';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGGoogleDriveSystem { 
     result?: GGoogleDriveSystem;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -57,7 +57,7 @@ public class MistralAiChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findMistralAIChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GMistralChatModelConfig response = api.findMistralAIChatModelConfigByCode(code);
 
         // TODO: test validations

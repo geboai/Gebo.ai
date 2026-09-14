@@ -11,5 +11,5 @@
  */
 
 export interface ChatSessionUploadUserSessionCodeBody { 
-    files: any;
+    files: Array<Blob>;
 }

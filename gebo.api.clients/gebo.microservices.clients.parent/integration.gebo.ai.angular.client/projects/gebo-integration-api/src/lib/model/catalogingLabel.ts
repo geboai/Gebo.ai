@@ -11,8 +11,8 @@
  */
 
 export interface CatalogingLabel { 
-    code?: any;
-    label?: any;
-    catalogingCriteria?: any;
+    code?: string;
+    label?: string;
+    catalogingCriteria?: string;
     parent?: CatalogingLabel;
 }

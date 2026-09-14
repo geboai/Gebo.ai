@@ -18,38 +18,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GeneratedApiKeyInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeneratedApiKeyInfo {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("expiration")
-  private Object expiration = null;
+  private Date expiration = null;
 
   @JsonProperty("impersonatedUser")
-  private Object impersonatedUser = null;
+  private String impersonatedUser = null;
 
-  public GeneratedApiKeyInfo code(Object code) {
+  public GeneratedApiKeyInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -59,15 +60,15 @@ public class GeneratedApiKeyInfo {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GeneratedApiKeyInfo description(Object description) {
+  public GeneratedApiKeyInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -77,15 +78,15 @@ public class GeneratedApiKeyInfo {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GeneratedApiKeyInfo userModified(Object userModified) {
+  public GeneratedApiKeyInfo userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -95,15 +96,15 @@ public class GeneratedApiKeyInfo {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GeneratedApiKeyInfo userCreated(Object userCreated) {
+  public GeneratedApiKeyInfo userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -113,15 +114,15 @@ public class GeneratedApiKeyInfo {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GeneratedApiKeyInfo dateModified(Object dateModified) {
+  public GeneratedApiKeyInfo dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -131,15 +132,15 @@ public class GeneratedApiKeyInfo {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GeneratedApiKeyInfo dateCreated(Object dateCreated) {
+  public GeneratedApiKeyInfo dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -149,15 +150,15 @@ public class GeneratedApiKeyInfo {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GeneratedApiKeyInfo expiration(Object expiration) {
+  public GeneratedApiKeyInfo expiration(Date expiration) {
     this.expiration = expiration;
     return this;
   }
@@ -167,15 +168,15 @@ public class GeneratedApiKeyInfo {
    * @return expiration
   **/
   @Schema(required = true, description = "")
-  public Object getExpiration() {
+  public Date getExpiration() {
     return expiration;
   }
 
-  public void setExpiration(Object expiration) {
+  public void setExpiration(Date expiration) {
     this.expiration = expiration;
   }
 
-  public GeneratedApiKeyInfo impersonatedUser(Object impersonatedUser) {
+  public GeneratedApiKeyInfo impersonatedUser(String impersonatedUser) {
     this.impersonatedUser = impersonatedUser;
     return this;
   }
@@ -185,11 +186,11 @@ public class GeneratedApiKeyInfo {
    * @return impersonatedUser
   **/
   @Schema(required = true, description = "")
-  public Object getImpersonatedUser() {
+  public String getImpersonatedUser() {
     return impersonatedUser;
   }
 
-  public void setImpersonatedUser(Object impersonatedUser) {
+  public void setImpersonatedUser(String impersonatedUser) {
     this.impersonatedUser = impersonatedUser;
   }
 

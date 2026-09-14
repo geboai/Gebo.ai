@@ -19,5 +19,5 @@ export interface GeboContentProcessRow {
     project?: GProject;
     endpoint?: GProjectEndpoint;
     endpointObjectRef?: GObjectRefGProjectEndpoint;
-    contentsCount?: any;
+    contentsCount?: number;
 }

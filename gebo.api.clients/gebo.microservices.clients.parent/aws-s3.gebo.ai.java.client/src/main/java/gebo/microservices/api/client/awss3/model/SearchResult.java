@@ -18,18 +18,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.awss3.model.GeboComponentInfo;
+import gebo.microservices.api.client.awss3.model.SearchResult;
 import gebo.microservices.api.client.awss3.model.SearchResultReference;
 import gebo.microservices.api.client.awss3.model.VFilesystemReference;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * SearchResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:46.219289034+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:35.503809141+02:00[Europe/Rome]")
 
 public class SearchResult {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("resultReference")
   private SearchResultReference resultReference = null;
@@ -38,27 +42,27 @@ public class SearchResult {
   private VFilesystemReference navigationReference = null;
 
   @JsonProperty("descriptiveText")
-  private Object descriptiveText = null;
+  private String descriptiveText = null;
 
   @JsonProperty("nestingLevel")
-  private Object nestingLevel = null;
+  private Integer nestingLevel = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("childs")
-  private Object childs = null;
+  private List<SearchResult> childs = null;
 
   @JsonProperty("originComponent")
   private GeboComponentInfo originComponent = null;
 
   @JsonProperty("systemConfigurationCode")
-  private Object systemConfigurationCode = null;
+  private String systemConfigurationCode = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
-  public SearchResult id(Object id) {
+  public SearchResult id(String id) {
     this.id = id;
     return this;
   }
@@ -68,11 +72,11 @@ public class SearchResult {
    * @return id
   **/
   @Schema(required = true, description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -112,7 +116,7 @@ public class SearchResult {
     this.navigationReference = navigationReference;
   }
 
-  public SearchResult descriptiveText(Object descriptiveText) {
+  public SearchResult descriptiveText(String descriptiveText) {
     this.descriptiveText = descriptiveText;
     return this;
   }
@@ -122,15 +126,15 @@ public class SearchResult {
    * @return descriptiveText
   **/
   @Schema(required = true, description = "")
-  public Object getDescriptiveText() {
+  public String getDescriptiveText() {
     return descriptiveText;
   }
 
-  public void setDescriptiveText(Object descriptiveText) {
+  public void setDescriptiveText(String descriptiveText) {
     this.descriptiveText = descriptiveText;
   }
 
-  public SearchResult nestingLevel(Object nestingLevel) {
+  public SearchResult nestingLevel(Integer nestingLevel) {
     this.nestingLevel = nestingLevel;
     return this;
   }
@@ -140,15 +144,15 @@ public class SearchResult {
    * @return nestingLevel
   **/
   @Schema(description = "")
-  public Object getNestingLevel() {
+  public Integer getNestingLevel() {
     return nestingLevel;
   }
 
-  public void setNestingLevel(Object nestingLevel) {
+  public void setNestingLevel(Integer nestingLevel) {
     this.nestingLevel = nestingLevel;
   }
 
-  public SearchResult modificationDate(Object modificationDate) {
+  public SearchResult modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -158,16 +162,24 @@ public class SearchResult {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public SearchResult childs(Object childs) {
+  public SearchResult childs(List<SearchResult> childs) {
     this.childs = childs;
+    return this;
+  }
+
+  public SearchResult addChildsItem(SearchResult childsItem) {
+    if (this.childs == null) {
+      this.childs = new ArrayList<>();
+    }
+    this.childs.add(childsItem);
     return this;
   }
 
@@ -176,11 +188,11 @@ public class SearchResult {
    * @return childs
   **/
   @Schema(description = "")
-  public Object getChilds() {
+  public List<SearchResult> getChilds() {
     return childs;
   }
 
-  public void setChilds(Object childs) {
+  public void setChilds(List<SearchResult> childs) {
     this.childs = childs;
   }
 
@@ -202,7 +214,7 @@ public class SearchResult {
     this.originComponent = originComponent;
   }
 
-  public SearchResult systemConfigurationCode(Object systemConfigurationCode) {
+  public SearchResult systemConfigurationCode(String systemConfigurationCode) {
     this.systemConfigurationCode = systemConfigurationCode;
     return this;
   }
@@ -212,15 +224,15 @@ public class SearchResult {
    * @return systemConfigurationCode
   **/
   @Schema(required = true, description = "")
-  public Object getSystemConfigurationCode() {
+  public String getSystemConfigurationCode() {
     return systemConfigurationCode;
   }
 
-  public void setSystemConfigurationCode(Object systemConfigurationCode) {
+  public void setSystemConfigurationCode(String systemConfigurationCode) {
     this.systemConfigurationCode = systemConfigurationCode;
   }
 
-  public SearchResult code(Object code) {
+  public SearchResult code(String code) {
     this.code = code;
     return this;
   }
@@ -230,11 +242,11 @@ public class SearchResult {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 

@@ -17,66 +17,105 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GAclEntry;
+import gebo.microservices.api.client.brain.model.GObjectRef;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GKnowledgeBase
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GKnowledgeBase {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("knowledgeBaseReferences")
-  private Object knowledgeBaseReferences = null;
+  private List<String> knowledgeBaseReferences = null;
 
   @JsonProperty("projectsReferences")
-  private Object projectsReferences = null;
+  private List<String> projectsReferences = null;
 
   @JsonProperty("embeddingModelReferences")
-  private Object embeddingModelReferences = null;
+  private List<GObjectRef> embeddingModelReferences = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("parentKnowledgebaseCode")
-  private Object parentKnowledgebaseCode = null;
+  private String parentKnowledgebaseCode = null;
 
-  @JsonProperty("objectSpaceType")
-  private Object objectSpaceType = null;
+  /**
+   * Gets or Sets objectSpaceType
+   */
+  public enum ObjectSpaceTypeEnum {
+    COMPANY("COMPANY"),
+    USERSPACE("USERSPACE");
+
+    private String value;
+
+    ObjectSpaceTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ObjectSpaceTypeEnum fromValue(String input) {
+      for (ObjectSpaceTypeEnum b : ObjectSpaceTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("objectSpaceType")
+  private ObjectSpaceTypeEnum objectSpaceType = null;
 
   @JsonProperty("acl")
-  private Object acl = null;
+  private List<GAclEntry> acl = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
-  public GKnowledgeBase code(Object code) {
+  @JsonProperty("readonly")
+  private Boolean readonly = null;
+
+  public GKnowledgeBase code(String code) {
     this.code = code;
     return this;
   }
@@ -86,15 +125,15 @@ public class GKnowledgeBase {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GKnowledgeBase description(Object description) {
+  public GKnowledgeBase description(String description) {
     this.description = description;
     return this;
   }
@@ -104,15 +143,15 @@ public class GKnowledgeBase {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GKnowledgeBase userModified(Object userModified) {
+  public GKnowledgeBase userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -122,15 +161,15 @@ public class GKnowledgeBase {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GKnowledgeBase userCreated(Object userCreated) {
+  public GKnowledgeBase userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -140,15 +179,15 @@ public class GKnowledgeBase {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GKnowledgeBase dateModified(Object dateModified) {
+  public GKnowledgeBase dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -158,15 +197,15 @@ public class GKnowledgeBase {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GKnowledgeBase dateCreated(Object dateCreated) {
+  public GKnowledgeBase dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -176,16 +215,24 @@ public class GKnowledgeBase {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GKnowledgeBase accessibleGroups(Object accessibleGroups) {
+  public GKnowledgeBase accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GKnowledgeBase addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -194,16 +241,24 @@ public class GKnowledgeBase {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public GKnowledgeBase accessibleUsers(Object accessibleUsers) {
+  public GKnowledgeBase accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GKnowledgeBase addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -212,15 +267,15 @@ public class GKnowledgeBase {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public GKnowledgeBase accessibleToAll(Object accessibleToAll) {
+  public GKnowledgeBase accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -230,16 +285,24 @@ public class GKnowledgeBase {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GKnowledgeBase knowledgeBaseReferences(Object knowledgeBaseReferences) {
+  public GKnowledgeBase knowledgeBaseReferences(List<String> knowledgeBaseReferences) {
     this.knowledgeBaseReferences = knowledgeBaseReferences;
+    return this;
+  }
+
+  public GKnowledgeBase addKnowledgeBaseReferencesItem(String knowledgeBaseReferencesItem) {
+    if (this.knowledgeBaseReferences == null) {
+      this.knowledgeBaseReferences = new ArrayList<>();
+    }
+    this.knowledgeBaseReferences.add(knowledgeBaseReferencesItem);
     return this;
   }
 
@@ -248,16 +311,24 @@ public class GKnowledgeBase {
    * @return knowledgeBaseReferences
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseReferences() {
+  public List<String> getKnowledgeBaseReferences() {
     return knowledgeBaseReferences;
   }
 
-  public void setKnowledgeBaseReferences(Object knowledgeBaseReferences) {
+  public void setKnowledgeBaseReferences(List<String> knowledgeBaseReferences) {
     this.knowledgeBaseReferences = knowledgeBaseReferences;
   }
 
-  public GKnowledgeBase projectsReferences(Object projectsReferences) {
+  public GKnowledgeBase projectsReferences(List<String> projectsReferences) {
     this.projectsReferences = projectsReferences;
+    return this;
+  }
+
+  public GKnowledgeBase addProjectsReferencesItem(String projectsReferencesItem) {
+    if (this.projectsReferences == null) {
+      this.projectsReferences = new ArrayList<>();
+    }
+    this.projectsReferences.add(projectsReferencesItem);
     return this;
   }
 
@@ -266,16 +337,24 @@ public class GKnowledgeBase {
    * @return projectsReferences
   **/
   @Schema(description = "")
-  public Object getProjectsReferences() {
+  public List<String> getProjectsReferences() {
     return projectsReferences;
   }
 
-  public void setProjectsReferences(Object projectsReferences) {
+  public void setProjectsReferences(List<String> projectsReferences) {
     this.projectsReferences = projectsReferences;
   }
 
-  public GKnowledgeBase embeddingModelReferences(Object embeddingModelReferences) {
+  public GKnowledgeBase embeddingModelReferences(List<GObjectRef> embeddingModelReferences) {
     this.embeddingModelReferences = embeddingModelReferences;
+    return this;
+  }
+
+  public GKnowledgeBase addEmbeddingModelReferencesItem(GObjectRef embeddingModelReferencesItem) {
+    if (this.embeddingModelReferences == null) {
+      this.embeddingModelReferences = new ArrayList<>();
+    }
+    this.embeddingModelReferences.add(embeddingModelReferencesItem);
     return this;
   }
 
@@ -284,15 +363,15 @@ public class GKnowledgeBase {
    * @return embeddingModelReferences
   **/
   @Schema(description = "")
-  public Object getEmbeddingModelReferences() {
+  public List<GObjectRef> getEmbeddingModelReferences() {
     return embeddingModelReferences;
   }
 
-  public void setEmbeddingModelReferences(Object embeddingModelReferences) {
+  public void setEmbeddingModelReferences(List<GObjectRef> embeddingModelReferences) {
     this.embeddingModelReferences = embeddingModelReferences;
   }
 
-  public GKnowledgeBase username(Object username) {
+  public GKnowledgeBase username(String username) {
     this.username = username;
     return this;
   }
@@ -302,15 +381,15 @@ public class GKnowledgeBase {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public GKnowledgeBase parentKnowledgebaseCode(Object parentKnowledgebaseCode) {
+  public GKnowledgeBase parentKnowledgebaseCode(String parentKnowledgebaseCode) {
     this.parentKnowledgebaseCode = parentKnowledgebaseCode;
     return this;
   }
@@ -320,15 +399,15 @@ public class GKnowledgeBase {
    * @return parentKnowledgebaseCode
   **/
   @Schema(description = "")
-  public Object getParentKnowledgebaseCode() {
+  public String getParentKnowledgebaseCode() {
     return parentKnowledgebaseCode;
   }
 
-  public void setParentKnowledgebaseCode(Object parentKnowledgebaseCode) {
+  public void setParentKnowledgebaseCode(String parentKnowledgebaseCode) {
     this.parentKnowledgebaseCode = parentKnowledgebaseCode;
   }
 
-  public GKnowledgeBase objectSpaceType(Object objectSpaceType) {
+  public GKnowledgeBase objectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
     return this;
   }
@@ -338,16 +417,24 @@ public class GKnowledgeBase {
    * @return objectSpaceType
   **/
   @Schema(description = "")
-  public Object getObjectSpaceType() {
+  public ObjectSpaceTypeEnum getObjectSpaceType() {
     return objectSpaceType;
   }
 
-  public void setObjectSpaceType(Object objectSpaceType) {
+  public void setObjectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
   }
 
-  public GKnowledgeBase acl(Object acl) {
+  public GKnowledgeBase acl(List<GAclEntry> acl) {
     this.acl = acl;
+    return this;
+  }
+
+  public GKnowledgeBase addAclItem(GAclEntry aclItem) {
+    if (this.acl == null) {
+      this.acl = new ArrayList<>();
+    }
+    this.acl.add(aclItem);
     return this;
   }
 
@@ -356,16 +443,24 @@ public class GKnowledgeBase {
    * @return acl
   **/
   @Schema(description = "")
-  public Object getAcl() {
+  public List<GAclEntry> getAcl() {
     return acl;
   }
 
-  public void setAcl(Object acl) {
+  public void setAcl(List<GAclEntry> acl) {
     this.acl = acl;
   }
 
-  public GKnowledgeBase aclAliases(Object aclAliases) {
+  public GKnowledgeBase aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GKnowledgeBase addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -374,12 +469,30 @@ public class GKnowledgeBase {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+  }
+
+  public GKnowledgeBase readonly(Boolean readonly) {
+    this.readonly = readonly;
+    return this;
+  }
+
+   /**
+   * Get readonly
+   * @return readonly
+  **/
+  @Schema(description = "")
+  public Boolean isReadonly() {
+    return readonly;
+  }
+
+  public void setReadonly(Boolean readonly) {
+    this.readonly = readonly;
   }
 
 
@@ -408,12 +521,13 @@ public class GKnowledgeBase {
         Objects.equals(this.parentKnowledgebaseCode, gknowledgeBase.parentKnowledgebaseCode) &&
         Objects.equals(this.objectSpaceType, gknowledgeBase.objectSpaceType) &&
         Objects.equals(this.acl, gknowledgeBase.acl) &&
-        Objects.equals(this.aclAliases, gknowledgeBase.aclAliases);
+        Objects.equals(this.aclAliases, gknowledgeBase.aclAliases) &&
+        Objects.equals(this.readonly, gknowledgeBase.readonly);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, accessibleGroups, accessibleUsers, accessibleToAll, knowledgeBaseReferences, projectsReferences, embeddingModelReferences, username, parentKnowledgebaseCode, objectSpaceType, acl, aclAliases);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, accessibleGroups, accessibleUsers, accessibleToAll, knowledgeBaseReferences, projectsReferences, embeddingModelReferences, username, parentKnowledgebaseCode, objectSpaceType, acl, aclAliases, readonly);
   }
 
 
@@ -439,6 +553,7 @@ public class GKnowledgeBase {
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
     sb.append("    acl: ").append(toIndentedString(acl)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
+    sb.append("    readonly: ").append(toIndentedString(readonly)).append("\n");
     sb.append("}");
     return sb.toString();
   }

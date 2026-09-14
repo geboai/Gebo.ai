@@ -3,12 +3,26 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **Object** |  |  [optional]
-**sourname** | **Object** |  |  [optional]
-**username** | **Object** |  |  [optional]
-**imageUrl** | **Object** |  |  [optional]
-**emailVerified** | **Object** |  |  [optional]
-**disabled** | **Object** |  |  [optional]
-**provider** | **Object** |  | 
-**roles** | **Object** |  |  [optional]
-**langCode** | **Object** |  |  [optional]
+**name** | **String** |  |  [optional]
+**sourname** | **String** |  |  [optional]
+**username** | **String** |  |  [optional]
+**imageUrl** | **String** |  |  [optional]
+**emailVerified** | **Boolean** |  |  [optional]
+**disabled** | **Boolean** |  |  [optional]
+**provider** | [**ProviderEnum**](#ProviderEnum) |  | 
+**roles** | **List&lt;String&gt;** |  |  [optional]
+**langCode** | **String** |  |  [optional]
+
+<a name="ProviderEnum"></a>
+## Enum: ProviderEnum
+Name | Value
+---- | -----
+LOCAL | &quot;local&quot;
+GOOGLE | &quot;google&quot;
+MICROSOFT | &quot;microsoft&quot;
+MICROSOFT_MULTITENANT | &quot;microsoft_multitenant&quot;
+AWS_COGNITO | &quot;aws_cognito&quot;
+AWS_IDENTITY_CENTER | &quot;aws_identity_center&quot;
+KEYCLOAK | &quot;keycloak&quot;
+OAUTH2_GENERIC | &quot;oauth2_generic&quot;
+LDAP | &quot;ldap&quot;

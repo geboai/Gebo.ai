@@ -12,19 +12,19 @@
 import { ModelMetaInfo } from './modelMetaInfo';
 
 export interface GONNXTransformersEmbeddingModelChoice { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
     metaInfos?: ModelMetaInfo;
-    informativeUrl?: any;
-    contextLength?: any;
+    informativeUrl?: string;
+    contextLength?: number;
     nativeModelMetaInfos?: any;
-    optimalTokenizationParam?: any;
-    modelDetails?: any;
+    optimalTokenizationParam?: number;
+    modelDetails?: { [key: string]: any; };
 }

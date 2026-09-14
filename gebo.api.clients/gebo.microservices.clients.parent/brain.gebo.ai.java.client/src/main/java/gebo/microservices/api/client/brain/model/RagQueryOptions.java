@@ -22,22 +22,54 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * RagQueryOptions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class RagQueryOptions {
   @JsonProperty("topK")
-  private Object topK = null;
+  private Integer topK = null;
 
   @JsonProperty("similarityThreashold")
-  private Object similarityThreashold = null;
+  private Double similarityThreashold = null;
 
   @JsonProperty("maxTokens")
-  private Object maxTokens = null;
+  private Long maxTokens = null;
 
-  @JsonProperty("completeness")
-  private Object completeness = null;
+  /**
+   * Gets or Sets completeness
+   */
+  public enum CompletenessEnum {
+    STRICT_QUERY_RELATED("STRICT_QUERY_RELATED"),
+    FULL_DOCUMENTS("FULL_DOCUMENTS"),
+    MAX_TOKENS("MAX_TOKENS");
 
-  public RagQueryOptions topK(Object topK) {
+    private String value;
+
+    CompletenessEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static CompletenessEnum fromValue(String input) {
+      for (CompletenessEnum b : CompletenessEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("completeness")
+  private CompletenessEnum completeness = null;
+
+  public RagQueryOptions topK(Integer topK) {
     this.topK = topK;
     return this;
   }
@@ -47,15 +79,15 @@ public class RagQueryOptions {
    * @return topK
   **/
   @Schema(description = "")
-  public Object getTopK() {
+  public Integer getTopK() {
     return topK;
   }
 
-  public void setTopK(Object topK) {
+  public void setTopK(Integer topK) {
     this.topK = topK;
   }
 
-  public RagQueryOptions similarityThreashold(Object similarityThreashold) {
+  public RagQueryOptions similarityThreashold(Double similarityThreashold) {
     this.similarityThreashold = similarityThreashold;
     return this;
   }
@@ -65,15 +97,15 @@ public class RagQueryOptions {
    * @return similarityThreashold
   **/
   @Schema(description = "")
-  public Object getSimilarityThreashold() {
+  public Double getSimilarityThreashold() {
     return similarityThreashold;
   }
 
-  public void setSimilarityThreashold(Object similarityThreashold) {
+  public void setSimilarityThreashold(Double similarityThreashold) {
     this.similarityThreashold = similarityThreashold;
   }
 
-  public RagQueryOptions maxTokens(Object maxTokens) {
+  public RagQueryOptions maxTokens(Long maxTokens) {
     this.maxTokens = maxTokens;
     return this;
   }
@@ -83,15 +115,15 @@ public class RagQueryOptions {
    * @return maxTokens
   **/
   @Schema(description = "")
-  public Object getMaxTokens() {
+  public Long getMaxTokens() {
     return maxTokens;
   }
 
-  public void setMaxTokens(Object maxTokens) {
+  public void setMaxTokens(Long maxTokens) {
     this.maxTokens = maxTokens;
   }
 
-  public RagQueryOptions completeness(Object completeness) {
+  public RagQueryOptions completeness(CompletenessEnum completeness) {
     this.completeness = completeness;
     return this;
   }
@@ -101,11 +133,11 @@ public class RagQueryOptions {
    * @return completeness
   **/
   @Schema(description = "")
-  public Object getCompleteness() {
+  public CompletenessEnum getCompleteness() {
     return completeness;
   }
 
-  public void setCompleteness(Object completeness) {
+  public void setCompleteness(CompletenessEnum completeness) {
     this.completeness = completeness;
   }
 

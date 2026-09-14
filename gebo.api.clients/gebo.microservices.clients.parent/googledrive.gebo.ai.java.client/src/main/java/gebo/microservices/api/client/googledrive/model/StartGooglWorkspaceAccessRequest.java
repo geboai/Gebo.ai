@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * StartGooglWorkspaceAccessRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:25.000010563+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class StartGooglWorkspaceAccessRequest {
   @JsonProperty("user")
-  private Object user = null;
+  private String user = null;
 
   @JsonProperty("uiSuccessForward")
-  private Object uiSuccessForward = null;
+  private String uiSuccessForward = null;
 
   @JsonProperty("uiErrorForward")
-  private Object uiErrorForward = null;
+  private String uiErrorForward = null;
 
-  public StartGooglWorkspaceAccessRequest user(Object user) {
+  public StartGooglWorkspaceAccessRequest user(String user) {
     this.user = user;
     return this;
   }
@@ -44,15 +44,15 @@ public class StartGooglWorkspaceAccessRequest {
    * @return user
   **/
   @Schema(required = true, description = "")
-  public Object getUser() {
+  public String getUser() {
     return user;
   }
 
-  public void setUser(Object user) {
+  public void setUser(String user) {
     this.user = user;
   }
 
-  public StartGooglWorkspaceAccessRequest uiSuccessForward(Object uiSuccessForward) {
+  public StartGooglWorkspaceAccessRequest uiSuccessForward(String uiSuccessForward) {
     this.uiSuccessForward = uiSuccessForward;
     return this;
   }
@@ -62,15 +62,15 @@ public class StartGooglWorkspaceAccessRequest {
    * @return uiSuccessForward
   **/
   @Schema(required = true, description = "")
-  public Object getUiSuccessForward() {
+  public String getUiSuccessForward() {
     return uiSuccessForward;
   }
 
-  public void setUiSuccessForward(Object uiSuccessForward) {
+  public void setUiSuccessForward(String uiSuccessForward) {
     this.uiSuccessForward = uiSuccessForward;
   }
 
-  public StartGooglWorkspaceAccessRequest uiErrorForward(Object uiErrorForward) {
+  public StartGooglWorkspaceAccessRequest uiErrorForward(String uiErrorForward) {
     this.uiErrorForward = uiErrorForward;
     return this;
   }
@@ -80,11 +80,11 @@ public class StartGooglWorkspaceAccessRequest {
    * @return uiErrorForward
   **/
   @Schema(required = true, description = "")
-  public Object getUiErrorForward() {
+  public String getUiErrorForward() {
     return uiErrorForward;
   }
 
-  public void setUiErrorForward(Object uiErrorForward) {
+  public void setUiErrorForward(String uiErrorForward) {
     this.uiErrorForward = uiErrorForward;
   }
 

@@ -12,6 +12,6 @@
 import { GeboGoogleJsonSecretContent } from './geboGoogleJsonSecretContent';
 
 export interface FastGoogleDriveSystemInsert { 
-    description: any;
+    description: string;
     googleJsonCredentials: GeboGoogleJsonSecretContent;
 }

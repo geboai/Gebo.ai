@@ -21,6 +21,7 @@ import { BrowseParam } from '../model/browseParam';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
+import { VFilesystemReference } from '../model/vFilesystemReference';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,10 +67,10 @@ export class JiraBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public browseJiraPath(body: BrowseParam, systemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
-    public browseJiraPath(body: BrowseParam, systemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
-    public browseJiraPath(body: BrowseParam, systemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
-    public browseJiraPath(body: BrowseParam, systemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public browseJiraPath(body: BrowseParam, systemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
+    public browseJiraPath(body: BrowseParam, systemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
+    public browseJiraPath(body: BrowseParam, systemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
+    public browseJiraPath(body: BrowseParam, systemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling browseJiraPath.');
@@ -124,10 +125,10 @@ export class JiraBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJiraNavigationStatus(body: any, systemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
-    public getJiraNavigationStatus(body: any, systemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getJiraNavigationStatus(body: any, systemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getJiraNavigationStatus(body: any, systemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJiraNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
+    public getJiraNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getJiraNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getJiraNavigationStatus(body: Array<VFilesystemReference>, systemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getJiraNavigationStatus.');
@@ -181,10 +182,10 @@ export class JiraBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJiraRoots(systemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
-    public getJiraRoots(systemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
-    public getJiraRoots(systemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
-    public getJiraRoots(systemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJiraRoots(systemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
+    public getJiraRoots(systemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
+    public getJiraRoots(systemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
+    public getJiraRoots(systemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (systemCode === null || systemCode === undefined) {
             throw new Error('Required parameter systemCode was null or undefined when calling getJiraRoots.');

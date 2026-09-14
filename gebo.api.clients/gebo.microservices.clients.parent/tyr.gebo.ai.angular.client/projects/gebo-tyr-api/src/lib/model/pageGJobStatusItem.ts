@@ -9,19 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GJobStatusItem } from './gJobStatusItem';
 import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageGJobStatusItem { 
-    totalPages?: any;
-    totalElements?: any;
+    totalPages?: number;
+    totalElements?: number;
     pageable?: PageableObject;
-    first?: any;
-    last?: any;
-    size?: any;
-    content?: any;
-    number?: any;
+    size?: number;
+    content?: Array<GJobStatusItem>;
+    number?: number;
     sort?: SortObject;
-    numberOfElements?: any;
-    empty?: any;
+    first?: boolean;
+    last?: boolean;
+    numberOfElements?: number;
+    empty?: boolean;
 }

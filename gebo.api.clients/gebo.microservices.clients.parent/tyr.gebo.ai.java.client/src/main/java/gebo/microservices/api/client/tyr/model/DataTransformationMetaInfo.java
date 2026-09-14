@@ -18,26 +18,110 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * DataTransformationMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class DataTransformationMetaInfo {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  @JsonProperty("transformFrom")
-  private Object transformFrom = null;
+  /**
+   * Gets or Sets transformFrom
+   */
+  public enum TransformFromEnum {
+    DOCUMENTS("DOCUMENTS"),
+    DATABASE("DATABASE"),
+    VECTORIAL_DATABASE("VECTORIAL_DATABASE"),
+    GRAPH_DATABASE("GRAPH_DATABASE"),
+    CHUNK("CHUNK"),
+    FULLTEXT_INDEX("FULLTEXT_INDEX"),
+    LLM_ENDPOINT("LLM_ENDPOINT"),
+    OBJECT_STORAGE("OBJECT_STORAGE"),
+    MESSAGE_BROKER("MESSAGE_BROKER"),
+    WEB_SEARCH("WEB_SEARCH"),
+    LOCAL_FILESYSTEM("LOCAL_FILESYSTEM"),
+    CHAT_SESSION("CHAT_SESSION");
 
-  @JsonProperty("transformInto")
-  private Object transformInto = null;
+    private String value;
 
-  public DataTransformationMetaInfo id(Object id) {
+    TransformFromEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TransformFromEnum fromValue(String input) {
+      for (TransformFromEnum b : TransformFromEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("transformFrom")
+  private List<TransformFromEnum> transformFrom = new ArrayList<>();
+
+  /**
+   * Gets or Sets transformInto
+   */
+  public enum TransformIntoEnum {
+    DOCUMENTS("DOCUMENTS"),
+    DATABASE("DATABASE"),
+    VECTORIAL_DATABASE("VECTORIAL_DATABASE"),
+    GRAPH_DATABASE("GRAPH_DATABASE"),
+    CHUNK("CHUNK"),
+    FULLTEXT_INDEX("FULLTEXT_INDEX"),
+    LLM_ENDPOINT("LLM_ENDPOINT"),
+    OBJECT_STORAGE("OBJECT_STORAGE"),
+    MESSAGE_BROKER("MESSAGE_BROKER"),
+    WEB_SEARCH("WEB_SEARCH"),
+    LOCAL_FILESYSTEM("LOCAL_FILESYSTEM"),
+    CHAT_SESSION("CHAT_SESSION");
+
+    private String value;
+
+    TransformIntoEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TransformIntoEnum fromValue(String input) {
+      for (TransformIntoEnum b : TransformIntoEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("transformInto")
+  private List<TransformIntoEnum> transformInto = new ArrayList<>();
+
+  public DataTransformationMetaInfo id(String id) {
     this.id = id;
     return this;
   }
@@ -47,15 +131,15 @@ public class DataTransformationMetaInfo {
    * @return id
   **/
   @Schema(required = true, description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public DataTransformationMetaInfo description(Object description) {
+  public DataTransformationMetaInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -65,16 +149,21 @@ public class DataTransformationMetaInfo {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public DataTransformationMetaInfo transformFrom(Object transformFrom) {
+  public DataTransformationMetaInfo transformFrom(List<TransformFromEnum> transformFrom) {
     this.transformFrom = transformFrom;
+    return this;
+  }
+
+  public DataTransformationMetaInfo addTransformFromItem(TransformFromEnum transformFromItem) {
+    this.transformFrom.add(transformFromItem);
     return this;
   }
 
@@ -83,16 +172,21 @@ public class DataTransformationMetaInfo {
    * @return transformFrom
   **/
   @Schema(required = true, description = "")
-  public Object getTransformFrom() {
+  public List<TransformFromEnum> getTransformFrom() {
     return transformFrom;
   }
 
-  public void setTransformFrom(Object transformFrom) {
+  public void setTransformFrom(List<TransformFromEnum> transformFrom) {
     this.transformFrom = transformFrom;
   }
 
-  public DataTransformationMetaInfo transformInto(Object transformInto) {
+  public DataTransformationMetaInfo transformInto(List<TransformIntoEnum> transformInto) {
     this.transformInto = transformInto;
+    return this;
+  }
+
+  public DataTransformationMetaInfo addTransformIntoItem(TransformIntoEnum transformIntoItem) {
+    this.transformInto.add(transformIntoItem);
     return this;
   }
 
@@ -101,11 +195,11 @@ public class DataTransformationMetaInfo {
    * @return transformInto
   **/
   @Schema(required = true, description = "")
-  public Object getTransformInto() {
+  public List<TransformIntoEnum> getTransformInto() {
     return transformInto;
   }
 
-  public void setTransformInto(Object transformInto) {
+  public void setTransformInto(List<TransformIntoEnum> transformInto) {
     this.transformInto = transformInto;
   }
 

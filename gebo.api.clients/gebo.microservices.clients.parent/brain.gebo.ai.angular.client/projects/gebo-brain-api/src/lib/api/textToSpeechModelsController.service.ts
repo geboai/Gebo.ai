@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ConfigurationEntryGBaseTextToSpeachModelConfig } from '../model/configurationEntryGBaseTextToSpeachModelConfig';
+import { GTextToSpeechModelType } from '../model/gTextToSpeechModelType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -61,10 +63,10 @@ export class TextToSpeechModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntryGBaseTextToSpeachModelConfig>>;
+    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntryGBaseTextToSpeachModelConfig>>>;
+    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntryGBaseTextToSpeachModelConfig>>>;
+    public getRuntimeConfiguredTextToSpeechModels(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -87,7 +89,7 @@ export class TextToSpeechModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels`,
+        return this.httpClient.request<Array<ConfigurationEntryGBaseTextToSpeachModelConfig>>('get',`${this.basePath}/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -104,9 +106,9 @@ export class TextToSpeechModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTextToSpeechModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getTextToSpeechModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getTextToSpeechModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getTextToSpeechModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GTextToSpeechModelType>>;
+    public getTextToSpeechModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GTextToSpeechModelType>>>;
+    public getTextToSpeechModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GTextToSpeechModelType>>>;
     public getTextToSpeechModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -124,7 +126,7 @@ export class TextToSpeechModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes`,
+        return this.httpClient.request<Array<GTextToSpeechModelType>>('get',`${this.basePath}/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

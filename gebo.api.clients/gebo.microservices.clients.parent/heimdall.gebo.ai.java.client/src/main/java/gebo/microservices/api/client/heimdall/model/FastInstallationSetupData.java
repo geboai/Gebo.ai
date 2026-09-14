@@ -22,25 +22,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastInstallationSetupData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class FastInstallationSetupData {
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
   @JsonProperty("passwordC")
-  private Object passwordC = null;
+  private String passwordC = null;
 
   @JsonProperty("licenceAgreement")
-  private Object licenceAgreement = null;
+  private String licenceAgreement = null;
 
   @JsonProperty("lang")
-  private Object lang = null;
+  private String lang = null;
 
-  public FastInstallationSetupData username(Object username) {
+  public FastInstallationSetupData username(String username) {
     this.username = username;
     return this;
   }
@@ -50,15 +50,15 @@ public class FastInstallationSetupData {
    * @return username
   **/
   @Schema(required = true, description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public FastInstallationSetupData password(Object password) {
+  public FastInstallationSetupData password(String password) {
     this.password = password;
     return this;
   }
@@ -68,15 +68,15 @@ public class FastInstallationSetupData {
    * @return password
   **/
   @Schema(required = true, description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
-  public FastInstallationSetupData passwordC(Object passwordC) {
+  public FastInstallationSetupData passwordC(String passwordC) {
     this.passwordC = passwordC;
     return this;
   }
@@ -86,15 +86,15 @@ public class FastInstallationSetupData {
    * @return passwordC
   **/
   @Schema(description = "")
-  public Object getPasswordC() {
+  public String getPasswordC() {
     return passwordC;
   }
 
-  public void setPasswordC(Object passwordC) {
+  public void setPasswordC(String passwordC) {
     this.passwordC = passwordC;
   }
 
-  public FastInstallationSetupData licenceAgreement(Object licenceAgreement) {
+  public FastInstallationSetupData licenceAgreement(String licenceAgreement) {
     this.licenceAgreement = licenceAgreement;
     return this;
   }
@@ -104,15 +104,15 @@ public class FastInstallationSetupData {
    * @return licenceAgreement
   **/
   @Schema(required = true, description = "")
-  public Object getLicenceAgreement() {
+  public String getLicenceAgreement() {
     return licenceAgreement;
   }
 
-  public void setLicenceAgreement(Object licenceAgreement) {
+  public void setLicenceAgreement(String licenceAgreement) {
     this.licenceAgreement = licenceAgreement;
   }
 
-  public FastInstallationSetupData lang(Object lang) {
+  public FastInstallationSetupData lang(String lang) {
     this.lang = lang;
     return this;
   }
@@ -122,11 +122,11 @@ public class FastInstallationSetupData {
    * @return lang
   **/
   @Schema(required = true, description = "")
-  public Object getLang() {
+  public String getLang() {
     return lang;
   }
 
-  public void setLang(Object lang) {
+  public void setLang(String lang) {
     this.lang = lang;
   }
 

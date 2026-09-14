@@ -18,44 +18,45 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * QdrantConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class QdrantConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("host")
-  private Object host = null;
+  private String host = null;
 
   @JsonProperty("port")
-  private Object port = null;
+  private Integer port = null;
 
   @JsonProperty("apiKey")
-  private Object apiKey = null;
+  private String apiKey = null;
 
   @JsonProperty("tls")
-  private Object tls = null;
+  private Boolean tls = null;
 
-  public QdrantConfig code(Object code) {
+  public QdrantConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -65,15 +66,15 @@ public class QdrantConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public QdrantConfig description(Object description) {
+  public QdrantConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -83,15 +84,15 @@ public class QdrantConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public QdrantConfig userModified(Object userModified) {
+  public QdrantConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -101,15 +102,15 @@ public class QdrantConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public QdrantConfig userCreated(Object userCreated) {
+  public QdrantConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -119,15 +120,15 @@ public class QdrantConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public QdrantConfig dateModified(Object dateModified) {
+  public QdrantConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -137,15 +138,15 @@ public class QdrantConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public QdrantConfig dateCreated(Object dateCreated) {
+  public QdrantConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -155,15 +156,15 @@ public class QdrantConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public QdrantConfig host(Object host) {
+  public QdrantConfig host(String host) {
     this.host = host;
     return this;
   }
@@ -173,15 +174,15 @@ public class QdrantConfig {
    * @return host
   **/
   @Schema(description = "")
-  public Object getHost() {
+  public String getHost() {
     return host;
   }
 
-  public void setHost(Object host) {
+  public void setHost(String host) {
     this.host = host;
   }
 
-  public QdrantConfig port(Object port) {
+  public QdrantConfig port(Integer port) {
     this.port = port;
     return this;
   }
@@ -191,15 +192,15 @@ public class QdrantConfig {
    * @return port
   **/
   @Schema(description = "")
-  public Object getPort() {
+  public Integer getPort() {
     return port;
   }
 
-  public void setPort(Object port) {
+  public void setPort(Integer port) {
     this.port = port;
   }
 
-  public QdrantConfig apiKey(Object apiKey) {
+  public QdrantConfig apiKey(String apiKey) {
     this.apiKey = apiKey;
     return this;
   }
@@ -209,15 +210,15 @@ public class QdrantConfig {
    * @return apiKey
   **/
   @Schema(description = "")
-  public Object getApiKey() {
+  public String getApiKey() {
     return apiKey;
   }
 
-  public void setApiKey(Object apiKey) {
+  public void setApiKey(String apiKey) {
     this.apiKey = apiKey;
   }
 
-  public QdrantConfig tls(Object tls) {
+  public QdrantConfig tls(Boolean tls) {
     this.tls = tls;
     return this;
   }
@@ -227,11 +228,11 @@ public class QdrantConfig {
    * @return tls
   **/
   @Schema(description = "")
-  public Object getTls() {
+  public Boolean isTls() {
     return tls;
   }
 
-  public void setTls(Object tls) {
+  public void setTls(Boolean tls) {
     this.tls = tls;
   }
 

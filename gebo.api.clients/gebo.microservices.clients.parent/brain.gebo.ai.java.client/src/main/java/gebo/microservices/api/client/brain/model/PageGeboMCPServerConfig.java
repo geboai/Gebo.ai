@@ -17,50 +17,53 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GeboMCPServerConfig;
 import gebo.microservices.api.client.brain.model.PageableObject;
 import gebo.microservices.api.client.brain.model.SortObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * PageGeboMCPServerConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class PageGeboMCPServerConfig {
   @JsonProperty("totalPages")
-  private Object totalPages = null;
+  private Integer totalPages = null;
 
   @JsonProperty("totalElements")
-  private Object totalElements = null;
+  private Long totalElements = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
   @JsonProperty("first")
-  private Object first = null;
+  private Boolean first = null;
 
   @JsonProperty("last")
-  private Object last = null;
+  private Boolean last = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Integer size = null;
 
   @JsonProperty("content")
-  private Object content = null;
+  private List<GeboMCPServerConfig> content = null;
 
   @JsonProperty("number")
-  private Object number = null;
+  private Integer number = null;
 
   @JsonProperty("sort")
   private SortObject sort = null;
 
   @JsonProperty("numberOfElements")
-  private Object numberOfElements = null;
+  private Integer numberOfElements = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
-  public PageGeboMCPServerConfig totalPages(Object totalPages) {
+  public PageGeboMCPServerConfig totalPages(Integer totalPages) {
     this.totalPages = totalPages;
     return this;
   }
@@ -70,15 +73,15 @@ public class PageGeboMCPServerConfig {
    * @return totalPages
   **/
   @Schema(description = "")
-  public Object getTotalPages() {
+  public Integer getTotalPages() {
     return totalPages;
   }
 
-  public void setTotalPages(Object totalPages) {
+  public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
   }
 
-  public PageGeboMCPServerConfig totalElements(Object totalElements) {
+  public PageGeboMCPServerConfig totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
   }
@@ -88,11 +91,11 @@ public class PageGeboMCPServerConfig {
    * @return totalElements
   **/
   @Schema(description = "")
-  public Object getTotalElements() {
+  public Long getTotalElements() {
     return totalElements;
   }
 
-  public void setTotalElements(Object totalElements) {
+  public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
   }
 
@@ -114,7 +117,7 @@ public class PageGeboMCPServerConfig {
     this.pageable = pageable;
   }
 
-  public PageGeboMCPServerConfig first(Object first) {
+  public PageGeboMCPServerConfig first(Boolean first) {
     this.first = first;
     return this;
   }
@@ -124,15 +127,15 @@ public class PageGeboMCPServerConfig {
    * @return first
   **/
   @Schema(description = "")
-  public Object getFirst() {
+  public Boolean isFirst() {
     return first;
   }
 
-  public void setFirst(Object first) {
+  public void setFirst(Boolean first) {
     this.first = first;
   }
 
-  public PageGeboMCPServerConfig last(Object last) {
+  public PageGeboMCPServerConfig last(Boolean last) {
     this.last = last;
     return this;
   }
@@ -142,15 +145,15 @@ public class PageGeboMCPServerConfig {
    * @return last
   **/
   @Schema(description = "")
-  public Object getLast() {
+  public Boolean isLast() {
     return last;
   }
 
-  public void setLast(Object last) {
+  public void setLast(Boolean last) {
     this.last = last;
   }
 
-  public PageGeboMCPServerConfig size(Object size) {
+  public PageGeboMCPServerConfig size(Integer size) {
     this.size = size;
     return this;
   }
@@ -160,16 +163,24 @@ public class PageGeboMCPServerConfig {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Integer getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Integer size) {
     this.size = size;
   }
 
-  public PageGeboMCPServerConfig content(Object content) {
+  public PageGeboMCPServerConfig content(List<GeboMCPServerConfig> content) {
     this.content = content;
+    return this;
+  }
+
+  public PageGeboMCPServerConfig addContentItem(GeboMCPServerConfig contentItem) {
+    if (this.content == null) {
+      this.content = new ArrayList<>();
+    }
+    this.content.add(contentItem);
     return this;
   }
 
@@ -178,15 +189,15 @@ public class PageGeboMCPServerConfig {
    * @return content
   **/
   @Schema(description = "")
-  public Object getContent() {
+  public List<GeboMCPServerConfig> getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(List<GeboMCPServerConfig> content) {
     this.content = content;
   }
 
-  public PageGeboMCPServerConfig number(Object number) {
+  public PageGeboMCPServerConfig number(Integer number) {
     this.number = number;
     return this;
   }
@@ -196,11 +207,11 @@ public class PageGeboMCPServerConfig {
    * @return number
   **/
   @Schema(description = "")
-  public Object getNumber() {
+  public Integer getNumber() {
     return number;
   }
 
-  public void setNumber(Object number) {
+  public void setNumber(Integer number) {
     this.number = number;
   }
 
@@ -222,7 +233,7 @@ public class PageGeboMCPServerConfig {
     this.sort = sort;
   }
 
-  public PageGeboMCPServerConfig numberOfElements(Object numberOfElements) {
+  public PageGeboMCPServerConfig numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
   }
@@ -232,15 +243,15 @@ public class PageGeboMCPServerConfig {
    * @return numberOfElements
   **/
   @Schema(description = "")
-  public Object getNumberOfElements() {
+  public Integer getNumberOfElements() {
     return numberOfElements;
   }
 
-  public void setNumberOfElements(Object numberOfElements) {
+  public void setNumberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
   }
 
-  public PageGeboMCPServerConfig empty(Object empty) {
+  public PageGeboMCPServerConfig empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -250,11 +261,11 @@ public class PageGeboMCPServerConfig {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 

@@ -18,51 +18,249 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * SharePointContentAttributeFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class SharePointContentAttributeFilter {
-  @JsonProperty("contentKinds")
-  private Object contentKinds = null;
+  /**
+   * Gets or Sets contentKinds
+   */
+  public enum ContentKindsEnum {
+    DOCUMENT("DOCUMENT"),
+    PAGE("PAGE");
+
+    private String value;
+
+    ContentKindsEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ContentKindsEnum fromValue(String input) {
+      for (ContentKindsEnum b : ContentKindsEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("contentKinds")
+  private List<ContentKindsEnum> contentKinds = null;
 
   @JsonProperty("textTerms")
-  private Object textTerms = null;
+  private List<String> textTerms = null;
 
-  @JsonProperty("textTermsMatchMode")
-  private Object textTermsMatchMode = null;
+  /**
+   * Gets or Sets textTermsMatchMode
+   */
+  public enum TextTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    TextTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TextTermsMatchModeEnum fromValue(String input) {
+      for (TextTermsMatchModeEnum b : TextTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("textTermsMatchMode")
+  private TextTermsMatchModeEnum textTermsMatchMode = null;
 
   @JsonProperty("titleTerms")
-  private Object titleTerms = null;
+  private List<String> titleTerms = null;
 
-  @JsonProperty("titleTermsMatchMode")
-  private Object titleTermsMatchMode = null;
+  /**
+   * Gets or Sets titleTermsMatchMode
+   */
+  public enum TitleTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    TitleTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TitleTermsMatchModeEnum fromValue(String input) {
+      for (TitleTermsMatchModeEnum b : TitleTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("titleTermsMatchMode")
+  private TitleTermsMatchModeEnum titleTermsMatchMode = null;
 
   @JsonProperty("siteUrls")
-  private Object siteUrls = null;
+  private List<String> siteUrls = null;
 
-  @JsonProperty("siteUrlsMatchMode")
-  private Object siteUrlsMatchMode = null;
+  /**
+   * Gets or Sets siteUrlsMatchMode
+   */
+  public enum SiteUrlsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    SiteUrlsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SiteUrlsMatchModeEnum fromValue(String input) {
+      for (SiteUrlsMatchModeEnum b : SiteUrlsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("siteUrlsMatchMode")
+  private SiteUrlsMatchModeEnum siteUrlsMatchMode = null;
 
   @JsonProperty("pathPrefixes")
-  private Object pathPrefixes = null;
+  private List<String> pathPrefixes = null;
 
-  @JsonProperty("pathPrefixesMatchMode")
-  private Object pathPrefixesMatchMode = null;
+  /**
+   * Gets or Sets pathPrefixesMatchMode
+   */
+  public enum PathPrefixesMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    PathPrefixesMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static PathPrefixesMatchModeEnum fromValue(String input) {
+      for (PathPrefixesMatchModeEnum b : PathPrefixesMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("pathPrefixesMatchMode")
+  private PathPrefixesMatchModeEnum pathPrefixesMatchMode = null;
 
   @JsonProperty("managedPropertyEquals")
-  private Object managedPropertyEquals = null;
+  private Map<String, List<String>> managedPropertyEquals = null;
 
   @JsonProperty("managedPropertyContains")
-  private Object managedPropertyContains = null;
+  private Map<String, List<String>> managedPropertyContains = null;
 
-  @JsonProperty("managedPropertiesValuesMatchMode")
-  private Object managedPropertiesValuesMatchMode = null;
+  /**
+   * Gets or Sets managedPropertiesValuesMatchMode
+   */
+  public enum ManagedPropertiesValuesMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
 
-  public SharePointContentAttributeFilter contentKinds(Object contentKinds) {
+    private String value;
+
+    ManagedPropertiesValuesMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ManagedPropertiesValuesMatchModeEnum fromValue(String input) {
+      for (ManagedPropertiesValuesMatchModeEnum b : ManagedPropertiesValuesMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("managedPropertiesValuesMatchMode")
+  private ManagedPropertiesValuesMatchModeEnum managedPropertiesValuesMatchMode = null;
+
+  public SharePointContentAttributeFilter contentKinds(List<ContentKindsEnum> contentKinds) {
     this.contentKinds = contentKinds;
+    return this;
+  }
+
+  public SharePointContentAttributeFilter addContentKindsItem(ContentKindsEnum contentKindsItem) {
+    if (this.contentKinds == null) {
+      this.contentKinds = new ArrayList<>();
+    }
+    this.contentKinds.add(contentKindsItem);
     return this;
   }
 
@@ -71,16 +269,24 @@ public class SharePointContentAttributeFilter {
    * @return contentKinds
   **/
   @Schema(description = "")
-  public Object getContentKinds() {
+  public List<ContentKindsEnum> getContentKinds() {
     return contentKinds;
   }
 
-  public void setContentKinds(Object contentKinds) {
+  public void setContentKinds(List<ContentKindsEnum> contentKinds) {
     this.contentKinds = contentKinds;
   }
 
-  public SharePointContentAttributeFilter textTerms(Object textTerms) {
+  public SharePointContentAttributeFilter textTerms(List<String> textTerms) {
     this.textTerms = textTerms;
+    return this;
+  }
+
+  public SharePointContentAttributeFilter addTextTermsItem(String textTermsItem) {
+    if (this.textTerms == null) {
+      this.textTerms = new ArrayList<>();
+    }
+    this.textTerms.add(textTermsItem);
     return this;
   }
 
@@ -89,15 +295,15 @@ public class SharePointContentAttributeFilter {
    * @return textTerms
   **/
   @Schema(description = "")
-  public Object getTextTerms() {
+  public List<String> getTextTerms() {
     return textTerms;
   }
 
-  public void setTextTerms(Object textTerms) {
+  public void setTextTerms(List<String> textTerms) {
     this.textTerms = textTerms;
   }
 
-  public SharePointContentAttributeFilter textTermsMatchMode(Object textTermsMatchMode) {
+  public SharePointContentAttributeFilter textTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
     return this;
   }
@@ -107,16 +313,24 @@ public class SharePointContentAttributeFilter {
    * @return textTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTextTermsMatchMode() {
+  public TextTermsMatchModeEnum getTextTermsMatchMode() {
     return textTermsMatchMode;
   }
 
-  public void setTextTermsMatchMode(Object textTermsMatchMode) {
+  public void setTextTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
   }
 
-  public SharePointContentAttributeFilter titleTerms(Object titleTerms) {
+  public SharePointContentAttributeFilter titleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
+    return this;
+  }
+
+  public SharePointContentAttributeFilter addTitleTermsItem(String titleTermsItem) {
+    if (this.titleTerms == null) {
+      this.titleTerms = new ArrayList<>();
+    }
+    this.titleTerms.add(titleTermsItem);
     return this;
   }
 
@@ -125,15 +339,15 @@ public class SharePointContentAttributeFilter {
    * @return titleTerms
   **/
   @Schema(description = "")
-  public Object getTitleTerms() {
+  public List<String> getTitleTerms() {
     return titleTerms;
   }
 
-  public void setTitleTerms(Object titleTerms) {
+  public void setTitleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
   }
 
-  public SharePointContentAttributeFilter titleTermsMatchMode(Object titleTermsMatchMode) {
+  public SharePointContentAttributeFilter titleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
     return this;
   }
@@ -143,16 +357,24 @@ public class SharePointContentAttributeFilter {
    * @return titleTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTitleTermsMatchMode() {
+  public TitleTermsMatchModeEnum getTitleTermsMatchMode() {
     return titleTermsMatchMode;
   }
 
-  public void setTitleTermsMatchMode(Object titleTermsMatchMode) {
+  public void setTitleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
   }
 
-  public SharePointContentAttributeFilter siteUrls(Object siteUrls) {
+  public SharePointContentAttributeFilter siteUrls(List<String> siteUrls) {
     this.siteUrls = siteUrls;
+    return this;
+  }
+
+  public SharePointContentAttributeFilter addSiteUrlsItem(String siteUrlsItem) {
+    if (this.siteUrls == null) {
+      this.siteUrls = new ArrayList<>();
+    }
+    this.siteUrls.add(siteUrlsItem);
     return this;
   }
 
@@ -161,15 +383,15 @@ public class SharePointContentAttributeFilter {
    * @return siteUrls
   **/
   @Schema(description = "")
-  public Object getSiteUrls() {
+  public List<String> getSiteUrls() {
     return siteUrls;
   }
 
-  public void setSiteUrls(Object siteUrls) {
+  public void setSiteUrls(List<String> siteUrls) {
     this.siteUrls = siteUrls;
   }
 
-  public SharePointContentAttributeFilter siteUrlsMatchMode(Object siteUrlsMatchMode) {
+  public SharePointContentAttributeFilter siteUrlsMatchMode(SiteUrlsMatchModeEnum siteUrlsMatchMode) {
     this.siteUrlsMatchMode = siteUrlsMatchMode;
     return this;
   }
@@ -179,16 +401,24 @@ public class SharePointContentAttributeFilter {
    * @return siteUrlsMatchMode
   **/
   @Schema(description = "")
-  public Object getSiteUrlsMatchMode() {
+  public SiteUrlsMatchModeEnum getSiteUrlsMatchMode() {
     return siteUrlsMatchMode;
   }
 
-  public void setSiteUrlsMatchMode(Object siteUrlsMatchMode) {
+  public void setSiteUrlsMatchMode(SiteUrlsMatchModeEnum siteUrlsMatchMode) {
     this.siteUrlsMatchMode = siteUrlsMatchMode;
   }
 
-  public SharePointContentAttributeFilter pathPrefixes(Object pathPrefixes) {
+  public SharePointContentAttributeFilter pathPrefixes(List<String> pathPrefixes) {
     this.pathPrefixes = pathPrefixes;
+    return this;
+  }
+
+  public SharePointContentAttributeFilter addPathPrefixesItem(String pathPrefixesItem) {
+    if (this.pathPrefixes == null) {
+      this.pathPrefixes = new ArrayList<>();
+    }
+    this.pathPrefixes.add(pathPrefixesItem);
     return this;
   }
 
@@ -197,15 +427,15 @@ public class SharePointContentAttributeFilter {
    * @return pathPrefixes
   **/
   @Schema(description = "")
-  public Object getPathPrefixes() {
+  public List<String> getPathPrefixes() {
     return pathPrefixes;
   }
 
-  public void setPathPrefixes(Object pathPrefixes) {
+  public void setPathPrefixes(List<String> pathPrefixes) {
     this.pathPrefixes = pathPrefixes;
   }
 
-  public SharePointContentAttributeFilter pathPrefixesMatchMode(Object pathPrefixesMatchMode) {
+  public SharePointContentAttributeFilter pathPrefixesMatchMode(PathPrefixesMatchModeEnum pathPrefixesMatchMode) {
     this.pathPrefixesMatchMode = pathPrefixesMatchMode;
     return this;
   }
@@ -215,16 +445,24 @@ public class SharePointContentAttributeFilter {
    * @return pathPrefixesMatchMode
   **/
   @Schema(description = "")
-  public Object getPathPrefixesMatchMode() {
+  public PathPrefixesMatchModeEnum getPathPrefixesMatchMode() {
     return pathPrefixesMatchMode;
   }
 
-  public void setPathPrefixesMatchMode(Object pathPrefixesMatchMode) {
+  public void setPathPrefixesMatchMode(PathPrefixesMatchModeEnum pathPrefixesMatchMode) {
     this.pathPrefixesMatchMode = pathPrefixesMatchMode;
   }
 
-  public SharePointContentAttributeFilter managedPropertyEquals(Object managedPropertyEquals) {
+  public SharePointContentAttributeFilter managedPropertyEquals(Map<String, List<String>> managedPropertyEquals) {
     this.managedPropertyEquals = managedPropertyEquals;
+    return this;
+  }
+
+  public SharePointContentAttributeFilter putManagedPropertyEqualsItem(String key, List<String> managedPropertyEqualsItem) {
+    if (this.managedPropertyEquals == null) {
+      this.managedPropertyEquals = new HashMap<>();
+    }
+    this.managedPropertyEquals.put(key, managedPropertyEqualsItem);
     return this;
   }
 
@@ -233,16 +471,24 @@ public class SharePointContentAttributeFilter {
    * @return managedPropertyEquals
   **/
   @Schema(description = "")
-  public Object getManagedPropertyEquals() {
+  public Map<String, List<String>> getManagedPropertyEquals() {
     return managedPropertyEquals;
   }
 
-  public void setManagedPropertyEquals(Object managedPropertyEquals) {
+  public void setManagedPropertyEquals(Map<String, List<String>> managedPropertyEquals) {
     this.managedPropertyEquals = managedPropertyEquals;
   }
 
-  public SharePointContentAttributeFilter managedPropertyContains(Object managedPropertyContains) {
+  public SharePointContentAttributeFilter managedPropertyContains(Map<String, List<String>> managedPropertyContains) {
     this.managedPropertyContains = managedPropertyContains;
+    return this;
+  }
+
+  public SharePointContentAttributeFilter putManagedPropertyContainsItem(String key, List<String> managedPropertyContainsItem) {
+    if (this.managedPropertyContains == null) {
+      this.managedPropertyContains = new HashMap<>();
+    }
+    this.managedPropertyContains.put(key, managedPropertyContainsItem);
     return this;
   }
 
@@ -251,15 +497,15 @@ public class SharePointContentAttributeFilter {
    * @return managedPropertyContains
   **/
   @Schema(description = "")
-  public Object getManagedPropertyContains() {
+  public Map<String, List<String>> getManagedPropertyContains() {
     return managedPropertyContains;
   }
 
-  public void setManagedPropertyContains(Object managedPropertyContains) {
+  public void setManagedPropertyContains(Map<String, List<String>> managedPropertyContains) {
     this.managedPropertyContains = managedPropertyContains;
   }
 
-  public SharePointContentAttributeFilter managedPropertiesValuesMatchMode(Object managedPropertiesValuesMatchMode) {
+  public SharePointContentAttributeFilter managedPropertiesValuesMatchMode(ManagedPropertiesValuesMatchModeEnum managedPropertiesValuesMatchMode) {
     this.managedPropertiesValuesMatchMode = managedPropertiesValuesMatchMode;
     return this;
   }
@@ -269,11 +515,11 @@ public class SharePointContentAttributeFilter {
    * @return managedPropertiesValuesMatchMode
   **/
   @Schema(description = "")
-  public Object getManagedPropertiesValuesMatchMode() {
+  public ManagedPropertiesValuesMatchModeEnum getManagedPropertiesValuesMatchMode() {
     return managedPropertiesValuesMatchMode;
   }
 
-  public void setManagedPropertiesValuesMatchMode(Object managedPropertiesValuesMatchMode) {
+  public void setManagedPropertiesValuesMatchMode(ManagedPropertiesValuesMatchModeEnum managedPropertiesValuesMatchMode) {
     this.managedPropertiesValuesMatchMode = managedPropertiesValuesMatchMode;
   }
 

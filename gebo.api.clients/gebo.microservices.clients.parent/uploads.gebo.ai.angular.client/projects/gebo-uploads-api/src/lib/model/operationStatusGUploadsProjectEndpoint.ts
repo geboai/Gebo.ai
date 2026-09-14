@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GUploadsProjectEndpoint } from './gUploadsProjectEndpoint';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGUploadsProjectEndpoint { 
     result?: GUploadsProjectEndpoint;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

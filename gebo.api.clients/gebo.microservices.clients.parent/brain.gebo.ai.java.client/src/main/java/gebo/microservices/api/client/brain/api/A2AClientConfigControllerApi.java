@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class A2AClientConfigControllerApi {
     private ApiClient apiClient;
@@ -99,7 +99,7 @@ public class A2AClientConfigControllerApi {
      * @return OperationStatusA2ARemoteAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2ARemoteAgentConfig findByCode2(Object code) throws RestClientException {
+    public OperationStatusA2ARemoteAgentConfig findByCode2(String code) throws RestClientException {
         return findByCode2WithHttpInfo(code).getBody();
     }
 
@@ -111,7 +111,7 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2ARemoteAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> findByCode2WithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<OperationStatusA2ARemoteAgentConfig> findByCode2WithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -191,7 +191,7 @@ public class A2AClientConfigControllerApi {
      * @return PageA2ARemoteAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageA2ARemoteAgentConfig list(Object page, Object size) throws RestClientException {
+    public PageA2ARemoteAgentConfig list(Integer page, Integer size) throws RestClientException {
         return listWithHttpInfo(page, size).getBody();
     }
 
@@ -204,7 +204,7 @@ public class A2AClientConfigControllerApi {
      * @return ResponseEntity&lt;PageA2ARemoteAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageA2ARemoteAgentConfig> listWithHttpInfo(Object page, Object size) throws RestClientException {
+    public ResponseEntity<PageA2ARemoteAgentConfig> listWithHttpInfo(Integer page, Integer size) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/A2AClientConfigController/list").build().toUriString();
         

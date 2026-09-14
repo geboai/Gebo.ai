@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**workflowType** | **Object** |  |  [optional]
-**workflowId** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**finished** | **Object** |  |  [optional]
-**hasErrors** | **Object** |  |  [optional]
+**workflowType** | **String** |  |  [optional]
+**workflowId** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**finished** | **Boolean** |  |  [optional]
+**hasErrors** | **Boolean** |  |  [optional]
 **rootStatus** | [**ComputedWorkflowStatus**](ComputedWorkflowStatus.md) |  |  [optional]

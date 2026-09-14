@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:20.180928852+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.835643861+02:00[Europe/Rome]")
 
 public class JobLauncherControllerApi {
     private ApiClient apiClient;
@@ -51,7 +51,7 @@ public class JobLauncherControllerApi {
      * @param jobCode  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void abortJob(Object jobCode) throws RestClientException {
+    public void abortJob(String jobCode) throws RestClientException {
         abortJobWithHttpInfo(jobCode);
     }
 
@@ -63,7 +63,7 @@ public class JobLauncherControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> abortJobWithHttpInfo(Object jobCode) throws RestClientException {
+    public ResponseEntity<Void> abortJobWithHttpInfo(String jobCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'jobCode' is set
         if (jobCode == null) {

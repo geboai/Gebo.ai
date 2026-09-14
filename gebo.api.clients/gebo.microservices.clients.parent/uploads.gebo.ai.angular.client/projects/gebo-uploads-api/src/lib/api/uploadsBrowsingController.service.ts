@@ -21,6 +21,7 @@ import { BrowseParam } from '../model/browseParam';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
+import { VFilesystemReference } from '../model/vFilesystemReference';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,10 +67,10 @@ export class UploadsBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
-    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
-    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
-    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
+    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
+    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
+    public browseUploadsEndpointPath(body: BrowseParam, endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling browseUploadsEndpointPath.');
@@ -124,10 +125,10 @@ export class UploadsBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUploadsEndpointNavigationStatus(body: any, endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
-    public getUploadsEndpointNavigationStatus(body: any, endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getUploadsEndpointNavigationStatus(body: any, endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getUploadsEndpointNavigationStatus(body: any, endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUploadsEndpointNavigationStatus(body: Array<VFilesystemReference>, endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
+    public getUploadsEndpointNavigationStatus(body: Array<VFilesystemReference>, endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getUploadsEndpointNavigationStatus(body: Array<VFilesystemReference>, endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getUploadsEndpointNavigationStatus(body: Array<VFilesystemReference>, endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getUploadsEndpointNavigationStatus.');
@@ -181,10 +182,10 @@ export class UploadsBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUploadsEndpointRoots(endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
-    public getUploadsEndpointRoots(endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
-    public getUploadsEndpointRoots(endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
-    public getUploadsEndpointRoots(endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUploadsEndpointRoots(endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
+    public getUploadsEndpointRoots(endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
+    public getUploadsEndpointRoots(endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
+    public getUploadsEndpointRoots(endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (endpointCode === null || endpointCode === undefined) {
             throw new Error('Required parameter endpointCode was null or undefined when calling getUploadsEndpointRoots.');
@@ -229,10 +230,10 @@ export class UploadsBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serveUploadsEndpointFile(endpointCode: any, path: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public serveUploadsEndpointFile(endpointCode: any, path: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public serveUploadsEndpointFile(endpointCode: any, path: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public serveUploadsEndpointFile(endpointCode: any, path: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
+    public serveUploadsEndpointFile(endpointCode: string, path: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (endpointCode === null || endpointCode === undefined) {
             throw new Error('Required parameter endpointCode was null or undefined when calling serveUploadsEndpointFile.');
@@ -265,9 +266,10 @@ export class UploadsBrowsingControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/UploadsBrowsingController/serveUploadsEndpointFile`,
+        return this.httpClient.request('get',`${this.basePath}/api/admin/UploadsBrowsingController/serveUploadsEndpointFile`,
             {
                 params: queryParameters,
+                responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

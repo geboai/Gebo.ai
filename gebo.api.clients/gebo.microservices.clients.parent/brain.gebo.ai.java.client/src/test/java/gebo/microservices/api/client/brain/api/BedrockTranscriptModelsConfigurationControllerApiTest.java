@@ -57,7 +57,7 @@ public class BedrockTranscriptModelsConfigurationControllerApiTest {
      */
     @Test
     public void findBedrockTranscriptModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GBedrockTranscriptModelConfig response = api.findBedrockTranscriptModelConfigByCode(code);
 
         // TODO: test validations

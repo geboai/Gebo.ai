@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
+import { UserUploadedContent } from './userUploadedContent';
 
 export interface OperationStatusListUserUploadedContent { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<UserUploadedContent>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

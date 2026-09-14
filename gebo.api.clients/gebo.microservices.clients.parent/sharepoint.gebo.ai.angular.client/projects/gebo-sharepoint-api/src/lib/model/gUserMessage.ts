@@ -11,11 +11,20 @@
  */
 
 export interface GUserMessage { 
-    severity: any;
-    summary: any;
-    detail: any;
-    id: any;
-    key?: any;
-    jobId: any;
-    timestamp: any;
+    severity: GUserMessage.SeverityEnum;
+    summary: string;
+    detail: string;
+    id: string;
+    key?: string;
+    jobId: string;
+    timestamp: number;
+}
+export namespace GUserMessage {
+    export type SeverityEnum = 'info' | 'warn' | 'error' | 'success';
+    export const SeverityEnum = {
+        Info: 'info' as SeverityEnum,
+        Warn: 'warn' as SeverityEnum,
+        Error: 'error' as SeverityEnum,
+        Success: 'success' as SeverityEnum
+    };
 }

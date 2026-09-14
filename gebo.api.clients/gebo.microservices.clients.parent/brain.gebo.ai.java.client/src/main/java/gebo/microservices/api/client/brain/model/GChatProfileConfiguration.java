@@ -20,30 +20,33 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GObjectRefGBaseChatModelConfig;
 import gebo.microservices.api.client.brain.model.GObjectRefGBaseEmbeddingModelConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GChatProfileConfiguration {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("embeddingModelReference")
   private GObjectRefGBaseEmbeddingModelConfig embeddingModelReference = null;
@@ -52,48 +55,48 @@ public class GChatProfileConfiguration {
   private GObjectRefGBaseChatModelConfig chatModelReference = null;
 
   @JsonProperty("enabledFunctions")
-  private Object enabledFunctions = null;
+  private List<String> enabledFunctions = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("userChoosesKnowledgeBases")
-  private Object userChoosesKnowledgeBases = null;
+  private Boolean userChoosesKnowledgeBases = null;
 
   @JsonProperty("topK")
-  private Object topK = null;
+  private Integer topK = null;
 
   @JsonProperty("similaritySearchThreshold")
-  private Object similaritySearchThreshold = null;
+  private Double similaritySearchThreshold = null;
 
   @JsonProperty("knowledgeBaseCodes")
-  private Object knowledgeBaseCodes = null;
+  private List<String> knowledgeBaseCodes = null;
 
   @JsonProperty("forcedRequestDocuments")
-  private Object forcedRequestDocuments = null;
+  private List<String> forcedRequestDocuments = null;
 
   @JsonProperty("forcedRequestDocumentsReadonly")
-  private Object forcedRequestDocumentsReadonly = null;
+  private Boolean forcedRequestDocumentsReadonly = null;
 
   @JsonProperty("disableMultiHopRag")
-  private Object disableMultiHopRag = null;
+  private Boolean disableMultiHopRag = null;
 
   @JsonProperty("otherSearchSimilarityThreshold")
-  private Object otherSearchSimilarityThreshold = null;
+  private Double otherSearchSimilarityThreshold = null;
 
   @JsonProperty("manualThreasholdsConfiguration")
-  private Object manualThreasholdsConfiguration = null;
+  private Boolean manualThreasholdsConfiguration = null;
 
   @JsonProperty("useAlsoKeywordSearch")
-  private Object useAlsoKeywordSearch = null;
+  private Boolean useAlsoKeywordSearch = null;
 
-  public GChatProfileConfiguration code(Object code) {
+  public GChatProfileConfiguration code(String code) {
     this.code = code;
     return this;
   }
@@ -103,15 +106,15 @@ public class GChatProfileConfiguration {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GChatProfileConfiguration description(Object description) {
+  public GChatProfileConfiguration description(String description) {
     this.description = description;
     return this;
   }
@@ -121,15 +124,15 @@ public class GChatProfileConfiguration {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GChatProfileConfiguration userModified(Object userModified) {
+  public GChatProfileConfiguration userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -139,15 +142,15 @@ public class GChatProfileConfiguration {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GChatProfileConfiguration userCreated(Object userCreated) {
+  public GChatProfileConfiguration userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -157,15 +160,15 @@ public class GChatProfileConfiguration {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GChatProfileConfiguration dateModified(Object dateModified) {
+  public GChatProfileConfiguration dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -175,15 +178,15 @@ public class GChatProfileConfiguration {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GChatProfileConfiguration dateCreated(Object dateCreated) {
+  public GChatProfileConfiguration dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -193,11 +196,11 @@ public class GChatProfileConfiguration {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
@@ -237,8 +240,16 @@ public class GChatProfileConfiguration {
     this.chatModelReference = chatModelReference;
   }
 
-  public GChatProfileConfiguration enabledFunctions(Object enabledFunctions) {
+  public GChatProfileConfiguration enabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
+    return this;
+  }
+
+  public GChatProfileConfiguration addEnabledFunctionsItem(String enabledFunctionsItem) {
+    if (this.enabledFunctions == null) {
+      this.enabledFunctions = new ArrayList<>();
+    }
+    this.enabledFunctions.add(enabledFunctionsItem);
     return this;
   }
 
@@ -247,16 +258,24 @@ public class GChatProfileConfiguration {
    * @return enabledFunctions
   **/
   @Schema(description = "")
-  public Object getEnabledFunctions() {
+  public List<String> getEnabledFunctions() {
     return enabledFunctions;
   }
 
-  public void setEnabledFunctions(Object enabledFunctions) {
+  public void setEnabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
   }
 
-  public GChatProfileConfiguration accessibleGroups(Object accessibleGroups) {
+  public GChatProfileConfiguration accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GChatProfileConfiguration addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -265,16 +284,24 @@ public class GChatProfileConfiguration {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public GChatProfileConfiguration accessibleUsers(Object accessibleUsers) {
+  public GChatProfileConfiguration accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GChatProfileConfiguration addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -283,15 +310,15 @@ public class GChatProfileConfiguration {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public GChatProfileConfiguration accessibleToAll(Object accessibleToAll) {
+  public GChatProfileConfiguration accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -301,15 +328,15 @@ public class GChatProfileConfiguration {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GChatProfileConfiguration userChoosesKnowledgeBases(Object userChoosesKnowledgeBases) {
+  public GChatProfileConfiguration userChoosesKnowledgeBases(Boolean userChoosesKnowledgeBases) {
     this.userChoosesKnowledgeBases = userChoosesKnowledgeBases;
     return this;
   }
@@ -319,15 +346,15 @@ public class GChatProfileConfiguration {
    * @return userChoosesKnowledgeBases
   **/
   @Schema(description = "")
-  public Object getUserChoosesKnowledgeBases() {
+  public Boolean isUserChoosesKnowledgeBases() {
     return userChoosesKnowledgeBases;
   }
 
-  public void setUserChoosesKnowledgeBases(Object userChoosesKnowledgeBases) {
+  public void setUserChoosesKnowledgeBases(Boolean userChoosesKnowledgeBases) {
     this.userChoosesKnowledgeBases = userChoosesKnowledgeBases;
   }
 
-  public GChatProfileConfiguration topK(Object topK) {
+  public GChatProfileConfiguration topK(Integer topK) {
     this.topK = topK;
     return this;
   }
@@ -337,15 +364,15 @@ public class GChatProfileConfiguration {
    * @return topK
   **/
   @Schema(description = "")
-  public Object getTopK() {
+  public Integer getTopK() {
     return topK;
   }
 
-  public void setTopK(Object topK) {
+  public void setTopK(Integer topK) {
     this.topK = topK;
   }
 
-  public GChatProfileConfiguration similaritySearchThreshold(Object similaritySearchThreshold) {
+  public GChatProfileConfiguration similaritySearchThreshold(Double similaritySearchThreshold) {
     this.similaritySearchThreshold = similaritySearchThreshold;
     return this;
   }
@@ -355,16 +382,24 @@ public class GChatProfileConfiguration {
    * @return similaritySearchThreshold
   **/
   @Schema(description = "")
-  public Object getSimilaritySearchThreshold() {
+  public Double getSimilaritySearchThreshold() {
     return similaritySearchThreshold;
   }
 
-  public void setSimilaritySearchThreshold(Object similaritySearchThreshold) {
+  public void setSimilaritySearchThreshold(Double similaritySearchThreshold) {
     this.similaritySearchThreshold = similaritySearchThreshold;
   }
 
-  public GChatProfileConfiguration knowledgeBaseCodes(Object knowledgeBaseCodes) {
+  public GChatProfileConfiguration knowledgeBaseCodes(List<String> knowledgeBaseCodes) {
     this.knowledgeBaseCodes = knowledgeBaseCodes;
+    return this;
+  }
+
+  public GChatProfileConfiguration addKnowledgeBaseCodesItem(String knowledgeBaseCodesItem) {
+    if (this.knowledgeBaseCodes == null) {
+      this.knowledgeBaseCodes = new ArrayList<>();
+    }
+    this.knowledgeBaseCodes.add(knowledgeBaseCodesItem);
     return this;
   }
 
@@ -373,16 +408,24 @@ public class GChatProfileConfiguration {
    * @return knowledgeBaseCodes
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseCodes() {
+  public List<String> getKnowledgeBaseCodes() {
     return knowledgeBaseCodes;
   }
 
-  public void setKnowledgeBaseCodes(Object knowledgeBaseCodes) {
+  public void setKnowledgeBaseCodes(List<String> knowledgeBaseCodes) {
     this.knowledgeBaseCodes = knowledgeBaseCodes;
   }
 
-  public GChatProfileConfiguration forcedRequestDocuments(Object forcedRequestDocuments) {
+  public GChatProfileConfiguration forcedRequestDocuments(List<String> forcedRequestDocuments) {
     this.forcedRequestDocuments = forcedRequestDocuments;
+    return this;
+  }
+
+  public GChatProfileConfiguration addForcedRequestDocumentsItem(String forcedRequestDocumentsItem) {
+    if (this.forcedRequestDocuments == null) {
+      this.forcedRequestDocuments = new ArrayList<>();
+    }
+    this.forcedRequestDocuments.add(forcedRequestDocumentsItem);
     return this;
   }
 
@@ -391,15 +434,15 @@ public class GChatProfileConfiguration {
    * @return forcedRequestDocuments
   **/
   @Schema(description = "")
-  public Object getForcedRequestDocuments() {
+  public List<String> getForcedRequestDocuments() {
     return forcedRequestDocuments;
   }
 
-  public void setForcedRequestDocuments(Object forcedRequestDocuments) {
+  public void setForcedRequestDocuments(List<String> forcedRequestDocuments) {
     this.forcedRequestDocuments = forcedRequestDocuments;
   }
 
-  public GChatProfileConfiguration forcedRequestDocumentsReadonly(Object forcedRequestDocumentsReadonly) {
+  public GChatProfileConfiguration forcedRequestDocumentsReadonly(Boolean forcedRequestDocumentsReadonly) {
     this.forcedRequestDocumentsReadonly = forcedRequestDocumentsReadonly;
     return this;
   }
@@ -409,15 +452,15 @@ public class GChatProfileConfiguration {
    * @return forcedRequestDocumentsReadonly
   **/
   @Schema(description = "")
-  public Object getForcedRequestDocumentsReadonly() {
+  public Boolean isForcedRequestDocumentsReadonly() {
     return forcedRequestDocumentsReadonly;
   }
 
-  public void setForcedRequestDocumentsReadonly(Object forcedRequestDocumentsReadonly) {
+  public void setForcedRequestDocumentsReadonly(Boolean forcedRequestDocumentsReadonly) {
     this.forcedRequestDocumentsReadonly = forcedRequestDocumentsReadonly;
   }
 
-  public GChatProfileConfiguration disableMultiHopRag(Object disableMultiHopRag) {
+  public GChatProfileConfiguration disableMultiHopRag(Boolean disableMultiHopRag) {
     this.disableMultiHopRag = disableMultiHopRag;
     return this;
   }
@@ -427,15 +470,15 @@ public class GChatProfileConfiguration {
    * @return disableMultiHopRag
   **/
   @Schema(description = "")
-  public Object getDisableMultiHopRag() {
+  public Boolean isDisableMultiHopRag() {
     return disableMultiHopRag;
   }
 
-  public void setDisableMultiHopRag(Object disableMultiHopRag) {
+  public void setDisableMultiHopRag(Boolean disableMultiHopRag) {
     this.disableMultiHopRag = disableMultiHopRag;
   }
 
-  public GChatProfileConfiguration otherSearchSimilarityThreshold(Object otherSearchSimilarityThreshold) {
+  public GChatProfileConfiguration otherSearchSimilarityThreshold(Double otherSearchSimilarityThreshold) {
     this.otherSearchSimilarityThreshold = otherSearchSimilarityThreshold;
     return this;
   }
@@ -445,15 +488,15 @@ public class GChatProfileConfiguration {
    * @return otherSearchSimilarityThreshold
   **/
   @Schema(description = "")
-  public Object getOtherSearchSimilarityThreshold() {
+  public Double getOtherSearchSimilarityThreshold() {
     return otherSearchSimilarityThreshold;
   }
 
-  public void setOtherSearchSimilarityThreshold(Object otherSearchSimilarityThreshold) {
+  public void setOtherSearchSimilarityThreshold(Double otherSearchSimilarityThreshold) {
     this.otherSearchSimilarityThreshold = otherSearchSimilarityThreshold;
   }
 
-  public GChatProfileConfiguration manualThreasholdsConfiguration(Object manualThreasholdsConfiguration) {
+  public GChatProfileConfiguration manualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
     return this;
   }
@@ -463,15 +506,15 @@ public class GChatProfileConfiguration {
    * @return manualThreasholdsConfiguration
   **/
   @Schema(description = "")
-  public Object getManualThreasholdsConfiguration() {
+  public Boolean isManualThreasholdsConfiguration() {
     return manualThreasholdsConfiguration;
   }
 
-  public void setManualThreasholdsConfiguration(Object manualThreasholdsConfiguration) {
+  public void setManualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
     this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
   }
 
-  public GChatProfileConfiguration useAlsoKeywordSearch(Object useAlsoKeywordSearch) {
+  public GChatProfileConfiguration useAlsoKeywordSearch(Boolean useAlsoKeywordSearch) {
     this.useAlsoKeywordSearch = useAlsoKeywordSearch;
     return this;
   }
@@ -481,11 +524,11 @@ public class GChatProfileConfiguration {
    * @return useAlsoKeywordSearch
   **/
   @Schema(description = "")
-  public Object getUseAlsoKeywordSearch() {
+  public Boolean isUseAlsoKeywordSearch() {
     return useAlsoKeywordSearch;
   }
 
-  public void setUseAlsoKeywordSearch(Object useAlsoKeywordSearch) {
+  public void setUseAlsoKeywordSearch(Boolean useAlsoKeywordSearch) {
     this.useAlsoKeywordSearch = useAlsoKeywordSearch;
   }
 

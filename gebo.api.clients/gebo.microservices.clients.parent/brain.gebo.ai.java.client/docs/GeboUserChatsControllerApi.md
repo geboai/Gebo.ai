@@ -76,8 +76,8 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object chatProfileCode = null; // Object | 
-Object contextCode = null; // Object | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
+String contextCode = "contextCode_example"; // String | 
 try {
     GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
     System.out.println(result);
@@ -91,8 +91,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  |
- **contextCode** | [**Object**](.md)|  | [optional]
+ **chatProfileCode** | **String**|  |
+ **contextCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -121,7 +121,7 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object modelCode = null; // Object | 
+String modelCode = "modelCode_example"; // String | 
 try {
     GUserChatInfo result = apiInstance.createCleanChatByModelCode(modelCode);
     System.out.println(result);
@@ -135,7 +135,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  |
+ **modelCode** | **String**|  |
 
 ### Return type
 
@@ -164,7 +164,7 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object userChatContextCode = null; // Object | 
+String userChatContextCode = "userChatContextCode_example"; // String | 
 try {
     apiInstance.deleteChat(userChatContextCode);
 } catch (ApiException e) {
@@ -177,7 +177,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userChatContextCode** | [**Object**](.md)|  |
+ **userChatContextCode** | **String**|  |
 
 ### Return type
 
@@ -206,9 +206,9 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object userContextCode = null; // Object | 
-Object responseId = null; // Object | 
-Object format = null; // Object | 
+String userContextCode = "userContextCode_example"; // String | 
+String responseId = "responseId_example"; // String | 
+String format = "format_example"; // String | 
 try {
     apiInstance.exportResponse2file(userContextCode, responseId, format);
 } catch (ApiException e) {
@@ -221,9 +221,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userContextCode** | [**Object**](.md)|  |
- **responseId** | [**Object**](.md)|  |
- **format** | [**Object**](.md)|  |
+ **userContextCode** | **String**|  |
+ **responseId** | **String**|  |
+ **format** | **String**|  | [enum: EXCEL, WORD, PDF]
 
 ### Return type
 
@@ -252,7 +252,7 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     UserChatHistory result = apiInstance.getChatHistory(code);
     System.out.println(result);
@@ -266,7 +266,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -295,7 +295,7 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object id = null; // Object | 
+String id = "id_example"; // String | 
 try {
     GUserChatInfo result = apiInstance.getChatInfosByCode(id);
     System.out.println(result);
@@ -309,7 +309,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | [**Object**](.md)|  |
+ **id** | **String**|  |
 
 ### Return type
 
@@ -369,7 +369,7 @@ No authorization required
 
 <a name="getMyChats"></a>
 # **getMyChats**
-> Object getMyChats()
+> List&lt;GUserChatInfo&gt; getMyChats()
 
 
 
@@ -382,7 +382,7 @@ No authorization required
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 try {
-    Object result = apiInstance.getMyChats();
+    List<GUserChatInfo> result = apiInstance.getMyChats();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#getMyChats");
@@ -395,7 +395,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GUserChatInfo&gt;**](GUserChatInfo.md)
 
 ### Authorization
 
@@ -408,7 +408,7 @@ No authorization required
 
 <a name="getMyChatsByContextCode"></a>
 # **getMyChatsByContextCode**
-> Object getMyChatsByContextCode(contextCode)
+> List&lt;GUserChatInfo&gt; getMyChatsByContextCode(contextCode)
 
 
 
@@ -420,9 +420,9 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object contextCode = null; // Object | 
+String contextCode = "contextCode_example"; // String | 
 try {
-    Object result = apiInstance.getMyChatsByContextCode(contextCode);
+    List<GUserChatInfo> result = apiInstance.getMyChatsByContextCode(contextCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#getMyChatsByContextCode");
@@ -434,11 +434,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **contextCode** | [**Object**](.md)|  |
+ **contextCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GUserChatInfo&gt;**](GUserChatInfo.md)
 
 ### Authorization
 
@@ -463,8 +463,8 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object page = null; // Object | 
-Object pageSize = null; // Object | 
+Integer page = 56; // Integer | 
+Integer pageSize = 56; // Integer | 
 try {
     PageGUserChatInfo result = apiInstance.getMyChatsPaged(page, pageSize);
     System.out.println(result);
@@ -478,8 +478,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | [**Object**](.md)|  |
- **pageSize** | [**Object**](.md)|  |
+ **page** | **Integer**|  |
+ **pageSize** | **Integer**|  |
 
 ### Return type
 
@@ -535,7 +535,7 @@ No authorization required
 
 <a name="isMinimalLLMSSetupDone"></a>
 # **isMinimalLLMSSetupDone**
-> Object isMinimalLLMSSetupDone()
+> Boolean isMinimalLLMSSetupDone()
 
 
 
@@ -548,7 +548,7 @@ No authorization required
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
 try {
-    Object result = apiInstance.isMinimalLLMSSetupDone();
+    Boolean result = apiInstance.isMinimalLLMSSetupDone();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserChatsControllerApi#isMinimalLLMSSetupDone");
@@ -561,7 +561,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 
@@ -586,7 +586,7 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-Object userChatContextCode = null; // Object | 
+String userChatContextCode = "userChatContextCode_example"; // String | 
 try {
     GUserChatInfo result = apiInstance.suggestChatDescription(userChatContextCode);
     System.out.println(result);
@@ -600,7 +600,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userChatContextCode** | [**Object**](.md)|  |
+ **userChatContextCode** | **String**|  |
 
 ### Return type
 

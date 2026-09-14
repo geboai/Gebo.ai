@@ -22,49 +22,125 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMSVendorInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMSVendorInfo {
   @JsonProperty("vendorId")
-  private Object vendorId = null;
+  private String vendorId = null;
 
   @JsonProperty("requiresCustomUrl")
-  private Object requiresCustomUrl = null;
+  private Boolean requiresCustomUrl = null;
 
   @JsonProperty("defaultCustomUrl")
-  private Object defaultCustomUrl = null;
+  private String defaultCustomUrl = null;
 
   @JsonProperty("requiresApiKey")
-  private Object requiresApiKey = null;
+  private Boolean requiresApiKey = null;
 
-  @JsonProperty("secretType")
-  private Object secretType = null;
+  /**
+   * Gets or Sets secretType
+   */
+  public enum SecretTypeEnum {
+    USERNAME_PASSWORD("USERNAME_PASSWORD"),
+    TOKEN("TOKEN"),
+    SSH_KEY("SSH_KEY"),
+    CUSTOM_SECRET("CUSTOM_SECRET"),
+    OAUTH2_STANDARD("OAUTH2_STANDARD"),
+    OAUTH2_GOOGLE("OAUTH2_GOOGLE"),
+    GOOGLE_CLOUD_JSON_CREDENTIALS("GOOGLE_CLOUD_JSON_CREDENTIALS"),
+    OAUTH2_AUTHORIZED_CLIENT("OAUTH2_AUTHORIZED_CLIENT"),
+    AWS_CONNECTION("AWS_CONNECTION");
 
-  @JsonProperty("authProvider")
-  private Object authProvider = null;
+    private String value;
+
+    SecretTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SecretTypeEnum fromValue(String input) {
+      for (SecretTypeEnum b : SecretTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("secretType")
+  private SecretTypeEnum secretType = null;
+
+  /**
+   * Gets or Sets authProvider
+   */
+  public enum AuthProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
+
+    private String value;
+
+    AuthProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthProviderEnum fromValue(String input) {
+      for (AuthProviderEnum b : AuthProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authProvider")
+  private AuthProviderEnum authProvider = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("webSite")
-  private Object webSite = null;
+  private String webSite = null;
 
   @JsonProperty("acquireKeyUrl")
-  private Object acquireKeyUrl = null;
+  private String acquireKeyUrl = null;
 
   @JsonProperty("apiKeySecretContext")
-  private Object apiKeySecretContext = null;
+  private String apiKeySecretContext = null;
 
   @JsonProperty("minContextWindow")
-  private Object minContextWindow = null;
+  private Integer minContextWindow = null;
 
   @JsonProperty("supportsAutoconfig")
-  private Object supportsAutoconfig = null;
+  private Boolean supportsAutoconfig = null;
 
-  public LLMSVendorInfo vendorId(Object vendorId) {
+  public LLMSVendorInfo vendorId(String vendorId) {
     this.vendorId = vendorId;
     return this;
   }
@@ -74,15 +150,15 @@ public class LLMSVendorInfo {
    * @return vendorId
   **/
   @Schema(required = true, description = "")
-  public Object getVendorId() {
+  public String getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(Object vendorId) {
+  public void setVendorId(String vendorId) {
     this.vendorId = vendorId;
   }
 
-  public LLMSVendorInfo requiresCustomUrl(Object requiresCustomUrl) {
+  public LLMSVendorInfo requiresCustomUrl(Boolean requiresCustomUrl) {
     this.requiresCustomUrl = requiresCustomUrl;
     return this;
   }
@@ -92,15 +168,15 @@ public class LLMSVendorInfo {
    * @return requiresCustomUrl
   **/
   @Schema(description = "")
-  public Object getRequiresCustomUrl() {
+  public Boolean isRequiresCustomUrl() {
     return requiresCustomUrl;
   }
 
-  public void setRequiresCustomUrl(Object requiresCustomUrl) {
+  public void setRequiresCustomUrl(Boolean requiresCustomUrl) {
     this.requiresCustomUrl = requiresCustomUrl;
   }
 
-  public LLMSVendorInfo defaultCustomUrl(Object defaultCustomUrl) {
+  public LLMSVendorInfo defaultCustomUrl(String defaultCustomUrl) {
     this.defaultCustomUrl = defaultCustomUrl;
     return this;
   }
@@ -110,15 +186,15 @@ public class LLMSVendorInfo {
    * @return defaultCustomUrl
   **/
   @Schema(description = "")
-  public Object getDefaultCustomUrl() {
+  public String getDefaultCustomUrl() {
     return defaultCustomUrl;
   }
 
-  public void setDefaultCustomUrl(Object defaultCustomUrl) {
+  public void setDefaultCustomUrl(String defaultCustomUrl) {
     this.defaultCustomUrl = defaultCustomUrl;
   }
 
-  public LLMSVendorInfo requiresApiKey(Object requiresApiKey) {
+  public LLMSVendorInfo requiresApiKey(Boolean requiresApiKey) {
     this.requiresApiKey = requiresApiKey;
     return this;
   }
@@ -128,15 +204,15 @@ public class LLMSVendorInfo {
    * @return requiresApiKey
   **/
   @Schema(description = "")
-  public Object getRequiresApiKey() {
+  public Boolean isRequiresApiKey() {
     return requiresApiKey;
   }
 
-  public void setRequiresApiKey(Object requiresApiKey) {
+  public void setRequiresApiKey(Boolean requiresApiKey) {
     this.requiresApiKey = requiresApiKey;
   }
 
-  public LLMSVendorInfo secretType(Object secretType) {
+  public LLMSVendorInfo secretType(SecretTypeEnum secretType) {
     this.secretType = secretType;
     return this;
   }
@@ -146,15 +222,15 @@ public class LLMSVendorInfo {
    * @return secretType
   **/
   @Schema(description = "")
-  public Object getSecretType() {
+  public SecretTypeEnum getSecretType() {
     return secretType;
   }
 
-  public void setSecretType(Object secretType) {
+  public void setSecretType(SecretTypeEnum secretType) {
     this.secretType = secretType;
   }
 
-  public LLMSVendorInfo authProvider(Object authProvider) {
+  public LLMSVendorInfo authProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
     return this;
   }
@@ -164,15 +240,15 @@ public class LLMSVendorInfo {
    * @return authProvider
   **/
   @Schema(description = "")
-  public Object getAuthProvider() {
+  public AuthProviderEnum getAuthProvider() {
     return authProvider;
   }
 
-  public void setAuthProvider(Object authProvider) {
+  public void setAuthProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
   }
 
-  public LLMSVendorInfo description(Object description) {
+  public LLMSVendorInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -182,15 +258,15 @@ public class LLMSVendorInfo {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public LLMSVendorInfo name(Object name) {
+  public LLMSVendorInfo name(String name) {
     this.name = name;
     return this;
   }
@@ -200,15 +276,15 @@ public class LLMSVendorInfo {
    * @return name
   **/
   @Schema(required = true, description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public LLMSVendorInfo webSite(Object webSite) {
+  public LLMSVendorInfo webSite(String webSite) {
     this.webSite = webSite;
     return this;
   }
@@ -218,15 +294,15 @@ public class LLMSVendorInfo {
    * @return webSite
   **/
   @Schema(required = true, description = "")
-  public Object getWebSite() {
+  public String getWebSite() {
     return webSite;
   }
 
-  public void setWebSite(Object webSite) {
+  public void setWebSite(String webSite) {
     this.webSite = webSite;
   }
 
-  public LLMSVendorInfo acquireKeyUrl(Object acquireKeyUrl) {
+  public LLMSVendorInfo acquireKeyUrl(String acquireKeyUrl) {
     this.acquireKeyUrl = acquireKeyUrl;
     return this;
   }
@@ -236,15 +312,15 @@ public class LLMSVendorInfo {
    * @return acquireKeyUrl
   **/
   @Schema(description = "")
-  public Object getAcquireKeyUrl() {
+  public String getAcquireKeyUrl() {
     return acquireKeyUrl;
   }
 
-  public void setAcquireKeyUrl(Object acquireKeyUrl) {
+  public void setAcquireKeyUrl(String acquireKeyUrl) {
     this.acquireKeyUrl = acquireKeyUrl;
   }
 
-  public LLMSVendorInfo apiKeySecretContext(Object apiKeySecretContext) {
+  public LLMSVendorInfo apiKeySecretContext(String apiKeySecretContext) {
     this.apiKeySecretContext = apiKeySecretContext;
     return this;
   }
@@ -254,15 +330,15 @@ public class LLMSVendorInfo {
    * @return apiKeySecretContext
   **/
   @Schema(required = true, description = "")
-  public Object getApiKeySecretContext() {
+  public String getApiKeySecretContext() {
     return apiKeySecretContext;
   }
 
-  public void setApiKeySecretContext(Object apiKeySecretContext) {
+  public void setApiKeySecretContext(String apiKeySecretContext) {
     this.apiKeySecretContext = apiKeySecretContext;
   }
 
-  public LLMSVendorInfo minContextWindow(Object minContextWindow) {
+  public LLMSVendorInfo minContextWindow(Integer minContextWindow) {
     this.minContextWindow = minContextWindow;
     return this;
   }
@@ -272,15 +348,15 @@ public class LLMSVendorInfo {
    * @return minContextWindow
   **/
   @Schema(description = "")
-  public Object getMinContextWindow() {
+  public Integer getMinContextWindow() {
     return minContextWindow;
   }
 
-  public void setMinContextWindow(Object minContextWindow) {
+  public void setMinContextWindow(Integer minContextWindow) {
     this.minContextWindow = minContextWindow;
   }
 
-  public LLMSVendorInfo supportsAutoconfig(Object supportsAutoconfig) {
+  public LLMSVendorInfo supportsAutoconfig(Boolean supportsAutoconfig) {
     this.supportsAutoconfig = supportsAutoconfig;
     return this;
   }
@@ -290,11 +366,11 @@ public class LLMSVendorInfo {
    * @return supportsAutoconfig
   **/
   @Schema(description = "")
-  public Object getSupportsAutoconfig() {
+  public Boolean isSupportsAutoconfig() {
     return supportsAutoconfig;
   }
 
-  public void setSupportsAutoconfig(Object supportsAutoconfig) {
+  public void setSupportsAutoconfig(Boolean supportsAutoconfig) {
     this.supportsAutoconfig = supportsAutoconfig;
   }
 

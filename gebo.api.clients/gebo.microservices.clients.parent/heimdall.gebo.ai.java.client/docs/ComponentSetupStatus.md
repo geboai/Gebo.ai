@@ -3,4 +3,4 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**isSetup** | **Object** |  |  [optional]
+**isSetup** | **Boolean** |  |  [optional]

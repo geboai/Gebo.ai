@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GLookupEntry } from '../model/gLookupEntry';
+import { ToolCategoriesTree } from '../model/toolCategoriesTree';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +62,9 @@ export class FunctionsLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllFunctions(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllFunctions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllFunctions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllFunctions(observe?: 'body', reportProgress?: boolean): Observable<Array<GLookupEntry>>;
+    public getAllFunctions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GLookupEntry>>>;
+    public getAllFunctions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GLookupEntry>>>;
     public getAllFunctions(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +82,7 @@ export class FunctionsLookupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllFunctions`,
+        return this.httpClient.request<Array<GLookupEntry>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllFunctions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -97,10 +99,10 @@ export class FunctionsLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllFunctionsTree(ragContextFunctions?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllFunctionsTree(ragContextFunctions?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllFunctionsTree(ragContextFunctions?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getAllFunctionsTree(ragContextFunctions?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllFunctionsTree(ragContextFunctions?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<ToolCategoriesTree>>;
+    public getAllFunctionsTree(ragContextFunctions?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ToolCategoriesTree>>>;
+    public getAllFunctionsTree(ragContextFunctions?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ToolCategoriesTree>>>;
+    public getAllFunctionsTree(ragContextFunctions?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -123,7 +125,7 @@ export class FunctionsLookupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllFunctionsTree`,
+        return this.httpClient.request<Array<ToolCategoriesTree>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllFunctionsTree`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -140,9 +142,9 @@ export class FunctionsLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllLocalFunctions(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllLocalFunctions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllLocalFunctions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllLocalFunctions(observe?: 'body', reportProgress?: boolean): Observable<Array<GLookupEntry>>;
+    public getAllLocalFunctions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GLookupEntry>>>;
+    public getAllLocalFunctions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GLookupEntry>>>;
     public getAllLocalFunctions(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -160,7 +162,7 @@ export class FunctionsLookupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllLocalFunctions`,
+        return this.httpClient.request<Array<GLookupEntry>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllLocalFunctions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -177,15 +179,15 @@ export class FunctionsLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllLocalFunctionsTree(ragContextFunctions?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllLocalFunctionsTree(ragContextFunctions?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllLocalFunctionsTree(ragContextFunctions?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getAllLocalFunctionsTree(ragContextFunctions?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<ToolCategoriesTree>>;
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ToolCategoriesTree>>>;
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ToolCategoriesTree>>>;
+    public getAllLocalFunctionsTree(ragContextFunctions?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (ragContextFunctions !== undefined && ragContextFunctions !== null) {
-            queryParameters = queryParameters.set('ragContextFunctions', JSON.stringify(ragContextFunctions));
+            queryParameters = queryParameters.set('ragContextFunctions', <any>ragContextFunctions);
         }
 
         let headers = this.defaultHeaders;
@@ -203,7 +205,7 @@ export class FunctionsLookupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllLocalFunctionsTree`,
+        return this.httpClient.request<Array<ToolCategoriesTree>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllLocalFunctionsTree`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

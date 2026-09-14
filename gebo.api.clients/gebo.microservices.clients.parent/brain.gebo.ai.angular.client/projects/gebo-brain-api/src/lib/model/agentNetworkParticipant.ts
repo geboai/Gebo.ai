@@ -11,16 +11,25 @@
  */
 
 export interface AgentNetworkParticipant { 
-    agentConfigCode: any;
-    agentContextualName?: any;
-    inputNode?: any;
-    outputNode?: any;
-    allowedToNotifyUser?: any;
-    communicationPolicy: any;
-    communicationList?: any;
-    maxInvocations?: any;
-    maxConsecutiveInvocations?: any;
-    canCallTools?: any;
-    canCallOtherAgents?: any;
-    networkAgentName?: any;
+    agentConfigCode: string;
+    agentContextualName?: string;
+    inputNode?: boolean;
+    outputNode?: boolean;
+    allowedToNotifyUser?: boolean;
+    communicationPolicy: AgentNetworkParticipant.CommunicationPolicyEnum;
+    communicationList?: Array<string>;
+    maxInvocations?: number;
+    maxConsecutiveInvocations?: number;
+    canCallTools?: boolean;
+    canCallOtherAgents?: boolean;
+    networkAgentName?: string;
+}
+export namespace AgentNetworkParticipant {
+    export type CommunicationPolicyEnum = 'ALLOW_ALL' | 'DENY_ALL' | 'ALLOW_LIST' | 'DENY_LIST';
+    export const CommunicationPolicyEnum = {
+        ALLOWALL: 'ALLOW_ALL' as CommunicationPolicyEnum,
+        DENYALL: 'DENY_ALL' as CommunicationPolicyEnum,
+        ALLOWLIST: 'ALLOW_LIST' as CommunicationPolicyEnum,
+        DENYLIST: 'DENY_LIST' as CommunicationPolicyEnum
+    };
 }

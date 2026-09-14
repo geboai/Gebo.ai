@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getSearxngSearchApiCredentials"></a>
 # **getSearxngSearchApiCredentials**
-> Object getSearxngSearchApiCredentials()
+> List&lt;GSearxngSearchApiCredentials&gt; getSearxngSearchApiCredentials()
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 
 SearxngSearchConfigurationControllerApi apiInstance = new SearxngSearchConfigurationControllerApi();
 try {
-    Object result = apiInstance.getSearxngSearchApiCredentials();
+    List<GSearxngSearchApiCredentials> result = apiInstance.getSearxngSearchApiCredentials();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SearxngSearchConfigurationControllerApi#getSearxngSearchApiCredentials");
@@ -125,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GSearxngSearchApiCredentials&gt;**](GSearxngSearchApiCredentials.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ No authorization required
 
 
 SearxngSearchConfigurationControllerApi apiInstance = new SearxngSearchConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GSearxngSearchApiCredentials result = apiInstance.searchGSearxngSearchApiCredentialsByCode(code);
     System.out.println(result);
@@ -246,7 +246,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

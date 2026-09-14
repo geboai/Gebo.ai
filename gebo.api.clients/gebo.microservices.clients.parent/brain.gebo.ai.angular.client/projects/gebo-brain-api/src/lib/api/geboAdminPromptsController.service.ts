@@ -109,10 +109,10 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findPromptConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
-    public findPromptConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
-    public findPromptConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
-    public findPromptConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findPromptConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public findPromptConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public findPromptConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
+    public findPromptConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findPromptConfigByCode.');
@@ -155,9 +155,9 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPromptCategories(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getPromptCategories(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getPromptCategories(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getPromptCategories(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getPromptCategories(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getPromptCategories(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
     public getPromptCategories(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -175,7 +175,7 @@ export class GeboAdminPromptsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/getPromptCategories`,
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/getPromptCategories`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

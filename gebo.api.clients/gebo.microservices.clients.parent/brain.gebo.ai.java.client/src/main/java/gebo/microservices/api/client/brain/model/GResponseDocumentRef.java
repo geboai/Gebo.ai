@@ -17,76 +17,110 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.DocInternalRef;
 import gebo.microservices.api.client.brain.model.SearchResult;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GResponseDocumentRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GResponseDocumentRef {
-  @JsonProperty("referenceType")
-  private Object referenceType = null;
+  /**
+   * Gets or Sets referenceType
+   */
+  public enum ReferenceTypeEnum {
+    FILE("FILE"),
+    WEB("WEB");
+
+    private String value;
+
+    ReferenceTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ReferenceTypeEnum fromValue(String input) {
+      for (ReferenceTypeEnum b : ReferenceTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("referenceType")
+  private ReferenceTypeEnum referenceType = null;
 
   @JsonProperty("uuid")
-  private Object uuid = null;
+  private String uuid = null;
 
   @JsonProperty("documentCode")
-  private Object documentCode = null;
+  private String documentCode = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("knowledgeBaseCode")
-  private Object knowledgeBaseCode = null;
+  private String knowledgeBaseCode = null;
 
   @JsonProperty("projectCode")
-  private Object projectCode = null;
+  private String projectCode = null;
 
   @JsonProperty("geboTreatAs")
-  private Object geboTreatAs = null;
+  private String geboTreatAs = null;
 
   @JsonProperty("geboFileTypeDescription")
-  private Object geboFileTypeDescription = null;
+  private String geboFileTypeDescription = null;
 
   @JsonProperty("geboFileTypeId")
-  private Object geboFileTypeId = null;
+  private String geboFileTypeId = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("knowledgeBaseDocument")
-  private Object knowledgeBaseDocument = null;
+  private Boolean knowledgeBaseDocument = null;
 
   @JsonProperty("nestedSearchResult")
   private SearchResult nestedSearchResult = null;
 
   @JsonProperty("loadPercentage")
-  private Object loadPercentage = null;
+  private Double loadPercentage = null;
 
   @JsonProperty("references")
-  private Object references = null;
+  private List<DocInternalRef> references = null;
 
   @JsonProperty("ntokensRelevant")
-  private Object ntokensRelevant = null;
+  private Long ntokensRelevant = null;
 
   @JsonProperty("ntotalContentTokens")
-  private Object ntotalContentTokens = null;
+  private Long ntotalContentTokens = null;
 
   @JsonProperty("nbytesRelevant")
-  private Object nbytesRelevant = null;
+  private Long nbytesRelevant = null;
 
   @JsonProperty("shortCode")
-  private Object shortCode = null;
+  private String shortCode = null;
 
-  public GResponseDocumentRef referenceType(Object referenceType) {
+  public GResponseDocumentRef referenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
     return this;
   }
@@ -96,15 +130,15 @@ public class GResponseDocumentRef {
    * @return referenceType
   **/
   @Schema(description = "")
-  public Object getReferenceType() {
+  public ReferenceTypeEnum getReferenceType() {
     return referenceType;
   }
 
-  public void setReferenceType(Object referenceType) {
+  public void setReferenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
   }
 
-  public GResponseDocumentRef uuid(Object uuid) {
+  public GResponseDocumentRef uuid(String uuid) {
     this.uuid = uuid;
     return this;
   }
@@ -114,15 +148,15 @@ public class GResponseDocumentRef {
    * @return uuid
   **/
   @Schema(description = "")
-  public Object getUuid() {
+  public String getUuid() {
     return uuid;
   }
 
-  public void setUuid(Object uuid) {
+  public void setUuid(String uuid) {
     this.uuid = uuid;
   }
 
-  public GResponseDocumentRef documentCode(Object documentCode) {
+  public GResponseDocumentRef documentCode(String documentCode) {
     this.documentCode = documentCode;
     return this;
   }
@@ -132,15 +166,15 @@ public class GResponseDocumentRef {
    * @return documentCode
   **/
   @Schema(description = "")
-  public Object getDocumentCode() {
+  public String getDocumentCode() {
     return documentCode;
   }
 
-  public void setDocumentCode(Object documentCode) {
+  public void setDocumentCode(String documentCode) {
     this.documentCode = documentCode;
   }
 
-  public GResponseDocumentRef description(Object description) {
+  public GResponseDocumentRef description(String description) {
     this.description = description;
     return this;
   }
@@ -150,15 +184,15 @@ public class GResponseDocumentRef {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GResponseDocumentRef contentType(Object contentType) {
+  public GResponseDocumentRef contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -168,15 +202,15 @@ public class GResponseDocumentRef {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public GResponseDocumentRef extension(Object extension) {
+  public GResponseDocumentRef extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -186,15 +220,15 @@ public class GResponseDocumentRef {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public GResponseDocumentRef knowledgeBaseCode(Object knowledgeBaseCode) {
+  public GResponseDocumentRef knowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
     return this;
   }
@@ -204,15 +238,15 @@ public class GResponseDocumentRef {
    * @return knowledgeBaseCode
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseCode() {
+  public String getKnowledgeBaseCode() {
     return knowledgeBaseCode;
   }
 
-  public void setKnowledgeBaseCode(Object knowledgeBaseCode) {
+  public void setKnowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
   }
 
-  public GResponseDocumentRef projectCode(Object projectCode) {
+  public GResponseDocumentRef projectCode(String projectCode) {
     this.projectCode = projectCode;
     return this;
   }
@@ -222,15 +256,15 @@ public class GResponseDocumentRef {
    * @return projectCode
   **/
   @Schema(description = "")
-  public Object getProjectCode() {
+  public String getProjectCode() {
     return projectCode;
   }
 
-  public void setProjectCode(Object projectCode) {
+  public void setProjectCode(String projectCode) {
     this.projectCode = projectCode;
   }
 
-  public GResponseDocumentRef geboTreatAs(Object geboTreatAs) {
+  public GResponseDocumentRef geboTreatAs(String geboTreatAs) {
     this.geboTreatAs = geboTreatAs;
     return this;
   }
@@ -240,15 +274,15 @@ public class GResponseDocumentRef {
    * @return geboTreatAs
   **/
   @Schema(description = "")
-  public Object getGeboTreatAs() {
+  public String getGeboTreatAs() {
     return geboTreatAs;
   }
 
-  public void setGeboTreatAs(Object geboTreatAs) {
+  public void setGeboTreatAs(String geboTreatAs) {
     this.geboTreatAs = geboTreatAs;
   }
 
-  public GResponseDocumentRef geboFileTypeDescription(Object geboFileTypeDescription) {
+  public GResponseDocumentRef geboFileTypeDescription(String geboFileTypeDescription) {
     this.geboFileTypeDescription = geboFileTypeDescription;
     return this;
   }
@@ -258,15 +292,15 @@ public class GResponseDocumentRef {
    * @return geboFileTypeDescription
   **/
   @Schema(description = "")
-  public Object getGeboFileTypeDescription() {
+  public String getGeboFileTypeDescription() {
     return geboFileTypeDescription;
   }
 
-  public void setGeboFileTypeDescription(Object geboFileTypeDescription) {
+  public void setGeboFileTypeDescription(String geboFileTypeDescription) {
     this.geboFileTypeDescription = geboFileTypeDescription;
   }
 
-  public GResponseDocumentRef geboFileTypeId(Object geboFileTypeId) {
+  public GResponseDocumentRef geboFileTypeId(String geboFileTypeId) {
     this.geboFileTypeId = geboFileTypeId;
     return this;
   }
@@ -276,15 +310,15 @@ public class GResponseDocumentRef {
    * @return geboFileTypeId
   **/
   @Schema(description = "")
-  public Object getGeboFileTypeId() {
+  public String getGeboFileTypeId() {
     return geboFileTypeId;
   }
 
-  public void setGeboFileTypeId(Object geboFileTypeId) {
+  public void setGeboFileTypeId(String geboFileTypeId) {
     this.geboFileTypeId = geboFileTypeId;
   }
 
-  public GResponseDocumentRef name(Object name) {
+  public GResponseDocumentRef name(String name) {
     this.name = name;
     return this;
   }
@@ -294,15 +328,15 @@ public class GResponseDocumentRef {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public GResponseDocumentRef knowledgeBaseDocument(Object knowledgeBaseDocument) {
+  public GResponseDocumentRef knowledgeBaseDocument(Boolean knowledgeBaseDocument) {
     this.knowledgeBaseDocument = knowledgeBaseDocument;
     return this;
   }
@@ -312,11 +346,11 @@ public class GResponseDocumentRef {
    * @return knowledgeBaseDocument
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseDocument() {
+  public Boolean isKnowledgeBaseDocument() {
     return knowledgeBaseDocument;
   }
 
-  public void setKnowledgeBaseDocument(Object knowledgeBaseDocument) {
+  public void setKnowledgeBaseDocument(Boolean knowledgeBaseDocument) {
     this.knowledgeBaseDocument = knowledgeBaseDocument;
   }
 
@@ -338,7 +372,7 @@ public class GResponseDocumentRef {
     this.nestedSearchResult = nestedSearchResult;
   }
 
-  public GResponseDocumentRef loadPercentage(Object loadPercentage) {
+  public GResponseDocumentRef loadPercentage(Double loadPercentage) {
     this.loadPercentage = loadPercentage;
     return this;
   }
@@ -348,16 +382,24 @@ public class GResponseDocumentRef {
    * @return loadPercentage
   **/
   @Schema(description = "")
-  public Object getLoadPercentage() {
+  public Double getLoadPercentage() {
     return loadPercentage;
   }
 
-  public void setLoadPercentage(Object loadPercentage) {
+  public void setLoadPercentage(Double loadPercentage) {
     this.loadPercentage = loadPercentage;
   }
 
-  public GResponseDocumentRef references(Object references) {
+  public GResponseDocumentRef references(List<DocInternalRef> references) {
     this.references = references;
+    return this;
+  }
+
+  public GResponseDocumentRef addReferencesItem(DocInternalRef referencesItem) {
+    if (this.references == null) {
+      this.references = new ArrayList<>();
+    }
+    this.references.add(referencesItem);
     return this;
   }
 
@@ -366,15 +408,15 @@ public class GResponseDocumentRef {
    * @return references
   **/
   @Schema(description = "")
-  public Object getReferences() {
+  public List<DocInternalRef> getReferences() {
     return references;
   }
 
-  public void setReferences(Object references) {
+  public void setReferences(List<DocInternalRef> references) {
     this.references = references;
   }
 
-  public GResponseDocumentRef ntokensRelevant(Object ntokensRelevant) {
+  public GResponseDocumentRef ntokensRelevant(Long ntokensRelevant) {
     this.ntokensRelevant = ntokensRelevant;
     return this;
   }
@@ -384,15 +426,15 @@ public class GResponseDocumentRef {
    * @return ntokensRelevant
   **/
   @Schema(description = "")
-  public Object getNtokensRelevant() {
+  public Long getNtokensRelevant() {
     return ntokensRelevant;
   }
 
-  public void setNtokensRelevant(Object ntokensRelevant) {
+  public void setNtokensRelevant(Long ntokensRelevant) {
     this.ntokensRelevant = ntokensRelevant;
   }
 
-  public GResponseDocumentRef ntotalContentTokens(Object ntotalContentTokens) {
+  public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
     this.ntotalContentTokens = ntotalContentTokens;
     return this;
   }
@@ -402,15 +444,15 @@ public class GResponseDocumentRef {
    * @return ntotalContentTokens
   **/
   @Schema(description = "")
-  public Object getNtotalContentTokens() {
+  public Long getNtotalContentTokens() {
     return ntotalContentTokens;
   }
 
-  public void setNtotalContentTokens(Object ntotalContentTokens) {
+  public void setNtotalContentTokens(Long ntotalContentTokens) {
     this.ntotalContentTokens = ntotalContentTokens;
   }
 
-  public GResponseDocumentRef nbytesRelevant(Object nbytesRelevant) {
+  public GResponseDocumentRef nbytesRelevant(Long nbytesRelevant) {
     this.nbytesRelevant = nbytesRelevant;
     return this;
   }
@@ -420,15 +462,15 @@ public class GResponseDocumentRef {
    * @return nbytesRelevant
   **/
   @Schema(description = "")
-  public Object getNbytesRelevant() {
+  public Long getNbytesRelevant() {
     return nbytesRelevant;
   }
 
-  public void setNbytesRelevant(Object nbytesRelevant) {
+  public void setNbytesRelevant(Long nbytesRelevant) {
     this.nbytesRelevant = nbytesRelevant;
   }
 
-  public GResponseDocumentRef shortCode(Object shortCode) {
+  public GResponseDocumentRef shortCode(String shortCode) {
     this.shortCode = shortCode;
     return this;
   }
@@ -438,11 +480,11 @@ public class GResponseDocumentRef {
    * @return shortCode
   **/
   @Schema(description = "")
-  public Object getShortCode() {
+  public String getShortCode() {
     return shortCode;
   }
 
-  public void setShortCode(Object shortCode) {
+  public void setShortCode(String shortCode) {
     this.shortCode = shortCode;
   }
 

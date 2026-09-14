@@ -18,18 +18,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ChatSessionUploadUserSessionCodeBody
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ChatSessionUploadUserSessionCodeBody {
   @JsonProperty("files[]")
-  private Object files = null;
+  private List<File> files = new ArrayList<>();
 
-  public ChatSessionUploadUserSessionCodeBody files(Object files) {
+  public ChatSessionUploadUserSessionCodeBody files(List<File> files) {
     this.files = files;
+    return this;
+  }
+
+  public ChatSessionUploadUserSessionCodeBody addFilesItem(File filesItem) {
+    this.files.add(filesItem);
     return this;
   }
 
@@ -38,11 +46,11 @@ public class ChatSessionUploadUserSessionCodeBody {
    * @return files
   **/
   @Schema(required = true, description = "")
-  public Object getFiles() {
+  public List<File> getFiles() {
     return files;
   }
 
-  public void setFiles(Object files) {
+  public void setFiles(List<File> files) {
     this.files = files;
   }
 

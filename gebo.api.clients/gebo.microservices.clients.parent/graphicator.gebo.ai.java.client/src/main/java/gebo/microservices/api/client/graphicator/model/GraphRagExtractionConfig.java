@@ -20,58 +20,62 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.graphicator.model.GContentSelectionFilter;
 import gebo.microservices.api.client.graphicator.model.GObjectRefGBaseChatModelConfig;
 import gebo.microservices.api.client.graphicator.model.GObjectRefGProjectEndpoint;
+import gebo.microservices.api.client.graphicator.model.GraphObjectType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GraphRagExtractionConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:08:59.956635121+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.713838626+02:00[Europe/Rome]")
 
 public class GraphRagExtractionConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("knowledgeBaseCode")
-  private Object knowledgeBaseCode = null;
+  private String knowledgeBaseCode = null;
 
   @JsonProperty("projectCode")
-  private Object projectCode = null;
+  private String projectCode = null;
 
   @JsonProperty("defaultConfiguration")
-  private Object defaultConfiguration = null;
+  private Boolean defaultConfiguration = null;
 
   @JsonProperty("graphRagAllSources")
-  private Object graphRagAllSources = null;
+  private Boolean graphRagAllSources = null;
 
   @JsonProperty("endpoint")
   private GObjectRefGProjectEndpoint endpoint = null;
 
   @JsonProperty("extractionPrompt")
-  private Object extractionPrompt = null;
+  private String extractionPrompt = null;
 
   @JsonProperty("customEntityTypes")
-  private Object customEntityTypes = null;
+  private List<GraphObjectType> customEntityTypes = null;
 
   @JsonProperty("customEventTypes")
-  private Object customEventTypes = null;
+  private List<GraphObjectType> customEventTypes = null;
 
   @JsonProperty("customRelationTypes")
-  private Object customRelationTypes = null;
+  private List<GraphObjectType> customRelationTypes = null;
 
   @JsonProperty("usedModelConfiguration")
   private GObjectRefGBaseChatModelConfig usedModelConfiguration = null;
@@ -80,12 +84,43 @@ public class GraphRagExtractionConfig {
   private GContentSelectionFilter contentSelectionFilter = null;
 
   @JsonProperty("processEveryDocument")
-  private Object processEveryDocument = null;
+  private Boolean processEveryDocument = null;
 
-  @JsonProperty("extractionFormat")
-  private Object extractionFormat = null;
+  /**
+   * Gets or Sets extractionFormat
+   */
+  public enum ExtractionFormatEnum {
+    JSON("JSON"),
+    CSV("CSV");
 
-  public GraphRagExtractionConfig code(Object code) {
+    private String value;
+
+    ExtractionFormatEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ExtractionFormatEnum fromValue(String input) {
+      for (ExtractionFormatEnum b : ExtractionFormatEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("extractionFormat")
+  private ExtractionFormatEnum extractionFormat = null;
+
+  public GraphRagExtractionConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -95,15 +130,15 @@ public class GraphRagExtractionConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GraphRagExtractionConfig description(Object description) {
+  public GraphRagExtractionConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -113,15 +148,15 @@ public class GraphRagExtractionConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GraphRagExtractionConfig userModified(Object userModified) {
+  public GraphRagExtractionConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -131,15 +166,15 @@ public class GraphRagExtractionConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GraphRagExtractionConfig userCreated(Object userCreated) {
+  public GraphRagExtractionConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -149,15 +184,15 @@ public class GraphRagExtractionConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GraphRagExtractionConfig dateModified(Object dateModified) {
+  public GraphRagExtractionConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -167,15 +202,15 @@ public class GraphRagExtractionConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GraphRagExtractionConfig dateCreated(Object dateCreated) {
+  public GraphRagExtractionConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -185,15 +220,15 @@ public class GraphRagExtractionConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GraphRagExtractionConfig knowledgeBaseCode(Object knowledgeBaseCode) {
+  public GraphRagExtractionConfig knowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
     return this;
   }
@@ -203,15 +238,15 @@ public class GraphRagExtractionConfig {
    * @return knowledgeBaseCode
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseCode() {
+  public String getKnowledgeBaseCode() {
     return knowledgeBaseCode;
   }
 
-  public void setKnowledgeBaseCode(Object knowledgeBaseCode) {
+  public void setKnowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
   }
 
-  public GraphRagExtractionConfig projectCode(Object projectCode) {
+  public GraphRagExtractionConfig projectCode(String projectCode) {
     this.projectCode = projectCode;
     return this;
   }
@@ -221,15 +256,15 @@ public class GraphRagExtractionConfig {
    * @return projectCode
   **/
   @Schema(description = "")
-  public Object getProjectCode() {
+  public String getProjectCode() {
     return projectCode;
   }
 
-  public void setProjectCode(Object projectCode) {
+  public void setProjectCode(String projectCode) {
     this.projectCode = projectCode;
   }
 
-  public GraphRagExtractionConfig defaultConfiguration(Object defaultConfiguration) {
+  public GraphRagExtractionConfig defaultConfiguration(Boolean defaultConfiguration) {
     this.defaultConfiguration = defaultConfiguration;
     return this;
   }
@@ -239,15 +274,15 @@ public class GraphRagExtractionConfig {
    * @return defaultConfiguration
   **/
   @Schema(description = "")
-  public Object getDefaultConfiguration() {
+  public Boolean isDefaultConfiguration() {
     return defaultConfiguration;
   }
 
-  public void setDefaultConfiguration(Object defaultConfiguration) {
+  public void setDefaultConfiguration(Boolean defaultConfiguration) {
     this.defaultConfiguration = defaultConfiguration;
   }
 
-  public GraphRagExtractionConfig graphRagAllSources(Object graphRagAllSources) {
+  public GraphRagExtractionConfig graphRagAllSources(Boolean graphRagAllSources) {
     this.graphRagAllSources = graphRagAllSources;
     return this;
   }
@@ -257,11 +292,11 @@ public class GraphRagExtractionConfig {
    * @return graphRagAllSources
   **/
   @Schema(description = "")
-  public Object getGraphRagAllSources() {
+  public Boolean isGraphRagAllSources() {
     return graphRagAllSources;
   }
 
-  public void setGraphRagAllSources(Object graphRagAllSources) {
+  public void setGraphRagAllSources(Boolean graphRagAllSources) {
     this.graphRagAllSources = graphRagAllSources;
   }
 
@@ -283,7 +318,7 @@ public class GraphRagExtractionConfig {
     this.endpoint = endpoint;
   }
 
-  public GraphRagExtractionConfig extractionPrompt(Object extractionPrompt) {
+  public GraphRagExtractionConfig extractionPrompt(String extractionPrompt) {
     this.extractionPrompt = extractionPrompt;
     return this;
   }
@@ -293,16 +328,24 @@ public class GraphRagExtractionConfig {
    * @return extractionPrompt
   **/
   @Schema(description = "")
-  public Object getExtractionPrompt() {
+  public String getExtractionPrompt() {
     return extractionPrompt;
   }
 
-  public void setExtractionPrompt(Object extractionPrompt) {
+  public void setExtractionPrompt(String extractionPrompt) {
     this.extractionPrompt = extractionPrompt;
   }
 
-  public GraphRagExtractionConfig customEntityTypes(Object customEntityTypes) {
+  public GraphRagExtractionConfig customEntityTypes(List<GraphObjectType> customEntityTypes) {
     this.customEntityTypes = customEntityTypes;
+    return this;
+  }
+
+  public GraphRagExtractionConfig addCustomEntityTypesItem(GraphObjectType customEntityTypesItem) {
+    if (this.customEntityTypes == null) {
+      this.customEntityTypes = new ArrayList<>();
+    }
+    this.customEntityTypes.add(customEntityTypesItem);
     return this;
   }
 
@@ -311,16 +354,24 @@ public class GraphRagExtractionConfig {
    * @return customEntityTypes
   **/
   @Schema(description = "")
-  public Object getCustomEntityTypes() {
+  public List<GraphObjectType> getCustomEntityTypes() {
     return customEntityTypes;
   }
 
-  public void setCustomEntityTypes(Object customEntityTypes) {
+  public void setCustomEntityTypes(List<GraphObjectType> customEntityTypes) {
     this.customEntityTypes = customEntityTypes;
   }
 
-  public GraphRagExtractionConfig customEventTypes(Object customEventTypes) {
+  public GraphRagExtractionConfig customEventTypes(List<GraphObjectType> customEventTypes) {
     this.customEventTypes = customEventTypes;
+    return this;
+  }
+
+  public GraphRagExtractionConfig addCustomEventTypesItem(GraphObjectType customEventTypesItem) {
+    if (this.customEventTypes == null) {
+      this.customEventTypes = new ArrayList<>();
+    }
+    this.customEventTypes.add(customEventTypesItem);
     return this;
   }
 
@@ -329,16 +380,24 @@ public class GraphRagExtractionConfig {
    * @return customEventTypes
   **/
   @Schema(description = "")
-  public Object getCustomEventTypes() {
+  public List<GraphObjectType> getCustomEventTypes() {
     return customEventTypes;
   }
 
-  public void setCustomEventTypes(Object customEventTypes) {
+  public void setCustomEventTypes(List<GraphObjectType> customEventTypes) {
     this.customEventTypes = customEventTypes;
   }
 
-  public GraphRagExtractionConfig customRelationTypes(Object customRelationTypes) {
+  public GraphRagExtractionConfig customRelationTypes(List<GraphObjectType> customRelationTypes) {
     this.customRelationTypes = customRelationTypes;
+    return this;
+  }
+
+  public GraphRagExtractionConfig addCustomRelationTypesItem(GraphObjectType customRelationTypesItem) {
+    if (this.customRelationTypes == null) {
+      this.customRelationTypes = new ArrayList<>();
+    }
+    this.customRelationTypes.add(customRelationTypesItem);
     return this;
   }
 
@@ -347,11 +406,11 @@ public class GraphRagExtractionConfig {
    * @return customRelationTypes
   **/
   @Schema(description = "")
-  public Object getCustomRelationTypes() {
+  public List<GraphObjectType> getCustomRelationTypes() {
     return customRelationTypes;
   }
 
-  public void setCustomRelationTypes(Object customRelationTypes) {
+  public void setCustomRelationTypes(List<GraphObjectType> customRelationTypes) {
     this.customRelationTypes = customRelationTypes;
   }
 
@@ -391,7 +450,7 @@ public class GraphRagExtractionConfig {
     this.contentSelectionFilter = contentSelectionFilter;
   }
 
-  public GraphRagExtractionConfig processEveryDocument(Object processEveryDocument) {
+  public GraphRagExtractionConfig processEveryDocument(Boolean processEveryDocument) {
     this.processEveryDocument = processEveryDocument;
     return this;
   }
@@ -401,15 +460,15 @@ public class GraphRagExtractionConfig {
    * @return processEveryDocument
   **/
   @Schema(description = "")
-  public Object getProcessEveryDocument() {
+  public Boolean isProcessEveryDocument() {
     return processEveryDocument;
   }
 
-  public void setProcessEveryDocument(Object processEveryDocument) {
+  public void setProcessEveryDocument(Boolean processEveryDocument) {
     this.processEveryDocument = processEveryDocument;
   }
 
-  public GraphRagExtractionConfig extractionFormat(Object extractionFormat) {
+  public GraphRagExtractionConfig extractionFormat(ExtractionFormatEnum extractionFormat) {
     this.extractionFormat = extractionFormat;
     return this;
   }
@@ -419,11 +478,11 @@ public class GraphRagExtractionConfig {
    * @return extractionFormat
   **/
   @Schema(required = true, description = "")
-  public Object getExtractionFormat() {
+  public ExtractionFormatEnum getExtractionFormat() {
     return extractionFormat;
   }
 
-  public void setExtractionFormat(Object extractionFormat) {
+  public void setExtractionFormat(ExtractionFormatEnum extractionFormat) {
     this.extractionFormat = extractionFormat;
   }
 

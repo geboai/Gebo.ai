@@ -110,10 +110,10 @@ export class McpClientSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findMCPClientEndpointsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<MCPClientProjectEndpoint>;
-    public findMCPClientEndpointsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MCPClientProjectEndpoint>>;
-    public findMCPClientEndpointsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MCPClientProjectEndpoint>>;
-    public findMCPClientEndpointsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findMCPClientEndpointsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<MCPClientProjectEndpoint>;
+    public findMCPClientEndpointsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MCPClientProjectEndpoint>>;
+    public findMCPClientEndpointsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MCPClientProjectEndpoint>>;
+    public findMCPClientEndpointsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findMCPClientEndpointsByCode.');
@@ -157,10 +157,10 @@ export class McpClientSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findMCPClientEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findMCPClientEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findMCPClientEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findMCPClientEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findMCPClientEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<MCPClientProjectEndpoint>>;
+    public findMCPClientEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MCPClientProjectEndpoint>>>;
+    public findMCPClientEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MCPClientProjectEndpoint>>>;
+    public findMCPClientEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findMCPClientEndpointsByProject.');
@@ -186,7 +186,7 @@ export class McpClientSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/MCPClientSystemsController/findMCPClientEndpointsByProject`,
+        return this.httpClient.request<Array<MCPClientProjectEndpoint>>('get',`${this.basePath}/api/admin/MCPClientSystemsController/findMCPClientEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -204,9 +204,9 @@ export class McpClientSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findMCPClientEndpointsByQbe(body: MCPClientProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findMCPClientEndpointsByQbe(body: MCPClientProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findMCPClientEndpointsByQbe(body: MCPClientProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findMCPClientEndpointsByQbe(body: MCPClientProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<MCPClientProjectEndpoint>>;
+    public findMCPClientEndpointsByQbe(body: MCPClientProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MCPClientProjectEndpoint>>>;
+    public findMCPClientEndpointsByQbe(body: MCPClientProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MCPClientProjectEndpoint>>>;
     public findMCPClientEndpointsByQbe(body: MCPClientProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -233,7 +233,7 @@ export class McpClientSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/MCPClientSystemsController/findMCPClientEndpointsByQbe`,
+        return this.httpClient.request<Array<MCPClientProjectEndpoint>>('post',`${this.basePath}/api/admin/MCPClientSystemsController/findMCPClientEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -22,43 +22,43 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ModelMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ModelMetaInfo {
   @JsonProperty("providerId")
-  private Object providerId = null;
+  private String providerId = null;
 
   @JsonProperty("modelId")
-  private Object modelId = null;
+  private String modelId = null;
 
   @JsonProperty("chatModel")
-  private Object chatModel = null;
+  private Boolean chatModel = null;
 
   @JsonProperty("embeddingModel")
-  private Object embeddingModel = null;
+  private Boolean embeddingModel = null;
 
   @JsonProperty("supportsStructuredOutput")
-  private Object supportsStructuredOutput = null;
+  private Boolean supportsStructuredOutput = null;
 
   @JsonProperty("supportsFunctionCalls")
-  private Object supportsFunctionCalls = null;
+  private Boolean supportsFunctionCalls = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("tokenizingThreashold")
-  private Object tokenizingThreashold = null;
+  private Integer tokenizingThreashold = null;
 
   @JsonProperty("maxOutputToken")
-  private Object maxOutputToken = null;
+  private Integer maxOutputToken = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("informativeUrl")
-  private Object informativeUrl = null;
+  private String informativeUrl = null;
 
-  public ModelMetaInfo providerId(Object providerId) {
+  public ModelMetaInfo providerId(String providerId) {
     this.providerId = providerId;
     return this;
   }
@@ -68,15 +68,15 @@ public class ModelMetaInfo {
    * @return providerId
   **/
   @Schema(description = "")
-  public Object getProviderId() {
+  public String getProviderId() {
     return providerId;
   }
 
-  public void setProviderId(Object providerId) {
+  public void setProviderId(String providerId) {
     this.providerId = providerId;
   }
 
-  public ModelMetaInfo modelId(Object modelId) {
+  public ModelMetaInfo modelId(String modelId) {
     this.modelId = modelId;
     return this;
   }
@@ -86,15 +86,15 @@ public class ModelMetaInfo {
    * @return modelId
   **/
   @Schema(description = "")
-  public Object getModelId() {
+  public String getModelId() {
     return modelId;
   }
 
-  public void setModelId(Object modelId) {
+  public void setModelId(String modelId) {
     this.modelId = modelId;
   }
 
-  public ModelMetaInfo chatModel(Object chatModel) {
+  public ModelMetaInfo chatModel(Boolean chatModel) {
     this.chatModel = chatModel;
     return this;
   }
@@ -104,15 +104,15 @@ public class ModelMetaInfo {
    * @return chatModel
   **/
   @Schema(description = "")
-  public Object getChatModel() {
+  public Boolean isChatModel() {
     return chatModel;
   }
 
-  public void setChatModel(Object chatModel) {
+  public void setChatModel(Boolean chatModel) {
     this.chatModel = chatModel;
   }
 
-  public ModelMetaInfo embeddingModel(Object embeddingModel) {
+  public ModelMetaInfo embeddingModel(Boolean embeddingModel) {
     this.embeddingModel = embeddingModel;
     return this;
   }
@@ -122,15 +122,15 @@ public class ModelMetaInfo {
    * @return embeddingModel
   **/
   @Schema(description = "")
-  public Object getEmbeddingModel() {
+  public Boolean isEmbeddingModel() {
     return embeddingModel;
   }
 
-  public void setEmbeddingModel(Object embeddingModel) {
+  public void setEmbeddingModel(Boolean embeddingModel) {
     this.embeddingModel = embeddingModel;
   }
 
-  public ModelMetaInfo supportsStructuredOutput(Object supportsStructuredOutput) {
+  public ModelMetaInfo supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
   }
@@ -140,15 +140,15 @@ public class ModelMetaInfo {
    * @return supportsStructuredOutput
   **/
   @Schema(description = "")
-  public Object getSupportsStructuredOutput() {
+  public Boolean isSupportsStructuredOutput() {
     return supportsStructuredOutput;
   }
 
-  public void setSupportsStructuredOutput(Object supportsStructuredOutput) {
+  public void setSupportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
   }
 
-  public ModelMetaInfo supportsFunctionCalls(Object supportsFunctionCalls) {
+  public ModelMetaInfo supportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
     return this;
   }
@@ -158,15 +158,15 @@ public class ModelMetaInfo {
    * @return supportsFunctionCalls
   **/
   @Schema(description = "")
-  public Object getSupportsFunctionCalls() {
+  public Boolean isSupportsFunctionCalls() {
     return supportsFunctionCalls;
   }
 
-  public void setSupportsFunctionCalls(Object supportsFunctionCalls) {
+  public void setSupportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
   }
 
-  public ModelMetaInfo contextLength(Object contextLength) {
+  public ModelMetaInfo contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -176,15 +176,15 @@ public class ModelMetaInfo {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
-  public ModelMetaInfo tokenizingThreashold(Object tokenizingThreashold) {
+  public ModelMetaInfo tokenizingThreashold(Integer tokenizingThreashold) {
     this.tokenizingThreashold = tokenizingThreashold;
     return this;
   }
@@ -194,15 +194,15 @@ public class ModelMetaInfo {
    * @return tokenizingThreashold
   **/
   @Schema(description = "")
-  public Object getTokenizingThreashold() {
+  public Integer getTokenizingThreashold() {
     return tokenizingThreashold;
   }
 
-  public void setTokenizingThreashold(Object tokenizingThreashold) {
+  public void setTokenizingThreashold(Integer tokenizingThreashold) {
     this.tokenizingThreashold = tokenizingThreashold;
   }
 
-  public ModelMetaInfo maxOutputToken(Object maxOutputToken) {
+  public ModelMetaInfo maxOutputToken(Integer maxOutputToken) {
     this.maxOutputToken = maxOutputToken;
     return this;
   }
@@ -212,15 +212,15 @@ public class ModelMetaInfo {
    * @return maxOutputToken
   **/
   @Schema(description = "")
-  public Object getMaxOutputToken() {
+  public Integer getMaxOutputToken() {
     return maxOutputToken;
   }
 
-  public void setMaxOutputToken(Object maxOutputToken) {
+  public void setMaxOutputToken(Integer maxOutputToken) {
     this.maxOutputToken = maxOutputToken;
   }
 
-  public ModelMetaInfo description(Object description) {
+  public ModelMetaInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -230,15 +230,15 @@ public class ModelMetaInfo {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public ModelMetaInfo informativeUrl(Object informativeUrl) {
+  public ModelMetaInfo informativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
     return this;
   }
@@ -248,11 +248,11 @@ public class ModelMetaInfo {
    * @return informativeUrl
   **/
   @Schema(description = "")
-  public Object getInformativeUrl() {
+  public String getInformativeUrl() {
     return informativeUrl;
   }
 
-  public void setInformativeUrl(Object informativeUrl) {
+  public void setInformativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
   }
 

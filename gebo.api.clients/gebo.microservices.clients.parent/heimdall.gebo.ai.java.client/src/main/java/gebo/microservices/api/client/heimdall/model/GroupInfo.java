@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GroupInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GroupInfo {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public GroupInfo code(Object code) {
+  public GroupInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -41,15 +41,15 @@ public class GroupInfo {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GroupInfo description(Object description) {
+  public GroupInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -59,11 +59,11 @@ public class GroupInfo {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

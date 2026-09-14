@@ -21,6 +21,8 @@ import { ChildVirtualFSParam } from '../model/childVirtualFSParam';
 import { GObjectRefGProjectEndpoint } from '../model/gObjectRefGProjectEndpoint';
 import { GProject } from '../model/gProject';
 import { ProjectsResearchFilter } from '../model/projectsResearchFilter';
+import { VDocumentInfo } from '../model/vDocumentInfo';
+import { VFolderInfo } from '../model/vFolderInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -112,10 +114,10 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findChildProjects(knowledgeBaseCode: any, parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findChildProjects(knowledgeBaseCode: any, parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findChildProjects(knowledgeBaseCode: any, parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findChildProjects(knowledgeBaseCode: any, parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findChildProjects(knowledgeBaseCode: string, parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GProject>>;
+    public findChildProjects(knowledgeBaseCode: string, parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GProject>>>;
+    public findChildProjects(knowledgeBaseCode: string, parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GProject>>>;
+    public findChildProjects(knowledgeBaseCode: string, parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (knowledgeBaseCode === null || knowledgeBaseCode === undefined) {
             throw new Error('Required parameter knowledgeBaseCode was null or undefined when calling findChildProjects.');
@@ -148,7 +150,7 @@ export class ProjectsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ProjectsController/findChildProjects`,
+        return this.httpClient.request<Array<GProject>>('get',`${this.basePath}/api/admin/ProjectsController/findChildProjects`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -167,10 +169,10 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: any, actualSelectedProjects: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: any, actualSelectedProjects: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: any, actualSelectedProjects: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: any, actualSelectedProjects: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: string, actualSelectedProjects: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<GProject>>;
+    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: string, actualSelectedProjects: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GProject>>>;
+    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: string, actualSelectedProjects: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GProject>>>;
+    public findOtherKnowledgeBaseIncludableProjects(knowledgeBaseCode: string, actualSelectedProjects: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (knowledgeBaseCode === null || knowledgeBaseCode === undefined) {
             throw new Error('Required parameter knowledgeBaseCode was null or undefined when calling findOtherKnowledgeBaseIncludableProjects.');
@@ -184,8 +186,10 @@ export class ProjectsControllerService {
         if (knowledgeBaseCode !== undefined && knowledgeBaseCode !== null) {
             queryParameters = queryParameters.set('knowledgeBaseCode', <any>knowledgeBaseCode);
         }
-        if (actualSelectedProjects !== undefined && actualSelectedProjects !== null) {
-            queryParameters = queryParameters.set('actualSelectedProjects', JSON.stringify(actualSelectedProjects));
+        if (actualSelectedProjects) {
+            actualSelectedProjects.forEach((element) => {
+                queryParameters = queryParameters.append('actualSelectedProjects', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;
@@ -203,7 +207,7 @@ export class ProjectsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ProjectsController/findOtherKnowledgeBaseIncludableProjects`,
+        return this.httpClient.request<Array<GProject>>('get',`${this.basePath}/api/admin/ProjectsController/findOtherKnowledgeBaseIncludableProjects`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -221,10 +225,10 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findProjectByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GProject>;
-    public findProjectByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GProject>>;
-    public findProjectByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GProject>>;
-    public findProjectByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findProjectByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GProject>;
+    public findProjectByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GProject>>;
+    public findProjectByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GProject>>;
+    public findProjectByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findProjectByCode.');
@@ -268,10 +272,10 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findRootProjects(knowledgeBaseCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findRootProjects(knowledgeBaseCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findRootProjects(knowledgeBaseCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findRootProjects(knowledgeBaseCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findRootProjects(knowledgeBaseCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GProject>>;
+    public findRootProjects(knowledgeBaseCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GProject>>>;
+    public findRootProjects(knowledgeBaseCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GProject>>>;
+    public findRootProjects(knowledgeBaseCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (knowledgeBaseCode === null || knowledgeBaseCode === undefined) {
             throw new Error('Required parameter knowledgeBaseCode was null or undefined when calling findRootProjects.');
@@ -297,7 +301,7 @@ export class ProjectsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ProjectsController/findRootProjects`,
+        return this.httpClient.request<Array<GProject>>('get',`${this.basePath}/api/admin/ProjectsController/findRootProjects`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -315,9 +319,9 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChildDocuments(body: ChildVirtualFSParam, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getChildDocuments(body: ChildVirtualFSParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getChildDocuments(body: ChildVirtualFSParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getChildDocuments(body: ChildVirtualFSParam, observe?: 'body', reportProgress?: boolean): Observable<Array<VDocumentInfo>>;
+    public getChildDocuments(body: ChildVirtualFSParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<VDocumentInfo>>>;
+    public getChildDocuments(body: ChildVirtualFSParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<VDocumentInfo>>>;
     public getChildDocuments(body: ChildVirtualFSParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -344,7 +348,7 @@ export class ProjectsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/ProjectsController/getChildDocuments`,
+        return this.httpClient.request<Array<VDocumentInfo>>('post',`${this.basePath}/api/admin/ProjectsController/getChildDocuments`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -362,9 +366,9 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChildFolders(body: ChildVirtualFSParam, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getChildFolders(body: ChildVirtualFSParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getChildFolders(body: ChildVirtualFSParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getChildFolders(body: ChildVirtualFSParam, observe?: 'body', reportProgress?: boolean): Observable<Array<VFolderInfo>>;
+    public getChildFolders(body: ChildVirtualFSParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<VFolderInfo>>>;
+    public getChildFolders(body: ChildVirtualFSParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<VFolderInfo>>>;
     public getChildFolders(body: ChildVirtualFSParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -391,7 +395,7 @@ export class ProjectsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/ProjectsController/getChildFolders`,
+        return this.httpClient.request<Array<VFolderInfo>>('post',`${this.basePath}/api/admin/ProjectsController/getChildFolders`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -408,9 +412,9 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjects(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getProjects(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getProjects(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getProjects(observe?: 'body', reportProgress?: boolean): Observable<Array<GProject>>;
+    public getProjects(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GProject>>>;
+    public getProjects(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GProject>>>;
     public getProjects(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -428,7 +432,7 @@ export class ProjectsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ProjectsController/getProjects`,
+        return this.httpClient.request<Array<GProject>>('get',`${this.basePath}/api/admin/ProjectsController/getProjects`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -445,9 +449,9 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRootDocuments(body: GObjectRefGProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRootDocuments(body: GObjectRefGProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRootDocuments(body: GObjectRefGProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getRootDocuments(body: GObjectRefGProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<VDocumentInfo>>;
+    public getRootDocuments(body: GObjectRefGProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<VDocumentInfo>>>;
+    public getRootDocuments(body: GObjectRefGProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<VDocumentInfo>>>;
     public getRootDocuments(body: GObjectRefGProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -474,7 +478,7 @@ export class ProjectsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/ProjectsController/getRootDocuments`,
+        return this.httpClient.request<Array<VDocumentInfo>>('post',`${this.basePath}/api/admin/ProjectsController/getRootDocuments`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -492,9 +496,9 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRootFolders(body: GObjectRefGProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRootFolders(body: GObjectRefGProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRootFolders(body: GObjectRefGProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getRootFolders(body: GObjectRefGProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<VFolderInfo>>;
+    public getRootFolders(body: GObjectRefGProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<VFolderInfo>>>;
+    public getRootFolders(body: GObjectRefGProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<VFolderInfo>>>;
     public getRootFolders(body: GObjectRefGProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -521,7 +525,7 @@ export class ProjectsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/ProjectsController/getRootFolders`,
+        return this.httpClient.request<Array<VFolderInfo>>('post',`${this.basePath}/api/admin/ProjectsController/getRootFolders`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -586,9 +590,9 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchProjects(body: ProjectsResearchFilter, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public searchProjects(body: ProjectsResearchFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public searchProjects(body: ProjectsResearchFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public searchProjects(body: ProjectsResearchFilter, observe?: 'body', reportProgress?: boolean): Observable<Array<GProject>>;
+    public searchProjects(body: ProjectsResearchFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GProject>>>;
+    public searchProjects(body: ProjectsResearchFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GProject>>>;
     public searchProjects(body: ProjectsResearchFilter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -615,7 +619,7 @@ export class ProjectsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/ProjectsController/searchProjects`,
+        return this.httpClient.request<Array<GProject>>('post',`${this.basePath}/api/admin/ProjectsController/searchProjects`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -633,9 +637,9 @@ export class ProjectsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchProjectsByQbe(body: GProject, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public searchProjectsByQbe(body: GProject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public searchProjectsByQbe(body: GProject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public searchProjectsByQbe(body: GProject, observe?: 'body', reportProgress?: boolean): Observable<Array<GProject>>;
+    public searchProjectsByQbe(body: GProject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GProject>>>;
+    public searchProjectsByQbe(body: GProject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GProject>>>;
     public searchProjectsByQbe(body: GProject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -662,7 +666,7 @@ export class ProjectsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/ProjectsController/searchProjectsByQbe`,
+        return this.httpClient.request<Array<GProject>>('post',`${this.basePath}/api/admin/ProjectsController/searchProjectsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

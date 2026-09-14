@@ -11,13 +11,13 @@
  */
 
 export interface UploadedFileInfo { 
-    name?: any;
-    absolutePath?: any;
-    extension?: any;
-    size?: any;
-    modificationTime?: any;
-    folder?: any;
-    ingested?: any;
-    documentCode?: any;
-    tracked?: any;
+    name?: string;
+    absolutePath?: string;
+    extension?: string;
+    size?: number;
+    modificationTime?: Date;
+    folder?: boolean;
+    ingested?: boolean;
+    documentCode?: string;
+    tracked?: boolean;
 }

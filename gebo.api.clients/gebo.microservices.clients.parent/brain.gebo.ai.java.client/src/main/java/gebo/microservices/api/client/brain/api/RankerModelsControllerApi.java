@@ -2,6 +2,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseRankerModelConfig;
+import gebo.microservices.api.client.brain.model.GRankerModelType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class RankerModelsControllerApi {
     private ApiClient apiClient;
@@ -45,10 +47,10 @@ public class RankerModelsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GRankerModelType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRankerModelTypes() throws RestClientException {
+    public List<GRankerModelType> getRankerModelTypes() throws RestClientException {
         return getRankerModelTypesWithHttpInfo().getBody();
     }
 
@@ -56,10 +58,10 @@ public class RankerModelsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GRankerModelType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRankerModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GRankerModelType>> getRankerModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/RankerModelsController/getRankerModelTypes").build().toUriString();
         
@@ -76,7 +78,7 @@ public class RankerModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GRankerModelType>> returnType = new ParameterizedTypeReference<List<GRankerModelType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -84,10 +86,10 @@ public class RankerModelsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return Object
+     * @return List&lt;ConfigurationEntryGBaseRankerModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRuntimeConfiguredRankerModels(Object modelTypeCode) throws RestClientException {
+    public List<ConfigurationEntryGBaseRankerModelConfig> getRuntimeConfiguredRankerModels(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredRankerModelsWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -96,10 +98,10 @@ public class RankerModelsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ConfigurationEntryGBaseRankerModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRuntimeConfiguredRankerModelsWithHttpInfo(Object modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<ConfigurationEntryGBaseRankerModelConfig>> getRuntimeConfiguredRankerModelsWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels").build().toUriString();
         
@@ -117,7 +119,7 @@ public class RankerModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<ConfigurationEntryGBaseRankerModelConfig>> returnType = new ParameterizedTypeReference<List<ConfigurationEntryGBaseRankerModelConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -11,8 +11,9 @@
  */
 
 export interface GeboSshKeySecretContent { 
-    email: any;
-    key: any;
-    pub: any;
-    passphrase: any;
+    readOnly?: boolean;
+    email: string;
+    key: string;
+    pub: string;
+    passphrase: string;
 }

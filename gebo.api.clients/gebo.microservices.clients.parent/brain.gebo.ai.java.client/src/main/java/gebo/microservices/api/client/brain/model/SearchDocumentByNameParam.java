@@ -18,20 +18,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SearchDocumentByNameParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class SearchDocumentByNameParam {
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("knowledgeBaseCodes")
-  private Object knowledgeBaseCodes = null;
+  private List<String> knowledgeBaseCodes = new ArrayList<>();
 
-  public SearchDocumentByNameParam name(Object name) {
+  public SearchDocumentByNameParam name(String name) {
     this.name = name;
     return this;
   }
@@ -41,16 +43,21 @@ public class SearchDocumentByNameParam {
    * @return name
   **/
   @Schema(required = true, description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public SearchDocumentByNameParam knowledgeBaseCodes(Object knowledgeBaseCodes) {
+  public SearchDocumentByNameParam knowledgeBaseCodes(List<String> knowledgeBaseCodes) {
     this.knowledgeBaseCodes = knowledgeBaseCodes;
+    return this;
+  }
+
+  public SearchDocumentByNameParam addKnowledgeBaseCodesItem(String knowledgeBaseCodesItem) {
+    this.knowledgeBaseCodes.add(knowledgeBaseCodesItem);
     return this;
   }
 
@@ -59,11 +66,11 @@ public class SearchDocumentByNameParam {
    * @return knowledgeBaseCodes
   **/
   @Schema(required = true, description = "")
-  public Object getKnowledgeBaseCodes() {
+  public List<String> getKnowledgeBaseCodes() {
     return knowledgeBaseCodes;
   }
 
-  public void setKnowledgeBaseCodes(Object knowledgeBaseCodes) {
+  public void setKnowledgeBaseCodes(List<String> knowledgeBaseCodes) {
     this.knowledgeBaseCodes = knowledgeBaseCodes;
   }
 

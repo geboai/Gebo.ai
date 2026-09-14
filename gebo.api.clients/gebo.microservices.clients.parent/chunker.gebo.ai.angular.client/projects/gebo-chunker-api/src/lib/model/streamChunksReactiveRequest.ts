@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { ChunkingParams } from './chunkingParams';
+import { DocumentBatch } from './documentBatch';
 
 export interface StreamChunksReactiveRequest { 
-    batches?: any;
+    batches?: Array<DocumentBatch>;
     chunkingSpecs?: ChunkingParams;
-    chunkSessionId?: any;
-    docConcurrency?: any;
+    chunkSessionId?: string;
+    docConcurrency?: number;
 }

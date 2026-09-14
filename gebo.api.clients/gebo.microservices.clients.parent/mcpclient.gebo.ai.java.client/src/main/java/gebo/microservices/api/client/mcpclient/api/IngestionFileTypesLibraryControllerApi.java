@@ -3,6 +3,7 @@ package gebo.microservices.api.client.mcpclient.api;
 import gebo.microservices.api.client.mcpclient.invoker.ApiClient;
 
 import gebo.microservices.api.client.mcpclient.model.IngestionFileType;
+import gebo.microservices.api.client.mcpclient.model.IngestionHandlerConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:50.381843566+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class IngestionFileTypesLibraryControllerApi {
     private ApiClient apiClient;
@@ -46,10 +47,10 @@ public class IngestionFileTypesLibraryControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;IngestionFileType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllFileTypes() throws RestClientException {
+    public List<IngestionFileType> getAllFileTypes() throws RestClientException {
         return getAllFileTypesWithHttpInfo().getBody();
     }
 
@@ -57,10 +58,10 @@ public class IngestionFileTypesLibraryControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;IngestionFileType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllFileTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<IngestionFileType>> getAllFileTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getAllFileTypes").build().toUriString();
         
@@ -77,7 +78,7 @@ public class IngestionFileTypesLibraryControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<IngestionFileType>> returnType = new ParameterizedTypeReference<List<IngestionFileType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -88,7 +89,7 @@ public class IngestionFileTypesLibraryControllerApi {
      * @return IngestionFileType
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public IngestionFileType getIngestionFileTypeByExtension(Object extension) throws RestClientException {
+    public IngestionFileType getIngestionFileTypeByExtension(String extension) throws RestClientException {
         return getIngestionFileTypeByExtensionWithHttpInfo(extension).getBody();
     }
 
@@ -100,7 +101,7 @@ public class IngestionFileTypesLibraryControllerApi {
      * @return ResponseEntity&lt;IngestionFileType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<IngestionFileType> getIngestionFileTypeByExtensionWithHttpInfo(Object extension) throws RestClientException {
+    public ResponseEntity<IngestionFileType> getIngestionFileTypeByExtensionWithHttpInfo(String extension) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'extension' is set
         if (extension == null) {
@@ -129,10 +130,10 @@ public class IngestionFileTypesLibraryControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;IngestionHandlerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getIngestionReadingModules() throws RestClientException {
+    public List<IngestionHandlerConfig> getIngestionReadingModules() throws RestClientException {
         return getIngestionReadingModulesWithHttpInfo().getBody();
     }
 
@@ -140,10 +141,10 @@ public class IngestionFileTypesLibraryControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;IngestionHandlerConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getIngestionReadingModulesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<IngestionHandlerConfig>> getIngestionReadingModulesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules").build().toUriString();
         
@@ -160,7 +161,7 @@ public class IngestionFileTypesLibraryControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<IngestionHandlerConfig>> returnType = new ParameterizedTypeReference<List<IngestionHandlerConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

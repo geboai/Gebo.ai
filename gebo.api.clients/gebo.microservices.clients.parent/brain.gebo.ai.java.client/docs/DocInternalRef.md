@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Object** |  |  [optional]
-**page** | **Object** |  |  [optional]
+**id** | **String** |  |  [optional]
+**page** | **String** |  |  [optional]

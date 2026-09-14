@@ -39,7 +39,7 @@ public class GeboTranscriptControllerApiTest {
      */
     @Test
     public void isEnabledTest() {
-        Object response = api.isEnabled();
+        Boolean response = api.isEnabled();
 
         // TODO: test validations
     }

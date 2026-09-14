@@ -22,8 +22,8 @@ Method | HTTP request | Description
 
 
 GeboUserChatUploadsControllerApi apiInstance = new GeboUserChatUploadsControllerApi();
-Object userSessionCode = null; // Object | 
-Object files = null; // Object | 
+String userSessionCode = "userSessionCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
 try {
     OperationStatusListUserUploadedContent result = apiInstance.chatSessionUpload(userSessionCode, files);
     System.out.println(result);
@@ -37,8 +37,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userSessionCode** | [**Object**](.md)|  |
- **files** | [**Object**](.md)|  | [optional]
+ **userSessionCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
 
 ### Return type
 
@@ -106,8 +106,8 @@ No authorization required
 
 
 GeboUserChatUploadsControllerApi apiInstance = new GeboUserChatUploadsControllerApi();
-Object userSessionCode = null; // Object | 
-Object uploadedContentId = null; // Object | 
+String userSessionCode = "userSessionCode_example"; // String | 
+String uploadedContentId = "uploadedContentId_example"; // String | 
 try {
     apiInstance.serveContent(userSessionCode, uploadedContentId);
 } catch (ApiException e) {
@@ -120,8 +120,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userSessionCode** | [**Object**](.md)|  |
- **uploadedContentId** | [**Object**](.md)|  |
+ **userSessionCode** | **String**|  |
+ **uploadedContentId** | **String**|  |
 
 ### Return type
 

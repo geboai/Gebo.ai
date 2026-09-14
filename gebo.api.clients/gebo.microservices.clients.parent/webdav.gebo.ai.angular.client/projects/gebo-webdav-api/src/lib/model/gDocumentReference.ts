@@ -9,50 +9,58 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GDocumentAttributeValue } from './gDocumentAttributeValue';
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 import { GeboComponentInfo } from './geboComponentInfo';
 
 export interface GDocumentReference { 
-    code: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    parentVirtualFolderCode?: any;
-    absolutePath?: any;
-    parentProjectCode?: any;
-    rootKnowledgebaseCode?: any;
-    uri?: any;
-    relativePath?: any;
-    name?: any;
-    deleted?: any;
-    messagingModuleId?: any;
+    code: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    parentVirtualFolderCode?: string;
+    absolutePath?: string;
+    parentProjectCode?: string;
+    rootKnowledgebaseCode?: string;
+    uri?: string;
+    relativePath?: string;
+    name?: string;
+    deleted?: boolean;
+    messagingModuleId?: string;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
-    nestedInArchive?: any;
-    absoluteArchivePath?: any;
-    archiveInternalPath?: any;
-    customMetaInfos?: any;
-    lastesJobId?: any;
-    aclAliases?: any;
-    extIntegrationCode?: any;
-    synchronizationUUID?: any;
-    extension?: any;
-    contentType?: any;
-    geboFileArchetypeId?: any;
-    fileSize?: any;
-    unmanagedContentType?: any;
-    referenceType?: any;
-    skippedVectorizationContent?: any;
-    artificiallyGeneratedContent?: any;
+    nestedInArchive?: boolean;
+    absoluteArchivePath?: string;
+    archiveInternalPath?: string;
+    customMetaInfos?: { [key: string]: any; };
+    lastesJobId?: string;
+    aclAliases?: Array<number>;
+    extIntegrationCode?: string;
+    synchronizationUUID?: string;
+    extension?: string;
+    contentType?: string;
+    geboFileArchetypeId?: string;
+    fileSize?: number;
+    unmanagedContentType?: boolean;
+    referenceType?: GDocumentReference.ReferenceTypeEnum;
+    skippedVectorizationContent?: boolean;
+    artificiallyGeneratedContent?: string;
     originComponent: GeboComponentInfo;
-    attributesValues?: any;
-    langCode?: any;
-    translationOfDocumentCode?: any;
-    categoryCodes?: any;
-    publishedDate?: any;
-    author?: any;
+    attributesValues?: Array<GDocumentAttributeValue>;
+    langCode?: string;
+    translationOfDocumentCode?: string;
+    categoryCodes?: Array<string>;
+    publishedDate?: Date;
+    author?: string;
+}
+export namespace GDocumentReference {
+    export type ReferenceTypeEnum = 'FILE' | 'WEB';
+    export const ReferenceTypeEnum = {
+        FILE: 'FILE' as ReferenceTypeEnum,
+        WEB: 'WEB' as ReferenceTypeEnum
+    };
 }

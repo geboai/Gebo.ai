@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GBedrockRankerModelConfig } from './gBedrockRankerModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGBedrockRankerModelConfig { 
     result?: GBedrockRankerModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

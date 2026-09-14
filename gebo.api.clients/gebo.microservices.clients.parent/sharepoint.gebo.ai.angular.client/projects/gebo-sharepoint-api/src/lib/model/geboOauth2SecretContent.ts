@@ -11,9 +11,10 @@
  */
 
 export interface GeboOauth2SecretContent { 
-    providerName: any;
-    clientId: any;
-    secret: any;
-    scopes?: any;
-    customAttributes?: any;
+    readOnly?: boolean;
+    providerName: string;
+    clientId: string;
+    secret: string;
+    scopes?: Array<string>;
+    customAttributes?: { [key: string]: string; };
 }

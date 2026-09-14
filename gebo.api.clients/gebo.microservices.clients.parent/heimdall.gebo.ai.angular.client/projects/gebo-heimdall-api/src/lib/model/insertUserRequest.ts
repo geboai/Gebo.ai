@@ -13,5 +13,5 @@ import { EditableUser } from './editableUser';
 
 export interface InsertUserRequest { 
     user?: EditableUser;
-    password?: any;
+    password?: string;
 }

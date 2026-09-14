@@ -17,57 +17,61 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.A2AExportedAgent;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * A2AServerConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class A2AServerConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("exportedRelativeUrl")
-  private Object exportedRelativeUrl = null;
+  private String exportedRelativeUrl = null;
 
   @JsonProperty("enabled")
-  private Object enabled = null;
+  private Boolean enabled = null;
 
   @JsonProperty("exportedAgents")
-  private Object exportedAgents = null;
+  private List<A2AExportedAgent> exportedAgents = null;
 
   @JsonProperty("securitySchemeName")
-  private Object securitySchemeName = null;
+  private String securitySchemeName = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
-  public A2AServerConfig code(Object code) {
+  public A2AServerConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -77,15 +81,15 @@ public class A2AServerConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public A2AServerConfig description(Object description) {
+  public A2AServerConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -95,15 +99,15 @@ public class A2AServerConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public A2AServerConfig userModified(Object userModified) {
+  public A2AServerConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -113,15 +117,15 @@ public class A2AServerConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public A2AServerConfig userCreated(Object userCreated) {
+  public A2AServerConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -131,15 +135,15 @@ public class A2AServerConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public A2AServerConfig dateModified(Object dateModified) {
+  public A2AServerConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -149,15 +153,15 @@ public class A2AServerConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public A2AServerConfig dateCreated(Object dateCreated) {
+  public A2AServerConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -167,15 +171,15 @@ public class A2AServerConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public A2AServerConfig exportedRelativeUrl(Object exportedRelativeUrl) {
+  public A2AServerConfig exportedRelativeUrl(String exportedRelativeUrl) {
     this.exportedRelativeUrl = exportedRelativeUrl;
     return this;
   }
@@ -185,15 +189,15 @@ public class A2AServerConfig {
    * @return exportedRelativeUrl
   **/
   @Schema(required = true, description = "")
-  public Object getExportedRelativeUrl() {
+  public String getExportedRelativeUrl() {
     return exportedRelativeUrl;
   }
 
-  public void setExportedRelativeUrl(Object exportedRelativeUrl) {
+  public void setExportedRelativeUrl(String exportedRelativeUrl) {
     this.exportedRelativeUrl = exportedRelativeUrl;
   }
 
-  public A2AServerConfig enabled(Object enabled) {
+  public A2AServerConfig enabled(Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -203,16 +207,24 @@ public class A2AServerConfig {
    * @return enabled
   **/
   @Schema(description = "")
-  public Object getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Object enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 
-  public A2AServerConfig exportedAgents(Object exportedAgents) {
+  public A2AServerConfig exportedAgents(List<A2AExportedAgent> exportedAgents) {
     this.exportedAgents = exportedAgents;
+    return this;
+  }
+
+  public A2AServerConfig addExportedAgentsItem(A2AExportedAgent exportedAgentsItem) {
+    if (this.exportedAgents == null) {
+      this.exportedAgents = new ArrayList<>();
+    }
+    this.exportedAgents.add(exportedAgentsItem);
     return this;
   }
 
@@ -221,15 +233,15 @@ public class A2AServerConfig {
    * @return exportedAgents
   **/
   @Schema(description = "")
-  public Object getExportedAgents() {
+  public List<A2AExportedAgent> getExportedAgents() {
     return exportedAgents;
   }
 
-  public void setExportedAgents(Object exportedAgents) {
+  public void setExportedAgents(List<A2AExportedAgent> exportedAgents) {
     this.exportedAgents = exportedAgents;
   }
 
-  public A2AServerConfig securitySchemeName(Object securitySchemeName) {
+  public A2AServerConfig securitySchemeName(String securitySchemeName) {
     this.securitySchemeName = securitySchemeName;
     return this;
   }
@@ -239,16 +251,24 @@ public class A2AServerConfig {
    * @return securitySchemeName
   **/
   @Schema(description = "")
-  public Object getSecuritySchemeName() {
+  public String getSecuritySchemeName() {
     return securitySchemeName;
   }
 
-  public void setSecuritySchemeName(Object securitySchemeName) {
+  public void setSecuritySchemeName(String securitySchemeName) {
     this.securitySchemeName = securitySchemeName;
   }
 
-  public A2AServerConfig accessibleGroups(Object accessibleGroups) {
+  public A2AServerConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public A2AServerConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -257,16 +277,24 @@ public class A2AServerConfig {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public A2AServerConfig accessibleUsers(Object accessibleUsers) {
+  public A2AServerConfig accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public A2AServerConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -275,15 +303,15 @@ public class A2AServerConfig {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public A2AServerConfig accessibleToAll(Object accessibleToAll) {
+  public A2AServerConfig accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -293,16 +321,24 @@ public class A2AServerConfig {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public A2AServerConfig aclAliases(Object aclAliases) {
+  public A2AServerConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public A2AServerConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -311,11 +347,11 @@ public class A2AServerConfig {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 

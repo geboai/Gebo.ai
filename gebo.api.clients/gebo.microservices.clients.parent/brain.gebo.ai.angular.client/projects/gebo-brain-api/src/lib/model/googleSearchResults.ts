@@ -9,7 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GoogleSearchResultItem } from './googleSearchResultItem';
 
 export interface GoogleSearchResults { 
-    items?: any;
+    items?: Array<GoogleSearchResultItem>;
 }

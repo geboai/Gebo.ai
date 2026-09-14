@@ -11,20 +11,34 @@
  */
 
 export interface GSharepointContentManagementSystem { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    contentManagementSystemType?: any;
-    readonly?: any;
-    baseUri?: any;
-    usedCapabilities?: any;
-    aclAliases?: any;
-    secretCode: any;
-    sharepointVersion: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    contentManagementSystemType?: string;
+    readonly?: boolean;
+    baseUri?: string;
+    usedCapabilities?: Array<GSharepointContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
+    secretCode: string;
+    sharepointVersion: GSharepointContentManagementSystem.SharepointVersionEnum;
+}
+export namespace GSharepointContentManagementSystem {
+    export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';
+    export const UsedCapabilitiesEnum = {
+        TICKETSMANAGEMENT: 'TICKETS_MANAGEMENT' as UsedCapabilitiesEnum,
+        DOCUMENTSMANAGEMENT: 'DOCUMENTS_MANAGEMENT' as UsedCapabilitiesEnum,
+        SOURCEMANAGEMENT: 'SOURCE_MANAGEMENT' as UsedCapabilitiesEnum,
+        ARTIFACTSREPOSITORYMANAGEMENT: 'ARTIFACTS_REPOSITORY_MANAGEMENT' as UsedCapabilitiesEnum
+    };
+    export type SharepointVersionEnum = 'CLOUD_VERSION' | 'ONPREMISE2019';
+    export const SharepointVersionEnum = {
+        CLOUDVERSION: 'CLOUD_VERSION' as SharepointVersionEnum,
+        ONPREMISE2019: 'ONPREMISE2019' as SharepointVersionEnum
+    };
 }

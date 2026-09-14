@@ -2,6 +2,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.GBaseObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboDeepSearchControllerApi {
     private ApiClient apiClient;
@@ -45,10 +46,10 @@ public class GeboDeepSearchControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GBaseObject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getDeepSearchDataSources() throws RestClientException {
+    public List<GBaseObject> getDeepSearchDataSources() throws RestClientException {
         return getDeepSearchDataSourcesWithHttpInfo().getBody();
     }
 
@@ -56,10 +57,10 @@ public class GeboDeepSearchControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBaseObject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getDeepSearchDataSourcesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GBaseObject>> getDeepSearchDataSourcesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboDeepSearchController/getDeepSearchDataSources").build().toUriString();
         
@@ -76,7 +77,7 @@ public class GeboDeepSearchControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

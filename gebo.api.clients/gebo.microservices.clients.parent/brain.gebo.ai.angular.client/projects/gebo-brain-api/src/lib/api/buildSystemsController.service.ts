@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GBuildSystem } from '../model/gBuildSystem';
+import { GBuildSystemType } from '../model/gBuildSystemType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -61,10 +63,10 @@ export class BuildSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBuildSystemConfigs(buildSystemTypeCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getBuildSystemConfigs(buildSystemTypeCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getBuildSystemConfigs(buildSystemTypeCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getBuildSystemConfigs(buildSystemTypeCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getBuildSystemConfigs(buildSystemTypeCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GBuildSystem>>;
+    public getBuildSystemConfigs(buildSystemTypeCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBuildSystem>>>;
+    public getBuildSystemConfigs(buildSystemTypeCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBuildSystem>>>;
+    public getBuildSystemConfigs(buildSystemTypeCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (buildSystemTypeCode === null || buildSystemTypeCode === undefined) {
             throw new Error('Required parameter buildSystemTypeCode was null or undefined when calling getBuildSystemConfigs.');
@@ -90,7 +92,7 @@ export class BuildSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/BuildSystemsController/getBuildSystemConfigs`,
+        return this.httpClient.request<Array<GBuildSystem>>('get',`${this.basePath}/api/admin/BuildSystemsController/getBuildSystemConfigs`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -107,9 +109,9 @@ export class BuildSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBuildSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getBuildSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getBuildSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getBuildSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GBuildSystemType>>;
+    public getBuildSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBuildSystemType>>>;
+    public getBuildSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBuildSystemType>>>;
     public getBuildSystemTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -127,7 +129,7 @@ export class BuildSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/BuildSystemsController/getBuildSystemTypes`,
+        return this.httpClient.request<Array<GBuildSystemType>>('get',`${this.basePath}/api/admin/BuildSystemsController/getBuildSystemTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

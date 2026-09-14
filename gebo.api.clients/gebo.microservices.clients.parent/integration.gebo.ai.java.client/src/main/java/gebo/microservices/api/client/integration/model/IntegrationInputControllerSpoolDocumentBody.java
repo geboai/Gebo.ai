@@ -18,17 +18,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.File;
 /**
  * IntegrationInputControllerSpoolDocumentBody
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:40.120904804+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class IntegrationInputControllerSpoolDocumentBody {
   @JsonProperty("file")
-  private Object file = null;
+  private File file = null;
 
-  public IntegrationInputControllerSpoolDocumentBody file(Object file) {
+  public IntegrationInputControllerSpoolDocumentBody file(File file) {
     this.file = file;
     return this;
   }
@@ -38,11 +39,11 @@ public class IntegrationInputControllerSpoolDocumentBody {
    * @return file
   **/
   @Schema(required = true, description = "")
-  public Object getFile() {
+  public File getFile() {
     return file;
   }
 
-  public void setFile(Object file) {
+  public void setFile(File file) {
     this.file = file;
   }
 
@@ -61,7 +62,7 @@ public class IntegrationInputControllerSpoolDocumentBody {
 
   @Override
   public int hashCode() {
-    return Objects.hash(file);
+    return Objects.hash(Objects.hashCode(file));
   }
 
 

@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.googledrive.api;
 
 import gebo.microservices.api.client.googledrive.model.AggregateRequestBodyGoogleDriveResultsExtractionData;
+import gebo.microservices.api.client.googledrive.model.CatalogueSample;
 import gebo.microservices.api.client.googledrive.model.GoogleDriveResultsExtractionData;
 import gebo.microservices.api.client.googledrive.model.SearchQuery;
 import gebo.microservices.api.client.googledrive.model.SearchResult;
@@ -60,7 +61,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
     @Test
     public void restExtractRelatedAnalisysReferencesTest() {
         GoogleDriveResultsExtractionData body = null;
-        Object systemId = null;
+        String systemId = null;
         SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferences(body, systemId);
 
         // TODO: test validations
@@ -75,7 +76,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restFindSystemByIdTest() {
-        Object systemId = null;
+        String systemId = null;
         SearchableSystemMetaData response = api.restFindSystemById(systemId);
 
         // TODO: test validations
@@ -105,8 +106,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetCachedCataloguesTest() {
-        Object systemConfigurationCode = null;
-        Object response = api.restGetCachedCatalogues(systemConfigurationCode);
+        String systemConfigurationCode = null;
+        List<CatalogueSample> response = api.restGetCachedCatalogues(systemConfigurationCode);
 
         // TODO: test validations
     }
@@ -120,8 +121,8 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetCataloguesListSampleTest() {
-        Object configurationCode = null;
-        Object response = api.restGetCataloguesListSample(configurationCode);
+        String configurationCode = null;
+        List<CatalogueSample> response = api.restGetCataloguesListSample(configurationCode);
 
         // TODO: test validations
     }
@@ -135,7 +136,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetDescriptionTest() {
-        Object response = api.restGetDescription();
+        String response = api.restGetDescription();
 
         // TODO: test validations
     }
@@ -149,7 +150,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetIdTest() {
-        Object response = api.restGetId();
+        String response = api.restGetId();
 
         // TODO: test validations
     }
@@ -163,7 +164,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetMessagingModuleIdTest() {
-        Object response = api.restGetMessagingModuleId();
+        String response = api.restGetMessagingModuleId();
 
         // TODO: test validations
     }
@@ -177,7 +178,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetProductIdTest() {
-        Object response = api.restGetProductId();
+        String response = api.restGetProductId();
 
         // TODO: test validations
     }
@@ -191,7 +192,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetQueriesGenerationPromptUseCodeTest() {
-        Object response = api.restGetQueriesGenerationPromptUseCode();
+        String response = api.restGetQueriesGenerationPromptUseCode();
 
         // TODO: test validations
     }
@@ -205,7 +206,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restGetSearchableSystemsTest() {
-        Object response = api.restGetSearchableSystems();
+        List<SearchableSystemMetaData> response = api.restGetSearchableSystems();
 
         // TODO: test validations
     }
@@ -219,7 +220,7 @@ public class GoogleDriveSearchServiceControllerApiTest {
      */
     @Test
     public void restIsEnabledTest() {
-        Object response = api.restIsEnabled();
+        Boolean response = api.restIsEnabled();
 
         // TODO: test validations
     }
@@ -234,9 +235,9 @@ public class GoogleDriveSearchServiceControllerApiTest {
     @Test
     public void restSearchTest() {
         SearchQuery body = null;
-        Object systemId = null;
-        Object nEntryLimit = null;
-        Object response = api.restSearch(body, systemId, nEntryLimit);
+        String systemId = null;
+        Integer nEntryLimit = null;
+        List<SearchResult> response = api.restSearch(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }

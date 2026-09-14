@@ -11,12 +11,12 @@
  */
 
 export interface A2ARemoteSkill { 
-    id?: any;
-    name?: any;
-    description?: any;
-    tags?: any;
-    inputModes?: any;
-    outputModes?: any;
-    addedOnRemote?: any;
-    deletedOnRemote?: any;
+    id?: string;
+    name?: string;
+    description?: string;
+    tags?: Array<string>;
+    inputModes?: Array<string>;
+    outputModes?: Array<string>;
+    addedOnRemote?: boolean;
+    deletedOnRemote?: boolean;
 }

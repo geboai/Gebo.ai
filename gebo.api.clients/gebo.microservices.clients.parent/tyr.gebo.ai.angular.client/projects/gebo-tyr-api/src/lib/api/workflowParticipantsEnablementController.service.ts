@@ -62,10 +62,10 @@ export class WorkflowParticipantsEnablementControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public enabledSteps(workflowType: any, workflowId: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public enabledSteps(workflowType: any, workflowId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public enabledSteps(workflowType: any, workflowId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public enabledSteps(workflowType: any, workflowId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public enabledSteps(workflowType: string, workflowId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public enabledSteps(workflowType: string, workflowId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public enabledSteps(workflowType: string, workflowId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public enabledSteps(workflowType: string, workflowId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (workflowType === null || workflowType === undefined) {
             throw new Error('Required parameter workflowType was null or undefined when calling enabledSteps.');
@@ -98,7 +98,7 @@ export class WorkflowParticipantsEnablementControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/WorkflowParticipantsEnablementController/enabledSteps`,
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/users/WorkflowParticipantsEnablementController/enabledSteps`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

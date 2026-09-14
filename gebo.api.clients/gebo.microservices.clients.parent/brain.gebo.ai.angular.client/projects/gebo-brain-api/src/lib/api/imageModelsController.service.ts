@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ConfigurationEntryGBaseImageModelConfig } from '../model/configurationEntryGBaseImageModelConfig';
+import { GImageModelType } from '../model/gImageModelType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +62,9 @@ export class ImageModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getImageModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getImageModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getImageModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getImageModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GImageModelType>>;
+    public getImageModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GImageModelType>>>;
+    public getImageModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GImageModelType>>>;
     public getImageModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +82,7 @@ export class ImageModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ImageModelsController/getImageModelTypes`,
+        return this.httpClient.request<Array<GImageModelType>>('get',`${this.basePath}/api/admin/ImageModelsController/getImageModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -97,10 +99,10 @@ export class ImageModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredImageModels(modelTypeCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRuntimeConfiguredImageModels(modelTypeCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRuntimeConfiguredImageModels(modelTypeCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getRuntimeConfiguredImageModels(modelTypeCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRuntimeConfiguredImageModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntryGBaseImageModelConfig>>;
+    public getRuntimeConfiguredImageModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntryGBaseImageModelConfig>>>;
+    public getRuntimeConfiguredImageModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntryGBaseImageModelConfig>>>;
+    public getRuntimeConfiguredImageModels(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -123,7 +125,7 @@ export class ImageModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ImageModelsController/getRuntimeConfiguredImageModels`,
+        return this.httpClient.request<Array<ConfigurationEntryGBaseImageModelConfig>>('get',`${this.basePath}/api/admin/ImageModelsController/getRuntimeConfiguredImageModels`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

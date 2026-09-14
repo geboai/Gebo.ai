@@ -3,6 +3,7 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIEmbeddingModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIEmbeddingModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIEmbeddingModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIEmbeddingModelChoice;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -99,7 +100,7 @@ public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
      * @return GenericOpenAIAPIEmbeddingModelConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GenericOpenAIAPIEmbeddingModelConfig findGenericOpenAIAPIEmbeddingModelConfigByCode(Object code) throws RestClientException {
+    public GenericOpenAIAPIEmbeddingModelConfig findGenericOpenAIAPIEmbeddingModelConfigByCode(String code) throws RestClientException {
         return findGenericOpenAIAPIEmbeddingModelConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -111,7 +112,7 @@ public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
      * @return ResponseEntity&lt;GenericOpenAIAPIEmbeddingModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GenericOpenAIAPIEmbeddingModelConfig> findGenericOpenAIAPIEmbeddingModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GenericOpenAIAPIEmbeddingModelConfig> findGenericOpenAIAPIEmbeddingModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -186,10 +187,10 @@ public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAIEmbeddingModelTypeConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAIEmbeddingModelTypes() throws RestClientException {
+    public List<GenericOpenAIEmbeddingModelTypeConfig> getGenericOpenAIEmbeddingModelTypes() throws RestClientException {
         return getGenericOpenAIEmbeddingModelTypesWithHttpInfo().getBody();
     }
 
@@ -197,10 +198,10 @@ public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAIEmbeddingModelTypeConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAIEmbeddingModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAIEmbeddingModelTypeConfig>> getGenericOpenAIEmbeddingModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController/getGenericOpenAIEmbeddingModelTypes").build().toUriString();
         
@@ -217,7 +218,7 @@ public class GenericOpenAiapiEmbeddingModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAIEmbeddingModelTypeConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIEmbeddingModelTypeConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

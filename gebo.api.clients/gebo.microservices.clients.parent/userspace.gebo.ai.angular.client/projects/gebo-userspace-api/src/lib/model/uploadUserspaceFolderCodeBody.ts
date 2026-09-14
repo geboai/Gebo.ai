@@ -11,5 +11,5 @@
  */
 
 export interface UploadUserspaceFolderCodeBody { 
-    files: any;
+    files: Array<Blob>;
 }

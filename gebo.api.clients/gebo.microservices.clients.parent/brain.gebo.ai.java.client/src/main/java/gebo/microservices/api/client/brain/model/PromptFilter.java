@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PromptFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class PromptFilter {
   @JsonProperty("modelUse")
-  private Object modelUse = null;
+  private String modelUse = null;
 
   @JsonProperty("langCode")
-  private Object langCode = null;
+  private String langCode = null;
 
   @JsonProperty("modelProvider")
-  private Object modelProvider = null;
+  private String modelProvider = null;
 
   @JsonProperty("modelCode")
-  private Object modelCode = null;
+  private String modelCode = null;
 
-  public PromptFilter modelUse(Object modelUse) {
+  public PromptFilter modelUse(String modelUse) {
     this.modelUse = modelUse;
     return this;
   }
@@ -47,15 +47,15 @@ public class PromptFilter {
    * @return modelUse
   **/
   @Schema(description = "")
-  public Object getModelUse() {
+  public String getModelUse() {
     return modelUse;
   }
 
-  public void setModelUse(Object modelUse) {
+  public void setModelUse(String modelUse) {
     this.modelUse = modelUse;
   }
 
-  public PromptFilter langCode(Object langCode) {
+  public PromptFilter langCode(String langCode) {
     this.langCode = langCode;
     return this;
   }
@@ -65,15 +65,15 @@ public class PromptFilter {
    * @return langCode
   **/
   @Schema(description = "")
-  public Object getLangCode() {
+  public String getLangCode() {
     return langCode;
   }
 
-  public void setLangCode(Object langCode) {
+  public void setLangCode(String langCode) {
     this.langCode = langCode;
   }
 
-  public PromptFilter modelProvider(Object modelProvider) {
+  public PromptFilter modelProvider(String modelProvider) {
     this.modelProvider = modelProvider;
     return this;
   }
@@ -83,15 +83,15 @@ public class PromptFilter {
    * @return modelProvider
   **/
   @Schema(description = "")
-  public Object getModelProvider() {
+  public String getModelProvider() {
     return modelProvider;
   }
 
-  public void setModelProvider(Object modelProvider) {
+  public void setModelProvider(String modelProvider) {
     this.modelProvider = modelProvider;
   }
 
-  public PromptFilter modelCode(Object modelCode) {
+  public PromptFilter modelCode(String modelCode) {
     this.modelCode = modelCode;
     return this;
   }
@@ -101,11 +101,11 @@ public class PromptFilter {
    * @return modelCode
   **/
   @Schema(description = "")
-  public Object getModelCode() {
+  public String getModelCode() {
     return modelCode;
   }
 
-  public void setModelCode(Object modelCode) {
+  public void setModelCode(String modelCode) {
     this.modelCode = modelCode;
   }
 

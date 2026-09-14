@@ -10,6 +10,7 @@ import gebo.microservices.api.client.heimdall.model.GUserMessage;
 import gebo.microservices.api.client.heimdall.model.InsertUserParam;
 import gebo.microservices.api.client.heimdall.model.PageUserInfos;
 import gebo.microservices.api.client.heimdall.model.PageUsersGroup;
+import gebo.microservices.api.client.heimdall.model.UserInfos;
 import gebo.microservices.api.client.heimdall.model.UsersGroup;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UsersAdminControllerApi {
     private ApiClient apiClient;
@@ -190,7 +191,7 @@ public class UsersAdminControllerApi {
      * @return UsersGroup
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UsersGroup findGroupByCode1(Object code) throws RestClientException {
+    public UsersGroup findGroupByCode1(String code) throws RestClientException {
         return findGroupByCode1WithHttpInfo(code).getBody();
     }
 
@@ -202,7 +203,7 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UsersGroup> findGroupByCode1WithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<UsersGroup> findGroupByCode1WithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -281,7 +282,7 @@ public class UsersAdminControllerApi {
      * @return EditableUser
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public EditableUser findUserByUsername2(Object email) throws RestClientException {
+    public EditableUser findUserByUsername2(String email) throws RestClientException {
         return findUserByUsername2WithHttpInfo(email).getBody();
     }
 
@@ -293,7 +294,7 @@ public class UsersAdminControllerApi {
      * @return ResponseEntity&lt;EditableUser&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<EditableUser> findUserByUsername2WithHttpInfo(Object email) throws RestClientException {
+    public ResponseEntity<EditableUser> findUserByUsername2WithHttpInfo(String email) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'email' is set
         if (email == null) {
@@ -368,10 +369,10 @@ public class UsersAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllGroups1() throws RestClientException {
+    public List<UsersGroup> getAllGroups1() throws RestClientException {
         return getAllGroups1WithHttpInfo().getBody();
     }
 
@@ -379,10 +380,10 @@ public class UsersAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UsersGroup&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllGroups1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UsersGroup>> getAllGroups1WithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllGroups").build().toUriString();
         
@@ -399,17 +400,17 @@ public class UsersAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UsersGroup>> returnType = new ParameterizedTypeReference<List<UsersGroup>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;UserInfos&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllUsers1() throws RestClientException {
+    public List<UserInfos> getAllUsers1() throws RestClientException {
         return getAllUsers1WithHttpInfo().getBody();
     }
 
@@ -417,10 +418,10 @@ public class UsersAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserInfos&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllUsers1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UserInfos>> getAllUsers1WithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/UsersAdminController/getAllUsers").build().toUriString();
         
@@ -437,7 +438,7 @@ public class UsersAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UserInfos>> returnType = new ParameterizedTypeReference<List<UserInfos>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

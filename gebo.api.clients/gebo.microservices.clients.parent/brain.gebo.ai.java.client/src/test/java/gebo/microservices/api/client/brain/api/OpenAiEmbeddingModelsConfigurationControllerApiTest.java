@@ -57,7 +57,7 @@ public class OpenAiEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void findOpenAIEmbeddingModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GOpenAIEmbeddingModelConfig response = api.findOpenAIEmbeddingModelConfigByCode(code);
 
         // TODO: test validations

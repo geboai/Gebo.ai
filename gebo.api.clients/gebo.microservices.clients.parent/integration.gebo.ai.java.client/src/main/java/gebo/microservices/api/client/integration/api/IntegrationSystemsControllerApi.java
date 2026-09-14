@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:40.120904804+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class IntegrationSystemsControllerApi {
     private ApiClient apiClient;
@@ -91,10 +91,10 @@ public class IntegrationSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GIntegrationProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findIntegrationEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GIntegrationProjectEndpoint> findIntegrationEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findIntegrationEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -103,10 +103,10 @@ public class IntegrationSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GIntegrationProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findIntegrationEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GIntegrationProjectEndpoint>> findIntegrationEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
@@ -128,7 +128,7 @@ public class IntegrationSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GIntegrationProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GIntegrationProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

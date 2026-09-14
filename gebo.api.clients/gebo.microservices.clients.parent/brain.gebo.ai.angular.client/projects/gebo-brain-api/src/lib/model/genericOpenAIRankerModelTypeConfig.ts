@@ -11,16 +11,16 @@
  */
 
 export interface GenericOpenAIRankerModelTypeConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelConfigurationClass?: any;
-    baseUrl?: any;
-    modelsListProvider?: any;
-    providerId?: any;
-    optionalAuthentication?: any;
-    defaultModel?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelConfigurationClass?: string;
+    baseUrl?: string;
+    modelsListProvider?: string;
+    providerId?: string;
+    optionalAuthentication?: boolean;
+    defaultModel?: string;
 }

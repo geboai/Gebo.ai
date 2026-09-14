@@ -9,21 +9,22 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { JobWorkflowStepSummaryTimeSlotStats } from './jobWorkflowStepSummaryTimeSlotStats';
 
 export interface JobWorkflowStepSummary { 
-    workflowType?: any;
-    workflowId?: any;
-    workflowStepId?: any;
-    startDateTime?: any;
-    endDateTime?: any;
-    batchDocumentsInput?: any;
-    batchDiscardedInput?: any;
-    batchSentToNextStep?: any;
-    chunksProcessed?: any;
-    tokensProcessed?: any;
-    batchDocumentsProcessingErrors?: any;
-    batchDocumentsProcessed?: any;
-    errorChunks?: any;
-    errorTokens?: any;
-    timesamples?: any;
+    workflowType?: string;
+    workflowId?: string;
+    workflowStepId?: string;
+    startDateTime?: Date;
+    endDateTime?: Date;
+    batchDocumentsInput?: number;
+    batchDiscardedInput?: number;
+    batchSentToNextStep?: number;
+    chunksProcessed?: number;
+    tokensProcessed?: number;
+    batchDocumentsProcessingErrors?: number;
+    batchDocumentsProcessed?: number;
+    errorChunks?: number;
+    errorTokens?: number;
+    timesamples?: Array<JobWorkflowStepSummaryTimeSlotStats>;
 }

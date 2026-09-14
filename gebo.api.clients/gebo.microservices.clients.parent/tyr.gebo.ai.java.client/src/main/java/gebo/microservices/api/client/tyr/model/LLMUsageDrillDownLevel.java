@@ -22,31 +22,66 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageDrillDownLevel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class LLMUsageDrillDownLevel {
   @JsonProperty("providerId")
-  private Object providerId = null;
+  private String providerId = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("model")
-  private Object model = null;
+  private String model = null;
 
   @JsonProperty("callerStack")
-  private Object callerStack = null;
+  private String callerStack = null;
 
-  @JsonProperty("modelType")
-  private Object modelType = null;
+  /**
+   * Gets or Sets modelType
+   */
+  public enum ModelTypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    IMAGE("IMAGE"),
+    RANKER("RANKER"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    ModelTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ModelTypeEnum fromValue(String input) {
+      for (ModelTypeEnum b : ModelTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("modelType")
+  private ModelTypeEnum modelType = null;
 
   @JsonProperty("year")
-  private Object year = null;
+  private Integer year = null;
 
   @JsonProperty("month")
-  private Object month = null;
+  private Integer month = null;
 
-  public LLMUsageDrillDownLevel providerId(Object providerId) {
+  public LLMUsageDrillDownLevel providerId(String providerId) {
     this.providerId = providerId;
     return this;
   }
@@ -56,15 +91,15 @@ public class LLMUsageDrillDownLevel {
    * @return providerId
   **/
   @Schema(description = "")
-  public Object getProviderId() {
+  public String getProviderId() {
     return providerId;
   }
 
-  public void setProviderId(Object providerId) {
+  public void setProviderId(String providerId) {
     this.providerId = providerId;
   }
 
-  public LLMUsageDrillDownLevel username(Object username) {
+  public LLMUsageDrillDownLevel username(String username) {
     this.username = username;
     return this;
   }
@@ -74,15 +109,15 @@ public class LLMUsageDrillDownLevel {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public LLMUsageDrillDownLevel model(Object model) {
+  public LLMUsageDrillDownLevel model(String model) {
     this.model = model;
     return this;
   }
@@ -92,15 +127,15 @@ public class LLMUsageDrillDownLevel {
    * @return model
   **/
   @Schema(description = "")
-  public Object getModel() {
+  public String getModel() {
     return model;
   }
 
-  public void setModel(Object model) {
+  public void setModel(String model) {
     this.model = model;
   }
 
-  public LLMUsageDrillDownLevel callerStack(Object callerStack) {
+  public LLMUsageDrillDownLevel callerStack(String callerStack) {
     this.callerStack = callerStack;
     return this;
   }
@@ -110,15 +145,15 @@ public class LLMUsageDrillDownLevel {
    * @return callerStack
   **/
   @Schema(description = "")
-  public Object getCallerStack() {
+  public String getCallerStack() {
     return callerStack;
   }
 
-  public void setCallerStack(Object callerStack) {
+  public void setCallerStack(String callerStack) {
     this.callerStack = callerStack;
   }
 
-  public LLMUsageDrillDownLevel modelType(Object modelType) {
+  public LLMUsageDrillDownLevel modelType(ModelTypeEnum modelType) {
     this.modelType = modelType;
     return this;
   }
@@ -128,15 +163,15 @@ public class LLMUsageDrillDownLevel {
    * @return modelType
   **/
   @Schema(description = "")
-  public Object getModelType() {
+  public ModelTypeEnum getModelType() {
     return modelType;
   }
 
-  public void setModelType(Object modelType) {
+  public void setModelType(ModelTypeEnum modelType) {
     this.modelType = modelType;
   }
 
-  public LLMUsageDrillDownLevel year(Object year) {
+  public LLMUsageDrillDownLevel year(Integer year) {
     this.year = year;
     return this;
   }
@@ -146,15 +181,15 @@ public class LLMUsageDrillDownLevel {
    * @return year
   **/
   @Schema(description = "")
-  public Object getYear() {
+  public Integer getYear() {
     return year;
   }
 
-  public void setYear(Object year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
-  public LLMUsageDrillDownLevel month(Object month) {
+  public LLMUsageDrillDownLevel month(Integer month) {
     this.month = month;
     return this;
   }
@@ -164,11 +199,11 @@ public class LLMUsageDrillDownLevel {
    * @return month
   **/
   @Schema(description = "")
-  public Object getMonth() {
+  public Integer getMonth() {
     return month;
   }
 
-  public void setMonth(Object month) {
+  public void setMonth(Integer month) {
     this.month = month;
   }
 

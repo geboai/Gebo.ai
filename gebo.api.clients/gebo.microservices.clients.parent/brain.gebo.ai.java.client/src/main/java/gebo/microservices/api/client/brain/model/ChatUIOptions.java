@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChatUIOptions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ChatUIOptions {
   @JsonProperty("enablePureModelChat")
-  private Object enablePureModelChat = null;
+  private Boolean enablePureModelChat = null;
 
   @JsonProperty("defaultUILanguage")
-  private Object defaultUILanguage = null;
+  private String defaultUILanguage = null;
 
-  public ChatUIOptions enablePureModelChat(Object enablePureModelChat) {
+  public ChatUIOptions enablePureModelChat(Boolean enablePureModelChat) {
     this.enablePureModelChat = enablePureModelChat;
     return this;
   }
@@ -41,15 +41,15 @@ public class ChatUIOptions {
    * @return enablePureModelChat
   **/
   @Schema(description = "")
-  public Object getEnablePureModelChat() {
+  public Boolean isEnablePureModelChat() {
     return enablePureModelChat;
   }
 
-  public void setEnablePureModelChat(Object enablePureModelChat) {
+  public void setEnablePureModelChat(Boolean enablePureModelChat) {
     this.enablePureModelChat = enablePureModelChat;
   }
 
-  public ChatUIOptions defaultUILanguage(Object defaultUILanguage) {
+  public ChatUIOptions defaultUILanguage(String defaultUILanguage) {
     this.defaultUILanguage = defaultUILanguage;
     return this;
   }
@@ -59,11 +59,11 @@ public class ChatUIOptions {
    * @return defaultUILanguage
   **/
   @Schema(description = "")
-  public Object getDefaultUILanguage() {
+  public String getDefaultUILanguage() {
     return defaultUILanguage;
   }
 
-  public void setDefaultUILanguage(Object defaultUILanguage) {
+  public void setDefaultUILanguage(String defaultUILanguage) {
     this.defaultUILanguage = defaultUILanguage;
   }
 

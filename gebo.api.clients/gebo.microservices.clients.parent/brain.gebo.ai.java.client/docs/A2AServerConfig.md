@@ -3,17 +3,17 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**userModified** | **Object** |  |  [optional]
-**userCreated** | **Object** |  |  [optional]
-**dateModified** | **Object** |  |  [optional]
-**dateCreated** | **Object** |  |  [optional]
-**exportedRelativeUrl** | **Object** |  | 
-**enabled** | **Object** |  |  [optional]
-**exportedAgents** | **Object** |  |  [optional]
-**securitySchemeName** | **Object** |  |  [optional]
-**accessibleGroups** | **Object** |  |  [optional]
-**accessibleUsers** | **Object** |  |  [optional]
-**accessibleToAll** | **Object** |  |  [optional]
-**aclAliases** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**userModified** | **String** |  |  [optional]
+**userCreated** | **String** |  |  [optional]
+**dateModified** | [**Date**](Date.md) |  |  [optional]
+**dateCreated** | [**Date**](Date.md) |  |  [optional]
+**exportedRelativeUrl** | **String** |  | 
+**enabled** | **Boolean** |  |  [optional]
+**exportedAgents** | [**List&lt;A2AExportedAgent&gt;**](A2AExportedAgent.md) |  |  [optional]
+**securitySchemeName** | **String** |  |  [optional]
+**accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
+**accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
+**accessibleToAll** | **Boolean** |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]

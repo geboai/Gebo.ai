@@ -15,6 +15,6 @@ import { GUserMessage } from './gUserMessage';
 export interface OperationStatusListGMistralEmbeddingModelChoice { 
     result?: Array<GMistralEmbeddingModelChoice>;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.filesystem.api;
 
+import gebo.microservices.api.client.filesystem.model.GContentManagementSystemType;
+import gebo.microservices.api.client.filesystem.model.GFilesystemContentManagementSystem;
 import gebo.microservices.api.client.filesystem.model.GFilesystemProjectEndpoint;
 import gebo.microservices.api.client.filesystem.model.OperationStatusGJobStatus;
 import org.junit.Test;
@@ -55,8 +57,8 @@ public class FileSystemsControllerApiTest {
      */
     @Test
     public void findFileSystemEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findFileSystemEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GFilesystemProjectEndpoint> response = api.findFileSystemEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -71,7 +73,7 @@ public class FileSystemsControllerApiTest {
     @Test
     public void findFileSystemEndpointsByQbeTest() {
         GFilesystemProjectEndpoint body = null;
-        Object response = api.findFileSystemEndpointsByQbe(body);
+        List<GFilesystemProjectEndpoint> response = api.findFileSystemEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -85,7 +87,7 @@ public class FileSystemsControllerApiTest {
      */
     @Test
     public void getFileSystemSystemTypesTest() {
-        Object response = api.getFileSystemSystemTypes();
+        List<GContentManagementSystemType> response = api.getFileSystemSystemTypes();
 
         // TODO: test validations
     }
@@ -99,8 +101,8 @@ public class FileSystemsControllerApiTest {
      */
     @Test
     public void getFileSystemSystemsTest() {
-        Object handlerCode = null;
-        Object response = api.getFileSystemSystems(handlerCode);
+        String handlerCode = null;
+        List<GFilesystemContentManagementSystem> response = api.getFileSystemSystems(handlerCode);
 
         // TODO: test validations
     }

@@ -12,19 +12,19 @@
 import { MistralModelCapabilities } from './mistralModelCapabilities';
 
 export interface MistralBaseModelCard { 
-    id?: any;
+    id?: string;
     capabilities?: MistralModelCapabilities;
-    job?: any;
-    root?: any;
-    object?: any;
-    created?: any;
-    ownedBy?: any;
-    name?: any;
-    description?: any;
-    maxContextLength?: any;
-    aliases?: any;
-    deprecation?: any;
-    deprecationReplacementModel?: any;
-    defaultModelTemperature?: any;
-    archived?: any;
+    job?: string;
+    root?: string;
+    object?: string;
+    created?: number;
+    ownedBy?: string;
+    name?: string;
+    description?: string;
+    maxContextLength?: number;
+    aliases?: Array<string>;
+    deprecation?: string;
+    deprecationReplacementModel?: string;
+    defaultModelTemperature?: number;
+    archived?: boolean;
 }

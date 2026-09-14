@@ -2,6 +2,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseTextToSpeachModelConfig;
+import gebo.microservices.api.client.brain.model.GTextToSpeechModelType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class TextToSpeechModelsControllerApi {
     private ApiClient apiClient;
@@ -46,10 +48,10 @@ public class TextToSpeechModelsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return Object
+     * @return List&lt;ConfigurationEntryGBaseTextToSpeachModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRuntimeConfiguredTextToSpeechModels(Object modelTypeCode) throws RestClientException {
+    public List<ConfigurationEntryGBaseTextToSpeachModelConfig> getRuntimeConfiguredTextToSpeechModels(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredTextToSpeechModelsWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -58,10 +60,10 @@ public class TextToSpeechModelsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ConfigurationEntryGBaseTextToSpeachModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRuntimeConfiguredTextToSpeechModelsWithHttpInfo(Object modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<ConfigurationEntryGBaseTextToSpeachModelConfig>> getRuntimeConfiguredTextToSpeechModelsWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/TextToSpeechModelsController/getRuntimeConfiguredTextToSpeechModels").build().toUriString();
         
@@ -79,17 +81,17 @@ public class TextToSpeechModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<ConfigurationEntryGBaseTextToSpeachModelConfig>> returnType = new ParameterizedTypeReference<List<ConfigurationEntryGBaseTextToSpeachModelConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GTextToSpeechModelType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getTextToSpeechModelTypes() throws RestClientException {
+    public List<GTextToSpeechModelType> getTextToSpeechModelTypes() throws RestClientException {
         return getTextToSpeechModelTypesWithHttpInfo().getBody();
     }
 
@@ -97,10 +99,10 @@ public class TextToSpeechModelsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GTextToSpeechModelType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getTextToSpeechModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GTextToSpeechModelType>> getTextToSpeechModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/TextToSpeechModelsController/getTextToSpeechModelTypes").build().toUriString();
         
@@ -117,7 +119,7 @@ public class TextToSpeechModelsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GTextToSpeechModelType>> returnType = new ParameterizedTypeReference<List<GTextToSpeechModelType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -11,9 +11,10 @@
  */
 
 export interface GeboGoogleOauth2SecretContent { 
-    uid?: any;
-    token?: any;
-    location?: any;
-    projectId?: any;
-    scopes?: any;
+    readOnly?: boolean;
+    uid?: string;
+    token?: string;
+    location?: string;
+    projectId?: string;
+    scopes?: Array<string>;
 }

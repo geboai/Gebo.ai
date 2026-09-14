@@ -17,21 +17,60 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.mcpclient.model.ReindexingTime;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ReindexingProgrammedTable
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:50.381843566+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class ReindexingProgrammedTable {
-  @JsonProperty("frequency")
-  private Object frequency = null;
+  /**
+   * Gets or Sets frequency
+   */
+  public enum FrequencyEnum {
+    DAILY("DAILY"),
+    MONTHLY("MONTHLY"),
+    WEEKLY("WEEKLY"),
+    HOURLY("HOURLY"),
+    YEARLY("YEARLY"),
+    ON_CHANGES("ON_CHANGES"),
+    DATES("DATES");
+
+    private String value;
+
+    FrequencyEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static FrequencyEnum fromValue(String input) {
+      for (FrequencyEnum b : FrequencyEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("frequency")
+  private FrequencyEnum frequency = null;
 
   @JsonProperty("times")
-  private Object times = null;
+  private List<ReindexingTime> times = null;
 
-  public ReindexingProgrammedTable frequency(Object frequency) {
+  public ReindexingProgrammedTable frequency(FrequencyEnum frequency) {
     this.frequency = frequency;
     return this;
   }
@@ -41,16 +80,24 @@ public class ReindexingProgrammedTable {
    * @return frequency
   **/
   @Schema(required = true, description = "")
-  public Object getFrequency() {
+  public FrequencyEnum getFrequency() {
     return frequency;
   }
 
-  public void setFrequency(Object frequency) {
+  public void setFrequency(FrequencyEnum frequency) {
     this.frequency = frequency;
   }
 
-  public ReindexingProgrammedTable times(Object times) {
+  public ReindexingProgrammedTable times(List<ReindexingTime> times) {
     this.times = times;
+    return this;
+  }
+
+  public ReindexingProgrammedTable addTimesItem(ReindexingTime timesItem) {
+    if (this.times == null) {
+      this.times = new ArrayList<>();
+    }
+    this.times.add(timesItem);
     return this;
   }
 
@@ -59,11 +106,11 @@ public class ReindexingProgrammedTable {
    * @return times
   **/
   @Schema(description = "")
-  public Object getTimes() {
+  public List<ReindexingTime> getTimes() {
     return times;
   }
 
-  public void setTimes(Object times) {
+  public void setTimes(List<ReindexingTime> times) {
     this.times = times;
   }
 

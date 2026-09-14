@@ -11,9 +11,9 @@
  */
 
 export interface StartGooglWorkspaceAccessRespose { 
-    notExecuted?: any;
-    alreadyOwningCredentials?: any;
-    forwardUrl?: any;
-    jumpTo?: any;
-    authenticationSessionId?: any;
+    notExecuted?: boolean;
+    alreadyOwningCredentials?: boolean;
+    forwardUrl?: string;
+    jumpTo?: string;
+    authenticationSessionId?: string;
 }

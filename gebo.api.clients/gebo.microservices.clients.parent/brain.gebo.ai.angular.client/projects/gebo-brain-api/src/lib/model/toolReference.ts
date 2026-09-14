@@ -11,8 +11,8 @@
  */
 
 export interface ToolReference { 
-    name?: any;
-    description?: any;
-    userUIfunctionDescription?: any;
-    inputSchema?: any;
+    name?: string;
+    description?: string;
+    userUIfunctionDescription?: string;
+    inputSchema?: string;
 }

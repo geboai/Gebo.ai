@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeneratedUserApiKeyControllerApi {
     private ApiClient apiClient;
@@ -52,7 +52,7 @@ public class GeneratedUserApiKeyControllerApi {
      * @param code  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteUserGeneratedApiKey(Object code) throws RestClientException {
+    public void deleteUserGeneratedApiKey(String code) throws RestClientException {
         deleteUserGeneratedApiKeyWithHttpInfo(code);
     }
 
@@ -64,7 +64,7 @@ public class GeneratedUserApiKeyControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteUserGeneratedApiKeyWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<Void> deleteUserGeneratedApiKeyWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -183,10 +183,10 @@ public class GeneratedUserApiKeyControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object isUserGeneratedApiKeyGenerationAllowed() throws RestClientException {
+    public Boolean isUserGeneratedApiKeyGenerationAllowed() throws RestClientException {
         return isUserGeneratedApiKeyGenerationAllowedWithHttpInfo().getBody();
     }
 
@@ -194,10 +194,10 @@ public class GeneratedUserApiKeyControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> isUserGeneratedApiKeyGenerationAllowedWithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> isUserGeneratedApiKeyGenerationAllowedWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed").build().toUriString();
         
@@ -214,7 +214,7 @@ public class GeneratedUserApiKeyControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

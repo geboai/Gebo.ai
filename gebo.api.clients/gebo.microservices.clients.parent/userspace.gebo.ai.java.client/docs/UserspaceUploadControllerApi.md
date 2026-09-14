@@ -20,8 +20,8 @@ Method | HTTP request | Description
 
 
 UserspaceUploadControllerApi apiInstance = new UserspaceUploadControllerApi();
-Object userspaceFolderCode = null; // Object | 
-Object files = null; // Object | 
+String userspaceFolderCode = "userspaceFolderCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
 try {
     apiInstance.upload(userspaceFolderCode, files);
 } catch (ApiException e) {
@@ -34,8 +34,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userspaceFolderCode** | [**Object**](.md)|  |
- **files** | [**Object**](.md)|  | [optional]
+ **userspaceFolderCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
 
 ### Return type
 

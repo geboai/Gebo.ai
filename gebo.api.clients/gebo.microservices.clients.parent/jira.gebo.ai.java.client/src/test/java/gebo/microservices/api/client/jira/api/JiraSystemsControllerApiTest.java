@@ -89,7 +89,7 @@ public class JiraSystemsControllerApiTest {
      */
     @Test
     public void findJiraEndpointsByCodeTest() {
-        Object code = null;
+        String code = null;
         GJiraProjectEndpoint response = api.findJiraEndpointsByCode(code);
 
         // TODO: test validations
@@ -104,8 +104,8 @@ public class JiraSystemsControllerApiTest {
      */
     @Test
     public void findJiraEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findJiraEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GJiraProjectEndpoint> response = api.findJiraEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -120,7 +120,7 @@ public class JiraSystemsControllerApiTest {
     @Test
     public void findJiraEndpointsByQbeTest() {
         GJiraProjectEndpoint body = null;
-        Object response = api.findJiraEndpointsByQbe(body);
+        List<GJiraProjectEndpoint> response = api.findJiraEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -134,7 +134,7 @@ public class JiraSystemsControllerApiTest {
      */
     @Test
     public void findJiraSystemByCodeTest() {
-        Object code = null;
+        String code = null;
         GJiraSystem response = api.findJiraSystemByCode(code);
 
         // TODO: test validations
@@ -163,7 +163,7 @@ public class JiraSystemsControllerApiTest {
      */
     @Test
     public void getJiraSystemsTest() {
-        Object response = api.getJiraSystems();
+        List<GJiraSystem> response = api.getJiraSystems();
 
         // TODO: test validations
     }

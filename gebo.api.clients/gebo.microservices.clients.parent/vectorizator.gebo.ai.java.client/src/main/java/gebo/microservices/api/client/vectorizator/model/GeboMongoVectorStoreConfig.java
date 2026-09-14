@@ -25,14 +25,47 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboMongoVectorStoreConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:15.167851277+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
 
 public class GeboMongoVectorStoreConfig {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
-  @JsonProperty("product")
-  private Object product = null;
+  /**
+   * Gets or Sets product
+   */
+  public enum ProductEnum {
+    MONGO("MONGO"),
+    QDRANT("QDRANT"),
+    REDIS("REDIS"),
+    TEST("TEST");
+
+    private String value;
+
+    ProductEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ProductEnum fromValue(String input) {
+      for (ProductEnum b : ProductEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("product")
+  private ProductEnum product = null;
 
   @JsonProperty("qdrantConfig")
   private QdrantConfig qdrantConfig = null;
@@ -43,7 +76,7 @@ public class GeboMongoVectorStoreConfig {
   @JsonProperty("redisConfig")
   private RedisConfig redisConfig = null;
 
-  public GeboMongoVectorStoreConfig id(Object id) {
+  public GeboMongoVectorStoreConfig id(String id) {
     this.id = id;
     return this;
   }
@@ -53,15 +86,15 @@ public class GeboMongoVectorStoreConfig {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public GeboMongoVectorStoreConfig product(Object product) {
+  public GeboMongoVectorStoreConfig product(ProductEnum product) {
     this.product = product;
     return this;
   }
@@ -71,11 +104,11 @@ public class GeboMongoVectorStoreConfig {
    * @return product
   **/
   @Schema(required = true, description = "")
-  public Object getProduct() {
+  public ProductEnum getProduct() {
     return product;
   }
 
-  public void setProduct(Object product) {
+  public void setProduct(ProductEnum product) {
     this.product = product;
   }
 

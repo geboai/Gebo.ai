@@ -22,13 +22,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ContentObject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ContentObject {
   @JsonProperty("content")
-  private Object content = null;
+  private String content = null;
 
-  public ContentObject content(Object content) {
+  public ContentObject content(String content) {
     this.content = content;
     return this;
   }
@@ -38,11 +38,11 @@ public class ContentObject {
    * @return content
   **/
   @Schema(description = "")
-  public Object getContent() {
+  public String getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(String content) {
     this.content = content;
   }
 

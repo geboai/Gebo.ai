@@ -3,11 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**workflowType** | **Object** |  |  [optional]
-**workflowId** | **Object** |  |  [optional]
-**startDateTime** | **Object** |  |  [optional]
-**endDateTime** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**workflowType** | **String** |  |  [optional]
+**workflowId** | **String** |  |  [optional]
+**startDateTime** | [**Date**](Date.md) |  |  [optional]
+**endDateTime** | [**Date**](Date.md) |  |  [optional]
 **workflowStatus** | [**ComputedWorkflowResult**](ComputedWorkflowResult.md) |  |  [optional]
-**workflowStepsSummaries** | **Object** |  |  [optional]
+**workflowStepsSummaries** | [**List&lt;JobWorkflowStepSummary&gt;**](JobWorkflowStepSummary.md) |  |  [optional]

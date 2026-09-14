@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getChatModelTypes"></a>
 # **getChatModelTypes**
-> Object getChatModelTypes()
+> List&lt;GChatModelType&gt; getChatModelTypes()
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 ChatModelsControllerApi apiInstance = new ChatModelsControllerApi();
 try {
-    Object result = apiInstance.getChatModelTypes();
+    List<GChatModelType> result = apiInstance.getChatModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ChatModelsControllerApi#getChatModelTypes");
@@ -35,7 +35,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GChatModelType&gt;**](GChatModelType.md)
 
 ### Authorization
 
@@ -48,7 +48,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredChatModels"></a>
 # **getRuntimeConfiguredChatModels**
-> Object getRuntimeConfiguredChatModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseChatModelConfig&gt; getRuntimeConfiguredChatModels(modelTypeCode)
 
 
 
@@ -60,9 +60,9 @@ No authorization required
 
 
 ChatModelsControllerApi apiInstance = new ChatModelsControllerApi();
-Object modelTypeCode = null; // Object | 
+String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getRuntimeConfiguredChatModels(modelTypeCode);
+    List<ConfigurationEntryGBaseChatModelConfig> result = apiInstance.getRuntimeConfiguredChatModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ChatModelsControllerApi#getRuntimeConfiguredChatModels");
@@ -74,11 +74,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional]
+ **modelTypeCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ConfigurationEntryGBaseChatModelConfig&gt;**](ConfigurationEntryGBaseChatModelConfig.md)
 
 ### Authorization
 

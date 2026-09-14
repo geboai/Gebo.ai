@@ -2,6 +2,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseEmbeddingModelConfig;
+import gebo.microservices.api.client.brain.model.GEmbeddingModelType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class EmbeddingModelsControllersApi {
     private ApiClient apiClient;
@@ -45,10 +47,10 @@ public class EmbeddingModelsControllersApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GEmbeddingModelType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getEmbeddingModelTypes() throws RestClientException {
+    public List<GEmbeddingModelType> getEmbeddingModelTypes() throws RestClientException {
         return getEmbeddingModelTypesWithHttpInfo().getBody();
     }
 
@@ -56,10 +58,10 @@ public class EmbeddingModelsControllersApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GEmbeddingModelType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getEmbeddingModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GEmbeddingModelType>> getEmbeddingModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/EmbeddingModelsControllers/getEmbeddingModelTypes").build().toUriString();
         
@@ -76,7 +78,7 @@ public class EmbeddingModelsControllersApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GEmbeddingModelType>> returnType = new ParameterizedTypeReference<List<GEmbeddingModelType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -84,10 +86,10 @@ public class EmbeddingModelsControllersApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return Object
+     * @return List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRuntimeConfiguredEmbeddingModels(Object modelTypeCode) throws RestClientException {
+    public List<ConfigurationEntryGBaseEmbeddingModelConfig> getRuntimeConfiguredEmbeddingModels(String modelTypeCode) throws RestClientException {
         return getRuntimeConfiguredEmbeddingModelsWithHttpInfo(modelTypeCode).getBody();
     }
 
@@ -96,10 +98,10 @@ public class EmbeddingModelsControllersApi {
      * 
      * <p><b>200</b> - OK
      * @param modelTypeCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;ConfigurationEntryGBaseEmbeddingModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRuntimeConfiguredEmbeddingModelsWithHttpInfo(Object modelTypeCode) throws RestClientException {
+    public ResponseEntity<List<ConfigurationEntryGBaseEmbeddingModelConfig>> getRuntimeConfiguredEmbeddingModelsWithHttpInfo(String modelTypeCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/EmbeddingModelsControllers/getRuntimeConfiguredEmbeddingModels").build().toUriString();
         
@@ -117,7 +119,7 @@ public class EmbeddingModelsControllersApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<ConfigurationEntryGBaseEmbeddingModelConfig>> returnType = new ParameterizedTypeReference<List<ConfigurationEntryGBaseEmbeddingModelConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

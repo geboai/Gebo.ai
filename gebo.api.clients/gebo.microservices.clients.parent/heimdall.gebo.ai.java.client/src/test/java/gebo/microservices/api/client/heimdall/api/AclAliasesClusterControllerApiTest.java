@@ -40,7 +40,7 @@ public class AclAliasesClusterControllerApiTest {
     @Test
     public void addAclTest() {
         GAclEntry body = null;
-        Object response = api.addAcl(body);
+        Integer response = api.addAcl(body);
 
         // TODO: test validations
     }
@@ -54,7 +54,7 @@ public class AclAliasesClusterControllerApiTest {
      */
     @Test
     public void findAclTest() {
-        Object alias = null;
+        Integer alias = null;
         GAclEntry response = api.findAcl(alias);
 
         // TODO: test validations
@@ -70,7 +70,7 @@ public class AclAliasesClusterControllerApiTest {
     @Test
     public void findAliasTest() {
         GAclEntry body = null;
-        Object response = api.findAlias(body);
+        Integer response = api.findAlias(body);
 
         // TODO: test validations
     }
@@ -84,8 +84,8 @@ public class AclAliasesClusterControllerApiTest {
      */
     @Test
     public void findAliasesByAclGrantedUniqueIdTest() {
-        Object uniqueId = null;
-        Object response = api.findAliasesByAclGrantedUniqueId(uniqueId);
+        String uniqueId = null;
+        List<Integer> response = api.findAliasesByAclGrantedUniqueId(uniqueId);
 
         // TODO: test validations
     }
@@ -99,9 +99,9 @@ public class AclAliasesClusterControllerApiTest {
      */
     @Test
     public void findAliasesByAclGrantedUniqueIdAndAclGrantTypeTest() {
-        Object uniqueId = null;
-        Object grantType = null;
-        Object response = api.findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
+        String uniqueId = null;
+        String grantType = null;
+        List<Integer> response = api.findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
 
         // TODO: test validations
     }
@@ -115,8 +115,8 @@ public class AclAliasesClusterControllerApiTest {
      */
     @Test
     public void findAliasesByAclGrantedUniqueIdInTest() {
-        Object body = null;
-        Object response = api.findAliasesByAclGrantedUniqueIdIn(body);
+        List<String> body = null;
+        List<Integer> response = api.findAliasesByAclGrantedUniqueIdIn(body);
 
         // TODO: test validations
     }
@@ -130,9 +130,9 @@ public class AclAliasesClusterControllerApiTest {
      */
     @Test
     public void findAliasesByAclGrantedUniqueIdInAndAclGrantTypeTest() {
-        Object body = null;
-        Object grantType = null;
-        Object response = api.findAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType);
+        List<String> body = null;
+        String grantType = null;
+        List<Integer> response = api.findAliasesByAclGrantedUniqueIdInAndAclGrantType(body, grantType);
 
         // TODO: test validations
     }
@@ -146,7 +146,7 @@ public class AclAliasesClusterControllerApiTest {
      */
     @Test
     public void removeAclTest() {
-        Object alias = null;
+        Integer alias = null;
         api.removeAcl(alias);
 
         // TODO: test validations

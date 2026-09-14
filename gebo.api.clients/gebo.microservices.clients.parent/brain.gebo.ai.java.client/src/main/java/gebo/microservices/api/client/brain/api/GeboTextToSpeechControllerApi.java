@@ -2,6 +2,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import java.io.File;
 import gebo.microservices.api.client.brain.model.SpeechRequest;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboTextToSpeechControllerApi {
     private ApiClient apiClient;
@@ -46,10 +47,10 @@ public class GeboTextToSpeechControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object isEnabled1() throws RestClientException {
+    public Boolean isEnabled1() throws RestClientException {
         return isEnabled1WithHttpInfo().getBody();
     }
 
@@ -57,10 +58,10 @@ public class GeboTextToSpeechControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> isEnabled1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> isEnabled1WithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboTextToSpeechController/isEnabled").build().toUriString();
         
@@ -77,7 +78,7 @@ public class GeboTextToSpeechControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -85,10 +86,10 @@ public class GeboTextToSpeechControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return File
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object speechText(SpeechRequest body) throws RestClientException {
+    public File speechText(SpeechRequest body) throws RestClientException {
         return speechTextWithHttpInfo(body).getBody();
     }
 
@@ -97,10 +98,10 @@ public class GeboTextToSpeechControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;File&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> speechTextWithHttpInfo(SpeechRequest body) throws RestClientException {
+    public ResponseEntity<File> speechTextWithHttpInfo(SpeechRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -123,7 +124,7 @@ public class GeboTextToSpeechControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<File> returnType = new ParameterizedTypeReference<File>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

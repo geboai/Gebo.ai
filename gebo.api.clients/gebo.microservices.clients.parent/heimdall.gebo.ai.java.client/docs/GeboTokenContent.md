@@ -3,5 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**token** | **Object** |  | 
-**user** | **Object** |  | 
+**readOnly** | **Boolean** |  |  [optional]
+**token** | **String** |  | 
+**user** | **String** |  | 

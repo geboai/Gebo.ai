@@ -18,6 +18,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GAgentConfig } from '../model/gAgentConfig';
+import { GBaseObject } from '../model/gBaseObject';
+import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -108,10 +110,10 @@ export class GeboAgentAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GAgentConfig>;
-    public getAgentByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAgentConfig>>;
-    public getAgentByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAgentConfig>>;
-    public getAgentByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAgentByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAgentConfig>;
+    public getAgentByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAgentConfig>>;
+    public getAgentByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAgentConfig>>;
+    public getAgentByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling getAgentByCode.');
@@ -154,9 +156,9 @@ export class GeboAgentAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgents(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAgents(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAgents(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAgents(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getAgents(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getAgents(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
     public getAgents(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -174,7 +176,7 @@ export class GeboAgentAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getAgents`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getAgents`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -190,9 +192,9 @@ export class GeboAgentAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsChoices(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAgentsChoices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAgentsChoices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAgentsChoices(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getAgentsChoices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getAgentsChoices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
     public getAgentsChoices(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -210,7 +212,7 @@ export class GeboAgentAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getAgentsChoices`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getAgentsChoices`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -227,10 +229,10 @@ export class GeboAgentAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPromptTemplatesByAgentId(agentId: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getPromptTemplatesByAgentId(agentId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getPromptTemplatesByAgentId(agentId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getPromptTemplatesByAgentId(agentId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPromptTemplatesByAgentId(agentId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GPromptTemplateConfig>>;
+    public getPromptTemplatesByAgentId(agentId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GPromptTemplateConfig>>>;
+    public getPromptTemplatesByAgentId(agentId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GPromptTemplateConfig>>>;
+    public getPromptTemplatesByAgentId(agentId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (agentId === null || agentId === undefined) {
             throw new Error('Required parameter agentId was null or undefined when calling getPromptTemplatesByAgentId.');
@@ -256,7 +258,7 @@ export class GeboAgentAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId`,
+        return this.httpClient.request<Array<GPromptTemplateConfig>>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

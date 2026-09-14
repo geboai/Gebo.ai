@@ -3,20 +3,28 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**userModified** | **Object** |  |  [optional]
-**userCreated** | **Object** |  |  [optional]
-**dateModified** | **Object** |  |  [optional]
-**dateCreated** | **Object** |  |  [optional]
-**accessibleGroups** | **Object** |  |  [optional]
-**accessibleUsers** | **Object** |  |  [optional]
-**accessibleToAll** | **Object** |  |  [optional]
-**knowledgeBaseReferences** | **Object** |  |  [optional]
-**projectsReferences** | **Object** |  |  [optional]
-**embeddingModelReferences** | **Object** |  |  [optional]
-**username** | **Object** |  |  [optional]
-**parentKnowledgebaseCode** | **Object** |  |  [optional]
-**objectSpaceType** | **Object** |  |  [optional]
-**acl** | **Object** |  |  [optional]
-**aclAliases** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**userModified** | **String** |  |  [optional]
+**userCreated** | **String** |  |  [optional]
+**dateModified** | [**Date**](Date.md) |  |  [optional]
+**dateCreated** | [**Date**](Date.md) |  |  [optional]
+**accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
+**accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
+**accessibleToAll** | **Boolean** |  |  [optional]
+**knowledgeBaseReferences** | **List&lt;String&gt;** |  |  [optional]
+**projectsReferences** | **List&lt;String&gt;** |  |  [optional]
+**embeddingModelReferences** | [**List&lt;GObjectRef&gt;**](GObjectRef.md) |  |  [optional]
+**username** | **String** |  |  [optional]
+**parentKnowledgebaseCode** | **String** |  |  [optional]
+**objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
+**acl** | [**List&lt;GAclEntry&gt;**](GAclEntry.md) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
+**readonly** | **Boolean** |  |  [optional]
+
+<a name="ObjectSpaceTypeEnum"></a>
+## Enum: ObjectSpaceTypeEnum
+Name | Value
+---- | -----
+COMPANY | &quot;COMPANY&quot;
+USERSPACE | &quot;USERSPACE&quot;

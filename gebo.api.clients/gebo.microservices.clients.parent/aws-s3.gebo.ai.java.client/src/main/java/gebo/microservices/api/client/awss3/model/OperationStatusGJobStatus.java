@@ -18,25 +18,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.awss3.model.GJobStatus;
+import gebo.microservices.api.client.awss3.model.GUserMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * OperationStatusGJobStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:46.219289034+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:35.503809141+02:00[Europe/Rome]")
 
 public class OperationStatusGJobStatus {
   @JsonProperty("result")
   private GJobStatus result = null;
 
   @JsonProperty("messages")
-  private Object messages = null;
+  private List<GUserMessage> messages = null;
 
   @JsonProperty("hasErrorMessages")
-  private Object hasErrorMessages = null;
+  private Boolean hasErrorMessages = null;
 
   @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGJobStatus result(GJobStatus result) {
     this.result = result;
@@ -56,8 +59,16 @@ public class OperationStatusGJobStatus {
     this.result = result;
   }
 
-  public OperationStatusGJobStatus messages(Object messages) {
+  public OperationStatusGJobStatus messages(List<GUserMessage> messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public OperationStatusGJobStatus addMessagesItem(GUserMessage messagesItem) {
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(messagesItem);
     return this;
   }
 
@@ -66,15 +77,15 @@ public class OperationStatusGJobStatus {
    * @return messages
   **/
   @Schema(description = "")
-  public Object getMessages() {
+  public List<GUserMessage> getMessages() {
     return messages;
   }
 
-  public void setMessages(Object messages) {
+  public void setMessages(List<GUserMessage> messages) {
     this.messages = messages;
   }
 
-  public OperationStatusGJobStatus hasErrorMessages(Object hasErrorMessages) {
+  public OperationStatusGJobStatus hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
   }
@@ -84,15 +95,15 @@ public class OperationStatusGJobStatus {
    * @return hasErrorMessages
   **/
   @Schema(description = "")
-  public Object getHasErrorMessages() {
+  public Boolean isHasErrorMessages() {
     return hasErrorMessages;
   }
 
-  public void setHasErrorMessages(Object hasErrorMessages) {
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
   }
 
-  public OperationStatusGJobStatus hasWarnMessages(Object hasWarnMessages) {
+  public OperationStatusGJobStatus hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -102,11 +113,11 @@ public class OperationStatusGJobStatus {
    * @return hasWarnMessages
   **/
   @Schema(description = "")
-  public Object getHasWarnMessages() {
+  public Boolean isHasWarnMessages() {
     return hasWarnMessages;
   }
 
-  public void setHasWarnMessages(Object hasWarnMessages) {
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
   }
 

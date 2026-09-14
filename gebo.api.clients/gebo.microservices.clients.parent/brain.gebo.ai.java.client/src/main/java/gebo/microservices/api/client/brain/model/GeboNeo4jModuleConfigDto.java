@@ -22,13 +22,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboNeo4jModuleConfigDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboNeo4jModuleConfigDto {
   @JsonProperty("enabled")
-  private Object enabled = null;
+  private Boolean enabled = null;
 
-  public GeboNeo4jModuleConfigDto enabled(Object enabled) {
+  public GeboNeo4jModuleConfigDto enabled(Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -38,11 +38,11 @@ public class GeboNeo4jModuleConfigDto {
    * @return enabled
   **/
   @Schema(description = "")
-  public Object getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Object enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 

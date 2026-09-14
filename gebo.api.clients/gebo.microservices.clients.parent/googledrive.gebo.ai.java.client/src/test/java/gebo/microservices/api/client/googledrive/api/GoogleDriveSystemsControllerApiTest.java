@@ -89,8 +89,8 @@ public class GoogleDriveSystemsControllerApiTest {
      */
     @Test
     public void findGoogleDriveEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findGoogleDriveEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GGoogleDriveProjectEndpoint> response = api.findGoogleDriveEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -105,7 +105,7 @@ public class GoogleDriveSystemsControllerApiTest {
     @Test
     public void findGoogleDriveEndpointsByQbeTest() {
         GGoogleDriveProjectEndpoint body = null;
-        Object response = api.findGoogleDriveEndpointsByQbe(body);
+        List<GGoogleDriveProjectEndpoint> response = api.findGoogleDriveEndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -119,7 +119,7 @@ public class GoogleDriveSystemsControllerApiTest {
      */
     @Test
     public void findGoogleDriveProjectEndpointByCodeTest() {
-        Object code = null;
+        String code = null;
         GGoogleDriveProjectEndpoint response = api.findGoogleDriveProjectEndpointByCode(code);
 
         // TODO: test validations
@@ -134,7 +134,7 @@ public class GoogleDriveSystemsControllerApiTest {
      */
     @Test
     public void findGoogleDriveSystemByCodeTest() {
-        Object code = null;
+        String code = null;
         GGoogleDriveSystem response = api.findGoogleDriveSystemByCode(code);
 
         // TODO: test validations
@@ -163,7 +163,7 @@ public class GoogleDriveSystemsControllerApiTest {
      */
     @Test
     public void getGoogleDriveSystemsTest() {
-        Object response = api.getGoogleDriveSystems();
+        List<GGoogleDriveSystem> response = api.getGoogleDriveSystems();
 
         // TODO: test validations
     }

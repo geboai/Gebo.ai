@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | 
-**owners** | **Object** |  | 
+**code** | **String** |  | 
+**owners** | [**List&lt;AclOwnerParam&gt;**](AclOwnerParam.md) |  | 

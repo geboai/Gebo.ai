@@ -22,43 +22,43 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMAutoconfigureCreationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMAutoconfigureCreationData {
   @JsonProperty("vendorId")
-  private Object vendorId = null;
+  private String vendorId = null;
 
   @JsonProperty("secretId")
-  private Object secretId = null;
+  private String secretId = null;
 
   @JsonProperty("newApiSecret")
-  private Object newApiSecret = null;
+  private String newApiSecret = null;
 
   @JsonProperty("newUserName")
-  private Object newUserName = null;
+  private String newUserName = null;
 
   @JsonProperty("defaultChatModel")
-  private Object defaultChatModel = null;
+  private String defaultChatModel = null;
 
   @JsonProperty("internalServicesModel")
-  private Object internalServicesModel = null;
+  private String internalServicesModel = null;
 
   @JsonProperty("embeddingModel")
-  private Object embeddingModel = null;
+  private String embeddingModel = null;
 
   @JsonProperty("rankerModel")
-  private Object rankerModel = null;
+  private String rankerModel = null;
 
   @JsonProperty("transcriptModel")
-  private Object transcriptModel = null;
+  private String transcriptModel = null;
 
   @JsonProperty("ttsModel")
-  private Object ttsModel = null;
+  private String ttsModel = null;
 
   @JsonProperty("imagesModel")
-  private Object imagesModel = null;
+  private String imagesModel = null;
 
-  public LLMAutoconfigureCreationData vendorId(Object vendorId) {
+  public LLMAutoconfigureCreationData vendorId(String vendorId) {
     this.vendorId = vendorId;
     return this;
   }
@@ -68,15 +68,15 @@ public class LLMAutoconfigureCreationData {
    * @return vendorId
   **/
   @Schema(required = true, description = "")
-  public Object getVendorId() {
+  public String getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(Object vendorId) {
+  public void setVendorId(String vendorId) {
     this.vendorId = vendorId;
   }
 
-  public LLMAutoconfigureCreationData secretId(Object secretId) {
+  public LLMAutoconfigureCreationData secretId(String secretId) {
     this.secretId = secretId;
     return this;
   }
@@ -86,15 +86,15 @@ public class LLMAutoconfigureCreationData {
    * @return secretId
   **/
   @Schema(description = "")
-  public Object getSecretId() {
+  public String getSecretId() {
     return secretId;
   }
 
-  public void setSecretId(Object secretId) {
+  public void setSecretId(String secretId) {
     this.secretId = secretId;
   }
 
-  public LLMAutoconfigureCreationData newApiSecret(Object newApiSecret) {
+  public LLMAutoconfigureCreationData newApiSecret(String newApiSecret) {
     this.newApiSecret = newApiSecret;
     return this;
   }
@@ -104,15 +104,15 @@ public class LLMAutoconfigureCreationData {
    * @return newApiSecret
   **/
   @Schema(description = "")
-  public Object getNewApiSecret() {
+  public String getNewApiSecret() {
     return newApiSecret;
   }
 
-  public void setNewApiSecret(Object newApiSecret) {
+  public void setNewApiSecret(String newApiSecret) {
     this.newApiSecret = newApiSecret;
   }
 
-  public LLMAutoconfigureCreationData newUserName(Object newUserName) {
+  public LLMAutoconfigureCreationData newUserName(String newUserName) {
     this.newUserName = newUserName;
     return this;
   }
@@ -122,15 +122,15 @@ public class LLMAutoconfigureCreationData {
    * @return newUserName
   **/
   @Schema(description = "")
-  public Object getNewUserName() {
+  public String getNewUserName() {
     return newUserName;
   }
 
-  public void setNewUserName(Object newUserName) {
+  public void setNewUserName(String newUserName) {
     this.newUserName = newUserName;
   }
 
-  public LLMAutoconfigureCreationData defaultChatModel(Object defaultChatModel) {
+  public LLMAutoconfigureCreationData defaultChatModel(String defaultChatModel) {
     this.defaultChatModel = defaultChatModel;
     return this;
   }
@@ -140,15 +140,15 @@ public class LLMAutoconfigureCreationData {
    * @return defaultChatModel
   **/
   @Schema(description = "")
-  public Object getDefaultChatModel() {
+  public String getDefaultChatModel() {
     return defaultChatModel;
   }
 
-  public void setDefaultChatModel(Object defaultChatModel) {
+  public void setDefaultChatModel(String defaultChatModel) {
     this.defaultChatModel = defaultChatModel;
   }
 
-  public LLMAutoconfigureCreationData internalServicesModel(Object internalServicesModel) {
+  public LLMAutoconfigureCreationData internalServicesModel(String internalServicesModel) {
     this.internalServicesModel = internalServicesModel;
     return this;
   }
@@ -158,15 +158,15 @@ public class LLMAutoconfigureCreationData {
    * @return internalServicesModel
   **/
   @Schema(description = "")
-  public Object getInternalServicesModel() {
+  public String getInternalServicesModel() {
     return internalServicesModel;
   }
 
-  public void setInternalServicesModel(Object internalServicesModel) {
+  public void setInternalServicesModel(String internalServicesModel) {
     this.internalServicesModel = internalServicesModel;
   }
 
-  public LLMAutoconfigureCreationData embeddingModel(Object embeddingModel) {
+  public LLMAutoconfigureCreationData embeddingModel(String embeddingModel) {
     this.embeddingModel = embeddingModel;
     return this;
   }
@@ -176,15 +176,15 @@ public class LLMAutoconfigureCreationData {
    * @return embeddingModel
   **/
   @Schema(description = "")
-  public Object getEmbeddingModel() {
+  public String getEmbeddingModel() {
     return embeddingModel;
   }
 
-  public void setEmbeddingModel(Object embeddingModel) {
+  public void setEmbeddingModel(String embeddingModel) {
     this.embeddingModel = embeddingModel;
   }
 
-  public LLMAutoconfigureCreationData rankerModel(Object rankerModel) {
+  public LLMAutoconfigureCreationData rankerModel(String rankerModel) {
     this.rankerModel = rankerModel;
     return this;
   }
@@ -194,15 +194,15 @@ public class LLMAutoconfigureCreationData {
    * @return rankerModel
   **/
   @Schema(description = "")
-  public Object getRankerModel() {
+  public String getRankerModel() {
     return rankerModel;
   }
 
-  public void setRankerModel(Object rankerModel) {
+  public void setRankerModel(String rankerModel) {
     this.rankerModel = rankerModel;
   }
 
-  public LLMAutoconfigureCreationData transcriptModel(Object transcriptModel) {
+  public LLMAutoconfigureCreationData transcriptModel(String transcriptModel) {
     this.transcriptModel = transcriptModel;
     return this;
   }
@@ -212,15 +212,15 @@ public class LLMAutoconfigureCreationData {
    * @return transcriptModel
   **/
   @Schema(description = "")
-  public Object getTranscriptModel() {
+  public String getTranscriptModel() {
     return transcriptModel;
   }
 
-  public void setTranscriptModel(Object transcriptModel) {
+  public void setTranscriptModel(String transcriptModel) {
     this.transcriptModel = transcriptModel;
   }
 
-  public LLMAutoconfigureCreationData ttsModel(Object ttsModel) {
+  public LLMAutoconfigureCreationData ttsModel(String ttsModel) {
     this.ttsModel = ttsModel;
     return this;
   }
@@ -230,15 +230,15 @@ public class LLMAutoconfigureCreationData {
    * @return ttsModel
   **/
   @Schema(description = "")
-  public Object getTtsModel() {
+  public String getTtsModel() {
     return ttsModel;
   }
 
-  public void setTtsModel(Object ttsModel) {
+  public void setTtsModel(String ttsModel) {
     this.ttsModel = ttsModel;
   }
 
-  public LLMAutoconfigureCreationData imagesModel(Object imagesModel) {
+  public LLMAutoconfigureCreationData imagesModel(String imagesModel) {
     this.imagesModel = imagesModel;
     return this;
   }
@@ -248,11 +248,11 @@ public class LLMAutoconfigureCreationData {
    * @return imagesModel
   **/
   @Schema(description = "")
-  public Object getImagesModel() {
+  public String getImagesModel() {
     return imagesModel;
   }
 
-  public void setImagesModel(Object imagesModel) {
+  public void setImagesModel(String imagesModel) {
     this.imagesModel = imagesModel;
   }
 

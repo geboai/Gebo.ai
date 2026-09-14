@@ -2,6 +2,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import java.io.File;
 import gebo.microservices.api.client.brain.model.OperationStatusListUserUploadedContent;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboUserChatUploadsControllerApi {
     private ApiClient apiClient;
@@ -51,7 +52,7 @@ public class GeboUserChatUploadsControllerApi {
      * @return OperationStatusListUserUploadedContent
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListUserUploadedContent chatSessionUpload(Object userSessionCode, Object files) throws RestClientException {
+    public OperationStatusListUserUploadedContent chatSessionUpload(String userSessionCode, List<File> files) throws RestClientException {
         return chatSessionUploadWithHttpInfo(userSessionCode, files).getBody();
     }
 
@@ -64,7 +65,7 @@ public class GeboUserChatUploadsControllerApi {
      * @return ResponseEntity&lt;OperationStatusListUserUploadedContent&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListUserUploadedContent> chatSessionUploadWithHttpInfo(Object userSessionCode, Object files) throws RestClientException {
+    public ResponseEntity<OperationStatusListUserUploadedContent> chatSessionUploadWithHttpInfo(String userSessionCode, List<File> files) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userSessionCode' is set
         if (userSessionCode == null) {
@@ -143,7 +144,7 @@ public class GeboUserChatUploadsControllerApi {
      * @param uploadedContentId  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void serveContent(Object userSessionCode, Object uploadedContentId) throws RestClientException {
+    public void serveContent(String userSessionCode, String uploadedContentId) throws RestClientException {
         serveContentWithHttpInfo(userSessionCode, uploadedContentId);
     }
 
@@ -156,7 +157,7 @@ public class GeboUserChatUploadsControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> serveContentWithHttpInfo(Object userSessionCode, Object uploadedContentId) throws RestClientException {
+    public ResponseEntity<Void> serveContentWithHttpInfo(String userSessionCode, String uploadedContentId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userSessionCode' is set
         if (userSessionCode == null) {

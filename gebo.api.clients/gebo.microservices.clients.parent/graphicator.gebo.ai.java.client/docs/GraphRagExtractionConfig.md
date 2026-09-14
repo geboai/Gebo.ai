@@ -3,22 +3,29 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**userModified** | **Object** |  |  [optional]
-**userCreated** | **Object** |  |  [optional]
-**dateModified** | **Object** |  |  [optional]
-**dateCreated** | **Object** |  |  [optional]
-**knowledgeBaseCode** | **Object** |  |  [optional]
-**projectCode** | **Object** |  |  [optional]
-**defaultConfiguration** | **Object** |  |  [optional]
-**graphRagAllSources** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**userModified** | **String** |  |  [optional]
+**userCreated** | **String** |  |  [optional]
+**dateModified** | [**Date**](Date.md) |  |  [optional]
+**dateCreated** | [**Date**](Date.md) |  |  [optional]
+**knowledgeBaseCode** | **String** |  |  [optional]
+**projectCode** | **String** |  |  [optional]
+**defaultConfiguration** | **Boolean** |  |  [optional]
+**graphRagAllSources** | **Boolean** |  |  [optional]
 **endpoint** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
-**extractionPrompt** | **Object** |  |  [optional]
-**customEntityTypes** | **Object** |  |  [optional]
-**customEventTypes** | **Object** |  |  [optional]
-**customRelationTypes** | **Object** |  |  [optional]
+**extractionPrompt** | **String** |  |  [optional]
+**customEntityTypes** | [**List&lt;GraphObjectType&gt;**](GraphObjectType.md) |  |  [optional]
+**customEventTypes** | [**List&lt;GraphObjectType&gt;**](GraphObjectType.md) |  |  [optional]
+**customRelationTypes** | [**List&lt;GraphObjectType&gt;**](GraphObjectType.md) |  |  [optional]
 **usedModelConfiguration** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **contentSelectionFilter** | [**GContentSelectionFilter**](GContentSelectionFilter.md) |  |  [optional]
-**processEveryDocument** | **Object** |  |  [optional]
-**extractionFormat** | **Object** |  | 
+**processEveryDocument** | **Boolean** |  |  [optional]
+**extractionFormat** | [**ExtractionFormatEnum**](#ExtractionFormatEnum) |  | 
+
+<a name="ExtractionFormatEnum"></a>
+## Enum: ExtractionFormatEnum
+Name | Value
+---- | -----
+JSON | &quot;JSON&quot;
+CSV | &quot;CSV&quot;

@@ -18,39 +18,84 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GeboTextDocumentFragment
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:40.120904804+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class GeboTextDocumentFragment {
   @JsonProperty("customMetaData")
-  private Object customMetaData = null;
+  private Map<String, Object> customMetaData = null;
 
-  @JsonProperty("fragmentType")
-  private Object fragmentType = null;
+  /**
+   * Gets or Sets fragmentType
+   */
+  public enum FragmentTypeEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE"),
+    AUDIO("AUDIO"),
+    VIDEO("VIDEO"),
+    MEDIA("MEDIA");
+
+    private String value;
+
+    FragmentTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static FragmentTypeEnum fromValue(String input) {
+      for (FragmentTypeEnum b : FragmentTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("fragmentType")
+  private FragmentTypeEnum fragmentType = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("characterEncoding")
-  private Object characterEncoding = null;
+  private String characterEncoding = null;
 
   @JsonProperty("encoding")
-  private Object encoding = null;
+  private String encoding = null;
 
   @JsonProperty("content")
-  private Object content = null;
+  private String content = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("uniqueCode")
-  private Object uniqueCode = null;
+  private String uniqueCode = null;
 
-  public GeboTextDocumentFragment customMetaData(Object customMetaData) {
+  public GeboTextDocumentFragment customMetaData(Map<String, Object> customMetaData) {
     this.customMetaData = customMetaData;
+    return this;
+  }
+
+  public GeboTextDocumentFragment putCustomMetaDataItem(String key, Object customMetaDataItem) {
+    if (this.customMetaData == null) {
+      this.customMetaData = new HashMap<>();
+    }
+    this.customMetaData.put(key, customMetaDataItem);
     return this;
   }
 
@@ -59,15 +104,15 @@ public class GeboTextDocumentFragment {
    * @return customMetaData
   **/
   @Schema(description = "")
-  public Object getCustomMetaData() {
+  public Map<String, Object> getCustomMetaData() {
     return customMetaData;
   }
 
-  public void setCustomMetaData(Object customMetaData) {
+  public void setCustomMetaData(Map<String, Object> customMetaData) {
     this.customMetaData = customMetaData;
   }
 
-  public GeboTextDocumentFragment fragmentType(Object fragmentType) {
+  public GeboTextDocumentFragment fragmentType(FragmentTypeEnum fragmentType) {
     this.fragmentType = fragmentType;
     return this;
   }
@@ -77,15 +122,15 @@ public class GeboTextDocumentFragment {
    * @return fragmentType
   **/
   @Schema(description = "")
-  public Object getFragmentType() {
+  public FragmentTypeEnum getFragmentType() {
     return fragmentType;
   }
 
-  public void setFragmentType(Object fragmentType) {
+  public void setFragmentType(FragmentTypeEnum fragmentType) {
     this.fragmentType = fragmentType;
   }
 
-  public GeboTextDocumentFragment contentType(Object contentType) {
+  public GeboTextDocumentFragment contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -95,15 +140,15 @@ public class GeboTextDocumentFragment {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public GeboTextDocumentFragment characterEncoding(Object characterEncoding) {
+  public GeboTextDocumentFragment characterEncoding(String characterEncoding) {
     this.characterEncoding = characterEncoding;
     return this;
   }
@@ -113,15 +158,15 @@ public class GeboTextDocumentFragment {
    * @return characterEncoding
   **/
   @Schema(description = "")
-  public Object getCharacterEncoding() {
+  public String getCharacterEncoding() {
     return characterEncoding;
   }
 
-  public void setCharacterEncoding(Object characterEncoding) {
+  public void setCharacterEncoding(String characterEncoding) {
     this.characterEncoding = characterEncoding;
   }
 
-  public GeboTextDocumentFragment encoding(Object encoding) {
+  public GeboTextDocumentFragment encoding(String encoding) {
     this.encoding = encoding;
     return this;
   }
@@ -131,15 +176,15 @@ public class GeboTextDocumentFragment {
    * @return encoding
   **/
   @Schema(description = "")
-  public Object getEncoding() {
+  public String getEncoding() {
     return encoding;
   }
 
-  public void setEncoding(Object encoding) {
+  public void setEncoding(String encoding) {
     this.encoding = encoding;
   }
 
-  public GeboTextDocumentFragment content(Object content) {
+  public GeboTextDocumentFragment content(String content) {
     this.content = content;
     return this;
   }
@@ -149,15 +194,15 @@ public class GeboTextDocumentFragment {
    * @return content
   **/
   @Schema(description = "")
-  public Object getContent() {
+  public String getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(String content) {
     this.content = content;
   }
 
-  public GeboTextDocumentFragment name(Object name) {
+  public GeboTextDocumentFragment name(String name) {
     this.name = name;
     return this;
   }
@@ -167,15 +212,15 @@ public class GeboTextDocumentFragment {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public GeboTextDocumentFragment uniqueCode(Object uniqueCode) {
+  public GeboTextDocumentFragment uniqueCode(String uniqueCode) {
     this.uniqueCode = uniqueCode;
     return this;
   }
@@ -185,11 +230,11 @@ public class GeboTextDocumentFragment {
    * @return uniqueCode
   **/
   @Schema(description = "")
-  public Object getUniqueCode() {
+  public String getUniqueCode() {
     return uniqueCode;
   }
 
-  public void setUniqueCode(Object uniqueCode) {
+  public void setUniqueCode(String uniqueCode) {
     this.uniqueCode = uniqueCode;
   }
 

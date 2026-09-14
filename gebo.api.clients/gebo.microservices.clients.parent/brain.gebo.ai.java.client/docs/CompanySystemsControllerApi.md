@@ -26,8 +26,8 @@ Method | HTTP request | Description
 
 
 CompanySystemsControllerApi apiInstance = new CompanySystemsControllerApi();
-Object systemTypeCode = null; // Object | 
-Object systemCode = null; // Object | 
+String systemTypeCode = "systemTypeCode_example"; // String | 
+String systemCode = "systemCode_example"; // String | 
 try {
     GContentManagementSystem result = apiInstance.getContentSystem(systemTypeCode, systemCode);
     System.out.println(result);
@@ -41,8 +41,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemTypeCode** | [**Object**](.md)|  |
- **systemCode** | [**Object**](.md)|  |
+ **systemTypeCode** | **String**|  |
+ **systemCode** | **String**|  |
 
 ### Return type
 
@@ -71,7 +71,7 @@ No authorization required
 
 
 CompanySystemsControllerApi apiInstance = new CompanySystemsControllerApi();
-Object systemTypeCode = null; // Object | 
+String systemTypeCode = "systemTypeCode_example"; // String | 
 try {
     GContentManagementSystemType result = apiInstance.getContentSystemType(systemTypeCode);
     System.out.println(result);
@@ -85,7 +85,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemTypeCode** | [**Object**](.md)|  |
+ **systemTypeCode** | **String**|  |
 
 ### Return type
 
@@ -102,7 +102,7 @@ No authorization required
 
 <a name="getContentSystemTypes"></a>
 # **getContentSystemTypes**
-> Object getContentSystemTypes()
+> List&lt;GContentManagementSystemType&gt; getContentSystemTypes()
 
 
 
@@ -115,7 +115,7 @@ No authorization required
 
 CompanySystemsControllerApi apiInstance = new CompanySystemsControllerApi();
 try {
-    Object result = apiInstance.getContentSystemTypes();
+    List<GContentManagementSystemType> result = apiInstance.getContentSystemTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling CompanySystemsControllerApi#getContentSystemTypes");
@@ -128,7 +128,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GContentManagementSystemType&gt;**](GContentManagementSystemType.md)
 
 ### Authorization
 
@@ -141,7 +141,7 @@ No authorization required
 
 <a name="getContentSystems"></a>
 # **getContentSystems**
-> Object getContentSystems()
+> List&lt;GContentManagementSystem&gt; getContentSystems()
 
 
 
@@ -154,7 +154,7 @@ No authorization required
 
 CompanySystemsControllerApi apiInstance = new CompanySystemsControllerApi();
 try {
-    Object result = apiInstance.getContentSystems();
+    List<GContentManagementSystem> result = apiInstance.getContentSystems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling CompanySystemsControllerApi#getContentSystems");
@@ -167,7 +167,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GContentManagementSystem&gt;**](GContentManagementSystem.md)
 
 ### Authorization
 
@@ -192,9 +192,9 @@ No authorization required
 
 
 CompanySystemsControllerApi apiInstance = new CompanySystemsControllerApi();
-Object systemTypeCode = null; // Object | 
-Object systemCode = null; // Object | 
-Object projectEndpointCode = null; // Object | 
+String systemTypeCode = "systemTypeCode_example"; // String | 
+String systemCode = "systemCode_example"; // String | 
+String projectEndpointCode = "projectEndpointCode_example"; // String | 
 try {
     GProjectEndpoint result = apiInstance.getProjectEndpoint(systemTypeCode, systemCode, projectEndpointCode);
     System.out.println(result);
@@ -208,9 +208,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **systemTypeCode** | [**Object**](.md)|  |
- **systemCode** | [**Object**](.md)|  |
- **projectEndpointCode** | [**Object**](.md)|  |
+ **systemTypeCode** | **String**|  |
+ **systemCode** | **String**|  |
+ **projectEndpointCode** | **String**|  |
 
 ### Return type
 

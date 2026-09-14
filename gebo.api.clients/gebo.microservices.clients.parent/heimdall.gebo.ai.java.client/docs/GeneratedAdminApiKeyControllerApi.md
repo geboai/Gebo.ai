@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 
 GeneratedAdminApiKeyControllerApi apiInstance = new GeneratedAdminApiKeyControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     apiInstance.deleteAdminGeneratedApiKey(code);
 } catch (ApiException e) {
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -139,7 +139,7 @@ No authorization required
 
 <a name="isAdminGeneratedApiKeyGenerationAllowed"></a>
 # **isAdminGeneratedApiKeyGenerationAllowed**
-> Object isAdminGeneratedApiKeyGenerationAllowed()
+> Boolean isAdminGeneratedApiKeyGenerationAllowed()
 
 
 
@@ -152,7 +152,7 @@ No authorization required
 
 GeneratedAdminApiKeyControllerApi apiInstance = new GeneratedAdminApiKeyControllerApi();
 try {
-    Object result = apiInstance.isAdminGeneratedApiKeyGenerationAllowed();
+    Boolean result = apiInstance.isAdminGeneratedApiKeyGenerationAllowed();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeneratedAdminApiKeyControllerApi#isAdminGeneratedApiKeyGenerationAllowed");
@@ -165,7 +165,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 

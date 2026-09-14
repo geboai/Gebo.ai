@@ -112,10 +112,10 @@ export class OpenAiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findOpenAIEmbeddingModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GOpenAIEmbeddingModelConfig>;
-    public findOpenAIEmbeddingModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GOpenAIEmbeddingModelConfig>>;
-    public findOpenAIEmbeddingModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GOpenAIEmbeddingModelConfig>>;
-    public findOpenAIEmbeddingModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findOpenAIEmbeddingModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GOpenAIEmbeddingModelConfig>;
+    public findOpenAIEmbeddingModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GOpenAIEmbeddingModelConfig>>;
+    public findOpenAIEmbeddingModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GOpenAIEmbeddingModelConfig>>;
+    public findOpenAIEmbeddingModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findOpenAIEmbeddingModelConfigByCode.');

@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class JobStatusControllerApi {
     private ApiClient apiClient;
@@ -53,7 +53,7 @@ public class JobStatusControllerApi {
      * @return GJobStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GJobStatus getJobStatus(Object jobCode) throws RestClientException {
+    public GJobStatus getJobStatus(String jobCode) throws RestClientException {
         return getJobStatusWithHttpInfo(jobCode).getBody();
     }
 
@@ -65,7 +65,7 @@ public class JobStatusControllerApi {
      * @return ResponseEntity&lt;GJobStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GJobStatus> getJobStatusWithHttpInfo(Object jobCode) throws RestClientException {
+    public ResponseEntity<GJobStatus> getJobStatusWithHttpInfo(String jobCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'jobCode' is set
         if (jobCode == null) {
@@ -98,7 +98,7 @@ public class JobStatusControllerApi {
      * @return JobSummary
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public JobSummary getJobSummary(Object jobCode) throws RestClientException {
+    public JobSummary getJobSummary(String jobCode) throws RestClientException {
         return getJobSummaryWithHttpInfo(jobCode).getBody();
     }
 
@@ -110,7 +110,7 @@ public class JobStatusControllerApi {
      * @return ResponseEntity&lt;JobSummary&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<JobSummary> getJobSummaryWithHttpInfo(Object jobCode) throws RestClientException {
+    public ResponseEntity<JobSummary> getJobSummaryWithHttpInfo(String jobCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'jobCode' is set
         if (jobCode == null) {

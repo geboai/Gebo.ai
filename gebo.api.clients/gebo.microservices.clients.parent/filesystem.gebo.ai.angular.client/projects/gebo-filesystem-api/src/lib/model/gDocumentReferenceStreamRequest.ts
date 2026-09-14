@@ -12,6 +12,13 @@
 import { GDocumentReference } from './gDocumentReference';
 
 export interface GDocumentReferenceStreamRequest { 
-    streamingPurpose: any;
+    streamingPurpose: GDocumentReferenceStreamRequest.StreamingPurposeEnum;
     reference: GDocumentReference;
+}
+export namespace GDocumentReferenceStreamRequest {
+    export type StreamingPurposeEnum = 'SERVING' | 'INGESTING';
+    export const StreamingPurposeEnum = {
+        SERVING: 'SERVING' as StreamingPurposeEnum,
+        INGESTING: 'INGESTING' as StreamingPurposeEnum
+    };
 }

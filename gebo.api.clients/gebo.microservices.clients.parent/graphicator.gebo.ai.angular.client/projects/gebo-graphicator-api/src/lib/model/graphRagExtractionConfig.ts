@@ -12,25 +12,33 @@
 import { GContentSelectionFilter } from './gContentSelectionFilter';
 import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig';
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
+import { GraphObjectType } from './graphObjectType';
 
 export interface GraphRagExtractionConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    knowledgeBaseCode?: any;
-    projectCode?: any;
-    defaultConfiguration?: any;
-    graphRagAllSources?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    knowledgeBaseCode?: string;
+    projectCode?: string;
+    defaultConfiguration?: boolean;
+    graphRagAllSources?: boolean;
     endpoint?: GObjectRefGProjectEndpoint;
-    extractionPrompt?: any;
-    customEntityTypes?: any;
-    customEventTypes?: any;
-    customRelationTypes?: any;
+    extractionPrompt?: string;
+    customEntityTypes?: Array<GraphObjectType>;
+    customEventTypes?: Array<GraphObjectType>;
+    customRelationTypes?: Array<GraphObjectType>;
     usedModelConfiguration?: GObjectRefGBaseChatModelConfig;
     contentSelectionFilter?: GContentSelectionFilter;
-    processEveryDocument?: any;
-    extractionFormat: any;
+    processEveryDocument?: boolean;
+    extractionFormat: GraphRagExtractionConfig.ExtractionFormatEnum;
+}
+export namespace GraphRagExtractionConfig {
+    export type ExtractionFormatEnum = 'JSON' | 'CSV';
+    export const ExtractionFormatEnum = {
+        JSON: 'JSON' as ExtractionFormatEnum,
+        CSV: 'CSV' as ExtractionFormatEnum
+    };
 }

@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ReindexTimeStructureMetaInfo } from '../model/reindexTimeStructureMetaInfo';
+import { ReindexingProgrammedTable } from '../model/reindexingProgrammedTable';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -62,10 +63,10 @@ export class ReindexingFrequencyOptionsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public displayTimeValues(body: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public displayTimeValues(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public displayTimeValues(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public displayTimeValues(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public displayTimeValues(body: Array<ReindexingProgrammedTable>, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public displayTimeValues(body: Array<ReindexingProgrammedTable>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public displayTimeValues(body: Array<ReindexingProgrammedTable>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public displayTimeValues(body: Array<ReindexingProgrammedTable>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling displayTimeValues.');
@@ -91,7 +92,7 @@ export class ReindexingFrequencyOptionsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/ReindexingFrequencyOptionsController/displayTimeValues`,
+        return this.httpClient.request<Array<string>>('post',`${this.basePath}/api/users/ReindexingFrequencyOptionsController/displayTimeValues`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -108,9 +109,9 @@ export class ReindexingFrequencyOptionsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllTimeStructureMetaInfos(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllTimeStructureMetaInfos(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllTimeStructureMetaInfos(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllTimeStructureMetaInfos(observe?: 'body', reportProgress?: boolean): Observable<Array<ReindexTimeStructureMetaInfo>>;
+    public getAllTimeStructureMetaInfos(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ReindexTimeStructureMetaInfo>>>;
+    public getAllTimeStructureMetaInfos(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ReindexTimeStructureMetaInfo>>>;
     public getAllTimeStructureMetaInfos(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -128,7 +129,7 @@ export class ReindexingFrequencyOptionsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos`,
+        return this.httpClient.request<Array<ReindexTimeStructureMetaInfo>>('get',`${this.basePath}/api/users/ReindexingFrequencyOptionsController/getAllTimeStructureMetaInfos`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -145,10 +146,10 @@ export class ReindexingFrequencyOptionsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTimeStructureMetaInfo(frequency: any, observe?: 'body', reportProgress?: boolean): Observable<ReindexTimeStructureMetaInfo>;
-    public getTimeStructureMetaInfo(frequency: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ReindexTimeStructureMetaInfo>>;
-    public getTimeStructureMetaInfo(frequency: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ReindexTimeStructureMetaInfo>>;
-    public getTimeStructureMetaInfo(frequency: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTimeStructureMetaInfo(frequency: string, observe?: 'body', reportProgress?: boolean): Observable<ReindexTimeStructureMetaInfo>;
+    public getTimeStructureMetaInfo(frequency: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ReindexTimeStructureMetaInfo>>;
+    public getTimeStructureMetaInfo(frequency: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ReindexTimeStructureMetaInfo>>;
+    public getTimeStructureMetaInfo(frequency: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (frequency === null || frequency === undefined) {
             throw new Error('Required parameter frequency was null or undefined when calling getTimeStructureMetaInfo.');

@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import java.io.File;
 import gebo.microservices.api.client.brain.model.SpeechRequest;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -39,7 +40,7 @@ public class GeboTextToSpeechControllerApiTest {
      */
     @Test
     public void isEnabled1Test() {
-        Object response = api.isEnabled1();
+        Boolean response = api.isEnabled1();
 
         // TODO: test validations
     }
@@ -54,7 +55,7 @@ public class GeboTextToSpeechControllerApiTest {
     @Test
     public void speechTextTest() {
         SpeechRequest body = null;
-        Object response = api.speechText(body);
+        File response = api.speechText(body);
 
         // TODO: test validations
     }

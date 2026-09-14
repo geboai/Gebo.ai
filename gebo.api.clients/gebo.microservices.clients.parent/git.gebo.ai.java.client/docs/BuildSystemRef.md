@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**buildSystemTypeCode** | **Object** |  |  [optional]
-**buildSystemConfigCode** | **Object** |  |  [optional]
+**buildSystemTypeCode** | **String** |  |  [optional]
+**buildSystemConfigCode** | **String** |  |  [optional]

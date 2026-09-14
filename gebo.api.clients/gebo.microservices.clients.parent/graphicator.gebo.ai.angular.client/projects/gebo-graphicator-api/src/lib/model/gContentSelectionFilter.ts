@@ -9,7 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GContentSelectionFilterCriteria } from './gContentSelectionFilterCriteria';
 
 export interface GContentSelectionFilter { 
-    criterias?: any;
+    criterias?: Array<GContentSelectionFilterCriteria>;
 }

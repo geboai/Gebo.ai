@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GJiraSystem } from './gJiraSystem';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGJiraSystem { 
     result?: GJiraSystem;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

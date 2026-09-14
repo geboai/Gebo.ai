@@ -57,7 +57,7 @@ public class GoogleVertexEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGoogleVertexEmbeddingModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GGoogleVertexEmbeddingModelConfig response = api.findGoogleVertexEmbeddingModelConfigByCode(code);
 
         // TODO: test validations

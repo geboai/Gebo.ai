@@ -14,6 +14,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.ContentMetaInfo;
 import gebo.microservices.api.client.brain.model.ContentObject;
+import gebo.microservices.api.client.brain.model.DocumentReferenceView;
 import gebo.microservices.api.client.brain.model.PageDocumentReferenceView;
 import gebo.microservices.api.client.brain.model.SearchDocumentByNamePagedParam;
 import gebo.microservices.api.client.brain.model.SearchDocumentByNameParam;
@@ -43,8 +44,8 @@ public class ContentMetaInfosControllerApiTest {
      */
     @Test
     public void findDocumentReferenceViewByCodeTest() {
-        Object body = null;
-        Object response = api.findDocumentReferenceViewByCode(body);
+        List<String> body = null;
+        List<DocumentReferenceView> response = api.findDocumentReferenceViewByCode(body);
 
         // TODO: test validations
     }
@@ -58,7 +59,7 @@ public class ContentMetaInfosControllerApiTest {
      */
     @Test
     public void getContentMetaInfosTest() {
-        Object code = null;
+        String code = null;
         ContentMetaInfo response = api.getContentMetaInfos(code);
 
         // TODO: test validations
@@ -73,7 +74,7 @@ public class ContentMetaInfosControllerApiTest {
      */
     @Test
     public void getContentObjectTest() {
-        Object code = null;
+        String code = null;
         ContentObject response = api.getContentObject(code);
 
         // TODO: test validations
@@ -89,7 +90,7 @@ public class ContentMetaInfosControllerApiTest {
     @Test
     public void searchByDocumentNameTest() {
         SearchDocumentByNameParam body = null;
-        Object response = api.searchByDocumentName(body);
+        List<DocumentReferenceView> response = api.searchByDocumentName(body);
 
         // TODO: test validations
     }

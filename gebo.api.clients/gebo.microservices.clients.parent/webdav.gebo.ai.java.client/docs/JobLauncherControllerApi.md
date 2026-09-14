@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 
 JobLauncherControllerApi apiInstance = new JobLauncherControllerApi();
-Object jobCode = null; // Object | 
+String jobCode = "jobCode_example"; // String | 
 try {
     apiInstance.abortJob(jobCode);
 } catch (ApiException e) {
@@ -35,7 +35,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **jobCode** | [**Object**](.md)|  |
+ **jobCode** | **String**|  |
 
 ### Return type
 

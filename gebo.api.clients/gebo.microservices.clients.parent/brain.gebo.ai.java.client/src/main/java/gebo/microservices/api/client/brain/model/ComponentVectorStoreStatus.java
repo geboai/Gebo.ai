@@ -24,14 +24,47 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentVectorStoreStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ComponentVectorStoreStatus {
   @JsonProperty("isSetup")
-  private Object isSetup = null;
+  private Boolean isSetup = null;
 
-  @JsonProperty("product")
-  private Object product = null;
+  /**
+   * Gets or Sets product
+   */
+  public enum ProductEnum {
+    MONGO("MONGO"),
+    QDRANT("QDRANT"),
+    REDIS("REDIS"),
+    TEST("TEST");
+
+    private String value;
+
+    ProductEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ProductEnum fromValue(String input) {
+      for (ProductEnum b : ProductEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("product")
+  private ProductEnum product = null;
 
   @JsonProperty("qdrantConfig")
   private QdrantConfig qdrantConfig = null;
@@ -39,7 +72,7 @@ public class ComponentVectorStoreStatus {
   @JsonProperty("redisConfig")
   private RedisConfig redisConfig = null;
 
-  public ComponentVectorStoreStatus isSetup(Object isSetup) {
+  public ComponentVectorStoreStatus isSetup(Boolean isSetup) {
     this.isSetup = isSetup;
     return this;
   }
@@ -49,15 +82,15 @@ public class ComponentVectorStoreStatus {
    * @return isSetup
   **/
   @Schema(description = "")
-  public Object getIsSetup() {
+  public Boolean isIsSetup() {
     return isSetup;
   }
 
-  public void setIsSetup(Object isSetup) {
+  public void setIsSetup(Boolean isSetup) {
     this.isSetup = isSetup;
   }
 
-  public ComponentVectorStoreStatus product(Object product) {
+  public ComponentVectorStoreStatus product(ProductEnum product) {
     this.product = product;
     return this;
   }
@@ -67,11 +100,11 @@ public class ComponentVectorStoreStatus {
    * @return product
   **/
   @Schema(description = "")
-  public Object getProduct() {
+  public ProductEnum getProduct() {
     return product;
   }
 
-  public void setProduct(Object product) {
+  public void setProduct(ProductEnum product) {
     this.product = product;
   }
 

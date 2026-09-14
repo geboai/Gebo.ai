@@ -71,7 +71,7 @@ public class TavilySearchConfigurationControllerApiTest {
      */
     @Test
     public void getTavilySearchApiCredentialsTest() {
-        Object response = api.getTavilySearchApiCredentials();
+        List<GTavilySearchApiCredentials> response = api.getTavilySearchApiCredentials();
 
         // TODO: test validations
     }
@@ -114,7 +114,7 @@ public class TavilySearchConfigurationControllerApiTest {
      */
     @Test
     public void searchGTavilySearchApiCredentialsByCodeTest() {
-        Object code = null;
+        String code = null;
         GTavilySearchApiCredentials response = api.searchGTavilySearchApiCredentialsByCode(code);
 
         // TODO: test validations

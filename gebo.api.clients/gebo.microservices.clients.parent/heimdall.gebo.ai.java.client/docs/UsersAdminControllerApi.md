@@ -159,7 +159,7 @@ No authorization required
 
 
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     UsersGroup result = apiInstance.findGroupByCode1(code);
     System.out.println(result);
@@ -173,7 +173,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -245,7 +245,7 @@ No authorization required
 
 
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
-Object email = null; // Object | 
+String email = "email_example"; // String | 
 try {
     EditableUser result = apiInstance.findUserByUsername2(email);
     System.out.println(result);
@@ -259,7 +259,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **email** | [**Object**](.md)|  |
+ **email** | **String**|  |
 
 ### Return type
 
@@ -319,7 +319,7 @@ No authorization required
 
 <a name="getAllGroups1"></a>
 # **getAllGroups1**
-> Object getAllGroups1()
+> List&lt;UsersGroup&gt; getAllGroups1()
 
 
 
@@ -332,7 +332,7 @@ No authorization required
 
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 try {
-    Object result = apiInstance.getAllGroups1();
+    List<UsersGroup> result = apiInstance.getAllGroups1();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UsersAdminControllerApi#getAllGroups1");
@@ -345,7 +345,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UsersGroup&gt;**](UsersGroup.md)
 
 ### Authorization
 
@@ -358,7 +358,7 @@ No authorization required
 
 <a name="getAllUsers1"></a>
 # **getAllUsers1**
-> Object getAllUsers1()
+> List&lt;UserInfos&gt; getAllUsers1()
 
 
 
@@ -371,7 +371,7 @@ No authorization required
 
 UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
 try {
-    Object result = apiInstance.getAllUsers1();
+    List<UserInfos> result = apiInstance.getAllUsers1();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UsersAdminControllerApi#getAllUsers1");
@@ -384,7 +384,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UserInfos&gt;**](UserInfos.md)
 
 ### Authorization
 

@@ -42,7 +42,7 @@ public class JobStatusControllerApiTest {
      */
     @Test
     public void getJobStatusTest() {
-        Object jobCode = null;
+        String jobCode = null;
         GJobStatus response = api.getJobStatus(jobCode);
 
         // TODO: test validations
@@ -57,7 +57,7 @@ public class JobStatusControllerApiTest {
      */
     @Test
     public void getJobSummaryTest() {
-        Object jobCode = null;
+        String jobCode = null;
         JobSummary response = api.getJobSummary(jobCode);
 
         // TODO: test validations

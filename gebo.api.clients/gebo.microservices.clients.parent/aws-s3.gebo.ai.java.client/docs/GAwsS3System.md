@@ -3,19 +3,28 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**description** | **Object** |  |  [optional]
-**userModified** | **Object** |  |  [optional]
-**userCreated** | **Object** |  |  [optional]
-**dateModified** | **Object** |  |  [optional]
-**dateCreated** | **Object** |  |  [optional]
-**creationDate** | **Object** |  |  [optional]
-**modificationDate** | **Object** |  |  [optional]
-**version** | **Object** |  |  [optional]
-**contentManagementSystemType** | **Object** |  |  [optional]
-**readonly** | **Object** |  |  [optional]
-**baseUri** | **Object** |  |  [optional]
-**usedCapabilities** | **Object** |  |  [optional]
-**aclAliases** | **Object** |  |  [optional]
-**awsEndpoint** | **Object** |  |  [optional]
-**s3SecretCode** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
+**userModified** | **String** |  |  [optional]
+**userCreated** | **String** |  |  [optional]
+**dateModified** | [**Date**](Date.md) |  |  [optional]
+**dateCreated** | [**Date**](Date.md) |  |  [optional]
+**creationDate** | [**Date**](Date.md) |  |  [optional]
+**modificationDate** | [**Date**](Date.md) |  |  [optional]
+**version** | **String** |  |  [optional]
+**contentManagementSystemType** | **String** |  |  [optional]
+**readonly** | **Boolean** |  |  [optional]
+**baseUri** | **String** |  |  [optional]
+**usedCapabilities** | [**List&lt;UsedCapabilitiesEnum&gt;**](#List&lt;UsedCapabilitiesEnum&gt;) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
+**awsEndpoint** | **String** |  |  [optional]
+**s3SecretCode** | **String** |  |  [optional]
+
+<a name="List<UsedCapabilitiesEnum>"></a>
+## Enum: List&lt;UsedCapabilitiesEnum&gt;
+Name | Value
+---- | -----
+TICKETS_MANAGEMENT | &quot;TICKETS_MANAGEMENT&quot;
+DOCUMENTS_MANAGEMENT | &quot;DOCUMENTS_MANAGEMENT&quot;
+SOURCE_MANAGEMENT | &quot;SOURCE_MANAGEMENT&quot;
+ARTIFACTS_REPOSITORY_MANAGEMENT | &quot;ARTIFACTS_REPOSITORY_MANAGEMENT&quot;

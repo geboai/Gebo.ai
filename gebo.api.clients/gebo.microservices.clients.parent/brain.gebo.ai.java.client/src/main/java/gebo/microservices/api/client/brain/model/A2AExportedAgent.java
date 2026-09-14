@@ -22,25 +22,56 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * A2AExportedAgent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class A2AExportedAgent {
-  @JsonProperty("kind")
-  private Object kind = null;
+  /**
+   * Gets or Sets kind
+   */
+  public enum KindEnum {
+    AGENT("AGENT"),
+    NETWORK("NETWORK");
+
+    private String value;
+
+    KindEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static KindEnum fromValue(String input) {
+      for (KindEnum b : KindEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("kind")
+  private KindEnum kind = null;
 
   @JsonProperty("networkCode")
-  private Object networkCode = null;
+  private String networkCode = null;
 
   @JsonProperty("agentConfigCode")
-  private Object agentConfigCode = null;
+  private String agentConfigCode = null;
 
   @JsonProperty("skillName")
-  private Object skillName = null;
+  private String skillName = null;
 
   @JsonProperty("exposeMemberCapabilities")
-  private Object exposeMemberCapabilities = null;
+  private Boolean exposeMemberCapabilities = null;
 
-  public A2AExportedAgent kind(Object kind) {
+  public A2AExportedAgent kind(KindEnum kind) {
     this.kind = kind;
     return this;
   }
@@ -50,15 +81,15 @@ public class A2AExportedAgent {
    * @return kind
   **/
   @Schema(description = "")
-  public Object getKind() {
+  public KindEnum getKind() {
     return kind;
   }
 
-  public void setKind(Object kind) {
+  public void setKind(KindEnum kind) {
     this.kind = kind;
   }
 
-  public A2AExportedAgent networkCode(Object networkCode) {
+  public A2AExportedAgent networkCode(String networkCode) {
     this.networkCode = networkCode;
     return this;
   }
@@ -68,15 +99,15 @@ public class A2AExportedAgent {
    * @return networkCode
   **/
   @Schema(description = "")
-  public Object getNetworkCode() {
+  public String getNetworkCode() {
     return networkCode;
   }
 
-  public void setNetworkCode(Object networkCode) {
+  public void setNetworkCode(String networkCode) {
     this.networkCode = networkCode;
   }
 
-  public A2AExportedAgent agentConfigCode(Object agentConfigCode) {
+  public A2AExportedAgent agentConfigCode(String agentConfigCode) {
     this.agentConfigCode = agentConfigCode;
     return this;
   }
@@ -86,15 +117,15 @@ public class A2AExportedAgent {
    * @return agentConfigCode
   **/
   @Schema(description = "")
-  public Object getAgentConfigCode() {
+  public String getAgentConfigCode() {
     return agentConfigCode;
   }
 
-  public void setAgentConfigCode(Object agentConfigCode) {
+  public void setAgentConfigCode(String agentConfigCode) {
     this.agentConfigCode = agentConfigCode;
   }
 
-  public A2AExportedAgent skillName(Object skillName) {
+  public A2AExportedAgent skillName(String skillName) {
     this.skillName = skillName;
     return this;
   }
@@ -104,15 +135,15 @@ public class A2AExportedAgent {
    * @return skillName
   **/
   @Schema(description = "")
-  public Object getSkillName() {
+  public String getSkillName() {
     return skillName;
   }
 
-  public void setSkillName(Object skillName) {
+  public void setSkillName(String skillName) {
     this.skillName = skillName;
   }
 
-  public A2AExportedAgent exposeMemberCapabilities(Object exposeMemberCapabilities) {
+  public A2AExportedAgent exposeMemberCapabilities(Boolean exposeMemberCapabilities) {
     this.exposeMemberCapabilities = exposeMemberCapabilities;
     return this;
   }
@@ -122,11 +153,11 @@ public class A2AExportedAgent {
    * @return exposeMemberCapabilities
   **/
   @Schema(description = "")
-  public Object getExposeMemberCapabilities() {
+  public Boolean isExposeMemberCapabilities() {
     return exposeMemberCapabilities;
   }
 
-  public void setExposeMemberCapabilities(Object exposeMemberCapabilities) {
+  public void setExposeMemberCapabilities(Boolean exposeMemberCapabilities) {
     this.exposeMemberCapabilities = exposeMemberCapabilities;
   }
 

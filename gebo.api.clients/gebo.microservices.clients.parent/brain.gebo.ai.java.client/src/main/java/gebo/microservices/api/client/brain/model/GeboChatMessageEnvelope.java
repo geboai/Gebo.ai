@@ -22,17 +22,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboChatMessageEnvelope
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboChatMessageEnvelope {
   @JsonProperty("content")
   private Object content = null;
 
   @JsonProperty("lastMessage")
-  private Object lastMessage = null;
+  private Boolean lastMessage = null;
 
   @JsonProperty("contentObjectType")
-  private Object contentObjectType = null;
+  private String contentObjectType = null;
 
   public GeboChatMessageEnvelope content(Object content) {
     this.content = content;
@@ -52,7 +52,7 @@ public class GeboChatMessageEnvelope {
     this.content = content;
   }
 
-  public GeboChatMessageEnvelope lastMessage(Object lastMessage) {
+  public GeboChatMessageEnvelope lastMessage(Boolean lastMessage) {
     this.lastMessage = lastMessage;
     return this;
   }
@@ -62,15 +62,15 @@ public class GeboChatMessageEnvelope {
    * @return lastMessage
   **/
   @Schema(description = "")
-  public Object getLastMessage() {
+  public Boolean isLastMessage() {
     return lastMessage;
   }
 
-  public void setLastMessage(Object lastMessage) {
+  public void setLastMessage(Boolean lastMessage) {
     this.lastMessage = lastMessage;
   }
 
-  public GeboChatMessageEnvelope contentObjectType(Object contentObjectType) {
+  public GeboChatMessageEnvelope contentObjectType(String contentObjectType) {
     this.contentObjectType = contentObjectType;
     return this;
   }
@@ -80,11 +80,11 @@ public class GeboChatMessageEnvelope {
    * @return contentObjectType
   **/
   @Schema(description = "")
-  public Object getContentObjectType() {
+  public String getContentObjectType() {
     return contentObjectType;
   }
 
-  public void setContentObjectType(Object contentObjectType) {
+  public void setContentObjectType(String contentObjectType) {
     this.contentObjectType = contentObjectType;
   }
 

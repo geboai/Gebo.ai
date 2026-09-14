@@ -57,7 +57,7 @@ public class GeboAdminChatProfilesConfigurationControllerApiTest {
      */
     @Test
     public void findChatProfileConfigurationByCodeTest() {
-        Object code = null;
+        String code = null;
         GChatProfileConfiguration response = api.findChatProfileConfigurationByCode(code);
 
         // TODO: test validations

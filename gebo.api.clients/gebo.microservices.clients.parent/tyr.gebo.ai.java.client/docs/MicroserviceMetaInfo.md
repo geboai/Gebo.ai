@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**microserviceId** | **Object** |  |  [optional]
-**modules** | **Object** |  |  [optional]
+**microserviceId** | **String** |  |  [optional]
+**modules** | [**List&lt;GModuleMetaInfo&gt;**](GModuleMetaInfo.md) |  |  [optional]

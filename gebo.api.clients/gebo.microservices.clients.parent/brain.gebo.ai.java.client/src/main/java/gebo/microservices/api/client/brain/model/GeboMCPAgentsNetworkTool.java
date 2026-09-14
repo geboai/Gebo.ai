@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboMCPAgentsNetworkTool
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboMCPAgentsNetworkTool {
   @JsonProperty("agentsNetworkCode")
-  private Object agentsNetworkCode = null;
+  private String agentsNetworkCode = null;
 
   @JsonProperty("toolName")
-  private Object toolName = null;
+  private String toolName = null;
 
-  public GeboMCPAgentsNetworkTool agentsNetworkCode(Object agentsNetworkCode) {
+  public GeboMCPAgentsNetworkTool agentsNetworkCode(String agentsNetworkCode) {
     this.agentsNetworkCode = agentsNetworkCode;
     return this;
   }
@@ -41,15 +41,15 @@ public class GeboMCPAgentsNetworkTool {
    * @return agentsNetworkCode
   **/
   @Schema(required = true, description = "")
-  public Object getAgentsNetworkCode() {
+  public String getAgentsNetworkCode() {
     return agentsNetworkCode;
   }
 
-  public void setAgentsNetworkCode(Object agentsNetworkCode) {
+  public void setAgentsNetworkCode(String agentsNetworkCode) {
     this.agentsNetworkCode = agentsNetworkCode;
   }
 
-  public GeboMCPAgentsNetworkTool toolName(Object toolName) {
+  public GeboMCPAgentsNetworkTool toolName(String toolName) {
     this.toolName = toolName;
     return this;
   }
@@ -59,11 +59,11 @@ public class GeboMCPAgentsNetworkTool {
    * @return toolName
   **/
   @Schema(required = true, description = "")
-  public Object getToolName() {
+  public String getToolName() {
     return toolName;
   }
 
-  public void setToolName(Object toolName) {
+  public void setToolName(String toolName) {
     this.toolName = toolName;
   }
 

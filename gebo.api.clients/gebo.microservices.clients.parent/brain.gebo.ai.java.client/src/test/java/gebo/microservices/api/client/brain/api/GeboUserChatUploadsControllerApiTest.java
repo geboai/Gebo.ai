@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import java.io.File;
 import gebo.microservices.api.client.brain.model.OperationStatusListUserUploadedContent;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -39,8 +40,8 @@ public class GeboUserChatUploadsControllerApiTest {
      */
     @Test
     public void chatSessionUploadTest() {
-        Object userSessionCode = null;
-        Object files = null;
+        String userSessionCode = null;
+        List<File> files = null;
         OperationStatusListUserUploadedContent response = api.chatSessionUpload(userSessionCode, files);
 
         // TODO: test validations
@@ -69,8 +70,8 @@ public class GeboUserChatUploadsControllerApiTest {
      */
     @Test
     public void serveContentTest() {
-        Object userSessionCode = null;
-        Object uploadedContentId = null;
+        String userSessionCode = null;
+        String uploadedContentId = null;
         api.serveContent(userSessionCode, uploadedContentId);
 
         // TODO: test validations

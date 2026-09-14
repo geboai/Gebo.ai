@@ -9,25 +9,44 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { A2ARemoteSkill } from './a2ARemoteSkill';
 
 export interface A2ARemoteAgentConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    agentCardUrl: any;
-    rpcEndpoint?: any;
-    transportType: any;
-    authMode: any;
-    secretCode?: any;
-    oauth2AuthenticatorCode?: any;
-    exportingPrefix: any;
-    enabled?: any;
-    skills?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    aclAliases?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    agentCardUrl: string;
+    rpcEndpoint?: string;
+    transportType: A2ARemoteAgentConfig.TransportTypeEnum;
+    authMode: A2ARemoteAgentConfig.AuthModeEnum;
+    secretCode?: string;
+    oauth2AuthenticatorCode?: string;
+    exportingPrefix: string;
+    enabled?: boolean;
+    skills?: Array<A2ARemoteSkill>;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
+}
+export namespace A2ARemoteAgentConfig {
+    export type TransportTypeEnum = 'JSONRPC' | 'REST' | 'GRPC';
+    export const TransportTypeEnum = {
+        JSONRPC: 'JSONRPC' as TransportTypeEnum,
+        REST: 'REST' as TransportTypeEnum,
+        GRPC: 'GRPC' as TransportTypeEnum
+    };
+    export type AuthModeEnum = 'NONE' | 'API_KEY' | 'STATIC_BEARER_TOKEN' | 'OAUTH2_CLIENT_CREDENTIALS' | 'OAUTH2_AUTHORIZATION_CODE_PER_USER' | 'USER_TOKEN_RELAY' | 'TOKEN_EXCHANGE';
+    export const AuthModeEnum = {
+        NONE: 'NONE' as AuthModeEnum,
+        APIKEY: 'API_KEY' as AuthModeEnum,
+        STATICBEARERTOKEN: 'STATIC_BEARER_TOKEN' as AuthModeEnum,
+        OAUTH2CLIENTCREDENTIALS: 'OAUTH2_CLIENT_CREDENTIALS' as AuthModeEnum,
+        OAUTH2AUTHORIZATIONCODEPERUSER: 'OAUTH2_AUTHORIZATION_CODE_PER_USER' as AuthModeEnum,
+        USERTOKENRELAY: 'USER_TOKEN_RELAY' as AuthModeEnum,
+        TOKENEXCHANGE: 'TOKEN_EXCHANGE' as AuthModeEnum
+    };
 }

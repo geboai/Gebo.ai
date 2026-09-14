@@ -65,10 +65,10 @@ export class AwsS3BrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public browseAwsS3Path(body: BrowseParam, s3SystemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
-    public browseAwsS3Path(body: BrowseParam, s3SystemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
-    public browseAwsS3Path(body: BrowseParam, s3SystemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
-    public browseAwsS3Path(body: BrowseParam, s3SystemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public browseAwsS3Path(body: BrowseParam, s3SystemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
+    public browseAwsS3Path(body: BrowseParam, s3SystemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
+    public browseAwsS3Path(body: BrowseParam, s3SystemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
+    public browseAwsS3Path(body: BrowseParam, s3SystemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling browseAwsS3Path.');
@@ -122,10 +122,10 @@ export class AwsS3BrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAwsS3Roots(s3SystemCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
-    public getAwsS3Roots(s3SystemCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
-    public getAwsS3Roots(s3SystemCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
-    public getAwsS3Roots(s3SystemCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAwsS3Roots(s3SystemCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
+    public getAwsS3Roots(s3SystemCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
+    public getAwsS3Roots(s3SystemCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
+    public getAwsS3Roots(s3SystemCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (s3SystemCode === null || s3SystemCode === undefined) {
             throw new Error('Required parameter s3SystemCode was null or undefined when calling getAwsS3Roots.');

@@ -54,7 +54,7 @@ public class KnowledgeBaseControllerApiTest {
      */
     @Test
     public void findKnowledgeBaseByCodeTest() {
-        Object code = null;
+        String code = null;
         GKnowledgeBase response = api.findKnowledgeBaseByCode(code);
 
         // TODO: test validations
@@ -70,7 +70,7 @@ public class KnowledgeBaseControllerApiTest {
     @Test
     public void findKnowledgeBasesByQbeTest() {
         GKnowledgeBase body = null;
-        Object response = api.findKnowledgeBasesByQbe(body);
+        List<GKnowledgeBase> response = api.findKnowledgeBasesByQbe(body);
 
         // TODO: test validations
     }
@@ -84,8 +84,8 @@ public class KnowledgeBaseControllerApiTest {
      */
     @Test
     public void getChildKnowledgeBasesTest() {
-        Object code = null;
-        Object response = api.getChildKnowledgeBases(code);
+        String code = null;
+        List<GKnowledgeBase> response = api.getChildKnowledgeBases(code);
 
         // TODO: test validations
     }
@@ -99,7 +99,7 @@ public class KnowledgeBaseControllerApiTest {
      */
     @Test
     public void getKnowledgeBasesTest() {
-        Object response = api.getKnowledgeBases();
+        List<GKnowledgeBase> response = api.getKnowledgeBases();
 
         // TODO: test validations
     }

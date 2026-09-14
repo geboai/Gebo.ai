@@ -12,8 +12,15 @@
 import { GeboOauth2SecretContent } from './geboOauth2SecretContent';
 
 export interface FastSharepointSystemInsertRequest { 
-    baseUri?: any;
-    description: any;
-    sharepointVersion: any;
+    baseUri?: string;
+    description: string;
+    sharepointVersion: FastSharepointSystemInsertRequest.SharepointVersionEnum;
     oauth2Credentials: GeboOauth2SecretContent;
+}
+export namespace FastSharepointSystemInsertRequest {
+    export type SharepointVersionEnum = 'CLOUD_VERSION' | 'ONPREMISE2019';
+    export const SharepointVersionEnum = {
+        CLOUDVERSION: 'CLOUD_VERSION' as SharepointVersionEnum,
+        ONPREMISE2019: 'ONPREMISE2019' as SharepointVersionEnum
+    };
 }

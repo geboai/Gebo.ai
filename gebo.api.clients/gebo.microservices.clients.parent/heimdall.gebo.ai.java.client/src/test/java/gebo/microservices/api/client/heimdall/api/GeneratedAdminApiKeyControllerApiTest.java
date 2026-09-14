@@ -42,7 +42,7 @@ public class GeneratedAdminApiKeyControllerApiTest {
      */
     @Test
     public void deleteAdminGeneratedApiKeyTest() {
-        Object code = null;
+        String code = null;
         api.deleteAdminGeneratedApiKey(code);
 
         // TODO: test validations
@@ -87,7 +87,7 @@ public class GeneratedAdminApiKeyControllerApiTest {
      */
     @Test
     public void isAdminGeneratedApiKeyGenerationAllowedTest() {
-        Object response = api.isAdminGeneratedApiKeyGenerationAllowed();
+        Boolean response = api.isAdminGeneratedApiKeyGenerationAllowed();
 
         // TODO: test validations
     }

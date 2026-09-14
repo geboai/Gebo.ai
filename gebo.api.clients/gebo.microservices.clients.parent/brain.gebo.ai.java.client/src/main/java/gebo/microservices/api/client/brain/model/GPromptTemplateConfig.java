@@ -18,65 +18,161 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GPromptTemplateConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GPromptTemplateConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("systemPromptTemplate")
-  private Object systemPromptTemplate = null;
+  private String systemPromptTemplate = null;
 
   @JsonProperty("userPromptTemplate")
-  private Object userPromptTemplate = null;
+  private String userPromptTemplate = null;
 
-  @JsonProperty("chatHistory")
-  private Object chatHistory = null;
+  /**
+   * Gets or Sets chatHistory
+   */
+  public enum ChatHistoryEnum {
+    REQUIRED("REQUIRED"),
+    NOT_REQUIRED("NOT_REQUIRED");
 
-  @JsonProperty("contextDocuments")
-  private Object contextDocuments = null;
+    private String value;
 
-  @JsonProperty("toolsCalling")
-  private Object toolsCalling = null;
+    ChatHistoryEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ChatHistoryEnum fromValue(String input) {
+      for (ChatHistoryEnum b : ChatHistoryEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("chatHistory")
+  private ChatHistoryEnum chatHistory = null;
+
+  /**
+   * Gets or Sets contextDocuments
+   */
+  public enum ContextDocumentsEnum {
+    REQUIRED("REQUIRED"),
+    NOT_REQUIRED("NOT_REQUIRED");
+
+    private String value;
+
+    ContextDocumentsEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ContextDocumentsEnum fromValue(String input) {
+      for (ContextDocumentsEnum b : ContextDocumentsEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("contextDocuments")
+  private ContextDocumentsEnum contextDocuments = null;
+
+  /**
+   * Gets or Sets toolsCalling
+   */
+  public enum ToolsCallingEnum {
+    REQUIRED("REQUIRED"),
+    NOT_REQUIRED("NOT_REQUIRED");
+
+    private String value;
+
+    ToolsCallingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ToolsCallingEnum fromValue(String input) {
+      for (ToolsCallingEnum b : ToolsCallingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("toolsCalling")
+  private ToolsCallingEnum toolsCalling = null;
 
   @JsonProperty("langCode")
-  private Object langCode = null;
+  private String langCode = null;
 
   @JsonProperty("promptUse")
-  private Object promptUse = null;
+  private String promptUse = null;
 
   @JsonProperty("modelProvider")
-  private Object modelProvider = null;
+  private String modelProvider = null;
 
   @JsonProperty("modelCode")
-  private Object modelCode = null;
+  private String modelCode = null;
 
   @JsonProperty("promptCategory")
-  private Object promptCategory = null;
+  private String promptCategory = null;
 
   @JsonProperty("tokensSize")
-  private Object tokensSize = null;
+  private Integer tokensSize = null;
 
   @JsonProperty("configDeclarated")
-  private Object configDeclarated = null;
+  private Boolean configDeclarated = null;
 
   @JsonProperty("agentPrompt")
-  private Object agentPrompt = null;
+  private Boolean agentPrompt = null;
 
   @JsonProperty("agentId")
-  private Object agentId = null;
+  private String agentId = null;
 
   @JsonProperty("placeholders")
-  private Object placeholders = null;
+  private Map<String, Boolean> placeholders = null;
 
-  public GPromptTemplateConfig code(Object code) {
+  public GPromptTemplateConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -86,15 +182,15 @@ public class GPromptTemplateConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GPromptTemplateConfig description(Object description) {
+  public GPromptTemplateConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -104,15 +200,15 @@ public class GPromptTemplateConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GPromptTemplateConfig systemPromptTemplate(Object systemPromptTemplate) {
+  public GPromptTemplateConfig systemPromptTemplate(String systemPromptTemplate) {
     this.systemPromptTemplate = systemPromptTemplate;
     return this;
   }
@@ -122,15 +218,15 @@ public class GPromptTemplateConfig {
    * @return systemPromptTemplate
   **/
   @Schema(description = "")
-  public Object getSystemPromptTemplate() {
+  public String getSystemPromptTemplate() {
     return systemPromptTemplate;
   }
 
-  public void setSystemPromptTemplate(Object systemPromptTemplate) {
+  public void setSystemPromptTemplate(String systemPromptTemplate) {
     this.systemPromptTemplate = systemPromptTemplate;
   }
 
-  public GPromptTemplateConfig userPromptTemplate(Object userPromptTemplate) {
+  public GPromptTemplateConfig userPromptTemplate(String userPromptTemplate) {
     this.userPromptTemplate = userPromptTemplate;
     return this;
   }
@@ -140,15 +236,15 @@ public class GPromptTemplateConfig {
    * @return userPromptTemplate
   **/
   @Schema(required = true, description = "")
-  public Object getUserPromptTemplate() {
+  public String getUserPromptTemplate() {
     return userPromptTemplate;
   }
 
-  public void setUserPromptTemplate(Object userPromptTemplate) {
+  public void setUserPromptTemplate(String userPromptTemplate) {
     this.userPromptTemplate = userPromptTemplate;
   }
 
-  public GPromptTemplateConfig chatHistory(Object chatHistory) {
+  public GPromptTemplateConfig chatHistory(ChatHistoryEnum chatHistory) {
     this.chatHistory = chatHistory;
     return this;
   }
@@ -158,15 +254,15 @@ public class GPromptTemplateConfig {
    * @return chatHistory
   **/
   @Schema(required = true, description = "")
-  public Object getChatHistory() {
+  public ChatHistoryEnum getChatHistory() {
     return chatHistory;
   }
 
-  public void setChatHistory(Object chatHistory) {
+  public void setChatHistory(ChatHistoryEnum chatHistory) {
     this.chatHistory = chatHistory;
   }
 
-  public GPromptTemplateConfig contextDocuments(Object contextDocuments) {
+  public GPromptTemplateConfig contextDocuments(ContextDocumentsEnum contextDocuments) {
     this.contextDocuments = contextDocuments;
     return this;
   }
@@ -176,15 +272,15 @@ public class GPromptTemplateConfig {
    * @return contextDocuments
   **/
   @Schema(required = true, description = "")
-  public Object getContextDocuments() {
+  public ContextDocumentsEnum getContextDocuments() {
     return contextDocuments;
   }
 
-  public void setContextDocuments(Object contextDocuments) {
+  public void setContextDocuments(ContextDocumentsEnum contextDocuments) {
     this.contextDocuments = contextDocuments;
   }
 
-  public GPromptTemplateConfig toolsCalling(Object toolsCalling) {
+  public GPromptTemplateConfig toolsCalling(ToolsCallingEnum toolsCalling) {
     this.toolsCalling = toolsCalling;
     return this;
   }
@@ -194,15 +290,15 @@ public class GPromptTemplateConfig {
    * @return toolsCalling
   **/
   @Schema(required = true, description = "")
-  public Object getToolsCalling() {
+  public ToolsCallingEnum getToolsCalling() {
     return toolsCalling;
   }
 
-  public void setToolsCalling(Object toolsCalling) {
+  public void setToolsCalling(ToolsCallingEnum toolsCalling) {
     this.toolsCalling = toolsCalling;
   }
 
-  public GPromptTemplateConfig langCode(Object langCode) {
+  public GPromptTemplateConfig langCode(String langCode) {
     this.langCode = langCode;
     return this;
   }
@@ -212,15 +308,15 @@ public class GPromptTemplateConfig {
    * @return langCode
   **/
   @Schema(description = "")
-  public Object getLangCode() {
+  public String getLangCode() {
     return langCode;
   }
 
-  public void setLangCode(Object langCode) {
+  public void setLangCode(String langCode) {
     this.langCode = langCode;
   }
 
-  public GPromptTemplateConfig promptUse(Object promptUse) {
+  public GPromptTemplateConfig promptUse(String promptUse) {
     this.promptUse = promptUse;
     return this;
   }
@@ -230,15 +326,15 @@ public class GPromptTemplateConfig {
    * @return promptUse
   **/
   @Schema(required = true, description = "")
-  public Object getPromptUse() {
+  public String getPromptUse() {
     return promptUse;
   }
 
-  public void setPromptUse(Object promptUse) {
+  public void setPromptUse(String promptUse) {
     this.promptUse = promptUse;
   }
 
-  public GPromptTemplateConfig modelProvider(Object modelProvider) {
+  public GPromptTemplateConfig modelProvider(String modelProvider) {
     this.modelProvider = modelProvider;
     return this;
   }
@@ -248,15 +344,15 @@ public class GPromptTemplateConfig {
    * @return modelProvider
   **/
   @Schema(description = "")
-  public Object getModelProvider() {
+  public String getModelProvider() {
     return modelProvider;
   }
 
-  public void setModelProvider(Object modelProvider) {
+  public void setModelProvider(String modelProvider) {
     this.modelProvider = modelProvider;
   }
 
-  public GPromptTemplateConfig modelCode(Object modelCode) {
+  public GPromptTemplateConfig modelCode(String modelCode) {
     this.modelCode = modelCode;
     return this;
   }
@@ -266,15 +362,15 @@ public class GPromptTemplateConfig {
    * @return modelCode
   **/
   @Schema(description = "")
-  public Object getModelCode() {
+  public String getModelCode() {
     return modelCode;
   }
 
-  public void setModelCode(Object modelCode) {
+  public void setModelCode(String modelCode) {
     this.modelCode = modelCode;
   }
 
-  public GPromptTemplateConfig promptCategory(Object promptCategory) {
+  public GPromptTemplateConfig promptCategory(String promptCategory) {
     this.promptCategory = promptCategory;
     return this;
   }
@@ -284,15 +380,15 @@ public class GPromptTemplateConfig {
    * @return promptCategory
   **/
   @Schema(description = "")
-  public Object getPromptCategory() {
+  public String getPromptCategory() {
     return promptCategory;
   }
 
-  public void setPromptCategory(Object promptCategory) {
+  public void setPromptCategory(String promptCategory) {
     this.promptCategory = promptCategory;
   }
 
-  public GPromptTemplateConfig tokensSize(Object tokensSize) {
+  public GPromptTemplateConfig tokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
     return this;
   }
@@ -302,15 +398,15 @@ public class GPromptTemplateConfig {
    * @return tokensSize
   **/
   @Schema(description = "")
-  public Object getTokensSize() {
+  public Integer getTokensSize() {
     return tokensSize;
   }
 
-  public void setTokensSize(Object tokensSize) {
+  public void setTokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
   }
 
-  public GPromptTemplateConfig configDeclarated(Object configDeclarated) {
+  public GPromptTemplateConfig configDeclarated(Boolean configDeclarated) {
     this.configDeclarated = configDeclarated;
     return this;
   }
@@ -320,15 +416,15 @@ public class GPromptTemplateConfig {
    * @return configDeclarated
   **/
   @Schema(description = "")
-  public Object getConfigDeclarated() {
+  public Boolean isConfigDeclarated() {
     return configDeclarated;
   }
 
-  public void setConfigDeclarated(Object configDeclarated) {
+  public void setConfigDeclarated(Boolean configDeclarated) {
     this.configDeclarated = configDeclarated;
   }
 
-  public GPromptTemplateConfig agentPrompt(Object agentPrompt) {
+  public GPromptTemplateConfig agentPrompt(Boolean agentPrompt) {
     this.agentPrompt = agentPrompt;
     return this;
   }
@@ -338,15 +434,15 @@ public class GPromptTemplateConfig {
    * @return agentPrompt
   **/
   @Schema(description = "")
-  public Object getAgentPrompt() {
+  public Boolean isAgentPrompt() {
     return agentPrompt;
   }
 
-  public void setAgentPrompt(Object agentPrompt) {
+  public void setAgentPrompt(Boolean agentPrompt) {
     this.agentPrompt = agentPrompt;
   }
 
-  public GPromptTemplateConfig agentId(Object agentId) {
+  public GPromptTemplateConfig agentId(String agentId) {
     this.agentId = agentId;
     return this;
   }
@@ -356,16 +452,24 @@ public class GPromptTemplateConfig {
    * @return agentId
   **/
   @Schema(description = "")
-  public Object getAgentId() {
+  public String getAgentId() {
     return agentId;
   }
 
-  public void setAgentId(Object agentId) {
+  public void setAgentId(String agentId) {
     this.agentId = agentId;
   }
 
-  public GPromptTemplateConfig placeholders(Object placeholders) {
+  public GPromptTemplateConfig placeholders(Map<String, Boolean> placeholders) {
     this.placeholders = placeholders;
+    return this;
+  }
+
+  public GPromptTemplateConfig putPlaceholdersItem(String key, Boolean placeholdersItem) {
+    if (this.placeholders == null) {
+      this.placeholders = new HashMap<>();
+    }
+    this.placeholders.put(key, placeholdersItem);
     return this;
   }
 
@@ -374,11 +478,11 @@ public class GPromptTemplateConfig {
    * @return placeholders
   **/
   @Schema(description = "")
-  public Object getPlaceholders() {
+  public Map<String, Boolean> getPlaceholders() {
     return placeholders;
   }
 
-  public void setPlaceholders(Object placeholders) {
+  public void setPlaceholders(Map<String, Boolean> placeholders) {
     this.placeholders = placeholders;
   }
 

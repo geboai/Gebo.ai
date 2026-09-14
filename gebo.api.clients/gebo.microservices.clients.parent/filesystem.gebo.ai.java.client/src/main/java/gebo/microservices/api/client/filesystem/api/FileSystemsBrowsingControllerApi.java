@@ -6,6 +6,7 @@ import gebo.microservices.api.client.filesystem.model.BrowseParam;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.filesystem.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:09.115071854+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
 
 public class FileSystemsBrowsingControllerApi {
     private ApiClient apiClient;
@@ -99,7 +100,7 @@ public class FileSystemsBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getSharedFilesystemNavigationStatus(Object body) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getSharedFilesystemNavigationStatus(List<VFilesystemReference> body) throws RestClientException {
         return getSharedFilesystemNavigationStatusWithHttpInfo(body).getBody();
     }
 
@@ -111,7 +112,7 @@ public class FileSystemsBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getSharedFilesystemNavigationStatusWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getSharedFilesystemNavigationStatusWithHttpInfo(List<VFilesystemReference> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {

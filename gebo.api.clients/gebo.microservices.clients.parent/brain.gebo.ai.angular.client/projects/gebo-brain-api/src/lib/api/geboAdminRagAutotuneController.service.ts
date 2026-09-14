@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AutotuneVectorStoreInfo } from '../model/autotuneVectorStoreInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +61,9 @@ export class GeboAdminRagAutotuneControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getLatestComputedVectorStores(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getLatestComputedVectorStores(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getLatestComputedVectorStores(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getLatestComputedVectorStores(observe?: 'body', reportProgress?: boolean): Observable<Array<AutotuneVectorStoreInfo>>;
+    public getLatestComputedVectorStores(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AutotuneVectorStoreInfo>>>;
+    public getLatestComputedVectorStores(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AutotuneVectorStoreInfo>>>;
     public getLatestComputedVectorStores(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +81,7 @@ export class GeboAdminRagAutotuneControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores`,
+        return this.httpClient.request<Array<AutotuneVectorStoreInfo>>('get',`${this.basePath}/api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

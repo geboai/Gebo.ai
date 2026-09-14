@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.tyr.api;
 
 import gebo.microservices.api.client.tyr.model.ReindexTimeStructureMetaInfo;
+import gebo.microservices.api.client.tyr.model.ReindexingProgrammedTable;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -39,8 +40,8 @@ public class ReindexingFrequencyOptionsControllerApiTest {
      */
     @Test
     public void displayTimeValuesTest() {
-        Object body = null;
-        Object response = api.displayTimeValues(body);
+        List<ReindexingProgrammedTable> body = null;
+        List<String> response = api.displayTimeValues(body);
 
         // TODO: test validations
     }
@@ -54,7 +55,7 @@ public class ReindexingFrequencyOptionsControllerApiTest {
      */
     @Test
     public void getAllTimeStructureMetaInfosTest() {
-        Object response = api.getAllTimeStructureMetaInfos();
+        List<ReindexTimeStructureMetaInfo> response = api.getAllTimeStructureMetaInfos();
 
         // TODO: test validations
     }
@@ -68,7 +69,7 @@ public class ReindexingFrequencyOptionsControllerApiTest {
      */
     @Test
     public void getTimeStructureMetaInfoTest() {
-        Object frequency = null;
+        String frequency = null;
         ReindexTimeStructureMetaInfo response = api.getTimeStructureMetaInfo(frequency);
 
         // TODO: test validations

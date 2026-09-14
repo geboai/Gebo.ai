@@ -11,15 +11,15 @@
  */
 
 export interface LLMAutoconfigureCreationData { 
-    vendorId: any;
-    secretId?: any;
-    newApiSecret?: any;
-    newUserName?: any;
-    defaultChatModel?: any;
-    internalServicesModel?: any;
-    embeddingModel?: any;
-    rankerModel?: any;
-    transcriptModel?: any;
-    ttsModel?: any;
-    imagesModel?: any;
+    vendorId: string;
+    secretId?: string;
+    newApiSecret?: string;
+    newUserName?: string;
+    defaultChatModel?: string;
+    internalServicesModel?: string;
+    embeddingModel?: string;
+    rankerModel?: string;
+    transcriptModel?: string;
+    ttsModel?: string;
+    imagesModel?: string;
 }

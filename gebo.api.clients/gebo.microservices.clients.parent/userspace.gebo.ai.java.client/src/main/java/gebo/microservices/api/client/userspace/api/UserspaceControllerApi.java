@@ -7,6 +7,7 @@ import gebo.microservices.api.client.userspace.model.OperationStatusGJobStatus;
 import gebo.microservices.api.client.userspace.model.OperationStatusPublishingStatus;
 import gebo.microservices.api.client.userspace.model.PublishingStatus;
 import gebo.microservices.api.client.userspace.model.UserUploadToUserSpaceParam;
+import gebo.microservices.api.client.userspace.model.UserspaceFileDto;
 import gebo.microservices.api.client.userspace.model.UserspaceFolderDto;
 import gebo.microservices.api.client.userspace.model.UserspaceKnowledgebaseDto;
 
@@ -28,7 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:10.490888548+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class UserspaceControllerApi {
     private ApiClient apiClient;
@@ -98,7 +99,7 @@ public class UserspaceControllerApi {
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteUserspaceFiles(Object body) throws RestClientException {
+    public void deleteUserspaceFiles(List<UserspaceFileDto> body) throws RestClientException {
         deleteUserspaceFilesWithHttpInfo(body);
     }
 
@@ -110,7 +111,7 @@ public class UserspaceControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteUserspaceFilesWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<Void> deleteUserspaceFilesWithHttpInfo(List<UserspaceFileDto> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -185,7 +186,7 @@ public class UserspaceControllerApi {
      * @return UserspaceKnowledgebaseDto
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UserspaceKnowledgebaseDto findUserKnowledgebaseByCode(Object code) throws RestClientException {
+    public UserspaceKnowledgebaseDto findUserKnowledgebaseByCode(String code) throws RestClientException {
         return findUserKnowledgebaseByCodeWithHttpInfo(code).getBody();
     }
 
@@ -197,7 +198,7 @@ public class UserspaceControllerApi {
      * @return ResponseEntity&lt;UserspaceKnowledgebaseDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UserspaceKnowledgebaseDto> findUserKnowledgebaseByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<UserspaceKnowledgebaseDto> findUserKnowledgebaseByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -227,10 +228,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;UserspaceFileDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findUserspaceFileByCodes(Object body) throws RestClientException {
+    public List<UserspaceFileDto> findUserspaceFileByCodes(List<String> body) throws RestClientException {
         return findUserspaceFileByCodesWithHttpInfo(body).getBody();
     }
 
@@ -239,10 +240,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserspaceFileDto&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findUserspaceFileByCodesWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<List<UserspaceFileDto>> findUserspaceFileByCodesWithHttpInfo(List<String> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -265,7 +266,7 @@ public class UserspaceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UserspaceFileDto>> returnType = new ParameterizedTypeReference<List<UserspaceFileDto>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -276,7 +277,7 @@ public class UserspaceControllerApi {
      * @return UserspaceFolderDto
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UserspaceFolderDto findUserspaceFolderByCode(Object code) throws RestClientException {
+    public UserspaceFolderDto findUserspaceFolderByCode(String code) throws RestClientException {
         return findUserspaceFolderByCodeWithHttpInfo(code).getBody();
     }
 
@@ -288,7 +289,7 @@ public class UserspaceControllerApi {
      * @return ResponseEntity&lt;UserspaceFolderDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UserspaceFolderDto> findUserspaceFolderByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<UserspaceFolderDto> findUserspaceFolderByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -317,10 +318,10 @@ public class UserspaceControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;UserspaceKnowledgebaseDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getPersonalKnowledgebases() throws RestClientException {
+    public List<UserspaceKnowledgebaseDto> getPersonalKnowledgebases() throws RestClientException {
         return getPersonalKnowledgebasesWithHttpInfo().getBody();
     }
 
@@ -328,10 +329,10 @@ public class UserspaceControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserspaceKnowledgebaseDto&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getPersonalKnowledgebasesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UserspaceKnowledgebaseDto>> getPersonalKnowledgebasesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/user/UserspaceController/getPersonalKnowledgebases").build().toUriString();
         
@@ -348,7 +349,7 @@ public class UserspaceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>> returnType = new ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -402,10 +403,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;UserspaceKnowledgebaseDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object listChildPersonalKnowledgebases(Object body) throws RestClientException {
+    public List<UserspaceKnowledgebaseDto> listChildPersonalKnowledgebases(List<String> body) throws RestClientException {
         return listChildPersonalKnowledgebasesWithHttpInfo(body).getBody();
     }
 
@@ -414,10 +415,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserspaceKnowledgebaseDto&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> listChildPersonalKnowledgebasesWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<List<UserspaceKnowledgebaseDto>> listChildPersonalKnowledgebasesWithHttpInfo(List<String> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -440,7 +441,7 @@ public class UserspaceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>> returnType = new ParameterizedTypeReference<List<UserspaceKnowledgebaseDto>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -448,10 +449,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param userspaceUploadCode  (required)
-     * @return Object
+     * @return List&lt;UserspaceFileDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object listUserspaceFiles(Object userspaceUploadCode) throws RestClientException {
+    public List<UserspaceFileDto> listUserspaceFiles(String userspaceUploadCode) throws RestClientException {
         return listUserspaceFilesWithHttpInfo(userspaceUploadCode).getBody();
     }
 
@@ -460,10 +461,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param userspaceUploadCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserspaceFileDto&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> listUserspaceFilesWithHttpInfo(Object userspaceUploadCode) throws RestClientException {
+    public ResponseEntity<List<UserspaceFileDto>> listUserspaceFilesWithHttpInfo(String userspaceUploadCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userspaceUploadCode' is set
         if (userspaceUploadCode == null) {
@@ -485,7 +486,7 @@ public class UserspaceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UserspaceFileDto>> returnType = new ParameterizedTypeReference<List<UserspaceFileDto>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -493,10 +494,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param userspaceKnowledgeBase  (required)
-     * @return Object
+     * @return List&lt;UserspaceFolderDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object listUserspaceFolders(Object userspaceKnowledgeBase) throws RestClientException {
+    public List<UserspaceFolderDto> listUserspaceFolders(String userspaceKnowledgeBase) throws RestClientException {
         return listUserspaceFoldersWithHttpInfo(userspaceKnowledgeBase).getBody();
     }
 
@@ -505,10 +506,10 @@ public class UserspaceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param userspaceKnowledgeBase  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserspaceFolderDto&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> listUserspaceFoldersWithHttpInfo(Object userspaceKnowledgeBase) throws RestClientException {
+    public ResponseEntity<List<UserspaceFolderDto>> listUserspaceFoldersWithHttpInfo(String userspaceKnowledgeBase) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userspaceKnowledgeBase' is set
         if (userspaceKnowledgeBase == null) {
@@ -530,7 +531,7 @@ public class UserspaceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UserspaceFolderDto>> returnType = new ParameterizedTypeReference<List<UserspaceFolderDto>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

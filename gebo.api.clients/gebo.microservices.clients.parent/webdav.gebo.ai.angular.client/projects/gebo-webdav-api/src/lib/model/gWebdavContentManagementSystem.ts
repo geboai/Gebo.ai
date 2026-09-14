@@ -11,20 +11,37 @@
  */
 
 export interface GWebdavContentManagementSystem { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    contentManagementSystemType?: any;
-    readonly?: any;
-    baseUri?: any;
-    usedCapabilities?: any;
-    aclAliases?: any;
-    webdavAuthType?: any;
-    secretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    contentManagementSystemType?: string;
+    readonly?: boolean;
+    baseUri?: string;
+    usedCapabilities?: Array<GWebdavContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
+    webdavAuthType?: GWebdavContentManagementSystem.WebdavAuthTypeEnum;
+    secretCode?: string;
+}
+export namespace GWebdavContentManagementSystem {
+    export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';
+    export const UsedCapabilitiesEnum = {
+        TICKETSMANAGEMENT: 'TICKETS_MANAGEMENT' as UsedCapabilitiesEnum,
+        DOCUMENTSMANAGEMENT: 'DOCUMENTS_MANAGEMENT' as UsedCapabilitiesEnum,
+        SOURCEMANAGEMENT: 'SOURCE_MANAGEMENT' as UsedCapabilitiesEnum,
+        ARTIFACTSREPOSITORYMANAGEMENT: 'ARTIFACTS_REPOSITORY_MANAGEMENT' as UsedCapabilitiesEnum
+    };
+    export type WebdavAuthTypeEnum = 'NONE' | 'BASIC' | 'DIGEST' | 'NTLM' | 'BEARER_TOKEN';
+    export const WebdavAuthTypeEnum = {
+        NONE: 'NONE' as WebdavAuthTypeEnum,
+        BASIC: 'BASIC' as WebdavAuthTypeEnum,
+        DIGEST: 'DIGEST' as WebdavAuthTypeEnum,
+        NTLM: 'NTLM' as WebdavAuthTypeEnum,
+        BEARERTOKEN: 'BEARER_TOKEN' as WebdavAuthTypeEnum
+    };
 }

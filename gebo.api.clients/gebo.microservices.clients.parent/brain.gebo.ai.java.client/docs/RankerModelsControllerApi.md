@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getRankerModelTypes"></a>
 # **getRankerModelTypes**
-> Object getRankerModelTypes()
+> List&lt;GRankerModelType&gt; getRankerModelTypes()
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 RankerModelsControllerApi apiInstance = new RankerModelsControllerApi();
 try {
-    Object result = apiInstance.getRankerModelTypes();
+    List<GRankerModelType> result = apiInstance.getRankerModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling RankerModelsControllerApi#getRankerModelTypes");
@@ -35,7 +35,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GRankerModelType&gt;**](GRankerModelType.md)
 
 ### Authorization
 
@@ -48,7 +48,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredRankerModels"></a>
 # **getRuntimeConfiguredRankerModels**
-> Object getRuntimeConfiguredRankerModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseRankerModelConfig&gt; getRuntimeConfiguredRankerModels(modelTypeCode)
 
 
 
@@ -60,9 +60,9 @@ No authorization required
 
 
 RankerModelsControllerApi apiInstance = new RankerModelsControllerApi();
-Object modelTypeCode = null; // Object | 
+String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getRuntimeConfiguredRankerModels(modelTypeCode);
+    List<ConfigurationEntryGBaseRankerModelConfig> result = apiInstance.getRuntimeConfiguredRankerModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling RankerModelsControllerApi#getRuntimeConfiguredRankerModels");
@@ -74,11 +74,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional]
+ **modelTypeCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ConfigurationEntryGBaseRankerModelConfig&gt;**](ConfigurationEntryGBaseRankerModelConfig.md)
 
 ### Authorization
 

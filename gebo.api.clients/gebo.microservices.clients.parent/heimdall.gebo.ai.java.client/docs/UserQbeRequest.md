@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | **Object** |  |  [optional]
-**size** | **Object** |  |  [optional]
+**page** | **Integer** |  |  [optional]
+**size** | **Integer** |  |  [optional]
 **qbe** | [**User**](User.md) |  |  [optional]

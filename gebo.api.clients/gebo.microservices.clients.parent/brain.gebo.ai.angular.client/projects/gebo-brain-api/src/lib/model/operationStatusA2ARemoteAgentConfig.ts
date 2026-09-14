@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { A2ARemoteAgentConfig } from './a2ARemoteAgentConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusA2ARemoteAgentConfig { 
     result?: A2ARemoteAgentConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

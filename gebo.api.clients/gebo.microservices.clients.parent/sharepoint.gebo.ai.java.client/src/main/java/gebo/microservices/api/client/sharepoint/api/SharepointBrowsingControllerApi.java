@@ -6,6 +6,7 @@ import gebo.microservices.api.client.sharepoint.model.BrowseParam;
 import gebo.microservices.api.client.sharepoint.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.sharepoint.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.sharepoint.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.sharepoint.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class SharepointBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +55,7 @@ public class SharepointBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseSharepointPath(BrowseParam body, Object systemCode) throws RestClientException {
+    public OperationStatusListPathInfo browseSharepointPath(BrowseParam body, String systemCode) throws RestClientException {
         return browseSharepointPathWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -67,7 +68,7 @@ public class SharepointBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseSharepointPathWithHttpInfo(BrowseParam body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseSharepointPathWithHttpInfo(BrowseParam body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -107,7 +108,7 @@ public class SharepointBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getSharepointNavigationStatus(Object body, Object systemCode) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getSharepointNavigationStatus(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         return getSharepointNavigationStatusWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -120,7 +121,7 @@ public class SharepointBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getSharepointNavigationStatusWithHttpInfo(Object body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getSharepointNavigationStatusWithHttpInfo(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -159,7 +160,7 @@ public class SharepointBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getSharepointRoots(Object systemCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getSharepointRoots(String systemCode) throws RestClientException {
         return getSharepointRootsWithHttpInfo(systemCode).getBody();
     }
 
@@ -171,7 +172,7 @@ public class SharepointBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getSharepointRootsWithHttpInfo(Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getSharepointRootsWithHttpInfo(String systemCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemCode' is set
         if (systemCode == null) {

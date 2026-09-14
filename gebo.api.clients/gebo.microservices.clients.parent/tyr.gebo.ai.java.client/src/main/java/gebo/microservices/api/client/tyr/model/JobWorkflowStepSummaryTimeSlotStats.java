@@ -18,47 +18,48 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * JobWorkflowStepSummaryTimeSlotStats
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class JobWorkflowStepSummaryTimeSlotStats {
   @JsonProperty("startDateTime")
-  private Object startDateTime = null;
+  private Date startDateTime = null;
 
   @JsonProperty("endDateTime")
-  private Object endDateTime = null;
+  private Date endDateTime = null;
 
   @JsonProperty("batchDocumentsInput")
-  private Object batchDocumentsInput = null;
+  private Long batchDocumentsInput = null;
 
   @JsonProperty("batchDiscardedInput")
-  private Object batchDiscardedInput = null;
+  private Long batchDiscardedInput = null;
 
   @JsonProperty("batchSentToNextStep")
-  private Object batchSentToNextStep = null;
+  private Long batchSentToNextStep = null;
 
   @JsonProperty("chunksProcessed")
-  private Object chunksProcessed = null;
+  private Long chunksProcessed = null;
 
   @JsonProperty("tokensProcessed")
-  private Object tokensProcessed = null;
+  private Long tokensProcessed = null;
 
   @JsonProperty("batchDocumentsProcessingErrors")
-  private Object batchDocumentsProcessingErrors = null;
+  private Long batchDocumentsProcessingErrors = null;
 
   @JsonProperty("batchDocumentsProcessed")
-  private Object batchDocumentsProcessed = null;
+  private Long batchDocumentsProcessed = null;
 
   @JsonProperty("errorChunks")
-  private Object errorChunks = null;
+  private Long errorChunks = null;
 
   @JsonProperty("errorTokens")
-  private Object errorTokens = null;
+  private Long errorTokens = null;
 
-  public JobWorkflowStepSummaryTimeSlotStats startDateTime(Object startDateTime) {
+  public JobWorkflowStepSummaryTimeSlotStats startDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
     return this;
   }
@@ -68,15 +69,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return startDateTime
   **/
   @Schema(description = "")
-  public Object getStartDateTime() {
+  public Date getStartDateTime() {
     return startDateTime;
   }
 
-  public void setStartDateTime(Object startDateTime) {
+  public void setStartDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats endDateTime(Object endDateTime) {
+  public JobWorkflowStepSummaryTimeSlotStats endDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
     return this;
   }
@@ -86,15 +87,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return endDateTime
   **/
   @Schema(description = "")
-  public Object getEndDateTime() {
+  public Date getEndDateTime() {
     return endDateTime;
   }
 
-  public void setEndDateTime(Object endDateTime) {
+  public void setEndDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats batchDocumentsInput(Object batchDocumentsInput) {
+  public JobWorkflowStepSummaryTimeSlotStats batchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
     return this;
   }
@@ -104,15 +105,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return batchDocumentsInput
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsInput() {
+  public Long getBatchDocumentsInput() {
     return batchDocumentsInput;
   }
 
-  public void setBatchDocumentsInput(Object batchDocumentsInput) {
+  public void setBatchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats batchDiscardedInput(Object batchDiscardedInput) {
+  public JobWorkflowStepSummaryTimeSlotStats batchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
     return this;
   }
@@ -122,15 +123,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return batchDiscardedInput
   **/
   @Schema(description = "")
-  public Object getBatchDiscardedInput() {
+  public Long getBatchDiscardedInput() {
     return batchDiscardedInput;
   }
 
-  public void setBatchDiscardedInput(Object batchDiscardedInput) {
+  public void setBatchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats batchSentToNextStep(Object batchSentToNextStep) {
+  public JobWorkflowStepSummaryTimeSlotStats batchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
     return this;
   }
@@ -140,15 +141,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return batchSentToNextStep
   **/
   @Schema(description = "")
-  public Object getBatchSentToNextStep() {
+  public Long getBatchSentToNextStep() {
     return batchSentToNextStep;
   }
 
-  public void setBatchSentToNextStep(Object batchSentToNextStep) {
+  public void setBatchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats chunksProcessed(Object chunksProcessed) {
+  public JobWorkflowStepSummaryTimeSlotStats chunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
     return this;
   }
@@ -158,15 +159,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return chunksProcessed
   **/
   @Schema(description = "")
-  public Object getChunksProcessed() {
+  public Long getChunksProcessed() {
     return chunksProcessed;
   }
 
-  public void setChunksProcessed(Object chunksProcessed) {
+  public void setChunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats tokensProcessed(Object tokensProcessed) {
+  public JobWorkflowStepSummaryTimeSlotStats tokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
     return this;
   }
@@ -176,15 +177,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return tokensProcessed
   **/
   @Schema(description = "")
-  public Object getTokensProcessed() {
+  public Long getTokensProcessed() {
     return tokensProcessed;
   }
 
-  public void setTokensProcessed(Object tokensProcessed) {
+  public void setTokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats batchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public JobWorkflowStepSummaryTimeSlotStats batchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
     return this;
   }
@@ -194,15 +195,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return batchDocumentsProcessingErrors
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessingErrors() {
+  public Long getBatchDocumentsProcessingErrors() {
     return batchDocumentsProcessingErrors;
   }
 
-  public void setBatchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public void setBatchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats batchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public JobWorkflowStepSummaryTimeSlotStats batchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
     return this;
   }
@@ -212,15 +213,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return batchDocumentsProcessed
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessed() {
+  public Long getBatchDocumentsProcessed() {
     return batchDocumentsProcessed;
   }
 
-  public void setBatchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public void setBatchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats errorChunks(Object errorChunks) {
+  public JobWorkflowStepSummaryTimeSlotStats errorChunks(Long errorChunks) {
     this.errorChunks = errorChunks;
     return this;
   }
@@ -230,15 +231,15 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return errorChunks
   **/
   @Schema(description = "")
-  public Object getErrorChunks() {
+  public Long getErrorChunks() {
     return errorChunks;
   }
 
-  public void setErrorChunks(Object errorChunks) {
+  public void setErrorChunks(Long errorChunks) {
     this.errorChunks = errorChunks;
   }
 
-  public JobWorkflowStepSummaryTimeSlotStats errorTokens(Object errorTokens) {
+  public JobWorkflowStepSummaryTimeSlotStats errorTokens(Long errorTokens) {
     this.errorTokens = errorTokens;
     return this;
   }
@@ -248,11 +249,11 @@ public class JobWorkflowStepSummaryTimeSlotStats {
    * @return errorTokens
   **/
   @Schema(description = "")
-  public Object getErrorTokens() {
+  public Long getErrorTokens() {
     return errorTokens;
   }
 
-  public void setErrorTokens(Object errorTokens) {
+  public void setErrorTokens(Long errorTokens) {
     this.errorTokens = errorTokens;
   }
 

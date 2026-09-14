@@ -57,7 +57,7 @@ public class DeepseekChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findDeepseekChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GDeepseekChatModelConfig response = api.findDeepseekChatModelConfigByCode(code);
 
         // TODO: test validations

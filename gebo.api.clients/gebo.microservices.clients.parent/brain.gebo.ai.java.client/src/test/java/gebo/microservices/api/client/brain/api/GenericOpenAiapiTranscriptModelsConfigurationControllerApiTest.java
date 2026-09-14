@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPITranscriptModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAITranscriptModelType;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPITranscriptModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPITranscriptModelChoice;
@@ -57,7 +58,7 @@ public class GenericOpenAiapiTranscriptModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGenericOpenAIAPITranscriptModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GenericOpenAIAPITranscriptModelConfig response = api.findGenericOpenAIAPITranscriptModelConfigByCode(code);
 
         // TODO: test validations
@@ -87,7 +88,7 @@ public class GenericOpenAiapiTranscriptModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAITranscriptModelConfigsTest() {
-        Object response = api.getGenericOpenAITranscriptModelConfigs();
+        List<GenericOpenAIAPITranscriptModelConfig> response = api.getGenericOpenAITranscriptModelConfigs();
 
         // TODO: test validations
     }
@@ -101,7 +102,7 @@ public class GenericOpenAiapiTranscriptModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAITranscriptModelTypesTest() {
-        Object response = api.getGenericOpenAITranscriptModelTypes();
+        List<GenericOpenAITranscriptModelType> response = api.getGenericOpenAITranscriptModelTypes();
 
         // TODO: test validations
     }

@@ -5,6 +5,7 @@ import gebo.microservices.api.client.heimdall.invoker.ApiClient;
 import gebo.microservices.api.client.heimdall.model.CheckPasswordRequest;
 import gebo.microservices.api.client.heimdall.model.CreateUserIfNotExistsRequest;
 import gebo.microservices.api.client.heimdall.model.UserInfosImpl;
+import gebo.microservices.api.client.heimdall.model.UsersGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class SecurityDirectoryClusterControllerApi {
     private ApiClient apiClient;
@@ -49,10 +50,10 @@ public class SecurityDirectoryClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object checkPassword(CheckPasswordRequest body) throws RestClientException {
+    public Boolean checkPassword(CheckPasswordRequest body) throws RestClientException {
         return checkPasswordWithHttpInfo(body).getBody();
     }
 
@@ -61,10 +62,10 @@ public class SecurityDirectoryClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> checkPasswordWithHttpInfo(CheckPasswordRequest body) throws RestClientException {
+    public ResponseEntity<Boolean> checkPasswordWithHttpInfo(CheckPasswordRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -87,7 +88,7 @@ public class SecurityDirectoryClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -140,10 +141,10 @@ public class SecurityDirectoryClusterControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAllGroups() throws RestClientException {
+    public List<UsersGroup> findAllGroups() throws RestClientException {
         return findAllGroupsWithHttpInfo().getBody();
     }
 
@@ -151,10 +152,10 @@ public class SecurityDirectoryClusterControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UsersGroup&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAllGroupsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UsersGroup>> findAllGroupsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/findAllGroups").build().toUriString();
         
@@ -171,7 +172,7 @@ public class SecurityDirectoryClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UsersGroup>> returnType = new ParameterizedTypeReference<List<UsersGroup>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -179,10 +180,10 @@ public class SecurityDirectoryClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param username  (required)
-     * @return Object
+     * @return List&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGroupsOfUser(Object username) throws RestClientException {
+    public List<UsersGroup> findGroupsOfUser(String username) throws RestClientException {
         return findGroupsOfUserWithHttpInfo(username).getBody();
     }
 
@@ -191,10 +192,10 @@ public class SecurityDirectoryClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param username  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UsersGroup&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGroupsOfUserWithHttpInfo(Object username) throws RestClientException {
+    public ResponseEntity<List<UsersGroup>> findGroupsOfUserWithHttpInfo(String username) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'username' is set
         if (username == null) {
@@ -216,7 +217,7 @@ public class SecurityDirectoryClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UsersGroup>> returnType = new ParameterizedTypeReference<List<UsersGroup>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -227,7 +228,7 @@ public class SecurityDirectoryClusterControllerApi {
      * @return UserInfosImpl
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UserInfosImpl findUserByUsername(Object username) throws RestClientException {
+    public UserInfosImpl findUserByUsername(String username) throws RestClientException {
         return findUserByUsernameWithHttpInfo(username).getBody();
     }
 
@@ -239,7 +240,7 @@ public class SecurityDirectoryClusterControllerApi {
      * @return ResponseEntity&lt;UserInfosImpl&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UserInfosImpl> findUserByUsernameWithHttpInfo(Object username) throws RestClientException {
+    public ResponseEntity<UserInfosImpl> findUserByUsernameWithHttpInfo(String username) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'username' is set
         if (username == null) {

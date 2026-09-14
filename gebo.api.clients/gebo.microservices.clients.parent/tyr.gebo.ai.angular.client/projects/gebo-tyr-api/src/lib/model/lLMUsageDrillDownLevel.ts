@@ -11,11 +11,22 @@
  */
 
 export interface LLMUsageDrillDownLevel { 
-    providerId?: any;
-    username?: any;
-    model?: any;
-    callerStack?: any;
-    modelType?: any;
-    year?: any;
-    month?: any;
+    providerId?: string;
+    username?: string;
+    model?: string;
+    callerStack?: string;
+    modelType?: LLMUsageDrillDownLevel.ModelTypeEnum;
+    year?: number;
+    month?: number;
+}
+export namespace LLMUsageDrillDownLevel {
+    export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';
+    export const ModelTypeEnum = {
+        CHAT: 'CHAT' as ModelTypeEnum,
+        EMBEDDING: 'EMBEDDING' as ModelTypeEnum,
+        IMAGE: 'IMAGE' as ModelTypeEnum,
+        RANKER: 'RANKER' as ModelTypeEnum,
+        TTS: 'TTS' as ModelTypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as ModelTypeEnum
+    };
 }

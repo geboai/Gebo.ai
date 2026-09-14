@@ -20,8 +20,8 @@ Method | HTTP request | Description
 
 
 GeboLlmGeneratedResourceControllerApi apiInstance = new GeboLlmGeneratedResourceControllerApi();
-Object userSessionCode = null; // Object | 
-Object generatedResourceCode = null; // Object | 
+String userSessionCode = "userSessionCode_example"; // String | 
+String generatedResourceCode = "generatedResourceCode_example"; // String | 
 try {
     apiInstance.serveLLMGeneratedContent(userSessionCode, generatedResourceCode);
 } catch (ApiException e) {
@@ -34,8 +34,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userSessionCode** | [**Object**](.md)|  |
- **generatedResourceCode** | [**Object**](.md)|  |
+ **userSessionCode** | **String**|  |
+ **generatedResourceCode** | **String**|  |
 
 ### Return type
 

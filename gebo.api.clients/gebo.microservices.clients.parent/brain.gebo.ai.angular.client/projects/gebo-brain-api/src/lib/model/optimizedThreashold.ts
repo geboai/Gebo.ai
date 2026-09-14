@@ -11,7 +11,7 @@
  */
 
 export interface OptimizedThreashold { 
-    optimizedThreashold?: any;
-    firstHopOptimizedThreashold?: any;
-    secondHopOptimizedThreashold?: any;
+    optimizedThreashold?: number;
+    firstHopOptimizedThreashold?: number;
+    secondHopOptimizedThreashold?: number;
 }

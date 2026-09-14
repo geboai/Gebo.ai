@@ -19,65 +19,66 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GBaseRankerModelChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GBaseRankerModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GBaseRankerModelConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("modelTypeCode")
-  private Object modelTypeCode = null;
+  private String modelTypeCode = null;
 
   @JsonProperty("defaultModel")
-  private Object defaultModel = null;
+  private Boolean defaultModel = null;
 
   @JsonProperty("apiSecretCode")
-  private Object apiSecretCode = null;
+  private String apiSecretCode = null;
 
   @JsonProperty("choosedModel")
   private GBaseRankerModelChoice choosedModel = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("maxDocumentsPerRequest")
-  private Object maxDocumentsPerRequest = null;
+  private Integer maxDocumentsPerRequest = null;
 
   @JsonProperty("maxDocumentTokens")
-  private Object maxDocumentTokens = null;
+  private Integer maxDocumentTokens = null;
 
   @JsonProperty("responseReserveTokens")
-  private Object responseReserveTokens = null;
+  private Integer responseReserveTokens = null;
 
   @JsonProperty("fullServiceUrl")
-  private Object fullServiceUrl = null;
+  private String fullServiceUrl = null;
 
   @JsonProperty("relativeServiceUrl")
-  private Object relativeServiceUrl = null;
+  private String relativeServiceUrl = null;
 
-  public GBaseRankerModelConfig code(Object code) {
+  public GBaseRankerModelConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -87,15 +88,15 @@ public class GBaseRankerModelConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GBaseRankerModelConfig description(Object description) {
+  public GBaseRankerModelConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -105,15 +106,15 @@ public class GBaseRankerModelConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GBaseRankerModelConfig userModified(Object userModified) {
+  public GBaseRankerModelConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -123,15 +124,15 @@ public class GBaseRankerModelConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GBaseRankerModelConfig userCreated(Object userCreated) {
+  public GBaseRankerModelConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -141,15 +142,15 @@ public class GBaseRankerModelConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GBaseRankerModelConfig dateModified(Object dateModified) {
+  public GBaseRankerModelConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -159,15 +160,15 @@ public class GBaseRankerModelConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GBaseRankerModelConfig dateCreated(Object dateCreated) {
+  public GBaseRankerModelConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -177,15 +178,15 @@ public class GBaseRankerModelConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GBaseRankerModelConfig modelTypeCode(Object modelTypeCode) {
+  public GBaseRankerModelConfig modelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
     return this;
   }
@@ -195,15 +196,15 @@ public class GBaseRankerModelConfig {
    * @return modelTypeCode
   **/
   @Schema(description = "")
-  public Object getModelTypeCode() {
+  public String getModelTypeCode() {
     return modelTypeCode;
   }
 
-  public void setModelTypeCode(Object modelTypeCode) {
+  public void setModelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
   }
 
-  public GBaseRankerModelConfig defaultModel(Object defaultModel) {
+  public GBaseRankerModelConfig defaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
     return this;
   }
@@ -213,15 +214,15 @@ public class GBaseRankerModelConfig {
    * @return defaultModel
   **/
   @Schema(description = "")
-  public Object getDefaultModel() {
+  public Boolean isDefaultModel() {
     return defaultModel;
   }
 
-  public void setDefaultModel(Object defaultModel) {
+  public void setDefaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
   }
 
-  public GBaseRankerModelConfig apiSecretCode(Object apiSecretCode) {
+  public GBaseRankerModelConfig apiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
     return this;
   }
@@ -231,11 +232,11 @@ public class GBaseRankerModelConfig {
    * @return apiSecretCode
   **/
   @Schema(description = "")
-  public Object getApiSecretCode() {
+  public String getApiSecretCode() {
     return apiSecretCode;
   }
 
-  public void setApiSecretCode(Object apiSecretCode) {
+  public void setApiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
   }
 
@@ -257,7 +258,7 @@ public class GBaseRankerModelConfig {
     this.choosedModel = choosedModel;
   }
 
-  public GBaseRankerModelConfig baseUrl(Object baseUrl) {
+  public GBaseRankerModelConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -267,15 +268,15 @@ public class GBaseRankerModelConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public GBaseRankerModelConfig contextLength(Object contextLength) {
+  public GBaseRankerModelConfig contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -285,15 +286,15 @@ public class GBaseRankerModelConfig {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
-  public GBaseRankerModelConfig maxDocumentsPerRequest(Object maxDocumentsPerRequest) {
+  public GBaseRankerModelConfig maxDocumentsPerRequest(Integer maxDocumentsPerRequest) {
     this.maxDocumentsPerRequest = maxDocumentsPerRequest;
     return this;
   }
@@ -303,15 +304,15 @@ public class GBaseRankerModelConfig {
    * @return maxDocumentsPerRequest
   **/
   @Schema(description = "")
-  public Object getMaxDocumentsPerRequest() {
+  public Integer getMaxDocumentsPerRequest() {
     return maxDocumentsPerRequest;
   }
 
-  public void setMaxDocumentsPerRequest(Object maxDocumentsPerRequest) {
+  public void setMaxDocumentsPerRequest(Integer maxDocumentsPerRequest) {
     this.maxDocumentsPerRequest = maxDocumentsPerRequest;
   }
 
-  public GBaseRankerModelConfig maxDocumentTokens(Object maxDocumentTokens) {
+  public GBaseRankerModelConfig maxDocumentTokens(Integer maxDocumentTokens) {
     this.maxDocumentTokens = maxDocumentTokens;
     return this;
   }
@@ -321,15 +322,15 @@ public class GBaseRankerModelConfig {
    * @return maxDocumentTokens
   **/
   @Schema(description = "")
-  public Object getMaxDocumentTokens() {
+  public Integer getMaxDocumentTokens() {
     return maxDocumentTokens;
   }
 
-  public void setMaxDocumentTokens(Object maxDocumentTokens) {
+  public void setMaxDocumentTokens(Integer maxDocumentTokens) {
     this.maxDocumentTokens = maxDocumentTokens;
   }
 
-  public GBaseRankerModelConfig responseReserveTokens(Object responseReserveTokens) {
+  public GBaseRankerModelConfig responseReserveTokens(Integer responseReserveTokens) {
     this.responseReserveTokens = responseReserveTokens;
     return this;
   }
@@ -339,15 +340,15 @@ public class GBaseRankerModelConfig {
    * @return responseReserveTokens
   **/
   @Schema(description = "")
-  public Object getResponseReserveTokens() {
+  public Integer getResponseReserveTokens() {
     return responseReserveTokens;
   }
 
-  public void setResponseReserveTokens(Object responseReserveTokens) {
+  public void setResponseReserveTokens(Integer responseReserveTokens) {
     this.responseReserveTokens = responseReserveTokens;
   }
 
-  public GBaseRankerModelConfig fullServiceUrl(Object fullServiceUrl) {
+  public GBaseRankerModelConfig fullServiceUrl(String fullServiceUrl) {
     this.fullServiceUrl = fullServiceUrl;
     return this;
   }
@@ -357,15 +358,15 @@ public class GBaseRankerModelConfig {
    * @return fullServiceUrl
   **/
   @Schema(description = "")
-  public Object getFullServiceUrl() {
+  public String getFullServiceUrl() {
     return fullServiceUrl;
   }
 
-  public void setFullServiceUrl(Object fullServiceUrl) {
+  public void setFullServiceUrl(String fullServiceUrl) {
     this.fullServiceUrl = fullServiceUrl;
   }
 
-  public GBaseRankerModelConfig relativeServiceUrl(Object relativeServiceUrl) {
+  public GBaseRankerModelConfig relativeServiceUrl(String relativeServiceUrl) {
     this.relativeServiceUrl = relativeServiceUrl;
     return this;
   }
@@ -375,11 +376,11 @@ public class GBaseRankerModelConfig {
    * @return relativeServiceUrl
   **/
   @Schema(description = "")
-  public Object getRelativeServiceUrl() {
+  public String getRelativeServiceUrl() {
     return relativeServiceUrl;
   }
 
-  public void setRelativeServiceUrl(Object relativeServiceUrl) {
+  public void setRelativeServiceUrl(String relativeServiceUrl) {
     this.relativeServiceUrl = relativeServiceUrl;
   }
 

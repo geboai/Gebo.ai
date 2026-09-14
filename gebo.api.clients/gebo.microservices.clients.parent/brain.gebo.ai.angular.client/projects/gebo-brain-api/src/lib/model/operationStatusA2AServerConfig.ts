@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { A2AServerConfig } from './a2AServerConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusA2AServerConfig { 
     result?: A2AServerConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

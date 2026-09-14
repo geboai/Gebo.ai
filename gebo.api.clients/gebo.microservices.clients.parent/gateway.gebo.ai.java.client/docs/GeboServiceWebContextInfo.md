@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**serviceId** | **Object** |  |  [optional]
-**relativeContextUrl** | **Object** |  |  [optional]
+**serviceId** | **String** |  |  [optional]
+**relativeContextUrl** | **String** |  |  [optional]

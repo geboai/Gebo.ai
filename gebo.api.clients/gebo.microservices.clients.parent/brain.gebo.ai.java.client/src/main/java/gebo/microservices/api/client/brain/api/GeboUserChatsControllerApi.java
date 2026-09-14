@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboUserChatsControllerApi {
     private ApiClient apiClient;
@@ -102,7 +102,7 @@ public class GeboUserChatsControllerApi {
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo createCleanChatByChatProfileCode(Object chatProfileCode, Object contextCode) throws RestClientException {
+    public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode, String contextCode) throws RestClientException {
         return createCleanChatByChatProfileCodeWithHttpInfo(chatProfileCode, contextCode).getBody();
     }
 
@@ -115,7 +115,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(Object chatProfileCode, Object contextCode) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> createCleanChatByChatProfileCodeWithHttpInfo(String chatProfileCode, String contextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
@@ -149,7 +149,7 @@ public class GeboUserChatsControllerApi {
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo createCleanChatByModelCode(Object modelCode) throws RestClientException {
+    public GUserChatInfo createCleanChatByModelCode(String modelCode) throws RestClientException {
         return createCleanChatByModelCodeWithHttpInfo(modelCode).getBody();
     }
 
@@ -161,7 +161,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> createCleanChatByModelCodeWithHttpInfo(Object modelCode) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> createCleanChatByModelCodeWithHttpInfo(String modelCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'modelCode' is set
         if (modelCode == null) {
@@ -193,7 +193,7 @@ public class GeboUserChatsControllerApi {
      * @param userChatContextCode  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteChat(Object userChatContextCode) throws RestClientException {
+    public void deleteChat(String userChatContextCode) throws RestClientException {
         deleteChatWithHttpInfo(userChatContextCode);
     }
 
@@ -205,7 +205,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteChatWithHttpInfo(Object userChatContextCode) throws RestClientException {
+    public ResponseEntity<Void> deleteChatWithHttpInfo(String userChatContextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userChatContextCode' is set
         if (userChatContextCode == null) {
@@ -237,7 +237,7 @@ public class GeboUserChatsControllerApi {
      * @param format  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void exportResponse2file(Object userContextCode, Object responseId, Object format) throws RestClientException {
+    public void exportResponse2file(String userContextCode, String responseId, String format) throws RestClientException {
         exportResponse2fileWithHttpInfo(userContextCode, responseId, format);
     }
 
@@ -251,7 +251,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> exportResponse2fileWithHttpInfo(Object userContextCode, Object responseId, Object format) throws RestClientException {
+    public ResponseEntity<Void> exportResponse2fileWithHttpInfo(String userContextCode, String responseId, String format) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userContextCode' is set
         if (userContextCode == null) {
@@ -292,7 +292,7 @@ public class GeboUserChatsControllerApi {
      * @return UserChatHistory
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UserChatHistory getChatHistory(Object code) throws RestClientException {
+    public UserChatHistory getChatHistory(String code) throws RestClientException {
         return getChatHistoryWithHttpInfo(code).getBody();
     }
 
@@ -304,7 +304,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;UserChatHistory&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UserChatHistory> getChatHistoryWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<UserChatHistory> getChatHistoryWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -337,7 +337,7 @@ public class GeboUserChatsControllerApi {
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo getChatInfosByCode(Object id) throws RestClientException {
+    public GUserChatInfo getChatInfosByCode(String id) throws RestClientException {
         return getChatInfosByCodeWithHttpInfo(id).getBody();
     }
 
@@ -349,7 +349,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> getChatInfosByCodeWithHttpInfo(Object id) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> getChatInfosByCodeWithHttpInfo(String id) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'id' is set
         if (id == null) {
@@ -424,10 +424,10 @@ public class GeboUserChatsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getMyChats() throws RestClientException {
+    public List<GUserChatInfo> getMyChats() throws RestClientException {
         return getMyChatsWithHttpInfo().getBody();
     }
 
@@ -435,10 +435,10 @@ public class GeboUserChatsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GUserChatInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getMyChatsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GUserChatInfo>> getMyChatsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/getMyChats").build().toUriString();
         
@@ -455,7 +455,7 @@ public class GeboUserChatsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GUserChatInfo>> returnType = new ParameterizedTypeReference<List<GUserChatInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -463,10 +463,10 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param contextCode  (required)
-     * @return Object
+     * @return List&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getMyChatsByContextCode(Object contextCode) throws RestClientException {
+    public List<GUserChatInfo> getMyChatsByContextCode(String contextCode) throws RestClientException {
         return getMyChatsByContextCodeWithHttpInfo(contextCode).getBody();
     }
 
@@ -475,10 +475,10 @@ public class GeboUserChatsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param contextCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GUserChatInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getMyChatsByContextCodeWithHttpInfo(Object contextCode) throws RestClientException {
+    public ResponseEntity<List<GUserChatInfo>> getMyChatsByContextCodeWithHttpInfo(String contextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'contextCode' is set
         if (contextCode == null) {
@@ -500,7 +500,7 @@ public class GeboUserChatsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GUserChatInfo>> returnType = new ParameterizedTypeReference<List<GUserChatInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -512,7 +512,7 @@ public class GeboUserChatsControllerApi {
      * @return PageGUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public PageGUserChatInfo getMyChatsPaged(Object page, Object pageSize) throws RestClientException {
+    public PageGUserChatInfo getMyChatsPaged(Integer page, Integer pageSize) throws RestClientException {
         return getMyChatsPagedWithHttpInfo(page, pageSize).getBody();
     }
 
@@ -525,7 +525,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;PageGUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<PageGUserChatInfo> getMyChatsPagedWithHttpInfo(Object page, Object pageSize) throws RestClientException {
+    public ResponseEntity<PageGUserChatInfo> getMyChatsPagedWithHttpInfo(Integer page, Integer pageSize) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'page' is set
         if (page == null) {
@@ -597,10 +597,10 @@ public class GeboUserChatsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object isMinimalLLMSSetupDone() throws RestClientException {
+    public Boolean isMinimalLLMSSetupDone() throws RestClientException {
         return isMinimalLLMSSetupDoneWithHttpInfo().getBody();
     }
 
@@ -608,10 +608,10 @@ public class GeboUserChatsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Boolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> isMinimalLLMSSetupDoneWithHttpInfo() throws RestClientException {
+    public ResponseEntity<Boolean> isMinimalLLMSSetupDoneWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatsController/isMinimalLLMSSetupDone").build().toUriString();
         
@@ -628,7 +628,7 @@ public class GeboUserChatsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -639,7 +639,7 @@ public class GeboUserChatsControllerApi {
      * @return GUserChatInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GUserChatInfo suggestChatDescription(Object userChatContextCode) throws RestClientException {
+    public GUserChatInfo suggestChatDescription(String userChatContextCode) throws RestClientException {
         return suggestChatDescriptionWithHttpInfo(userChatContextCode).getBody();
     }
 
@@ -651,7 +651,7 @@ public class GeboUserChatsControllerApi {
      * @return ResponseEntity&lt;GUserChatInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GUserChatInfo> suggestChatDescriptionWithHttpInfo(Object userChatContextCode) throws RestClientException {
+    public ResponseEntity<GUserChatInfo> suggestChatDescriptionWithHttpInfo(String userChatContextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userChatContextCode' is set
         if (userChatContextCode == null) {

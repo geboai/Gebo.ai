@@ -69,7 +69,7 @@ No authorization required
 
 
 GenericOpenAiRankerModelsConfigurationControllerApi apiInstance = new GenericOpenAiRankerModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GenericOpenAIAPIRankerModelConfig result = apiInstance.findGenericOpenAIAPIRankerModelConfigByCode(code);
     System.out.println(result);
@@ -83,7 +83,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -143,7 +143,7 @@ No authorization required
 
 <a name="getGenericOpenAIRankerModelConfigs"></a>
 # **getGenericOpenAIRankerModelConfigs**
-> Object getGenericOpenAIRankerModelConfigs()
+> List&lt;GenericOpenAIAPIRankerModelConfig&gt; getGenericOpenAIRankerModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ No authorization required
 
 GenericOpenAiRankerModelsConfigurationControllerApi apiInstance = new GenericOpenAiRankerModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAIRankerModelConfigs();
+    List<GenericOpenAIAPIRankerModelConfig> result = apiInstance.getGenericOpenAIRankerModelConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiRankerModelsConfigurationControllerApi#getGenericOpenAIRankerModelConfigs");
@@ -169,7 +169,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIAPIRankerModelConfig&gt;**](GenericOpenAIAPIRankerModelConfig.md)
 
 ### Authorization
 
@@ -182,7 +182,7 @@ No authorization required
 
 <a name="getGenericOpenAIRankerModelTypes"></a>
 # **getGenericOpenAIRankerModelTypes**
-> Object getGenericOpenAIRankerModelTypes()
+> List&lt;GenericOpenAIRankerModelTypeConfig&gt; getGenericOpenAIRankerModelTypes()
 
 
 
@@ -195,7 +195,7 @@ No authorization required
 
 GenericOpenAiRankerModelsConfigurationControllerApi apiInstance = new GenericOpenAiRankerModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAIRankerModelTypes();
+    List<GenericOpenAIRankerModelTypeConfig> result = apiInstance.getGenericOpenAIRankerModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiRankerModelsConfigurationControllerApi#getGenericOpenAIRankerModelTypes");
@@ -208,7 +208,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIRankerModelTypeConfig&gt;**](GenericOpenAIRankerModelTypeConfig.md)
 
 ### Authorization
 

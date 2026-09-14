@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GBedrockEmbeddingModelChoice } from './gBedrockEmbeddingModelChoice';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusListGBedrockEmbeddingModelChoice { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<GBedrockEmbeddingModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

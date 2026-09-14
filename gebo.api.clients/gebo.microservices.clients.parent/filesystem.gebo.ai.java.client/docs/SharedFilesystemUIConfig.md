@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**uiSettingsEnabled** | **Object** |  |  [optional]
-**shares** | **Object** |  |  [optional]
+**uiSettingsEnabled** | **Boolean** |  |  [optional]
+**shares** | [**List&lt;GFileSystemShareReference&gt;**](GFileSystemShareReference.md) |  |  [optional]

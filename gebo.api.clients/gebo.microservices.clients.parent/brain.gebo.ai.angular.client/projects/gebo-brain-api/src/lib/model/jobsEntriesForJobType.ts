@@ -12,6 +12,14 @@
 import { DataPage } from './dataPage';
 
 export interface JobsEntriesForJobType { 
-    jobType?: any;
+    jobType?: JobsEntriesForJobType.JobTypeEnum;
     page?: DataPage;
+}
+export namespace JobsEntriesForJobType {
+    export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';
+    export const JobTypeEnum = {
+        CONTENTSREADING: 'CONTENTS_READING' as JobTypeEnum,
+        VECTORIZINGCONTENTS: 'VECTORIZING_CONTENTS' as JobTypeEnum,
+        CONTENTSREADINGVECTORIZING: 'CONTENTS_READING_VECTORIZING' as JobTypeEnum
+    };
 }

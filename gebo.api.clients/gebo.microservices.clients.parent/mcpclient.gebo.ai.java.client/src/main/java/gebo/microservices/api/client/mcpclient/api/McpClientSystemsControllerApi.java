@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:50.381843566+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class McpClientSystemsControllerApi {
     private ApiClient apiClient;
@@ -95,7 +95,7 @@ public class McpClientSystemsControllerApi {
      * @return MCPClientProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public MCPClientProjectEndpoint findMCPClientEndpointsByCode(Object code) throws RestClientException {
+    public MCPClientProjectEndpoint findMCPClientEndpointsByCode(String code) throws RestClientException {
         return findMCPClientEndpointsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -107,7 +107,7 @@ public class McpClientSystemsControllerApi {
      * @return ResponseEntity&lt;MCPClientProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<MCPClientProjectEndpoint> findMCPClientEndpointsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<MCPClientProjectEndpoint> findMCPClientEndpointsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -137,10 +137,10 @@ public class McpClientSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;MCPClientProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findMCPClientEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<MCPClientProjectEndpoint> findMCPClientEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findMCPClientEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -149,10 +149,10 @@ public class McpClientSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;MCPClientProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findMCPClientEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<MCPClientProjectEndpoint>> findMCPClientEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
@@ -174,7 +174,7 @@ public class McpClientSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<MCPClientProjectEndpoint>> returnType = new ParameterizedTypeReference<List<MCPClientProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -182,10 +182,10 @@ public class McpClientSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;MCPClientProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findMCPClientEndpointsByQbe(MCPClientProjectEndpoint body) throws RestClientException {
+    public List<MCPClientProjectEndpoint> findMCPClientEndpointsByQbe(MCPClientProjectEndpoint body) throws RestClientException {
         return findMCPClientEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -194,10 +194,10 @@ public class McpClientSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;MCPClientProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findMCPClientEndpointsByQbeWithHttpInfo(MCPClientProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<MCPClientProjectEndpoint>> findMCPClientEndpointsByQbeWithHttpInfo(MCPClientProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -220,7 +220,7 @@ public class McpClientSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<MCPClientProjectEndpoint>> returnType = new ParameterizedTypeReference<List<MCPClientProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

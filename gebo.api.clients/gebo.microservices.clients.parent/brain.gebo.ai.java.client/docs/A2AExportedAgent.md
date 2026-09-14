@@ -3,8 +3,15 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**kind** | **Object** |  |  [optional]
-**networkCode** | **Object** |  |  [optional]
-**agentConfigCode** | **Object** |  |  [optional]
-**skillName** | **Object** |  |  [optional]
-**exposeMemberCapabilities** | **Object** |  |  [optional]
+**kind** | [**KindEnum**](#KindEnum) |  |  [optional]
+**networkCode** | **String** |  |  [optional]
+**agentConfigCode** | **String** |  |  [optional]
+**skillName** | **String** |  |  [optional]
+**exposeMemberCapabilities** | **Boolean** |  |  [optional]
+
+<a name="KindEnum"></a>
+## Enum: KindEnum
+Name | Value
+---- | -----
+AGENT | &quot;AGENT&quot;
+NETWORK | &quot;NETWORK&quot;

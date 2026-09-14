@@ -12,7 +12,7 @@
 import { DataPage } from './dataPage';
 
 export interface SearchDocumentByNamePagedParam { 
-    name: any;
-    knowledgeBaseCodes: any;
+    name: string;
+    knowledgeBaseCodes: Array<string>;
     page: DataPage;
 }

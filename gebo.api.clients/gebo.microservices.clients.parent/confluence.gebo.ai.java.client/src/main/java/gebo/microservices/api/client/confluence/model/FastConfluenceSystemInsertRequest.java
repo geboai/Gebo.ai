@@ -22,28 +22,59 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastConfluenceSystemInsertRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class FastConfluenceSystemInsertRequest {
   @JsonProperty("baseUri")
-  private Object baseUri = null;
+  private String baseUri = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
   @JsonProperty("token")
-  private Object token = null;
+  private String token = null;
 
-  @JsonProperty("confluenceVersion")
-  private Object confluenceVersion = null;
+  /**
+   * Gets or Sets confluenceVersion
+   */
+  public enum ConfluenceVersionEnum {
+    ONPREMISE7X("ONPREMISE7X"),
+    CLOUD("CLOUD");
 
-  public FastConfluenceSystemInsertRequest baseUri(Object baseUri) {
+    private String value;
+
+    ConfluenceVersionEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ConfluenceVersionEnum fromValue(String input) {
+      for (ConfluenceVersionEnum b : ConfluenceVersionEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("confluenceVersion")
+  private ConfluenceVersionEnum confluenceVersion = null;
+
+  public FastConfluenceSystemInsertRequest baseUri(String baseUri) {
     this.baseUri = baseUri;
     return this;
   }
@@ -53,15 +84,15 @@ public class FastConfluenceSystemInsertRequest {
    * @return baseUri
   **/
   @Schema(required = true, description = "")
-  public Object getBaseUri() {
+  public String getBaseUri() {
     return baseUri;
   }
 
-  public void setBaseUri(Object baseUri) {
+  public void setBaseUri(String baseUri) {
     this.baseUri = baseUri;
   }
 
-  public FastConfluenceSystemInsertRequest description(Object description) {
+  public FastConfluenceSystemInsertRequest description(String description) {
     this.description = description;
     return this;
   }
@@ -71,15 +102,15 @@ public class FastConfluenceSystemInsertRequest {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public FastConfluenceSystemInsertRequest username(Object username) {
+  public FastConfluenceSystemInsertRequest username(String username) {
     this.username = username;
     return this;
   }
@@ -89,15 +120,15 @@ public class FastConfluenceSystemInsertRequest {
    * @return username
   **/
   @Schema(required = true, description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public FastConfluenceSystemInsertRequest password(Object password) {
+  public FastConfluenceSystemInsertRequest password(String password) {
     this.password = password;
     return this;
   }
@@ -107,15 +138,15 @@ public class FastConfluenceSystemInsertRequest {
    * @return password
   **/
   @Schema(description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
-  public FastConfluenceSystemInsertRequest token(Object token) {
+  public FastConfluenceSystemInsertRequest token(String token) {
     this.token = token;
     return this;
   }
@@ -125,15 +156,15 @@ public class FastConfluenceSystemInsertRequest {
    * @return token
   **/
   @Schema(description = "")
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(Object token) {
+  public void setToken(String token) {
     this.token = token;
   }
 
-  public FastConfluenceSystemInsertRequest confluenceVersion(Object confluenceVersion) {
+  public FastConfluenceSystemInsertRequest confluenceVersion(ConfluenceVersionEnum confluenceVersion) {
     this.confluenceVersion = confluenceVersion;
     return this;
   }
@@ -143,11 +174,11 @@ public class FastConfluenceSystemInsertRequest {
    * @return confluenceVersion
   **/
   @Schema(required = true, description = "")
-  public Object getConfluenceVersion() {
+  public ConfluenceVersionEnum getConfluenceVersion() {
     return confluenceVersion;
   }
 
-  public void setConfluenceVersion(Object confluenceVersion) {
+  public void setConfluenceVersion(ConfluenceVersionEnum confluenceVersion) {
     this.confluenceVersion = confluenceVersion;
   }
 

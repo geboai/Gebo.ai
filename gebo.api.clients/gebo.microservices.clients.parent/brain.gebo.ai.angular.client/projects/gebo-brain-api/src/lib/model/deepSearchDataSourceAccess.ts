@@ -11,8 +11,8 @@
  */
 
 export interface DeepSearchDataSourceAccess { 
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    dataSourceId?: any;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    dataSourceId?: string;
 }

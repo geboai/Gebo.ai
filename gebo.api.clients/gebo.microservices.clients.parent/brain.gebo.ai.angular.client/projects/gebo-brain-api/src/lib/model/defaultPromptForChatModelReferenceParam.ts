@@ -13,5 +13,5 @@ import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig
 
 export interface DefaultPromptForChatModelReferenceParam { 
     chatModelConfigReference: GObjectRefGBaseChatModelConfig;
-    ragPrompt: any;
+    ragPrompt: boolean;
 }

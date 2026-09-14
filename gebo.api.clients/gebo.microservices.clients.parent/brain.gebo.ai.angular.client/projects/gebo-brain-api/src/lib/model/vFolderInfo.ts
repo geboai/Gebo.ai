@@ -12,8 +12,8 @@
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface VFolderInfo { 
-    code?: any;
-    name?: any;
-    parentFolderCode?: any;
+    code?: string;
+    name?: string;
+    parentFolderCode?: string;
     endpointRef?: GObjectRefGProjectEndpoint;
 }

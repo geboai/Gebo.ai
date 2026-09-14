@@ -17,28 +17,40 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GBedrockEmbeddingModelChoice;
+import gebo.microservices.api.client.brain.model.GUserMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * OperationStatusListGBedrockEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class OperationStatusListGBedrockEmbeddingModelChoice {
   @JsonProperty("result")
-  private Object result = null;
+  private List<GBedrockEmbeddingModelChoice> result = null;
 
   @JsonProperty("messages")
-  private Object messages = null;
+  private List<GUserMessage> messages = null;
 
   @JsonProperty("hasErrorMessages")
-  private Object hasErrorMessages = null;
+  private Boolean hasErrorMessages = null;
 
   @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
+  private Boolean hasWarnMessages = null;
 
-  public OperationStatusListGBedrockEmbeddingModelChoice result(Object result) {
+  public OperationStatusListGBedrockEmbeddingModelChoice result(List<GBedrockEmbeddingModelChoice> result) {
     this.result = result;
+    return this;
+  }
+
+  public OperationStatusListGBedrockEmbeddingModelChoice addResultItem(GBedrockEmbeddingModelChoice resultItem) {
+    if (this.result == null) {
+      this.result = new ArrayList<>();
+    }
+    this.result.add(resultItem);
     return this;
   }
 
@@ -47,16 +59,24 @@ public class OperationStatusListGBedrockEmbeddingModelChoice {
    * @return result
   **/
   @Schema(description = "")
-  public Object getResult() {
+  public List<GBedrockEmbeddingModelChoice> getResult() {
     return result;
   }
 
-  public void setResult(Object result) {
+  public void setResult(List<GBedrockEmbeddingModelChoice> result) {
     this.result = result;
   }
 
-  public OperationStatusListGBedrockEmbeddingModelChoice messages(Object messages) {
+  public OperationStatusListGBedrockEmbeddingModelChoice messages(List<GUserMessage> messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public OperationStatusListGBedrockEmbeddingModelChoice addMessagesItem(GUserMessage messagesItem) {
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(messagesItem);
     return this;
   }
 
@@ -65,15 +85,15 @@ public class OperationStatusListGBedrockEmbeddingModelChoice {
    * @return messages
   **/
   @Schema(description = "")
-  public Object getMessages() {
+  public List<GUserMessage> getMessages() {
     return messages;
   }
 
-  public void setMessages(Object messages) {
+  public void setMessages(List<GUserMessage> messages) {
     this.messages = messages;
   }
 
-  public OperationStatusListGBedrockEmbeddingModelChoice hasErrorMessages(Object hasErrorMessages) {
+  public OperationStatusListGBedrockEmbeddingModelChoice hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
   }
@@ -83,15 +103,15 @@ public class OperationStatusListGBedrockEmbeddingModelChoice {
    * @return hasErrorMessages
   **/
   @Schema(description = "")
-  public Object getHasErrorMessages() {
+  public Boolean isHasErrorMessages() {
     return hasErrorMessages;
   }
 
-  public void setHasErrorMessages(Object hasErrorMessages) {
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
   }
 
-  public OperationStatusListGBedrockEmbeddingModelChoice hasWarnMessages(Object hasWarnMessages) {
+  public OperationStatusListGBedrockEmbeddingModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -101,11 +121,11 @@ public class OperationStatusListGBedrockEmbeddingModelChoice {
    * @return hasWarnMessages
   **/
   @Schema(description = "")
-  public Object getHasWarnMessages() {
+  public Boolean isHasWarnMessages() {
     return hasWarnMessages;
   }
 
-  public void setHasWarnMessages(Object hasWarnMessages) {
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
   }
 

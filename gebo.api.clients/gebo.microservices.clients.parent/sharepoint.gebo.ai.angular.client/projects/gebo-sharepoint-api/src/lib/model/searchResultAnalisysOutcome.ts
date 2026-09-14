@@ -9,9 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { SearchQuery } from './searchQuery';
+import { SearchResult } from './searchResult';
 
 export interface SearchResultAnalisysOutcome { 
-    searchQueries?: any;
-    relatedResults?: any;
-    empty?: any;
+    searchQueries?: Array<SearchQuery>;
+    relatedResults?: Array<SearchResult>;
+    empty?: boolean;
 }

@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GBedrockTextToSpeechModelChoice } from './gBedrockTextToSpeechModelChoice';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusListGBedrockTextToSpeechModelChoice { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<GBedrockTextToSpeechModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

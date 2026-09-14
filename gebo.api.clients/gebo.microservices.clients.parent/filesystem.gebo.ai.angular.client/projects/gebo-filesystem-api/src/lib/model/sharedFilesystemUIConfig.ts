@@ -9,8 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GFileSystemShareReference } from './gFileSystemShareReference';
 
 export interface SharedFilesystemUIConfig { 
-    uiSettingsEnabled?: any;
-    shares?: any;
+    uiSettingsEnabled?: boolean;
+    shares?: Array<GFileSystemShareReference>;
 }

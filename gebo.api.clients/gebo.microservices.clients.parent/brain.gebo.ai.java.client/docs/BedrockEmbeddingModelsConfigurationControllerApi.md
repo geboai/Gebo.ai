@@ -67,7 +67,7 @@ No authorization required
 
 
 BedrockEmbeddingModelsConfigurationControllerApi apiInstance = new BedrockEmbeddingModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GBedrockEmbeddingModelConfig result = apiInstance.findBedrockEmbeddingModelConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

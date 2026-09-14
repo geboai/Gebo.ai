@@ -11,8 +11,8 @@
  */
 
 export interface UsersGroup { 
-    code?: any;
-    description?: any;
-    userIds?: any;
-    extCode?: any;
+    code?: string;
+    description?: string;
+    userIds?: Array<string>;
+    extCode?: string;
 }

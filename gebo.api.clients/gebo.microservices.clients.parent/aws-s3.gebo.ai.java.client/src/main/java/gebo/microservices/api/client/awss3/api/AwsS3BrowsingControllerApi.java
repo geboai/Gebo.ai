@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:46.219289034+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:35.503809141+02:00[Europe/Rome]")
 
 public class AwsS3BrowsingControllerApi {
     private ApiClient apiClient;
@@ -53,7 +53,7 @@ public class AwsS3BrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseAwsS3Path(BrowseParam body, Object s3SystemCode) throws RestClientException {
+    public OperationStatusListPathInfo browseAwsS3Path(BrowseParam body, String s3SystemCode) throws RestClientException {
         return browseAwsS3PathWithHttpInfo(body, s3SystemCode).getBody();
     }
 
@@ -66,7 +66,7 @@ public class AwsS3BrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseAwsS3PathWithHttpInfo(BrowseParam body, Object s3SystemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseAwsS3PathWithHttpInfo(BrowseParam body, String s3SystemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -105,7 +105,7 @@ public class AwsS3BrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getAwsS3Roots(Object s3SystemCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getAwsS3Roots(String s3SystemCode) throws RestClientException {
         return getAwsS3RootsWithHttpInfo(s3SystemCode).getBody();
     }
 
@@ -117,7 +117,7 @@ public class AwsS3BrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getAwsS3RootsWithHttpInfo(Object s3SystemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getAwsS3RootsWithHttpInfo(String s3SystemCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 's3SystemCode' is set
         if (s3SystemCode == null) {

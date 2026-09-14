@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GenericOpenAIAPITextToSpeechModelConfig } from '../model/genericOpenAIAPITextToSpeechModelConfig';
+import { GenericOpenAITextToSpeechModelType } from '../model/genericOpenAITextToSpeechModelType';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
 import { OperationStatusGenericOpenAIAPITextToSpeechModelConfig } from '../model/operationStatusGenericOpenAIAPITextToSpeechModelConfig';
 import { OperationStatusListGenericOpenAIAPITextToSpeechModelChoice } from '../model/operationStatusListGenericOpenAIAPITextToSpeechModelChoice';
@@ -112,10 +113,10 @@ export class GenericOpenAiapiTextToSpeechModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPITextToSpeechModelConfig>;
-    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPITextToSpeechModelConfig>>;
-    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPITextToSpeechModelConfig>>;
-    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPITextToSpeechModelConfig>;
+    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPITextToSpeechModelConfig>>;
+    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPITextToSpeechModelConfig>>;
+    public findGenericOpenAIAPITextToSpeechModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGenericOpenAIAPITextToSpeechModelConfigByCode.');
@@ -205,9 +206,9 @@ export class GenericOpenAiapiTextToSpeechModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAITextToSpeechModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAITextToSpeechModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAITextToSpeechModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAITextToSpeechModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIAPITextToSpeechModelConfig>>;
+    public getGenericOpenAITextToSpeechModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIAPITextToSpeechModelConfig>>>;
+    public getGenericOpenAITextToSpeechModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIAPITextToSpeechModelConfig>>>;
     public getGenericOpenAITextToSpeechModelConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -225,7 +226,7 @@ export class GenericOpenAiapiTextToSpeechModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelConfigs`,
+        return this.httpClient.request<Array<GenericOpenAIAPITextToSpeechModelConfig>>('get',`${this.basePath}/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelConfigs`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -241,9 +242,9 @@ export class GenericOpenAiapiTextToSpeechModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAITextToSpeechModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGenericOpenAITextToSpeechModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGenericOpenAITextToSpeechModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGenericOpenAITextToSpeechModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAITextToSpeechModelType>>;
+    public getGenericOpenAITextToSpeechModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAITextToSpeechModelType>>>;
+    public getGenericOpenAITextToSpeechModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAITextToSpeechModelType>>>;
     public getGenericOpenAITextToSpeechModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -261,7 +262,7 @@ export class GenericOpenAiapiTextToSpeechModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelTypes`,
+        return this.httpClient.request<Array<GenericOpenAITextToSpeechModelType>>('get',`${this.basePath}/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

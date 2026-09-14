@@ -12,17 +12,17 @@
 import { GMistralEmbeddingModelChoice } from './gMistralEmbeddingModelChoice';
 
 export interface GMistralEmbeddingModelConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelTypeCode?: any;
-    defaultModel?: any;
-    apiSecretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
     choosedModel?: GMistralEmbeddingModelChoice;
-    baseUrl?: any;
-    contextLength?: any;
-    tokenizationThreshold?: any;
+    baseUrl?: string;
+    contextLength?: number;
+    tokenizationThreshold?: number;
 }

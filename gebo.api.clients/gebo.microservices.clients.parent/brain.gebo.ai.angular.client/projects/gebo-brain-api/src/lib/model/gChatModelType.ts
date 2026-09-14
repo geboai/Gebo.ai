@@ -11,11 +11,11 @@
  */
 
 export interface GChatModelType { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelConfigurationClass?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelConfigurationClass?: string;
 }

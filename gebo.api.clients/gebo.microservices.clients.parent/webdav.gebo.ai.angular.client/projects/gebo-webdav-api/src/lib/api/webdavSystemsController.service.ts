@@ -206,10 +206,10 @@ export class WebdavSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findWebdavEndpointsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GWebdavProjectEndpoint>;
-    public findWebdavEndpointsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GWebdavProjectEndpoint>>;
-    public findWebdavEndpointsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GWebdavProjectEndpoint>>;
-    public findWebdavEndpointsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findWebdavEndpointsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GWebdavProjectEndpoint>;
+    public findWebdavEndpointsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GWebdavProjectEndpoint>>;
+    public findWebdavEndpointsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GWebdavProjectEndpoint>>;
+    public findWebdavEndpointsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findWebdavEndpointsByCode.');
@@ -253,10 +253,10 @@ export class WebdavSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findWebdavEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findWebdavEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findWebdavEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findWebdavEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findWebdavEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GWebdavProjectEndpoint>>;
+    public findWebdavEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GWebdavProjectEndpoint>>>;
+    public findWebdavEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GWebdavProjectEndpoint>>>;
+    public findWebdavEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findWebdavEndpointsByProject.');
@@ -282,7 +282,7 @@ export class WebdavSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/WebdavSystemsController/findWebdavEndpointsByProject`,
+        return this.httpClient.request<Array<GWebdavProjectEndpoint>>('get',`${this.basePath}/api/admin/WebdavSystemsController/findWebdavEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -300,9 +300,9 @@ export class WebdavSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findWebdavEndpointsByQbe(body: GWebdavProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findWebdavEndpointsByQbe(body: GWebdavProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findWebdavEndpointsByQbe(body: GWebdavProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findWebdavEndpointsByQbe(body: GWebdavProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GWebdavProjectEndpoint>>;
+    public findWebdavEndpointsByQbe(body: GWebdavProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GWebdavProjectEndpoint>>>;
+    public findWebdavEndpointsByQbe(body: GWebdavProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GWebdavProjectEndpoint>>>;
     public findWebdavEndpointsByQbe(body: GWebdavProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -329,7 +329,7 @@ export class WebdavSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/WebdavSystemsController/findWebdavEndpointsByQbe`,
+        return this.httpClient.request<Array<GWebdavProjectEndpoint>>('post',`${this.basePath}/api/admin/WebdavSystemsController/findWebdavEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -347,10 +347,10 @@ export class WebdavSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findWebdavSystemByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GWebdavContentManagementSystem>;
-    public findWebdavSystemByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GWebdavContentManagementSystem>>;
-    public findWebdavSystemByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GWebdavContentManagementSystem>>;
-    public findWebdavSystemByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findWebdavSystemByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GWebdavContentManagementSystem>;
+    public findWebdavSystemByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GWebdavContentManagementSystem>>;
+    public findWebdavSystemByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GWebdavContentManagementSystem>>;
+    public findWebdavSystemByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findWebdavSystemByCode.');
@@ -429,9 +429,9 @@ export class WebdavSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getWebdavSystems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getWebdavSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getWebdavSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getWebdavSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<GWebdavContentManagementSystem>>;
+    public getWebdavSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GWebdavContentManagementSystem>>>;
+    public getWebdavSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GWebdavContentManagementSystem>>>;
     public getWebdavSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -449,7 +449,7 @@ export class WebdavSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/WebdavSystemsController/getWebdavSystems`,
+        return this.httpClient.request<Array<GWebdavContentManagementSystem>>('get',`${this.basePath}/api/admin/WebdavSystemsController/getWebdavSystems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

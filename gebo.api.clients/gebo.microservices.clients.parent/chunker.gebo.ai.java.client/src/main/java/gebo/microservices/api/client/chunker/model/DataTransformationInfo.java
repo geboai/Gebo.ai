@@ -23,25 +23,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DataTransformationInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class DataTransformationInfo {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("transformationInfo")
   private DataTransformationMetaInfo transformationInfo = null;
 
   @JsonProperty("dataSourceId")
-  private Object dataSourceId = null;
+  private String dataSourceId = null;
 
   @JsonProperty("dataDestinationId")
-  private Object dataDestinationId = null;
+  private String dataDestinationId = null;
 
-  public DataTransformationInfo id(Object id) {
+  public DataTransformationInfo id(String id) {
     this.id = id;
     return this;
   }
@@ -51,15 +51,15 @@ public class DataTransformationInfo {
    * @return id
   **/
   @Schema(required = true, description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public DataTransformationInfo description(Object description) {
+  public DataTransformationInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -69,11 +69,11 @@ public class DataTransformationInfo {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
@@ -95,7 +95,7 @@ public class DataTransformationInfo {
     this.transformationInfo = transformationInfo;
   }
 
-  public DataTransformationInfo dataSourceId(Object dataSourceId) {
+  public DataTransformationInfo dataSourceId(String dataSourceId) {
     this.dataSourceId = dataSourceId;
     return this;
   }
@@ -105,15 +105,15 @@ public class DataTransformationInfo {
    * @return dataSourceId
   **/
   @Schema(required = true, description = "")
-  public Object getDataSourceId() {
+  public String getDataSourceId() {
     return dataSourceId;
   }
 
-  public void setDataSourceId(Object dataSourceId) {
+  public void setDataSourceId(String dataSourceId) {
     this.dataSourceId = dataSourceId;
   }
 
-  public DataTransformationInfo dataDestinationId(Object dataDestinationId) {
+  public DataTransformationInfo dataDestinationId(String dataDestinationId) {
     this.dataDestinationId = dataDestinationId;
     return this;
   }
@@ -123,11 +123,11 @@ public class DataTransformationInfo {
    * @return dataDestinationId
   **/
   @Schema(required = true, description = "")
-  public Object getDataDestinationId() {
+  public String getDataDestinationId() {
     return dataDestinationId;
   }
 
-  public void setDataDestinationId(Object dataDestinationId) {
+  public void setDataDestinationId(String dataDestinationId) {
     this.dataDestinationId = dataDestinationId;
   }
 

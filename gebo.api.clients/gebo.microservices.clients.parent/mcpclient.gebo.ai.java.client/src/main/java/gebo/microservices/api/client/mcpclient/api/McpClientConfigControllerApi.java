@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:50.381843566+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class McpClientConfigControllerApi {
     private ApiClient apiClient;
@@ -101,7 +101,7 @@ public class McpClientConfigControllerApi {
      * @return OperationStatusMCPClientConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusMCPClientConfig findMCPClientConfigByCode(Object code) throws RestClientException {
+    public OperationStatusMCPClientConfig findMCPClientConfigByCode(String code) throws RestClientException {
         return findMCPClientConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -113,7 +113,7 @@ public class McpClientConfigControllerApi {
      * @return ResponseEntity&lt;OperationStatusMCPClientConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusMCPClientConfig> findMCPClientConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<OperationStatusMCPClientConfig> findMCPClientConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

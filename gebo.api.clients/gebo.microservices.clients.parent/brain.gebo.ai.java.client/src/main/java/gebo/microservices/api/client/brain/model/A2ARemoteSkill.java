@@ -18,38 +18,40 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * A2ARemoteSkill
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class A2ARemoteSkill {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("tags")
-  private Object tags = null;
+  private List<String> tags = null;
 
   @JsonProperty("inputModes")
-  private Object inputModes = null;
+  private List<String> inputModes = null;
 
   @JsonProperty("outputModes")
-  private Object outputModes = null;
+  private List<String> outputModes = null;
 
   @JsonProperty("addedOnRemote")
-  private Object addedOnRemote = null;
+  private Boolean addedOnRemote = null;
 
   @JsonProperty("deletedOnRemote")
-  private Object deletedOnRemote = null;
+  private Boolean deletedOnRemote = null;
 
-  public A2ARemoteSkill id(Object id) {
+  public A2ARemoteSkill id(String id) {
     this.id = id;
     return this;
   }
@@ -59,15 +61,15 @@ public class A2ARemoteSkill {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public A2ARemoteSkill name(Object name) {
+  public A2ARemoteSkill name(String name) {
     this.name = name;
     return this;
   }
@@ -77,15 +79,15 @@ public class A2ARemoteSkill {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public A2ARemoteSkill description(Object description) {
+  public A2ARemoteSkill description(String description) {
     this.description = description;
     return this;
   }
@@ -95,16 +97,24 @@ public class A2ARemoteSkill {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public A2ARemoteSkill tags(Object tags) {
+  public A2ARemoteSkill tags(List<String> tags) {
     this.tags = tags;
+    return this;
+  }
+
+  public A2ARemoteSkill addTagsItem(String tagsItem) {
+    if (this.tags == null) {
+      this.tags = new ArrayList<>();
+    }
+    this.tags.add(tagsItem);
     return this;
   }
 
@@ -113,16 +123,24 @@ public class A2ARemoteSkill {
    * @return tags
   **/
   @Schema(description = "")
-  public Object getTags() {
+  public List<String> getTags() {
     return tags;
   }
 
-  public void setTags(Object tags) {
+  public void setTags(List<String> tags) {
     this.tags = tags;
   }
 
-  public A2ARemoteSkill inputModes(Object inputModes) {
+  public A2ARemoteSkill inputModes(List<String> inputModes) {
     this.inputModes = inputModes;
+    return this;
+  }
+
+  public A2ARemoteSkill addInputModesItem(String inputModesItem) {
+    if (this.inputModes == null) {
+      this.inputModes = new ArrayList<>();
+    }
+    this.inputModes.add(inputModesItem);
     return this;
   }
 
@@ -131,16 +149,24 @@ public class A2ARemoteSkill {
    * @return inputModes
   **/
   @Schema(description = "")
-  public Object getInputModes() {
+  public List<String> getInputModes() {
     return inputModes;
   }
 
-  public void setInputModes(Object inputModes) {
+  public void setInputModes(List<String> inputModes) {
     this.inputModes = inputModes;
   }
 
-  public A2ARemoteSkill outputModes(Object outputModes) {
+  public A2ARemoteSkill outputModes(List<String> outputModes) {
     this.outputModes = outputModes;
+    return this;
+  }
+
+  public A2ARemoteSkill addOutputModesItem(String outputModesItem) {
+    if (this.outputModes == null) {
+      this.outputModes = new ArrayList<>();
+    }
+    this.outputModes.add(outputModesItem);
     return this;
   }
 
@@ -149,15 +175,15 @@ public class A2ARemoteSkill {
    * @return outputModes
   **/
   @Schema(description = "")
-  public Object getOutputModes() {
+  public List<String> getOutputModes() {
     return outputModes;
   }
 
-  public void setOutputModes(Object outputModes) {
+  public void setOutputModes(List<String> outputModes) {
     this.outputModes = outputModes;
   }
 
-  public A2ARemoteSkill addedOnRemote(Object addedOnRemote) {
+  public A2ARemoteSkill addedOnRemote(Boolean addedOnRemote) {
     this.addedOnRemote = addedOnRemote;
     return this;
   }
@@ -167,15 +193,15 @@ public class A2ARemoteSkill {
    * @return addedOnRemote
   **/
   @Schema(description = "")
-  public Object getAddedOnRemote() {
+  public Boolean isAddedOnRemote() {
     return addedOnRemote;
   }
 
-  public void setAddedOnRemote(Object addedOnRemote) {
+  public void setAddedOnRemote(Boolean addedOnRemote) {
     this.addedOnRemote = addedOnRemote;
   }
 
-  public A2ARemoteSkill deletedOnRemote(Object deletedOnRemote) {
+  public A2ARemoteSkill deletedOnRemote(Boolean deletedOnRemote) {
     this.deletedOnRemote = deletedOnRemote;
     return this;
   }
@@ -185,11 +211,11 @@ public class A2ARemoteSkill {
    * @return deletedOnRemote
   **/
   @Schema(description = "")
-  public Object getDeletedOnRemote() {
+  public Boolean isDeletedOnRemote() {
     return deletedOnRemote;
   }
 
-  public void setDeletedOnRemote(Object deletedOnRemote) {
+  public void setDeletedOnRemote(Boolean deletedOnRemote) {
     this.deletedOnRemote = deletedOnRemote;
   }
 

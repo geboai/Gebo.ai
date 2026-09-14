@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.chunker.api;
 
+import java.io.File;
 import gebo.microservices.api.client.chunker.model.StreamDocumentRequest;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -40,7 +41,7 @@ public class DocumentsCacheServiceControllerApiTest {
     @Test
     public void streamDocumentTest() {
         StreamDocumentRequest body = null;
-        Object response = api.streamDocument(body);
+        File response = api.streamDocument(body);
 
         // TODO: test validations
     }

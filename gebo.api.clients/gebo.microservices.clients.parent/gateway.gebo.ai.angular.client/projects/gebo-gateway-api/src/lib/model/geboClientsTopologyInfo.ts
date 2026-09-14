@@ -9,8 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeboServiceWebContextInfo } from './geboServiceWebContextInfo';
 
 export interface GeboClientsTopologyInfo { 
-    architectureType: any;
-    services: any;
+    architectureType: GeboClientsTopologyInfo.ArchitectureTypeEnum;
+    services: Array<GeboServiceWebContextInfo>;
+}
+export namespace GeboClientsTopologyInfo {
+    export type ArchitectureTypeEnum = 'MONOLITHIC' | 'MICROSERVICES';
+    export const ArchitectureTypeEnum = {
+        MONOLITHIC: 'MONOLITHIC' as ArchitectureTypeEnum,
+        MICROSERVICES: 'MICROSERVICES' as ArchitectureTypeEnum
+    };
 }

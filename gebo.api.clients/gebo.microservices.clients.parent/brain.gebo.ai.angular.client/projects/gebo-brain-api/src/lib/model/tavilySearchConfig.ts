@@ -11,6 +11,6 @@
  */
 
 export interface TavilySearchConfig { 
-    apiKey?: any;
-    enabled?: any;
+    apiKey?: string;
+    enabled?: boolean;
 }

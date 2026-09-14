@@ -11,7 +11,7 @@
  */
 
 export interface LLMCredentialsVerificationData { 
-    vendorId: any;
-    secretId: any;
-    baseUrl?: any;
+    vendorId: string;
+    secretId: string;
+    baseUrl?: string;
 }

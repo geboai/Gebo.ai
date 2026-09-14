@@ -62,7 +62,7 @@ No authorization required
 
 <a name="getAgentConfigs"></a>
 # **getAgentConfigs**
-> Object getAgentConfigs()
+> List&lt;GBaseObject&gt; getAgentConfigs()
 
 
 
@@ -75,7 +75,7 @@ No authorization required
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
 try {
-    Object result = apiInstance.getAgentConfigs();
+    List<GBaseObject> result = apiInstance.getAgentConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getAgentConfigs");
@@ -88,7 +88,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -101,7 +101,7 @@ No authorization required
 
 <a name="getAgentConfigsByServiceId"></a>
 # **getAgentConfigsByServiceId**
-> Object getAgentConfigsByServiceId(serviceId)
+> List&lt;GAgentConfig&gt; getAgentConfigsByServiceId(serviceId)
 
 
 
@@ -113,9 +113,9 @@ No authorization required
 
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
-Object serviceId = null; // Object | 
+String serviceId = "serviceId_example"; // String | 
 try {
-    Object result = apiInstance.getAgentConfigsByServiceId(serviceId);
+    List<GAgentConfig> result = apiInstance.getAgentConfigsByServiceId(serviceId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getAgentConfigsByServiceId");
@@ -127,11 +127,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **serviceId** | [**Object**](.md)|  |
+ **serviceId** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GAgentConfig&gt;**](GAgentConfig.md)
 
 ### Authorization
 
@@ -144,7 +144,7 @@ No authorization required
 
 <a name="getAgentServices"></a>
 # **getAgentServices**
-> Object getAgentServices()
+> List&lt;AgentServiceDescriptor&gt; getAgentServices()
 
 
 
@@ -157,7 +157,7 @@ No authorization required
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
 try {
-    Object result = apiInstance.getAgentServices();
+    List<AgentServiceDescriptor> result = apiInstance.getAgentServices();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getAgentServices");
@@ -170,7 +170,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;AgentServiceDescriptor&gt;**](AgentServiceDescriptor.md)
 
 ### Authorization
 
@@ -183,7 +183,7 @@ No authorization required
 
 <a name="getAgentsNetwork"></a>
 # **getAgentsNetwork**
-> Object getAgentsNetwork()
+> List&lt;GBaseObject&gt; getAgentsNetwork()
 
 
 
@@ -196,7 +196,7 @@ No authorization required
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
 try {
-    Object result = apiInstance.getAgentsNetwork();
+    List<GBaseObject> result = apiInstance.getAgentsNetwork();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getAgentsNetwork");
@@ -209,7 +209,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -234,7 +234,7 @@ No authorization required
 
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GAgentsNetwork result = apiInstance.getAgentsNetworkByCode(code);
     System.out.println(result);
@@ -248,7 +248,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -265,7 +265,7 @@ No authorization required
 
 <a name="getCompatibleNextServices"></a>
 # **getCompatibleNextServices**
-> Object getCompatibleNextServices(serviceId)
+> List&lt;AgentServiceDescriptor&gt; getCompatibleNextServices(serviceId)
 
 
 
@@ -277,9 +277,9 @@ No authorization required
 
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
-Object serviceId = null; // Object | 
+String serviceId = "serviceId_example"; // String | 
 try {
-    Object result = apiInstance.getCompatibleNextServices(serviceId);
+    List<AgentServiceDescriptor> result = apiInstance.getCompatibleNextServices(serviceId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getCompatibleNextServices");
@@ -291,11 +291,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **serviceId** | [**Object**](.md)|  |
+ **serviceId** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;AgentServiceDescriptor&gt;**](AgentServiceDescriptor.md)
 
 ### Authorization
 
@@ -308,7 +308,7 @@ No authorization required
 
 <a name="getCompatiblePreviousServices"></a>
 # **getCompatiblePreviousServices**
-> Object getCompatiblePreviousServices(serviceId)
+> List&lt;AgentServiceDescriptor&gt; getCompatiblePreviousServices(serviceId)
 
 
 
@@ -320,9 +320,9 @@ No authorization required
 
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
-Object serviceId = null; // Object | 
+String serviceId = "serviceId_example"; // String | 
 try {
-    Object result = apiInstance.getCompatiblePreviousServices(serviceId);
+    List<AgentServiceDescriptor> result = apiInstance.getCompatiblePreviousServices(serviceId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getCompatiblePreviousServices");
@@ -334,11 +334,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **serviceId** | [**Object**](.md)|  |
+ **serviceId** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;AgentServiceDescriptor&gt;**](AgentServiceDescriptor.md)
 
 ### Authorization
 
@@ -351,7 +351,7 @@ No authorization required
 
 <a name="getNetworkAdapterServices"></a>
 # **getNetworkAdapterServices**
-> Object getNetworkAdapterServices()
+> List&lt;AgentServiceDescriptor&gt; getNetworkAdapterServices()
 
 
 
@@ -364,7 +364,7 @@ No authorization required
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
 try {
-    Object result = apiInstance.getNetworkAdapterServices();
+    List<AgentServiceDescriptor> result = apiInstance.getNetworkAdapterServices();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getNetworkAdapterServices");
@@ -377,7 +377,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;AgentServiceDescriptor&gt;**](AgentServiceDescriptor.md)
 
 ### Authorization
 

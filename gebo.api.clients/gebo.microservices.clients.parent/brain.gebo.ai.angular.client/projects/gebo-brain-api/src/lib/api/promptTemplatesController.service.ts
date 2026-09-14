@@ -64,10 +64,10 @@ export class PromptTemplatesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDefaultPrompt(ragPrompt: any, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
-    public getDefaultPrompt(ragPrompt: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
-    public getDefaultPrompt(ragPrompt: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
-    public getDefaultPrompt(ragPrompt: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDefaultPrompt(ragPrompt: boolean, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public getDefaultPrompt(ragPrompt: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public getDefaultPrompt(ragPrompt: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
+    public getDefaultPrompt(ragPrompt: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (ragPrompt === null || ragPrompt === undefined) {
             throw new Error('Required parameter ragPrompt was null or undefined when calling getDefaultPrompt.');
@@ -75,7 +75,7 @@ export class PromptTemplatesControllerService {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (ragPrompt !== undefined && ragPrompt !== null) {
-            queryParameters = queryParameters.set('ragPrompt', JSON.stringify(ragPrompt));
+            queryParameters = queryParameters.set('ragPrompt', <any>ragPrompt);
         }
 
         let headers = this.defaultHeaders;

@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteJobStatus**](LogViewControllerApi.md#deleteJobStatus) | **POST** /api/admin/LogViewController/deleteJobStatus | 
 [**getJobMessagesPaged**](LogViewControllerApi.md#getJobMessagesPaged) | **POST** /api/admin/LogViewController/getJobMessagesPaged | 
+[**getJobsEntries**](LogViewControllerApi.md#getJobsEntries) | **POST** /api/admin/LogViewController/getJobsEntries | 
 [**getJobsEntriesForClassName**](LogViewControllerApi.md#getJobsEntriesForClassName) | **POST** /api/admin/LogViewController/getJobsEntriesForClassName | 
 [**getJobsEntriesForJobType**](LogViewControllerApi.md#getJobsEntriesForJobType) | **POST** /api/admin/LogViewController/getJobsEntriesForJobType | 
 [**getJobsEntriesForProjectEndpoint**](LogViewControllerApi.md#getJobsEntriesForProjectEndpoint) | **POST** /api/admin/LogViewController/getJobsEntriesForProjectEndpoint | 
@@ -85,6 +86,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PagedModelGUserMessage**](PagedModelGUserMessage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getJobsEntries"></a>
+# **getJobsEntries**
+> PagedModelGJobStatusItem getJobsEntries(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.LogViewControllerApi;
+
+
+LogViewControllerApi apiInstance = new LogViewControllerApi();
+JobsEntriesFilter body = new JobsEntriesFilter(); // JobsEntriesFilter | 
+try {
+    PagedModelGJobStatusItem result = apiInstance.getJobsEntries(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling LogViewControllerApi#getJobsEntries");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**JobsEntriesFilter**](JobsEntriesFilter.md)|  |
+
+### Return type
+
+[**PagedModelGJobStatusItem**](PagedModelGJobStatusItem.md)
 
 ### Authorization
 

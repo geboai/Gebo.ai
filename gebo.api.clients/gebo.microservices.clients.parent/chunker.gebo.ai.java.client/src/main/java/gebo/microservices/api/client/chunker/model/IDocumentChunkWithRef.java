@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * IDocumentChunkWithRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class IDocumentChunkWithRef {
   @JsonProperty("errorMessage")
@@ -38,7 +38,7 @@ public class IDocumentChunkWithRef {
   private IGComponentOriginatedDocument documentRef = null;
 
   @JsonProperty("errorState")
-  private Object errorState = null;
+  private Boolean errorState = null;
 
   public IDocumentChunkWithRef errorMessage(GUserMessage errorMessage) {
     this.errorMessage = errorMessage;
@@ -94,7 +94,7 @@ public class IDocumentChunkWithRef {
     this.documentRef = documentRef;
   }
 
-  public IDocumentChunkWithRef errorState(Object errorState) {
+  public IDocumentChunkWithRef errorState(Boolean errorState) {
     this.errorState = errorState;
     return this;
   }
@@ -104,11 +104,11 @@ public class IDocumentChunkWithRef {
    * @return errorState
   **/
   @Schema(description = "")
-  public Object getErrorState() {
+  public Boolean isErrorState() {
     return errorState;
   }
 
-  public void setErrorState(Object errorState) {
+  public void setErrorState(Boolean errorState) {
     this.errorState = errorState;
   }
 

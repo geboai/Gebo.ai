@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class BedrockTranscriptModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -99,7 +99,7 @@ public class BedrockTranscriptModelsConfigurationControllerApi {
      * @return GBedrockTranscriptModelConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GBedrockTranscriptModelConfig findBedrockTranscriptModelConfigByCode(Object code) throws RestClientException {
+    public GBedrockTranscriptModelConfig findBedrockTranscriptModelConfigByCode(String code) throws RestClientException {
         return findBedrockTranscriptModelConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -111,7 +111,7 @@ public class BedrockTranscriptModelsConfigurationControllerApi {
      * @return ResponseEntity&lt;GBedrockTranscriptModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GBedrockTranscriptModelConfig> findBedrockTranscriptModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GBedrockTranscriptModelConfig> findBedrockTranscriptModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

@@ -27,6 +27,7 @@ export interface GProject {
     objectSpaceType?: GProject.ObjectSpaceTypeEnum;
     aclAliases?: Array<number>;
     parentProjectCode?: string;
+    readonly?: boolean;
 }
 export namespace GProject {
     export type ObjectSpaceTypeEnum = 'COMPANY' | 'USERSPACE';

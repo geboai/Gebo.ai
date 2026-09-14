@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ContentMetaInfo } from '../model/contentMetaInfo';
 import { ContentObject } from '../model/contentObject';
+import { DocumentReferenceView } from '../model/documentReferenceView';
 import { PageDocumentReferenceView } from '../model/pageDocumentReferenceView';
 import { SearchDocumentByNamePagedParam } from '../model/searchDocumentByNamePagedParam';
 import { SearchDocumentByNameParam } from '../model/searchDocumentByNameParam';
@@ -66,10 +67,10 @@ export class ContentMetaInfosControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findDocumentReferenceViewByCode(body: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findDocumentReferenceViewByCode(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findDocumentReferenceViewByCode(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findDocumentReferenceViewByCode(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findDocumentReferenceViewByCode(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<DocumentReferenceView>>;
+    public findDocumentReferenceViewByCode(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DocumentReferenceView>>>;
+    public findDocumentReferenceViewByCode(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DocumentReferenceView>>>;
+    public findDocumentReferenceViewByCode(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling findDocumentReferenceViewByCode.');
@@ -95,7 +96,7 @@ export class ContentMetaInfosControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/ContentMetaInfosController/findDocumentReferenceViewByCode`,
+        return this.httpClient.request<Array<DocumentReferenceView>>('post',`${this.basePath}/api/users/ContentMetaInfosController/findDocumentReferenceViewByCode`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -113,10 +114,10 @@ export class ContentMetaInfosControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContentMetaInfos(code: any, observe?: 'body', reportProgress?: boolean): Observable<ContentMetaInfo>;
-    public getContentMetaInfos(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ContentMetaInfo>>;
-    public getContentMetaInfos(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ContentMetaInfo>>;
-    public getContentMetaInfos(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getContentMetaInfos(code: string, observe?: 'body', reportProgress?: boolean): Observable<ContentMetaInfo>;
+    public getContentMetaInfos(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ContentMetaInfo>>;
+    public getContentMetaInfos(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ContentMetaInfo>>;
+    public getContentMetaInfos(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling getContentMetaInfos.');
@@ -160,10 +161,10 @@ export class ContentMetaInfosControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContentObject(code: any, observe?: 'body', reportProgress?: boolean): Observable<ContentObject>;
-    public getContentObject(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ContentObject>>;
-    public getContentObject(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ContentObject>>;
-    public getContentObject(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getContentObject(code: string, observe?: 'body', reportProgress?: boolean): Observable<ContentObject>;
+    public getContentObject(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ContentObject>>;
+    public getContentObject(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ContentObject>>;
+    public getContentObject(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling getContentObject.');
@@ -207,9 +208,9 @@ export class ContentMetaInfosControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchByDocumentName(body: SearchDocumentByNameParam, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public searchByDocumentName(body: SearchDocumentByNameParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public searchByDocumentName(body: SearchDocumentByNameParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public searchByDocumentName(body: SearchDocumentByNameParam, observe?: 'body', reportProgress?: boolean): Observable<Array<DocumentReferenceView>>;
+    public searchByDocumentName(body: SearchDocumentByNameParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DocumentReferenceView>>>;
+    public searchByDocumentName(body: SearchDocumentByNameParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DocumentReferenceView>>>;
     public searchByDocumentName(body: SearchDocumentByNameParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -236,7 +237,7 @@ export class ContentMetaInfosControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/ContentMetaInfosController/searchByDocumentName`,
+        return this.httpClient.request<Array<DocumentReferenceView>>('post',`${this.basePath}/api/users/ContentMetaInfosController/searchByDocumentName`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

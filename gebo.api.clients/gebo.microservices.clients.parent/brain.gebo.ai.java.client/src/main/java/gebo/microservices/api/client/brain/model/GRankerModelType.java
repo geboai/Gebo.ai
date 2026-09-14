@@ -18,35 +18,36 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GRankerModelType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GRankerModelType {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("modelConfigurationClass")
-  private Object modelConfigurationClass = null;
+  private String modelConfigurationClass = null;
 
-  public GRankerModelType code(Object code) {
+  public GRankerModelType code(String code) {
     this.code = code;
     return this;
   }
@@ -56,15 +57,15 @@ public class GRankerModelType {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GRankerModelType description(Object description) {
+  public GRankerModelType description(String description) {
     this.description = description;
     return this;
   }
@@ -74,15 +75,15 @@ public class GRankerModelType {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GRankerModelType userModified(Object userModified) {
+  public GRankerModelType userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -92,15 +93,15 @@ public class GRankerModelType {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GRankerModelType userCreated(Object userCreated) {
+  public GRankerModelType userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -110,15 +111,15 @@ public class GRankerModelType {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GRankerModelType dateModified(Object dateModified) {
+  public GRankerModelType dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -128,15 +129,15 @@ public class GRankerModelType {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GRankerModelType dateCreated(Object dateCreated) {
+  public GRankerModelType dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -146,15 +147,15 @@ public class GRankerModelType {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GRankerModelType modelConfigurationClass(Object modelConfigurationClass) {
+  public GRankerModelType modelConfigurationClass(String modelConfigurationClass) {
     this.modelConfigurationClass = modelConfigurationClass;
     return this;
   }
@@ -164,11 +165,11 @@ public class GRankerModelType {
    * @return modelConfigurationClass
   **/
   @Schema(description = "")
-  public Object getModelConfigurationClass() {
+  public String getModelConfigurationClass() {
     return modelConfigurationClass;
   }
 
-  public void setModelConfigurationClass(Object modelConfigurationClass) {
+  public void setModelConfigurationClass(String modelConfigurationClass) {
     this.modelConfigurationClass = modelConfigurationClass;
   }
 

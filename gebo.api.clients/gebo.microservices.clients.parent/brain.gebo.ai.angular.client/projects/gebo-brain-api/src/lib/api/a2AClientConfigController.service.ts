@@ -112,10 +112,10 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findByCode2(code: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
-    public findByCode2(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
-    public findByCode2(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
-    public findByCode2(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findByCode2(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2ARemoteAgentConfig>;
+    public findByCode2(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2ARemoteAgentConfig>>;
+    public findByCode2(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2ARemoteAgentConfig>>;
+    public findByCode2(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findByCode2.');
@@ -207,10 +207,10 @@ export class A2AClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public list(page?: any, size?: any, observe?: 'body', reportProgress?: boolean): Observable<PageA2ARemoteAgentConfig>;
-    public list(page?: any, size?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageA2ARemoteAgentConfig>>;
-    public list(page?: any, size?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageA2ARemoteAgentConfig>>;
-    public list(page?: any, size?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public list(page?: number, size?: number, observe?: 'body', reportProgress?: boolean): Observable<PageA2ARemoteAgentConfig>;
+    public list(page?: number, size?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageA2ARemoteAgentConfig>>;
+    public list(page?: number, size?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageA2ARemoteAgentConfig>>;
+    public list(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 

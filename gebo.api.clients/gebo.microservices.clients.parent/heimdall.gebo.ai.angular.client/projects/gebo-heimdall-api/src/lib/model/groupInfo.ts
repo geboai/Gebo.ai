@@ -11,6 +11,6 @@
  */
 
 export interface GroupInfo { 
-    code: any;
-    description: any;
+    code: string;
+    description: string;
 }

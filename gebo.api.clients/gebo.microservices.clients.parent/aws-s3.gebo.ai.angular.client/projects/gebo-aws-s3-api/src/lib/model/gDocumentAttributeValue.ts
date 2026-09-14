@@ -11,6 +11,6 @@
  */
 
 export interface GDocumentAttributeValue { 
-    attributeCode?: any;
+    attributeCode?: string;
     attributeValue?: any;
 }

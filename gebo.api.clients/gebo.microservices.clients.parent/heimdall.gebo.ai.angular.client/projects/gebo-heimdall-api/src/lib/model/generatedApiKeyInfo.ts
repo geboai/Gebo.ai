@@ -11,12 +11,12 @@
  */
 
 export interface GeneratedApiKeyInfo { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    expiration: any;
-    impersonatedUser: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    expiration: Date;
+    impersonatedUser: string;
 }

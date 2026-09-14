@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboAdminChatProfilesConfigurationControllerApi {
     private ApiClient apiClient;
@@ -96,7 +96,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
      * @return GChatProfileConfiguration
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GChatProfileConfiguration findChatProfileConfigurationByCode(Object code) throws RestClientException {
+    public GChatProfileConfiguration findChatProfileConfigurationByCode(String code) throws RestClientException {
         return findChatProfileConfigurationByCodeWithHttpInfo(code).getBody();
     }
 
@@ -108,7 +108,7 @@ public class GeboAdminChatProfilesConfigurationControllerApi {
      * @return ResponseEntity&lt;GChatProfileConfiguration&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GChatProfileConfiguration> findChatProfileConfigurationByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GChatProfileConfiguration> findChatProfileConfigurationByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

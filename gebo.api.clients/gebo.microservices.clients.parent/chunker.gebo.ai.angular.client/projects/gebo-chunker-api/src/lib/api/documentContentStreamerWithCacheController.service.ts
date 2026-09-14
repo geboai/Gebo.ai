@@ -63,9 +63,9 @@ export class DocumentContentStreamerWithCacheControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamDocumentReference(body: GDocumentReferenceStreamRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public streamDocumentReference(body: GDocumentReferenceStreamRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public streamDocumentReference(body: GDocumentReferenceStreamRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public streamDocumentReference(body: GDocumentReferenceStreamRequest, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public streamDocumentReference(body: GDocumentReferenceStreamRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public streamDocumentReference(body: GDocumentReferenceStreamRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
     public streamDocumentReference(body: GDocumentReferenceStreamRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -92,9 +92,10 @@ export class DocumentContentStreamerWithCacheControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/DocumentContentStreamerWithCacheController/streamDocumentReference`,
+        return this.httpClient.request('post',`${this.basePath}/api/DocumentContentStreamerWithCacheController/streamDocumentReference`,
             {
                 body: body,
+                responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -110,9 +111,9 @@ export class DocumentContentStreamerWithCacheControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamSearchResult(body: SearchResultStreamRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public streamSearchResult(body: SearchResultStreamRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public streamSearchResult(body: SearchResultStreamRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public streamSearchResult(body: SearchResultStreamRequest, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public streamSearchResult(body: SearchResultStreamRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public streamSearchResult(body: SearchResultStreamRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
     public streamSearchResult(body: SearchResultStreamRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -139,9 +140,10 @@ export class DocumentContentStreamerWithCacheControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/DocumentContentStreamerWithCacheController/streamSearchResult`,
+        return this.httpClient.request('post',`${this.basePath}/api/DocumentContentStreamerWithCacheController/streamSearchResult`,
             {
                 body: body,
+                responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

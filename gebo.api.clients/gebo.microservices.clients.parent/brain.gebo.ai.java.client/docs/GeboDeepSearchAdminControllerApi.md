@@ -57,7 +57,7 @@ No authorization required
 
 <a name="getConfigurableDataSources"></a>
 # **getConfigurableDataSources**
-> Object getConfigurableDataSources()
+> List&lt;GBaseObject&gt; getConfigurableDataSources()
 
 
 
@@ -70,7 +70,7 @@ No authorization required
 
 GeboDeepSearchAdminControllerApi apiInstance = new GeboDeepSearchAdminControllerApi();
 try {
-    Object result = apiInstance.getConfigurableDataSources();
+    List<GBaseObject> result = apiInstance.getConfigurableDataSources();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboDeepSearchAdminControllerApi#getConfigurableDataSources");
@@ -83,7 +83,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -96,7 +96,7 @@ No authorization required
 
 <a name="getDeepSeachConfigs"></a>
 # **getDeepSeachConfigs**
-> Object getDeepSeachConfigs()
+> List&lt;DeepSearchConfig&gt; getDeepSeachConfigs()
 
 
 
@@ -109,7 +109,7 @@ No authorization required
 
 GeboDeepSearchAdminControllerApi apiInstance = new GeboDeepSearchAdminControllerApi();
 try {
-    Object result = apiInstance.getDeepSeachConfigs();
+    List<DeepSearchConfig> result = apiInstance.getDeepSeachConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboDeepSearchAdminControllerApi#getDeepSeachConfigs");
@@ -122,7 +122,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;DeepSearchConfig&gt;**](DeepSearchConfig.md)
 
 ### Authorization
 

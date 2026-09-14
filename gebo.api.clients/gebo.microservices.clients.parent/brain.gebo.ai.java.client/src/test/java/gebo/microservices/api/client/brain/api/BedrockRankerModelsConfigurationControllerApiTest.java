@@ -57,7 +57,7 @@ public class BedrockRankerModelsConfigurationControllerApiTest {
      */
     @Test
     public void findBedrockRankerModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GBedrockRankerModelConfig response = api.findBedrockRankerModelConfigByCode(code);
 
         // TODO: test validations

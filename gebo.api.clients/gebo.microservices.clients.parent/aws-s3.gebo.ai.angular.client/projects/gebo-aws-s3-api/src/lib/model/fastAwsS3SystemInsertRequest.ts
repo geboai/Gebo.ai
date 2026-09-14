@@ -12,7 +12,7 @@
 import { GeboAwsConnectionCredentials } from './geboAwsConnectionCredentials';
 
 export interface FastAwsS3SystemInsertRequest { 
-    description: any;
-    awsEndpoint?: any;
+    description: string;
+    awsEndpoint?: string;
     awsConnectionCredentials: GeboAwsConnectionCredentials;
 }

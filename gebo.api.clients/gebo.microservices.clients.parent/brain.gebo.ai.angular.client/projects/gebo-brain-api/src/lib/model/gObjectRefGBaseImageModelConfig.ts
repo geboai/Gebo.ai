@@ -11,7 +11,7 @@
  */
 
 export interface GObjectRefGBaseImageModelConfig { 
-    className?: any;
-    code?: any;
-    description?: any;
+    className?: string;
+    code?: string;
+    description?: string;
 }

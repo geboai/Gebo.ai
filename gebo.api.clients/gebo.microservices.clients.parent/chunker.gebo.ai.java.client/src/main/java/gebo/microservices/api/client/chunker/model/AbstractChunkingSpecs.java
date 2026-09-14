@@ -22,13 +22,44 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AbstractChunkingSpecs
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class AbstractChunkingSpecs {
-  @JsonProperty("chunkType")
-  private Object chunkType = null;
+  /**
+   * Gets or Sets chunkType
+   */
+  public enum ChunkTypeEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE");
 
-  public AbstractChunkingSpecs chunkType(Object chunkType) {
+    private String value;
+
+    ChunkTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ChunkTypeEnum fromValue(String input) {
+      for (ChunkTypeEnum b : ChunkTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("chunkType")
+  private ChunkTypeEnum chunkType = null;
+
+  public AbstractChunkingSpecs chunkType(ChunkTypeEnum chunkType) {
     this.chunkType = chunkType;
     return this;
   }
@@ -38,11 +69,11 @@ public class AbstractChunkingSpecs {
    * @return chunkType
   **/
   @Schema(description = "")
-  public Object getChunkType() {
+  public ChunkTypeEnum getChunkType() {
     return chunkType;
   }
 
-  public void setChunkType(Object chunkType) {
+  public void setChunkType(ChunkTypeEnum chunkType) {
     this.chunkType = chunkType;
   }
 

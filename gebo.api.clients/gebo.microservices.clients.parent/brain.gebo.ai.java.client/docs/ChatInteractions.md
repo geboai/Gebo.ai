@@ -4,7 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **request** | [**GeboChatRequest**](GeboChatRequest.md) |  |  [optional]
-**requestNTokens** | **Object** |  |  [optional]
+**requestNTokens** | **Integer** |  |  [optional]
 **response** | [**GeboTemplatedChatResponse**](GeboTemplatedChatResponse.md) |  |  [optional]
-**responseNTokens** | **Object** |  |  [optional]
-**tokensSize** | **Object** |  |  [optional]
+**responseNTokens** | **Integer** |  |  [optional]
+**tokensSize** | **Integer** |  |  [optional]

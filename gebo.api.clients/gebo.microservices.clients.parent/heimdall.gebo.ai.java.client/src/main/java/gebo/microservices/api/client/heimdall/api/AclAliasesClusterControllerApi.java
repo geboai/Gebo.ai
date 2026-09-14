@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class AclAliasesClusterControllerApi {
     private ApiClient apiClient;
@@ -47,10 +47,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return Integer
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object addAcl(GAclEntry body) throws RestClientException {
+    public Integer addAcl(GAclEntry body) throws RestClientException {
         return addAclWithHttpInfo(body).getBody();
     }
 
@@ -59,10 +59,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Integer&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> addAclWithHttpInfo(GAclEntry body) throws RestClientException {
+    public ResponseEntity<Integer> addAclWithHttpInfo(GAclEntry body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -85,7 +85,7 @@ public class AclAliasesClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<Integer> returnType = new ParameterizedTypeReference<Integer>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -96,7 +96,7 @@ public class AclAliasesClusterControllerApi {
      * @return GAclEntry
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GAclEntry findAcl(Object alias) throws RestClientException {
+    public GAclEntry findAcl(Integer alias) throws RestClientException {
         return findAclWithHttpInfo(alias).getBody();
     }
 
@@ -108,7 +108,7 @@ public class AclAliasesClusterControllerApi {
      * @return ResponseEntity&lt;GAclEntry&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GAclEntry> findAclWithHttpInfo(Object alias) throws RestClientException {
+    public ResponseEntity<GAclEntry> findAclWithHttpInfo(Integer alias) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'alias' is set
         if (alias == null) {
@@ -138,10 +138,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return Integer
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAlias(GAclEntry body) throws RestClientException {
+    public Integer findAlias(GAclEntry body) throws RestClientException {
         return findAliasWithHttpInfo(body).getBody();
     }
 
@@ -150,10 +150,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;Integer&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAliasWithHttpInfo(GAclEntry body) throws RestClientException {
+    public ResponseEntity<Integer> findAliasWithHttpInfo(GAclEntry body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -176,7 +176,7 @@ public class AclAliasesClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<Integer> returnType = new ParameterizedTypeReference<Integer>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -184,10 +184,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param uniqueId  (required)
-     * @return Object
+     * @return List&lt;Integer&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAliasesByAclGrantedUniqueId(Object uniqueId) throws RestClientException {
+    public List<Integer> findAliasesByAclGrantedUniqueId(String uniqueId) throws RestClientException {
         return findAliasesByAclGrantedUniqueIdWithHttpInfo(uniqueId).getBody();
     }
 
@@ -196,10 +196,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param uniqueId  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;Integer&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAliasesByAclGrantedUniqueIdWithHttpInfo(Object uniqueId) throws RestClientException {
+    public ResponseEntity<List<Integer>> findAliasesByAclGrantedUniqueIdWithHttpInfo(String uniqueId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'uniqueId' is set
         if (uniqueId == null) {
@@ -221,7 +221,7 @@ public class AclAliasesClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<Integer>> returnType = new ParameterizedTypeReference<List<Integer>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -230,10 +230,10 @@ public class AclAliasesClusterControllerApi {
      * <p><b>200</b> - OK
      * @param uniqueId  (required)
      * @param grantType  (required)
-     * @return Object
+     * @return List&lt;Integer&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAliasesByAclGrantedUniqueIdAndAclGrantType(Object uniqueId, Object grantType) throws RestClientException {
+    public List<Integer> findAliasesByAclGrantedUniqueIdAndAclGrantType(String uniqueId, String grantType) throws RestClientException {
         return findAliasesByAclGrantedUniqueIdAndAclGrantTypeWithHttpInfo(uniqueId, grantType).getBody();
     }
 
@@ -243,10 +243,10 @@ public class AclAliasesClusterControllerApi {
      * <p><b>200</b> - OK
      * @param uniqueId  (required)
      * @param grantType  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;Integer&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAliasesByAclGrantedUniqueIdAndAclGrantTypeWithHttpInfo(Object uniqueId, Object grantType) throws RestClientException {
+    public ResponseEntity<List<Integer>> findAliasesByAclGrantedUniqueIdAndAclGrantTypeWithHttpInfo(String uniqueId, String grantType) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'uniqueId' is set
         if (uniqueId == null) {
@@ -273,7 +273,7 @@ public class AclAliasesClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<Integer>> returnType = new ParameterizedTypeReference<List<Integer>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -281,10 +281,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;Integer&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAliasesByAclGrantedUniqueIdIn(Object body) throws RestClientException {
+    public List<Integer> findAliasesByAclGrantedUniqueIdIn(List<String> body) throws RestClientException {
         return findAliasesByAclGrantedUniqueIdInWithHttpInfo(body).getBody();
     }
 
@@ -293,10 +293,10 @@ public class AclAliasesClusterControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;Integer&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAliasesByAclGrantedUniqueIdInWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<List<Integer>> findAliasesByAclGrantedUniqueIdInWithHttpInfo(List<String> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -319,7 +319,7 @@ public class AclAliasesClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<Integer>> returnType = new ParameterizedTypeReference<List<Integer>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -328,10 +328,10 @@ public class AclAliasesClusterControllerApi {
      * <p><b>200</b> - OK
      * @param body  (required)
      * @param grantType  (required)
-     * @return Object
+     * @return List&lt;Integer&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAliasesByAclGrantedUniqueIdInAndAclGrantType(Object body, Object grantType) throws RestClientException {
+    public List<Integer> findAliasesByAclGrantedUniqueIdInAndAclGrantType(List<String> body, String grantType) throws RestClientException {
         return findAliasesByAclGrantedUniqueIdInAndAclGrantTypeWithHttpInfo(body, grantType).getBody();
     }
 
@@ -341,10 +341,10 @@ public class AclAliasesClusterControllerApi {
      * <p><b>200</b> - OK
      * @param body  (required)
      * @param grantType  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;Integer&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAliasesByAclGrantedUniqueIdInAndAclGrantTypeWithHttpInfo(Object body, Object grantType) throws RestClientException {
+    public ResponseEntity<List<Integer>> findAliasesByAclGrantedUniqueIdInAndAclGrantTypeWithHttpInfo(List<String> body, String grantType) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -372,7 +372,7 @@ public class AclAliasesClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<Integer>> returnType = new ParameterizedTypeReference<List<Integer>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -382,7 +382,7 @@ public class AclAliasesClusterControllerApi {
      * @param alias  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void removeAcl(Object alias) throws RestClientException {
+    public void removeAcl(Integer alias) throws RestClientException {
         removeAclWithHttpInfo(alias);
     }
 
@@ -394,7 +394,7 @@ public class AclAliasesClusterControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> removeAclWithHttpInfo(Object alias) throws RestClientException {
+    public ResponseEntity<Void> removeAclWithHttpInfo(Integer alias) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'alias' is set
         if (alias == null) {

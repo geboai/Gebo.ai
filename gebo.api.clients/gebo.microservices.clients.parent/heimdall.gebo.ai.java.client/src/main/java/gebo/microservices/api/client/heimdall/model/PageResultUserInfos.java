@@ -17,28 +17,39 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.heimdall.model.UserInfos;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * PageResultUserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class PageResultUserInfos {
   @JsonProperty("content")
-  private Object content = null;
+  private List<UserInfos> content = null;
 
   @JsonProperty("totalElements")
-  private Object totalElements = null;
+  private Long totalElements = null;
 
   @JsonProperty("number")
-  private Object number = null;
+  private Integer number = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Integer size = null;
 
-  public PageResultUserInfos content(Object content) {
+  public PageResultUserInfos content(List<UserInfos> content) {
     this.content = content;
+    return this;
+  }
+
+  public PageResultUserInfos addContentItem(UserInfos contentItem) {
+    if (this.content == null) {
+      this.content = new ArrayList<>();
+    }
+    this.content.add(contentItem);
     return this;
   }
 
@@ -47,15 +58,15 @@ public class PageResultUserInfos {
    * @return content
   **/
   @Schema(description = "")
-  public Object getContent() {
+  public List<UserInfos> getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(List<UserInfos> content) {
     this.content = content;
   }
 
-  public PageResultUserInfos totalElements(Object totalElements) {
+  public PageResultUserInfos totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
   }
@@ -65,15 +76,15 @@ public class PageResultUserInfos {
    * @return totalElements
   **/
   @Schema(description = "")
-  public Object getTotalElements() {
+  public Long getTotalElements() {
     return totalElements;
   }
 
-  public void setTotalElements(Object totalElements) {
+  public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
   }
 
-  public PageResultUserInfos number(Object number) {
+  public PageResultUserInfos number(Integer number) {
     this.number = number;
     return this;
   }
@@ -83,15 +94,15 @@ public class PageResultUserInfos {
    * @return number
   **/
   @Schema(description = "")
-  public Object getNumber() {
+  public Integer getNumber() {
     return number;
   }
 
-  public void setNumber(Object number) {
+  public void setNumber(Integer number) {
     this.number = number;
   }
 
-  public PageResultUserInfos size(Object size) {
+  public PageResultUserInfos size(Integer size) {
     this.size = size;
     return this;
   }
@@ -101,11 +112,11 @@ public class PageResultUserInfos {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Integer getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Integer size) {
     this.size = size;
   }
 

@@ -11,8 +11,8 @@
  */
 
 export interface UserWorkFlowChangePasswordResponse { 
-    ok?: any;
-    invalidAccountState?: any;
-    invalidToken?: any;
-    timeoutReached?: any;
+    ok?: boolean;
+    invalidAccountState?: boolean;
+    invalidToken?: boolean;
+    timeoutReached?: boolean;
 }

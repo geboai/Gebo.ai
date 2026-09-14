@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **Object** |  | 
+**description** | **String** |  | 
 **googleJsonCredentials** | [**GeboGoogleJsonSecretContent**](GeboGoogleJsonSecretContent.md) |  | 

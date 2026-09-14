@@ -18,25 +18,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.uploads.model.GUploadsProjectEndpoint;
+import gebo.microservices.api.client.uploads.model.GUserMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * OperationStatusGUploadsProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:05.518323320+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class OperationStatusGUploadsProjectEndpoint {
   @JsonProperty("result")
   private GUploadsProjectEndpoint result = null;
 
   @JsonProperty("messages")
-  private Object messages = null;
+  private List<GUserMessage> messages = null;
 
   @JsonProperty("hasErrorMessages")
-  private Object hasErrorMessages = null;
+  private Boolean hasErrorMessages = null;
 
   @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGUploadsProjectEndpoint result(GUploadsProjectEndpoint result) {
     this.result = result;
@@ -56,8 +59,16 @@ public class OperationStatusGUploadsProjectEndpoint {
     this.result = result;
   }
 
-  public OperationStatusGUploadsProjectEndpoint messages(Object messages) {
+  public OperationStatusGUploadsProjectEndpoint messages(List<GUserMessage> messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public OperationStatusGUploadsProjectEndpoint addMessagesItem(GUserMessage messagesItem) {
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(messagesItem);
     return this;
   }
 
@@ -66,15 +77,15 @@ public class OperationStatusGUploadsProjectEndpoint {
    * @return messages
   **/
   @Schema(description = "")
-  public Object getMessages() {
+  public List<GUserMessage> getMessages() {
     return messages;
   }
 
-  public void setMessages(Object messages) {
+  public void setMessages(List<GUserMessage> messages) {
     this.messages = messages;
   }
 
-  public OperationStatusGUploadsProjectEndpoint hasErrorMessages(Object hasErrorMessages) {
+  public OperationStatusGUploadsProjectEndpoint hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
   }
@@ -84,15 +95,15 @@ public class OperationStatusGUploadsProjectEndpoint {
    * @return hasErrorMessages
   **/
   @Schema(description = "")
-  public Object getHasErrorMessages() {
+  public Boolean isHasErrorMessages() {
     return hasErrorMessages;
   }
 
-  public void setHasErrorMessages(Object hasErrorMessages) {
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
   }
 
-  public OperationStatusGUploadsProjectEndpoint hasWarnMessages(Object hasWarnMessages) {
+  public OperationStatusGUploadsProjectEndpoint hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -102,11 +113,11 @@ public class OperationStatusGUploadsProjectEndpoint {
    * @return hasWarnMessages
   **/
   @Schema(description = "")
-  public Object getHasWarnMessages() {
+  public Boolean isHasWarnMessages() {
     return hasWarnMessages;
   }
 
-  public void setHasWarnMessages(Object hasWarnMessages) {
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
   }
 

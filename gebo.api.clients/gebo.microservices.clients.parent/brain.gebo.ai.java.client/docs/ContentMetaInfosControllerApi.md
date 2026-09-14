@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 <a name="findDocumentReferenceViewByCode"></a>
 # **findDocumentReferenceViewByCode**
-> Object findDocumentReferenceViewByCode(body)
+> List&lt;DocumentReferenceView&gt; findDocumentReferenceViewByCode(body)
 
 
 
@@ -24,9 +24,9 @@ Method | HTTP request | Description
 
 
 ContentMetaInfosControllerApi apiInstance = new ContentMetaInfosControllerApi();
-Object body = null; // Object | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    Object result = apiInstance.findDocumentReferenceViewByCode(body);
+    List<DocumentReferenceView> result = apiInstance.findDocumentReferenceViewByCode(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ContentMetaInfosControllerApi#findDocumentReferenceViewByCode");
@@ -38,11 +38,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
-**Object**
+[**List&lt;DocumentReferenceView&gt;**](DocumentReferenceView.md)
 
 ### Authorization
 
@@ -67,7 +67,7 @@ No authorization required
 
 
 ContentMetaInfosControllerApi apiInstance = new ContentMetaInfosControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     ContentMetaInfo result = apiInstance.getContentMetaInfos(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -110,7 +110,7 @@ No authorization required
 
 
 ContentMetaInfosControllerApi apiInstance = new ContentMetaInfosControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     ContentObject result = apiInstance.getContentObject(code);
     System.out.println(result);
@@ -124,7 +124,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -141,7 +141,7 @@ No authorization required
 
 <a name="searchByDocumentName"></a>
 # **searchByDocumentName**
-> Object searchByDocumentName(body)
+> List&lt;DocumentReferenceView&gt; searchByDocumentName(body)
 
 
 
@@ -155,7 +155,7 @@ No authorization required
 ContentMetaInfosControllerApi apiInstance = new ContentMetaInfosControllerApi();
 SearchDocumentByNameParam body = new SearchDocumentByNameParam(); // SearchDocumentByNameParam | 
 try {
-    Object result = apiInstance.searchByDocumentName(body);
+    List<DocumentReferenceView> result = apiInstance.searchByDocumentName(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ContentMetaInfosControllerApi#searchByDocumentName");
@@ -171,7 +171,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;DocumentReferenceView&gt;**](DocumentReferenceView.md)
 
 ### Authorization
 

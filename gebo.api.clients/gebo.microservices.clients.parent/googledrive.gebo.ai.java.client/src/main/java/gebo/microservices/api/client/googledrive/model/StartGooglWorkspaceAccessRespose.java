@@ -22,25 +22,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * StartGooglWorkspaceAccessRespose
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:25.000010563+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class StartGooglWorkspaceAccessRespose {
   @JsonProperty("notExecuted")
-  private Object notExecuted = null;
+  private Boolean notExecuted = null;
 
   @JsonProperty("alreadyOwningCredentials")
-  private Object alreadyOwningCredentials = null;
+  private Boolean alreadyOwningCredentials = null;
 
   @JsonProperty("forwardUrl")
-  private Object forwardUrl = null;
+  private String forwardUrl = null;
 
   @JsonProperty("jumpTo")
-  private Object jumpTo = null;
+  private String jumpTo = null;
 
   @JsonProperty("authenticationSessionId")
-  private Object authenticationSessionId = null;
+  private String authenticationSessionId = null;
 
-  public StartGooglWorkspaceAccessRespose notExecuted(Object notExecuted) {
+  public StartGooglWorkspaceAccessRespose notExecuted(Boolean notExecuted) {
     this.notExecuted = notExecuted;
     return this;
   }
@@ -50,15 +50,15 @@ public class StartGooglWorkspaceAccessRespose {
    * @return notExecuted
   **/
   @Schema(description = "")
-  public Object getNotExecuted() {
+  public Boolean isNotExecuted() {
     return notExecuted;
   }
 
-  public void setNotExecuted(Object notExecuted) {
+  public void setNotExecuted(Boolean notExecuted) {
     this.notExecuted = notExecuted;
   }
 
-  public StartGooglWorkspaceAccessRespose alreadyOwningCredentials(Object alreadyOwningCredentials) {
+  public StartGooglWorkspaceAccessRespose alreadyOwningCredentials(Boolean alreadyOwningCredentials) {
     this.alreadyOwningCredentials = alreadyOwningCredentials;
     return this;
   }
@@ -68,15 +68,15 @@ public class StartGooglWorkspaceAccessRespose {
    * @return alreadyOwningCredentials
   **/
   @Schema(description = "")
-  public Object getAlreadyOwningCredentials() {
+  public Boolean isAlreadyOwningCredentials() {
     return alreadyOwningCredentials;
   }
 
-  public void setAlreadyOwningCredentials(Object alreadyOwningCredentials) {
+  public void setAlreadyOwningCredentials(Boolean alreadyOwningCredentials) {
     this.alreadyOwningCredentials = alreadyOwningCredentials;
   }
 
-  public StartGooglWorkspaceAccessRespose forwardUrl(Object forwardUrl) {
+  public StartGooglWorkspaceAccessRespose forwardUrl(String forwardUrl) {
     this.forwardUrl = forwardUrl;
     return this;
   }
@@ -86,15 +86,15 @@ public class StartGooglWorkspaceAccessRespose {
    * @return forwardUrl
   **/
   @Schema(description = "")
-  public Object getForwardUrl() {
+  public String getForwardUrl() {
     return forwardUrl;
   }
 
-  public void setForwardUrl(Object forwardUrl) {
+  public void setForwardUrl(String forwardUrl) {
     this.forwardUrl = forwardUrl;
   }
 
-  public StartGooglWorkspaceAccessRespose jumpTo(Object jumpTo) {
+  public StartGooglWorkspaceAccessRespose jumpTo(String jumpTo) {
     this.jumpTo = jumpTo;
     return this;
   }
@@ -104,15 +104,15 @@ public class StartGooglWorkspaceAccessRespose {
    * @return jumpTo
   **/
   @Schema(description = "")
-  public Object getJumpTo() {
+  public String getJumpTo() {
     return jumpTo;
   }
 
-  public void setJumpTo(Object jumpTo) {
+  public void setJumpTo(String jumpTo) {
     this.jumpTo = jumpTo;
   }
 
-  public StartGooglWorkspaceAccessRespose authenticationSessionId(Object authenticationSessionId) {
+  public StartGooglWorkspaceAccessRespose authenticationSessionId(String authenticationSessionId) {
     this.authenticationSessionId = authenticationSessionId;
     return this;
   }
@@ -122,11 +122,11 @@ public class StartGooglWorkspaceAccessRespose {
    * @return authenticationSessionId
   **/
   @Schema(description = "")
-  public Object getAuthenticationSessionId() {
+  public String getAuthenticationSessionId() {
     return authenticationSessionId;
   }
 
-  public void setAuthenticationSessionId(Object authenticationSessionId) {
+  public void setAuthenticationSessionId(String authenticationSessionId) {
     this.authenticationSessionId = authenticationSessionId;
   }
 

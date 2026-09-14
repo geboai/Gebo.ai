@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { AuthResponse } from './authResponse';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusAuthResponse { 
     result?: AuthResponse;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

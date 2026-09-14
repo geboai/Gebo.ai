@@ -492,10 +492,10 @@ export class SecretsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSecretsByContextCode(context: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getSecretsByContextCode(context: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getSecretsByContextCode(context: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getSecretsByContextCode(context: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSecretsByContextCode(context: string, observe?: 'body', reportProgress?: boolean): Observable<Array<SecretInfo>>;
+    public getSecretsByContextCode(context: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SecretInfo>>>;
+    public getSecretsByContextCode(context: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SecretInfo>>>;
+    public getSecretsByContextCode(context: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (context === null || context === undefined) {
             throw new Error('Required parameter context was null or undefined when calling getSecretsByContextCode.');
@@ -521,7 +521,7 @@ export class SecretsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/SecretsController/getSecretsByContextCode`,
+        return this.httpClient.request<Array<SecretInfo>>('get',`${this.basePath}/api/admin/SecretsController/getSecretsByContextCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

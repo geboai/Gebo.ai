@@ -6,6 +6,7 @@ import gebo.microservices.api.client.jira.model.BrowseParam;
 import gebo.microservices.api.client.jira.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.jira.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.jira.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.jira.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:45.187682910+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
 
 public class JiraBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +55,7 @@ public class JiraBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseJiraPath(BrowseParam body, Object systemCode) throws RestClientException {
+    public OperationStatusListPathInfo browseJiraPath(BrowseParam body, String systemCode) throws RestClientException {
         return browseJiraPathWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -67,7 +68,7 @@ public class JiraBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseJiraPathWithHttpInfo(BrowseParam body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseJiraPathWithHttpInfo(BrowseParam body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -107,7 +108,7 @@ public class JiraBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getJiraNavigationStatus(Object body, Object systemCode) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getJiraNavigationStatus(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         return getJiraNavigationStatusWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -120,7 +121,7 @@ public class JiraBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getJiraNavigationStatusWithHttpInfo(Object body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getJiraNavigationStatusWithHttpInfo(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -159,7 +160,7 @@ public class JiraBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getJiraRoots(Object systemCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getJiraRoots(String systemCode) throws RestClientException {
         return getJiraRootsWithHttpInfo(systemCode).getBody();
     }
 
@@ -171,7 +172,7 @@ public class JiraBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getJiraRootsWithHttpInfo(Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getJiraRootsWithHttpInfo(String systemCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemCode' is set
         if (systemCode == null) {

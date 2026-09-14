@@ -9,19 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeneratedApiKeyInfo } from './generatedApiKeyInfo';
 import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageGeneratedApiKeyInfo { 
-    totalElements?: any;
-    totalPages?: any;
+    totalPages?: number;
+    totalElements?: number;
     pageable?: PageableObject;
-    first?: any;
-    last?: any;
-    size?: any;
-    content?: any;
-    number?: any;
+    first?: boolean;
+    last?: boolean;
+    size?: number;
+    content?: Array<GeneratedApiKeyInfo>;
+    number?: number;
     sort?: SortObject;
-    numberOfElements?: any;
-    empty?: any;
+    numberOfElements?: number;
+    empty?: boolean;
 }

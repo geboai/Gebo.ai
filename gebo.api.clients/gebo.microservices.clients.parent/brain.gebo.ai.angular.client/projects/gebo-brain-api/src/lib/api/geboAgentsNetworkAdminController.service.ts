@@ -17,7 +17,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AgentServiceDescriptor } from '../model/agentServiceDescriptor';
+import { GAgentConfig } from '../model/gAgentConfig';
 import { GAgentsNetwork } from '../model/gAgentsNetwork';
+import { GBaseObject } from '../model/gBaseObject';
 import { OperationStatusGAgentsNetwork } from '../model/operationStatusGAgentsNetwork';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -109,9 +112,9 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentConfigs(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAgentConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAgentConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAgentConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getAgentConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getAgentConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
     public getAgentConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -129,7 +132,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -146,10 +149,10 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentConfigsByServiceId(serviceId: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAgentConfigsByServiceId(serviceId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAgentConfigsByServiceId(serviceId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getAgentConfigsByServiceId(serviceId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAgentConfigsByServiceId(serviceId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GAgentConfig>>;
+    public getAgentConfigsByServiceId(serviceId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GAgentConfig>>>;
+    public getAgentConfigsByServiceId(serviceId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GAgentConfig>>>;
+    public getAgentConfigsByServiceId(serviceId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (serviceId === null || serviceId === undefined) {
             throw new Error('Required parameter serviceId was null or undefined when calling getAgentConfigsByServiceId.');
@@ -175,7 +178,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId`,
+        return this.httpClient.request<Array<GAgentConfig>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -192,9 +195,9 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentServices(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAgentServices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAgentServices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAgentServices(observe?: 'body', reportProgress?: boolean): Observable<Array<AgentServiceDescriptor>>;
+    public getAgentServices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AgentServiceDescriptor>>>;
+    public getAgentServices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AgentServiceDescriptor>>>;
     public getAgentServices(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -212,7 +215,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentServices`,
+        return this.httpClient.request<Array<AgentServiceDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentServices`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -228,9 +231,9 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsNetwork(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAgentsNetwork(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAgentsNetwork(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAgentsNetwork(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getAgentsNetwork(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getAgentsNetwork(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
     public getAgentsNetwork(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -248,7 +251,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -265,10 +268,10 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsNetworkByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GAgentsNetwork>;
-    public getAgentsNetworkByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAgentsNetwork>>;
-    public getAgentsNetworkByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAgentsNetwork>>;
-    public getAgentsNetworkByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAgentsNetworkByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAgentsNetwork>;
+    public getAgentsNetworkByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAgentsNetwork>>;
+    public getAgentsNetworkByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAgentsNetwork>>;
+    public getAgentsNetworkByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling getAgentsNetworkByCode.');
@@ -312,10 +315,10 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCompatibleNextServices(serviceId: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getCompatibleNextServices(serviceId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getCompatibleNextServices(serviceId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getCompatibleNextServices(serviceId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getCompatibleNextServices(serviceId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AgentServiceDescriptor>>;
+    public getCompatibleNextServices(serviceId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AgentServiceDescriptor>>>;
+    public getCompatibleNextServices(serviceId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AgentServiceDescriptor>>>;
+    public getCompatibleNextServices(serviceId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (serviceId === null || serviceId === undefined) {
             throw new Error('Required parameter serviceId was null or undefined when calling getCompatibleNextServices.');
@@ -341,7 +344,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices`,
+        return this.httpClient.request<Array<AgentServiceDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -359,10 +362,10 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCompatiblePreviousServices(serviceId: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getCompatiblePreviousServices(serviceId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getCompatiblePreviousServices(serviceId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getCompatiblePreviousServices(serviceId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getCompatiblePreviousServices(serviceId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AgentServiceDescriptor>>;
+    public getCompatiblePreviousServices(serviceId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AgentServiceDescriptor>>>;
+    public getCompatiblePreviousServices(serviceId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AgentServiceDescriptor>>>;
+    public getCompatiblePreviousServices(serviceId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (serviceId === null || serviceId === undefined) {
             throw new Error('Required parameter serviceId was null or undefined when calling getCompatiblePreviousServices.');
@@ -388,7 +391,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getCompatiblePreviousServices`,
+        return this.httpClient.request<Array<AgentServiceDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getCompatiblePreviousServices`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -405,9 +408,9 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNetworkAdapterServices(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getNetworkAdapterServices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getNetworkAdapterServices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getNetworkAdapterServices(observe?: 'body', reportProgress?: boolean): Observable<Array<AgentServiceDescriptor>>;
+    public getNetworkAdapterServices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AgentServiceDescriptor>>>;
+    public getNetworkAdapterServices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AgentServiceDescriptor>>>;
     public getNetworkAdapterServices(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -425,7 +428,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices`,
+        return this.httpClient.request<Array<AgentServiceDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -3,8 +3,17 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Object** |  |  [optional]
-**product** | **Object** |  | 
+**id** | **String** |  |  [optional]
+**product** | [**ProductEnum**](#ProductEnum) |  | 
 **qdrantConfig** | [**QdrantConfig**](QdrantConfig.md) |  |  [optional]
 **mongoConfig** | [**MongoConfig**](MongoConfig.md) |  |  [optional]
 **redisConfig** | [**RedisConfig**](RedisConfig.md) |  |  [optional]
+
+<a name="ProductEnum"></a>
+## Enum: ProductEnum
+Name | Value
+---- | -----
+MONGO | &quot;MONGO&quot;
+QDRANT | &quot;QDRANT&quot;
+REDIS | &quot;REDIS&quot;
+TEST | &quot;TEST&quot;

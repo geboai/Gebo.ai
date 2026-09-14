@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **Object** |  | 
-**knowledgeBaseCodes** | **Object** |  | 
+**name** | **String** |  | 
+**knowledgeBaseCodes** | **List&lt;String&gt;** |  | 

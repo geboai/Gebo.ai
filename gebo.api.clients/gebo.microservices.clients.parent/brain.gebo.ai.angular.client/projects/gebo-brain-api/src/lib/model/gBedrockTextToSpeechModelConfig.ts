@@ -12,18 +12,18 @@
 import { GBedrockTextToSpeechModelChoice } from './gBedrockTextToSpeechModelChoice';
 
 export interface GBedrockTextToSpeechModelConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelTypeCode?: any;
-    defaultModel?: any;
-    apiSecretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
     choosedModel?: GBedrockTextToSpeechModelChoice;
-    baseUrl?: any;
-    contextLength?: any;
-    voice?: any;
-    engine?: any;
+    baseUrl?: string;
+    contextLength?: number;
+    voice?: string;
+    engine?: string;
 }

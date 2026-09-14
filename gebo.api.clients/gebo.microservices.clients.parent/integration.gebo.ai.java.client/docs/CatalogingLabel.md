@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  |  [optional]
-**label** | **Object** |  |  [optional]
-**catalogingCriteria** | **Object** |  |  [optional]
+**code** | **String** |  |  [optional]
+**label** | **String** |  |  [optional]
+**catalogingCriteria** | **String** |  |  [optional]
 **parent** | [**CatalogingLabel**](CatalogingLabel.md) |  |  [optional]

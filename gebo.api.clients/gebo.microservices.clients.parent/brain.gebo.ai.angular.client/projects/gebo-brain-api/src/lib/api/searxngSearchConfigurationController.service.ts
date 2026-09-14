@@ -156,9 +156,9 @@ export class SearxngSearchConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSearxngSearchApiCredentials(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getSearxngSearchApiCredentials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getSearxngSearchApiCredentials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getSearxngSearchApiCredentials(observe?: 'body', reportProgress?: boolean): Observable<Array<GSearxngSearchApiCredentials>>;
+    public getSearxngSearchApiCredentials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GSearxngSearchApiCredentials>>>;
+    public getSearxngSearchApiCredentials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GSearxngSearchApiCredentials>>>;
     public getSearxngSearchApiCredentials(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -176,7 +176,7 @@ export class SearxngSearchConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials`,
+        return this.httpClient.request<Array<GSearxngSearchApiCredentials>>('get',`${this.basePath}/api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -276,10 +276,10 @@ export class SearxngSearchConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchGSearxngSearchApiCredentialsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GSearxngSearchApiCredentials>;
-    public searchGSearxngSearchApiCredentialsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GSearxngSearchApiCredentials>>;
-    public searchGSearxngSearchApiCredentialsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GSearxngSearchApiCredentials>>;
-    public searchGSearxngSearchApiCredentialsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public searchGSearxngSearchApiCredentialsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GSearxngSearchApiCredentials>;
+    public searchGSearxngSearchApiCredentialsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GSearxngSearchApiCredentials>>;
+    public searchGSearxngSearchApiCredentialsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GSearxngSearchApiCredentials>>;
+    public searchGSearxngSearchApiCredentialsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling searchGSearxngSearchApiCredentialsByCode.');

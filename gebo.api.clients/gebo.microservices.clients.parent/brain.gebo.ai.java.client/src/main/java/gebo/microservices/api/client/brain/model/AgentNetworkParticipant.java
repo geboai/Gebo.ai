@@ -18,50 +18,85 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * AgentNetworkParticipant
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class AgentNetworkParticipant {
   @JsonProperty("agentConfigCode")
-  private Object agentConfigCode = null;
+  private String agentConfigCode = null;
 
   @JsonProperty("agentContextualName")
-  private Object agentContextualName = null;
+  private String agentContextualName = null;
 
   @JsonProperty("inputNode")
-  private Object inputNode = null;
+  private Boolean inputNode = null;
 
   @JsonProperty("outputNode")
-  private Object outputNode = null;
+  private Boolean outputNode = null;
 
   @JsonProperty("allowedToNotifyUser")
-  private Object allowedToNotifyUser = null;
+  private Boolean allowedToNotifyUser = null;
 
-  @JsonProperty("communicationPolicy")
-  private Object communicationPolicy = null;
+  /**
+   * Gets or Sets communicationPolicy
+   */
+  public enum CommunicationPolicyEnum {
+    ALLOW_ALL("ALLOW_ALL"),
+    DENY_ALL("DENY_ALL"),
+    ALLOW_LIST("ALLOW_LIST"),
+    DENY_LIST("DENY_LIST");
+
+    private String value;
+
+    CommunicationPolicyEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static CommunicationPolicyEnum fromValue(String input) {
+      for (CommunicationPolicyEnum b : CommunicationPolicyEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("communicationPolicy")
+  private CommunicationPolicyEnum communicationPolicy = null;
 
   @JsonProperty("communicationList")
-  private Object communicationList = null;
+  private List<String> communicationList = null;
 
   @JsonProperty("maxInvocations")
-  private Object maxInvocations = null;
+  private Integer maxInvocations = null;
 
   @JsonProperty("maxConsecutiveInvocations")
-  private Object maxConsecutiveInvocations = null;
+  private Integer maxConsecutiveInvocations = null;
 
   @JsonProperty("canCallTools")
-  private Object canCallTools = null;
+  private Boolean canCallTools = null;
 
   @JsonProperty("canCallOtherAgents")
-  private Object canCallOtherAgents = null;
+  private Boolean canCallOtherAgents = null;
 
   @JsonProperty("networkAgentName")
-  private Object networkAgentName = null;
+  private String networkAgentName = null;
 
-  public AgentNetworkParticipant agentConfigCode(Object agentConfigCode) {
+  public AgentNetworkParticipant agentConfigCode(String agentConfigCode) {
     this.agentConfigCode = agentConfigCode;
     return this;
   }
@@ -71,15 +106,15 @@ public class AgentNetworkParticipant {
    * @return agentConfigCode
   **/
   @Schema(required = true, description = "")
-  public Object getAgentConfigCode() {
+  public String getAgentConfigCode() {
     return agentConfigCode;
   }
 
-  public void setAgentConfigCode(Object agentConfigCode) {
+  public void setAgentConfigCode(String agentConfigCode) {
     this.agentConfigCode = agentConfigCode;
   }
 
-  public AgentNetworkParticipant agentContextualName(Object agentContextualName) {
+  public AgentNetworkParticipant agentContextualName(String agentContextualName) {
     this.agentContextualName = agentContextualName;
     return this;
   }
@@ -89,15 +124,15 @@ public class AgentNetworkParticipant {
    * @return agentContextualName
   **/
   @Schema(description = "")
-  public Object getAgentContextualName() {
+  public String getAgentContextualName() {
     return agentContextualName;
   }
 
-  public void setAgentContextualName(Object agentContextualName) {
+  public void setAgentContextualName(String agentContextualName) {
     this.agentContextualName = agentContextualName;
   }
 
-  public AgentNetworkParticipant inputNode(Object inputNode) {
+  public AgentNetworkParticipant inputNode(Boolean inputNode) {
     this.inputNode = inputNode;
     return this;
   }
@@ -107,15 +142,15 @@ public class AgentNetworkParticipant {
    * @return inputNode
   **/
   @Schema(description = "")
-  public Object getInputNode() {
+  public Boolean isInputNode() {
     return inputNode;
   }
 
-  public void setInputNode(Object inputNode) {
+  public void setInputNode(Boolean inputNode) {
     this.inputNode = inputNode;
   }
 
-  public AgentNetworkParticipant outputNode(Object outputNode) {
+  public AgentNetworkParticipant outputNode(Boolean outputNode) {
     this.outputNode = outputNode;
     return this;
   }
@@ -125,15 +160,15 @@ public class AgentNetworkParticipant {
    * @return outputNode
   **/
   @Schema(description = "")
-  public Object getOutputNode() {
+  public Boolean isOutputNode() {
     return outputNode;
   }
 
-  public void setOutputNode(Object outputNode) {
+  public void setOutputNode(Boolean outputNode) {
     this.outputNode = outputNode;
   }
 
-  public AgentNetworkParticipant allowedToNotifyUser(Object allowedToNotifyUser) {
+  public AgentNetworkParticipant allowedToNotifyUser(Boolean allowedToNotifyUser) {
     this.allowedToNotifyUser = allowedToNotifyUser;
     return this;
   }
@@ -143,15 +178,15 @@ public class AgentNetworkParticipant {
    * @return allowedToNotifyUser
   **/
   @Schema(description = "")
-  public Object getAllowedToNotifyUser() {
+  public Boolean isAllowedToNotifyUser() {
     return allowedToNotifyUser;
   }
 
-  public void setAllowedToNotifyUser(Object allowedToNotifyUser) {
+  public void setAllowedToNotifyUser(Boolean allowedToNotifyUser) {
     this.allowedToNotifyUser = allowedToNotifyUser;
   }
 
-  public AgentNetworkParticipant communicationPolicy(Object communicationPolicy) {
+  public AgentNetworkParticipant communicationPolicy(CommunicationPolicyEnum communicationPolicy) {
     this.communicationPolicy = communicationPolicy;
     return this;
   }
@@ -161,16 +196,24 @@ public class AgentNetworkParticipant {
    * @return communicationPolicy
   **/
   @Schema(required = true, description = "")
-  public Object getCommunicationPolicy() {
+  public CommunicationPolicyEnum getCommunicationPolicy() {
     return communicationPolicy;
   }
 
-  public void setCommunicationPolicy(Object communicationPolicy) {
+  public void setCommunicationPolicy(CommunicationPolicyEnum communicationPolicy) {
     this.communicationPolicy = communicationPolicy;
   }
 
-  public AgentNetworkParticipant communicationList(Object communicationList) {
+  public AgentNetworkParticipant communicationList(List<String> communicationList) {
     this.communicationList = communicationList;
+    return this;
+  }
+
+  public AgentNetworkParticipant addCommunicationListItem(String communicationListItem) {
+    if (this.communicationList == null) {
+      this.communicationList = new ArrayList<>();
+    }
+    this.communicationList.add(communicationListItem);
     return this;
   }
 
@@ -179,15 +222,15 @@ public class AgentNetworkParticipant {
    * @return communicationList
   **/
   @Schema(description = "")
-  public Object getCommunicationList() {
+  public List<String> getCommunicationList() {
     return communicationList;
   }
 
-  public void setCommunicationList(Object communicationList) {
+  public void setCommunicationList(List<String> communicationList) {
     this.communicationList = communicationList;
   }
 
-  public AgentNetworkParticipant maxInvocations(Object maxInvocations) {
+  public AgentNetworkParticipant maxInvocations(Integer maxInvocations) {
     this.maxInvocations = maxInvocations;
     return this;
   }
@@ -197,15 +240,15 @@ public class AgentNetworkParticipant {
    * @return maxInvocations
   **/
   @Schema(description = "")
-  public Object getMaxInvocations() {
+  public Integer getMaxInvocations() {
     return maxInvocations;
   }
 
-  public void setMaxInvocations(Object maxInvocations) {
+  public void setMaxInvocations(Integer maxInvocations) {
     this.maxInvocations = maxInvocations;
   }
 
-  public AgentNetworkParticipant maxConsecutiveInvocations(Object maxConsecutiveInvocations) {
+  public AgentNetworkParticipant maxConsecutiveInvocations(Integer maxConsecutiveInvocations) {
     this.maxConsecutiveInvocations = maxConsecutiveInvocations;
     return this;
   }
@@ -215,15 +258,15 @@ public class AgentNetworkParticipant {
    * @return maxConsecutiveInvocations
   **/
   @Schema(description = "")
-  public Object getMaxConsecutiveInvocations() {
+  public Integer getMaxConsecutiveInvocations() {
     return maxConsecutiveInvocations;
   }
 
-  public void setMaxConsecutiveInvocations(Object maxConsecutiveInvocations) {
+  public void setMaxConsecutiveInvocations(Integer maxConsecutiveInvocations) {
     this.maxConsecutiveInvocations = maxConsecutiveInvocations;
   }
 
-  public AgentNetworkParticipant canCallTools(Object canCallTools) {
+  public AgentNetworkParticipant canCallTools(Boolean canCallTools) {
     this.canCallTools = canCallTools;
     return this;
   }
@@ -233,15 +276,15 @@ public class AgentNetworkParticipant {
    * @return canCallTools
   **/
   @Schema(description = "")
-  public Object getCanCallTools() {
+  public Boolean isCanCallTools() {
     return canCallTools;
   }
 
-  public void setCanCallTools(Object canCallTools) {
+  public void setCanCallTools(Boolean canCallTools) {
     this.canCallTools = canCallTools;
   }
 
-  public AgentNetworkParticipant canCallOtherAgents(Object canCallOtherAgents) {
+  public AgentNetworkParticipant canCallOtherAgents(Boolean canCallOtherAgents) {
     this.canCallOtherAgents = canCallOtherAgents;
     return this;
   }
@@ -251,15 +294,15 @@ public class AgentNetworkParticipant {
    * @return canCallOtherAgents
   **/
   @Schema(description = "")
-  public Object getCanCallOtherAgents() {
+  public Boolean isCanCallOtherAgents() {
     return canCallOtherAgents;
   }
 
-  public void setCanCallOtherAgents(Object canCallOtherAgents) {
+  public void setCanCallOtherAgents(Boolean canCallOtherAgents) {
     this.canCallOtherAgents = canCallOtherAgents;
   }
 
-  public AgentNetworkParticipant networkAgentName(Object networkAgentName) {
+  public AgentNetworkParticipant networkAgentName(String networkAgentName) {
     this.networkAgentName = networkAgentName;
     return this;
   }
@@ -269,11 +312,11 @@ public class AgentNetworkParticipant {
    * @return networkAgentName
   **/
   @Schema(description = "")
-  public Object getNetworkAgentName() {
+  public String getNetworkAgentName() {
     return networkAgentName;
   }
 
-  public void setNetworkAgentName(Object networkAgentName) {
+  public void setNetworkAgentName(String networkAgentName) {
     this.networkAgentName = networkAgentName;
   }
 

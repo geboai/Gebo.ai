@@ -115,10 +115,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
-    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
-    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
-    public createCleanChatByChatProfileCode(chatProfileCode: any, contextCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public createCleanChatByChatProfileCode(chatProfileCode: string, contextCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling createCleanChatByChatProfileCode.');
@@ -166,10 +166,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createCleanChatByModelCode(modelCode: any, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
-    public createCleanChatByModelCode(modelCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
-    public createCleanChatByModelCode(modelCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
-    public createCleanChatByModelCode(modelCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createCleanChatByModelCode(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public createCleanChatByModelCode(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public createCleanChatByModelCode(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public createCleanChatByModelCode(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (modelCode === null || modelCode === undefined) {
             throw new Error('Required parameter modelCode was null or undefined when calling createCleanChatByModelCode.');
@@ -213,10 +213,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteChat(userChatContextCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteChat(userChatContextCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteChat(userChatContextCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteChat(userChatContextCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteChat(userChatContextCode: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteChat(userChatContextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteChat(userChatContextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteChat(userChatContextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userChatContextCode === null || userChatContextCode === undefined) {
             throw new Error('Required parameter userChatContextCode was null or undefined when calling deleteChat.');
@@ -261,10 +261,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public exportResponse2file(userContextCode: any, responseId: any, format: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public exportResponse2file(userContextCode: any, responseId: any, format: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public exportResponse2file(userContextCode: any, responseId: any, format: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public exportResponse2file(userContextCode: any, responseId: any, format: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userContextCode === null || userContextCode === undefined) {
             throw new Error('Required parameter userContextCode was null or undefined when calling exportResponse2file.');
@@ -321,10 +321,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatHistory(code: any, observe?: 'body', reportProgress?: boolean): Observable<UserChatHistory>;
-    public getChatHistory(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserChatHistory>>;
-    public getChatHistory(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserChatHistory>>;
-    public getChatHistory(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatHistory(code: string, observe?: 'body', reportProgress?: boolean): Observable<UserChatHistory>;
+    public getChatHistory(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserChatHistory>>;
+    public getChatHistory(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserChatHistory>>;
+    public getChatHistory(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling getChatHistory.');
@@ -368,10 +368,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatInfosByCode(id: any, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
-    public getChatInfosByCode(id: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
-    public getChatInfosByCode(id: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
-    public getChatInfosByCode(id: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatInfosByCode(id: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public getChatInfosByCode(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public getChatInfosByCode(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public getChatInfosByCode(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getChatInfosByCode.');
@@ -461,9 +461,9 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMyChats(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getMyChats(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getMyChats(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getMyChats(observe?: 'body', reportProgress?: boolean): Observable<Array<GUserChatInfo>>;
+    public getMyChats(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GUserChatInfo>>>;
+    public getMyChats(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GUserChatInfo>>>;
     public getMyChats(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -481,7 +481,7 @@ export class GeboUserChatsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChats`,
+        return this.httpClient.request<Array<GUserChatInfo>>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChats`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -498,10 +498,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMyChatsByContextCode(contextCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getMyChatsByContextCode(contextCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getMyChatsByContextCode(contextCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getMyChatsByContextCode(contextCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMyChatsByContextCode(contextCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GUserChatInfo>>;
+    public getMyChatsByContextCode(contextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GUserChatInfo>>>;
+    public getMyChatsByContextCode(contextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GUserChatInfo>>>;
+    public getMyChatsByContextCode(contextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (contextCode === null || contextCode === undefined) {
             throw new Error('Required parameter contextCode was null or undefined when calling getMyChatsByContextCode.');
@@ -527,7 +527,7 @@ export class GeboUserChatsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChatsByContextCode`,
+        return this.httpClient.request<Array<GUserChatInfo>>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChatsByContextCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -546,10 +546,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMyChatsPaged(page: any, pageSize: any, observe?: 'body', reportProgress?: boolean): Observable<PageGUserChatInfo>;
-    public getMyChatsPaged(page: any, pageSize: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGUserChatInfo>>;
-    public getMyChatsPaged(page: any, pageSize: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGUserChatInfo>>;
-    public getMyChatsPaged(page: any, pageSize: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMyChatsPaged(page: number, pageSize: number, observe?: 'body', reportProgress?: boolean): Observable<PageGUserChatInfo>;
+    public getMyChatsPaged(page: number, pageSize: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGUserChatInfo>>;
+    public getMyChatsPaged(page: number, pageSize: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGUserChatInfo>>;
+    public getMyChatsPaged(page: number, pageSize: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (page === null || page === undefined) {
             throw new Error('Required parameter page was null or undefined when calling getMyChatsPaged.');
@@ -635,9 +635,9 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isMinimalLLMSSetupDone(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public isMinimalLLMSSetupDone(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public isMinimalLLMSSetupDone(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public isMinimalLLMSSetupDone(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isMinimalLLMSSetupDone(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isMinimalLLMSSetupDone(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public isMinimalLLMSSetupDone(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -655,7 +655,7 @@ export class GeboUserChatsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatsController/isMinimalLLMSSetupDone`,
+        return this.httpClient.request<boolean>('get',`${this.basePath}/api/users/GeboUserChatsController/isMinimalLLMSSetupDone`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -672,10 +672,10 @@ export class GeboUserChatsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public suggestChatDescription(userChatContextCode: any, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
-    public suggestChatDescription(userChatContextCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
-    public suggestChatDescription(userChatContextCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
-    public suggestChatDescription(userChatContextCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public suggestChatDescription(userChatContextCode: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public suggestChatDescription(userChatContextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public suggestChatDescription(userChatContextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public suggestChatDescription(userChatContextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userChatContextCode === null || userChatContextCode === undefined) {
             throw new Error('Required parameter userChatContextCode was null or undefined when calling suggestChatDescription.');

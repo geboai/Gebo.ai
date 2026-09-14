@@ -18,39 +18,82 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GContentSelectionFilterCriteria
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:08:59.956635121+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.713838626+02:00[Europe/Rome]")
 
 public class GContentSelectionFilterCriteria {
   @JsonProperty("mimeContentTypes")
-  private Object mimeContentTypes = null;
+  private List<String> mimeContentTypes = null;
 
   @JsonProperty("extensions")
-  private Object extensions = null;
+  private List<String> extensions = null;
 
   @JsonProperty("nameFilter")
-  private Object nameFilter = null;
+  private String nameFilter = null;
 
-  @JsonProperty("nameFilterCriteria")
-  private Object nameFilterCriteria = null;
+  /**
+   * Gets or Sets nameFilterCriteria
+   */
+  public enum NameFilterCriteriaEnum {
+    CONTAINS("CONTAINS"),
+    EQUALS("EQUALS"),
+    STARTS_WITH("STARTS_WITH"),
+    ENDS_WITH("ENDS_WITH");
+
+    private String value;
+
+    NameFilterCriteriaEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static NameFilterCriteriaEnum fromValue(String input) {
+      for (NameFilterCriteriaEnum b : NameFilterCriteriaEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("nameFilterCriteria")
+  private NameFilterCriteriaEnum nameFilterCriteria = null;
 
   @JsonProperty("maxFileSize")
-  private Object maxFileSize = null;
+  private Long maxFileSize = null;
 
   @JsonProperty("maxTokenSize")
-  private Object maxTokenSize = null;
+  private Long maxTokenSize = null;
 
   @JsonProperty("maxModificationAgeInDays")
-  private Object maxModificationAgeInDays = null;
+  private Integer maxModificationAgeInDays = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
-  public GContentSelectionFilterCriteria mimeContentTypes(Object mimeContentTypes) {
+  public GContentSelectionFilterCriteria mimeContentTypes(List<String> mimeContentTypes) {
     this.mimeContentTypes = mimeContentTypes;
+    return this;
+  }
+
+  public GContentSelectionFilterCriteria addMimeContentTypesItem(String mimeContentTypesItem) {
+    if (this.mimeContentTypes == null) {
+      this.mimeContentTypes = new ArrayList<>();
+    }
+    this.mimeContentTypes.add(mimeContentTypesItem);
     return this;
   }
 
@@ -59,16 +102,24 @@ public class GContentSelectionFilterCriteria {
    * @return mimeContentTypes
   **/
   @Schema(description = "")
-  public Object getMimeContentTypes() {
+  public List<String> getMimeContentTypes() {
     return mimeContentTypes;
   }
 
-  public void setMimeContentTypes(Object mimeContentTypes) {
+  public void setMimeContentTypes(List<String> mimeContentTypes) {
     this.mimeContentTypes = mimeContentTypes;
   }
 
-  public GContentSelectionFilterCriteria extensions(Object extensions) {
+  public GContentSelectionFilterCriteria extensions(List<String> extensions) {
     this.extensions = extensions;
+    return this;
+  }
+
+  public GContentSelectionFilterCriteria addExtensionsItem(String extensionsItem) {
+    if (this.extensions == null) {
+      this.extensions = new ArrayList<>();
+    }
+    this.extensions.add(extensionsItem);
     return this;
   }
 
@@ -77,15 +128,15 @@ public class GContentSelectionFilterCriteria {
    * @return extensions
   **/
   @Schema(description = "")
-  public Object getExtensions() {
+  public List<String> getExtensions() {
     return extensions;
   }
 
-  public void setExtensions(Object extensions) {
+  public void setExtensions(List<String> extensions) {
     this.extensions = extensions;
   }
 
-  public GContentSelectionFilterCriteria nameFilter(Object nameFilter) {
+  public GContentSelectionFilterCriteria nameFilter(String nameFilter) {
     this.nameFilter = nameFilter;
     return this;
   }
@@ -95,15 +146,15 @@ public class GContentSelectionFilterCriteria {
    * @return nameFilter
   **/
   @Schema(description = "")
-  public Object getNameFilter() {
+  public String getNameFilter() {
     return nameFilter;
   }
 
-  public void setNameFilter(Object nameFilter) {
+  public void setNameFilter(String nameFilter) {
     this.nameFilter = nameFilter;
   }
 
-  public GContentSelectionFilterCriteria nameFilterCriteria(Object nameFilterCriteria) {
+  public GContentSelectionFilterCriteria nameFilterCriteria(NameFilterCriteriaEnum nameFilterCriteria) {
     this.nameFilterCriteria = nameFilterCriteria;
     return this;
   }
@@ -113,15 +164,15 @@ public class GContentSelectionFilterCriteria {
    * @return nameFilterCriteria
   **/
   @Schema(description = "")
-  public Object getNameFilterCriteria() {
+  public NameFilterCriteriaEnum getNameFilterCriteria() {
     return nameFilterCriteria;
   }
 
-  public void setNameFilterCriteria(Object nameFilterCriteria) {
+  public void setNameFilterCriteria(NameFilterCriteriaEnum nameFilterCriteria) {
     this.nameFilterCriteria = nameFilterCriteria;
   }
 
-  public GContentSelectionFilterCriteria maxFileSize(Object maxFileSize) {
+  public GContentSelectionFilterCriteria maxFileSize(Long maxFileSize) {
     this.maxFileSize = maxFileSize;
     return this;
   }
@@ -131,15 +182,15 @@ public class GContentSelectionFilterCriteria {
    * @return maxFileSize
   **/
   @Schema(description = "")
-  public Object getMaxFileSize() {
+  public Long getMaxFileSize() {
     return maxFileSize;
   }
 
-  public void setMaxFileSize(Object maxFileSize) {
+  public void setMaxFileSize(Long maxFileSize) {
     this.maxFileSize = maxFileSize;
   }
 
-  public GContentSelectionFilterCriteria maxTokenSize(Object maxTokenSize) {
+  public GContentSelectionFilterCriteria maxTokenSize(Long maxTokenSize) {
     this.maxTokenSize = maxTokenSize;
     return this;
   }
@@ -149,15 +200,15 @@ public class GContentSelectionFilterCriteria {
    * @return maxTokenSize
   **/
   @Schema(description = "")
-  public Object getMaxTokenSize() {
+  public Long getMaxTokenSize() {
     return maxTokenSize;
   }
 
-  public void setMaxTokenSize(Object maxTokenSize) {
+  public void setMaxTokenSize(Long maxTokenSize) {
     this.maxTokenSize = maxTokenSize;
   }
 
-  public GContentSelectionFilterCriteria maxModificationAgeInDays(Object maxModificationAgeInDays) {
+  public GContentSelectionFilterCriteria maxModificationAgeInDays(Integer maxModificationAgeInDays) {
     this.maxModificationAgeInDays = maxModificationAgeInDays;
     return this;
   }
@@ -167,15 +218,15 @@ public class GContentSelectionFilterCriteria {
    * @return maxModificationAgeInDays
   **/
   @Schema(description = "")
-  public Object getMaxModificationAgeInDays() {
+  public Integer getMaxModificationAgeInDays() {
     return maxModificationAgeInDays;
   }
 
-  public void setMaxModificationAgeInDays(Object maxModificationAgeInDays) {
+  public void setMaxModificationAgeInDays(Integer maxModificationAgeInDays) {
     this.maxModificationAgeInDays = maxModificationAgeInDays;
   }
 
-  public GContentSelectionFilterCriteria empty(Object empty) {
+  public GContentSelectionFilterCriteria empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -185,11 +236,11 @@ public class GContentSelectionFilterCriteria {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 

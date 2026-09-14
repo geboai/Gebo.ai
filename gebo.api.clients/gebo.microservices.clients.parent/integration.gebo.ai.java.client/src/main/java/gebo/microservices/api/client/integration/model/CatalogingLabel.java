@@ -23,22 +23,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * CatalogingLabel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:40.120904804+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class CatalogingLabel {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("label")
-  private Object label = null;
+  private String label = null;
 
   @JsonProperty("catalogingCriteria")
-  private Object catalogingCriteria = null;
+  private String catalogingCriteria = null;
 
   @JsonProperty("parent")
   private CatalogingLabel parent = null;
 
-  public CatalogingLabel code(Object code) {
+  public CatalogingLabel code(String code) {
     this.code = code;
     return this;
   }
@@ -48,15 +48,15 @@ public class CatalogingLabel {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public CatalogingLabel label(Object label) {
+  public CatalogingLabel label(String label) {
     this.label = label;
     return this;
   }
@@ -66,15 +66,15 @@ public class CatalogingLabel {
    * @return label
   **/
   @Schema(description = "")
-  public Object getLabel() {
+  public String getLabel() {
     return label;
   }
 
-  public void setLabel(Object label) {
+  public void setLabel(String label) {
     this.label = label;
   }
 
-  public CatalogingLabel catalogingCriteria(Object catalogingCriteria) {
+  public CatalogingLabel catalogingCriteria(String catalogingCriteria) {
     this.catalogingCriteria = catalogingCriteria;
     return this;
   }
@@ -84,11 +84,11 @@ public class CatalogingLabel {
    * @return catalogingCriteria
   **/
   @Schema(description = "")
-  public Object getCatalogingCriteria() {
+  public String getCatalogingCriteria() {
     return catalogingCriteria;
   }
 
-  public void setCatalogingCriteria(Object catalogingCriteria) {
+  public void setCatalogingCriteria(String catalogingCriteria) {
     this.catalogingCriteria = catalogingCriteria;
   }
 

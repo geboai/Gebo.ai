@@ -63,10 +63,10 @@ export class GeboUserChatUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chatSessionUploadForm(userSessionCode: any, files?: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListUserUploadedContent>;
-    public chatSessionUploadForm(userSessionCode: any, files?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListUserUploadedContent>>;
-    public chatSessionUploadForm(userSessionCode: any, files?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListUserUploadedContent>>;
-    public chatSessionUploadForm(userSessionCode: any, files?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListUserUploadedContent>;
+    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListUserUploadedContent>>;
+    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListUserUploadedContent>>;
+    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userSessionCode === null || userSessionCode === undefined) {
             throw new Error('Required parameter userSessionCode was null or undefined when calling chatSessionUpload.');
@@ -94,14 +94,19 @@ export class GeboUserChatUploadsControllerService {
         let formParams: { append(param: string, value: any): void; };
         let useForm = false;
         let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
         if (useForm) {
             formParams = new FormData();
         } else {
             formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         }
 
-        if (files !== undefined) {
-            formParams = formParams.append('files[]', <any>files) as any || formParams;
+        if (files) {
+            files.forEach((element) => {
+                formParams = formParams.append('files[]', <any>element) as any || formParams;
+            })
         }
 
         return this.httpClient.request<OperationStatusListUserUploadedContent>('post',`${this.basePath}/api/users/GeboUserChatUploadsController/chatSessionUpload/${encodeURIComponent(String(userSessionCode))}`,
@@ -160,10 +165,10 @@ export class GeboUserChatUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serveContent(userSessionCode: any, uploadedContentId: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public serveContent(userSessionCode: any, uploadedContentId: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public serveContent(userSessionCode: any, uploadedContentId: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public serveContent(userSessionCode: any, uploadedContentId: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userSessionCode === null || userSessionCode === undefined) {
             throw new Error('Required parameter userSessionCode was null or undefined when calling serveContent.');

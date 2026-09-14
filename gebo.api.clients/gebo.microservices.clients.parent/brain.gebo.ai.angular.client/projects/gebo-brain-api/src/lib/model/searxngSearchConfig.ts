@@ -11,7 +11,7 @@
  */
 
 export interface SearxngSearchConfig { 
-    baseUrl?: any;
-    apiKey?: any;
-    enabled?: any;
+    baseUrl?: string;
+    apiKey?: string;
+    enabled?: boolean;
 }

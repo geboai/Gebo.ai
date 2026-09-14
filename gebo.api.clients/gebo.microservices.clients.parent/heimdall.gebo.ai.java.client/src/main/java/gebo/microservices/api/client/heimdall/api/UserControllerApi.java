@@ -4,6 +4,7 @@ import gebo.microservices.api.client.heimdall.invoker.ApiClient;
 
 import gebo.microservices.api.client.heimdall.model.ChangePasswordParam;
 import gebo.microservices.api.client.heimdall.model.ChangePasswordResponse;
+import gebo.microservices.api.client.heimdall.model.GroupInfo;
 import gebo.microservices.api.client.heimdall.model.UserInfo;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserControllerApi {
     private ApiClient apiClient;
@@ -132,10 +133,10 @@ public class UserControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GroupInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getMyGroups() throws RestClientException {
+    public List<GroupInfo> getMyGroups() throws RestClientException {
         return getMyGroupsWithHttpInfo().getBody();
     }
 
@@ -143,10 +144,10 @@ public class UserControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GroupInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getMyGroupsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GroupInfo>> getMyGroupsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/ActualUserController/getMyGroups").build().toUriString();
         
@@ -163,7 +164,7 @@ public class UserControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GroupInfo>> returnType = new ParameterizedTypeReference<List<GroupInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

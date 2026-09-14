@@ -23,19 +23,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecretWrapperGeboCustomSecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class SecretWrapperGeboCustomSecretContent {
   @JsonProperty("contextCode")
-  private Object contextCode = null;
+  private String contextCode = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("secretContent")
   private GeboCustomSecretContent secretContent = null;
 
-  public SecretWrapperGeboCustomSecretContent contextCode(Object contextCode) {
+  public SecretWrapperGeboCustomSecretContent contextCode(String contextCode) {
     this.contextCode = contextCode;
     return this;
   }
@@ -45,15 +45,15 @@ public class SecretWrapperGeboCustomSecretContent {
    * @return contextCode
   **/
   @Schema(required = true, description = "")
-  public Object getContextCode() {
+  public String getContextCode() {
     return contextCode;
   }
 
-  public void setContextCode(Object contextCode) {
+  public void setContextCode(String contextCode) {
     this.contextCode = contextCode;
   }
 
-  public SecretWrapperGeboCustomSecretContent description(Object description) {
+  public SecretWrapperGeboCustomSecretContent description(String description) {
     this.description = description;
     return this;
   }
@@ -63,11 +63,11 @@ public class SecretWrapperGeboCustomSecretContent {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

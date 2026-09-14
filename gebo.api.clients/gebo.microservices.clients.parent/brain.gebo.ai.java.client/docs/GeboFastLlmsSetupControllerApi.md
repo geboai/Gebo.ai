@@ -112,7 +112,7 @@ No authorization required
 
 
 GeboFastLlmsSetupControllerApi apiInstance = new GeboFastLlmsSetupControllerApi();
-Object body = null; // Object | 
+List<LLMCreateModelData> body = Arrays.asList(new LLMCreateModelData()); // List<LLMCreateModelData> | 
 try {
     OperationStatusLLMSModelsCreationResult result = apiInstance.createLLMS(body);
     System.out.println(result);
@@ -126,7 +126,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;LLMCreateModelData&gt;**](LLMCreateModelData.md)|  |
 
 ### Return type
 

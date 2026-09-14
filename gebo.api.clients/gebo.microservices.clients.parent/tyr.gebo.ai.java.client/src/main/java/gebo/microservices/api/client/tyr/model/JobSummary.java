@@ -18,39 +18,43 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.tyr.model.ComputedWorkflowResult;
+import gebo.microservices.api.client.tyr.model.JobWorkflowStepSummary;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * JobSummary
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class JobSummary {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("startDateTime")
-  private Object startDateTime = null;
+  private Date startDateTime = null;
 
   @JsonProperty("endDateTime")
-  private Object endDateTime = null;
+  private Date endDateTime = null;
 
   @JsonProperty("workflowStatus")
   private ComputedWorkflowResult workflowStatus = null;
 
   @JsonProperty("workflowStepsSummaries")
-  private Object workflowStepsSummaries = null;
+  private List<JobWorkflowStepSummary> workflowStepsSummaries = null;
 
-  public JobSummary code(Object code) {
+  public JobSummary code(String code) {
     this.code = code;
     return this;
   }
@@ -60,15 +64,15 @@ public class JobSummary {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public JobSummary description(Object description) {
+  public JobSummary description(String description) {
     this.description = description;
     return this;
   }
@@ -78,15 +82,15 @@ public class JobSummary {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public JobSummary workflowType(Object workflowType) {
+  public JobSummary workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -96,15 +100,15 @@ public class JobSummary {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
-  public JobSummary workflowId(Object workflowId) {
+  public JobSummary workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -114,15 +118,15 @@ public class JobSummary {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public JobSummary startDateTime(Object startDateTime) {
+  public JobSummary startDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
     return this;
   }
@@ -132,15 +136,15 @@ public class JobSummary {
    * @return startDateTime
   **/
   @Schema(description = "")
-  public Object getStartDateTime() {
+  public Date getStartDateTime() {
     return startDateTime;
   }
 
-  public void setStartDateTime(Object startDateTime) {
+  public void setStartDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
   }
 
-  public JobSummary endDateTime(Object endDateTime) {
+  public JobSummary endDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
     return this;
   }
@@ -150,11 +154,11 @@ public class JobSummary {
    * @return endDateTime
   **/
   @Schema(description = "")
-  public Object getEndDateTime() {
+  public Date getEndDateTime() {
     return endDateTime;
   }
 
-  public void setEndDateTime(Object endDateTime) {
+  public void setEndDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
   }
 
@@ -176,8 +180,16 @@ public class JobSummary {
     this.workflowStatus = workflowStatus;
   }
 
-  public JobSummary workflowStepsSummaries(Object workflowStepsSummaries) {
+  public JobSummary workflowStepsSummaries(List<JobWorkflowStepSummary> workflowStepsSummaries) {
     this.workflowStepsSummaries = workflowStepsSummaries;
+    return this;
+  }
+
+  public JobSummary addWorkflowStepsSummariesItem(JobWorkflowStepSummary workflowStepsSummariesItem) {
+    if (this.workflowStepsSummaries == null) {
+      this.workflowStepsSummaries = new ArrayList<>();
+    }
+    this.workflowStepsSummaries.add(workflowStepsSummariesItem);
     return this;
   }
 
@@ -186,11 +198,11 @@ public class JobSummary {
    * @return workflowStepsSummaries
   **/
   @Schema(description = "")
-  public Object getWorkflowStepsSummaries() {
+  public List<JobWorkflowStepSummary> getWorkflowStepsSummaries() {
     return workflowStepsSummaries;
   }
 
-  public void setWorkflowStepsSummaries(Object workflowStepsSummaries) {
+  public void setWorkflowStepsSummaries(List<JobWorkflowStepSummary> workflowStepsSummaries) {
     this.workflowStepsSummaries = workflowStepsSummaries;
   }
 

@@ -23,22 +23,53 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastSharepointSystemInsertRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class FastSharepointSystemInsertRequest {
   @JsonProperty("baseUri")
-  private Object baseUri = null;
+  private String baseUri = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  @JsonProperty("sharepointVersion")
-  private Object sharepointVersion = null;
+  /**
+   * Gets or Sets sharepointVersion
+   */
+  public enum SharepointVersionEnum {
+    CLOUD_VERSION("CLOUD_VERSION"),
+    ONPREMISE2019("ONPREMISE2019");
+
+    private String value;
+
+    SharepointVersionEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SharepointVersionEnum fromValue(String input) {
+      for (SharepointVersionEnum b : SharepointVersionEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("sharepointVersion")
+  private SharepointVersionEnum sharepointVersion = null;
 
   @JsonProperty("oauth2Credentials")
   private GeboOauth2SecretContent oauth2Credentials = null;
 
-  public FastSharepointSystemInsertRequest baseUri(Object baseUri) {
+  public FastSharepointSystemInsertRequest baseUri(String baseUri) {
     this.baseUri = baseUri;
     return this;
   }
@@ -48,15 +79,15 @@ public class FastSharepointSystemInsertRequest {
    * @return baseUri
   **/
   @Schema(description = "")
-  public Object getBaseUri() {
+  public String getBaseUri() {
     return baseUri;
   }
 
-  public void setBaseUri(Object baseUri) {
+  public void setBaseUri(String baseUri) {
     this.baseUri = baseUri;
   }
 
-  public FastSharepointSystemInsertRequest description(Object description) {
+  public FastSharepointSystemInsertRequest description(String description) {
     this.description = description;
     return this;
   }
@@ -66,15 +97,15 @@ public class FastSharepointSystemInsertRequest {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public FastSharepointSystemInsertRequest sharepointVersion(Object sharepointVersion) {
+  public FastSharepointSystemInsertRequest sharepointVersion(SharepointVersionEnum sharepointVersion) {
     this.sharepointVersion = sharepointVersion;
     return this;
   }
@@ -84,11 +115,11 @@ public class FastSharepointSystemInsertRequest {
    * @return sharepointVersion
   **/
   @Schema(required = true, description = "")
-  public Object getSharepointVersion() {
+  public SharepointVersionEnum getSharepointVersion() {
     return sharepointVersion;
   }
 
-  public void setSharepointVersion(Object sharepointVersion) {
+  public void setSharepointVersion(SharepointVersionEnum sharepointVersion) {
     this.sharepointVersion = sharepointVersion;
   }
 

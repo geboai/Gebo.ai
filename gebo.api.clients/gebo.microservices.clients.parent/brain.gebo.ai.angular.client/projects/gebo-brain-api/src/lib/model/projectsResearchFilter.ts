@@ -11,6 +11,6 @@
  */
 
 export interface ProjectsResearchFilter { 
-    rootKnowledgeBaseCode?: any;
-    parentProjectCode?: any;
+    rootKnowledgeBaseCode?: string;
+    parentProjectCode?: string;
 }

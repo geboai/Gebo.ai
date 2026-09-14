@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ProjectsResearchFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ProjectsResearchFilter {
   @JsonProperty("rootKnowledgeBaseCode")
-  private Object rootKnowledgeBaseCode = null;
+  private String rootKnowledgeBaseCode = null;
 
   @JsonProperty("parentProjectCode")
-  private Object parentProjectCode = null;
+  private String parentProjectCode = null;
 
-  public ProjectsResearchFilter rootKnowledgeBaseCode(Object rootKnowledgeBaseCode) {
+  public ProjectsResearchFilter rootKnowledgeBaseCode(String rootKnowledgeBaseCode) {
     this.rootKnowledgeBaseCode = rootKnowledgeBaseCode;
     return this;
   }
@@ -41,15 +41,15 @@ public class ProjectsResearchFilter {
    * @return rootKnowledgeBaseCode
   **/
   @Schema(description = "")
-  public Object getRootKnowledgeBaseCode() {
+  public String getRootKnowledgeBaseCode() {
     return rootKnowledgeBaseCode;
   }
 
-  public void setRootKnowledgeBaseCode(Object rootKnowledgeBaseCode) {
+  public void setRootKnowledgeBaseCode(String rootKnowledgeBaseCode) {
     this.rootKnowledgeBaseCode = rootKnowledgeBaseCode;
   }
 
-  public ProjectsResearchFilter parentProjectCode(Object parentProjectCode) {
+  public ProjectsResearchFilter parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -59,11 +59,11 @@ public class ProjectsResearchFilter {
    * @return parentProjectCode
   **/
   @Schema(description = "")
-  public Object getParentProjectCode() {
+  public String getParentProjectCode() {
     return parentProjectCode;
   }
 
-  public void setParentProjectCode(Object parentProjectCode) {
+  public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
   }
 

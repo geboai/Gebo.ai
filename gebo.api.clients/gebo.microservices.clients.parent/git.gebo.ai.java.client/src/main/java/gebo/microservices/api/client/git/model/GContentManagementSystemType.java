@@ -18,35 +18,71 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GContentManagementSystemType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:20.180928852+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.835643861+02:00[Europe/Rome]")
 
 public class GContentManagementSystemType {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
-  @JsonProperty("capabilities")
-  private Object capabilities = null;
+  /**
+   * Gets or Sets capabilities
+   */
+  public enum CapabilitiesEnum {
+    TICKETS_MANAGEMENT("TICKETS_MANAGEMENT"),
+    DOCUMENTS_MANAGEMENT("DOCUMENTS_MANAGEMENT"),
+    SOURCE_MANAGEMENT("SOURCE_MANAGEMENT"),
+    ARTIFACTS_REPOSITORY_MANAGEMENT("ARTIFACTS_REPOSITORY_MANAGEMENT");
 
-  public GContentManagementSystemType code(Object code) {
+    private String value;
+
+    CapabilitiesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static CapabilitiesEnum fromValue(String input) {
+      for (CapabilitiesEnum b : CapabilitiesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("capabilities")
+  private List<CapabilitiesEnum> capabilities = null;
+
+  public GContentManagementSystemType code(String code) {
     this.code = code;
     return this;
   }
@@ -56,15 +92,15 @@ public class GContentManagementSystemType {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GContentManagementSystemType description(Object description) {
+  public GContentManagementSystemType description(String description) {
     this.description = description;
     return this;
   }
@@ -74,15 +110,15 @@ public class GContentManagementSystemType {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GContentManagementSystemType userModified(Object userModified) {
+  public GContentManagementSystemType userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -92,15 +128,15 @@ public class GContentManagementSystemType {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GContentManagementSystemType userCreated(Object userCreated) {
+  public GContentManagementSystemType userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -110,15 +146,15 @@ public class GContentManagementSystemType {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GContentManagementSystemType dateModified(Object dateModified) {
+  public GContentManagementSystemType dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -128,15 +164,15 @@ public class GContentManagementSystemType {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GContentManagementSystemType dateCreated(Object dateCreated) {
+  public GContentManagementSystemType dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -146,16 +182,24 @@ public class GContentManagementSystemType {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GContentManagementSystemType capabilities(Object capabilities) {
+  public GContentManagementSystemType capabilities(List<CapabilitiesEnum> capabilities) {
     this.capabilities = capabilities;
+    return this;
+  }
+
+  public GContentManagementSystemType addCapabilitiesItem(CapabilitiesEnum capabilitiesItem) {
+    if (this.capabilities == null) {
+      this.capabilities = new ArrayList<>();
+    }
+    this.capabilities.add(capabilitiesItem);
     return this;
   }
 
@@ -164,11 +208,11 @@ public class GContentManagementSystemType {
    * @return capabilities
   **/
   @Schema(description = "")
-  public Object getCapabilities() {
+  public List<CapabilitiesEnum> getCapabilities() {
     return capabilities;
   }
 
-  public void setCapabilities(Object capabilities) {
+  public void setCapabilities(List<CapabilitiesEnum> capabilities) {
     this.capabilities = capabilities;
   }
 

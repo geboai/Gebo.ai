@@ -62,10 +62,10 @@ export class GeboLlmGeneratedResourceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public serveLLMGeneratedContent(userSessionCode: any, generatedResourceCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public serveLLMGeneratedContent(userSessionCode: any, generatedResourceCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public serveLLMGeneratedContent(userSessionCode: any, generatedResourceCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public serveLLMGeneratedContent(userSessionCode: any, generatedResourceCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public serveLLMGeneratedContent(userSessionCode: string, generatedResourceCode: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public serveLLMGeneratedContent(userSessionCode: string, generatedResourceCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public serveLLMGeneratedContent(userSessionCode: string, generatedResourceCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public serveLLMGeneratedContent(userSessionCode: string, generatedResourceCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userSessionCode === null || userSessionCode === undefined) {
             throw new Error('Required parameter userSessionCode was null or undefined when calling serveLLMGeneratedContent.');

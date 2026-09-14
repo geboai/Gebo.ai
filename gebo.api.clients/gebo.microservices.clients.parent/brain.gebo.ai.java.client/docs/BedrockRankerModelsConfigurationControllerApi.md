@@ -67,7 +67,7 @@ No authorization required
 
 
 BedrockRankerModelsConfigurationControllerApi apiInstance = new BedrockRankerModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GBedrockRankerModelConfig result = apiInstance.findBedrockRankerModelConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

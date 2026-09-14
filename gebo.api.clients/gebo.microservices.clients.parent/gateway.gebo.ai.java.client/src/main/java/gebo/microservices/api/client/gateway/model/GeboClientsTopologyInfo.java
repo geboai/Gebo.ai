@@ -17,21 +17,55 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.gateway.model.GeboServiceWebContextInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GeboClientsTopologyInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T14:51:27.378678764+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.314235033+02:00[Europe/Rome]")
 
 public class GeboClientsTopologyInfo {
-  @JsonProperty("architectureType")
-  private Object architectureType = null;
+  /**
+   * Gets or Sets architectureType
+   */
+  public enum ArchitectureTypeEnum {
+    MONOLITHIC("MONOLITHIC"),
+    MICROSERVICES("MICROSERVICES");
+
+    private String value;
+
+    ArchitectureTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ArchitectureTypeEnum fromValue(String input) {
+      for (ArchitectureTypeEnum b : ArchitectureTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("architectureType")
+  private ArchitectureTypeEnum architectureType = null;
 
   @JsonProperty("services")
-  private Object services = null;
+  private List<GeboServiceWebContextInfo> services = new ArrayList<>();
 
-  public GeboClientsTopologyInfo architectureType(Object architectureType) {
+  public GeboClientsTopologyInfo architectureType(ArchitectureTypeEnum architectureType) {
     this.architectureType = architectureType;
     return this;
   }
@@ -41,16 +75,21 @@ public class GeboClientsTopologyInfo {
    * @return architectureType
   **/
   @Schema(required = true, description = "")
-  public Object getArchitectureType() {
+  public ArchitectureTypeEnum getArchitectureType() {
     return architectureType;
   }
 
-  public void setArchitectureType(Object architectureType) {
+  public void setArchitectureType(ArchitectureTypeEnum architectureType) {
     this.architectureType = architectureType;
   }
 
-  public GeboClientsTopologyInfo services(Object services) {
+  public GeboClientsTopologyInfo services(List<GeboServiceWebContextInfo> services) {
     this.services = services;
+    return this;
+  }
+
+  public GeboClientsTopologyInfo addServicesItem(GeboServiceWebContextInfo servicesItem) {
+    this.services.add(servicesItem);
     return this;
   }
 
@@ -59,11 +98,11 @@ public class GeboClientsTopologyInfo {
    * @return services
   **/
   @Schema(required = true, description = "")
-  public Object getServices() {
+  public List<GeboServiceWebContextInfo> getServices() {
     return services;
   }
 
-  public void setServices(Object services) {
+  public void setServices(List<GeboServiceWebContextInfo> services) {
     this.services = services;
   }
 

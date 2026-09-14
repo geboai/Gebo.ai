@@ -17,21 +17,24 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.tyr.model.GModuleMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * MicroserviceMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class MicroserviceMetaInfo {
   @JsonProperty("microserviceId")
-  private Object microserviceId = null;
+  private String microserviceId = null;
 
   @JsonProperty("modules")
-  private Object modules = null;
+  private List<GModuleMetaInfo> modules = null;
 
-  public MicroserviceMetaInfo microserviceId(Object microserviceId) {
+  public MicroserviceMetaInfo microserviceId(String microserviceId) {
     this.microserviceId = microserviceId;
     return this;
   }
@@ -41,16 +44,24 @@ public class MicroserviceMetaInfo {
    * @return microserviceId
   **/
   @Schema(description = "")
-  public Object getMicroserviceId() {
+  public String getMicroserviceId() {
     return microserviceId;
   }
 
-  public void setMicroserviceId(Object microserviceId) {
+  public void setMicroserviceId(String microserviceId) {
     this.microserviceId = microserviceId;
   }
 
-  public MicroserviceMetaInfo modules(Object modules) {
+  public MicroserviceMetaInfo modules(List<GModuleMetaInfo> modules) {
     this.modules = modules;
+    return this;
+  }
+
+  public MicroserviceMetaInfo addModulesItem(GModuleMetaInfo modulesItem) {
+    if (this.modules == null) {
+      this.modules = new ArrayList<>();
+    }
+    this.modules.add(modulesItem);
     return this;
   }
 
@@ -59,11 +70,11 @@ public class MicroserviceMetaInfo {
    * @return modules
   **/
   @Schema(description = "")
-  public Object getModules() {
+  public List<GModuleMetaInfo> getModules() {
     return modules;
   }
 
-  public void setModules(Object modules) {
+  public void setModules(List<GModuleMetaInfo> modules) {
     this.modules = modules;
   }
 

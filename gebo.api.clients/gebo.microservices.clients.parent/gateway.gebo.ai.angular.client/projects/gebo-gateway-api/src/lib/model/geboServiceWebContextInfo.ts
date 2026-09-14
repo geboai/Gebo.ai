@@ -11,6 +11,6 @@
  */
 
 export interface GeboServiceWebContextInfo { 
-    serviceId?: any;
-    relativeContextUrl?: any;
+    serviceId?: string;
+    relativeContextUrl?: string;
 }

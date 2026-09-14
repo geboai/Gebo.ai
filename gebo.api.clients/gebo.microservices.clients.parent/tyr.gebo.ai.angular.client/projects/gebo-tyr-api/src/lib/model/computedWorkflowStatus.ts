@@ -11,24 +11,24 @@
  */
 
 export interface ComputedWorkflowStatus { 
-    jobId?: any;
-    workflowType?: any;
-    workflowId?: any;
-    workflowStepId?: any;
-    description?: any;
-    batchDocumentsInput?: any;
-    batchDocumentsProcessingErrors?: any;
-    batchDocumentsProcessed?: any;
-    batchSentToNextStep?: any;
-    batchDiscardedInput?: any;
-    chunksProcessed?: any;
-    tokensProcessed?: any;
-    completed?: any;
-    hasErrors?: any;
-    startedRunning?: any;
-    levelId?: any;
-    enabledStep?: any;
-    startProcessingTimestamp?: any;
-    lastProcessingTimestamp?: any;
-    childs?: any;
+    jobId?: string;
+    workflowType?: string;
+    workflowId?: string;
+    workflowStepId?: string;
+    description?: string;
+    batchDocumentsInput?: number;
+    batchDocumentsProcessingErrors?: number;
+    batchDocumentsProcessed?: number;
+    batchSentToNextStep?: number;
+    batchDiscardedInput?: number;
+    chunksProcessed?: number;
+    tokensProcessed?: number;
+    completed?: boolean;
+    hasErrors?: boolean;
+    startedRunning?: boolean;
+    levelId?: number;
+    enabledStep?: boolean;
+    startProcessingTimestamp?: Date;
+    lastProcessingTimestamp?: Date;
+    childs?: Array<ComputedWorkflowStatus>;
 }

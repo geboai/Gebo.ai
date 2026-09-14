@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.userspace.api;
 
+import java.io.File;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,8 +39,8 @@ public class UserspaceUploadControllerApiTest {
      */
     @Test
     public void uploadTest() {
-        Object userspaceFolderCode = null;
-        Object files = null;
+        String userspaceFolderCode = null;
+        List<File> files = null;
         api.upload(userspaceFolderCode, files);
 
         // TODO: test validations

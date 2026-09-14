@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Object** |  | 
-**modificationDate** | **Object** |  |  [optional]
+**code** | **String** |  | 
+**modificationDate** | [**Date**](Date.md) |  |  [optional]
 **originComponent** | [**GeboComponentInfo**](GeboComponentInfo.md) |  | 

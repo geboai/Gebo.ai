@@ -16,6 +16,7 @@ import gebo.microservices.api.client.sharepoint.model.BrowseParam;
 import gebo.microservices.api.client.sharepoint.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.sharepoint.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.sharepoint.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.sharepoint.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +44,7 @@ public class SharepointBrowsingControllerApiTest {
     @Test
     public void browseSharepointPathTest() {
         BrowseParam body = null;
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListPathInfo response = api.browseSharepointPath(body, systemCode);
 
         // TODO: test validations
@@ -58,8 +59,8 @@ public class SharepointBrowsingControllerApiTest {
      */
     @Test
     public void getSharepointNavigationStatusTest() {
-        Object body = null;
-        Object systemCode = null;
+        List<VFilesystemReference> body = null;
+        String systemCode = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getSharepointNavigationStatus(body, systemCode);
 
         // TODO: test validations
@@ -74,7 +75,7 @@ public class SharepointBrowsingControllerApiTest {
      */
     @Test
     public void getSharepointRootsTest() {
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getSharepointRoots(systemCode);
 
         // TODO: test validations

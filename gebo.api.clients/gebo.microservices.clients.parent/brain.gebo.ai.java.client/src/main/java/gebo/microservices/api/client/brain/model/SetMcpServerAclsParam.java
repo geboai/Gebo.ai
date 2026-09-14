@@ -17,21 +17,24 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.AclOwnerParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SetMcpServerAclsParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class SetMcpServerAclsParam {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("owners")
-  private Object owners = null;
+  private List<AclOwnerParam> owners = new ArrayList<>();
 
-  public SetMcpServerAclsParam code(Object code) {
+  public SetMcpServerAclsParam code(String code) {
     this.code = code;
     return this;
   }
@@ -41,16 +44,21 @@ public class SetMcpServerAclsParam {
    * @return code
   **/
   @Schema(required = true, description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public SetMcpServerAclsParam owners(Object owners) {
+  public SetMcpServerAclsParam owners(List<AclOwnerParam> owners) {
     this.owners = owners;
+    return this;
+  }
+
+  public SetMcpServerAclsParam addOwnersItem(AclOwnerParam ownersItem) {
+    this.owners.add(ownersItem);
     return this;
   }
 
@@ -59,11 +67,11 @@ public class SetMcpServerAclsParam {
    * @return owners
   **/
   @Schema(required = true, description = "")
-  public Object getOwners() {
+  public List<AclOwnerParam> getOwners() {
     return owners;
   }
 
-  public void setOwners(Object owners) {
+  public void setOwners(List<AclOwnerParam> owners) {
     this.owners = owners;
   }
 

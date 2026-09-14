@@ -12,7 +12,9 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.GeboChatMessageEnvelope;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
+import gebo.microservices.api.client.brain.model.PipelineChatMenu;
 import gebo.microservices.api.client.brain.model.PipelineRequestBody;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -41,7 +43,7 @@ public class GeboChatPipelinesControllerApiTest {
     @Test
     public void executeChatPipelineTest() {
         PipelineRequestBody body = null;
-        Object pipelineCode = null;
+        String pipelineCode = null;
         GeboChatResponse response = api.executeChatPipeline(body, pipelineCode);
 
         // TODO: test validations
@@ -71,8 +73,8 @@ public class GeboChatPipelinesControllerApiTest {
      */
     @Test
     public void getDefaultPersonalPipelinesChatMenuTest() {
-        Object chatProfileCode = null;
-        Object response = api.getDefaultPersonalPipelinesChatMenu(chatProfileCode);
+        String chatProfileCode = null;
+        List<PipelineChatMenu> response = api.getDefaultPersonalPipelinesChatMenu(chatProfileCode);
 
         // TODO: test validations
     }
@@ -86,9 +88,9 @@ public class GeboChatPipelinesControllerApiTest {
      */
     @Test
     public void getPersonalPipelinesChatMenuTest() {
-        Object chatProfileCode = null;
-        Object pipelineCode = null;
-        Object response = api.getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode);
+        String chatProfileCode = null;
+        String pipelineCode = null;
+        List<PipelineChatMenu> response = api.getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode);
 
         // TODO: test validations
     }
@@ -102,7 +104,7 @@ public class GeboChatPipelinesControllerApiTest {
      */
     @Test
     public void stopChatPipelineTest() {
-        Object userChatContextCode = null;
+        String userChatContextCode = null;
         api.stopChatPipeline(userChatContextCode);
 
         // TODO: test validations
@@ -118,8 +120,8 @@ public class GeboChatPipelinesControllerApiTest {
     @Test
     public void streamChatPipelineTest() {
         PipelineRequestBody body = null;
-        Object pipelineCode = null;
-        Object response = api.streamChatPipeline(body, pipelineCode);
+        String pipelineCode = null;
+        List<GeboChatMessageEnvelope> response = api.streamChatPipeline(body, pipelineCode);
 
         // TODO: test validations
     }
@@ -134,7 +136,7 @@ public class GeboChatPipelinesControllerApiTest {
     @Test
     public void streamDefaultChatPipelineTest() {
         PipelineRequestBody body = null;
-        Object response = api.streamDefaultChatPipeline(body);
+        List<GeboChatMessageEnvelope> response = api.streamDefaultChatPipeline(body);
 
         // TODO: test validations
     }

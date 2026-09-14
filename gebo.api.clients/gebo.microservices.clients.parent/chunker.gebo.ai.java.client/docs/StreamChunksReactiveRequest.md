@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**batches** | **Object** |  |  [optional]
+**batches** | [**List&lt;DocumentBatch&gt;**](DocumentBatch.md) |  |  [optional]
 **chunkingSpecs** | [**ChunkingParams**](ChunkingParams.md) |  |  [optional]
-**chunkSessionId** | **Object** |  |  [optional]
-**docConcurrency** | **Object** |  |  [optional]
+**chunkSessionId** | **String** |  |  [optional]
+**docConcurrency** | **Integer** |  |  [optional]

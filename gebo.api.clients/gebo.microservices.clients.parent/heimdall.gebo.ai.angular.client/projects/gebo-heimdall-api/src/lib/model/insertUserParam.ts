@@ -13,5 +13,5 @@ import { EditableUser } from './editableUser';
 
 export interface InsertUserParam { 
     user: EditableUser;
-    password: any;
+    password: string;
 }

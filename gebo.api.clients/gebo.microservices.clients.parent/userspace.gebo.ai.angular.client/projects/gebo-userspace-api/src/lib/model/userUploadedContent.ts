@@ -11,16 +11,16 @@
  */
 
 export interface UserUploadedContent { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    fileName: any;
-    extension: any;
-    contentType: any;
-    fileSize: any;
-    tokensCount: any;
-    userContextCode: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    fileName: string;
+    extension: string;
+    contentType: string;
+    fileSize: number;
+    tokensCount: number;
+    userContextCode: string;
 }

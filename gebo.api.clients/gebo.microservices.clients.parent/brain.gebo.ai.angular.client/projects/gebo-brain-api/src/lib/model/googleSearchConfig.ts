@@ -11,7 +11,7 @@
  */
 
 export interface GoogleSearchConfig { 
-    apiKey?: any;
-    customSearchEngineId?: any;
-    enabled?: any;
+    apiKey?: string;
+    customSearchEngineId?: string;
+    enabled?: boolean;
 }

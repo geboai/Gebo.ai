@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class TavilySearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -137,10 +137,10 @@ public class TavilySearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GTavilySearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getTavilySearchApiCredentials() throws RestClientException {
+    public List<GTavilySearchApiCredentials> getTavilySearchApiCredentials() throws RestClientException {
         return getTavilySearchApiCredentialsWithHttpInfo().getBody();
     }
 
@@ -148,10 +148,10 @@ public class TavilySearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GTavilySearchApiCredentials&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getTavilySearchApiCredentialsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GTavilySearchApiCredentials>> getTavilySearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/TavilySearchConfigurationController/getTavilySearchApiCredentials").build().toUriString();
         
@@ -168,7 +168,7 @@ public class TavilySearchConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GTavilySearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GTavilySearchApiCredentials>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -263,7 +263,7 @@ public class TavilySearchConfigurationControllerApi {
      * @return GTavilySearchApiCredentials
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GTavilySearchApiCredentials searchGTavilySearchApiCredentialsByCode(Object code) throws RestClientException {
+    public GTavilySearchApiCredentials searchGTavilySearchApiCredentialsByCode(String code) throws RestClientException {
         return searchGTavilySearchApiCredentialsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -275,7 +275,7 @@ public class TavilySearchConfigurationControllerApi {
      * @return ResponseEntity&lt;GTavilySearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GTavilySearchApiCredentials> searchGTavilySearchApiCredentialsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GTavilySearchApiCredentials> searchGTavilySearchApiCredentialsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

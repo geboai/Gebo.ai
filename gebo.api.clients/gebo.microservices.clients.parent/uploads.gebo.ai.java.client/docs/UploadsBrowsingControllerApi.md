@@ -24,7 +24,7 @@ Method | HTTP request | Description
 
 UploadsBrowsingControllerApi apiInstance = new UploadsBrowsingControllerApi();
 BrowseParam body = new BrowseParam(); // BrowseParam | 
-Object endpointCode = null; // Object | 
+String endpointCode = "endpointCode_example"; // String | 
 try {
     OperationStatusListPathInfo result = apiInstance.browseUploadsEndpointPath(body, endpointCode);
     System.out.println(result);
@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**BrowseParam**](BrowseParam.md)|  |
- **endpointCode** | [**Object**](.md)|  |
+ **endpointCode** | **String**|  |
 
 ### Return type
 
@@ -68,8 +68,8 @@ No authorization required
 
 
 UploadsBrowsingControllerApi apiInstance = new UploadsBrowsingControllerApi();
-Object body = null; // Object | 
-Object endpointCode = null; // Object | 
+List<VFilesystemReference> body = Arrays.asList(new VFilesystemReference()); // List<VFilesystemReference> | 
+String endpointCode = "endpointCode_example"; // String | 
 try {
     OperationStatusListVirtualFilesystemNavigationTreeStatus result = apiInstance.getUploadsEndpointNavigationStatus(body, endpointCode);
     System.out.println(result);
@@ -83,8 +83,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
- **endpointCode** | [**Object**](.md)|  |
+ **body** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md)|  |
+ **endpointCode** | **String**|  |
 
 ### Return type
 
@@ -113,7 +113,7 @@ No authorization required
 
 
 UploadsBrowsingControllerApi apiInstance = new UploadsBrowsingControllerApi();
-Object endpointCode = null; // Object | 
+String endpointCode = "endpointCode_example"; // String | 
 try {
     OperationStatusListGVirtualFilesystemRoot result = apiInstance.getUploadsEndpointRoots(endpointCode);
     System.out.println(result);
@@ -127,7 +127,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **endpointCode** | [**Object**](.md)|  |
+ **endpointCode** | **String**|  |
 
 ### Return type
 
@@ -144,7 +144,7 @@ No authorization required
 
 <a name="serveUploadsEndpointFile"></a>
 # **serveUploadsEndpointFile**
-> Object serveUploadsEndpointFile(endpointCode, path)
+> File serveUploadsEndpointFile(endpointCode, path)
 
 
 
@@ -156,10 +156,10 @@ No authorization required
 
 
 UploadsBrowsingControllerApi apiInstance = new UploadsBrowsingControllerApi();
-Object endpointCode = null; // Object | 
-Object path = null; // Object | 
+String endpointCode = "endpointCode_example"; // String | 
+String path = "path_example"; // String | 
 try {
-    Object result = apiInstance.serveUploadsEndpointFile(endpointCode, path);
+    File result = apiInstance.serveUploadsEndpointFile(endpointCode, path);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UploadsBrowsingControllerApi#serveUploadsEndpointFile");
@@ -171,12 +171,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **endpointCode** | [**Object**](.md)|  |
- **path** | [**Object**](.md)|  |
+ **endpointCode** | **String**|  |
+ **path** | **String**|  |
 
 ### Return type
 
-**Object**
+[**File**](File.md)
 
 ### Authorization
 

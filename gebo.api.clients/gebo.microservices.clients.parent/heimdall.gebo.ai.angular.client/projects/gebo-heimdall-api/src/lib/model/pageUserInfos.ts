@@ -11,17 +11,18 @@
  */
 import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
+import { UserInfos } from './userInfos';
 
 export interface PageUserInfos { 
-    totalElements?: any;
-    totalPages?: any;
+    totalPages?: number;
+    totalElements?: number;
     pageable?: PageableObject;
-    first?: any;
-    last?: any;
-    size?: any;
-    content?: any;
-    number?: any;
+    first?: boolean;
+    last?: boolean;
+    size?: number;
+    content?: Array<UserInfos>;
+    number?: number;
     sort?: SortObject;
-    numberOfElements?: any;
-    empty?: any;
+    numberOfElements?: number;
+    empty?: boolean;
 }

@@ -114,10 +114,10 @@ export class McpClientConfigControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findMCPClientConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusMCPClientConfig>;
-    public findMCPClientConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusMCPClientConfig>>;
-    public findMCPClientConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusMCPClientConfig>>;
-    public findMCPClientConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findMCPClientConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusMCPClientConfig>;
+    public findMCPClientConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusMCPClientConfig>>;
+    public findMCPClientConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusMCPClientConfig>>;
+    public findMCPClientConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findMCPClientConfigByCode.');

@@ -69,7 +69,7 @@ No authorization required
 
 
 McpClientSystemsControllerApi apiInstance = new McpClientSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     MCPClientProjectEndpoint result = apiInstance.findMCPClientEndpointsByCode(code);
     System.out.println(result);
@@ -83,7 +83,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -100,7 +100,7 @@ No authorization required
 
 <a name="findMCPClientEndpointsByProject"></a>
 # **findMCPClientEndpointsByProject**
-> Object findMCPClientEndpointsByProject(parentProjectCode)
+> List&lt;MCPClientProjectEndpoint&gt; findMCPClientEndpointsByProject(parentProjectCode)
 
 
 
@@ -112,9 +112,9 @@ No authorization required
 
 
 McpClientSystemsControllerApi apiInstance = new McpClientSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findMCPClientEndpointsByProject(parentProjectCode);
+    List<MCPClientProjectEndpoint> result = apiInstance.findMCPClientEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling McpClientSystemsControllerApi#findMCPClientEndpointsByProject");
@@ -126,11 +126,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;MCPClientProjectEndpoint&gt;**](MCPClientProjectEndpoint.md)
 
 ### Authorization
 
@@ -143,7 +143,7 @@ No authorization required
 
 <a name="findMCPClientEndpointsByQbe"></a>
 # **findMCPClientEndpointsByQbe**
-> Object findMCPClientEndpointsByQbe(body)
+> List&lt;MCPClientProjectEndpoint&gt; findMCPClientEndpointsByQbe(body)
 
 
 
@@ -157,7 +157,7 @@ No authorization required
 McpClientSystemsControllerApi apiInstance = new McpClientSystemsControllerApi();
 MCPClientProjectEndpoint body = new MCPClientProjectEndpoint(); // MCPClientProjectEndpoint | 
 try {
-    Object result = apiInstance.findMCPClientEndpointsByQbe(body);
+    List<MCPClientProjectEndpoint> result = apiInstance.findMCPClientEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling McpClientSystemsControllerApi#findMCPClientEndpointsByQbe");
@@ -173,7 +173,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;MCPClientProjectEndpoint&gt;**](MCPClientProjectEndpoint.md)
 
 ### Authorization
 

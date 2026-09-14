@@ -3,4 +3,4 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**file** | **Object** |  | 
+**file** | [**File**](File.md) |  | 

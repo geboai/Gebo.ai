@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseChatModelConfig;
+import gebo.microservices.api.client.brain.model.GChatModelType;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +40,7 @@ public class ChatModelsControllerApiTest {
      */
     @Test
     public void getChatModelTypesTest() {
-        Object response = api.getChatModelTypes();
+        List<GChatModelType> response = api.getChatModelTypes();
 
         // TODO: test validations
     }
@@ -52,8 +54,8 @@ public class ChatModelsControllerApiTest {
      */
     @Test
     public void getRuntimeConfiguredChatModelsTest() {
-        Object modelTypeCode = null;
-        Object response = api.getRuntimeConfiguredChatModels(modelTypeCode);
+        String modelTypeCode = null;
+        List<ConfigurationEntryGBaseChatModelConfig> response = api.getRuntimeConfiguredChatModels(modelTypeCode);
 
         // TODO: test validations
     }

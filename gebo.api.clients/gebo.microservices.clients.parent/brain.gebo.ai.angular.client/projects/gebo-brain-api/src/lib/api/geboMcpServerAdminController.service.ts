@@ -65,10 +65,10 @@ export class GeboMcpServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMcpServer(code: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteMcpServer(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteMcpServer(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteMcpServer(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteMcpServer(code: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteMcpServer(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteMcpServer(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteMcpServer(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling deleteMcpServer.');
@@ -111,10 +111,10 @@ export class GeboMcpServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findMcpServerByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GeboMCPServerConfig>;
-    public findMcpServerByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboMCPServerConfig>>;
-    public findMcpServerByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboMCPServerConfig>>;
-    public findMcpServerByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findMcpServerByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GeboMCPServerConfig>;
+    public findMcpServerByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboMCPServerConfig>>;
+    public findMcpServerByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboMCPServerConfig>>;
+    public findMcpServerByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findMcpServerByCode.');
@@ -157,9 +157,9 @@ export class GeboMcpServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllMcpServers(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllMcpServers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllMcpServers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllMcpServers(observe?: 'body', reportProgress?: boolean): Observable<Array<GeboMCPServerConfig>>;
+    public getAllMcpServers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboMCPServerConfig>>>;
+    public getAllMcpServers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboMCPServerConfig>>>;
     public getAllMcpServers(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -177,7 +177,7 @@ export class GeboMcpServerAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboMCPServerAdminController/getAllMcpServers`,
+        return this.httpClient.request<Array<GeboMCPServerConfig>>('get',`${this.basePath}/api/admin/GeboMCPServerAdminController/getAllMcpServers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

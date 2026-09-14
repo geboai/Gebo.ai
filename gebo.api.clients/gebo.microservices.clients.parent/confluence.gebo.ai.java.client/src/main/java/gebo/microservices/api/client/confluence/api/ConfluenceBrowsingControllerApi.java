@@ -6,6 +6,7 @@ import gebo.microservices.api.client.confluence.model.BrowseParam;
 import gebo.microservices.api.client.confluence.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.confluence.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.confluence.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.confluence.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class ConfluenceBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +55,7 @@ public class ConfluenceBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseConfluencePath(BrowseParam body, Object systemCode) throws RestClientException {
+    public OperationStatusListPathInfo browseConfluencePath(BrowseParam body, String systemCode) throws RestClientException {
         return browseConfluencePathWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -67,7 +68,7 @@ public class ConfluenceBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseConfluencePathWithHttpInfo(BrowseParam body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseConfluencePathWithHttpInfo(BrowseParam body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -107,7 +108,7 @@ public class ConfluenceBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getConfluenceNavigationStatus(Object body, Object systemCode) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getConfluenceNavigationStatus(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         return getConfluenceNavigationStatusWithHttpInfo(body, systemCode).getBody();
     }
 
@@ -120,7 +121,7 @@ public class ConfluenceBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getConfluenceNavigationStatusWithHttpInfo(Object body, Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getConfluenceNavigationStatusWithHttpInfo(List<VFilesystemReference> body, String systemCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -159,7 +160,7 @@ public class ConfluenceBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getConfluenceRoots(Object systemCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getConfluenceRoots(String systemCode) throws RestClientException {
         return getConfluenceRootsWithHttpInfo(systemCode).getBody();
     }
 
@@ -171,7 +172,7 @@ public class ConfluenceBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getConfluenceRootsWithHttpInfo(Object systemCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getConfluenceRootsWithHttpInfo(String systemCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'systemCode' is set
         if (systemCode == null) {

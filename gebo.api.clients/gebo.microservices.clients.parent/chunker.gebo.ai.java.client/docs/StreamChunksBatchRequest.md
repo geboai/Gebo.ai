@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**documents** | **Object** |  |  [optional]
+**documents** | [**List&lt;IGComponentOriginatedDocument&gt;**](IGComponentOriginatedDocument.md) |  |  [optional]
 **chunkingSpecs** | [**ChunkingParams**](ChunkingParams.md) |  |  [optional]
-**chunkSessionId** | **Object** |  |  [optional]
-**docConcurrency** | **Object** |  |  [optional]
+**chunkSessionId** | **String** |  |  [optional]
+**docConcurrency** | **Integer** |  |  [optional]

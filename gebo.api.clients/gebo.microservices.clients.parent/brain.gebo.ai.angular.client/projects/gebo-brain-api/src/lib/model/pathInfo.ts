@@ -11,9 +11,19 @@
  */
 
 export interface PathInfo { 
-    absolutePath?: any;
-    name?: any;
-    folder?: any;
-    metaType?: any;
-    iconKey?: any;
+    absolutePath?: string;
+    name?: string;
+    folder?: boolean;
+    metaType?: PathInfo.MetaTypeEnum;
+    iconKey?: string;
+}
+export namespace PathInfo {
+    export type MetaTypeEnum = 'WEB_PAGE' | 'FILE' | 'FOLDER' | 'DEVICE' | 'UNKNOWN';
+    export const MetaTypeEnum = {
+        WEBPAGE: 'WEB_PAGE' as MetaTypeEnum,
+        FILE: 'FILE' as MetaTypeEnum,
+        FOLDER: 'FOLDER' as MetaTypeEnum,
+        DEVICE: 'DEVICE' as MetaTypeEnum,
+        UNKNOWN: 'UNKNOWN' as MetaTypeEnum
+    };
 }

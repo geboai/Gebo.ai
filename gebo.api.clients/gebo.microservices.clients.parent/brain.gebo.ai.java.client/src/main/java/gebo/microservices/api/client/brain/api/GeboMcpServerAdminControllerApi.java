@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboMcpServerAdminControllerApi {
     private ApiClient apiClient;
@@ -52,7 +52,7 @@ public class GeboMcpServerAdminControllerApi {
      * @param code  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteMcpServer(Object code) throws RestClientException {
+    public void deleteMcpServer(String code) throws RestClientException {
         deleteMcpServerWithHttpInfo(code);
     }
 
@@ -64,7 +64,7 @@ public class GeboMcpServerAdminControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteMcpServerWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<Void> deleteMcpServerWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -95,7 +95,7 @@ public class GeboMcpServerAdminControllerApi {
      * @return GeboMCPServerConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboMCPServerConfig findMcpServerByCode(Object code) throws RestClientException {
+    public GeboMCPServerConfig findMcpServerByCode(String code) throws RestClientException {
         return findMcpServerByCodeWithHttpInfo(code).getBody();
     }
 
@@ -107,7 +107,7 @@ public class GeboMcpServerAdminControllerApi {
      * @return ResponseEntity&lt;GeboMCPServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboMCPServerConfig> findMcpServerByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GeboMCPServerConfig> findMcpServerByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -136,10 +136,10 @@ public class GeboMcpServerAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GeboMCPServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllMcpServers() throws RestClientException {
+    public List<GeboMCPServerConfig> getAllMcpServers() throws RestClientException {
         return getAllMcpServersWithHttpInfo().getBody();
     }
 
@@ -147,10 +147,10 @@ public class GeboMcpServerAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GeboMCPServerConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllMcpServersWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GeboMCPServerConfig>> getAllMcpServersWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboMCPServerAdminController/getAllMcpServers").build().toUriString();
         
@@ -167,7 +167,7 @@ public class GeboMcpServerAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GeboMCPServerConfig>> returnType = new ParameterizedTypeReference<List<GeboMCPServerConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

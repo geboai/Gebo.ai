@@ -11,6 +11,6 @@
  */
 
 export interface UserWorkflows { 
-    activationWorkflowEnabled?: any;
-    forgotPasswordWorkflowEnabled?: any;
+    activationWorkflowEnabled?: boolean;
+    forgotPasswordWorkflowEnabled?: boolean;
 }
