@@ -29,6 +29,8 @@ import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.model.base.GeboComponentInfo;
+import ai.gebo.security.services.IGeboSystemUserService;
+import ai.gebo.security.services.IdentityUtil;
 
 /**
  * A <b>symbolic</b> messaging component that puts the agent-network responder's
@@ -58,11 +60,14 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 
 	private final ObjectProvider<IAgentsNetworkDao> agentsNetworkDaoProvider;
 	private final ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider;
+	private final ObjectProvider<IGeboSystemUserService> systemUserServiceProvider;
 
 	public GAgentsNetworkDataFlowComponent(@Autowired ObjectProvider<IAgentsNetworkDao> agentsNetworkDaoProvider,
-			@Autowired ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider) {
+			@Autowired ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider,
+			@Autowired ObjectProvider<IGeboSystemUserService> systemUserServiceProvider) {
 		this.agentsNetworkDaoProvider = agentsNetworkDaoProvider;
 		this.searchServicesProvider = searchServicesProvider;
+		this.systemUserServiceProvider = systemUserServiceProvider;
 	}
 
 	@Override
@@ -93,7 +98,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		}
 		List<GAgentsNetwork> networks;
 		try {
-			networks = agentsNetworkDao.getConfigurations();
+			networks = listNetworks(agentsNetworkDao);
 		} catch (RuntimeException e) {
 			return null;
 		}
@@ -216,5 +221,34 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 
 	private static List<MetaEndpointType> list(MetaEndpointType... types) {
 		return new java.util.ArrayList<MetaEndpointType>(List.of(types));
+	}
+
+	/**
+	 * Enumerates the configured networks under the platform's own system identity.
+	 *
+	 * <p>
+	 * The register is assembled from a {@code ContextRefreshedEvent} (see
+	 * {@code MessageBrokeringAssembler}), on a thread that carries no caller identity,
+	 * while building each network configuration transitively reaches security checks -
+	 * {@code GSecurityServiceImpl.isCurrentUserAdmin()} through the tool repository -
+	 * that require an authenticated {@code SecurityContext}. Without one the MCP tool
+	 * export fails with "Not authenticated" and the snapshot silently describes the
+	 * networks as having no tools at all.
+	 * </p>
+	 *
+	 * <p>
+	 * This impersonation is for the compliance snapshot only, and must not be extended
+	 * to the request path: nothing caches these configurations, so at request time the
+	 * same network is rebuilt on the caller's own thread and each user keeps getting a
+	 * network resolved under their own profile and ACLs.
+	 * </p>
+	 */
+	private List<GAgentsNetwork> listNetworks(IAgentsNetworkDao agentsNetworkDao) {
+		IGeboSystemUserService systemUserService = systemUserServiceProvider.getIfAvailable();
+		if (systemUserService == null) {
+			return agentsNetworkDao.getConfigurations();
+		}
+		return IdentityUtil.create(systemUserService.getUsername(), systemUserService.getRoles())
+				.doRunAsWithReturn(() -> agentsNetworkDao.getConfigurations());
 	}
 }

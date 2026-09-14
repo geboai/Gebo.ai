@@ -27,7 +27,7 @@ import lombok.AllArgsConstructor;
  * office agents-network streaming step; it is selected with
  * {@code pipelineCode=office-assistant}.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Component
 @AllArgsConstructor
 public class OfficeAssistantPipelineConfig {

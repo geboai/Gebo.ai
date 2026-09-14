@@ -9,13 +9,13 @@
 */
 -->
 
-<p-blockUI [blocked]="loading">
+<p-blockUI [target]="workflowStatsPanel" [blocked]="loading">
   <div class="flex justify-content-center align-items-center h-full">
     <i class="pi pi-spin pi-spinner" style="font-size: 3rem; color: var(--primary-color)"></i>
   </div>
 </p-blockUI>
 
-<p-panel id="workflowStatsDashboardPanel">
+<p-panel #workflowStatsPanel id="workflowStatsDashboardPanel">
   @if (hasNoStats) {
     <div class="flex flex-column align-items-center justify-content-center p-6 text-500 text-center">
       <i class="pi pi-info-circle text-5xl mb-3" style="color: var(--text-color-secondary)"></i>

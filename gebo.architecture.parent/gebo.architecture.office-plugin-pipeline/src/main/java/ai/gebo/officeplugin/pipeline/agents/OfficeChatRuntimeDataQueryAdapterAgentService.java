@@ -51,7 +51,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
  * is aware both of the user's question and of the piece of document being worked
  * on.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
 public class OfficeChatRuntimeDataQueryAdapterAgentService extends ChatRuntimeDataQueryAdapterAgentService {
 

@@ -2,10 +2,10 @@
   <gebo-ai-notifications [messages]="messages"></gebo-ai-notifications>
 }
 <p-fieldset id="HeaderFieldSet" gebo-ai-label legend="Use or create api key credentials">
-  <p-blockUI id="BlockUI"  [blocked]="loading">
+  <p-blockUI id="BlockUI" [target]="apiKeyBox" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
-  <div class="grid" [formGroup]="secretFormGroup">
+  <div class="grid" #apiKeyBox="geboBlockableContainer" geboBlockableContainer [formGroup]="secretFormGroup">
     <div class="col-3">
       <gebo-ai-field id="UseExistingOrNewCredentials" label="Use existing or new"
         help="Use existing or create new credentials for this provider">

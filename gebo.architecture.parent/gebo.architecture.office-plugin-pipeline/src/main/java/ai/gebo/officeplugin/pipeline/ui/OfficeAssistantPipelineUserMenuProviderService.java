@@ -26,7 +26,7 @@ import ai.gebo.officeplugin.pipeline.OfficeAssistantConstants;
  * through its network of agents, so it exposes a single "Agentic chat" option with
  * no explicit route override (the pipeline router shortcuts to the network).
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Component
 @Scope("singleton")
 public class OfficeAssistantPipelineUserMenuProviderService implements IPipelineUserMenuProviderService {

@@ -37,6 +37,7 @@ import { FieldsetModule } from "primeng/fieldset";
 import { SelectModule } from 'primeng/select';
 import { GEBO_AI_MODULE} from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
+import { GeboBlockableContainerDirective } from "../../directives/blockable-container/blockable-container.directive";
 
 /**
  * NgModule for content reindexing functionality.
@@ -53,7 +54,7 @@ import { GeboAIFieldTranslationContainerModule } from "../field-translation-cont
  * Only the GeboAIContentReindexScheduleComponent is exported for use in other modules.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, DatePickerModule, InputNumberModule, FieldsetModule,GeboAIFieldTranslationContainerModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, DatePickerModule, InputNumberModule, FieldsetModule,GeboAIFieldTranslationContainerModule, GeboBlockableContainerDirective],
     declarations: [GeboAIPeriodsSchedulingBaseComponent, TimeSetComponent, GeboAIContentReindexScheduleComponent],
     exports: [GeboAIContentReindexScheduleComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: false }]

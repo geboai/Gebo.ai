@@ -48,7 +48,7 @@ import ai.gebo.officeplugin.pipeline.steps.OfficeAgentsNetworkStreamingStepServi
  * ({@code ai.gebo.agents.standard.enabled=true}); the office network reuses its
  * searcher/tool config data sources and the shared controller agent service.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 public class OfficeAgentsInitialization {
 
