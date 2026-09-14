@@ -583,8 +583,17 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				iterationValue = render(session, startedContribution, actualContributionNr, fixedBudget, splitByBudget);
 				String sharedContext = nullToEmpty(iterationValue.getContext());
 				params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
-				startedContribution = iterationValue.getLastContribution();
+				// Past the last rendered contribution, not onto it: getSampledContributionsAfter
+				// filters on >= , so reusing lastContribution as-is makes every window repeat
+				// the previous window's final contribution and waste that much budget.
+				startedContribution = iterationValue.getLastContribution() + 1;
 				vectorized.add(params);
+				if (splitByBudget && sharedContext.isBlank()) {
+					// Defensive: a window carrying no contribution cannot advance the cursor,
+					// so continuing would loop. renderBatchedContributions(...) always inserts
+					// at least one contribution, so this is only reachable if that changes.
+					break;
+				}
 			} while (iterationValue != null && (splitByBudget && !iterationValue.isFinishedContributions()));
 		} else {
 			vectorized.add(constantParams);
@@ -929,13 +938,24 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		int insertedSlots = 0;
 		for (AgentProducedSessionContribution agentProducedSessionContribution : remainingContributions) {
 			String rendered = renderContribution(agentProducedSessionContribution);
-			remainingBudget -= ITokensCountable.stringsTokensSize(rendered);
-			if (remainingBudget >= 0) {
-				minContribution = Math.min(agentProducedSessionContribution.getContributionUniqueNr(), minContribution);
-				maxContribution = Math.max(agentProducedSessionContribution.getContributionUniqueNr(), maxContribution);
-				inner.append(rendered);
-				insertedSlots++;
+			final int renderedTokens = ITokensCountable.stringsTokensSize(rendered);
+			// The first contribution of a window always goes in, even when it alone is
+			// over budget. A window that renders nothing cannot move the caller's cursor,
+			// so the do/while in createAgentTemplateParams(...) would re-render the same
+			// contribution for ever. This mirrors the coordinator's own batching
+			// (TokensBudgetFluxCoordinator.emitQueueWhenPredicateTrue), which likewise
+			// never drops an oversized element - it just lets it travel on its own.
+			if (insertedSlots > 0 && renderedTokens > remainingBudget) {
+				// Stop at the first contribution that does not fit rather than scanning on:
+				// the cursor below is the LAST included contribution, so the window has to
+				// stay a contiguous range or the skipped ones would never be rendered.
+				break;
 			}
+			remainingBudget -= renderedTokens;
+			minContribution = Math.min(agentProducedSessionContribution.getContributionUniqueNr(), minContribution);
+			maxContribution = Math.max(agentProducedSessionContribution.getContributionUniqueNr(), maxContribution);
+			inner.append(rendered);
+			insertedSlots++;
 		}
 		StringBuffer buffer = new StringBuffer();
 		if (!inner.isEmpty()) {
@@ -946,7 +966,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			buffer.append(NEWLINE);
 		}
 		return new RenderedRange(minContribution, maxContribution, buffer.toString(),
-				insertedSlots == remainingContributions.size());
+				insertedSlots >= remainingContributions.size());
 	}
 
 	private String renderContributionData(Object data) {
