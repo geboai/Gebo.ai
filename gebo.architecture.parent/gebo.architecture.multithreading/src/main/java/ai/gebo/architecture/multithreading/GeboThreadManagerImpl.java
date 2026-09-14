@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
@@ -43,8 +44,12 @@ public class GeboThreadManagerImpl implements IGeboThreadManager, ApplicationLis
 	// Executor service for creating and managing threads
 	private final ThreadPoolTaskExecutor executor;
 
-	// Map to store running tasks against their identifiers
-	private final Map<String, RunnableWrapper> map = new HashMap<String, RunnableWrapper>();
+	// Map to store running tasks against their identifiers. Concurrent because every
+	// pooled thread writes to it (put on start, remove on exit) while others read it:
+	// with a plain HashMap, logging map.keySet() from exited() iterated the map while
+	// another thread was mutating it, and the resulting ConcurrentModificationException
+	// escaped the finally block in RunnableWrapper.run() and killed the worker thread.
+	private final Map<String, RunnableWrapper> map = new ConcurrentHashMap<String, RunnableWrapper>();
 
 	// Counter map to keep track of instances of each runnable type
 	private final Map<String, Integer> cntr = new HashMap<String, Integer>();
@@ -194,8 +199,16 @@ public class GeboThreadManagerImpl implements IGeboThreadManager, ApplicationLis
 	 * @param runnable        the runnable that has exited
 	 */
 	void exited(RunnableWrapper runnableWrapper, IGRunnable runnable) {
+		// Called from the finally of RunnableWrapper.run(), so anything escaping here
+		// kills the pooled thread instead of just failing the task: the bookkeeping is
+		// done first and the task's own cleanUp() is isolated, exactly as the callback
+		// invocation in run() already is.
 		map.remove(runnableWrapper.id);
-		runnable.cleanUp();
+		try {
+			runnable.cleanUp();
+		} catch (Throwable th) {
+			LOGGER.error("Error cleaning up =>" + runnableWrapper.id, th);
+		}
 		LOGGER.info("Still running==>" + map.keySet());
 	}
 
