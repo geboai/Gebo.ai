@@ -6,7 +6,7 @@
 
   <form [formGroup]="formGroup" (submit)="onSubmit()">
 
-    @if (ragsystem) {
+    @if (ragsystem && !disableFilesBrowsers) {
       <gebo-ai-choose-documents-panel-component [interactionDisabled]="loading"
         [maxDisplayedDocuments]="3" [knowledgeBaseCodes]="knowledgeBaseCodes"
         [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"

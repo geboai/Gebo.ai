@@ -76,6 +76,12 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Input() formGroup!: FormGroup;
 
   @Input() ragsystem!: boolean;
+  /**
+   * When true the company/userspace file browsers are unavailable: the
+   * choose-documents panel is not rendered and the "Browse/search company
+   * file(s)" menu entry is hidden.
+   */
+  @Input() disableFilesBrowsers: boolean = false;
   @Input() chatUserInfos?: GeboChatUserInfo;
   @Input() knowledgeBaseCodes?: string[] = undefined;
 
@@ -127,7 +133,15 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       this.openSelectDocsDialog();
     }
   }];
-  protected addBehaviorsMenu: MenuItem[] = this.staticBehaviorsMenuItems;
+  protected addBehaviorsMenu: MenuItem[] = this.enabledStaticBehaviorsMenuItems();
+
+  /**
+   * The static menu entries that are actually offered: the company files browser
+   * entry is dropped altogether when the file browsers are disabled.
+   */
+  private enabledStaticBehaviorsMenuItems(): MenuItem[] {
+    return this.staticBehaviorsMenuItems.filter(x => !(this.disableFilesBrowsers && x.id === "ChatWithDocsMenuItem"));
+  }
 
   private allPipelineRoutingOptions: PipelineRoutingOption[] = [];
   protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
@@ -229,7 +243,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     });
   }
   private recreateMenuAndRouteOptions(): void {
-    const newMenu: MenuItem[] = [...this.staticBehaviorsMenuItems];
+    const newMenu: MenuItem[] = [...this.enabledStaticBehaviorsMenuItems()];
     const allPipelineRoutingOptions: PipelineRoutingOption[] = [chatWithFilesPipelineOption];
     this.pipelineChatMenu.forEach(menuItem => {
       if (menuItem.items && menuItem.items.length === 1) {
@@ -307,10 +321,16 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
         this.setChatMode("standard-chat");
       }
     }
-    if (changes["ragsystem"]) {
+    if (changes["disableFilesBrowsers"]) {
+      if (this.disableFilesBrowsers) {
+        this.closeSelectDocsDialog();
+      }
+      this.addBehaviorsMenu = this.addBehaviorsMenu.filter(x => !(this.disableFilesBrowsers && x.id === "ChatWithDocsMenuItem"));
+    }
+    if (changes["ragsystem"] || changes["disableFilesBrowsers"]) {
       const item = this.addBehaviorsMenu.find(x => x.id === "ChatWithDocsMenuItem");
       if (item) {
-        item.disabled = !this.ragsystem;
+        item.disabled = !this.ragsystem || this.disableFilesBrowsers;
       }
       this.addBehaviorsMenu = [...this.addBehaviorsMenu];
     }
@@ -424,9 +444,19 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   }
 
   openSelectDocsDialog() {
+    if (this.disableFilesBrowsers) {
+      return;
+    }
     this.nextRequestMode = "standard-chat";
     this.openSelectDocumentsWindow = true;
     this.openSelectDocumentsWindowChange.emit(true);
+  }
+
+  private closeSelectDocsDialog(): void {
+    if (this.openSelectDocumentsWindow) {
+      this.openSelectDocumentsWindow = false;
+      this.openSelectDocumentsWindowChange.emit(false);
+    }
   }
 
   onSkipDeepSearchEvent(_event: any): void {

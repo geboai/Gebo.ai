@@ -243,6 +243,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     @Input() ragsystem: boolean = false;
 
     /**
+     * When true the user cannot browse or select company/userspace files: the
+     * choose-documents panel (and the userspace files browser it hosts) is not
+     * rendered and the chat menu entry that opens it is hidden/disabled.
+     */
+    @Input() disableFilesBrowsers: boolean = false;
+
+    /**
      * Additional content (e.g. the document fragment(s) the user is editing) to
      * attach to every outgoing chat request as GeboChatRequest.additionalContents.
      * Driven by the host; when it changes it is copied into the request form group.
