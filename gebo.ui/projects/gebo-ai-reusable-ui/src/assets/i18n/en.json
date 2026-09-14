@@ -2501,6 +2501,12 @@
             },
             "LogTableComponent": {
                 "help": "This shared filesystem area ingestion log"
+            },
+            "SearchInput": {
+                "placeholder": "search logs"
+            },
+            "NoLogEntries": {
+                "label": "No log entry matches the current filters"
             }
         },
         "GJobStatus": {
@@ -4337,6 +4343,17 @@
         "GeboAIMainMicroLanguageComponent": {
             "MicroLanguageBtn": {
                 "help": "Change language"
+            }
+        }
+    },
+    "GeboAiLogsViewPanelModule": {
+        "GeboAiLogsViewComponent": {
+            "datasourceTypes": {
+                "label": "Data source types",
+                "help": "Data source types whose ingestion logs are listed. Leave empty to list them all."
+            },
+            "datasourceTypesSelector": {
+                "placeholder": "All data source types"
             }
         }
     }
