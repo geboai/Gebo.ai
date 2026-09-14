@@ -26,6 +26,7 @@ import type {
   GUserChatInfo,
 } from '@Gebo.ai/gebo-ai-rest-api';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from '../field-host-component-iface/field-host-component-iface';
+import { UI_COMPANY_FILES_NOT_SELECTABLE } from '../chat-control/company-files-selection.token';
 
 /** The two tabs the assistant panel exposes. */
 export type AssistantTab = 'assistant' | 'suggestion';
@@ -107,6 +108,14 @@ export class GeboAIOfficeAssistantComponent {
   readonly startChatWithProfile = output<string>();
 
   private readonly sanitizer = inject(DomSanitizer);
+
+  /**
+   * Value passed to the chat control as [disableFilesBrowsers], derived from the
+   * optional UI_COMPANY_FILES_NOT_SELECTABLE token: missing or false leaves the
+   * company/userspace file browsers available, true disables them.
+   */
+  readonly disableFilesBrowsers =
+    inject(UI_COMPANY_FILES_NOT_SELECTABLE, { optional: true }) === true;
 
   /** Which of the two tabs is active — pure UI state owned here. */
   readonly activeTab = signal<AssistantTab>('assistant');

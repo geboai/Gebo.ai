@@ -20,7 +20,7 @@
     <p class="assistant-status" id="ConnectingTheAssistant" gebo-ai-text>Connecting the assistant…</p>
     } @else if (chatInfo(); as chat) {
     <gebo-ai-reusable-chat-component [chatInfo]="chat" [ragsystem]="true" [pipelineId]="pipelineId()"
-      [additionalContents]="additionalContents()"
+      [additionalContents]="additionalContents()" [disableFilesBrowsers]="disableFilesBrowsers"
       (outputAdditionalContents)="outputAdditionalContents.emit($event)"></gebo-ai-reusable-chat-component>
     } @else if (profilesToChoose().length) {
     <p class="assistant-status" id="ChooseChatProfile" gebo-ai-text>Choose a chat profile to start:</p>

@@ -37,6 +37,7 @@ export * from "./lib/controls/relation-list-component/relation-list.component";
 
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.module';
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.component';
+export * from './lib/controls/chat-control/company-files-selection.token';
 
 export * from './lib/controls/gebo-ai-office-assistant/gebo-ai-office-assistant.module';
 export * from './lib/controls/gebo-ai-office-assistant/gebo-ai-office-assistant.component';
