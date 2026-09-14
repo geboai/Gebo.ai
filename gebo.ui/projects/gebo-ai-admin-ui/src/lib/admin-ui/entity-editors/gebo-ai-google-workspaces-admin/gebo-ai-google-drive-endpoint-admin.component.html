@@ -68,7 +68,7 @@
           </div>
           <div class="col-12">
             <gebo-ai-field id="tree" label="Choosed file or folder" help="Shared google drive spaces and pages contents" [required]="true">
-              <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable" [readonly]="mode==='EDIT'" formControlName="paths" selectionMode="multiple" [browsePathObservable]="browsePathObservable" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
+              <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable" [readonly]="mode==='EDIT'" formControlName="paths" [required]="true" selectionMode="multiple" [browsePathObservable]="browsePathObservable" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
             </gebo-ai-field>
           </div>
           <div class="col-2">
