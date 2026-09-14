@@ -238,7 +238,9 @@ services:
           # Container ceiling. Keep it comfortably above -Xmx below: metaspace,
           # code cache, thread stacks and direct buffers all live outside the
           # heap, and a heap sized to the limit gets the container OOM-killed.
-          memory: 4G
+          # 6G for a 4G heap: 512m metaspace plus the off-heap above, with room
+          # to spare. Raise both together, never -Xmx on its own.
+          memory: 6G
 
     # geboai/gebo.ai declares VOLUME on /opt/gebo.ai/{home,work,logs,shares}.
     # Anything NOT named here gets an ANONYMOUS volume, which `docker compose
@@ -272,7 +274,8 @@ services:
       # observability overlay turns sampling back on and points it at the
       # collector.
       MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "0"
-      # JVM settings. -Xmx stays well under the 4G container limit above.
+      # JVM settings. -Xmx stays well under the 6G container limit above, and
+      # matches the 4g the images themselves ship (dockers/gebo.ai/Dockerfile).
       # No -XX:+AggressiveHeap: it silently swaps G1 for the throughput
       # collector. No -XX:+PrintGCDetails: it is deprecated and re-routes the
       # whole GC stream to stdout, i.e. into `docker logs`, instead of gc.log.
@@ -281,8 +284,8 @@ services:
         -Dsun.jnu.encoding=UTF-8
         -Dfile.encoding=UTF-8
         -Dai.gebo.neo4j.enabled=true
-        -Xms1g
-        -Xmx3g
+        -Xms2g
+        -Xmx4g
         -XX:MaxMetaspaceSize=512m
         -Xlog:gc:file=/opt/gebo.ai/logs/gc.log:time,uptime:filecount=5,filesize=20M
         --add-opens=java.base/java.nio.charset=ALL-UNNAMED
