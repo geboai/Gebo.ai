@@ -575,16 +575,30 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			RenderedRange iterationValue = null;
 			int startedContribution = mySessionContext.getLastContributionTurn() == null ? 0
 					: mySessionContext.getLastContributionTurn();
+			// One memo for the whole pass: every window re-reads the contributions it did
+			// not consume, and rendering plus tokenising them again on each window makes
+			// the paging cost O(contributions x windows) instead of O(contributions).
+			final Map<Integer, RenderedContribution> renderedCache = new HashMap<Integer, RenderedContribution>();
 			do {
 				// Each shared-context window must still carry the constant agent placeholders
 				// (identity, scenario, communication, input, private context); otherwise the
 				// system/user templates that declare them render with missing variables.
 				Map<String, Object> params = new HashMap<String, Object>(constantParams);
-				iterationValue = render(session, startedContribution, actualContributionNr, fixedBudget, splitByBudget);
+				iterationValue = render(session, startedContribution, actualContributionNr, fixedBudget, splitByBudget,
+						renderedCache);
 				String sharedContext = nullToEmpty(iterationValue.getContext());
 				params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
-				startedContribution = iterationValue.getLastContribution();
+				// Past the last rendered contribution, not onto it: getSampledContributionsAfter
+				// filters on >= , so reusing lastContribution as-is makes every window repeat
+				// the previous window's final contribution and waste that much budget.
+				startedContribution = iterationValue.getLastContribution() + 1;
 				vectorized.add(params);
+				if (splitByBudget && sharedContext.isBlank()) {
+					// Defensive: a window carrying no contribution cannot advance the cursor,
+					// so continuing would loop. renderBatchedContributions(...) always inserts
+					// at least one contribution, so this is only reachable if that changes.
+					break;
+				}
 			} while (iterationValue != null && (splitByBudget && !iterationValue.isFinishedContributions()));
 		} else {
 			vectorized.add(constantParams);
@@ -859,6 +873,30 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return buffer.toString();
 	}
 
+	/**
+	 * A contribution's rendered form together with its token size, memoised for the
+	 * duration of one windowing pass. Paging N contributions into W windows revisits
+	 * the tail of the list on every window, so rendering and tokenising the same
+	 * contribution again each time is pure waste: nothing it depends on can change
+	 * while the pass runs. Tokenising is the expensive half - see
+	 * ITokensCountable.stringsTokensSize.
+	 */
+	private record RenderedContribution(String text, int tokens) {
+	}
+
+	/**
+	 * Renders a contribution once per windowing pass, reusing the memo on later
+	 * windows. The cache is per pass, never shared between calls, so a contribution
+	 * whose data changes between passes is still re-rendered.
+	 */
+	private RenderedContribution renderOnce(AgentProducedSessionContribution contribution,
+			Map<Integer, RenderedContribution> renderedCache) {
+		return renderedCache.computeIfAbsent(contribution.getContributionUniqueNr(), nr -> {
+			final String rendered = renderContribution(contribution);
+			return new RenderedContribution(rendered, ITokensCountable.stringsTokensSize(rendered));
+		});
+	}
+
 	@AllArgsConstructor
 	@Getter
 	protected static class RenderedRange {
@@ -869,7 +907,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	protected RenderedRange render(AgentsCollaborationSessionContext session, Integer lastTurn,
-			int actualContributionNr, int remainingBudget, boolean split) {
+			int actualContributionNr, int remainingBudget, boolean split,
+			Map<Integer, RenderedContribution> renderedCache) {
 		final int lastKnowledge = lastTurn == null ? 0 : lastTurn;
 		List<AgentProducedSessionContribution> newGeneratedKnowledge = session
 				.getSampledContributionsAfter(lastKnowledge);
@@ -880,7 +919,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		List<AgentProducedSessionContribution> remainingContributions = session
 				.getSampledContributionsAfter(lastKnowledge);
 		if (split) {
-			return renderBatchedContributions(remainingContributions, remainingBudget);
+			return renderBatchedContributions(remainingContributions, remainingBudget, renderedCache);
 		} else {
 			return renderAllContributions(remainingContributions);
 		}
@@ -921,21 +960,44 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return new RenderedRange(minContribution, maxContribution, buffer.toString(), true);
 	}
 
+	/**
+	 * Renders one window with a memo of its own. A single window gains nothing from
+	 * caching; the paging loop in createAgentTemplateParams(...) passes its own memo
+	 * so the windows of one pass share it.
+	 */
 	protected RenderedRange renderBatchedContributions(List<AgentProducedSessionContribution> remainingContributions,
 			int remainingBudget) {
+		return renderBatchedContributions(remainingContributions, remainingBudget,
+				new HashMap<Integer, RenderedContribution>());
+	}
+
+	protected RenderedRange renderBatchedContributions(List<AgentProducedSessionContribution> remainingContributions,
+			int remainingBudget, Map<Integer, RenderedContribution> renderedCache) {
 		StringBuffer inner = new StringBuffer();
 		int minContribution = Integer.MAX_VALUE;
 		int maxContribution = 0;
 		int insertedSlots = 0;
 		for (AgentProducedSessionContribution agentProducedSessionContribution : remainingContributions) {
-			String rendered = renderContribution(agentProducedSessionContribution);
-			remainingBudget -= ITokensCountable.stringsTokensSize(rendered);
-			if (remainingBudget >= 0) {
-				minContribution = Math.min(agentProducedSessionContribution.getContributionUniqueNr(), minContribution);
-				maxContribution = Math.max(agentProducedSessionContribution.getContributionUniqueNr(), maxContribution);
-				inner.append(rendered);
-				insertedSlots++;
+			final RenderedContribution memo = renderOnce(agentProducedSessionContribution, renderedCache);
+			final String rendered = memo.text();
+			final int renderedTokens = memo.tokens();
+			// The first contribution of a window always goes in, even when it alone is
+			// over budget. A window that renders nothing cannot move the caller's cursor,
+			// so the do/while in createAgentTemplateParams(...) would re-render the same
+			// contribution for ever. This mirrors the coordinator's own batching
+			// (TokensBudgetFluxCoordinator.emitQueueWhenPredicateTrue), which likewise
+			// never drops an oversized element - it just lets it travel on its own.
+			if (insertedSlots > 0 && renderedTokens > remainingBudget) {
+				// Stop at the first contribution that does not fit rather than scanning on:
+				// the cursor below is the LAST included contribution, so the window has to
+				// stay a contiguous range or the skipped ones would never be rendered.
+				break;
 			}
+			remainingBudget -= renderedTokens;
+			minContribution = Math.min(agentProducedSessionContribution.getContributionUniqueNr(), minContribution);
+			maxContribution = Math.max(agentProducedSessionContribution.getContributionUniqueNr(), maxContribution);
+			inner.append(rendered);
+			insertedSlots++;
 		}
 		StringBuffer buffer = new StringBuffer();
 		if (!inner.isEmpty()) {
@@ -946,7 +1008,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			buffer.append(NEWLINE);
 		}
 		return new RenderedRange(minContribution, maxContribution, buffer.toString(),
-				insertedSlots == remainingContributions.size());
+				insertedSlots >= remainingContributions.size());
 	}
 
 	private String renderContributionData(Object data) {

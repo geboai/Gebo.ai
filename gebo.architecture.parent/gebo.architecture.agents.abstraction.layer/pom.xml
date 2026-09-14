@@ -18,5 +18,12 @@
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy</artifactId>
 		</dependency>
+		<!-- Test only: JUnit 5 + Mockito for the shared-context windowing test, which
+		     pins the forward-progress guarantee of renderBatchedContributions(...). -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
