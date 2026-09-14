@@ -31,6 +31,17 @@ import lombok.Data;
 @org.springframework.data.mongodb.core.mapping.Document
 @Data
 public class AIDocumentCacheItem extends GBaseObject {
+
+	/**
+	 * Shared, because building one is far more expensive than using one: a
+	 * JTokkitTokenCountEstimator loads the whole cl100k encoding table in its
+	 * constructor (~40ms measured) while estimating 48k characters costs ~1ms.
+	 * of(...) runs once per cached document, so constructing it there paid that
+	 * cost on every document of an ingestion. The estimator is stateless and
+	 * thread safe, exactly like the static instances the rest of the codebase
+	 * already keeps (ITokensCountable, AbstractChatService, DocumentsChunkServiceImpl).
+	 */
+	private static final TokenCountEstimator TOKENS_ESTIMATOR = new JTokkitTokenCountEstimator();
 	// Stores the actual textual content of the document
 	private String text = null;
 
@@ -68,8 +79,7 @@ public class AIDocumentCacheItem extends GBaseObject {
 			}
 		});
 		item.text = buffer.toString();
-		TokenCountEstimator estimator = new JTokkitTokenCountEstimator();
-		int tokenCount = estimator.estimate(item.text); // Estimates the token count
+		int tokenCount = TOKENS_ESTIMATOR.estimate(item.text); // Estimates the token count
 		item.tokensSize = Long.valueOf(tokenCount);
 		item.bytesSize = Long.valueOf(item.text.length() * 2); // Estimates the byte size assuming 2 bytes per character
 		return item;
