@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class SearxngSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -137,10 +137,10 @@ public class SearxngSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GSearxngSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getSearxngSearchApiCredentials() throws RestClientException {
+    public List<GSearxngSearchApiCredentials> getSearxngSearchApiCredentials() throws RestClientException {
         return getSearxngSearchApiCredentialsWithHttpInfo().getBody();
     }
 
@@ -148,10 +148,10 @@ public class SearxngSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GSearxngSearchApiCredentials&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getSearxngSearchApiCredentialsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GSearxngSearchApiCredentials>> getSearxngSearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SearxngSearchConfigurationController/getSearxngSearchApiCredentials").build().toUriString();
         
@@ -168,7 +168,7 @@ public class SearxngSearchConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GSearxngSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GSearxngSearchApiCredentials>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -263,7 +263,7 @@ public class SearxngSearchConfigurationControllerApi {
      * @return GSearxngSearchApiCredentials
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GSearxngSearchApiCredentials searchGSearxngSearchApiCredentialsByCode(Object code) throws RestClientException {
+    public GSearxngSearchApiCredentials searchGSearxngSearchApiCredentialsByCode(String code) throws RestClientException {
         return searchGSearxngSearchApiCredentialsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -275,7 +275,7 @@ public class SearxngSearchConfigurationControllerApi {
      * @return ResponseEntity&lt;GSearxngSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GSearxngSearchApiCredentials> searchGSearxngSearchApiCredentialsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GSearxngSearchApiCredentials> searchGSearxngSearchApiCredentialsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

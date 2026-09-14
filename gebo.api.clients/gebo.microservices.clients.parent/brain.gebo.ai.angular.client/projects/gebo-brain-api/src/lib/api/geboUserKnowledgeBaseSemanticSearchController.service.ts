@@ -62,9 +62,9 @@ export class GeboUserKnowledgeBaseSemanticSearchControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public semanticSearch(body: SemanticQueryParam, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public semanticSearch(body: SemanticQueryParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public semanticSearch(body: SemanticQueryParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public semanticSearch(body: SemanticQueryParam, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public semanticSearch(body: SemanticQueryParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public semanticSearch(body: SemanticQueryParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
     public semanticSearch(body: SemanticQueryParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -91,7 +91,7 @@ export class GeboUserKnowledgeBaseSemanticSearchControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch`,
+        return this.httpClient.request<Array<string>>('post',`${this.basePath}/api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

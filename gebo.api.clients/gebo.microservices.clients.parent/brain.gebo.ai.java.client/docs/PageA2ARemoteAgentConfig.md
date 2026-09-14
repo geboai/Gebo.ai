@@ -3,14 +3,14 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalPages** | **Object** |  |  [optional]
-**totalElements** | **Object** |  |  [optional]
+**totalPages** | **Integer** |  |  [optional]
+**totalElements** | **Long** |  |  [optional]
 **pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
-**first** | **Object** |  |  [optional]
-**last** | **Object** |  |  [optional]
-**size** | **Object** |  |  [optional]
-**content** | **Object** |  |  [optional]
-**number** | **Object** |  |  [optional]
+**first** | **Boolean** |  |  [optional]
+**last** | **Boolean** |  |  [optional]
+**size** | **Integer** |  |  [optional]
+**content** | [**List&lt;A2ARemoteAgentConfig&gt;**](A2ARemoteAgentConfig.md) |  |  [optional]
+**number** | **Integer** |  |  [optional]
 **sort** | [**SortObject**](SortObject.md) |  |  [optional]
-**numberOfElements** | **Object** |  |  [optional]
-**empty** | **Object** |  |  [optional]
+**numberOfElements** | **Integer** |  |  [optional]
+**empty** | **Boolean** |  |  [optional]

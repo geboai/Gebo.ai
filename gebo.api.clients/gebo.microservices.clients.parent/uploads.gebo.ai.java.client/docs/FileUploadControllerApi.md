@@ -61,8 +61,8 @@ No authorization required
 
 
 FileUploadControllerApi apiInstance = new FileUploadControllerApi();
-Object handShakeCode = null; // Object | 
-Object files = null; // Object | 
+String handShakeCode = "handShakeCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
 try {
     apiInstance.upload(handShakeCode, files);
 } catch (ApiException e) {
@@ -75,8 +75,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **handShakeCode** | [**Object**](.md)|  |
- **files** | [**Object**](.md)|  | [optional]
+ **handShakeCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
 
 ### Return type
 
@@ -105,8 +105,8 @@ No authorization required
 
 
 FileUploadControllerApi apiInstance = new FileUploadControllerApi();
-Object endpointCode = null; // Object | 
-Object files = null; // Object | 
+String endpointCode = "endpointCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
 try {
     apiInstance.uploadToEndpoint(endpointCode, files);
 } catch (ApiException e) {
@@ -119,8 +119,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **endpointCode** | [**Object**](.md)|  |
- **files** | [**Object**](.md)|  | [optional]
+ **endpointCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
 
 ### Return type
 

@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 AwsS3BrowsingControllerApi apiInstance = new AwsS3BrowsingControllerApi();
 BrowseParam body = new BrowseParam(); // BrowseParam | 
-Object s3SystemCode = null; // Object | 
+String s3SystemCode = "s3SystemCode_example"; // String | 
 try {
     OperationStatusListPathInfo result = apiInstance.browseAwsS3Path(body, s3SystemCode);
     System.out.println(result);
@@ -37,7 +37,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**BrowseParam**](BrowseParam.md)|  |
- **s3SystemCode** | [**Object**](.md)|  |
+ **s3SystemCode** | **String**|  |
 
 ### Return type
 
@@ -66,7 +66,7 @@ No authorization required
 
 
 AwsS3BrowsingControllerApi apiInstance = new AwsS3BrowsingControllerApi();
-Object s3SystemCode = null; // Object | 
+String s3SystemCode = "s3SystemCode_example"; // String | 
 try {
     OperationStatusListGVirtualFilesystemRoot result = apiInstance.getAwsS3Roots(s3SystemCode);
     System.out.println(result);
@@ -80,7 +80,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **s3SystemCode** | [**Object**](.md)|  |
+ **s3SystemCode** | **String**|  |
 
 ### Return type
 

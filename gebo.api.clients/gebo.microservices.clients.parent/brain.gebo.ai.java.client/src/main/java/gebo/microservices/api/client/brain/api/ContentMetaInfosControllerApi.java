@@ -4,6 +4,7 @@ import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.ContentMetaInfo;
 import gebo.microservices.api.client.brain.model.ContentObject;
+import gebo.microservices.api.client.brain.model.DocumentReferenceView;
 import gebo.microservices.api.client.brain.model.PageDocumentReferenceView;
 import gebo.microservices.api.client.brain.model.SearchDocumentByNamePagedParam;
 import gebo.microservices.api.client.brain.model.SearchDocumentByNameParam;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ContentMetaInfosControllerApi {
     private ApiClient apiClient;
@@ -51,10 +52,10 @@ public class ContentMetaInfosControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;DocumentReferenceView&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findDocumentReferenceViewByCode(Object body) throws RestClientException {
+    public List<DocumentReferenceView> findDocumentReferenceViewByCode(List<String> body) throws RestClientException {
         return findDocumentReferenceViewByCodeWithHttpInfo(body).getBody();
     }
 
@@ -63,10 +64,10 @@ public class ContentMetaInfosControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;DocumentReferenceView&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findDocumentReferenceViewByCodeWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<List<DocumentReferenceView>> findDocumentReferenceViewByCodeWithHttpInfo(List<String> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -89,7 +90,7 @@ public class ContentMetaInfosControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<DocumentReferenceView>> returnType = new ParameterizedTypeReference<List<DocumentReferenceView>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -100,7 +101,7 @@ public class ContentMetaInfosControllerApi {
      * @return ContentMetaInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ContentMetaInfo getContentMetaInfos(Object code) throws RestClientException {
+    public ContentMetaInfo getContentMetaInfos(String code) throws RestClientException {
         return getContentMetaInfosWithHttpInfo(code).getBody();
     }
 
@@ -112,7 +113,7 @@ public class ContentMetaInfosControllerApi {
      * @return ResponseEntity&lt;ContentMetaInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<ContentMetaInfo> getContentMetaInfosWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<ContentMetaInfo> getContentMetaInfosWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -145,7 +146,7 @@ public class ContentMetaInfosControllerApi {
      * @return ContentObject
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ContentObject getContentObject(Object code) throws RestClientException {
+    public ContentObject getContentObject(String code) throws RestClientException {
         return getContentObjectWithHttpInfo(code).getBody();
     }
 
@@ -157,7 +158,7 @@ public class ContentMetaInfosControllerApi {
      * @return ResponseEntity&lt;ContentObject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<ContentObject> getContentObjectWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<ContentObject> getContentObjectWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -187,10 +188,10 @@ public class ContentMetaInfosControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;DocumentReferenceView&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object searchByDocumentName(SearchDocumentByNameParam body) throws RestClientException {
+    public List<DocumentReferenceView> searchByDocumentName(SearchDocumentByNameParam body) throws RestClientException {
         return searchByDocumentNameWithHttpInfo(body).getBody();
     }
 
@@ -199,10 +200,10 @@ public class ContentMetaInfosControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;DocumentReferenceView&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> searchByDocumentNameWithHttpInfo(SearchDocumentByNameParam body) throws RestClientException {
+    public ResponseEntity<List<DocumentReferenceView>> searchByDocumentNameWithHttpInfo(SearchDocumentByNameParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -225,7 +226,7 @@ public class ContentMetaInfosControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<DocumentReferenceView>> returnType = new ParameterizedTypeReference<List<DocumentReferenceView>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

@@ -17,60 +17,64 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.tyr.model.JobWorkflowStepSummaryTimeSlotStats;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * JobWorkflowStepSummary
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class JobWorkflowStepSummary {
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("workflowStepId")
-  private Object workflowStepId = null;
+  private String workflowStepId = null;
 
   @JsonProperty("startDateTime")
-  private Object startDateTime = null;
+  private Date startDateTime = null;
 
   @JsonProperty("endDateTime")
-  private Object endDateTime = null;
+  private Date endDateTime = null;
 
   @JsonProperty("batchDocumentsInput")
-  private Object batchDocumentsInput = null;
+  private Long batchDocumentsInput = null;
 
   @JsonProperty("batchDiscardedInput")
-  private Object batchDiscardedInput = null;
+  private Long batchDiscardedInput = null;
 
   @JsonProperty("batchSentToNextStep")
-  private Object batchSentToNextStep = null;
+  private Long batchSentToNextStep = null;
 
   @JsonProperty("chunksProcessed")
-  private Object chunksProcessed = null;
+  private Long chunksProcessed = null;
 
   @JsonProperty("tokensProcessed")
-  private Object tokensProcessed = null;
+  private Long tokensProcessed = null;
 
   @JsonProperty("batchDocumentsProcessingErrors")
-  private Object batchDocumentsProcessingErrors = null;
+  private Long batchDocumentsProcessingErrors = null;
 
   @JsonProperty("batchDocumentsProcessed")
-  private Object batchDocumentsProcessed = null;
+  private Long batchDocumentsProcessed = null;
 
   @JsonProperty("errorChunks")
-  private Object errorChunks = null;
+  private Long errorChunks = null;
 
   @JsonProperty("errorTokens")
-  private Object errorTokens = null;
+  private Long errorTokens = null;
 
   @JsonProperty("timesamples")
-  private Object timesamples = null;
+  private List<JobWorkflowStepSummaryTimeSlotStats> timesamples = null;
 
-  public JobWorkflowStepSummary workflowType(Object workflowType) {
+  public JobWorkflowStepSummary workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -80,15 +84,15 @@ public class JobWorkflowStepSummary {
    * @return workflowType
   **/
   @Schema(description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
-  public JobWorkflowStepSummary workflowId(Object workflowId) {
+  public JobWorkflowStepSummary workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -98,15 +102,15 @@ public class JobWorkflowStepSummary {
    * @return workflowId
   **/
   @Schema(description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public JobWorkflowStepSummary workflowStepId(Object workflowStepId) {
+  public JobWorkflowStepSummary workflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
     return this;
   }
@@ -116,15 +120,15 @@ public class JobWorkflowStepSummary {
    * @return workflowStepId
   **/
   @Schema(description = "")
-  public Object getWorkflowStepId() {
+  public String getWorkflowStepId() {
     return workflowStepId;
   }
 
-  public void setWorkflowStepId(Object workflowStepId) {
+  public void setWorkflowStepId(String workflowStepId) {
     this.workflowStepId = workflowStepId;
   }
 
-  public JobWorkflowStepSummary startDateTime(Object startDateTime) {
+  public JobWorkflowStepSummary startDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
     return this;
   }
@@ -134,15 +138,15 @@ public class JobWorkflowStepSummary {
    * @return startDateTime
   **/
   @Schema(description = "")
-  public Object getStartDateTime() {
+  public Date getStartDateTime() {
     return startDateTime;
   }
 
-  public void setStartDateTime(Object startDateTime) {
+  public void setStartDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
   }
 
-  public JobWorkflowStepSummary endDateTime(Object endDateTime) {
+  public JobWorkflowStepSummary endDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
     return this;
   }
@@ -152,15 +156,15 @@ public class JobWorkflowStepSummary {
    * @return endDateTime
   **/
   @Schema(description = "")
-  public Object getEndDateTime() {
+  public Date getEndDateTime() {
     return endDateTime;
   }
 
-  public void setEndDateTime(Object endDateTime) {
+  public void setEndDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
   }
 
-  public JobWorkflowStepSummary batchDocumentsInput(Object batchDocumentsInput) {
+  public JobWorkflowStepSummary batchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
     return this;
   }
@@ -170,15 +174,15 @@ public class JobWorkflowStepSummary {
    * @return batchDocumentsInput
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsInput() {
+  public Long getBatchDocumentsInput() {
     return batchDocumentsInput;
   }
 
-  public void setBatchDocumentsInput(Object batchDocumentsInput) {
+  public void setBatchDocumentsInput(Long batchDocumentsInput) {
     this.batchDocumentsInput = batchDocumentsInput;
   }
 
-  public JobWorkflowStepSummary batchDiscardedInput(Object batchDiscardedInput) {
+  public JobWorkflowStepSummary batchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
     return this;
   }
@@ -188,15 +192,15 @@ public class JobWorkflowStepSummary {
    * @return batchDiscardedInput
   **/
   @Schema(description = "")
-  public Object getBatchDiscardedInput() {
+  public Long getBatchDiscardedInput() {
     return batchDiscardedInput;
   }
 
-  public void setBatchDiscardedInput(Object batchDiscardedInput) {
+  public void setBatchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
   }
 
-  public JobWorkflowStepSummary batchSentToNextStep(Object batchSentToNextStep) {
+  public JobWorkflowStepSummary batchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
     return this;
   }
@@ -206,15 +210,15 @@ public class JobWorkflowStepSummary {
    * @return batchSentToNextStep
   **/
   @Schema(description = "")
-  public Object getBatchSentToNextStep() {
+  public Long getBatchSentToNextStep() {
     return batchSentToNextStep;
   }
 
-  public void setBatchSentToNextStep(Object batchSentToNextStep) {
+  public void setBatchSentToNextStep(Long batchSentToNextStep) {
     this.batchSentToNextStep = batchSentToNextStep;
   }
 
-  public JobWorkflowStepSummary chunksProcessed(Object chunksProcessed) {
+  public JobWorkflowStepSummary chunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
     return this;
   }
@@ -224,15 +228,15 @@ public class JobWorkflowStepSummary {
    * @return chunksProcessed
   **/
   @Schema(description = "")
-  public Object getChunksProcessed() {
+  public Long getChunksProcessed() {
     return chunksProcessed;
   }
 
-  public void setChunksProcessed(Object chunksProcessed) {
+  public void setChunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
   }
 
-  public JobWorkflowStepSummary tokensProcessed(Object tokensProcessed) {
+  public JobWorkflowStepSummary tokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
     return this;
   }
@@ -242,15 +246,15 @@ public class JobWorkflowStepSummary {
    * @return tokensProcessed
   **/
   @Schema(description = "")
-  public Object getTokensProcessed() {
+  public Long getTokensProcessed() {
     return tokensProcessed;
   }
 
-  public void setTokensProcessed(Object tokensProcessed) {
+  public void setTokensProcessed(Long tokensProcessed) {
     this.tokensProcessed = tokensProcessed;
   }
 
-  public JobWorkflowStepSummary batchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public JobWorkflowStepSummary batchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
     return this;
   }
@@ -260,15 +264,15 @@ public class JobWorkflowStepSummary {
    * @return batchDocumentsProcessingErrors
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessingErrors() {
+  public Long getBatchDocumentsProcessingErrors() {
     return batchDocumentsProcessingErrors;
   }
 
-  public void setBatchDocumentsProcessingErrors(Object batchDocumentsProcessingErrors) {
+  public void setBatchDocumentsProcessingErrors(Long batchDocumentsProcessingErrors) {
     this.batchDocumentsProcessingErrors = batchDocumentsProcessingErrors;
   }
 
-  public JobWorkflowStepSummary batchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public JobWorkflowStepSummary batchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
     return this;
   }
@@ -278,15 +282,15 @@ public class JobWorkflowStepSummary {
    * @return batchDocumentsProcessed
   **/
   @Schema(description = "")
-  public Object getBatchDocumentsProcessed() {
+  public Long getBatchDocumentsProcessed() {
     return batchDocumentsProcessed;
   }
 
-  public void setBatchDocumentsProcessed(Object batchDocumentsProcessed) {
+  public void setBatchDocumentsProcessed(Long batchDocumentsProcessed) {
     this.batchDocumentsProcessed = batchDocumentsProcessed;
   }
 
-  public JobWorkflowStepSummary errorChunks(Object errorChunks) {
+  public JobWorkflowStepSummary errorChunks(Long errorChunks) {
     this.errorChunks = errorChunks;
     return this;
   }
@@ -296,15 +300,15 @@ public class JobWorkflowStepSummary {
    * @return errorChunks
   **/
   @Schema(description = "")
-  public Object getErrorChunks() {
+  public Long getErrorChunks() {
     return errorChunks;
   }
 
-  public void setErrorChunks(Object errorChunks) {
+  public void setErrorChunks(Long errorChunks) {
     this.errorChunks = errorChunks;
   }
 
-  public JobWorkflowStepSummary errorTokens(Object errorTokens) {
+  public JobWorkflowStepSummary errorTokens(Long errorTokens) {
     this.errorTokens = errorTokens;
     return this;
   }
@@ -314,16 +318,24 @@ public class JobWorkflowStepSummary {
    * @return errorTokens
   **/
   @Schema(description = "")
-  public Object getErrorTokens() {
+  public Long getErrorTokens() {
     return errorTokens;
   }
 
-  public void setErrorTokens(Object errorTokens) {
+  public void setErrorTokens(Long errorTokens) {
     this.errorTokens = errorTokens;
   }
 
-  public JobWorkflowStepSummary timesamples(Object timesamples) {
+  public JobWorkflowStepSummary timesamples(List<JobWorkflowStepSummaryTimeSlotStats> timesamples) {
     this.timesamples = timesamples;
+    return this;
+  }
+
+  public JobWorkflowStepSummary addTimesamplesItem(JobWorkflowStepSummaryTimeSlotStats timesamplesItem) {
+    if (this.timesamples == null) {
+      this.timesamples = new ArrayList<>();
+    }
+    this.timesamples.add(timesamplesItem);
     return this;
   }
 
@@ -332,11 +344,11 @@ public class JobWorkflowStepSummary {
    * @return timesamples
   **/
   @Schema(description = "")
-  public Object getTimesamples() {
+  public List<JobWorkflowStepSummaryTimeSlotStats> getTimesamples() {
     return timesamples;
   }
 
-  public void setTimesamples(Object timesamples) {
+  public void setTimesamples(List<JobWorkflowStepSummaryTimeSlotStats> timesamples) {
     this.timesamples = timesamples;
   }
 

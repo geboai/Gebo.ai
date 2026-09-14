@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="getChatModelTypesLookup"></a>
 # **getChatModelTypesLookup**
-> Object getChatModelTypesLookup()
+> List&lt;GLookupEntry&gt; getChatModelTypesLookup()
 
 
 
@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 ChatModelsLookupControllerApi apiInstance = new ChatModelsLookupControllerApi();
 try {
-    Object result = apiInstance.getChatModelTypesLookup();
+    List<GLookupEntry> result = apiInstance.getChatModelTypesLookup();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ChatModelsLookupControllerApi#getChatModelTypesLookup");
@@ -36,7 +36,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GLookupEntry&gt;**](GLookupEntry.md)
 
 ### Authorization
 
@@ -88,7 +88,7 @@ No authorization required
 
 <a name="getRuntimeConfiguredChatModelsLookup"></a>
 # **getRuntimeConfiguredChatModelsLookup**
-> Object getRuntimeConfiguredChatModelsLookup(modelTypeCode)
+> List&lt;GLookupEntryRefGBaseChatModelConfig&gt; getRuntimeConfiguredChatModelsLookup(modelTypeCode)
 
 
 
@@ -100,9 +100,9 @@ No authorization required
 
 
 ChatModelsLookupControllerApi apiInstance = new ChatModelsLookupControllerApi();
-Object modelTypeCode = null; // Object | 
+String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
+    List<GLookupEntryRefGBaseChatModelConfig> result = apiInstance.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ChatModelsLookupControllerApi#getRuntimeConfiguredChatModelsLookup");
@@ -114,11 +114,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional]
+ **modelTypeCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;GLookupEntryRefGBaseChatModelConfig&gt;**](GLookupEntryRefGBaseChatModelConfig.md)
 
 ### Authorization
 

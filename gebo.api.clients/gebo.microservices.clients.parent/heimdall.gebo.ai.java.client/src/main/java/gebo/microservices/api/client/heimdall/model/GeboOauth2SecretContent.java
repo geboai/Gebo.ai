@@ -18,29 +18,54 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GeboOauth2SecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeboOauth2SecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("providerName")
-  private Object providerName = null;
+  private String providerName = null;
 
   @JsonProperty("clientId")
-  private Object clientId = null;
+  private String clientId = null;
 
   @JsonProperty("secret")
-  private Object secret = null;
+  private String secret = null;
 
   @JsonProperty("scopes")
-  private Object scopes = null;
+  private List<String> scopes = null;
 
   @JsonProperty("customAttributes")
-  private Object customAttributes = null;
+  private Map<String, String> customAttributes = null;
 
-  public GeboOauth2SecretContent providerName(Object providerName) {
+  public GeboOauth2SecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
+  public GeboOauth2SecretContent providerName(String providerName) {
     this.providerName = providerName;
     return this;
   }
@@ -50,15 +75,15 @@ public class GeboOauth2SecretContent {
    * @return providerName
   **/
   @Schema(required = true, description = "")
-  public Object getProviderName() {
+  public String getProviderName() {
     return providerName;
   }
 
-  public void setProviderName(Object providerName) {
+  public void setProviderName(String providerName) {
     this.providerName = providerName;
   }
 
-  public GeboOauth2SecretContent clientId(Object clientId) {
+  public GeboOauth2SecretContent clientId(String clientId) {
     this.clientId = clientId;
     return this;
   }
@@ -68,15 +93,15 @@ public class GeboOauth2SecretContent {
    * @return clientId
   **/
   @Schema(required = true, description = "")
-  public Object getClientId() {
+  public String getClientId() {
     return clientId;
   }
 
-  public void setClientId(Object clientId) {
+  public void setClientId(String clientId) {
     this.clientId = clientId;
   }
 
-  public GeboOauth2SecretContent secret(Object secret) {
+  public GeboOauth2SecretContent secret(String secret) {
     this.secret = secret;
     return this;
   }
@@ -86,16 +111,24 @@ public class GeboOauth2SecretContent {
    * @return secret
   **/
   @Schema(required = true, description = "")
-  public Object getSecret() {
+  public String getSecret() {
     return secret;
   }
 
-  public void setSecret(Object secret) {
+  public void setSecret(String secret) {
     this.secret = secret;
   }
 
-  public GeboOauth2SecretContent scopes(Object scopes) {
+  public GeboOauth2SecretContent scopes(List<String> scopes) {
     this.scopes = scopes;
+    return this;
+  }
+
+  public GeboOauth2SecretContent addScopesItem(String scopesItem) {
+    if (this.scopes == null) {
+      this.scopes = new ArrayList<>();
+    }
+    this.scopes.add(scopesItem);
     return this;
   }
 
@@ -104,16 +137,24 @@ public class GeboOauth2SecretContent {
    * @return scopes
   **/
   @Schema(description = "")
-  public Object getScopes() {
+  public List<String> getScopes() {
     return scopes;
   }
 
-  public void setScopes(Object scopes) {
+  public void setScopes(List<String> scopes) {
     this.scopes = scopes;
   }
 
-  public GeboOauth2SecretContent customAttributes(Object customAttributes) {
+  public GeboOauth2SecretContent customAttributes(Map<String, String> customAttributes) {
     this.customAttributes = customAttributes;
+    return this;
+  }
+
+  public GeboOauth2SecretContent putCustomAttributesItem(String key, String customAttributesItem) {
+    if (this.customAttributes == null) {
+      this.customAttributes = new HashMap<>();
+    }
+    this.customAttributes.put(key, customAttributesItem);
     return this;
   }
 
@@ -122,11 +163,11 @@ public class GeboOauth2SecretContent {
    * @return customAttributes
   **/
   @Schema(description = "")
-  public Object getCustomAttributes() {
+  public Map<String, String> getCustomAttributes() {
     return customAttributes;
   }
 
-  public void setCustomAttributes(Object customAttributes) {
+  public void setCustomAttributes(Map<String, String> customAttributes) {
     this.customAttributes = customAttributes;
   }
 
@@ -140,7 +181,8 @@ public class GeboOauth2SecretContent {
       return false;
     }
     GeboOauth2SecretContent geboOauth2SecretContent = (GeboOauth2SecretContent) o;
-    return Objects.equals(this.providerName, geboOauth2SecretContent.providerName) &&
+    return Objects.equals(this.readOnly, geboOauth2SecretContent.readOnly) &&
+        Objects.equals(this.providerName, geboOauth2SecretContent.providerName) &&
         Objects.equals(this.clientId, geboOauth2SecretContent.clientId) &&
         Objects.equals(this.secret, geboOauth2SecretContent.secret) &&
         Objects.equals(this.scopes, geboOauth2SecretContent.scopes) &&
@@ -149,7 +191,7 @@ public class GeboOauth2SecretContent {
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerName, clientId, secret, scopes, customAttributes);
+    return Objects.hash(readOnly, providerName, clientId, secret, scopes, customAttributes);
   }
 
 
@@ -158,6 +200,7 @@ public class GeboOauth2SecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboOauth2SecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    providerName: ").append(toIndentedString(providerName)).append("\n");
     sb.append("    clientId: ").append(toIndentedString(clientId)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");

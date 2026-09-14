@@ -57,7 +57,7 @@ public class OpenAiTranscriptModelsConfigurationControllerApiTest {
      */
     @Test
     public void findOpenAITranscriptModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GOpenAITranscriptModelConfig response = api.findOpenAITranscriptModelConfigByCode(code);
 
         // TODO: test validations

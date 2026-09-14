@@ -18,27 +18,99 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SharepointAdditionalSearchFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class SharepointAdditionalSearchFilter {
   @JsonProperty("textTerms")
-  private Object textTerms = null;
+  private List<String> textTerms = null;
 
-  @JsonProperty("textTermsMatchMode")
-  private Object textTermsMatchMode = null;
+  /**
+   * Gets or Sets textTermsMatchMode
+   */
+  public enum TextTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    TextTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TextTermsMatchModeEnum fromValue(String input) {
+      for (TextTermsMatchModeEnum b : TextTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("textTermsMatchMode")
+  private TextTermsMatchModeEnum textTermsMatchMode = null;
 
   @JsonProperty("titleTerms")
-  private Object titleTerms = null;
+  private List<String> titleTerms = null;
 
-  @JsonProperty("titleTermsMatchMode")
-  private Object titleTermsMatchMode = null;
+  /**
+   * Gets or Sets titleTermsMatchMode
+   */
+  public enum TitleTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
 
-  public SharepointAdditionalSearchFilter textTerms(Object textTerms) {
+    private String value;
+
+    TitleTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TitleTermsMatchModeEnum fromValue(String input) {
+      for (TitleTermsMatchModeEnum b : TitleTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("titleTermsMatchMode")
+  private TitleTermsMatchModeEnum titleTermsMatchMode = null;
+
+  public SharepointAdditionalSearchFilter textTerms(List<String> textTerms) {
     this.textTerms = textTerms;
+    return this;
+  }
+
+  public SharepointAdditionalSearchFilter addTextTermsItem(String textTermsItem) {
+    if (this.textTerms == null) {
+      this.textTerms = new ArrayList<>();
+    }
+    this.textTerms.add(textTermsItem);
     return this;
   }
 
@@ -47,15 +119,15 @@ public class SharepointAdditionalSearchFilter {
    * @return textTerms
   **/
   @Schema(description = "")
-  public Object getTextTerms() {
+  public List<String> getTextTerms() {
     return textTerms;
   }
 
-  public void setTextTerms(Object textTerms) {
+  public void setTextTerms(List<String> textTerms) {
     this.textTerms = textTerms;
   }
 
-  public SharepointAdditionalSearchFilter textTermsMatchMode(Object textTermsMatchMode) {
+  public SharepointAdditionalSearchFilter textTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
     return this;
   }
@@ -65,16 +137,24 @@ public class SharepointAdditionalSearchFilter {
    * @return textTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTextTermsMatchMode() {
+  public TextTermsMatchModeEnum getTextTermsMatchMode() {
     return textTermsMatchMode;
   }
 
-  public void setTextTermsMatchMode(Object textTermsMatchMode) {
+  public void setTextTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
   }
 
-  public SharepointAdditionalSearchFilter titleTerms(Object titleTerms) {
+  public SharepointAdditionalSearchFilter titleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
+    return this;
+  }
+
+  public SharepointAdditionalSearchFilter addTitleTermsItem(String titleTermsItem) {
+    if (this.titleTerms == null) {
+      this.titleTerms = new ArrayList<>();
+    }
+    this.titleTerms.add(titleTermsItem);
     return this;
   }
 
@@ -83,15 +163,15 @@ public class SharepointAdditionalSearchFilter {
    * @return titleTerms
   **/
   @Schema(description = "")
-  public Object getTitleTerms() {
+  public List<String> getTitleTerms() {
     return titleTerms;
   }
 
-  public void setTitleTerms(Object titleTerms) {
+  public void setTitleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
   }
 
-  public SharepointAdditionalSearchFilter titleTermsMatchMode(Object titleTermsMatchMode) {
+  public SharepointAdditionalSearchFilter titleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
     return this;
   }
@@ -101,11 +181,11 @@ public class SharepointAdditionalSearchFilter {
    * @return titleTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTitleTermsMatchMode() {
+  public TitleTermsMatchModeEnum getTitleTermsMatchMode() {
     return titleTermsMatchMode;
   }
 
-  public void setTitleTermsMatchMode(Object titleTermsMatchMode) {
+  public void setTitleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
   }
 

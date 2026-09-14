@@ -20,71 +20,104 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.webdav.model.GObjectRefGProjectEndpoint;
 import gebo.microservices.api.client.webdav.model.WorkflowStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GJobStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:19.127862733+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:37.654842713+02:00[Europe/Rome]")
 
 public class GJobStatus {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
-  @JsonProperty("jobType")
-  private Object jobType = null;
+  /**
+   * Gets or Sets jobType
+   */
+  public enum JobTypeEnum {
+    CONTENTS_READING("CONTENTS_READING"),
+    VECTORIZING_CONTENTS("VECTORIZING_CONTENTS"),
+    CONTENTS_READING_VECTORIZING("CONTENTS_READING_VECTORIZING");
+
+    private String value;
+
+    JobTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static JobTypeEnum fromValue(String input) {
+      for (JobTypeEnum b : JobTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("jobType")
+  private JobTypeEnum jobType = null;
 
   @JsonProperty("workflowType")
-  private Object workflowType = null;
+  private String workflowType = null;
 
   @JsonProperty("workflowId")
-  private Object workflowId = null;
+  private String workflowId = null;
 
   @JsonProperty("processing")
-  private Object processing = null;
+  private Boolean processing = null;
 
   @JsonProperty("finished")
-  private Object finished = null;
+  private Boolean finished = null;
 
   @JsonProperty("error")
-  private Object error = null;
+  private Boolean error = null;
 
   @JsonProperty("startDateTime")
-  private Object startDateTime = null;
+  private Date startDateTime = null;
 
   @JsonProperty("endDateTime")
-  private Object endDateTime = null;
+  private Date endDateTime = null;
 
   @JsonProperty("projectEndpointReference")
   private GObjectRefGProjectEndpoint projectEndpointReference = null;
 
   @JsonProperty("knowledgeBaseCode")
-  private Object knowledgeBaseCode = null;
+  private String knowledgeBaseCode = null;
 
   @JsonProperty("projectCode")
-  private Object projectCode = null;
+  private String projectCode = null;
 
   @JsonProperty("parentJobCode")
-  private Object parentJobCode = null;
+  private String parentJobCode = null;
 
   @JsonProperty("workflowStatus")
   private WorkflowStatus workflowStatus = null;
 
-  public GJobStatus code(Object code) {
+  public GJobStatus code(String code) {
     this.code = code;
     return this;
   }
@@ -94,15 +127,15 @@ public class GJobStatus {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GJobStatus description(Object description) {
+  public GJobStatus description(String description) {
     this.description = description;
     return this;
   }
@@ -112,15 +145,15 @@ public class GJobStatus {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GJobStatus userModified(Object userModified) {
+  public GJobStatus userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -130,15 +163,15 @@ public class GJobStatus {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GJobStatus userCreated(Object userCreated) {
+  public GJobStatus userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -148,15 +181,15 @@ public class GJobStatus {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GJobStatus dateModified(Object dateModified) {
+  public GJobStatus dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -166,15 +199,15 @@ public class GJobStatus {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GJobStatus dateCreated(Object dateCreated) {
+  public GJobStatus dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -184,15 +217,15 @@ public class GJobStatus {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GJobStatus jobType(Object jobType) {
+  public GJobStatus jobType(JobTypeEnum jobType) {
     this.jobType = jobType;
     return this;
   }
@@ -202,15 +235,15 @@ public class GJobStatus {
    * @return jobType
   **/
   @Schema(required = true, description = "")
-  public Object getJobType() {
+  public JobTypeEnum getJobType() {
     return jobType;
   }
 
-  public void setJobType(Object jobType) {
+  public void setJobType(JobTypeEnum jobType) {
     this.jobType = jobType;
   }
 
-  public GJobStatus workflowType(Object workflowType) {
+  public GJobStatus workflowType(String workflowType) {
     this.workflowType = workflowType;
     return this;
   }
@@ -220,15 +253,15 @@ public class GJobStatus {
    * @return workflowType
   **/
   @Schema(required = true, description = "")
-  public Object getWorkflowType() {
+  public String getWorkflowType() {
     return workflowType;
   }
 
-  public void setWorkflowType(Object workflowType) {
+  public void setWorkflowType(String workflowType) {
     this.workflowType = workflowType;
   }
 
-  public GJobStatus workflowId(Object workflowId) {
+  public GJobStatus workflowId(String workflowId) {
     this.workflowId = workflowId;
     return this;
   }
@@ -238,15 +271,15 @@ public class GJobStatus {
    * @return workflowId
   **/
   @Schema(required = true, description = "")
-  public Object getWorkflowId() {
+  public String getWorkflowId() {
     return workflowId;
   }
 
-  public void setWorkflowId(Object workflowId) {
+  public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
   }
 
-  public GJobStatus processing(Object processing) {
+  public GJobStatus processing(Boolean processing) {
     this.processing = processing;
     return this;
   }
@@ -256,15 +289,15 @@ public class GJobStatus {
    * @return processing
   **/
   @Schema(description = "")
-  public Object getProcessing() {
+  public Boolean isProcessing() {
     return processing;
   }
 
-  public void setProcessing(Object processing) {
+  public void setProcessing(Boolean processing) {
     this.processing = processing;
   }
 
-  public GJobStatus finished(Object finished) {
+  public GJobStatus finished(Boolean finished) {
     this.finished = finished;
     return this;
   }
@@ -274,15 +307,15 @@ public class GJobStatus {
    * @return finished
   **/
   @Schema(description = "")
-  public Object getFinished() {
+  public Boolean isFinished() {
     return finished;
   }
 
-  public void setFinished(Object finished) {
+  public void setFinished(Boolean finished) {
     this.finished = finished;
   }
 
-  public GJobStatus error(Object error) {
+  public GJobStatus error(Boolean error) {
     this.error = error;
     return this;
   }
@@ -292,15 +325,15 @@ public class GJobStatus {
    * @return error
   **/
   @Schema(description = "")
-  public Object getError() {
+  public Boolean isError() {
     return error;
   }
 
-  public void setError(Object error) {
+  public void setError(Boolean error) {
     this.error = error;
   }
 
-  public GJobStatus startDateTime(Object startDateTime) {
+  public GJobStatus startDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
     return this;
   }
@@ -310,15 +343,15 @@ public class GJobStatus {
    * @return startDateTime
   **/
   @Schema(description = "")
-  public Object getStartDateTime() {
+  public Date getStartDateTime() {
     return startDateTime;
   }
 
-  public void setStartDateTime(Object startDateTime) {
+  public void setStartDateTime(Date startDateTime) {
     this.startDateTime = startDateTime;
   }
 
-  public GJobStatus endDateTime(Object endDateTime) {
+  public GJobStatus endDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
     return this;
   }
@@ -328,11 +361,11 @@ public class GJobStatus {
    * @return endDateTime
   **/
   @Schema(description = "")
-  public Object getEndDateTime() {
+  public Date getEndDateTime() {
     return endDateTime;
   }
 
-  public void setEndDateTime(Object endDateTime) {
+  public void setEndDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
   }
 
@@ -354,7 +387,7 @@ public class GJobStatus {
     this.projectEndpointReference = projectEndpointReference;
   }
 
-  public GJobStatus knowledgeBaseCode(Object knowledgeBaseCode) {
+  public GJobStatus knowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
     return this;
   }
@@ -364,15 +397,15 @@ public class GJobStatus {
    * @return knowledgeBaseCode
   **/
   @Schema(required = true, description = "")
-  public Object getKnowledgeBaseCode() {
+  public String getKnowledgeBaseCode() {
     return knowledgeBaseCode;
   }
 
-  public void setKnowledgeBaseCode(Object knowledgeBaseCode) {
+  public void setKnowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
   }
 
-  public GJobStatus projectCode(Object projectCode) {
+  public GJobStatus projectCode(String projectCode) {
     this.projectCode = projectCode;
     return this;
   }
@@ -382,15 +415,15 @@ public class GJobStatus {
    * @return projectCode
   **/
   @Schema(required = true, description = "")
-  public Object getProjectCode() {
+  public String getProjectCode() {
     return projectCode;
   }
 
-  public void setProjectCode(Object projectCode) {
+  public void setProjectCode(String projectCode) {
     this.projectCode = projectCode;
   }
 
-  public GJobStatus parentJobCode(Object parentJobCode) {
+  public GJobStatus parentJobCode(String parentJobCode) {
     this.parentJobCode = parentJobCode;
     return this;
   }
@@ -400,11 +433,11 @@ public class GJobStatus {
    * @return parentJobCode
   **/
   @Schema(description = "")
-  public Object getParentJobCode() {
+  public String getParentJobCode() {
     return parentJobCode;
   }
 
-  public void setParentJobCode(Object parentJobCode) {
+  public void setParentJobCode(String parentJobCode) {
     this.parentJobCode = parentJobCode;
   }
 

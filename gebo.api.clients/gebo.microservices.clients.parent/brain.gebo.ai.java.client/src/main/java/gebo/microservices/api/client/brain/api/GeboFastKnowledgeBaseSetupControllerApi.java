@@ -2,6 +2,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.GeboContentProcessRow;
 import gebo.microservices.api.client.brain.model.GeboKnowledgeBaseSetupStatus;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboFastKnowledgeBaseSetupControllerApi {
     private ApiClient apiClient;
@@ -84,10 +85,10 @@ public class GeboFastKnowledgeBaseSetupControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GeboContentProcessRow&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getContentProcessRows() throws RestClientException {
+    public List<GeboContentProcessRow> getContentProcessRows() throws RestClientException {
         return getContentProcessRowsWithHttpInfo().getBody();
     }
 
@@ -95,10 +96,10 @@ public class GeboFastKnowledgeBaseSetupControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GeboContentProcessRow&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getContentProcessRowsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GeboContentProcessRow>> getContentProcessRowsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboFastKnowledgeBaseSetupController/getContentProcessRows").build().toUriString();
         
@@ -115,7 +116,7 @@ public class GeboFastKnowledgeBaseSetupControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GeboContentProcessRow>> returnType = new ParameterizedTypeReference<List<GeboContentProcessRow>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -41,7 +41,7 @@ public class JobLauncherControllerApiTest {
      */
     @Test
     public void abortJobTest() {
-        Object jobCode = null;
+        String jobCode = null;
         api.abortJob(jobCode);
 
         // TODO: test validations

@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DocInternalRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class DocInternalRef {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("page")
-  private Object page = null;
+  private String page = null;
 
-  public DocInternalRef id(Object id) {
+  public DocInternalRef id(String id) {
     this.id = id;
     return this;
   }
@@ -41,15 +41,15 @@ public class DocInternalRef {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public DocInternalRef page(Object page) {
+  public DocInternalRef page(String page) {
     this.page = page;
     return this;
   }
@@ -59,11 +59,11 @@ public class DocInternalRef {
    * @return page
   **/
   @Schema(description = "")
-  public Object getPage() {
+  public String getPage() {
     return page;
   }
 
-  public void setPage(Object page) {
+  public void setPage(String page) {
     this.page = page;
   }
 

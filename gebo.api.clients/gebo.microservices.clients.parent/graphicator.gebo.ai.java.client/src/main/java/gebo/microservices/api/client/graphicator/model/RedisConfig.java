@@ -18,44 +18,45 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * RedisConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:08:59.956635121+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.713838626+02:00[Europe/Rome]")
 
 public class RedisConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("host")
-  private Object host = null;
+  private String host = null;
 
   @JsonProperty("port")
-  private Object port = null;
+  private Integer port = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
-  public RedisConfig code(Object code) {
+  public RedisConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -65,15 +66,15 @@ public class RedisConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public RedisConfig description(Object description) {
+  public RedisConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -83,15 +84,15 @@ public class RedisConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public RedisConfig userModified(Object userModified) {
+  public RedisConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -101,15 +102,15 @@ public class RedisConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public RedisConfig userCreated(Object userCreated) {
+  public RedisConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -119,15 +120,15 @@ public class RedisConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public RedisConfig dateModified(Object dateModified) {
+  public RedisConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -137,15 +138,15 @@ public class RedisConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public RedisConfig dateCreated(Object dateCreated) {
+  public RedisConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -155,15 +156,15 @@ public class RedisConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public RedisConfig host(Object host) {
+  public RedisConfig host(String host) {
     this.host = host;
     return this;
   }
@@ -173,15 +174,15 @@ public class RedisConfig {
    * @return host
   **/
   @Schema(description = "")
-  public Object getHost() {
+  public String getHost() {
     return host;
   }
 
-  public void setHost(Object host) {
+  public void setHost(String host) {
     this.host = host;
   }
 
-  public RedisConfig port(Object port) {
+  public RedisConfig port(Integer port) {
     this.port = port;
     return this;
   }
@@ -191,15 +192,15 @@ public class RedisConfig {
    * @return port
   **/
   @Schema(description = "")
-  public Object getPort() {
+  public Integer getPort() {
     return port;
   }
 
-  public void setPort(Object port) {
+  public void setPort(Integer port) {
     this.port = port;
   }
 
-  public RedisConfig username(Object username) {
+  public RedisConfig username(String username) {
     this.username = username;
     return this;
   }
@@ -209,15 +210,15 @@ public class RedisConfig {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public RedisConfig password(Object password) {
+  public RedisConfig password(String password) {
     this.password = password;
     return this;
   }
@@ -227,11 +228,11 @@ public class RedisConfig {
    * @return password
   **/
   @Schema(description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 

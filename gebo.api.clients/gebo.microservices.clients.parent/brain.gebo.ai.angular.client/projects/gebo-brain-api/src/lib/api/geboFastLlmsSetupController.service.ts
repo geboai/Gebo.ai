@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ComponentLLMSStatus } from '../model/componentLLMSStatus';
 import { LLMAutoconfigureCreationData } from '../model/lLMAutoconfigureCreationData';
+import { LLMCreateModelData } from '../model/lLMCreateModelData';
 import { LLMCredentialsCreationData } from '../model/lLMCredentialsCreationData';
 import { LLMCredentialsVerificationData } from '../model/lLMCredentialsVerificationData';
 import { LLMModelsLookupParameter } from '../model/lLMModelsLookupParameter';
@@ -165,10 +166,10 @@ export class GeboFastLlmsSetupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createLLMS(body: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusLLMSModelsCreationResult>;
-    public createLLMS(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusLLMSModelsCreationResult>>;
-    public createLLMS(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusLLMSModelsCreationResult>>;
-    public createLLMS(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusLLMSModelsCreationResult>;
+    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusLLMSModelsCreationResult>>;
+    public createLLMS(body: Array<LLMCreateModelData>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusLLMSModelsCreationResult>>;
+    public createLLMS(body: Array<LLMCreateModelData>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling createLLMS.');

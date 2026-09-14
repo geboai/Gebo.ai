@@ -57,7 +57,7 @@ public class OllamaChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findOllamaChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GOllamaChatModelConfig response = api.findOllamaChatModelConfigByCode(code);
 
         // TODO: test validations

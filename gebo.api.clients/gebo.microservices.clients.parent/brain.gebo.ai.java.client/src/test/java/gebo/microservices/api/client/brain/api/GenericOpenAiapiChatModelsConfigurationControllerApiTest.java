@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIChatModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIChatModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIChatModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIChatModelChoice;
@@ -57,7 +58,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGenericOpenAIAPIChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GenericOpenAIAPIChatModelConfig response = api.findGenericOpenAIAPIChatModelConfigByCode(code);
 
         // TODO: test validations
@@ -87,7 +88,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAIChatModelTypesTest() {
-        Object response = api.getGenericOpenAIChatModelTypes();
+        List<GenericOpenAIChatModelTypeConfig> response = api.getGenericOpenAIChatModelTypes();
 
         // TODO: test validations
     }

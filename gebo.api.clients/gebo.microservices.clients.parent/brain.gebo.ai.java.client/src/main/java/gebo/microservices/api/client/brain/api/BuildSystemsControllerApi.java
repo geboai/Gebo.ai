@@ -2,6 +2,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.GBuildSystem;
+import gebo.microservices.api.client.brain.model.GBuildSystemType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class BuildSystemsControllerApi {
     private ApiClient apiClient;
@@ -46,10 +48,10 @@ public class BuildSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param buildSystemTypeCode  (required)
-     * @return Object
+     * @return List&lt;GBuildSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getBuildSystemConfigs(Object buildSystemTypeCode) throws RestClientException {
+    public List<GBuildSystem> getBuildSystemConfigs(String buildSystemTypeCode) throws RestClientException {
         return getBuildSystemConfigsWithHttpInfo(buildSystemTypeCode).getBody();
     }
 
@@ -58,10 +60,10 @@ public class BuildSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param buildSystemTypeCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBuildSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getBuildSystemConfigsWithHttpInfo(Object buildSystemTypeCode) throws RestClientException {
+    public ResponseEntity<List<GBuildSystem>> getBuildSystemConfigsWithHttpInfo(String buildSystemTypeCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'buildSystemTypeCode' is set
         if (buildSystemTypeCode == null) {
@@ -83,17 +85,17 @@ public class BuildSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GBuildSystem>> returnType = new ParameterizedTypeReference<List<GBuildSystem>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GBuildSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getBuildSystemTypes() throws RestClientException {
+    public List<GBuildSystemType> getBuildSystemTypes() throws RestClientException {
         return getBuildSystemTypesWithHttpInfo().getBody();
     }
 
@@ -101,10 +103,10 @@ public class BuildSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBuildSystemType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getBuildSystemTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GBuildSystemType>> getBuildSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BuildSystemsController/getBuildSystemTypes").build().toUriString();
         
@@ -121,7 +123,7 @@ public class BuildSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GBuildSystemType>> returnType = new ParameterizedTypeReference<List<GBuildSystemType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

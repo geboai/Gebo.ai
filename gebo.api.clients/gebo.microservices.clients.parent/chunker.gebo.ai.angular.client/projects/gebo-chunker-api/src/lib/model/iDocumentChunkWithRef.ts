@@ -17,5 +17,5 @@ export interface IDocumentChunkWithRef {
     errorMessage?: GUserMessage;
     chunk?: DocumentChunk;
     documentRef?: IGComponentOriginatedDocument;
-    errorState?: any;
+    errorState?: boolean;
 }

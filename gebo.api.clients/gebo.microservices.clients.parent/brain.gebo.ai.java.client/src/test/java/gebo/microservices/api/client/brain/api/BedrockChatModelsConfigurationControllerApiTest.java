@@ -57,7 +57,7 @@ public class BedrockChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findBedrockChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GBedrockChatModelConfig response = api.findBedrockChatModelConfigByCode(code);
 
         // TODO: test validations

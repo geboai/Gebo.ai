@@ -11,5 +11,5 @@
  */
 
 export interface UploadToEndpointEndpointCodeBody { 
-    files: any;
+    files: Array<Blob>;
 }

@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GONNXTransformersEmbeddingModelConfig } from './gONNXTransformersEmbeddingModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGONNXTransformersEmbeddingModelConfig { 
     result?: GONNXTransformersEmbeddingModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

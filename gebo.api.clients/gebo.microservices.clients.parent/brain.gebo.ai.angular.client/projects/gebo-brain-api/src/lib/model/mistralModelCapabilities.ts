@@ -11,10 +11,10 @@
  */
 
 export interface MistralModelCapabilities { 
-    completionChat?: any;
-    completionFim?: any;
-    functionCalling?: any;
-    fineTuning?: any;
-    vision?: any;
-    classification?: any;
+    completionChat?: boolean;
+    completionFim?: boolean;
+    functionCalling?: boolean;
+    fineTuning?: boolean;
+    vision?: boolean;
+    classification?: boolean;
 }

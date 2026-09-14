@@ -11,6 +11,6 @@
  */
 
 export interface Oauth2ModuleStatus { 
-    oauth2UISetupEnabled?: any;
-    oauth2Enabled?: any;
+    oauth2UISetupEnabled?: boolean;
+    oauth2Enabled?: boolean;
 }

@@ -18,41 +18,42 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * UploadedFileInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:05.518323320+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class UploadedFileInfo {
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("absolutePath")
-  private Object absolutePath = null;
+  private String absolutePath = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Long size = null;
 
   @JsonProperty("modificationTime")
-  private Object modificationTime = null;
+  private Date modificationTime = null;
 
   @JsonProperty("folder")
-  private Object folder = null;
+  private Boolean folder = null;
 
   @JsonProperty("ingested")
-  private Object ingested = null;
+  private Boolean ingested = null;
 
   @JsonProperty("documentCode")
-  private Object documentCode = null;
+  private String documentCode = null;
 
   @JsonProperty("tracked")
-  private Object tracked = null;
+  private Boolean tracked = null;
 
-  public UploadedFileInfo name(Object name) {
+  public UploadedFileInfo name(String name) {
     this.name = name;
     return this;
   }
@@ -62,15 +63,15 @@ public class UploadedFileInfo {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public UploadedFileInfo absolutePath(Object absolutePath) {
+  public UploadedFileInfo absolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
     return this;
   }
@@ -80,15 +81,15 @@ public class UploadedFileInfo {
    * @return absolutePath
   **/
   @Schema(description = "")
-  public Object getAbsolutePath() {
+  public String getAbsolutePath() {
     return absolutePath;
   }
 
-  public void setAbsolutePath(Object absolutePath) {
+  public void setAbsolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
   }
 
-  public UploadedFileInfo extension(Object extension) {
+  public UploadedFileInfo extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -98,15 +99,15 @@ public class UploadedFileInfo {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public UploadedFileInfo size(Object size) {
+  public UploadedFileInfo size(Long size) {
     this.size = size;
     return this;
   }
@@ -116,15 +117,15 @@ public class UploadedFileInfo {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Long getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Long size) {
     this.size = size;
   }
 
-  public UploadedFileInfo modificationTime(Object modificationTime) {
+  public UploadedFileInfo modificationTime(Date modificationTime) {
     this.modificationTime = modificationTime;
     return this;
   }
@@ -134,15 +135,15 @@ public class UploadedFileInfo {
    * @return modificationTime
   **/
   @Schema(description = "")
-  public Object getModificationTime() {
+  public Date getModificationTime() {
     return modificationTime;
   }
 
-  public void setModificationTime(Object modificationTime) {
+  public void setModificationTime(Date modificationTime) {
     this.modificationTime = modificationTime;
   }
 
-  public UploadedFileInfo folder(Object folder) {
+  public UploadedFileInfo folder(Boolean folder) {
     this.folder = folder;
     return this;
   }
@@ -152,15 +153,15 @@ public class UploadedFileInfo {
    * @return folder
   **/
   @Schema(description = "")
-  public Object getFolder() {
+  public Boolean isFolder() {
     return folder;
   }
 
-  public void setFolder(Object folder) {
+  public void setFolder(Boolean folder) {
     this.folder = folder;
   }
 
-  public UploadedFileInfo ingested(Object ingested) {
+  public UploadedFileInfo ingested(Boolean ingested) {
     this.ingested = ingested;
     return this;
   }
@@ -170,15 +171,15 @@ public class UploadedFileInfo {
    * @return ingested
   **/
   @Schema(description = "")
-  public Object getIngested() {
+  public Boolean isIngested() {
     return ingested;
   }
 
-  public void setIngested(Object ingested) {
+  public void setIngested(Boolean ingested) {
     this.ingested = ingested;
   }
 
-  public UploadedFileInfo documentCode(Object documentCode) {
+  public UploadedFileInfo documentCode(String documentCode) {
     this.documentCode = documentCode;
     return this;
   }
@@ -188,15 +189,15 @@ public class UploadedFileInfo {
    * @return documentCode
   **/
   @Schema(description = "")
-  public Object getDocumentCode() {
+  public String getDocumentCode() {
     return documentCode;
   }
 
-  public void setDocumentCode(Object documentCode) {
+  public void setDocumentCode(String documentCode) {
     this.documentCode = documentCode;
   }
 
-  public UploadedFileInfo tracked(Object tracked) {
+  public UploadedFileInfo tracked(Boolean tracked) {
     this.tracked = tracked;
     return this;
   }
@@ -206,11 +207,11 @@ public class UploadedFileInfo {
    * @return tracked
   **/
   @Schema(description = "")
-  public Object getTracked() {
+  public Boolean isTracked() {
     return tracked;
   }
 
-  public void setTracked(Object tracked) {
+  public void setTracked(Boolean tracked) {
     this.tracked = tracked;
   }
 

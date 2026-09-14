@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIRankerModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIRankerModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIRankerModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIRankerModelChoice;
@@ -57,7 +58,7 @@ public class GenericOpenAiRankerModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGenericOpenAIAPIRankerModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GenericOpenAIAPIRankerModelConfig response = api.findGenericOpenAIAPIRankerModelConfigByCode(code);
 
         // TODO: test validations
@@ -87,7 +88,7 @@ public class GenericOpenAiRankerModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAIRankerModelConfigsTest() {
-        Object response = api.getGenericOpenAIRankerModelConfigs();
+        List<GenericOpenAIAPIRankerModelConfig> response = api.getGenericOpenAIRankerModelConfigs();
 
         // TODO: test validations
     }
@@ -101,7 +102,7 @@ public class GenericOpenAiRankerModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAIRankerModelTypesTest() {
-        Object response = api.getGenericOpenAIRankerModelTypes();
+        List<GenericOpenAIRankerModelTypeConfig> response = api.getGenericOpenAIRankerModelTypes();
 
         // TODO: test validations
     }

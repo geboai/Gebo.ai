@@ -9,11 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DataEndpoint } from './dataEndpoint';
+import { DataTransformationInfo } from './dataTransformationInfo';
+import { DataTransformationMetaInfo } from './dataTransformationMetaInfo';
 import { GeboComponentInfo } from './geboComponentInfo';
 
 export interface GDataFlowMetaInfos { 
     component?: GeboComponentInfo;
-    dataEndpoints?: any;
-    engines?: any;
-    transformations?: any;
+    dataEndpoints?: Array<DataEndpoint>;
+    engines?: Array<DataTransformationMetaInfo>;
+    transformations?: Array<DataTransformationInfo>;
 }

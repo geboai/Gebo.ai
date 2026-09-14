@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="streamDocumentReference"></a>
 # **streamDocumentReference**
-> Object streamDocumentReference(body)
+> File streamDocumentReference(body)
 
 
 
@@ -23,7 +23,7 @@ Method | HTTP request | Description
 DocumentContentStreamerControllerApi apiInstance = new DocumentContentStreamerControllerApi();
 GDocumentReferenceStreamRequest body = new GDocumentReferenceStreamRequest(); // GDocumentReferenceStreamRequest | 
 try {
-    Object result = apiInstance.streamDocumentReference(body);
+    File result = apiInstance.streamDocumentReference(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentContentStreamerControllerApi#streamDocumentReference");
@@ -39,7 +39,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**File**](File.md)
 
 ### Authorization
 
@@ -52,7 +52,7 @@ No authorization required
 
 <a name="streamSearchResult"></a>
 # **streamSearchResult**
-> Object streamSearchResult(body)
+> File streamSearchResult(body)
 
 
 
@@ -66,7 +66,7 @@ No authorization required
 DocumentContentStreamerControllerApi apiInstance = new DocumentContentStreamerControllerApi();
 SearchResultStreamRequest body = new SearchResultStreamRequest(); // SearchResultStreamRequest | 
 try {
-    Object result = apiInstance.streamSearchResult(body);
+    File result = apiInstance.streamSearchResult(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentContentStreamerControllerApi#streamSearchResult");
@@ -82,7 +82,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**File**](File.md)
 
 ### Authorization
 

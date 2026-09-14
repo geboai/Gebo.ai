@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChatInfosByQbeParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ChatInfosByQbeParam {
   @JsonProperty("filter")

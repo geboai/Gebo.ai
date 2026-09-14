@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:08:59.956635121+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.713838626+02:00[Europe/Rome]")
 
 public class GraphRagConfigurationControllerApi {
     private ApiClient apiClient;
@@ -94,7 +94,7 @@ public class GraphRagConfigurationControllerApi {
      * @return GraphRagExtractionConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GraphRagExtractionConfig findGraphRagExtractionConfigByCode(Object code) throws RestClientException {
+    public GraphRagExtractionConfig findGraphRagExtractionConfigByCode(String code) throws RestClientException {
         return findGraphRagExtractionConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -106,7 +106,7 @@ public class GraphRagConfigurationControllerApi {
      * @return ResponseEntity&lt;GraphRagExtractionConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GraphRagExtractionConfig> findGraphRagExtractionConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GraphRagExtractionConfig> findGraphRagExtractionConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -136,10 +136,10 @@ public class GraphRagConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
-     * @return Object
+     * @return List&lt;GraphRagExtractionConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGraphRagExtractionConfigByKnowledgeBase(Object knowledgeBaseCode) throws RestClientException {
+    public List<GraphRagExtractionConfig> findGraphRagExtractionConfigByKnowledgeBase(String knowledgeBaseCode) throws RestClientException {
         return findGraphRagExtractionConfigByKnowledgeBaseWithHttpInfo(knowledgeBaseCode).getBody();
     }
 
@@ -148,10 +148,10 @@ public class GraphRagConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GraphRagExtractionConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGraphRagExtractionConfigByKnowledgeBaseWithHttpInfo(Object knowledgeBaseCode) throws RestClientException {
+    public ResponseEntity<List<GraphRagExtractionConfig>> findGraphRagExtractionConfigByKnowledgeBaseWithHttpInfo(String knowledgeBaseCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'knowledgeBaseCode' is set
         if (knowledgeBaseCode == null) {
@@ -173,7 +173,7 @@ public class GraphRagConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -182,10 +182,10 @@ public class GraphRagConfigurationControllerApi {
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
      * @param projectCode  (required)
-     * @return Object
+     * @return List&lt;GraphRagExtractionConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(Object knowledgeBaseCode, Object projectCode) throws RestClientException {
+    public List<GraphRagExtractionConfig> findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(String knowledgeBaseCode, String projectCode) throws RestClientException {
         return findGraphRagExtractionConfigByKnowledgeBaseAndProjectCodeWithHttpInfo(knowledgeBaseCode, projectCode).getBody();
     }
 
@@ -195,10 +195,10 @@ public class GraphRagConfigurationControllerApi {
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
      * @param projectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GraphRagExtractionConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGraphRagExtractionConfigByKnowledgeBaseAndProjectCodeWithHttpInfo(Object knowledgeBaseCode, Object projectCode) throws RestClientException {
+    public ResponseEntity<List<GraphRagExtractionConfig>> findGraphRagExtractionConfigByKnowledgeBaseAndProjectCodeWithHttpInfo(String knowledgeBaseCode, String projectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'knowledgeBaseCode' is set
         if (knowledgeBaseCode == null) {
@@ -225,7 +225,7 @@ public class GraphRagConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -233,10 +233,10 @@ public class GraphRagConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GraphRagExtractionConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGraphRagExtractionConfigByProjectEndpointGObjectRef(GObjectRefGProjectEndpoint body) throws RestClientException {
+    public List<GraphRagExtractionConfig> findGraphRagExtractionConfigByProjectEndpointGObjectRef(GObjectRefGProjectEndpoint body) throws RestClientException {
         return findGraphRagExtractionConfigByProjectEndpointGObjectRefWithHttpInfo(body).getBody();
     }
 
@@ -245,10 +245,10 @@ public class GraphRagConfigurationControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GraphRagExtractionConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGraphRagExtractionConfigByProjectEndpointGObjectRefWithHttpInfo(GObjectRefGProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GraphRagExtractionConfig>> findGraphRagExtractionConfigByProjectEndpointGObjectRefWithHttpInfo(GObjectRefGProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -271,17 +271,17 @@ public class GraphRagConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GraphRagExtractionConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getDefaultGraphRagExtractionConfig() throws RestClientException {
+    public List<GraphRagExtractionConfig> getDefaultGraphRagExtractionConfig() throws RestClientException {
         return getDefaultGraphRagExtractionConfigWithHttpInfo().getBody();
     }
 
@@ -289,10 +289,10 @@ public class GraphRagConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GraphRagExtractionConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getDefaultGraphRagExtractionConfigWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GraphRagExtractionConfig>> getDefaultGraphRagExtractionConfigWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GraphRagConfigurationController/getDefaultGraphRagExtractionConfig").build().toUriString();
         
@@ -309,7 +309,7 @@ public class GraphRagConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GraphRagExtractionConfig>> returnType = new ParameterizedTypeReference<List<GraphRagExtractionConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -320,7 +320,7 @@ public class GraphRagConfigurationControllerApi {
      * @return GraphRagExtractionConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GraphRagExtractionConfig getSystemGraphRagExtractionConfig(Object format) throws RestClientException {
+    public GraphRagExtractionConfig getSystemGraphRagExtractionConfig(String format) throws RestClientException {
         return getSystemGraphRagExtractionConfigWithHttpInfo(format).getBody();
     }
 
@@ -332,7 +332,7 @@ public class GraphRagConfigurationControllerApi {
      * @return ResponseEntity&lt;GraphRagExtractionConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GraphRagExtractionConfig> getSystemGraphRagExtractionConfigWithHttpInfo(Object format) throws RestClientException {
+    public ResponseEntity<GraphRagExtractionConfig> getSystemGraphRagExtractionConfigWithHttpInfo(String format) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'format' is set
         if (format == null) {

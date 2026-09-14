@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getSerpapiSearchApiCredentials"></a>
 # **getSerpapiSearchApiCredentials**
-> Object getSerpapiSearchApiCredentials()
+> List&lt;GSerpapiSearchApiCredentials&gt; getSerpapiSearchApiCredentials()
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 
 SerpapiSearchConfigurationControllerApi apiInstance = new SerpapiSearchConfigurationControllerApi();
 try {
-    Object result = apiInstance.getSerpapiSearchApiCredentials();
+    List<GSerpapiSearchApiCredentials> result = apiInstance.getSerpapiSearchApiCredentials();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling SerpapiSearchConfigurationControllerApi#getSerpapiSearchApiCredentials");
@@ -125,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GSerpapiSearchApiCredentials&gt;**](GSerpapiSearchApiCredentials.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ No authorization required
 
 
 SerpapiSearchConfigurationControllerApi apiInstance = new SerpapiSearchConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GSerpapiSearchApiCredentials result = apiInstance.searchGSerpapiSearchApiCredentialsByCode(code);
     System.out.println(result);
@@ -246,7 +246,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

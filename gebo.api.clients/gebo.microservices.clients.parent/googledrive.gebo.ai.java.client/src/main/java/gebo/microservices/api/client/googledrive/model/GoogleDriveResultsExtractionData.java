@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GoogleDriveResultsExtractionData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:25.000010563+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.115295867+02:00[Europe/Rome]")
 
 public class GoogleDriveResultsExtractionData {
   @JsonProperty("extractedRelevantContent")
-  private Object extractedRelevantContent = null;
+  private String extractedRelevantContent = null;
 
   @JsonProperty("contentIsRelevant")
-  private Object contentIsRelevant = null;
+  private Boolean contentIsRelevant = null;
 
   @JsonProperty("satisfactoryAnswer")
-  private Object satisfactoryAnswer = null;
+  private Boolean satisfactoryAnswer = null;
 
-  public GoogleDriveResultsExtractionData extractedRelevantContent(Object extractedRelevantContent) {
+  public GoogleDriveResultsExtractionData extractedRelevantContent(String extractedRelevantContent) {
     this.extractedRelevantContent = extractedRelevantContent;
     return this;
   }
@@ -44,15 +44,15 @@ public class GoogleDriveResultsExtractionData {
    * @return extractedRelevantContent
   **/
   @Schema(description = "")
-  public Object getExtractedRelevantContent() {
+  public String getExtractedRelevantContent() {
     return extractedRelevantContent;
   }
 
-  public void setExtractedRelevantContent(Object extractedRelevantContent) {
+  public void setExtractedRelevantContent(String extractedRelevantContent) {
     this.extractedRelevantContent = extractedRelevantContent;
   }
 
-  public GoogleDriveResultsExtractionData contentIsRelevant(Object contentIsRelevant) {
+  public GoogleDriveResultsExtractionData contentIsRelevant(Boolean contentIsRelevant) {
     this.contentIsRelevant = contentIsRelevant;
     return this;
   }
@@ -62,15 +62,15 @@ public class GoogleDriveResultsExtractionData {
    * @return contentIsRelevant
   **/
   @Schema(description = "")
-  public Object getContentIsRelevant() {
+  public Boolean isContentIsRelevant() {
     return contentIsRelevant;
   }
 
-  public void setContentIsRelevant(Object contentIsRelevant) {
+  public void setContentIsRelevant(Boolean contentIsRelevant) {
     this.contentIsRelevant = contentIsRelevant;
   }
 
-  public GoogleDriveResultsExtractionData satisfactoryAnswer(Object satisfactoryAnswer) {
+  public GoogleDriveResultsExtractionData satisfactoryAnswer(Boolean satisfactoryAnswer) {
     this.satisfactoryAnswer = satisfactoryAnswer;
     return this;
   }
@@ -80,11 +80,11 @@ public class GoogleDriveResultsExtractionData {
    * @return satisfactoryAnswer
   **/
   @Schema(description = "")
-  public Object getSatisfactoryAnswer() {
+  public Boolean isSatisfactoryAnswer() {
     return satisfactoryAnswer;
   }
 
-  public void setSatisfactoryAnswer(Object satisfactoryAnswer) {
+  public void setSatisfactoryAnswer(Boolean satisfactoryAnswer) {
     this.satisfactoryAnswer = satisfactoryAnswer;
   }
 

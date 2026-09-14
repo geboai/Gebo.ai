@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UserChangePasswordWithTicket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserChangePasswordWithTicket {
   @JsonProperty("ticket")
-  private Object ticket = null;
+  private String ticket = null;
 
   @JsonProperty("email")
-  private Object email = null;
+  private String email = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
   @JsonProperty("confirmPassword")
-  private Object confirmPassword = null;
+  private String confirmPassword = null;
 
-  public UserChangePasswordWithTicket ticket(Object ticket) {
+  public UserChangePasswordWithTicket ticket(String ticket) {
     this.ticket = ticket;
     return this;
   }
@@ -47,15 +47,15 @@ public class UserChangePasswordWithTicket {
    * @return ticket
   **/
   @Schema(required = true, description = "")
-  public Object getTicket() {
+  public String getTicket() {
     return ticket;
   }
 
-  public void setTicket(Object ticket) {
+  public void setTicket(String ticket) {
     this.ticket = ticket;
   }
 
-  public UserChangePasswordWithTicket email(Object email) {
+  public UserChangePasswordWithTicket email(String email) {
     this.email = email;
     return this;
   }
@@ -65,15 +65,15 @@ public class UserChangePasswordWithTicket {
    * @return email
   **/
   @Schema(required = true, description = "")
-  public Object getEmail() {
+  public String getEmail() {
     return email;
   }
 
-  public void setEmail(Object email) {
+  public void setEmail(String email) {
     this.email = email;
   }
 
-  public UserChangePasswordWithTicket password(Object password) {
+  public UserChangePasswordWithTicket password(String password) {
     this.password = password;
     return this;
   }
@@ -83,15 +83,15 @@ public class UserChangePasswordWithTicket {
    * @return password
   **/
   @Schema(required = true, description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
-  public UserChangePasswordWithTicket confirmPassword(Object confirmPassword) {
+  public UserChangePasswordWithTicket confirmPassword(String confirmPassword) {
     this.confirmPassword = confirmPassword;
     return this;
   }
@@ -101,11 +101,11 @@ public class UserChangePasswordWithTicket {
    * @return confirmPassword
   **/
   @Schema(required = true, description = "")
-  public Object getConfirmPassword() {
+  public String getConfirmPassword() {
     return confirmPassword;
   }
 
-  public void setConfirmPassword(Object confirmPassword) {
+  public void setConfirmPassword(String confirmPassword) {
     this.confirmPassword = confirmPassword;
   }
 

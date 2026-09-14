@@ -11,6 +11,6 @@
  */
 
 export interface SearchQuery { 
-    queryText?: any;
-    relevantKeywords?: any;
+    queryText?: string;
+    relevantKeywords?: Array<string>;
 }

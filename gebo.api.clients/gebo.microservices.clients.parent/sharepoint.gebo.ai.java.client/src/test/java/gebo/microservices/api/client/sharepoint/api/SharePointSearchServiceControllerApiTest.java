@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.sharepoint.api;
 
 import gebo.microservices.api.client.sharepoint.model.AggregateRequestBodyMicrosoftResultsExtractionData;
+import gebo.microservices.api.client.sharepoint.model.CatalogueSample;
 import gebo.microservices.api.client.sharepoint.model.CustomTemplateParamsRequestBody;
 import gebo.microservices.api.client.sharepoint.model.MicrosoftResultsExtractionData;
 import gebo.microservices.api.client.sharepoint.model.SearchQuery;
@@ -62,7 +63,7 @@ public class SharePointSearchServiceControllerApiTest {
     @Test
     public void restCreateCustomTemplateParamsMapTest() {
         CustomTemplateParamsRequestBody body = null;
-        Object response = api.restCreateCustomTemplateParamsMap(body);
+        Map<String, Object> response = api.restCreateCustomTemplateParamsMap(body);
 
         // TODO: test validations
     }
@@ -77,7 +78,7 @@ public class SharePointSearchServiceControllerApiTest {
     @Test
     public void restExtractRelatedAnalisysReferencesTest() {
         MicrosoftResultsExtractionData body = null;
-        Object systemId = null;
+        String systemId = null;
         SearchResultAnalisysOutcome response = api.restExtractRelatedAnalisysReferences(body, systemId);
 
         // TODO: test validations
@@ -92,7 +93,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restFindSystemByIdTest() {
-        Object systemId = null;
+        String systemId = null;
         SearchableSystemMetaData response = api.restFindSystemById(systemId);
 
         // TODO: test validations
@@ -122,8 +123,8 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetCachedCataloguesTest() {
-        Object systemConfigurationCode = null;
-        Object response = api.restGetCachedCatalogues(systemConfigurationCode);
+        String systemConfigurationCode = null;
+        List<CatalogueSample> response = api.restGetCachedCatalogues(systemConfigurationCode);
 
         // TODO: test validations
     }
@@ -137,8 +138,8 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetCataloguesListSampleTest() {
-        Object configurationCode = null;
-        Object response = api.restGetCataloguesListSample(configurationCode);
+        String configurationCode = null;
+        List<CatalogueSample> response = api.restGetCataloguesListSample(configurationCode);
 
         // TODO: test validations
     }
@@ -152,7 +153,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetDescriptionTest() {
-        Object response = api.restGetDescription();
+        String response = api.restGetDescription();
 
         // TODO: test validations
     }
@@ -166,7 +167,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetIdTest() {
-        Object response = api.restGetId();
+        String response = api.restGetId();
 
         // TODO: test validations
     }
@@ -180,7 +181,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetMessagingModuleIdTest() {
-        Object response = api.restGetMessagingModuleId();
+        String response = api.restGetMessagingModuleId();
 
         // TODO: test validations
     }
@@ -194,7 +195,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetNativePromptTemplateUseCodeTest() {
-        Object response = api.restGetNativePromptTemplateUseCode();
+        String response = api.restGetNativePromptTemplateUseCode();
 
         // TODO: test validations
     }
@@ -208,7 +209,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetProductIdTest() {
-        Object response = api.restGetProductId();
+        String response = api.restGetProductId();
 
         // TODO: test validations
     }
@@ -222,7 +223,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetQueriesGenerationPromptUseCodeTest() {
-        Object response = api.restGetQueriesGenerationPromptUseCode();
+        String response = api.restGetQueriesGenerationPromptUseCode();
 
         // TODO: test validations
     }
@@ -236,7 +237,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restGetSearchableSystemsTest() {
-        Object response = api.restGetSearchableSystems();
+        List<SearchableSystemMetaData> response = api.restGetSearchableSystems();
 
         // TODO: test validations
     }
@@ -250,7 +251,7 @@ public class SharePointSearchServiceControllerApiTest {
      */
     @Test
     public void restIsEnabledTest() {
-        Object response = api.restIsEnabled();
+        Boolean response = api.restIsEnabled();
 
         // TODO: test validations
     }
@@ -265,9 +266,9 @@ public class SharePointSearchServiceControllerApiTest {
     @Test
     public void restNativeSearchTest() {
         SharePointSearchFilter body = null;
-        Object systemId = null;
-        Object nEntryLimit = null;
-        Object response = api.restNativeSearch(body, systemId, nEntryLimit);
+        String systemId = null;
+        Integer nEntryLimit = null;
+        List<SearchResult> response = api.restNativeSearch(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }
@@ -282,9 +283,9 @@ public class SharePointSearchServiceControllerApiTest {
     @Test
     public void restSearchTest() {
         SearchQuery body = null;
-        Object systemId = null;
-        Object nEntryLimit = null;
-        Object response = api.restSearch(body, systemId, nEntryLimit);
+        String systemId = null;
+        Integer nEntryLimit = null;
+        List<SearchResult> response = api.restSearch(body, systemId, nEntryLimit);
 
         // TODO: test validations
     }

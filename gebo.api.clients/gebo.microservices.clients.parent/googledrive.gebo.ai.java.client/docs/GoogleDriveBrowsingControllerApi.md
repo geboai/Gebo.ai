@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 GoogleDriveBrowsingControllerApi apiInstance = new GoogleDriveBrowsingControllerApi();
 BrowseParam body = new BrowseParam(); // BrowseParam | 
-Object driveSystemCode = null; // Object | 
+String driveSystemCode = "driveSystemCode_example"; // String | 
 try {
     OperationStatusListPathInfo result = apiInstance.browseGoogleDrivePath(body, driveSystemCode);
     System.out.println(result);
@@ -37,7 +37,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**BrowseParam**](BrowseParam.md)|  |
- **driveSystemCode** | [**Object**](.md)|  |
+ **driveSystemCode** | **String**|  |
 
 ### Return type
 
@@ -66,7 +66,7 @@ No authorization required
 
 
 GoogleDriveBrowsingControllerApi apiInstance = new GoogleDriveBrowsingControllerApi();
-Object driveSystemCode = null; // Object | 
+String driveSystemCode = "driveSystemCode_example"; // String | 
 try {
     OperationStatusListGVirtualFilesystemRoot result = apiInstance.getGoogleDriveRoots(driveSystemCode);
     System.out.println(result);
@@ -80,7 +80,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **driveSystemCode** | [**Object**](.md)|  |
+ **driveSystemCode** | **String**|  |
 
 ### Return type
 

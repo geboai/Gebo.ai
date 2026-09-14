@@ -11,6 +11,6 @@
  */
 
 export interface SharePointPeopleFilter { 
-    createdByList?: any;
-    lastModifiedByList?: any;
+    createdByList?: Array<string>;
+    lastModifiedByList?: Array<string>;
 }

@@ -40,7 +40,7 @@ public class GeboCoreAnalisysControllerApiTest {
     @Test
     public void coreDrillDownTest() {
         GStatsHolder body = null;
-        Object response = api.coreDrillDown(body);
+        List<GStatsHolder> response = api.coreDrillDown(body);
 
         // TODO: test validations
     }

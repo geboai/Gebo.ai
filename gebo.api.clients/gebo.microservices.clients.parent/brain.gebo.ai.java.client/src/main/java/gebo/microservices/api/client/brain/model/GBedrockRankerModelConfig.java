@@ -19,65 +19,66 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GBedrockRankerModelChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GBedrockRankerModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GBedrockRankerModelConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("modelTypeCode")
-  private Object modelTypeCode = null;
+  private String modelTypeCode = null;
 
   @JsonProperty("defaultModel")
-  private Object defaultModel = null;
+  private Boolean defaultModel = null;
 
   @JsonProperty("apiSecretCode")
-  private Object apiSecretCode = null;
+  private String apiSecretCode = null;
 
   @JsonProperty("choosedModel")
   private GBedrockRankerModelChoice choosedModel = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("maxDocumentsPerRequest")
-  private Object maxDocumentsPerRequest = null;
+  private Integer maxDocumentsPerRequest = null;
 
   @JsonProperty("maxDocumentTokens")
-  private Object maxDocumentTokens = null;
+  private Integer maxDocumentTokens = null;
 
   @JsonProperty("responseReserveTokens")
-  private Object responseReserveTokens = null;
+  private Integer responseReserveTokens = null;
 
   @JsonProperty("fullServiceUrl")
-  private Object fullServiceUrl = null;
+  private String fullServiceUrl = null;
 
   @JsonProperty("relativeServiceUrl")
-  private Object relativeServiceUrl = null;
+  private String relativeServiceUrl = null;
 
-  public GBedrockRankerModelConfig code(Object code) {
+  public GBedrockRankerModelConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -87,15 +88,15 @@ public class GBedrockRankerModelConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GBedrockRankerModelConfig description(Object description) {
+  public GBedrockRankerModelConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -105,15 +106,15 @@ public class GBedrockRankerModelConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GBedrockRankerModelConfig userModified(Object userModified) {
+  public GBedrockRankerModelConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -123,15 +124,15 @@ public class GBedrockRankerModelConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GBedrockRankerModelConfig userCreated(Object userCreated) {
+  public GBedrockRankerModelConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -141,15 +142,15 @@ public class GBedrockRankerModelConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GBedrockRankerModelConfig dateModified(Object dateModified) {
+  public GBedrockRankerModelConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -159,15 +160,15 @@ public class GBedrockRankerModelConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GBedrockRankerModelConfig dateCreated(Object dateCreated) {
+  public GBedrockRankerModelConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -177,15 +178,15 @@ public class GBedrockRankerModelConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GBedrockRankerModelConfig modelTypeCode(Object modelTypeCode) {
+  public GBedrockRankerModelConfig modelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
     return this;
   }
@@ -195,15 +196,15 @@ public class GBedrockRankerModelConfig {
    * @return modelTypeCode
   **/
   @Schema(description = "")
-  public Object getModelTypeCode() {
+  public String getModelTypeCode() {
     return modelTypeCode;
   }
 
-  public void setModelTypeCode(Object modelTypeCode) {
+  public void setModelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
   }
 
-  public GBedrockRankerModelConfig defaultModel(Object defaultModel) {
+  public GBedrockRankerModelConfig defaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
     return this;
   }
@@ -213,15 +214,15 @@ public class GBedrockRankerModelConfig {
    * @return defaultModel
   **/
   @Schema(description = "")
-  public Object getDefaultModel() {
+  public Boolean isDefaultModel() {
     return defaultModel;
   }
 
-  public void setDefaultModel(Object defaultModel) {
+  public void setDefaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
   }
 
-  public GBedrockRankerModelConfig apiSecretCode(Object apiSecretCode) {
+  public GBedrockRankerModelConfig apiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
     return this;
   }
@@ -231,11 +232,11 @@ public class GBedrockRankerModelConfig {
    * @return apiSecretCode
   **/
   @Schema(description = "")
-  public Object getApiSecretCode() {
+  public String getApiSecretCode() {
     return apiSecretCode;
   }
 
-  public void setApiSecretCode(Object apiSecretCode) {
+  public void setApiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
   }
 
@@ -257,7 +258,7 @@ public class GBedrockRankerModelConfig {
     this.choosedModel = choosedModel;
   }
 
-  public GBedrockRankerModelConfig baseUrl(Object baseUrl) {
+  public GBedrockRankerModelConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -267,15 +268,15 @@ public class GBedrockRankerModelConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public GBedrockRankerModelConfig contextLength(Object contextLength) {
+  public GBedrockRankerModelConfig contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -285,15 +286,15 @@ public class GBedrockRankerModelConfig {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
-  public GBedrockRankerModelConfig maxDocumentsPerRequest(Object maxDocumentsPerRequest) {
+  public GBedrockRankerModelConfig maxDocumentsPerRequest(Integer maxDocumentsPerRequest) {
     this.maxDocumentsPerRequest = maxDocumentsPerRequest;
     return this;
   }
@@ -303,15 +304,15 @@ public class GBedrockRankerModelConfig {
    * @return maxDocumentsPerRequest
   **/
   @Schema(description = "")
-  public Object getMaxDocumentsPerRequest() {
+  public Integer getMaxDocumentsPerRequest() {
     return maxDocumentsPerRequest;
   }
 
-  public void setMaxDocumentsPerRequest(Object maxDocumentsPerRequest) {
+  public void setMaxDocumentsPerRequest(Integer maxDocumentsPerRequest) {
     this.maxDocumentsPerRequest = maxDocumentsPerRequest;
   }
 
-  public GBedrockRankerModelConfig maxDocumentTokens(Object maxDocumentTokens) {
+  public GBedrockRankerModelConfig maxDocumentTokens(Integer maxDocumentTokens) {
     this.maxDocumentTokens = maxDocumentTokens;
     return this;
   }
@@ -321,15 +322,15 @@ public class GBedrockRankerModelConfig {
    * @return maxDocumentTokens
   **/
   @Schema(description = "")
-  public Object getMaxDocumentTokens() {
+  public Integer getMaxDocumentTokens() {
     return maxDocumentTokens;
   }
 
-  public void setMaxDocumentTokens(Object maxDocumentTokens) {
+  public void setMaxDocumentTokens(Integer maxDocumentTokens) {
     this.maxDocumentTokens = maxDocumentTokens;
   }
 
-  public GBedrockRankerModelConfig responseReserveTokens(Object responseReserveTokens) {
+  public GBedrockRankerModelConfig responseReserveTokens(Integer responseReserveTokens) {
     this.responseReserveTokens = responseReserveTokens;
     return this;
   }
@@ -339,15 +340,15 @@ public class GBedrockRankerModelConfig {
    * @return responseReserveTokens
   **/
   @Schema(description = "")
-  public Object getResponseReserveTokens() {
+  public Integer getResponseReserveTokens() {
     return responseReserveTokens;
   }
 
-  public void setResponseReserveTokens(Object responseReserveTokens) {
+  public void setResponseReserveTokens(Integer responseReserveTokens) {
     this.responseReserveTokens = responseReserveTokens;
   }
 
-  public GBedrockRankerModelConfig fullServiceUrl(Object fullServiceUrl) {
+  public GBedrockRankerModelConfig fullServiceUrl(String fullServiceUrl) {
     this.fullServiceUrl = fullServiceUrl;
     return this;
   }
@@ -357,15 +358,15 @@ public class GBedrockRankerModelConfig {
    * @return fullServiceUrl
   **/
   @Schema(description = "")
-  public Object getFullServiceUrl() {
+  public String getFullServiceUrl() {
     return fullServiceUrl;
   }
 
-  public void setFullServiceUrl(Object fullServiceUrl) {
+  public void setFullServiceUrl(String fullServiceUrl) {
     this.fullServiceUrl = fullServiceUrl;
   }
 
-  public GBedrockRankerModelConfig relativeServiceUrl(Object relativeServiceUrl) {
+  public GBedrockRankerModelConfig relativeServiceUrl(String relativeServiceUrl) {
     this.relativeServiceUrl = relativeServiceUrl;
     return this;
   }
@@ -375,11 +376,11 @@ public class GBedrockRankerModelConfig {
    * @return relativeServiceUrl
   **/
   @Schema(description = "")
-  public Object getRelativeServiceUrl() {
+  public String getRelativeServiceUrl() {
     return relativeServiceUrl;
   }
 
-  public void setRelativeServiceUrl(Object relativeServiceUrl) {
+  public void setRelativeServiceUrl(String relativeServiceUrl) {
     this.relativeServiceUrl = relativeServiceUrl;
   }
 

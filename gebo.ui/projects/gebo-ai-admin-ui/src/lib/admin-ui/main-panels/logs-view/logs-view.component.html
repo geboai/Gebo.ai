@@ -13,20 +13,20 @@
 
 
 
-<p-tabs [value]="0">
-  <p-tablist>
-    @for (tab of endpointTabs; track tab; let i = $index) {
-      <p-tab [value]="i" gebo-ai-text>{{tab.label + ' logs'}}</p-tab>
-    }
-  </p-tablist>
-  <p-tabpanels>
-    @for (tab of endpointTabs; track tab; let i = $index) {
-      <p-tabpanel [value]="i">
-        <gebo-ai-log-table-component [className]="tab.className" [jobType]="'CONTENTS_READING_VECTORIZING'"></gebo-ai-log-table-component>
-      </p-tabpanel>
-    }
-  </p-tabpanels>
-</p-tabs>
+<div class="grid">
+  <div class="col-12">
+    <gebo-ai-field id="datasourceTypes" label="Data source types"
+      help="Data source types whose ingestion logs are listed. Leave empty to list them all.">
+      <p-multiselect id="datasourceTypesSelector" gebo-ai-label gebo-ai-field-element styleClass="w-full"
+        [options]="endpointTypes" optionLabel="label" optionValue="className" [(ngModel)]="selectedClassNames"
+        [showToggleAll]="true" [filter]="true" placeholder="All data source types"></p-multiselect>
+    </gebo-ai-field>
+  </div>
+  <div class="col-12">
+    <gebo-ai-log-table-component [classNames]="selectedClassNames"
+      [jobType]="'CONTENTS_READING_VECTORIZING'"></gebo-ai-log-table-component>
+  </div>
+</div>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

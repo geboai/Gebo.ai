@@ -39,7 +39,7 @@ public class GeboMcpServerUserControllerApiTest {
      */
     @Test
     public void findAccessibleMcpServerByCodeTest() {
-        Object code = null;
+        String code = null;
         UserAccessibleMcpServerView response = api.findAccessibleMcpServerByCode(code);
 
         // TODO: test validations
@@ -54,7 +54,7 @@ public class GeboMcpServerUserControllerApiTest {
      */
     @Test
     public void getUsersCanAccessMcpServersListTest() {
-        Object response = api.getUsersCanAccessMcpServersList();
+        Boolean response = api.getUsersCanAccessMcpServersList();
 
         // TODO: test validations
     }
@@ -68,7 +68,7 @@ public class GeboMcpServerUserControllerApiTest {
      */
     @Test
     public void listAccessibleMcpServersTest() {
-        Object response = api.listAccessibleMcpServers();
+        List<UserAccessibleMcpServerView> response = api.listAccessibleMcpServers();
 
         // TODO: test validations
     }

@@ -23,20 +23,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GetNextChunkSetRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class GetNextChunkSetRequest {
   @JsonProperty("document")
   private IGComponentOriginatedDocument document = null;
 
   @JsonProperty("chunkRequestId")
-  private Object chunkRequestId = null;
+  private String chunkRequestId = null;
 
   @JsonProperty("nextChunkId")
-  private Object nextChunkId = null;
+  private String nextChunkId = null;
 
   @JsonProperty("chunkSessionId")
-  private Object chunkSessionId = null;
+  private String chunkSessionId = null;
 
   public GetNextChunkSetRequest document(IGComponentOriginatedDocument document) {
     this.document = document;
@@ -56,7 +56,7 @@ public class GetNextChunkSetRequest {
     this.document = document;
   }
 
-  public GetNextChunkSetRequest chunkRequestId(Object chunkRequestId) {
+  public GetNextChunkSetRequest chunkRequestId(String chunkRequestId) {
     this.chunkRequestId = chunkRequestId;
     return this;
   }
@@ -66,15 +66,15 @@ public class GetNextChunkSetRequest {
    * @return chunkRequestId
   **/
   @Schema(description = "")
-  public Object getChunkRequestId() {
+  public String getChunkRequestId() {
     return chunkRequestId;
   }
 
-  public void setChunkRequestId(Object chunkRequestId) {
+  public void setChunkRequestId(String chunkRequestId) {
     this.chunkRequestId = chunkRequestId;
   }
 
-  public GetNextChunkSetRequest nextChunkId(Object nextChunkId) {
+  public GetNextChunkSetRequest nextChunkId(String nextChunkId) {
     this.nextChunkId = nextChunkId;
     return this;
   }
@@ -84,15 +84,15 @@ public class GetNextChunkSetRequest {
    * @return nextChunkId
   **/
   @Schema(description = "")
-  public Object getNextChunkId() {
+  public String getNextChunkId() {
     return nextChunkId;
   }
 
-  public void setNextChunkId(Object nextChunkId) {
+  public void setNextChunkId(String nextChunkId) {
     this.nextChunkId = nextChunkId;
   }
 
-  public GetNextChunkSetRequest chunkSessionId(Object chunkSessionId) {
+  public GetNextChunkSetRequest chunkSessionId(String chunkSessionId) {
     this.chunkSessionId = chunkSessionId;
     return this;
   }
@@ -102,11 +102,11 @@ public class GetNextChunkSetRequest {
    * @return chunkSessionId
   **/
   @Schema(description = "")
-  public Object getChunkSessionId() {
+  public String getChunkSessionId() {
     return chunkSessionId;
   }
 
-  public void setChunkSessionId(Object chunkSessionId) {
+  public void setChunkSessionId(String chunkSessionId) {
     this.chunkSessionId = chunkSessionId;
   }
 

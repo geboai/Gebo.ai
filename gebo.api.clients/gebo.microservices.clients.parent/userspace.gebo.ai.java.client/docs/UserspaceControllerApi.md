@@ -79,7 +79,7 @@ No authorization required
 
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
-Object body = null; // Object | 
+List<UserspaceFileDto> body = Arrays.asList(new UserspaceFileDto()); // List<UserspaceFileDto> | 
 try {
     apiInstance.deleteUserspaceFiles(body);
 } catch (ApiException e) {
@@ -92,7 +92,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;UserspaceFileDto&gt;**](UserspaceFileDto.md)|  |
 
 ### Return type
 
@@ -163,7 +163,7 @@ No authorization required
 
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     UserspaceKnowledgebaseDto result = apiInstance.findUserKnowledgebaseByCode(code);
     System.out.println(result);
@@ -177,7 +177,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -194,7 +194,7 @@ No authorization required
 
 <a name="findUserspaceFileByCodes"></a>
 # **findUserspaceFileByCodes**
-> Object findUserspaceFileByCodes(body)
+> List&lt;UserspaceFileDto&gt; findUserspaceFileByCodes(body)
 
 
 
@@ -206,9 +206,9 @@ No authorization required
 
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
-Object body = null; // Object | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    Object result = apiInstance.findUserspaceFileByCodes(body);
+    List<UserspaceFileDto> result = apiInstance.findUserspaceFileByCodes(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserspaceControllerApi#findUserspaceFileByCodes");
@@ -220,11 +220,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
-**Object**
+[**List&lt;UserspaceFileDto&gt;**](UserspaceFileDto.md)
 
 ### Authorization
 
@@ -249,7 +249,7 @@ No authorization required
 
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     UserspaceFolderDto result = apiInstance.findUserspaceFolderByCode(code);
     System.out.println(result);
@@ -263,7 +263,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -280,7 +280,7 @@ No authorization required
 
 <a name="getPersonalKnowledgebases"></a>
 # **getPersonalKnowledgebases**
-> Object getPersonalKnowledgebases()
+> List&lt;UserspaceKnowledgebaseDto&gt; getPersonalKnowledgebases()
 
 
 
@@ -293,7 +293,7 @@ No authorization required
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
 try {
-    Object result = apiInstance.getPersonalKnowledgebases();
+    List<UserspaceKnowledgebaseDto> result = apiInstance.getPersonalKnowledgebases();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserspaceControllerApi#getPersonalKnowledgebases");
@@ -306,7 +306,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UserspaceKnowledgebaseDto&gt;**](UserspaceKnowledgebaseDto.md)
 
 ### Authorization
 
@@ -362,7 +362,7 @@ No authorization required
 
 <a name="listChildPersonalKnowledgebases"></a>
 # **listChildPersonalKnowledgebases**
-> Object listChildPersonalKnowledgebases(body)
+> List&lt;UserspaceKnowledgebaseDto&gt; listChildPersonalKnowledgebases(body)
 
 
 
@@ -374,9 +374,9 @@ No authorization required
 
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
-Object body = null; // Object | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    Object result = apiInstance.listChildPersonalKnowledgebases(body);
+    List<UserspaceKnowledgebaseDto> result = apiInstance.listChildPersonalKnowledgebases(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserspaceControllerApi#listChildPersonalKnowledgebases");
@@ -388,11 +388,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
-**Object**
+[**List&lt;UserspaceKnowledgebaseDto&gt;**](UserspaceKnowledgebaseDto.md)
 
 ### Authorization
 
@@ -405,7 +405,7 @@ No authorization required
 
 <a name="listUserspaceFiles"></a>
 # **listUserspaceFiles**
-> Object listUserspaceFiles(userspaceUploadCode)
+> List&lt;UserspaceFileDto&gt; listUserspaceFiles(userspaceUploadCode)
 
 
 
@@ -417,9 +417,9 @@ No authorization required
 
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
-Object userspaceUploadCode = null; // Object | 
+String userspaceUploadCode = "userspaceUploadCode_example"; // String | 
 try {
-    Object result = apiInstance.listUserspaceFiles(userspaceUploadCode);
+    List<UserspaceFileDto> result = apiInstance.listUserspaceFiles(userspaceUploadCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserspaceControllerApi#listUserspaceFiles");
@@ -431,11 +431,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userspaceUploadCode** | [**Object**](.md)|  |
+ **userspaceUploadCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;UserspaceFileDto&gt;**](UserspaceFileDto.md)
 
 ### Authorization
 
@@ -448,7 +448,7 @@ No authorization required
 
 <a name="listUserspaceFolders"></a>
 # **listUserspaceFolders**
-> Object listUserspaceFolders(userspaceKnowledgeBase)
+> List&lt;UserspaceFolderDto&gt; listUserspaceFolders(userspaceKnowledgeBase)
 
 
 
@@ -460,9 +460,9 @@ No authorization required
 
 
 UserspaceControllerApi apiInstance = new UserspaceControllerApi();
-Object userspaceKnowledgeBase = null; // Object | 
+String userspaceKnowledgeBase = "userspaceKnowledgeBase_example"; // String | 
 try {
-    Object result = apiInstance.listUserspaceFolders(userspaceKnowledgeBase);
+    List<UserspaceFolderDto> result = apiInstance.listUserspaceFolders(userspaceKnowledgeBase);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserspaceControllerApi#listUserspaceFolders");
@@ -474,11 +474,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userspaceKnowledgeBase** | [**Object**](.md)|  |
+ **userspaceKnowledgeBase** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;UserspaceFolderDto&gt;**](UserspaceFolderDto.md)
 
 ### Authorization
 

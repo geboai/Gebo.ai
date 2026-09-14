@@ -22,13 +22,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentEnabledStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class ComponentEnabledStatus {
   @JsonProperty("isEnabled")
-  private Object isEnabled = null;
+  private Boolean isEnabled = null;
 
-  public ComponentEnabledStatus isEnabled(Object isEnabled) {
+  public ComponentEnabledStatus isEnabled(Boolean isEnabled) {
     this.isEnabled = isEnabled;
     return this;
   }
@@ -38,11 +38,11 @@ public class ComponentEnabledStatus {
    * @return isEnabled
   **/
   @Schema(description = "")
-  public Object getIsEnabled() {
+  public Boolean isIsEnabled() {
     return isEnabled;
   }
 
-  public void setIsEnabled(Object isEnabled) {
+  public void setIsEnabled(Boolean isEnabled) {
     this.isEnabled = isEnabled;
   }
 

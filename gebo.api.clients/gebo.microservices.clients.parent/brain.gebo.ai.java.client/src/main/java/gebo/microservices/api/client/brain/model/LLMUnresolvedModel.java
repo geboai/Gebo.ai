@@ -17,30 +17,99 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GBaseModelChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMUnresolvedModel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMUnresolvedModel {
-  @JsonProperty("type")
-  private Object type = null;
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    RANKING("RANKING"),
+    IMAGESGEN("IMAGESGEN"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
 
-  @JsonProperty("uses")
-  private Object uses = null;
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypeEnum fromValue(String input) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("type")
+  private TypeEnum type = null;
+
+  /**
+   * Gets or Sets uses
+   */
+  public enum UsesEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
+
+    private String value;
+
+    UsesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UsesEnum fromValue(String input) {
+      for (UsesEnum b : UsesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("uses")
+  private List<UsesEnum> uses = null;
 
   @JsonProperty("serviceHandler")
-  private Object serviceHandler = null;
+  private String serviceHandler = null;
 
   @JsonProperty("requestedModelCode")
-  private Object requestedModelCode = null;
+  private String requestedModelCode = null;
 
   @JsonProperty("availableChoices")
-  private Object availableChoices = null;
+  private List<GBaseModelChoice> availableChoices = null;
 
-  public LLMUnresolvedModel type(Object type) {
+  public LLMUnresolvedModel type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -50,16 +119,24 @@ public class LLMUnresolvedModel {
    * @return type
   **/
   @Schema(description = "")
-  public Object getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(Object type) {
+  public void setType(TypeEnum type) {
     this.type = type;
   }
 
-  public LLMUnresolvedModel uses(Object uses) {
+  public LLMUnresolvedModel uses(List<UsesEnum> uses) {
     this.uses = uses;
+    return this;
+  }
+
+  public LLMUnresolvedModel addUsesItem(UsesEnum usesItem) {
+    if (this.uses == null) {
+      this.uses = new ArrayList<>();
+    }
+    this.uses.add(usesItem);
     return this;
   }
 
@@ -68,15 +145,15 @@ public class LLMUnresolvedModel {
    * @return uses
   **/
   @Schema(description = "")
-  public Object getUses() {
+  public List<UsesEnum> getUses() {
     return uses;
   }
 
-  public void setUses(Object uses) {
+  public void setUses(List<UsesEnum> uses) {
     this.uses = uses;
   }
 
-  public LLMUnresolvedModel serviceHandler(Object serviceHandler) {
+  public LLMUnresolvedModel serviceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
     return this;
   }
@@ -86,15 +163,15 @@ public class LLMUnresolvedModel {
    * @return serviceHandler
   **/
   @Schema(description = "")
-  public Object getServiceHandler() {
+  public String getServiceHandler() {
     return serviceHandler;
   }
 
-  public void setServiceHandler(Object serviceHandler) {
+  public void setServiceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
   }
 
-  public LLMUnresolvedModel requestedModelCode(Object requestedModelCode) {
+  public LLMUnresolvedModel requestedModelCode(String requestedModelCode) {
     this.requestedModelCode = requestedModelCode;
     return this;
   }
@@ -104,16 +181,24 @@ public class LLMUnresolvedModel {
    * @return requestedModelCode
   **/
   @Schema(description = "")
-  public Object getRequestedModelCode() {
+  public String getRequestedModelCode() {
     return requestedModelCode;
   }
 
-  public void setRequestedModelCode(Object requestedModelCode) {
+  public void setRequestedModelCode(String requestedModelCode) {
     this.requestedModelCode = requestedModelCode;
   }
 
-  public LLMUnresolvedModel availableChoices(Object availableChoices) {
+  public LLMUnresolvedModel availableChoices(List<GBaseModelChoice> availableChoices) {
     this.availableChoices = availableChoices;
+    return this;
+  }
+
+  public LLMUnresolvedModel addAvailableChoicesItem(GBaseModelChoice availableChoicesItem) {
+    if (this.availableChoices == null) {
+      this.availableChoices = new ArrayList<>();
+    }
+    this.availableChoices.add(availableChoicesItem);
     return this;
   }
 
@@ -122,11 +207,11 @@ public class LLMUnresolvedModel {
    * @return availableChoices
   **/
   @Schema(description = "")
-  public Object getAvailableChoices() {
+  public List<GBaseModelChoice> getAvailableChoices() {
     return availableChoices;
   }
 
-  public void setAvailableChoices(Object availableChoices) {
+  public void setAvailableChoices(List<GBaseModelChoice> availableChoices) {
     this.availableChoices = availableChoices;
   }
 

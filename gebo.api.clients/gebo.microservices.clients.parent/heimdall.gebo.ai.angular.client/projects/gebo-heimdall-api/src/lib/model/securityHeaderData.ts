@@ -11,9 +11,17 @@
  */
 
 export interface SecurityHeaderData { 
-    token?: any;
-    authType?: any;
-    authProviderId?: any;
-    authTenantId?: any;
-    empty?: any;
+    token?: string;
+    authType?: SecurityHeaderData.AuthTypeEnum;
+    authProviderId?: string;
+    authTenantId?: string;
+    empty?: boolean;
+}
+export namespace SecurityHeaderData {
+    export type AuthTypeEnum = 'OAUTH2' | 'LOCAL_JWT' | 'AUTO';
+    export const AuthTypeEnum = {
+        OAUTH2: 'OAUTH2' as AuthTypeEnum,
+        LOCALJWT: 'LOCAL_JWT' as AuthTypeEnum,
+        AUTO: 'AUTO' as AuthTypeEnum
+    };
 }

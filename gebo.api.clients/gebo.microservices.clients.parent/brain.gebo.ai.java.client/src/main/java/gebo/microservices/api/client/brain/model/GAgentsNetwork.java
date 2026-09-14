@@ -17,63 +17,67 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.AgentNetworkParticipant;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GAgentsNetwork
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GAgentsNetwork {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("maxLoopIteration")
-  private Object maxLoopIteration = null;
+  private Integer maxLoopIteration = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("agentsNetworkServiceFactoryId")
-  private Object agentsNetworkServiceFactoryId = null;
+  private String agentsNetworkServiceFactoryId = null;
 
   @JsonProperty("scenarioDescription")
-  private Object scenarioDescription = null;
+  private String scenarioDescription = null;
 
   @JsonProperty("agents")
-  private Object agents = null;
+  private List<AgentNetworkParticipant> agents = new ArrayList<>();
 
   @JsonProperty("readOnly")
-  private Object readOnly = null;
+  private Boolean readOnly = null;
 
   @JsonProperty("defaultUserInteractionNetwork")
-  private Object defaultUserInteractionNetwork = null;
+  private Boolean defaultUserInteractionNetwork = null;
 
-  public GAgentsNetwork code(Object code) {
+  public GAgentsNetwork code(String code) {
     this.code = code;
     return this;
   }
@@ -83,15 +87,15 @@ public class GAgentsNetwork {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GAgentsNetwork description(Object description) {
+  public GAgentsNetwork description(String description) {
     this.description = description;
     return this;
   }
@@ -101,15 +105,15 @@ public class GAgentsNetwork {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GAgentsNetwork userModified(Object userModified) {
+  public GAgentsNetwork userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -119,15 +123,15 @@ public class GAgentsNetwork {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GAgentsNetwork userCreated(Object userCreated) {
+  public GAgentsNetwork userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -137,15 +141,15 @@ public class GAgentsNetwork {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GAgentsNetwork dateModified(Object dateModified) {
+  public GAgentsNetwork dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -155,15 +159,15 @@ public class GAgentsNetwork {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GAgentsNetwork dateCreated(Object dateCreated) {
+  public GAgentsNetwork dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -173,15 +177,15 @@ public class GAgentsNetwork {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GAgentsNetwork maxLoopIteration(Object maxLoopIteration) {
+  public GAgentsNetwork maxLoopIteration(Integer maxLoopIteration) {
     this.maxLoopIteration = maxLoopIteration;
     return this;
   }
@@ -191,15 +195,15 @@ public class GAgentsNetwork {
    * @return maxLoopIteration
   **/
   @Schema(description = "")
-  public Object getMaxLoopIteration() {
+  public Integer getMaxLoopIteration() {
     return maxLoopIteration;
   }
 
-  public void setMaxLoopIteration(Object maxLoopIteration) {
+  public void setMaxLoopIteration(Integer maxLoopIteration) {
     this.maxLoopIteration = maxLoopIteration;
   }
 
-  public GAgentsNetwork accessibleToAll(Object accessibleToAll) {
+  public GAgentsNetwork accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -209,16 +213,24 @@ public class GAgentsNetwork {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GAgentsNetwork accessibleUsers(Object accessibleUsers) {
+  public GAgentsNetwork accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GAgentsNetwork addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -227,16 +239,24 @@ public class GAgentsNetwork {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public GAgentsNetwork accessibleGroups(Object accessibleGroups) {
+  public GAgentsNetwork accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GAgentsNetwork addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -245,16 +265,24 @@ public class GAgentsNetwork {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public GAgentsNetwork aclAliases(Object aclAliases) {
+  public GAgentsNetwork aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GAgentsNetwork addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -263,15 +291,15 @@ public class GAgentsNetwork {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GAgentsNetwork agentsNetworkServiceFactoryId(Object agentsNetworkServiceFactoryId) {
+  public GAgentsNetwork agentsNetworkServiceFactoryId(String agentsNetworkServiceFactoryId) {
     this.agentsNetworkServiceFactoryId = agentsNetworkServiceFactoryId;
     return this;
   }
@@ -281,15 +309,15 @@ public class GAgentsNetwork {
    * @return agentsNetworkServiceFactoryId
   **/
   @Schema(required = true, description = "")
-  public Object getAgentsNetworkServiceFactoryId() {
+  public String getAgentsNetworkServiceFactoryId() {
     return agentsNetworkServiceFactoryId;
   }
 
-  public void setAgentsNetworkServiceFactoryId(Object agentsNetworkServiceFactoryId) {
+  public void setAgentsNetworkServiceFactoryId(String agentsNetworkServiceFactoryId) {
     this.agentsNetworkServiceFactoryId = agentsNetworkServiceFactoryId;
   }
 
-  public GAgentsNetwork scenarioDescription(Object scenarioDescription) {
+  public GAgentsNetwork scenarioDescription(String scenarioDescription) {
     this.scenarioDescription = scenarioDescription;
     return this;
   }
@@ -299,16 +327,21 @@ public class GAgentsNetwork {
    * @return scenarioDescription
   **/
   @Schema(required = true, description = "")
-  public Object getScenarioDescription() {
+  public String getScenarioDescription() {
     return scenarioDescription;
   }
 
-  public void setScenarioDescription(Object scenarioDescription) {
+  public void setScenarioDescription(String scenarioDescription) {
     this.scenarioDescription = scenarioDescription;
   }
 
-  public GAgentsNetwork agents(Object agents) {
+  public GAgentsNetwork agents(List<AgentNetworkParticipant> agents) {
     this.agents = agents;
+    return this;
+  }
+
+  public GAgentsNetwork addAgentsItem(AgentNetworkParticipant agentsItem) {
+    this.agents.add(agentsItem);
     return this;
   }
 
@@ -317,15 +350,15 @@ public class GAgentsNetwork {
    * @return agents
   **/
   @Schema(required = true, description = "")
-  public Object getAgents() {
+  public List<AgentNetworkParticipant> getAgents() {
     return agents;
   }
 
-  public void setAgents(Object agents) {
+  public void setAgents(List<AgentNetworkParticipant> agents) {
     this.agents = agents;
   }
 
-  public GAgentsNetwork readOnly(Object readOnly) {
+  public GAgentsNetwork readOnly(Boolean readOnly) {
     this.readOnly = readOnly;
     return this;
   }
@@ -335,15 +368,15 @@ public class GAgentsNetwork {
    * @return readOnly
   **/
   @Schema(description = "")
-  public Object getReadOnly() {
+  public Boolean isReadOnly() {
     return readOnly;
   }
 
-  public void setReadOnly(Object readOnly) {
+  public void setReadOnly(Boolean readOnly) {
     this.readOnly = readOnly;
   }
 
-  public GAgentsNetwork defaultUserInteractionNetwork(Object defaultUserInteractionNetwork) {
+  public GAgentsNetwork defaultUserInteractionNetwork(Boolean defaultUserInteractionNetwork) {
     this.defaultUserInteractionNetwork = defaultUserInteractionNetwork;
     return this;
   }
@@ -353,11 +386,11 @@ public class GAgentsNetwork {
    * @return defaultUserInteractionNetwork
   **/
   @Schema(description = "")
-  public Object getDefaultUserInteractionNetwork() {
+  public Boolean isDefaultUserInteractionNetwork() {
     return defaultUserInteractionNetwork;
   }
 
-  public void setDefaultUserInteractionNetwork(Object defaultUserInteractionNetwork) {
+  public void setDefaultUserInteractionNetwork(Boolean defaultUserInteractionNetwork) {
     this.defaultUserInteractionNetwork = defaultUserInteractionNetwork;
   }
 

@@ -71,7 +71,7 @@ public class SerpapiSearchConfigurationControllerApiTest {
      */
     @Test
     public void getSerpapiSearchApiCredentialsTest() {
-        Object response = api.getSerpapiSearchApiCredentials();
+        List<GSerpapiSearchApiCredentials> response = api.getSerpapiSearchApiCredentials();
 
         // TODO: test validations
     }
@@ -114,7 +114,7 @@ public class SerpapiSearchConfigurationControllerApiTest {
      */
     @Test
     public void searchGSerpapiSearchApiCredentialsByCodeTest() {
-        Object code = null;
+        String code = null;
         GSerpapiSearchApiCredentials response = api.searchGSerpapiSearchApiCredentialsByCode(code);
 
         // TODO: test validations

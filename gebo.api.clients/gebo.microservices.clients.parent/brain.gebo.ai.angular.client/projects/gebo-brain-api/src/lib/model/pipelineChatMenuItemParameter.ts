@@ -11,6 +11,6 @@
  */
 
 export interface PipelineChatMenuItemParameter { 
-    parameterName: any;
+    parameterName: string;
     parameterValue: any;
 }

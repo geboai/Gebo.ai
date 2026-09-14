@@ -11,6 +11,6 @@
  */
 
 export interface ResetContentResponse { 
-    resetEntries?: any;
-    deletedAll?: any;
+    resetEntries?: number;
+    deletedAll?: boolean;
 }

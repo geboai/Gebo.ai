@@ -11,12 +11,22 @@
  */
 
 export interface GeboTextDocumentFragment { 
-    customMetaData?: any;
-    fragmentType?: any;
-    contentType?: any;
-    characterEncoding?: any;
-    encoding?: any;
-    content?: any;
-    name?: any;
-    uniqueCode?: any;
+    customMetaData?: { [key: string]: any; };
+    fragmentType?: GeboTextDocumentFragment.FragmentTypeEnum;
+    contentType?: string;
+    characterEncoding?: string;
+    encoding?: string;
+    content?: string;
+    name?: string;
+    uniqueCode?: string;
+}
+export namespace GeboTextDocumentFragment {
+    export type FragmentTypeEnum = 'TEXT' | 'IMAGE' | 'AUDIO' | 'VIDEO' | 'MEDIA';
+    export const FragmentTypeEnum = {
+        TEXT: 'TEXT' as FragmentTypeEnum,
+        IMAGE: 'IMAGE' as FragmentTypeEnum,
+        AUDIO: 'AUDIO' as FragmentTypeEnum,
+        VIDEO: 'VIDEO' as FragmentTypeEnum,
+        MEDIA: 'MEDIA' as FragmentTypeEnum
+    };
 }

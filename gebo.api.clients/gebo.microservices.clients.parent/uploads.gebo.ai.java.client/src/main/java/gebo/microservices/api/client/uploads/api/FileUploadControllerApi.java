@@ -2,6 +2,7 @@ package gebo.microservices.api.client.uploads.api;
 
 import gebo.microservices.api.client.uploads.invoker.ApiClient;
 
+import java.io.File;
 import gebo.microservices.api.client.uploads.model.HandShakeToken;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:05.518323320+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class FileUploadControllerApi {
     private ApiClient apiClient;
@@ -88,7 +89,7 @@ public class FileUploadControllerApi {
      * @param files  (optional)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void upload(Object handShakeCode, Object files) throws RestClientException {
+    public void upload(String handShakeCode, List<File> files) throws RestClientException {
         uploadWithHttpInfo(handShakeCode, files);
     }
 
@@ -101,7 +102,7 @@ public class FileUploadControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> uploadWithHttpInfo(Object handShakeCode, Object files) throws RestClientException {
+    public ResponseEntity<Void> uploadWithHttpInfo(String handShakeCode, List<File> files) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'handShakeCode' is set
         if (handShakeCode == null) {
@@ -138,7 +139,7 @@ public class FileUploadControllerApi {
      * @param files  (optional)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void uploadToEndpoint(Object endpointCode, Object files) throws RestClientException {
+    public void uploadToEndpoint(String endpointCode, List<File> files) throws RestClientException {
         uploadToEndpointWithHttpInfo(endpointCode, files);
     }
 
@@ -151,7 +152,7 @@ public class FileUploadControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> uploadToEndpointWithHttpInfo(Object endpointCode, Object files) throws RestClientException {
+    public ResponseEntity<Void> uploadToEndpointWithHttpInfo(String endpointCode, List<File> files) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {

@@ -26,7 +26,7 @@ Method | HTTP request | Description
 
 
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
-Object chatProfileCode = null; // Object | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
 try {
     GeboChatUserInfo result = apiInstance.getChatModelUserInfoByChatProfileCode(chatProfileCode);
     System.out.println(result);
@@ -40,7 +40,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  |
+ **chatProfileCode** | **String**|  |
 
 ### Return type
 
@@ -69,7 +69,7 @@ No authorization required
 
 
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
-Object chatProfileCode = null; // Object | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
 try {
     GBaseChatModelChoice result = apiInstance.getChatProfileModelMetaInfos(chatProfileCode);
     System.out.println(result);
@@ -83,7 +83,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  |
+ **chatProfileCode** | **String**|  |
 
 ### Return type
 
@@ -100,7 +100,7 @@ No authorization required
 
 <a name="getChatProfiles"></a>
 # **getChatProfiles**
-> Object getChatProfiles()
+> List&lt;GChatProfileConfiguration&gt; getChatProfiles()
 
 
 
@@ -113,7 +113,7 @@ No authorization required
 
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
 try {
-    Object result = apiInstance.getChatProfiles();
+    List<GChatProfileConfiguration> result = apiInstance.getChatProfiles();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboRagChatControllerApi#getChatProfiles");
@@ -126,7 +126,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GChatProfileConfiguration&gt;**](GChatProfileConfiguration.md)
 
 ### Authorization
 
@@ -151,7 +151,7 @@ No authorization required
 
 
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
-Object chatProfileCode = null; // Object | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
 try {
     ModelProviderCapabilities result = apiInstance.getProfileProviderModelCapabilities(chatProfileCode);
     System.out.println(result);
@@ -165,7 +165,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  |
+ **chatProfileCode** | **String**|  |
 
 ### Return type
 
@@ -182,7 +182,7 @@ No authorization required
 
 <a name="getVisibleKnowledgeBasesByProfileCode"></a>
 # **getVisibleKnowledgeBasesByProfileCode**
-> Object getVisibleKnowledgeBasesByProfileCode(profileCode)
+> List&lt;GBaseObject&gt; getVisibleKnowledgeBasesByProfileCode(profileCode)
 
 
 
@@ -194,9 +194,9 @@ No authorization required
 
 
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
-Object profileCode = null; // Object | 
+String profileCode = "profileCode_example"; // String | 
 try {
-    Object result = apiInstance.getVisibleKnowledgeBasesByProfileCode(profileCode);
+    List<GBaseObject> result = apiInstance.getVisibleKnowledgeBasesByProfileCode(profileCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboRagChatControllerApi#getVisibleKnowledgeBasesByProfileCode");
@@ -208,11 +208,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **profileCode** | [**Object**](.md)|  |
+ **profileCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -268,7 +268,7 @@ No authorization required
 
 <a name="streamRagResponse"></a>
 # **streamRagResponse**
-> Object streamRagResponse(body)
+> List&lt;ServerSentEventString&gt; streamRagResponse(body)
 
 
 
@@ -282,7 +282,7 @@ No authorization required
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
 GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
 try {
-    Object result = apiInstance.streamRagResponse(body);
+    List<ServerSentEventString> result = apiInstance.streamRagResponse(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboRagChatControllerApi#streamRagResponse");
@@ -298,7 +298,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;ServerSentEventString&gt;**](ServerSentEventString.md)
 
 ### Authorization
 

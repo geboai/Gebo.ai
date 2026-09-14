@@ -19,50 +19,125 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.awss3.model.GeboComponentInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * DataEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:46.219289034+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:35.503809141+02:00[Europe/Rome]")
 
 public class DataEndpoint {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("product")
-  private Object product = null;
+  private String product = null;
 
   @JsonProperty("endpoint")
-  private Object endpoint = null;
+  private String endpoint = null;
 
   @JsonProperty("input")
-  private Object input = null;
+  private Boolean input = null;
 
   @JsonProperty("output")
-  private Object output = null;
+  private Boolean output = null;
 
-  @JsonProperty("types")
-  private Object types = null;
+  /**
+   * Gets or Sets types
+   */
+  public enum TypesEnum {
+    DOCUMENTS("DOCUMENTS"),
+    DATABASE("DATABASE"),
+    VECTORIAL_DATABASE("VECTORIAL_DATABASE"),
+    GRAPH_DATABASE("GRAPH_DATABASE"),
+    CHUNK("CHUNK"),
+    FULLTEXT_INDEX("FULLTEXT_INDEX"),
+    LLM_ENDPOINT("LLM_ENDPOINT"),
+    OBJECT_STORAGE("OBJECT_STORAGE"),
+    MESSAGE_BROKER("MESSAGE_BROKER"),
+    WEB_SEARCH("WEB_SEARCH"),
+    LOCAL_FILESYSTEM("LOCAL_FILESYSTEM"),
+    CHAT_SESSION("CHAT_SESSION");
 
-  @JsonProperty("locality")
-  private Object locality = null;
+    private String value;
+
+    TypesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypesEnum fromValue(String input) {
+      for (TypesEnum b : TypesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("types")
+  private List<TypesEnum> types = new ArrayList<>();
+
+  /**
+   * Gets or Sets locality
+   */
+  public enum LocalityEnum {
+    LOCAL_DEPLOYMENT("LOCAL_DEPLOYMENT"),
+    SAME_NETWORK("SAME_NETWORK"),
+    EXTERNAL_PROVIDER("EXTERNAL_PROVIDER");
+
+    private String value;
+
+    LocalityEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static LocalityEnum fromValue(String input) {
+      for (LocalityEnum b : LocalityEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("locality")
+  private LocalityEnum locality = null;
 
   @JsonProperty("secretReference")
-  private Object secretReference = null;
+  private String secretReference = null;
 
   @JsonProperty("personalData")
-  private Object personalData = null;
+  private Boolean personalData = null;
 
   @JsonProperty("retention")
-  private Object retention = null;
+  private String retention = null;
 
   @JsonProperty("disposer")
   private GeboComponentInfo disposer = null;
 
-  public DataEndpoint id(Object id) {
+  public DataEndpoint id(String id) {
     this.id = id;
     return this;
   }
@@ -72,15 +147,15 @@ public class DataEndpoint {
    * @return id
   **/
   @Schema(required = true, description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public DataEndpoint description(Object description) {
+  public DataEndpoint description(String description) {
     this.description = description;
     return this;
   }
@@ -90,15 +165,15 @@ public class DataEndpoint {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public DataEndpoint product(Object product) {
+  public DataEndpoint product(String product) {
     this.product = product;
     return this;
   }
@@ -108,15 +183,15 @@ public class DataEndpoint {
    * @return product
   **/
   @Schema(required = true, description = "")
-  public Object getProduct() {
+  public String getProduct() {
     return product;
   }
 
-  public void setProduct(Object product) {
+  public void setProduct(String product) {
     this.product = product;
   }
 
-  public DataEndpoint endpoint(Object endpoint) {
+  public DataEndpoint endpoint(String endpoint) {
     this.endpoint = endpoint;
     return this;
   }
@@ -126,15 +201,15 @@ public class DataEndpoint {
    * @return endpoint
   **/
   @Schema(required = true, description = "")
-  public Object getEndpoint() {
+  public String getEndpoint() {
     return endpoint;
   }
 
-  public void setEndpoint(Object endpoint) {
+  public void setEndpoint(String endpoint) {
     this.endpoint = endpoint;
   }
 
-  public DataEndpoint input(Object input) {
+  public DataEndpoint input(Boolean input) {
     this.input = input;
     return this;
   }
@@ -144,15 +219,15 @@ public class DataEndpoint {
    * @return input
   **/
   @Schema(description = "")
-  public Object getInput() {
+  public Boolean isInput() {
     return input;
   }
 
-  public void setInput(Object input) {
+  public void setInput(Boolean input) {
     this.input = input;
   }
 
-  public DataEndpoint output(Object output) {
+  public DataEndpoint output(Boolean output) {
     this.output = output;
     return this;
   }
@@ -162,16 +237,21 @@ public class DataEndpoint {
    * @return output
   **/
   @Schema(description = "")
-  public Object getOutput() {
+  public Boolean isOutput() {
     return output;
   }
 
-  public void setOutput(Object output) {
+  public void setOutput(Boolean output) {
     this.output = output;
   }
 
-  public DataEndpoint types(Object types) {
+  public DataEndpoint types(List<TypesEnum> types) {
     this.types = types;
+    return this;
+  }
+
+  public DataEndpoint addTypesItem(TypesEnum typesItem) {
+    this.types.add(typesItem);
     return this;
   }
 
@@ -180,15 +260,15 @@ public class DataEndpoint {
    * @return types
   **/
   @Schema(required = true, description = "")
-  public Object getTypes() {
+  public List<TypesEnum> getTypes() {
     return types;
   }
 
-  public void setTypes(Object types) {
+  public void setTypes(List<TypesEnum> types) {
     this.types = types;
   }
 
-  public DataEndpoint locality(Object locality) {
+  public DataEndpoint locality(LocalityEnum locality) {
     this.locality = locality;
     return this;
   }
@@ -198,15 +278,15 @@ public class DataEndpoint {
    * @return locality
   **/
   @Schema(description = "")
-  public Object getLocality() {
+  public LocalityEnum getLocality() {
     return locality;
   }
 
-  public void setLocality(Object locality) {
+  public void setLocality(LocalityEnum locality) {
     this.locality = locality;
   }
 
-  public DataEndpoint secretReference(Object secretReference) {
+  public DataEndpoint secretReference(String secretReference) {
     this.secretReference = secretReference;
     return this;
   }
@@ -216,15 +296,15 @@ public class DataEndpoint {
    * @return secretReference
   **/
   @Schema(description = "")
-  public Object getSecretReference() {
+  public String getSecretReference() {
     return secretReference;
   }
 
-  public void setSecretReference(Object secretReference) {
+  public void setSecretReference(String secretReference) {
     this.secretReference = secretReference;
   }
 
-  public DataEndpoint personalData(Object personalData) {
+  public DataEndpoint personalData(Boolean personalData) {
     this.personalData = personalData;
     return this;
   }
@@ -234,15 +314,15 @@ public class DataEndpoint {
    * @return personalData
   **/
   @Schema(description = "")
-  public Object getPersonalData() {
+  public Boolean isPersonalData() {
     return personalData;
   }
 
-  public void setPersonalData(Object personalData) {
+  public void setPersonalData(Boolean personalData) {
     this.personalData = personalData;
   }
 
-  public DataEndpoint retention(Object retention) {
+  public DataEndpoint retention(String retention) {
     this.retention = retention;
     return this;
   }
@@ -252,11 +332,11 @@ public class DataEndpoint {
    * @return retention
   **/
   @Schema(description = "")
-  public Object getRetention() {
+  public String getRetention() {
     return retention;
   }
 
-  public void setRetention(Object retention) {
+  public void setRetention(String retention) {
     this.retention = retention;
   }
 

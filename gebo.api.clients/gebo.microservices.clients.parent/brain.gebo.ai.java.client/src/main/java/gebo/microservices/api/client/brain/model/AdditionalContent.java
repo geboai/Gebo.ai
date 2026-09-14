@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AdditionalContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class AdditionalContent {
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("content")
-  private Object content = null;
+  private String content = null;
 
-  public AdditionalContent contentType(Object contentType) {
+  public AdditionalContent contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -44,15 +44,15 @@ public class AdditionalContent {
    * @return contentType
   **/
   @Schema(required = true, description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public AdditionalContent name(Object name) {
+  public AdditionalContent name(String name) {
     this.name = name;
     return this;
   }
@@ -62,15 +62,15 @@ public class AdditionalContent {
    * @return name
   **/
   @Schema(required = true, description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public AdditionalContent content(Object content) {
+  public AdditionalContent content(String content) {
     this.content = content;
     return this;
   }
@@ -80,11 +80,11 @@ public class AdditionalContent {
    * @return content
   **/
   @Schema(required = true, description = "")
-  public Object getContent() {
+  public String getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(String content) {
     this.content = content;
   }
 

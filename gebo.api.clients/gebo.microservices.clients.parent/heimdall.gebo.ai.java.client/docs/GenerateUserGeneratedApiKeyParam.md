@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **Object** |  | 
-**expiration** | **Object** |  | 
+**description** | **String** |  | 
+**expiration** | [**Date**](Date.md) |  | 

@@ -23,17 +23,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * VirtualFilesystemNavigationNode
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class VirtualFilesystemNavigationNode {
   @JsonProperty("value")
   private VFilesystemReference value = null;
 
   @JsonProperty("selected")
-  private Object selected = null;
+  private Boolean selected = null;
 
   @JsonProperty("opened")
-  private Object opened = null;
+  private Boolean opened = null;
 
   public VirtualFilesystemNavigationNode value(VFilesystemReference value) {
     this.value = value;
@@ -53,7 +53,7 @@ public class VirtualFilesystemNavigationNode {
     this.value = value;
   }
 
-  public VirtualFilesystemNavigationNode selected(Object selected) {
+  public VirtualFilesystemNavigationNode selected(Boolean selected) {
     this.selected = selected;
     return this;
   }
@@ -63,15 +63,15 @@ public class VirtualFilesystemNavigationNode {
    * @return selected
   **/
   @Schema(description = "")
-  public Object getSelected() {
+  public Boolean isSelected() {
     return selected;
   }
 
-  public void setSelected(Object selected) {
+  public void setSelected(Boolean selected) {
     this.selected = selected;
   }
 
-  public VirtualFilesystemNavigationNode opened(Object opened) {
+  public VirtualFilesystemNavigationNode opened(Boolean opened) {
     this.opened = opened;
     return this;
   }
@@ -81,11 +81,11 @@ public class VirtualFilesystemNavigationNode {
    * @return opened
   **/
   @Schema(description = "")
-  public Object getOpened() {
+  public Boolean isOpened() {
     return opened;
   }
 
-  public void setOpened(Object opened) {
+  public void setOpened(Boolean opened) {
     this.opened = opened;
   }
 

@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GGoogleVertexChatModelConfig } from './gGoogleVertexChatModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGGoogleVertexChatModelConfig { 
     result?: GGoogleVertexChatModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -99,10 +99,10 @@ export class FileUploadControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadForm(handShakeCode: any, files?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public uploadForm(handShakeCode: any, files?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public uploadForm(handShakeCode: any, files?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public uploadForm(handShakeCode: any, files?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadForm(handShakeCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadForm(handShakeCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadForm(handShakeCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadForm(handShakeCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (handShakeCode === null || handShakeCode === undefined) {
             throw new Error('Required parameter handShakeCode was null or undefined when calling upload.');
@@ -129,14 +129,19 @@ export class FileUploadControllerService {
         let formParams: { append(param: string, value: any): void; };
         let useForm = false;
         let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
         if (useForm) {
             formParams = new FormData();
         } else {
             formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         }
 
-        if (files !== undefined) {
-            formParams = formParams.append('files[]', <any>files) as any || formParams;
+        if (files) {
+            files.forEach((element) => {
+                formParams = formParams.append('files[]', <any>element) as any || formParams;
+            })
         }
 
         return this.httpClient.request<any>('post',`${this.basePath}/api/admin/FileUploadController/upload/${encodeURIComponent(String(handShakeCode))}`,
@@ -158,10 +163,10 @@ export class FileUploadControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadToEndpointForm(endpointCode: any, files?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public uploadToEndpointForm(endpointCode: any, files?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public uploadToEndpointForm(endpointCode: any, files?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public uploadToEndpointForm(endpointCode: any, files?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadToEndpointForm(endpointCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (endpointCode === null || endpointCode === undefined) {
             throw new Error('Required parameter endpointCode was null or undefined when calling uploadToEndpoint.');
@@ -188,14 +193,19 @@ export class FileUploadControllerService {
         let formParams: { append(param: string, value: any): void; };
         let useForm = false;
         let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
         if (useForm) {
             formParams = new FormData();
         } else {
             formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         }
 
-        if (files !== undefined) {
-            formParams = formParams.append('files[]', <any>files) as any || formParams;
+        if (files) {
+            files.forEach((element) => {
+                formParams = formParams.append('files[]', <any>element) as any || formParams;
+            })
         }
 
         return this.httpClient.request<any>('post',`${this.basePath}/api/admin/FileUploadController/uploadToEndpoint/${encodeURIComponent(String(endpointCode))}`,

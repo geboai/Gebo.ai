@@ -7,4 +7,4 @@ Name | Type | Description | Notes
 **project** | [**GProject**](GProject.md) |  |  [optional]
 **endpoint** | [**GProjectEndpoint**](GProjectEndpoint.md) |  |  [optional]
 **endpointObjectRef** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
-**contentsCount** | **Object** |  |  [optional]
+**contentsCount** | **Long** |  |  [optional]

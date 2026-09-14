@@ -11,6 +11,6 @@
  */
 
 export interface ChangePasswordRequest { 
-    username?: any;
-    password?: any;
+    username?: string;
+    password?: string;
 }

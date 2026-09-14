@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 <a name="createChunkingSession"></a>
 # **createChunkingSession**
-> Object createChunkingSession(reference)
+> String createChunkingSession(reference)
 
 
 
@@ -29,9 +29,9 @@ Method | HTTP request | Description
 
 
 DocumentsChunkServiceControllerApi apiInstance = new DocumentsChunkServiceControllerApi();
-Object reference = null; // Object | 
+String reference = "reference_example"; // String | 
 try {
-    Object result = apiInstance.createChunkingSession(reference);
+    String result = apiInstance.createChunkingSession(reference);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentsChunkServiceControllerApi#createChunkingSession");
@@ -43,11 +43,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **reference** | [**Object**](.md)|  |
+ **reference** | **String**|  |
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -72,7 +72,7 @@ No authorization required
 
 
 DocumentsChunkServiceControllerApi apiInstance = new DocumentsChunkServiceControllerApi();
-Object chunkSessionId = null; // Object | 
+String chunkSessionId = "chunkSessionId_example"; // String | 
 try {
     apiInstance.disposeChunkingSession(chunkSessionId);
 } catch (ApiException e) {
@@ -85,7 +85,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chunkSessionId** | [**Object**](.md)|  |
+ **chunkSessionId** | **String**|  |
 
 ### Return type
 
@@ -274,7 +274,7 @@ No authorization required
 
 <a name="retrieveChunkingSession"></a>
 # **retrieveChunkingSession**
-> Object retrieveChunkingSession(reference)
+> String retrieveChunkingSession(reference)
 
 
 
@@ -286,9 +286,9 @@ No authorization required
 
 
 DocumentsChunkServiceControllerApi apiInstance = new DocumentsChunkServiceControllerApi();
-Object reference = null; // Object | 
+String reference = "reference_example"; // String | 
 try {
-    Object result = apiInstance.retrieveChunkingSession(reference);
+    String result = apiInstance.retrieveChunkingSession(reference);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentsChunkServiceControllerApi#retrieveChunkingSession");
@@ -300,11 +300,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **reference** | [**Object**](.md)|  |
+ **reference** | **String**|  |
 
 ### Return type
 
-**Object**
+**String**
 
 ### Authorization
 
@@ -317,7 +317,7 @@ No authorization required
 
 <a name="streamChunks"></a>
 # **streamChunks**
-> Object streamChunks(body)
+> List&lt;IDocumentChunkWithRef&gt; streamChunks(body)
 
 
 
@@ -331,7 +331,7 @@ No authorization required
 DocumentsChunkServiceControllerApi apiInstance = new DocumentsChunkServiceControllerApi();
 StreamChunksRequest body = new StreamChunksRequest(); // StreamChunksRequest | 
 try {
-    Object result = apiInstance.streamChunks(body);
+    List<IDocumentChunkWithRef> result = apiInstance.streamChunks(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentsChunkServiceControllerApi#streamChunks");
@@ -347,7 +347,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;IDocumentChunkWithRef&gt;**](IDocumentChunkWithRef.md)
 
 ### Authorization
 
@@ -360,7 +360,7 @@ No authorization required
 
 <a name="streamChunksBatch"></a>
 # **streamChunksBatch**
-> Object streamChunksBatch(body)
+> List&lt;IDocumentChunkWithRef&gt; streamChunksBatch(body)
 
 
 
@@ -374,7 +374,7 @@ No authorization required
 DocumentsChunkServiceControllerApi apiInstance = new DocumentsChunkServiceControllerApi();
 StreamChunksBatchRequest body = new StreamChunksBatchRequest(); // StreamChunksBatchRequest | 
 try {
-    Object result = apiInstance.streamChunksBatch(body);
+    List<IDocumentChunkWithRef> result = apiInstance.streamChunksBatch(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentsChunkServiceControllerApi#streamChunksBatch");
@@ -390,7 +390,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;IDocumentChunkWithRef&gt;**](IDocumentChunkWithRef.md)
 
 ### Authorization
 
@@ -403,7 +403,7 @@ No authorization required
 
 <a name="streamChunksReactive"></a>
 # **streamChunksReactive**
-> Object streamChunksReactive(body)
+> List&lt;IDocumentChunkWithRef&gt; streamChunksReactive(body)
 
 
 
@@ -417,7 +417,7 @@ No authorization required
 DocumentsChunkServiceControllerApi apiInstance = new DocumentsChunkServiceControllerApi();
 StreamChunksReactiveRequest body = new StreamChunksReactiveRequest(); // StreamChunksReactiveRequest | 
 try {
-    Object result = apiInstance.streamChunksReactive(body);
+    List<IDocumentChunkWithRef> result = apiInstance.streamChunksReactive(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DocumentsChunkServiceControllerApi#streamChunksReactive");
@@ -433,7 +433,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;IDocumentChunkWithRef&gt;**](IDocumentChunkWithRef.md)
 
 ### Authorization
 

@@ -17,51 +17,54 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.filesystem.model.SpecialFile;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * IngestionFileType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:09.115071854+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:30.490254341+02:00[Europe/Rome]")
 
 public class IngestionFileType {
   @JsonProperty("fileTypeId")
-  private Object fileTypeId = null;
+  private String fileTypeId = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("treatAs")
-  private Object treatAs = null;
+  private String treatAs = null;
 
   @JsonProperty("uiViewable")
-  private Object uiViewable = null;
+  private Boolean uiViewable = null;
 
   @JsonProperty("programmingLanguage")
-  private Object programmingLanguage = null;
+  private String programmingLanguage = null;
 
   @JsonProperty("commentEscapeBegin")
-  private Object commentEscapeBegin = null;
+  private String commentEscapeBegin = null;
 
   @JsonProperty("commentEscapeEnd")
-  private Object commentEscapeEnd = null;
+  private String commentEscapeEnd = null;
 
   @JsonProperty("commentRowEscape")
-  private Object commentRowEscape = null;
+  private String commentRowEscape = null;
 
   @JsonProperty("enrichWithCatalogInfos")
-  private Object enrichWithCatalogInfos = null;
+  private Boolean enrichWithCatalogInfos = null;
 
   @JsonProperty("specialfiles")
-  private Object specialfiles = null;
+  private List<SpecialFile> specialfiles = null;
 
   @JsonProperty("extensions")
-  private Object extensions = null;
+  private List<String> extensions = null;
 
   @JsonProperty("contentTypes")
-  private Object contentTypes = null;
+  private List<String> contentTypes = null;
 
-  public IngestionFileType fileTypeId(Object fileTypeId) {
+  public IngestionFileType fileTypeId(String fileTypeId) {
     this.fileTypeId = fileTypeId;
     return this;
   }
@@ -71,15 +74,15 @@ public class IngestionFileType {
    * @return fileTypeId
   **/
   @Schema(description = "")
-  public Object getFileTypeId() {
+  public String getFileTypeId() {
     return fileTypeId;
   }
 
-  public void setFileTypeId(Object fileTypeId) {
+  public void setFileTypeId(String fileTypeId) {
     this.fileTypeId = fileTypeId;
   }
 
-  public IngestionFileType description(Object description) {
+  public IngestionFileType description(String description) {
     this.description = description;
     return this;
   }
@@ -89,15 +92,15 @@ public class IngestionFileType {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public IngestionFileType treatAs(Object treatAs) {
+  public IngestionFileType treatAs(String treatAs) {
     this.treatAs = treatAs;
     return this;
   }
@@ -107,15 +110,15 @@ public class IngestionFileType {
    * @return treatAs
   **/
   @Schema(description = "")
-  public Object getTreatAs() {
+  public String getTreatAs() {
     return treatAs;
   }
 
-  public void setTreatAs(Object treatAs) {
+  public void setTreatAs(String treatAs) {
     this.treatAs = treatAs;
   }
 
-  public IngestionFileType uiViewable(Object uiViewable) {
+  public IngestionFileType uiViewable(Boolean uiViewable) {
     this.uiViewable = uiViewable;
     return this;
   }
@@ -125,15 +128,15 @@ public class IngestionFileType {
    * @return uiViewable
   **/
   @Schema(description = "")
-  public Object getUiViewable() {
+  public Boolean isUiViewable() {
     return uiViewable;
   }
 
-  public void setUiViewable(Object uiViewable) {
+  public void setUiViewable(Boolean uiViewable) {
     this.uiViewable = uiViewable;
   }
 
-  public IngestionFileType programmingLanguage(Object programmingLanguage) {
+  public IngestionFileType programmingLanguage(String programmingLanguage) {
     this.programmingLanguage = programmingLanguage;
     return this;
   }
@@ -143,15 +146,15 @@ public class IngestionFileType {
    * @return programmingLanguage
   **/
   @Schema(description = "")
-  public Object getProgrammingLanguage() {
+  public String getProgrammingLanguage() {
     return programmingLanguage;
   }
 
-  public void setProgrammingLanguage(Object programmingLanguage) {
+  public void setProgrammingLanguage(String programmingLanguage) {
     this.programmingLanguage = programmingLanguage;
   }
 
-  public IngestionFileType commentEscapeBegin(Object commentEscapeBegin) {
+  public IngestionFileType commentEscapeBegin(String commentEscapeBegin) {
     this.commentEscapeBegin = commentEscapeBegin;
     return this;
   }
@@ -161,15 +164,15 @@ public class IngestionFileType {
    * @return commentEscapeBegin
   **/
   @Schema(description = "")
-  public Object getCommentEscapeBegin() {
+  public String getCommentEscapeBegin() {
     return commentEscapeBegin;
   }
 
-  public void setCommentEscapeBegin(Object commentEscapeBegin) {
+  public void setCommentEscapeBegin(String commentEscapeBegin) {
     this.commentEscapeBegin = commentEscapeBegin;
   }
 
-  public IngestionFileType commentEscapeEnd(Object commentEscapeEnd) {
+  public IngestionFileType commentEscapeEnd(String commentEscapeEnd) {
     this.commentEscapeEnd = commentEscapeEnd;
     return this;
   }
@@ -179,15 +182,15 @@ public class IngestionFileType {
    * @return commentEscapeEnd
   **/
   @Schema(description = "")
-  public Object getCommentEscapeEnd() {
+  public String getCommentEscapeEnd() {
     return commentEscapeEnd;
   }
 
-  public void setCommentEscapeEnd(Object commentEscapeEnd) {
+  public void setCommentEscapeEnd(String commentEscapeEnd) {
     this.commentEscapeEnd = commentEscapeEnd;
   }
 
-  public IngestionFileType commentRowEscape(Object commentRowEscape) {
+  public IngestionFileType commentRowEscape(String commentRowEscape) {
     this.commentRowEscape = commentRowEscape;
     return this;
   }
@@ -197,15 +200,15 @@ public class IngestionFileType {
    * @return commentRowEscape
   **/
   @Schema(description = "")
-  public Object getCommentRowEscape() {
+  public String getCommentRowEscape() {
     return commentRowEscape;
   }
 
-  public void setCommentRowEscape(Object commentRowEscape) {
+  public void setCommentRowEscape(String commentRowEscape) {
     this.commentRowEscape = commentRowEscape;
   }
 
-  public IngestionFileType enrichWithCatalogInfos(Object enrichWithCatalogInfos) {
+  public IngestionFileType enrichWithCatalogInfos(Boolean enrichWithCatalogInfos) {
     this.enrichWithCatalogInfos = enrichWithCatalogInfos;
     return this;
   }
@@ -215,16 +218,24 @@ public class IngestionFileType {
    * @return enrichWithCatalogInfos
   **/
   @Schema(description = "")
-  public Object getEnrichWithCatalogInfos() {
+  public Boolean isEnrichWithCatalogInfos() {
     return enrichWithCatalogInfos;
   }
 
-  public void setEnrichWithCatalogInfos(Object enrichWithCatalogInfos) {
+  public void setEnrichWithCatalogInfos(Boolean enrichWithCatalogInfos) {
     this.enrichWithCatalogInfos = enrichWithCatalogInfos;
   }
 
-  public IngestionFileType specialfiles(Object specialfiles) {
+  public IngestionFileType specialfiles(List<SpecialFile> specialfiles) {
     this.specialfiles = specialfiles;
+    return this;
+  }
+
+  public IngestionFileType addSpecialfilesItem(SpecialFile specialfilesItem) {
+    if (this.specialfiles == null) {
+      this.specialfiles = new ArrayList<>();
+    }
+    this.specialfiles.add(specialfilesItem);
     return this;
   }
 
@@ -233,16 +244,24 @@ public class IngestionFileType {
    * @return specialfiles
   **/
   @Schema(description = "")
-  public Object getSpecialfiles() {
+  public List<SpecialFile> getSpecialfiles() {
     return specialfiles;
   }
 
-  public void setSpecialfiles(Object specialfiles) {
+  public void setSpecialfiles(List<SpecialFile> specialfiles) {
     this.specialfiles = specialfiles;
   }
 
-  public IngestionFileType extensions(Object extensions) {
+  public IngestionFileType extensions(List<String> extensions) {
     this.extensions = extensions;
+    return this;
+  }
+
+  public IngestionFileType addExtensionsItem(String extensionsItem) {
+    if (this.extensions == null) {
+      this.extensions = new ArrayList<>();
+    }
+    this.extensions.add(extensionsItem);
     return this;
   }
 
@@ -251,16 +270,24 @@ public class IngestionFileType {
    * @return extensions
   **/
   @Schema(description = "")
-  public Object getExtensions() {
+  public List<String> getExtensions() {
     return extensions;
   }
 
-  public void setExtensions(Object extensions) {
+  public void setExtensions(List<String> extensions) {
     this.extensions = extensions;
   }
 
-  public IngestionFileType contentTypes(Object contentTypes) {
+  public IngestionFileType contentTypes(List<String> contentTypes) {
     this.contentTypes = contentTypes;
+    return this;
+  }
+
+  public IngestionFileType addContentTypesItem(String contentTypesItem) {
+    if (this.contentTypes == null) {
+      this.contentTypes = new ArrayList<>();
+    }
+    this.contentTypes.add(contentTypesItem);
     return this;
   }
 
@@ -269,11 +296,11 @@ public class IngestionFileType {
    * @return contentTypes
   **/
   @Schema(description = "")
-  public Object getContentTypes() {
+  public List<String> getContentTypes() {
     return contentTypes;
   }
 
-  public void setContentTypes(Object contentTypes) {
+  public void setContentTypes(List<String> contentTypes) {
     this.contentTypes = contentTypes;
   }
 

@@ -11,5 +11,5 @@
  */
 
 export interface SpeechRequest { 
-    text: any;
+    text: string;
 }

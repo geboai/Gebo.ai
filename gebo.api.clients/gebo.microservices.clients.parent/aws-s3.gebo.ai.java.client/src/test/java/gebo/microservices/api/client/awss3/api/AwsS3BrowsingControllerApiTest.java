@@ -42,7 +42,7 @@ public class AwsS3BrowsingControllerApiTest {
     @Test
     public void browseAwsS3PathTest() {
         BrowseParam body = null;
-        Object s3SystemCode = null;
+        String s3SystemCode = null;
         OperationStatusListPathInfo response = api.browseAwsS3Path(body, s3SystemCode);
 
         // TODO: test validations
@@ -57,7 +57,7 @@ public class AwsS3BrowsingControllerApiTest {
      */
     @Test
     public void getAwsS3RootsTest() {
-        Object s3SystemCode = null;
+        String s3SystemCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getAwsS3Roots(s3SystemCode);
 
         // TODO: test validations

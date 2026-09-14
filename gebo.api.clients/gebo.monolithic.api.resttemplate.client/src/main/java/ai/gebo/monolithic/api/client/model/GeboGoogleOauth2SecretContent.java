@@ -24,9 +24,12 @@ import java.util.List;
  * GeboGoogleOauth2SecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T09:01:39.494209200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GeboGoogleOauth2SecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("uid")
   private String uid = null;
 
@@ -41,6 +44,24 @@ public class GeboGoogleOauth2SecretContent {
 
   @JsonProperty("scopes")
   private List<String> scopes = null;
+
+  public GeboGoogleOauth2SecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 
   public GeboGoogleOauth2SecretContent uid(String uid) {
     this.uid = uid;
@@ -150,7 +171,8 @@ public class GeboGoogleOauth2SecretContent {
       return false;
     }
     GeboGoogleOauth2SecretContent geboGoogleOauth2SecretContent = (GeboGoogleOauth2SecretContent) o;
-    return Objects.equals(this.uid, geboGoogleOauth2SecretContent.uid) &&
+    return Objects.equals(this.readOnly, geboGoogleOauth2SecretContent.readOnly) &&
+        Objects.equals(this.uid, geboGoogleOauth2SecretContent.uid) &&
         Objects.equals(this.token, geboGoogleOauth2SecretContent.token) &&
         Objects.equals(this.location, geboGoogleOauth2SecretContent.location) &&
         Objects.equals(this.projectId, geboGoogleOauth2SecretContent.projectId) &&
@@ -159,7 +181,7 @@ public class GeboGoogleOauth2SecretContent {
 
   @Override
   public int hashCode() {
-    return Objects.hash(uid, token, location, projectId, scopes);
+    return Objects.hash(readOnly, uid, token, location, projectId, scopes);
   }
 
 
@@ -168,6 +190,7 @@ public class GeboGoogleOauth2SecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboGoogleOauth2SecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    uid: ").append(toIndentedString(uid)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");

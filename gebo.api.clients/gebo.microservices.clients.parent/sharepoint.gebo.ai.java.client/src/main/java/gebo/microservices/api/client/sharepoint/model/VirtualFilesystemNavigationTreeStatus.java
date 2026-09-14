@@ -18,25 +18,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.sharepoint.model.GVirtualFilesystemRoot;
+import gebo.microservices.api.client.sharepoint.model.VirtualFilesystemNavigationNode;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * VirtualFilesystemNavigationTreeStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class VirtualFilesystemNavigationTreeStatus {
   @JsonProperty("root")
   private GVirtualFilesystemRoot root = null;
 
   @JsonProperty("selected")
-  private Object selected = null;
+  private Boolean selected = null;
 
   @JsonProperty("opened")
-  private Object opened = null;
+  private Boolean opened = null;
 
   @JsonProperty("childs")
-  private Object childs = null;
+  private List<VirtualFilesystemNavigationNode> childs = null;
 
   public VirtualFilesystemNavigationTreeStatus root(GVirtualFilesystemRoot root) {
     this.root = root;
@@ -56,7 +59,7 @@ public class VirtualFilesystemNavigationTreeStatus {
     this.root = root;
   }
 
-  public VirtualFilesystemNavigationTreeStatus selected(Object selected) {
+  public VirtualFilesystemNavigationTreeStatus selected(Boolean selected) {
     this.selected = selected;
     return this;
   }
@@ -66,15 +69,15 @@ public class VirtualFilesystemNavigationTreeStatus {
    * @return selected
   **/
   @Schema(description = "")
-  public Object getSelected() {
+  public Boolean isSelected() {
     return selected;
   }
 
-  public void setSelected(Object selected) {
+  public void setSelected(Boolean selected) {
     this.selected = selected;
   }
 
-  public VirtualFilesystemNavigationTreeStatus opened(Object opened) {
+  public VirtualFilesystemNavigationTreeStatus opened(Boolean opened) {
     this.opened = opened;
     return this;
   }
@@ -84,16 +87,24 @@ public class VirtualFilesystemNavigationTreeStatus {
    * @return opened
   **/
   @Schema(description = "")
-  public Object getOpened() {
+  public Boolean isOpened() {
     return opened;
   }
 
-  public void setOpened(Object opened) {
+  public void setOpened(Boolean opened) {
     this.opened = opened;
   }
 
-  public VirtualFilesystemNavigationTreeStatus childs(Object childs) {
+  public VirtualFilesystemNavigationTreeStatus childs(List<VirtualFilesystemNavigationNode> childs) {
     this.childs = childs;
+    return this;
+  }
+
+  public VirtualFilesystemNavigationTreeStatus addChildsItem(VirtualFilesystemNavigationNode childsItem) {
+    if (this.childs == null) {
+      this.childs = new ArrayList<>();
+    }
+    this.childs.add(childsItem);
     return this;
   }
 
@@ -102,11 +113,11 @@ public class VirtualFilesystemNavigationTreeStatus {
    * @return childs
   **/
   @Schema(description = "")
-  public Object getChilds() {
+  public List<VirtualFilesystemNavigationNode> getChilds() {
     return childs;
   }
 
-  public void setChilds(Object childs) {
+  public void setChilds(List<VirtualFilesystemNavigationNode> childs) {
     this.childs = childs;
   }
 

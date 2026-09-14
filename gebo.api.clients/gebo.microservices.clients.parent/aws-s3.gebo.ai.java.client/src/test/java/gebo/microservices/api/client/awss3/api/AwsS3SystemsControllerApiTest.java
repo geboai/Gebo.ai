@@ -89,8 +89,8 @@ public class AwsS3SystemsControllerApiTest {
      */
     @Test
     public void findAwsS3EndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findAwsS3EndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<GAwsS3ProjectEndpoint> response = api.findAwsS3EndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -105,7 +105,7 @@ public class AwsS3SystemsControllerApiTest {
     @Test
     public void findAwsS3EndpointsByQbeTest() {
         GAwsS3ProjectEndpoint body = null;
-        Object response = api.findAwsS3EndpointsByQbe(body);
+        List<GAwsS3ProjectEndpoint> response = api.findAwsS3EndpointsByQbe(body);
 
         // TODO: test validations
     }
@@ -119,7 +119,7 @@ public class AwsS3SystemsControllerApiTest {
      */
     @Test
     public void findAwsS3ProjectEndpointByCodeTest() {
-        Object code = null;
+        String code = null;
         GAwsS3ProjectEndpoint response = api.findAwsS3ProjectEndpointByCode(code);
 
         // TODO: test validations
@@ -134,7 +134,7 @@ public class AwsS3SystemsControllerApiTest {
      */
     @Test
     public void findAwsS3SystemByCodeTest() {
-        Object code = null;
+        String code = null;
         GAwsS3System response = api.findAwsS3SystemByCode(code);
 
         // TODO: test validations
@@ -163,7 +163,7 @@ public class AwsS3SystemsControllerApiTest {
      */
     @Test
     public void getAwsS3SystemsTest() {
-        Object response = api.getAwsS3Systems();
+        List<GAwsS3System> response = api.getAwsS3Systems();
 
         // TODO: test validations
     }

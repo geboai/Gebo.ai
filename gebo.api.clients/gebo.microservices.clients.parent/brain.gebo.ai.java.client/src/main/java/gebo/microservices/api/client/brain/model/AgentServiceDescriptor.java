@@ -22,31 +22,31 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AgentServiceDescriptor
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class AgentServiceDescriptor {
   @JsonProperty("serviceId")
-  private Object serviceId = null;
+  private String serviceId = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("inputType")
-  private Object inputType = null;
+  private String inputType = null;
 
   @JsonProperty("outputType")
-  private Object outputType = null;
+  private String outputType = null;
 
   @JsonProperty("networkAgent")
-  private Object networkAgent = null;
+  private Boolean networkAgent = null;
 
   @JsonProperty("routingAgent")
-  private Object routingAgent = null;
+  private Boolean routingAgent = null;
 
   @JsonProperty("networkAdapter")
-  private Object networkAdapter = null;
+  private Boolean networkAdapter = null;
 
-  public AgentServiceDescriptor serviceId(Object serviceId) {
+  public AgentServiceDescriptor serviceId(String serviceId) {
     this.serviceId = serviceId;
     return this;
   }
@@ -56,15 +56,15 @@ public class AgentServiceDescriptor {
    * @return serviceId
   **/
   @Schema(description = "")
-  public Object getServiceId() {
+  public String getServiceId() {
     return serviceId;
   }
 
-  public void setServiceId(Object serviceId) {
+  public void setServiceId(String serviceId) {
     this.serviceId = serviceId;
   }
 
-  public AgentServiceDescriptor description(Object description) {
+  public AgentServiceDescriptor description(String description) {
     this.description = description;
     return this;
   }
@@ -74,15 +74,15 @@ public class AgentServiceDescriptor {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public AgentServiceDescriptor inputType(Object inputType) {
+  public AgentServiceDescriptor inputType(String inputType) {
     this.inputType = inputType;
     return this;
   }
@@ -92,15 +92,15 @@ public class AgentServiceDescriptor {
    * @return inputType
   **/
   @Schema(description = "")
-  public Object getInputType() {
+  public String getInputType() {
     return inputType;
   }
 
-  public void setInputType(Object inputType) {
+  public void setInputType(String inputType) {
     this.inputType = inputType;
   }
 
-  public AgentServiceDescriptor outputType(Object outputType) {
+  public AgentServiceDescriptor outputType(String outputType) {
     this.outputType = outputType;
     return this;
   }
@@ -110,15 +110,15 @@ public class AgentServiceDescriptor {
    * @return outputType
   **/
   @Schema(description = "")
-  public Object getOutputType() {
+  public String getOutputType() {
     return outputType;
   }
 
-  public void setOutputType(Object outputType) {
+  public void setOutputType(String outputType) {
     this.outputType = outputType;
   }
 
-  public AgentServiceDescriptor networkAgent(Object networkAgent) {
+  public AgentServiceDescriptor networkAgent(Boolean networkAgent) {
     this.networkAgent = networkAgent;
     return this;
   }
@@ -128,15 +128,15 @@ public class AgentServiceDescriptor {
    * @return networkAgent
   **/
   @Schema(description = "")
-  public Object getNetworkAgent() {
+  public Boolean isNetworkAgent() {
     return networkAgent;
   }
 
-  public void setNetworkAgent(Object networkAgent) {
+  public void setNetworkAgent(Boolean networkAgent) {
     this.networkAgent = networkAgent;
   }
 
-  public AgentServiceDescriptor routingAgent(Object routingAgent) {
+  public AgentServiceDescriptor routingAgent(Boolean routingAgent) {
     this.routingAgent = routingAgent;
     return this;
   }
@@ -146,15 +146,15 @@ public class AgentServiceDescriptor {
    * @return routingAgent
   **/
   @Schema(description = "")
-  public Object getRoutingAgent() {
+  public Boolean isRoutingAgent() {
     return routingAgent;
   }
 
-  public void setRoutingAgent(Object routingAgent) {
+  public void setRoutingAgent(Boolean routingAgent) {
     this.routingAgent = routingAgent;
   }
 
-  public AgentServiceDescriptor networkAdapter(Object networkAdapter) {
+  public AgentServiceDescriptor networkAdapter(Boolean networkAdapter) {
     this.networkAdapter = networkAdapter;
     return this;
   }
@@ -164,11 +164,11 @@ public class AgentServiceDescriptor {
    * @return networkAdapter
   **/
   @Schema(description = "")
-  public Object getNetworkAdapter() {
+  public Boolean isNetworkAdapter() {
     return networkAdapter;
   }
 
-  public void setNetworkAdapter(Object networkAdapter) {
+  public void setNetworkAdapter(Boolean networkAdapter) {
     this.networkAdapter = networkAdapter;
   }
 

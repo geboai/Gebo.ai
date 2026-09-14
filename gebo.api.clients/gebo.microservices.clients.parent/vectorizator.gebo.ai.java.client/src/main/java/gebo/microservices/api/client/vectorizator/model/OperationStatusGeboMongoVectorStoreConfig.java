@@ -17,26 +17,29 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.vectorizator.model.GUserMessage;
 import gebo.microservices.api.client.vectorizator.model.GeboMongoVectorStoreConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * OperationStatusGeboMongoVectorStoreConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:15.167851277+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.382074718+02:00[Europe/Rome]")
 
 public class OperationStatusGeboMongoVectorStoreConfig {
   @JsonProperty("result")
   private GeboMongoVectorStoreConfig result = null;
 
   @JsonProperty("messages")
-  private Object messages = null;
+  private List<GUserMessage> messages = null;
 
   @JsonProperty("hasErrorMessages")
-  private Object hasErrorMessages = null;
+  private Boolean hasErrorMessages = null;
 
   @JsonProperty("hasWarnMessages")
-  private Object hasWarnMessages = null;
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGeboMongoVectorStoreConfig result(GeboMongoVectorStoreConfig result) {
     this.result = result;
@@ -56,8 +59,16 @@ public class OperationStatusGeboMongoVectorStoreConfig {
     this.result = result;
   }
 
-  public OperationStatusGeboMongoVectorStoreConfig messages(Object messages) {
+  public OperationStatusGeboMongoVectorStoreConfig messages(List<GUserMessage> messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public OperationStatusGeboMongoVectorStoreConfig addMessagesItem(GUserMessage messagesItem) {
+    if (this.messages == null) {
+      this.messages = new ArrayList<>();
+    }
+    this.messages.add(messagesItem);
     return this;
   }
 
@@ -66,15 +77,15 @@ public class OperationStatusGeboMongoVectorStoreConfig {
    * @return messages
   **/
   @Schema(description = "")
-  public Object getMessages() {
+  public List<GUserMessage> getMessages() {
     return messages;
   }
 
-  public void setMessages(Object messages) {
+  public void setMessages(List<GUserMessage> messages) {
     this.messages = messages;
   }
 
-  public OperationStatusGeboMongoVectorStoreConfig hasErrorMessages(Object hasErrorMessages) {
+  public OperationStatusGeboMongoVectorStoreConfig hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
   }
@@ -84,15 +95,15 @@ public class OperationStatusGeboMongoVectorStoreConfig {
    * @return hasErrorMessages
   **/
   @Schema(description = "")
-  public Object getHasErrorMessages() {
+  public Boolean isHasErrorMessages() {
     return hasErrorMessages;
   }
 
-  public void setHasErrorMessages(Object hasErrorMessages) {
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
   }
 
-  public OperationStatusGeboMongoVectorStoreConfig hasWarnMessages(Object hasWarnMessages) {
+  public OperationStatusGeboMongoVectorStoreConfig hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -102,11 +113,11 @@ public class OperationStatusGeboMongoVectorStoreConfig {
    * @return hasWarnMessages
   **/
   @Schema(description = "")
-  public Object getHasWarnMessages() {
+  public Boolean isHasWarnMessages() {
     return hasWarnMessages;
   }
 
-  public void setHasWarnMessages(Object hasWarnMessages) {
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
   }
 

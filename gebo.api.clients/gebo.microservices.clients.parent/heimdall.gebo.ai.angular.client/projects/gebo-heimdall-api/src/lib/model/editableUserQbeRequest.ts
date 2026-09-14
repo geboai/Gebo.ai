@@ -12,7 +12,7 @@
 import { EditableUser } from './editableUser';
 
 export interface EditableUserQbeRequest { 
-    page?: any;
-    size?: any;
+    page?: number;
+    size?: number;
     qbe?: EditableUser;
 }

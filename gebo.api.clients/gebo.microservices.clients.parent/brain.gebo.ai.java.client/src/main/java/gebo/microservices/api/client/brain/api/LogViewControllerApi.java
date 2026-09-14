@@ -3,6 +3,7 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GetJobMessagesParam;
+import gebo.microservices.api.client.brain.model.JobsEntriesFilter;
 import gebo.microservices.api.client.brain.model.JobsEntriesForClassNameFilter;
 import gebo.microservices.api.client.brain.model.JobsEntriesForJobType;
 import gebo.microservices.api.client.brain.model.JobsEntriesForProjectEndpointFilter;
@@ -27,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LogViewControllerApi {
     private ApiClient apiClient;
@@ -54,7 +55,7 @@ public class LogViewControllerApi {
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deleteJobStatus(Object body) throws RestClientException {
+    public void deleteJobStatus(List<String> body) throws RestClientException {
         deleteJobStatusWithHttpInfo(body);
     }
 
@@ -66,7 +67,7 @@ public class LogViewControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deleteJobStatusWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<Void> deleteJobStatusWithHttpInfo(List<String> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -134,6 +135,52 @@ public class LogViewControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<PageGUserMessage> returnType = new ParameterizedTypeReference<PageGUserMessage>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return PageGJobStatusItem
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public PageGJobStatusItem getJobsEntries(JobsEntriesFilter body) throws RestClientException {
+        return getJobsEntriesWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;PageGJobStatusItem&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<PageGJobStatusItem> getJobsEntriesWithHttpInfo(JobsEntriesFilter body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getJobsEntries");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/LogViewController/getJobsEntries").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<PageGJobStatusItem> returnType = new ParameterizedTypeReference<PageGJobStatusItem>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

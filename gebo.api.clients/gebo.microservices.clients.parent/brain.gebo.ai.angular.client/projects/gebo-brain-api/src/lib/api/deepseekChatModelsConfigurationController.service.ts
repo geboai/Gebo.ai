@@ -112,10 +112,10 @@ export class DeepseekChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findDeepseekChatModelConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GDeepseekChatModelConfig>;
-    public findDeepseekChatModelConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GDeepseekChatModelConfig>>;
-    public findDeepseekChatModelConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GDeepseekChatModelConfig>>;
-    public findDeepseekChatModelConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findDeepseekChatModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GDeepseekChatModelConfig>;
+    public findDeepseekChatModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GDeepseekChatModelConfig>>;
+    public findDeepseekChatModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GDeepseekChatModelConfig>>;
+    public findDeepseekChatModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findDeepseekChatModelConfigByCode.');

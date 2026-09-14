@@ -24,7 +24,7 @@ Method | HTTP request | Description
 
 
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     OperationStatusBoolean result = apiInstance.delete(code);
     System.out.println(result);
@@ -38,7 +38,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -55,7 +55,7 @@ No authorization required
 
 <a name="findAll1"></a>
 # **findAll1**
-> Object findAll1()
+> List&lt;A2AServerConfig&gt; findAll1()
 
 
 
@@ -68,7 +68,7 @@ No authorization required
 
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
 try {
-    Object result = apiInstance.findAll1();
+    List<A2AServerConfig> result = apiInstance.findAll1();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboA2AServerAdminControllerApi#findAll1");
@@ -81,7 +81,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;A2AServerConfig&gt;**](A2AServerConfig.md)
 
 ### Authorization
 
@@ -106,7 +106,7 @@ No authorization required
 
 
 GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     OperationStatusA2AServerConfig result = apiInstance.findByCode1(code);
     System.out.println(result);
@@ -120,7 +120,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

@@ -57,7 +57,7 @@ public class MistralAiEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void findMistralAIEmbeddingModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GMistralEmbeddingModelConfig response = api.findMistralAIEmbeddingModelConfigByCode(code);
 
         // TODO: test validations

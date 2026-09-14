@@ -57,7 +57,7 @@ public class OpenAiImageModelsConfigurationControllerApiTest {
      */
     @Test
     public void findOpenAIImageModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GOpenAIImageModelConfig response = api.findOpenAIImageModelConfigByCode(code);
 
         // TODO: test validations

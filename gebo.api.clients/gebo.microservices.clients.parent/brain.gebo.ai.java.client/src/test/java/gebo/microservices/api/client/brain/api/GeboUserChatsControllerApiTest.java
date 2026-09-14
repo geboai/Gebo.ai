@@ -59,8 +59,8 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void createCleanChatByChatProfileCodeTest() {
-        Object chatProfileCode = null;
-        Object contextCode = null;
+        String chatProfileCode = null;
+        String contextCode = null;
         GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode, contextCode);
 
         // TODO: test validations
@@ -75,7 +75,7 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void createCleanChatByModelCodeTest() {
-        Object modelCode = null;
+        String modelCode = null;
         GUserChatInfo response = api.createCleanChatByModelCode(modelCode);
 
         // TODO: test validations
@@ -90,7 +90,7 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void deleteChatTest() {
-        Object userChatContextCode = null;
+        String userChatContextCode = null;
         api.deleteChat(userChatContextCode);
 
         // TODO: test validations
@@ -105,9 +105,9 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void exportResponse2fileTest() {
-        Object userContextCode = null;
-        Object responseId = null;
-        Object format = null;
+        String userContextCode = null;
+        String responseId = null;
+        String format = null;
         api.exportResponse2file(userContextCode, responseId, format);
 
         // TODO: test validations
@@ -122,7 +122,7 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void getChatHistoryTest() {
-        Object code = null;
+        String code = null;
         UserChatHistory response = api.getChatHistory(code);
 
         // TODO: test validations
@@ -137,7 +137,7 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void getChatInfosByCodeTest() {
-        Object id = null;
+        String id = null;
         GUserChatInfo response = api.getChatInfosByCode(id);
 
         // TODO: test validations
@@ -167,7 +167,7 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void getMyChatsTest() {
-        Object response = api.getMyChats();
+        List<GUserChatInfo> response = api.getMyChats();
 
         // TODO: test validations
     }
@@ -181,8 +181,8 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void getMyChatsByContextCodeTest() {
-        Object contextCode = null;
-        Object response = api.getMyChatsByContextCode(contextCode);
+        String contextCode = null;
+        List<GUserChatInfo> response = api.getMyChatsByContextCode(contextCode);
 
         // TODO: test validations
     }
@@ -196,8 +196,8 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void getMyChatsPagedTest() {
-        Object page = null;
-        Object pageSize = null;
+        Integer page = null;
+        Integer pageSize = null;
         PageGUserChatInfo response = api.getMyChatsPaged(page, pageSize);
 
         // TODO: test validations
@@ -226,7 +226,7 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void isMinimalLLMSSetupDoneTest() {
-        Object response = api.isMinimalLLMSSetupDone();
+        Boolean response = api.isMinimalLLMSSetupDone();
 
         // TODO: test validations
     }
@@ -240,7 +240,7 @@ public class GeboUserChatsControllerApiTest {
      */
     @Test
     public void suggestChatDescriptionTest() {
-        Object userChatContextCode = null;
+        String userChatContextCode = null;
         GUserChatInfo response = api.suggestChatDescription(userChatContextCode);
 
         // TODO: test validations

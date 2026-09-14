@@ -12,6 +12,6 @@
 import { DataPage } from './dataPage';
 
 export interface GetJobMessagesParam { 
-    jobId: any;
+    jobId: string;
     dataPage: DataPage;
 }

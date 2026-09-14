@@ -17,19 +17,30 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.chunker.model.IGComponentOriginatedDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * DocumentBatch
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class DocumentBatch {
   @JsonProperty("documents")
-  private Object documents = null;
+  private List<IGComponentOriginatedDocument> documents = null;
 
-  public DocumentBatch documents(Object documents) {
+  public DocumentBatch documents(List<IGComponentOriginatedDocument> documents) {
     this.documents = documents;
+    return this;
+  }
+
+  public DocumentBatch addDocumentsItem(IGComponentOriginatedDocument documentsItem) {
+    if (this.documents == null) {
+      this.documents = new ArrayList<>();
+    }
+    this.documents.add(documentsItem);
     return this;
   }
 
@@ -38,11 +49,11 @@ public class DocumentBatch {
    * @return documents
   **/
   @Schema(description = "")
-  public Object getDocuments() {
+  public List<IGComponentOriginatedDocument> getDocuments() {
     return documents;
   }
 
-  public void setDocuments(Object documents) {
+  public void setDocuments(List<IGComponentOriginatedDocument> documents) {
     this.documents = documents;
   }
 

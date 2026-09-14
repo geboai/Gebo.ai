@@ -17,21 +17,24 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.userspace.model.ComponentMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GModuleMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:10.490888548+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class GModuleMetaInfo {
   @JsonProperty("messagingModuleId")
-  private Object messagingModuleId = null;
+  private String messagingModuleId = null;
 
   @JsonProperty("components")
-  private Object components = null;
+  private List<ComponentMetaInfo> components = null;
 
-  public GModuleMetaInfo messagingModuleId(Object messagingModuleId) {
+  public GModuleMetaInfo messagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
     return this;
   }
@@ -41,16 +44,24 @@ public class GModuleMetaInfo {
    * @return messagingModuleId
   **/
   @Schema(description = "")
-  public Object getMessagingModuleId() {
+  public String getMessagingModuleId() {
     return messagingModuleId;
   }
 
-  public void setMessagingModuleId(Object messagingModuleId) {
+  public void setMessagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
   }
 
-  public GModuleMetaInfo components(Object components) {
+  public GModuleMetaInfo components(List<ComponentMetaInfo> components) {
     this.components = components;
+    return this;
+  }
+
+  public GModuleMetaInfo addComponentsItem(ComponentMetaInfo componentsItem) {
+    if (this.components == null) {
+      this.components = new ArrayList<>();
+    }
+    this.components.add(componentsItem);
     return this;
   }
 
@@ -59,11 +70,11 @@ public class GModuleMetaInfo {
    * @return components
   **/
   @Schema(description = "")
-  public Object getComponents() {
+  public List<ComponentMetaInfo> getComponents() {
     return components;
   }
 
-  public void setComponents(Object components) {
+  public void setComponents(List<ComponentMetaInfo> components) {
     this.components = components;
   }
 

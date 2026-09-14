@@ -17,76 +17,143 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.webdav.model.BuildSystemRef;
 import gebo.microservices.api.client.webdav.model.GObjectRefGProjectEndpoint;
+import gebo.microservices.api.client.webdav.model.ReindexingProgrammedTable;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GCentralizedProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:19.127862733+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:37.654842713+02:00[Europe/Rome]")
 
 public class GCentralizedProjectEndpoint {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("parentProjectCode")
-  private Object parentProjectCode = null;
+  private String parentProjectCode = null;
 
   @JsonProperty("readonly")
-  private Object readonly = null;
+  private Boolean readonly = null;
 
   @JsonProperty("published")
-  private Object published = null;
+  private Boolean published = null;
 
   @JsonProperty("synchPeriodically")
-  private Object synchPeriodically = null;
+  private Boolean synchPeriodically = null;
 
   @JsonProperty("openZips")
-  private Object openZips = null;
+  private Boolean openZips = null;
 
   @JsonProperty("buildSystemsRefs")
-  private Object buildSystemsRefs = null;
+  private List<BuildSystemRef> buildSystemsRefs = null;
 
   @JsonProperty("catalogingCriteria")
-  private Object catalogingCriteria = null;
+  private String catalogingCriteria = null;
 
   @JsonProperty("programmedTables")
-  private Object programmedTables = null;
+  private List<ReindexingProgrammedTable> programmedTables = null;
 
   @JsonProperty("vectorizeOnlyExtensions")
-  private Object vectorizeOnlyExtensions = null;
+  private List<String> vectorizeOnlyExtensions = null;
 
-  @JsonProperty("synchroStrategy")
-  private Object synchroStrategy = null;
+  /**
+   * Gets or Sets synchroStrategy
+   */
+  public enum SynchroStrategyEnum {
+    SIZE_AND_TIMESTAMP_AND_HASH_CHECK("SIZE_AND_TIMESTAMP_AND_HASH_CHECK"),
+    HASH_CHECK("HASH_CHECK");
 
-  @JsonProperty("objectSpaceType")
-  private Object objectSpaceType = null;
+    private String value;
+
+    SynchroStrategyEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SynchroStrategyEnum fromValue(String input) {
+      for (SynchroStrategyEnum b : SynchroStrategyEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("synchroStrategy")
+  private SynchroStrategyEnum synchroStrategy = null;
+
+  /**
+   * Gets or Sets objectSpaceType
+   */
+  public enum ObjectSpaceTypeEnum {
+    COMPANY("COMPANY"),
+    USERSPACE("USERSPACE");
+
+    private String value;
+
+    ObjectSpaceTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ObjectSpaceTypeEnum fromValue(String input) {
+      for (ObjectSpaceTypeEnum b : ObjectSpaceTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("objectSpaceType")
+  private ObjectSpaceTypeEnum objectSpaceType = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("personalData")
-  private Object personalData = null;
+  private Boolean personalData = null;
 
   @JsonProperty("remoteProjectReference")
   private GObjectRefGProjectEndpoint remoteProjectReference = null;
 
-  public GCentralizedProjectEndpoint code(Object code) {
+  public GCentralizedProjectEndpoint code(String code) {
     this.code = code;
     return this;
   }
@@ -96,15 +163,15 @@ public class GCentralizedProjectEndpoint {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GCentralizedProjectEndpoint description(Object description) {
+  public GCentralizedProjectEndpoint description(String description) {
     this.description = description;
     return this;
   }
@@ -114,15 +181,15 @@ public class GCentralizedProjectEndpoint {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GCentralizedProjectEndpoint userModified(Object userModified) {
+  public GCentralizedProjectEndpoint userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -132,15 +199,15 @@ public class GCentralizedProjectEndpoint {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GCentralizedProjectEndpoint userCreated(Object userCreated) {
+  public GCentralizedProjectEndpoint userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -150,15 +217,15 @@ public class GCentralizedProjectEndpoint {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GCentralizedProjectEndpoint dateModified(Object dateModified) {
+  public GCentralizedProjectEndpoint dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -168,15 +235,15 @@ public class GCentralizedProjectEndpoint {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GCentralizedProjectEndpoint dateCreated(Object dateCreated) {
+  public GCentralizedProjectEndpoint dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -186,15 +253,15 @@ public class GCentralizedProjectEndpoint {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GCentralizedProjectEndpoint parentProjectCode(Object parentProjectCode) {
+  public GCentralizedProjectEndpoint parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -204,15 +271,15 @@ public class GCentralizedProjectEndpoint {
    * @return parentProjectCode
   **/
   @Schema(description = "")
-  public Object getParentProjectCode() {
+  public String getParentProjectCode() {
     return parentProjectCode;
   }
 
-  public void setParentProjectCode(Object parentProjectCode) {
+  public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
   }
 
-  public GCentralizedProjectEndpoint readonly(Object readonly) {
+  public GCentralizedProjectEndpoint readonly(Boolean readonly) {
     this.readonly = readonly;
     return this;
   }
@@ -222,15 +289,15 @@ public class GCentralizedProjectEndpoint {
    * @return readonly
   **/
   @Schema(description = "")
-  public Object getReadonly() {
+  public Boolean isReadonly() {
     return readonly;
   }
 
-  public void setReadonly(Object readonly) {
+  public void setReadonly(Boolean readonly) {
     this.readonly = readonly;
   }
 
-  public GCentralizedProjectEndpoint published(Object published) {
+  public GCentralizedProjectEndpoint published(Boolean published) {
     this.published = published;
     return this;
   }
@@ -240,15 +307,15 @@ public class GCentralizedProjectEndpoint {
    * @return published
   **/
   @Schema(description = "")
-  public Object getPublished() {
+  public Boolean isPublished() {
     return published;
   }
 
-  public void setPublished(Object published) {
+  public void setPublished(Boolean published) {
     this.published = published;
   }
 
-  public GCentralizedProjectEndpoint synchPeriodically(Object synchPeriodically) {
+  public GCentralizedProjectEndpoint synchPeriodically(Boolean synchPeriodically) {
     this.synchPeriodically = synchPeriodically;
     return this;
   }
@@ -258,15 +325,15 @@ public class GCentralizedProjectEndpoint {
    * @return synchPeriodically
   **/
   @Schema(description = "")
-  public Object getSynchPeriodically() {
+  public Boolean isSynchPeriodically() {
     return synchPeriodically;
   }
 
-  public void setSynchPeriodically(Object synchPeriodically) {
+  public void setSynchPeriodically(Boolean synchPeriodically) {
     this.synchPeriodically = synchPeriodically;
   }
 
-  public GCentralizedProjectEndpoint openZips(Object openZips) {
+  public GCentralizedProjectEndpoint openZips(Boolean openZips) {
     this.openZips = openZips;
     return this;
   }
@@ -276,16 +343,24 @@ public class GCentralizedProjectEndpoint {
    * @return openZips
   **/
   @Schema(description = "")
-  public Object getOpenZips() {
+  public Boolean isOpenZips() {
     return openZips;
   }
 
-  public void setOpenZips(Object openZips) {
+  public void setOpenZips(Boolean openZips) {
     this.openZips = openZips;
   }
 
-  public GCentralizedProjectEndpoint buildSystemsRefs(Object buildSystemsRefs) {
+  public GCentralizedProjectEndpoint buildSystemsRefs(List<BuildSystemRef> buildSystemsRefs) {
     this.buildSystemsRefs = buildSystemsRefs;
+    return this;
+  }
+
+  public GCentralizedProjectEndpoint addBuildSystemsRefsItem(BuildSystemRef buildSystemsRefsItem) {
+    if (this.buildSystemsRefs == null) {
+      this.buildSystemsRefs = new ArrayList<>();
+    }
+    this.buildSystemsRefs.add(buildSystemsRefsItem);
     return this;
   }
 
@@ -294,15 +369,15 @@ public class GCentralizedProjectEndpoint {
    * @return buildSystemsRefs
   **/
   @Schema(description = "")
-  public Object getBuildSystemsRefs() {
+  public List<BuildSystemRef> getBuildSystemsRefs() {
     return buildSystemsRefs;
   }
 
-  public void setBuildSystemsRefs(Object buildSystemsRefs) {
+  public void setBuildSystemsRefs(List<BuildSystemRef> buildSystemsRefs) {
     this.buildSystemsRefs = buildSystemsRefs;
   }
 
-  public GCentralizedProjectEndpoint catalogingCriteria(Object catalogingCriteria) {
+  public GCentralizedProjectEndpoint catalogingCriteria(String catalogingCriteria) {
     this.catalogingCriteria = catalogingCriteria;
     return this;
   }
@@ -312,16 +387,24 @@ public class GCentralizedProjectEndpoint {
    * @return catalogingCriteria
   **/
   @Schema(description = "")
-  public Object getCatalogingCriteria() {
+  public String getCatalogingCriteria() {
     return catalogingCriteria;
   }
 
-  public void setCatalogingCriteria(Object catalogingCriteria) {
+  public void setCatalogingCriteria(String catalogingCriteria) {
     this.catalogingCriteria = catalogingCriteria;
   }
 
-  public GCentralizedProjectEndpoint programmedTables(Object programmedTables) {
+  public GCentralizedProjectEndpoint programmedTables(List<ReindexingProgrammedTable> programmedTables) {
     this.programmedTables = programmedTables;
+    return this;
+  }
+
+  public GCentralizedProjectEndpoint addProgrammedTablesItem(ReindexingProgrammedTable programmedTablesItem) {
+    if (this.programmedTables == null) {
+      this.programmedTables = new ArrayList<>();
+    }
+    this.programmedTables.add(programmedTablesItem);
     return this;
   }
 
@@ -330,16 +413,24 @@ public class GCentralizedProjectEndpoint {
    * @return programmedTables
   **/
   @Schema(description = "")
-  public Object getProgrammedTables() {
+  public List<ReindexingProgrammedTable> getProgrammedTables() {
     return programmedTables;
   }
 
-  public void setProgrammedTables(Object programmedTables) {
+  public void setProgrammedTables(List<ReindexingProgrammedTable> programmedTables) {
     this.programmedTables = programmedTables;
   }
 
-  public GCentralizedProjectEndpoint vectorizeOnlyExtensions(Object vectorizeOnlyExtensions) {
+  public GCentralizedProjectEndpoint vectorizeOnlyExtensions(List<String> vectorizeOnlyExtensions) {
     this.vectorizeOnlyExtensions = vectorizeOnlyExtensions;
+    return this;
+  }
+
+  public GCentralizedProjectEndpoint addVectorizeOnlyExtensionsItem(String vectorizeOnlyExtensionsItem) {
+    if (this.vectorizeOnlyExtensions == null) {
+      this.vectorizeOnlyExtensions = new ArrayList<>();
+    }
+    this.vectorizeOnlyExtensions.add(vectorizeOnlyExtensionsItem);
     return this;
   }
 
@@ -348,15 +439,15 @@ public class GCentralizedProjectEndpoint {
    * @return vectorizeOnlyExtensions
   **/
   @Schema(description = "")
-  public Object getVectorizeOnlyExtensions() {
+  public List<String> getVectorizeOnlyExtensions() {
     return vectorizeOnlyExtensions;
   }
 
-  public void setVectorizeOnlyExtensions(Object vectorizeOnlyExtensions) {
+  public void setVectorizeOnlyExtensions(List<String> vectorizeOnlyExtensions) {
     this.vectorizeOnlyExtensions = vectorizeOnlyExtensions;
   }
 
-  public GCentralizedProjectEndpoint synchroStrategy(Object synchroStrategy) {
+  public GCentralizedProjectEndpoint synchroStrategy(SynchroStrategyEnum synchroStrategy) {
     this.synchroStrategy = synchroStrategy;
     return this;
   }
@@ -366,15 +457,15 @@ public class GCentralizedProjectEndpoint {
    * @return synchroStrategy
   **/
   @Schema(description = "")
-  public Object getSynchroStrategy() {
+  public SynchroStrategyEnum getSynchroStrategy() {
     return synchroStrategy;
   }
 
-  public void setSynchroStrategy(Object synchroStrategy) {
+  public void setSynchroStrategy(SynchroStrategyEnum synchroStrategy) {
     this.synchroStrategy = synchroStrategy;
   }
 
-  public GCentralizedProjectEndpoint objectSpaceType(Object objectSpaceType) {
+  public GCentralizedProjectEndpoint objectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
     return this;
   }
@@ -384,16 +475,24 @@ public class GCentralizedProjectEndpoint {
    * @return objectSpaceType
   **/
   @Schema(description = "")
-  public Object getObjectSpaceType() {
+  public ObjectSpaceTypeEnum getObjectSpaceType() {
     return objectSpaceType;
   }
 
-  public void setObjectSpaceType(Object objectSpaceType) {
+  public void setObjectSpaceType(ObjectSpaceTypeEnum objectSpaceType) {
     this.objectSpaceType = objectSpaceType;
   }
 
-  public GCentralizedProjectEndpoint aclAliases(Object aclAliases) {
+  public GCentralizedProjectEndpoint aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GCentralizedProjectEndpoint addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -402,15 +501,15 @@ public class GCentralizedProjectEndpoint {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GCentralizedProjectEndpoint personalData(Object personalData) {
+  public GCentralizedProjectEndpoint personalData(Boolean personalData) {
     this.personalData = personalData;
     return this;
   }
@@ -420,11 +519,11 @@ public class GCentralizedProjectEndpoint {
    * @return personalData
   **/
   @Schema(description = "")
-  public Object getPersonalData() {
+  public Boolean isPersonalData() {
     return personalData;
   }
 
-  public void setPersonalData(Object personalData) {
+  public void setPersonalData(Boolean personalData) {
     this.personalData = personalData;
   }
 

@@ -11,8 +11,8 @@
  */
 
 export interface ChangeUsernamePasswordData { 
-    username: any;
-    password: any;
-    confirmpassword: any;
-    currentUserPassword: any;
+    username: string;
+    password: string;
+    confirmpassword: string;
+    currentUserPassword: string;
 }

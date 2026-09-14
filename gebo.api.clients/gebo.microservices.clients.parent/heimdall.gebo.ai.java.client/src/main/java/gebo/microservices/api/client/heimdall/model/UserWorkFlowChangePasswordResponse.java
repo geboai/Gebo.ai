@@ -22,22 +22,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * UserWorkFlowChangePasswordResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UserWorkFlowChangePasswordResponse {
   @JsonProperty("ok")
-  private Object ok = null;
+  private Boolean ok = null;
 
   @JsonProperty("invalidAccountState")
-  private Object invalidAccountState = null;
+  private Boolean invalidAccountState = null;
 
   @JsonProperty("invalidToken")
-  private Object invalidToken = null;
+  private Boolean invalidToken = null;
 
   @JsonProperty("timeoutReached")
-  private Object timeoutReached = null;
+  private Boolean timeoutReached = null;
 
-  public UserWorkFlowChangePasswordResponse ok(Object ok) {
+  public UserWorkFlowChangePasswordResponse ok(Boolean ok) {
     this.ok = ok;
     return this;
   }
@@ -47,15 +47,15 @@ public class UserWorkFlowChangePasswordResponse {
    * @return ok
   **/
   @Schema(description = "")
-  public Object getOk() {
+  public Boolean isOk() {
     return ok;
   }
 
-  public void setOk(Object ok) {
+  public void setOk(Boolean ok) {
     this.ok = ok;
   }
 
-  public UserWorkFlowChangePasswordResponse invalidAccountState(Object invalidAccountState) {
+  public UserWorkFlowChangePasswordResponse invalidAccountState(Boolean invalidAccountState) {
     this.invalidAccountState = invalidAccountState;
     return this;
   }
@@ -65,15 +65,15 @@ public class UserWorkFlowChangePasswordResponse {
    * @return invalidAccountState
   **/
   @Schema(description = "")
-  public Object getInvalidAccountState() {
+  public Boolean isInvalidAccountState() {
     return invalidAccountState;
   }
 
-  public void setInvalidAccountState(Object invalidAccountState) {
+  public void setInvalidAccountState(Boolean invalidAccountState) {
     this.invalidAccountState = invalidAccountState;
   }
 
-  public UserWorkFlowChangePasswordResponse invalidToken(Object invalidToken) {
+  public UserWorkFlowChangePasswordResponse invalidToken(Boolean invalidToken) {
     this.invalidToken = invalidToken;
     return this;
   }
@@ -83,15 +83,15 @@ public class UserWorkFlowChangePasswordResponse {
    * @return invalidToken
   **/
   @Schema(description = "")
-  public Object getInvalidToken() {
+  public Boolean isInvalidToken() {
     return invalidToken;
   }
 
-  public void setInvalidToken(Object invalidToken) {
+  public void setInvalidToken(Boolean invalidToken) {
     this.invalidToken = invalidToken;
   }
 
-  public UserWorkFlowChangePasswordResponse timeoutReached(Object timeoutReached) {
+  public UserWorkFlowChangePasswordResponse timeoutReached(Boolean timeoutReached) {
     this.timeoutReached = timeoutReached;
     return this;
   }
@@ -101,11 +101,11 @@ public class UserWorkFlowChangePasswordResponse {
    * @return timeoutReached
   **/
   @Schema(description = "")
-  public Object getTimeoutReached() {
+  public Boolean isTimeoutReached() {
     return timeoutReached;
   }
 
-  public void setTimeoutReached(Object timeoutReached) {
+  public void setTimeoutReached(Boolean timeoutReached) {
     this.timeoutReached = timeoutReached;
   }
 

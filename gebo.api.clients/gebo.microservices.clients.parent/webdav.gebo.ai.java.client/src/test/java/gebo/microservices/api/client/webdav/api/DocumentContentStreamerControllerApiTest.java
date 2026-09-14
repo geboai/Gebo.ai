@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.webdav.api;
 
+import java.io.File;
 import gebo.microservices.api.client.webdav.model.GDocumentReferenceStreamRequest;
 import gebo.microservices.api.client.webdav.model.SearchResultStreamRequest;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class DocumentContentStreamerControllerApiTest {
     @Test
     public void streamDocumentReferenceTest() {
         GDocumentReferenceStreamRequest body = null;
-        Object response = api.streamDocumentReference(body);
+        File response = api.streamDocumentReference(body);
 
         // TODO: test validations
     }
@@ -56,7 +57,7 @@ public class DocumentContentStreamerControllerApiTest {
     @Test
     public void streamSearchResultTest() {
         SearchResultStreamRequest body = null;
-        Object response = api.streamSearchResult(body);
+        File response = api.streamSearchResult(body);
 
         // TODO: test validations
     }

@@ -16,6 +16,7 @@ import gebo.microservices.api.client.mcpclient.model.BrowseParam;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.mcpclient.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +44,7 @@ public class McpClientBrowsingControllerApiTest {
     @Test
     public void browseMCPClientPathTest() {
         BrowseParam body = null;
-        Object mcpClientConfigCode = null;
+        String mcpClientConfigCode = null;
         OperationStatusListPathInfo response = api.browseMCPClientPath(body, mcpClientConfigCode);
 
         // TODO: test validations
@@ -58,8 +59,8 @@ public class McpClientBrowsingControllerApiTest {
      */
     @Test
     public void getMCPClientNavigationStatusTest() {
-        Object body = null;
-        Object mcpClientConfigCode = null;
+        List<VFilesystemReference> body = null;
+        String mcpClientConfigCode = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getMCPClientNavigationStatus(body, mcpClientConfigCode);
 
         // TODO: test validations
@@ -74,7 +75,7 @@ public class McpClientBrowsingControllerApiTest {
      */
     @Test
     public void getMCPClientRootsTest() {
-        Object mcpClientConfigCode = null;
+        String mcpClientConfigCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getMCPClientRoots(mcpClientConfigCode);
 
         // TODO: test validations

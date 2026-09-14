@@ -15,6 +15,6 @@ import { WorkFolderSetupStatus } from './workFolderSetupStatus';
 export interface OperationStatusWorkFolderSetupStatus { 
     result?: WorkFolderSetupStatus;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

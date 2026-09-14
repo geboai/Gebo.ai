@@ -11,6 +11,6 @@
  */
 
 export interface DocInternalRef { 
-    id?: any;
-    page?: any;
+    id?: string;
+    page?: string;
 }

@@ -18,50 +18,152 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMCreateModelData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMCreateModelData {
-  @JsonProperty("type")
-  private Object type = null;
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    RANKING("RANKING"),
+    IMAGESGEN("IMAGESGEN"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypeEnum fromValue(String input) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("type")
+  private TypeEnum type = null;
 
   @JsonProperty("doModelsLookup")
-  private Object doModelsLookup = null;
+  private Boolean doModelsLookup = null;
 
   @JsonProperty("serviceHandler")
-  private Object serviceHandler = null;
+  private String serviceHandler = null;
 
   @JsonProperty("setAsDefaultModel")
-  private Object setAsDefaultModel = null;
+  private Boolean setAsDefaultModel = null;
 
   @JsonProperty("enableAllFunctions")
-  private Object enableAllFunctions = null;
+  private Boolean enableAllFunctions = null;
 
   @JsonProperty("secretId")
-  private Object secretId = null;
+  private String secretId = null;
 
   @JsonProperty("modelCode")
-  private Object modelCode = null;
+  private String modelCode = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("contextWindow")
-  private Object contextWindow = null;
+  private Integer contextWindow = null;
 
-  @JsonProperty("uses")
-  private Object uses = null;
+  /**
+   * Gets or Sets uses
+   */
+  public enum UsesEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
+
+    private String value;
+
+    UsesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UsesEnum fromValue(String input) {
+      for (UsesEnum b : UsesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("uses")
+  private List<UsesEnum> uses = null;
 
   @JsonProperty("maxGeneratedTokens")
-  private Object maxGeneratedTokens = null;
+  private Integer maxGeneratedTokens = null;
 
-  @JsonProperty("thinking")
-  private Object thinking = null;
+  /**
+   * Gets or Sets thinking
+   */
+  public enum ThinkingEnum {
+    NO_THINKING("NO_THINKING"),
+    LOW_THINKING("LOW_THINKING"),
+    MEDIUM_THINKING("MEDIUM_THINKING"),
+    HIGH_THINKING("HIGH_THINKING"),
+    AUTO("AUTO");
 
-  public LLMCreateModelData type(Object type) {
+    private String value;
+
+    ThinkingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ThinkingEnum fromValue(String input) {
+      for (ThinkingEnum b : ThinkingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("thinking")
+  private ThinkingEnum thinking = null;
+
+  public LLMCreateModelData type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -71,15 +173,15 @@ public class LLMCreateModelData {
    * @return type
   **/
   @Schema(required = true, description = "")
-  public Object getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(Object type) {
+  public void setType(TypeEnum type) {
     this.type = type;
   }
 
-  public LLMCreateModelData doModelsLookup(Object doModelsLookup) {
+  public LLMCreateModelData doModelsLookup(Boolean doModelsLookup) {
     this.doModelsLookup = doModelsLookup;
     return this;
   }
@@ -89,15 +191,15 @@ public class LLMCreateModelData {
    * @return doModelsLookup
   **/
   @Schema(description = "")
-  public Object getDoModelsLookup() {
+  public Boolean isDoModelsLookup() {
     return doModelsLookup;
   }
 
-  public void setDoModelsLookup(Object doModelsLookup) {
+  public void setDoModelsLookup(Boolean doModelsLookup) {
     this.doModelsLookup = doModelsLookup;
   }
 
-  public LLMCreateModelData serviceHandler(Object serviceHandler) {
+  public LLMCreateModelData serviceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
     return this;
   }
@@ -107,15 +209,15 @@ public class LLMCreateModelData {
    * @return serviceHandler
   **/
   @Schema(required = true, description = "")
-  public Object getServiceHandler() {
+  public String getServiceHandler() {
     return serviceHandler;
   }
 
-  public void setServiceHandler(Object serviceHandler) {
+  public void setServiceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
   }
 
-  public LLMCreateModelData setAsDefaultModel(Object setAsDefaultModel) {
+  public LLMCreateModelData setAsDefaultModel(Boolean setAsDefaultModel) {
     this.setAsDefaultModel = setAsDefaultModel;
     return this;
   }
@@ -125,15 +227,15 @@ public class LLMCreateModelData {
    * @return setAsDefaultModel
   **/
   @Schema(description = "")
-  public Object getSetAsDefaultModel() {
+  public Boolean isSetAsDefaultModel() {
     return setAsDefaultModel;
   }
 
-  public void setSetAsDefaultModel(Object setAsDefaultModel) {
+  public void setSetAsDefaultModel(Boolean setAsDefaultModel) {
     this.setAsDefaultModel = setAsDefaultModel;
   }
 
-  public LLMCreateModelData enableAllFunctions(Object enableAllFunctions) {
+  public LLMCreateModelData enableAllFunctions(Boolean enableAllFunctions) {
     this.enableAllFunctions = enableAllFunctions;
     return this;
   }
@@ -143,15 +245,15 @@ public class LLMCreateModelData {
    * @return enableAllFunctions
   **/
   @Schema(description = "")
-  public Object getEnableAllFunctions() {
+  public Boolean isEnableAllFunctions() {
     return enableAllFunctions;
   }
 
-  public void setEnableAllFunctions(Object enableAllFunctions) {
+  public void setEnableAllFunctions(Boolean enableAllFunctions) {
     this.enableAllFunctions = enableAllFunctions;
   }
 
-  public LLMCreateModelData secretId(Object secretId) {
+  public LLMCreateModelData secretId(String secretId) {
     this.secretId = secretId;
     return this;
   }
@@ -161,15 +263,15 @@ public class LLMCreateModelData {
    * @return secretId
   **/
   @Schema(description = "")
-  public Object getSecretId() {
+  public String getSecretId() {
     return secretId;
   }
 
-  public void setSecretId(Object secretId) {
+  public void setSecretId(String secretId) {
     this.secretId = secretId;
   }
 
-  public LLMCreateModelData modelCode(Object modelCode) {
+  public LLMCreateModelData modelCode(String modelCode) {
     this.modelCode = modelCode;
     return this;
   }
@@ -179,15 +281,15 @@ public class LLMCreateModelData {
    * @return modelCode
   **/
   @Schema(required = true, description = "")
-  public Object getModelCode() {
+  public String getModelCode() {
     return modelCode;
   }
 
-  public void setModelCode(Object modelCode) {
+  public void setModelCode(String modelCode) {
     this.modelCode = modelCode;
   }
 
-  public LLMCreateModelData baseUrl(Object baseUrl) {
+  public LLMCreateModelData baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -197,15 +299,15 @@ public class LLMCreateModelData {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public LLMCreateModelData contextWindow(Object contextWindow) {
+  public LLMCreateModelData contextWindow(Integer contextWindow) {
     this.contextWindow = contextWindow;
     return this;
   }
@@ -215,16 +317,24 @@ public class LLMCreateModelData {
    * @return contextWindow
   **/
   @Schema(description = "")
-  public Object getContextWindow() {
+  public Integer getContextWindow() {
     return contextWindow;
   }
 
-  public void setContextWindow(Object contextWindow) {
+  public void setContextWindow(Integer contextWindow) {
     this.contextWindow = contextWindow;
   }
 
-  public LLMCreateModelData uses(Object uses) {
+  public LLMCreateModelData uses(List<UsesEnum> uses) {
     this.uses = uses;
+    return this;
+  }
+
+  public LLMCreateModelData addUsesItem(UsesEnum usesItem) {
+    if (this.uses == null) {
+      this.uses = new ArrayList<>();
+    }
+    this.uses.add(usesItem);
     return this;
   }
 
@@ -233,15 +343,15 @@ public class LLMCreateModelData {
    * @return uses
   **/
   @Schema(description = "")
-  public Object getUses() {
+  public List<UsesEnum> getUses() {
     return uses;
   }
 
-  public void setUses(Object uses) {
+  public void setUses(List<UsesEnum> uses) {
     this.uses = uses;
   }
 
-  public LLMCreateModelData maxGeneratedTokens(Object maxGeneratedTokens) {
+  public LLMCreateModelData maxGeneratedTokens(Integer maxGeneratedTokens) {
     this.maxGeneratedTokens = maxGeneratedTokens;
     return this;
   }
@@ -251,15 +361,15 @@ public class LLMCreateModelData {
    * @return maxGeneratedTokens
   **/
   @Schema(description = "")
-  public Object getMaxGeneratedTokens() {
+  public Integer getMaxGeneratedTokens() {
     return maxGeneratedTokens;
   }
 
-  public void setMaxGeneratedTokens(Object maxGeneratedTokens) {
+  public void setMaxGeneratedTokens(Integer maxGeneratedTokens) {
     this.maxGeneratedTokens = maxGeneratedTokens;
   }
 
-  public LLMCreateModelData thinking(Object thinking) {
+  public LLMCreateModelData thinking(ThinkingEnum thinking) {
     this.thinking = thinking;
     return this;
   }
@@ -269,11 +379,11 @@ public class LLMCreateModelData {
    * @return thinking
   **/
   @Schema(description = "")
-  public Object getThinking() {
+  public ThinkingEnum getThinking() {
     return thinking;
   }
 
-  public void setThinking(Object thinking) {
+  public void setThinking(ThinkingEnum thinking) {
     this.thinking = thinking;
   }
 

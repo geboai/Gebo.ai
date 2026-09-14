@@ -41,7 +41,7 @@ public class SecretsClusterControllerApiTest {
      */
     @Test
     public void deleteSecretTest() {
-        Object code = null;
+        String code = null;
         api.deleteSecret(code);
 
         // TODO: test validations
@@ -56,7 +56,7 @@ public class SecretsClusterControllerApiTest {
      */
     @Test
     public void getAllSecretsIdTest() {
-        Object response = api.getAllSecretsId();
+        List<String> response = api.getAllSecretsId();
 
         // TODO: test validations
     }
@@ -70,7 +70,7 @@ public class SecretsClusterControllerApiTest {
      */
     @Test
     public void getSecretContentByIdTest() {
-        Object id = null;
+        String id = null;
         GeboSecretContentEnvelope response = api.getSecretContentById(id);
 
         // TODO: test validations
@@ -85,8 +85,8 @@ public class SecretsClusterControllerApiTest {
      */
     @Test
     public void getSecretInfoByContextCodeTest() {
-        Object contextCode = null;
-        Object response = api.getSecretInfoByContextCode(contextCode);
+        String contextCode = null;
+        List<SecretInfo> response = api.getSecretInfoByContextCode(contextCode);
 
         // TODO: test validations
     }
@@ -100,7 +100,7 @@ public class SecretsClusterControllerApiTest {
      */
     @Test
     public void getSecretInfoByIdTest() {
-        Object code = null;
+        String code = null;
         SecretInfo response = api.getSecretInfoById(code);
 
         // TODO: test validations
@@ -116,7 +116,7 @@ public class SecretsClusterControllerApiTest {
     @Test
     public void storeSecretTest() {
         GeboSecretStoreRequest body = null;
-        Object response = api.storeSecret(body);
+        String response = api.storeSecret(body);
 
         // TODO: test validations
     }

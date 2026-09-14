@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GOllamaEmbeddingModelConfig } from './gOllamaEmbeddingModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGOllamaEmbeddingModelConfig { 
     result?: GOllamaEmbeddingModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -3,13 +3,13 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Object** |  |  [optional]
-**totalBytesSize** | **Object** |  |  [optional]
-**totalTokensSize** | **Object** |  |  [optional]
-**totalChunksNumber** | **Object** |  |  [optional]
+**id** | **String** |  |  [optional]
+**totalBytesSize** | **Long** |  |  [optional]
+**totalTokensSize** | **Long** |  |  [optional]
+**totalChunksNumber** | **Integer** |  |  [optional]
 **currentChunkSet** | [**DocumentChunksSet**](DocumentChunksSet.md) |  |  [optional]
-**nextChunkSetId** | **Object** |  |  [optional]
-**chunkingSessionId** | **Object** |  |  [optional]
-**empty** | **Object** |  |  [optional]
-**error** | **Object** |  |  [optional]
+**nextChunkSetId** | **String** |  |  [optional]
+**chunkingSessionId** | **String** |  |  [optional]
+**empty** | **Boolean** |  |  [optional]
+**error** | **Boolean** |  |  [optional]
 **errorMessage** | [**GUserMessage**](GUserMessage.md) |  |  [optional]

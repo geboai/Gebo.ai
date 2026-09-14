@@ -40,7 +40,7 @@ public class GeboUserKnowledgeBaseSemanticSearchControllerApiTest {
     @Test
     public void semanticSearchTest() {
         SemanticQueryParam body = null;
-        Object response = api.semanticSearch(body);
+        List<String> response = api.semanticSearch(body);
 
         // TODO: test validations
     }

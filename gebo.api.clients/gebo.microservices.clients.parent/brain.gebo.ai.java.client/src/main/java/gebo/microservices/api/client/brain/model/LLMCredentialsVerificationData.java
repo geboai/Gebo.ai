@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMCredentialsVerificationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMCredentialsVerificationData {
   @JsonProperty("vendorId")
-  private Object vendorId = null;
+  private String vendorId = null;
 
   @JsonProperty("secretId")
-  private Object secretId = null;
+  private String secretId = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
-  public LLMCredentialsVerificationData vendorId(Object vendorId) {
+  public LLMCredentialsVerificationData vendorId(String vendorId) {
     this.vendorId = vendorId;
     return this;
   }
@@ -44,15 +44,15 @@ public class LLMCredentialsVerificationData {
    * @return vendorId
   **/
   @Schema(required = true, description = "")
-  public Object getVendorId() {
+  public String getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(Object vendorId) {
+  public void setVendorId(String vendorId) {
     this.vendorId = vendorId;
   }
 
-  public LLMCredentialsVerificationData secretId(Object secretId) {
+  public LLMCredentialsVerificationData secretId(String secretId) {
     this.secretId = secretId;
     return this;
   }
@@ -62,15 +62,15 @@ public class LLMCredentialsVerificationData {
    * @return secretId
   **/
   @Schema(required = true, description = "")
-  public Object getSecretId() {
+  public String getSecretId() {
     return secretId;
   }
 
-  public void setSecretId(Object secretId) {
+  public void setSecretId(String secretId) {
     this.secretId = secretId;
   }
 
-  public LLMCredentialsVerificationData baseUrl(Object baseUrl) {
+  public LLMCredentialsVerificationData baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -80,11 +80,11 @@ public class LLMCredentialsVerificationData {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 

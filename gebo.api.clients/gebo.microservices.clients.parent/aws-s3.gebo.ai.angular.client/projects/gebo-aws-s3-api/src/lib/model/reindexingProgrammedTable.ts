@@ -9,8 +9,21 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ReindexingTime } from './reindexingTime';
 
 export interface ReindexingProgrammedTable { 
-    frequency: any;
-    times?: any;
+    frequency: ReindexingProgrammedTable.FrequencyEnum;
+    times?: Array<ReindexingTime>;
+}
+export namespace ReindexingProgrammedTable {
+    export type FrequencyEnum = 'DAILY' | 'MONTHLY' | 'WEEKLY' | 'HOURLY' | 'YEARLY' | 'ON_CHANGES' | 'DATES';
+    export const FrequencyEnum = {
+        DAILY: 'DAILY' as FrequencyEnum,
+        MONTHLY: 'MONTHLY' as FrequencyEnum,
+        WEEKLY: 'WEEKLY' as FrequencyEnum,
+        HOURLY: 'HOURLY' as FrequencyEnum,
+        YEARLY: 'YEARLY' as FrequencyEnum,
+        ONCHANGES: 'ON_CHANGES' as FrequencyEnum,
+        DATES: 'DATES' as FrequencyEnum
+    };
 }

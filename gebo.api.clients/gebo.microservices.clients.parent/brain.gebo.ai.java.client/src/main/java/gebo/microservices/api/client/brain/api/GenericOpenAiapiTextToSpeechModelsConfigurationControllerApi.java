@@ -3,6 +3,7 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPITextToSpeechModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAITextToSpeechModelType;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPITextToSpeechModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPITextToSpeechModelChoice;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -99,7 +100,7 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
      * @return GenericOpenAIAPITextToSpeechModelConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GenericOpenAIAPITextToSpeechModelConfig findGenericOpenAIAPITextToSpeechModelConfigByCode(Object code) throws RestClientException {
+    public GenericOpenAIAPITextToSpeechModelConfig findGenericOpenAIAPITextToSpeechModelConfigByCode(String code) throws RestClientException {
         return findGenericOpenAIAPITextToSpeechModelConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -111,7 +112,7 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
      * @return ResponseEntity&lt;GenericOpenAIAPITextToSpeechModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GenericOpenAIAPITextToSpeechModelConfig> findGenericOpenAIAPITextToSpeechModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GenericOpenAIAPITextToSpeechModelConfig> findGenericOpenAIAPITextToSpeechModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -186,10 +187,10 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAIAPITextToSpeechModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAITextToSpeechModelConfigs() throws RestClientException {
+    public List<GenericOpenAIAPITextToSpeechModelConfig> getGenericOpenAITextToSpeechModelConfigs() throws RestClientException {
         return getGenericOpenAITextToSpeechModelConfigsWithHttpInfo().getBody();
     }
 
@@ -197,10 +198,10 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAIAPITextToSpeechModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAITextToSpeechModelConfigsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAIAPITextToSpeechModelConfig>> getGenericOpenAITextToSpeechModelConfigsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelConfigs").build().toUriString();
         
@@ -217,17 +218,17 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAIAPITextToSpeechModelConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIAPITextToSpeechModelConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAITextToSpeechModelType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAITextToSpeechModelTypes() throws RestClientException {
+    public List<GenericOpenAITextToSpeechModelType> getGenericOpenAITextToSpeechModelTypes() throws RestClientException {
         return getGenericOpenAITextToSpeechModelTypesWithHttpInfo().getBody();
     }
 
@@ -235,10 +236,10 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAITextToSpeechModelType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAITextToSpeechModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAITextToSpeechModelType>> getGenericOpenAITextToSpeechModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPITextToSpeechModelsConfigurationController/getGenericOpenAITextToSpeechModelTypes").build().toUriString();
         
@@ -255,7 +256,7 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAITextToSpeechModelType>> returnType = new ParameterizedTypeReference<List<GenericOpenAITextToSpeechModelType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

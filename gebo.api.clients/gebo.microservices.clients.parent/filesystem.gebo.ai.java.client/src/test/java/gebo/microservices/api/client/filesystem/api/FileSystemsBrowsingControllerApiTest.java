@@ -16,6 +16,7 @@ import gebo.microservices.api.client.filesystem.model.BrowseParam;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.filesystem.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.filesystem.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -57,7 +58,7 @@ public class FileSystemsBrowsingControllerApiTest {
      */
     @Test
     public void getSharedFilesystemNavigationStatusTest() {
-        Object body = null;
+        List<VFilesystemReference> body = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getSharedFilesystemNavigationStatus(body);
 
         // TODO: test validations

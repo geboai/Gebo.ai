@@ -11,8 +11,8 @@
  */
 
 export interface UserChangePasswordWithTicket { 
-    ticket: any;
-    email: any;
-    password: any;
-    confirmPassword: any;
+    ticket: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
 }

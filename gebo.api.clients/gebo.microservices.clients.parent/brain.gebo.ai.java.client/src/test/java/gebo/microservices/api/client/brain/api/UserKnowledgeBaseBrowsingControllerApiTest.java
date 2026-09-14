@@ -13,9 +13,12 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.BrowseParam;
+import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.GKnowledgeBase;
 import gebo.microservices.api.client.brain.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.brain.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.brain.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.brain.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +46,7 @@ public class UserKnowledgeBaseBrowsingControllerApiTest {
     @Test
     public void browseKnowledgeBasePathTest() {
         BrowseParam body = null;
-        Object codes = null;
+        List<String> codes = null;
         OperationStatusListPathInfo response = api.browseKnowledgeBasePath(body, codes);
 
         // TODO: test validations
@@ -58,7 +61,7 @@ public class UserKnowledgeBaseBrowsingControllerApiTest {
      */
     @Test
     public void getAccessibleRootKnowledgeBasesTest() {
-        Object response = api.getAccessibleRootKnowledgeBases();
+        List<GBaseObject> response = api.getAccessibleRootKnowledgeBases();
 
         // TODO: test validations
     }
@@ -72,8 +75,8 @@ public class UserKnowledgeBaseBrowsingControllerApiTest {
      */
     @Test
     public void getKnowledgeBaseNavigationStatusTest() {
-        Object body = null;
-        Object codes = null;
+        List<VFilesystemReference> body = null;
+        List<String> codes = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getKnowledgeBaseNavigationStatus(body, codes);
 
         // TODO: test validations
@@ -88,7 +91,7 @@ public class UserKnowledgeBaseBrowsingControllerApiTest {
      */
     @Test
     public void getKnowledgeBaseRootsTest() {
-        Object codes = null;
+        List<String> codes = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getKnowledgeBaseRoots(codes);
 
         // TODO: test validations
@@ -103,8 +106,8 @@ public class UserKnowledgeBaseBrowsingControllerApiTest {
      */
     @Test
     public void getVisibleKnowledgeBaseByCodesTest() {
-        Object body = null;
-        Object response = api.getVisibleKnowledgeBaseByCodes(body);
+        List<String> body = null;
+        List<GKnowledgeBase> response = api.getVisibleKnowledgeBaseByCodes(body);
 
         // TODO: test validations
     }

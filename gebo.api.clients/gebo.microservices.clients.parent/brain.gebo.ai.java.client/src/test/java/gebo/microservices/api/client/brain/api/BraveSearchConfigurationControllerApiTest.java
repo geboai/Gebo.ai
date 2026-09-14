@@ -71,7 +71,7 @@ public class BraveSearchConfigurationControllerApiTest {
      */
     @Test
     public void getBraveSearchApiCredentialsTest() {
-        Object response = api.getBraveSearchApiCredentials();
+        List<GBraveSearchApiCredentials> response = api.getBraveSearchApiCredentials();
 
         // TODO: test validations
     }
@@ -114,7 +114,7 @@ public class BraveSearchConfigurationControllerApiTest {
      */
     @Test
     public void searchGBraveSearchApiCredentialsByCodeTest() {
-        Object code = null;
+        String code = null;
         GBraveSearchApiCredentials response = api.searchGBraveSearchApiCredentialsByCode(code);
 
         // TODO: test validations

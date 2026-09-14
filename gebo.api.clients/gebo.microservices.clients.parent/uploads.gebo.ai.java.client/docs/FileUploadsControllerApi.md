@@ -30,8 +30,8 @@ Method | HTTP request | Description
 
 
 FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
-Object body = null; // Object | 
-Object endpointCode = null; // Object | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
+String endpointCode = "endpointCode_example"; // String | 
 try {
     OperationStatusGUploadsProjectEndpoint result = apiInstance.deleteUploadedFiles(body, endpointCode);
     System.out.println(result);
@@ -45,8 +45,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
- **endpointCode** | [**Object**](.md)|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  |
+ **endpointCode** | **String**|  |
 
 ### Return type
 
@@ -105,7 +105,7 @@ No authorization required
 
 <a name="findUploadsEndpointsByProject"></a>
 # **findUploadsEndpointsByProject**
-> Object findUploadsEndpointsByProject(parentProjectCode)
+> List&lt;GUploadsProjectEndpoint&gt; findUploadsEndpointsByProject(parentProjectCode)
 
 
 
@@ -117,9 +117,9 @@ No authorization required
 
 
 FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findUploadsEndpointsByProject(parentProjectCode);
+    List<GUploadsProjectEndpoint> result = apiInstance.findUploadsEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileUploadsControllerApi#findUploadsEndpointsByProject");
@@ -131,11 +131,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GUploadsProjectEndpoint&gt;**](GUploadsProjectEndpoint.md)
 
 ### Authorization
 
@@ -148,7 +148,7 @@ No authorization required
 
 <a name="findUploadsEndpointsByQbe"></a>
 # **findUploadsEndpointsByQbe**
-> Object findUploadsEndpointsByQbe(body)
+> List&lt;GUploadsProjectEndpoint&gt; findUploadsEndpointsByQbe(body)
 
 
 
@@ -162,7 +162,7 @@ No authorization required
 FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
 GUploadsProjectEndpoint body = new GUploadsProjectEndpoint(); // GUploadsProjectEndpoint | 
 try {
-    Object result = apiInstance.findUploadsEndpointsByQbe(body);
+    List<GUploadsProjectEndpoint> result = apiInstance.findUploadsEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileUploadsControllerApi#findUploadsEndpointsByQbe");
@@ -178,7 +178,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GUploadsProjectEndpoint&gt;**](GUploadsProjectEndpoint.md)
 
 ### Authorization
 
@@ -191,7 +191,7 @@ No authorization required
 
 <a name="getFileSystemSystemTypes"></a>
 # **getFileSystemSystemTypes**
-> Object getFileSystemSystemTypes()
+> List&lt;GContentManagementSystemType&gt; getFileSystemSystemTypes()
 
 
 
@@ -204,7 +204,7 @@ No authorization required
 
 FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
 try {
-    Object result = apiInstance.getFileSystemSystemTypes();
+    List<GContentManagementSystemType> result = apiInstance.getFileSystemSystemTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileUploadsControllerApi#getFileSystemSystemTypes");
@@ -217,7 +217,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GContentManagementSystemType&gt;**](GContentManagementSystemType.md)
 
 ### Authorization
 
@@ -230,7 +230,7 @@ No authorization required
 
 <a name="getUploadableFilesExtensions"></a>
 # **getUploadableFilesExtensions**
-> Object getUploadableFilesExtensions()
+> List&lt;String&gt; getUploadableFilesExtensions()
 
 
 
@@ -243,7 +243,7 @@ No authorization required
 
 FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
 try {
-    Object result = apiInstance.getUploadableFilesExtensions();
+    List<String> result = apiInstance.getUploadableFilesExtensions();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileUploadsControllerApi#getUploadableFilesExtensions");
@@ -256,7 +256,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**List&lt;String&gt;**
 
 ### Authorization
 
@@ -269,7 +269,7 @@ No authorization required
 
 <a name="getUploadsSystems"></a>
 # **getUploadsSystems**
-> Object getUploadsSystems(handlerCode)
+> List&lt;GUploadsContentManagementSystem&gt; getUploadsSystems(handlerCode)
 
 
 
@@ -281,9 +281,9 @@ No authorization required
 
 
 FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
-Object handlerCode = null; // Object | 
+String handlerCode = "handlerCode_example"; // String | 
 try {
-    Object result = apiInstance.getUploadsSystems(handlerCode);
+    List<GUploadsContentManagementSystem> result = apiInstance.getUploadsSystems(handlerCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileUploadsControllerApi#getUploadsSystems");
@@ -295,11 +295,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **handlerCode** | [**Object**](.md)|  | [optional]
+ **handlerCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;GUploadsContentManagementSystem&gt;**](GUploadsContentManagementSystem.md)
 
 ### Authorization
 
@@ -355,7 +355,7 @@ No authorization required
 
 <a name="listUploadedFiles"></a>
 # **listUploadedFiles**
-> Object listUploadedFiles(endpointCode)
+> List&lt;UploadedFileInfo&gt; listUploadedFiles(endpointCode)
 
 
 
@@ -367,9 +367,9 @@ No authorization required
 
 
 FileUploadsControllerApi apiInstance = new FileUploadsControllerApi();
-Object endpointCode = null; // Object | 
+String endpointCode = "endpointCode_example"; // String | 
 try {
-    Object result = apiInstance.listUploadedFiles(endpointCode);
+    List<UploadedFileInfo> result = apiInstance.listUploadedFiles(endpointCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileUploadsControllerApi#listUploadedFiles");
@@ -381,11 +381,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **endpointCode** | [**Object**](.md)|  |
+ **endpointCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;UploadedFileInfo&gt;**](UploadedFileInfo.md)
 
 ### Authorization
 

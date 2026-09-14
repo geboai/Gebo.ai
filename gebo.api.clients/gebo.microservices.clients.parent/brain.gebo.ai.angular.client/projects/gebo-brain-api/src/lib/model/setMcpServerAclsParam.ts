@@ -9,8 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AclOwnerParam } from './aclOwnerParam';
 
 export interface SetMcpServerAclsParam { 
-    code: any;
-    owners: any;
+    code: string;
+    owners: Array<AclOwnerParam>;
 }

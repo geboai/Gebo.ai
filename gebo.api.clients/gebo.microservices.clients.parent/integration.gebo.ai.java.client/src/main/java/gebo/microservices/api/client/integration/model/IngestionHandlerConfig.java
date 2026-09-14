@@ -17,21 +17,24 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.integration.model.IngestionFileType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * IngestionHandlerConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:40.120904804+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class IngestionHandlerConfig {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("fileTypes")
-  private Object fileTypes = null;
+  private List<IngestionFileType> fileTypes = null;
 
-  public IngestionHandlerConfig id(Object id) {
+  public IngestionHandlerConfig id(String id) {
     this.id = id;
     return this;
   }
@@ -41,16 +44,24 @@ public class IngestionHandlerConfig {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public IngestionHandlerConfig fileTypes(Object fileTypes) {
+  public IngestionHandlerConfig fileTypes(List<IngestionFileType> fileTypes) {
     this.fileTypes = fileTypes;
+    return this;
+  }
+
+  public IngestionHandlerConfig addFileTypesItem(IngestionFileType fileTypesItem) {
+    if (this.fileTypes == null) {
+      this.fileTypes = new ArrayList<>();
+    }
+    this.fileTypes.add(fileTypesItem);
     return this;
   }
 
@@ -59,11 +70,11 @@ public class IngestionHandlerConfig {
    * @return fileTypes
   **/
   @Schema(description = "")
-  public Object getFileTypes() {
+  public List<IngestionFileType> getFileTypes() {
     return fileTypes;
   }
 
-  public void setFileTypes(Object fileTypes) {
+  public void setFileTypes(List<IngestionFileType> fileTypes) {
     this.fileTypes = fileTypes;
   }
 

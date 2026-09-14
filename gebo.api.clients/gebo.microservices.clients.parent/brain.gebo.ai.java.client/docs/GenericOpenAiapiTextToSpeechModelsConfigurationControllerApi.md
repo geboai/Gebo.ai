@@ -69,7 +69,7 @@ No authorization required
 
 
 GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GenericOpenAIAPITextToSpeechModelConfig result = apiInstance.findGenericOpenAIAPITextToSpeechModelConfigByCode(code);
     System.out.println(result);
@@ -83,7 +83,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -143,7 +143,7 @@ No authorization required
 
 <a name="getGenericOpenAITextToSpeechModelConfigs"></a>
 # **getGenericOpenAITextToSpeechModelConfigs**
-> Object getGenericOpenAITextToSpeechModelConfigs()
+> List&lt;GenericOpenAIAPITextToSpeechModelConfig&gt; getGenericOpenAITextToSpeechModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ No authorization required
 
 GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAITextToSpeechModelConfigs();
+    List<GenericOpenAIAPITextToSpeechModelConfig> result = apiInstance.getGenericOpenAITextToSpeechModelConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi#getGenericOpenAITextToSpeechModelConfigs");
@@ -169,7 +169,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIAPITextToSpeechModelConfig&gt;**](GenericOpenAIAPITextToSpeechModelConfig.md)
 
 ### Authorization
 
@@ -182,7 +182,7 @@ No authorization required
 
 <a name="getGenericOpenAITextToSpeechModelTypes"></a>
 # **getGenericOpenAITextToSpeechModelTypes**
-> Object getGenericOpenAITextToSpeechModelTypes()
+> List&lt;GenericOpenAITextToSpeechModelType&gt; getGenericOpenAITextToSpeechModelTypes()
 
 
 
@@ -195,7 +195,7 @@ No authorization required
 
 GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAITextToSpeechModelTypes();
+    List<GenericOpenAITextToSpeechModelType> result = apiInstance.getGenericOpenAITextToSpeechModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiTextToSpeechModelsConfigurationControllerApi#getGenericOpenAITextToSpeechModelTypes");
@@ -208,7 +208,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAITextToSpeechModelType&gt;**](GenericOpenAITextToSpeechModelType.md)
 
 ### Authorization
 

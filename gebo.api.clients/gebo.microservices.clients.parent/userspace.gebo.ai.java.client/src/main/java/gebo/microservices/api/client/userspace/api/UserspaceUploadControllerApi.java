@@ -2,6 +2,7 @@ package gebo.microservices.api.client.userspace.api;
 
 import gebo.microservices.api.client.userspace.invoker.ApiClient;
 
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:10.490888548+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.206631637+02:00[Europe/Rome]")
 
 public class UserspaceUploadControllerApi {
     private ApiClient apiClient;
@@ -49,7 +50,7 @@ public class UserspaceUploadControllerApi {
      * @param files  (optional)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void upload(Object userspaceFolderCode, Object files) throws RestClientException {
+    public void upload(String userspaceFolderCode, List<File> files) throws RestClientException {
         uploadWithHttpInfo(userspaceFolderCode, files);
     }
 
@@ -62,7 +63,7 @@ public class UserspaceUploadControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> uploadWithHttpInfo(Object userspaceFolderCode, Object files) throws RestClientException {
+    public ResponseEntity<Void> uploadWithHttpInfo(String userspaceFolderCode, List<File> files) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userspaceFolderCode' is set
         if (userspaceFolderCode == null) {

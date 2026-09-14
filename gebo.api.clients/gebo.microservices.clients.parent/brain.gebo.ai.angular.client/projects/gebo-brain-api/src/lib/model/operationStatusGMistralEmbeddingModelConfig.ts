@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGMistralEmbeddingModelConfig { 
     result?: GMistralEmbeddingModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

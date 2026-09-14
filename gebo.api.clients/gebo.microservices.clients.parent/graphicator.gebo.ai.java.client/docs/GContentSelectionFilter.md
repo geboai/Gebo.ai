@@ -3,4 +3,4 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**criterias** | **Object** |  |  [optional]
+**criterias** | [**List&lt;GContentSelectionFilterCriteria&gt;**](GContentSelectionFilterCriteria.md) |  |  [optional]

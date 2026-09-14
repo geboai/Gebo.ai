@@ -17,19 +17,30 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GoogleSearchResultItem;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GoogleSearchResults
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GoogleSearchResults {
   @JsonProperty("items")
-  private Object items = null;
+  private List<GoogleSearchResultItem> items = null;
 
-  public GoogleSearchResults items(Object items) {
+  public GoogleSearchResults items(List<GoogleSearchResultItem> items) {
     this.items = items;
+    return this;
+  }
+
+  public GoogleSearchResults addItemsItem(GoogleSearchResultItem itemsItem) {
+    if (this.items == null) {
+      this.items = new ArrayList<>();
+    }
+    this.items.add(itemsItem);
     return this;
   }
 
@@ -38,11 +49,11 @@ public class GoogleSearchResults {
    * @return items
   **/
   @Schema(description = "")
-  public Object getItems() {
+  public List<GoogleSearchResultItem> getItems() {
     return items;
   }
 
-  public void setItems(Object items) {
+  public void setItems(List<GoogleSearchResultItem> items) {
     this.items = items;
   }
 

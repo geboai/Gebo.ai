@@ -11,7 +11,7 @@
  */
 
 export interface ToolsCategory { 
-    knowledgeBaseRelative?: any;
-    code?: any;
-    description?: any;
+    knowledgeBaseRelative?: boolean;
+    code?: string;
+    description?: string;
 }

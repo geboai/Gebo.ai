@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ChangePasswordParam } from '../model/changePasswordParam';
 import { ChangePasswordResponse } from '../model/changePasswordResponse';
+import { GroupInfo } from '../model/groupInfo';
 import { UserInfo } from '../model/userInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -146,9 +147,9 @@ export class UserControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMyGroups(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getMyGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getMyGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getMyGroups(observe?: 'body', reportProgress?: boolean): Observable<Array<GroupInfo>>;
+    public getMyGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GroupInfo>>>;
+    public getMyGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GroupInfo>>>;
     public getMyGroups(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -166,7 +167,7 @@ export class UserControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/ActualUserController/getMyGroups`,
+        return this.httpClient.request<Array<GroupInfo>>('get',`${this.basePath}/api/users/ActualUserController/getMyGroups`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

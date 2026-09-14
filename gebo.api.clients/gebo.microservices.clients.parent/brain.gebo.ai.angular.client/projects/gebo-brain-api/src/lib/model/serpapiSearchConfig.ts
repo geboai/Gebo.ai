@@ -11,6 +11,6 @@
  */
 
 export interface SerpapiSearchConfig { 
-    apiKey?: any;
-    enabled?: any;
+    apiKey?: string;
+    enabled?: boolean;
 }

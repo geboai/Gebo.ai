@@ -11,7 +11,7 @@
  */
 
 export interface JiraPeopleFilter { 
-    assigneesList?: any;
-    reportersList?: any;
-    creatorsList?: any;
+    assigneesList?: Array<string>;
+    reportersList?: Array<string>;
+    creatorsList?: Array<string>;
 }

@@ -11,9 +11,9 @@
  */
 
 export interface UserspaceFolderDto { 
-    code?: any;
-    description: any;
-    parentUserspaceKnowledgebaseCode: any;
-    uploadCode?: any;
-    owner?: any;
+    code?: string;
+    description: string;
+    parentUserspaceKnowledgebaseCode: string;
+    uploadCode?: string;
+    owner?: boolean;
 }

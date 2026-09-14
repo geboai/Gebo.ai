@@ -11,16 +11,48 @@
  */
 
 export interface SharePointContentAttributeFilter { 
-    contentKinds?: any;
-    textTerms?: any;
-    textTermsMatchMode?: any;
-    titleTerms?: any;
-    titleTermsMatchMode?: any;
-    siteUrls?: any;
-    siteUrlsMatchMode?: any;
-    pathPrefixes?: any;
-    pathPrefixesMatchMode?: any;
-    managedPropertyEquals?: any;
-    managedPropertyContains?: any;
-    managedPropertiesValuesMatchMode?: any;
+    contentKinds?: Array<SharePointContentAttributeFilter.ContentKindsEnum>;
+    textTerms?: Array<string>;
+    textTermsMatchMode?: SharePointContentAttributeFilter.TextTermsMatchModeEnum;
+    titleTerms?: Array<string>;
+    titleTermsMatchMode?: SharePointContentAttributeFilter.TitleTermsMatchModeEnum;
+    siteUrls?: Array<string>;
+    siteUrlsMatchMode?: SharePointContentAttributeFilter.SiteUrlsMatchModeEnum;
+    pathPrefixes?: Array<string>;
+    pathPrefixesMatchMode?: SharePointContentAttributeFilter.PathPrefixesMatchModeEnum;
+    managedPropertyEquals?: { [key: string]: Array<string>; };
+    managedPropertyContains?: { [key: string]: Array<string>; };
+    managedPropertiesValuesMatchMode?: SharePointContentAttributeFilter.ManagedPropertiesValuesMatchModeEnum;
+}
+export namespace SharePointContentAttributeFilter {
+    export type ContentKindsEnum = 'DOCUMENT' | 'PAGE';
+    export const ContentKindsEnum = {
+        DOCUMENT: 'DOCUMENT' as ContentKindsEnum,
+        PAGE: 'PAGE' as ContentKindsEnum
+    };
+    export type TextTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TextTermsMatchModeEnum = {
+        ANY: 'ANY' as TextTermsMatchModeEnum,
+        ALL: 'ALL' as TextTermsMatchModeEnum
+    };
+    export type TitleTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TitleTermsMatchModeEnum = {
+        ANY: 'ANY' as TitleTermsMatchModeEnum,
+        ALL: 'ALL' as TitleTermsMatchModeEnum
+    };
+    export type SiteUrlsMatchModeEnum = 'ANY' | 'ALL';
+    export const SiteUrlsMatchModeEnum = {
+        ANY: 'ANY' as SiteUrlsMatchModeEnum,
+        ALL: 'ALL' as SiteUrlsMatchModeEnum
+    };
+    export type PathPrefixesMatchModeEnum = 'ANY' | 'ALL';
+    export const PathPrefixesMatchModeEnum = {
+        ANY: 'ANY' as PathPrefixesMatchModeEnum,
+        ALL: 'ALL' as PathPrefixesMatchModeEnum
+    };
+    export type ManagedPropertiesValuesMatchModeEnum = 'ANY' | 'ALL';
+    export const ManagedPropertiesValuesMatchModeEnum = {
+        ANY: 'ANY' as ManagedPropertiesValuesMatchModeEnum,
+        ALL: 'ALL' as ManagedPropertiesValuesMatchModeEnum
+    };
 }

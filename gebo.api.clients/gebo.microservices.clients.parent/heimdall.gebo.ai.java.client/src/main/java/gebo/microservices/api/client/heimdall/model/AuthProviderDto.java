@@ -17,30 +17,103 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.heimdall.model.Oauth2CustomAttribute;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * AuthProviderDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class AuthProviderDto {
-  @JsonProperty("provider")
-  private Object provider = null;
+  /**
+   * Gets or Sets provider
+   */
+  public enum ProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
 
-  @JsonProperty("type")
-  private Object type = null;
+    private String value;
+
+    ProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ProviderEnum fromValue(String input) {
+      for (ProviderEnum b : ProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("provider")
+  private ProviderEnum provider = null;
+
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    LOCAL_JWT("LOCAL_JWT"),
+    OAUTH2("OAUTH2"),
+    LDAP("LDAP");
+
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypeEnum fromValue(String input) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("type")
+  private TypeEnum type = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("multitenant")
-  private Object multitenant = null;
+  private Boolean multitenant = null;
 
   @JsonProperty("customAttributes")
-  private Object customAttributes = null;
+  private List<Oauth2CustomAttribute> customAttributes = new ArrayList<>();
 
-  public AuthProviderDto provider(Object provider) {
+  public AuthProviderDto provider(ProviderEnum provider) {
     this.provider = provider;
     return this;
   }
@@ -50,15 +123,15 @@ public class AuthProviderDto {
    * @return provider
   **/
   @Schema(required = true, description = "")
-  public Object getProvider() {
+  public ProviderEnum getProvider() {
     return provider;
   }
 
-  public void setProvider(Object provider) {
+  public void setProvider(ProviderEnum provider) {
     this.provider = provider;
   }
 
-  public AuthProviderDto type(Object type) {
+  public AuthProviderDto type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -68,15 +141,15 @@ public class AuthProviderDto {
    * @return type
   **/
   @Schema(required = true, description = "")
-  public Object getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(Object type) {
+  public void setType(TypeEnum type) {
     this.type = type;
   }
 
-  public AuthProviderDto description(Object description) {
+  public AuthProviderDto description(String description) {
     this.description = description;
     return this;
   }
@@ -86,15 +159,15 @@ public class AuthProviderDto {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public AuthProviderDto multitenant(Object multitenant) {
+  public AuthProviderDto multitenant(Boolean multitenant) {
     this.multitenant = multitenant;
     return this;
   }
@@ -104,16 +177,21 @@ public class AuthProviderDto {
    * @return multitenant
   **/
   @Schema(required = true, description = "")
-  public Object getMultitenant() {
+  public Boolean isMultitenant() {
     return multitenant;
   }
 
-  public void setMultitenant(Object multitenant) {
+  public void setMultitenant(Boolean multitenant) {
     this.multitenant = multitenant;
   }
 
-  public AuthProviderDto customAttributes(Object customAttributes) {
+  public AuthProviderDto customAttributes(List<Oauth2CustomAttribute> customAttributes) {
     this.customAttributes = customAttributes;
+    return this;
+  }
+
+  public AuthProviderDto addCustomAttributesItem(Oauth2CustomAttribute customAttributesItem) {
+    this.customAttributes.add(customAttributesItem);
     return this;
   }
 
@@ -122,11 +200,11 @@ public class AuthProviderDto {
    * @return customAttributes
   **/
   @Schema(required = true, description = "")
-  public Object getCustomAttributes() {
+  public List<Oauth2CustomAttribute> getCustomAttributes() {
     return customAttributes;
   }
 
-  public void setCustomAttributes(Object customAttributes) {
+  public void setCustomAttributes(List<Oauth2CustomAttribute> customAttributes) {
     this.customAttributes = customAttributes;
   }
 

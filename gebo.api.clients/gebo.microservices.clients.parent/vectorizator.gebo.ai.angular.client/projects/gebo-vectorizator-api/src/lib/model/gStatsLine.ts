@@ -9,8 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GStatsLabelValue } from './gStatsLabelValue';
 
 export interface GStatsLine { 
-    statsKey?: any;
-    data?: any;
+    statsKey?: string;
+    data?: Array<GStatsLabelValue>;
 }

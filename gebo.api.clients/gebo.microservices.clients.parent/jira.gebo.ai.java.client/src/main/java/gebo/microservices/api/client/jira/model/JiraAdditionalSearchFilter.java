@@ -18,30 +18,102 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * JiraAdditionalSearchFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:45.187682910+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
 
 public class JiraAdditionalSearchFilter {
   @JsonProperty("issueKeys")
-  private Object issueKeys = null;
+  private List<String> issueKeys = null;
 
   @JsonProperty("summaryTerms")
-  private Object summaryTerms = null;
+  private List<String> summaryTerms = null;
 
-  @JsonProperty("summaryTermsMatchMode")
-  private Object summaryTermsMatchMode = null;
+  /**
+   * Gets or Sets summaryTermsMatchMode
+   */
+  public enum SummaryTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    SummaryTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SummaryTermsMatchModeEnum fromValue(String input) {
+      for (SummaryTermsMatchModeEnum b : SummaryTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("summaryTermsMatchMode")
+  private SummaryTermsMatchModeEnum summaryTermsMatchMode = null;
 
   @JsonProperty("descriptionTerms")
-  private Object descriptionTerms = null;
+  private List<String> descriptionTerms = null;
 
-  @JsonProperty("descriptionTermsMatchMode")
-  private Object descriptionTermsMatchMode = null;
+  /**
+   * Gets or Sets descriptionTermsMatchMode
+   */
+  public enum DescriptionTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
 
-  public JiraAdditionalSearchFilter issueKeys(Object issueKeys) {
+    private String value;
+
+    DescriptionTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static DescriptionTermsMatchModeEnum fromValue(String input) {
+      for (DescriptionTermsMatchModeEnum b : DescriptionTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("descriptionTermsMatchMode")
+  private DescriptionTermsMatchModeEnum descriptionTermsMatchMode = null;
+
+  public JiraAdditionalSearchFilter issueKeys(List<String> issueKeys) {
     this.issueKeys = issueKeys;
+    return this;
+  }
+
+  public JiraAdditionalSearchFilter addIssueKeysItem(String issueKeysItem) {
+    if (this.issueKeys == null) {
+      this.issueKeys = new ArrayList<>();
+    }
+    this.issueKeys.add(issueKeysItem);
     return this;
   }
 
@@ -50,16 +122,24 @@ public class JiraAdditionalSearchFilter {
    * @return issueKeys
   **/
   @Schema(description = "")
-  public Object getIssueKeys() {
+  public List<String> getIssueKeys() {
     return issueKeys;
   }
 
-  public void setIssueKeys(Object issueKeys) {
+  public void setIssueKeys(List<String> issueKeys) {
     this.issueKeys = issueKeys;
   }
 
-  public JiraAdditionalSearchFilter summaryTerms(Object summaryTerms) {
+  public JiraAdditionalSearchFilter summaryTerms(List<String> summaryTerms) {
     this.summaryTerms = summaryTerms;
+    return this;
+  }
+
+  public JiraAdditionalSearchFilter addSummaryTermsItem(String summaryTermsItem) {
+    if (this.summaryTerms == null) {
+      this.summaryTerms = new ArrayList<>();
+    }
+    this.summaryTerms.add(summaryTermsItem);
     return this;
   }
 
@@ -68,15 +148,15 @@ public class JiraAdditionalSearchFilter {
    * @return summaryTerms
   **/
   @Schema(description = "")
-  public Object getSummaryTerms() {
+  public List<String> getSummaryTerms() {
     return summaryTerms;
   }
 
-  public void setSummaryTerms(Object summaryTerms) {
+  public void setSummaryTerms(List<String> summaryTerms) {
     this.summaryTerms = summaryTerms;
   }
 
-  public JiraAdditionalSearchFilter summaryTermsMatchMode(Object summaryTermsMatchMode) {
+  public JiraAdditionalSearchFilter summaryTermsMatchMode(SummaryTermsMatchModeEnum summaryTermsMatchMode) {
     this.summaryTermsMatchMode = summaryTermsMatchMode;
     return this;
   }
@@ -86,16 +166,24 @@ public class JiraAdditionalSearchFilter {
    * @return summaryTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getSummaryTermsMatchMode() {
+  public SummaryTermsMatchModeEnum getSummaryTermsMatchMode() {
     return summaryTermsMatchMode;
   }
 
-  public void setSummaryTermsMatchMode(Object summaryTermsMatchMode) {
+  public void setSummaryTermsMatchMode(SummaryTermsMatchModeEnum summaryTermsMatchMode) {
     this.summaryTermsMatchMode = summaryTermsMatchMode;
   }
 
-  public JiraAdditionalSearchFilter descriptionTerms(Object descriptionTerms) {
+  public JiraAdditionalSearchFilter descriptionTerms(List<String> descriptionTerms) {
     this.descriptionTerms = descriptionTerms;
+    return this;
+  }
+
+  public JiraAdditionalSearchFilter addDescriptionTermsItem(String descriptionTermsItem) {
+    if (this.descriptionTerms == null) {
+      this.descriptionTerms = new ArrayList<>();
+    }
+    this.descriptionTerms.add(descriptionTermsItem);
     return this;
   }
 
@@ -104,15 +192,15 @@ public class JiraAdditionalSearchFilter {
    * @return descriptionTerms
   **/
   @Schema(description = "")
-  public Object getDescriptionTerms() {
+  public List<String> getDescriptionTerms() {
     return descriptionTerms;
   }
 
-  public void setDescriptionTerms(Object descriptionTerms) {
+  public void setDescriptionTerms(List<String> descriptionTerms) {
     this.descriptionTerms = descriptionTerms;
   }
 
-  public JiraAdditionalSearchFilter descriptionTermsMatchMode(Object descriptionTermsMatchMode) {
+  public JiraAdditionalSearchFilter descriptionTermsMatchMode(DescriptionTermsMatchModeEnum descriptionTermsMatchMode) {
     this.descriptionTermsMatchMode = descriptionTermsMatchMode;
     return this;
   }
@@ -122,11 +210,11 @@ public class JiraAdditionalSearchFilter {
    * @return descriptionTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getDescriptionTermsMatchMode() {
+  public DescriptionTermsMatchModeEnum getDescriptionTermsMatchMode() {
     return descriptionTermsMatchMode;
   }
 
-  public void setDescriptionTermsMatchMode(Object descriptionTermsMatchMode) {
+  public void setDescriptionTermsMatchMode(DescriptionTermsMatchModeEnum descriptionTermsMatchMode) {
     this.descriptionTermsMatchMode = descriptionTermsMatchMode;
   }
 

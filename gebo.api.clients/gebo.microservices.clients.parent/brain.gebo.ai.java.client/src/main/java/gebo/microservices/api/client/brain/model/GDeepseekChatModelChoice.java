@@ -19,62 +19,66 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.ModelMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GDeepseekChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GDeepseekChatModelChoice {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("version")
-  private Object version = null;
+  private String version = null;
 
   @JsonProperty("metaInfos")
   private ModelMetaInfo metaInfos = null;
 
   @JsonProperty("informativeUrl")
-  private Object informativeUrl = null;
+  private String informativeUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
 
   @JsonProperty("supportsStructuredOutput")
-  private Object supportsStructuredOutput = null;
+  private Boolean supportsStructuredOutput = null;
 
   @JsonProperty("supportsFunctionCalls")
-  private Object supportsFunctionCalls = null;
+  private Boolean supportsFunctionCalls = null;
 
   @JsonProperty("modelDetails")
-  private Object modelDetails = null;
+  private Map<String, Object> modelDetails = null;
 
-  public GDeepseekChatModelChoice code(Object code) {
+  public GDeepseekChatModelChoice code(String code) {
     this.code = code;
     return this;
   }
@@ -84,15 +88,15 @@ public class GDeepseekChatModelChoice {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GDeepseekChatModelChoice description(Object description) {
+  public GDeepseekChatModelChoice description(String description) {
     this.description = description;
     return this;
   }
@@ -102,15 +106,15 @@ public class GDeepseekChatModelChoice {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GDeepseekChatModelChoice userModified(Object userModified) {
+  public GDeepseekChatModelChoice userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -120,15 +124,15 @@ public class GDeepseekChatModelChoice {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GDeepseekChatModelChoice userCreated(Object userCreated) {
+  public GDeepseekChatModelChoice userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -138,15 +142,15 @@ public class GDeepseekChatModelChoice {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GDeepseekChatModelChoice dateModified(Object dateModified) {
+  public GDeepseekChatModelChoice dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -156,15 +160,15 @@ public class GDeepseekChatModelChoice {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GDeepseekChatModelChoice dateCreated(Object dateCreated) {
+  public GDeepseekChatModelChoice dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -174,15 +178,15 @@ public class GDeepseekChatModelChoice {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GDeepseekChatModelChoice creationDate(Object creationDate) {
+  public GDeepseekChatModelChoice creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -192,15 +196,15 @@ public class GDeepseekChatModelChoice {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public GDeepseekChatModelChoice modificationDate(Object modificationDate) {
+  public GDeepseekChatModelChoice modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -210,15 +214,15 @@ public class GDeepseekChatModelChoice {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public GDeepseekChatModelChoice version(Object version) {
+  public GDeepseekChatModelChoice version(String version) {
     this.version = version;
     return this;
   }
@@ -228,11 +232,11 @@ public class GDeepseekChatModelChoice {
    * @return version
   **/
   @Schema(description = "")
-  public Object getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(Object version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
@@ -254,7 +258,7 @@ public class GDeepseekChatModelChoice {
     this.metaInfos = metaInfos;
   }
 
-  public GDeepseekChatModelChoice informativeUrl(Object informativeUrl) {
+  public GDeepseekChatModelChoice informativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
     return this;
   }
@@ -264,15 +268,15 @@ public class GDeepseekChatModelChoice {
    * @return informativeUrl
   **/
   @Schema(description = "")
-  public Object getInformativeUrl() {
+  public String getInformativeUrl() {
     return informativeUrl;
   }
 
-  public void setInformativeUrl(Object informativeUrl) {
+  public void setInformativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
   }
 
-  public GDeepseekChatModelChoice contextLength(Object contextLength) {
+  public GDeepseekChatModelChoice contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -282,11 +286,11 @@ public class GDeepseekChatModelChoice {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
@@ -308,7 +312,7 @@ public class GDeepseekChatModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
-  public GDeepseekChatModelChoice supportsStructuredOutput(Object supportsStructuredOutput) {
+  public GDeepseekChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
   }
@@ -318,15 +322,15 @@ public class GDeepseekChatModelChoice {
    * @return supportsStructuredOutput
   **/
   @Schema(description = "")
-  public Object getSupportsStructuredOutput() {
+  public Boolean isSupportsStructuredOutput() {
     return supportsStructuredOutput;
   }
 
-  public void setSupportsStructuredOutput(Object supportsStructuredOutput) {
+  public void setSupportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
   }
 
-  public GDeepseekChatModelChoice supportsFunctionCalls(Object supportsFunctionCalls) {
+  public GDeepseekChatModelChoice supportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
     return this;
   }
@@ -336,16 +340,24 @@ public class GDeepseekChatModelChoice {
    * @return supportsFunctionCalls
   **/
   @Schema(description = "")
-  public Object getSupportsFunctionCalls() {
+  public Boolean isSupportsFunctionCalls() {
     return supportsFunctionCalls;
   }
 
-  public void setSupportsFunctionCalls(Object supportsFunctionCalls) {
+  public void setSupportsFunctionCalls(Boolean supportsFunctionCalls) {
     this.supportsFunctionCalls = supportsFunctionCalls;
   }
 
-  public GDeepseekChatModelChoice modelDetails(Object modelDetails) {
+  public GDeepseekChatModelChoice modelDetails(Map<String, Object> modelDetails) {
     this.modelDetails = modelDetails;
+    return this;
+  }
+
+  public GDeepseekChatModelChoice putModelDetailsItem(String key, Object modelDetailsItem) {
+    if (this.modelDetails == null) {
+      this.modelDetails = new HashMap<>();
+    }
+    this.modelDetails.put(key, modelDetailsItem);
     return this;
   }
 
@@ -354,11 +366,11 @@ public class GDeepseekChatModelChoice {
    * @return modelDetails
   **/
   @Schema(description = "")
-  public Object getModelDetails() {
+  public Map<String, Object> getModelDetails() {
     return modelDetails;
   }
 
-  public void setModelDetails(Object modelDetails) {
+  public void setModelDetails(Map<String, Object> modelDetails) {
     this.modelDetails = modelDetails;
   }
 

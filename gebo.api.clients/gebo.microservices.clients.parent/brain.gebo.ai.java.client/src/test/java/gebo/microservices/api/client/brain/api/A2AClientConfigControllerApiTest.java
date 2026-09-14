@@ -57,7 +57,7 @@ public class A2AClientConfigControllerApiTest {
      */
     @Test
     public void findByCode2Test() {
-        Object code = null;
+        String code = null;
         OperationStatusA2ARemoteAgentConfig response = api.findByCode2(code);
 
         // TODO: test validations
@@ -87,8 +87,8 @@ public class A2AClientConfigControllerApiTest {
      */
     @Test
     public void listTest() {
-        Object page = null;
-        Object size = null;
+        Integer page = null;
+        Integer size = null;
         PageA2ARemoteAgentConfig response = api.list(page, size);
 
         // TODO: test validations

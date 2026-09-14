@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**baseUrl** | **Object** |  |  [optional]
-**apiKey** | **Object** |  |  [optional]
-**enabled** | **Object** |  |  [optional]
+**baseUrl** | **String** |  |  [optional]
+**apiKey** | **String** |  |  [optional]
+**enabled** | **Boolean** |  |  [optional]

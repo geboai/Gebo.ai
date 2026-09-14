@@ -11,7 +11,7 @@
  */
 
 export interface GoogleDriveResultsExtractionData { 
-    extractedRelevantContent?: any;
-    contentIsRelevant?: any;
-    satisfactoryAnswer?: any;
+    extractedRelevantContent?: string;
+    contentIsRelevant?: boolean;
+    satisfactoryAnswer?: boolean;
 }

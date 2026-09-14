@@ -156,9 +156,9 @@ export class GoogleSearchConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGoogleSearchApiCredentials(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getGoogleSearchApiCredentials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getGoogleSearchApiCredentials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getGoogleSearchApiCredentials(observe?: 'body', reportProgress?: boolean): Observable<Array<GGoogleSearchApiCredentials>>;
+    public getGoogleSearchApiCredentials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGoogleSearchApiCredentials>>>;
+    public getGoogleSearchApiCredentials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGoogleSearchApiCredentials>>>;
     public getGoogleSearchApiCredentials(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -176,7 +176,7 @@ export class GoogleSearchConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GoogleSearchConfigurationController/getGoogleSearchApiCredentials`,
+        return this.httpClient.request<Array<GGoogleSearchApiCredentials>>('get',`${this.basePath}/api/admin/GoogleSearchConfigurationController/getGoogleSearchApiCredentials`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -276,10 +276,10 @@ export class GoogleSearchConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchGGoogleSearchApiCredentialsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GGoogleSearchApiCredentials>;
-    public searchGGoogleSearchApiCredentialsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GGoogleSearchApiCredentials>>;
-    public searchGGoogleSearchApiCredentialsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GGoogleSearchApiCredentials>>;
-    public searchGGoogleSearchApiCredentialsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public searchGGoogleSearchApiCredentialsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GGoogleSearchApiCredentials>;
+    public searchGGoogleSearchApiCredentialsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GGoogleSearchApiCredentials>>;
+    public searchGGoogleSearchApiCredentialsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GGoogleSearchApiCredentials>>;
+    public searchGGoogleSearchApiCredentialsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling searchGGoogleSearchApiCredentialsByCode.');

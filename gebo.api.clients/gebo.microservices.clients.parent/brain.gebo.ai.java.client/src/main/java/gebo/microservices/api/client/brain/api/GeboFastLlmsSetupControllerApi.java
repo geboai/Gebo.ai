@@ -4,6 +4,7 @@ import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.ComponentLLMSStatus;
 import gebo.microservices.api.client.brain.model.LLMAutoconfigureCreationData;
+import gebo.microservices.api.client.brain.model.LLMCreateModelData;
 import gebo.microservices.api.client.brain.model.LLMCredentialsCreationData;
 import gebo.microservices.api.client.brain.model.LLMCredentialsVerificationData;
 import gebo.microservices.api.client.brain.model.LLMModelsLookupParameter;
@@ -31,7 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboFastLlmsSetupControllerApi {
     private ApiClient apiClient;
@@ -151,7 +152,7 @@ public class GeboFastLlmsSetupControllerApi {
      * @return OperationStatusLLMSModelsCreationResult
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusLLMSModelsCreationResult createLLMS(Object body) throws RestClientException {
+    public OperationStatusLLMSModelsCreationResult createLLMS(List<LLMCreateModelData> body) throws RestClientException {
         return createLLMSWithHttpInfo(body).getBody();
     }
 
@@ -163,7 +164,7 @@ public class GeboFastLlmsSetupControllerApi {
      * @return ResponseEntity&lt;OperationStatusLLMSModelsCreationResult&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusLLMSModelsCreationResult> createLLMSWithHttpInfo(Object body) throws RestClientException {
+    public ResponseEntity<OperationStatusLLMSModelsCreationResult> createLLMSWithHttpInfo(List<LLMCreateModelData> body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {

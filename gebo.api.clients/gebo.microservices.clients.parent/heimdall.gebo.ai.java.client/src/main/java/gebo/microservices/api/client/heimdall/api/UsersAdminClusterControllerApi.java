@@ -10,6 +10,7 @@ import gebo.microservices.api.client.heimdall.model.GroupQbeRequest;
 import gebo.microservices.api.client.heimdall.model.InsertUserRequest;
 import gebo.microservices.api.client.heimdall.model.PageResultUserInfos;
 import gebo.microservices.api.client.heimdall.model.PageResultUsersGroup;
+import gebo.microservices.api.client.heimdall.model.UserInfos;
 import gebo.microservices.api.client.heimdall.model.UserQbeRequest;
 import gebo.microservices.api.client.heimdall.model.UsersGroup;
 
@@ -31,7 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UsersAdminClusterControllerApi {
     private ApiClient apiClient;
@@ -231,7 +232,7 @@ public class UsersAdminClusterControllerApi {
      * @return UsersGroup
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public UsersGroup findGroupByCode(Object code) throws RestClientException {
+    public UsersGroup findGroupByCode(String code) throws RestClientException {
         return findGroupByCodeWithHttpInfo(code).getBody();
     }
 
@@ -243,7 +244,7 @@ public class UsersAdminClusterControllerApi {
      * @return ResponseEntity&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<UsersGroup> findGroupByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<UsersGroup> findGroupByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -368,7 +369,7 @@ public class UsersAdminClusterControllerApi {
      * @return EditableUser
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public EditableUser findUserByUsername1(Object email) throws RestClientException {
+    public EditableUser findUserByUsername1(String email) throws RestClientException {
         return findUserByUsername1WithHttpInfo(email).getBody();
     }
 
@@ -380,7 +381,7 @@ public class UsersAdminClusterControllerApi {
      * @return ResponseEntity&lt;EditableUser&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<EditableUser> findUserByUsername1WithHttpInfo(Object email) throws RestClientException {
+    public ResponseEntity<EditableUser> findUserByUsername1WithHttpInfo(String email) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'email' is set
         if (email == null) {
@@ -455,10 +456,10 @@ public class UsersAdminClusterControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;UsersGroup&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllGroups() throws RestClientException {
+    public List<UsersGroup> getAllGroups() throws RestClientException {
         return getAllGroupsWithHttpInfo().getBody();
     }
 
@@ -466,10 +467,10 @@ public class UsersAdminClusterControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UsersGroup&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllGroupsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UsersGroup>> getAllGroupsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/UsersAdmin/getAllGroups").build().toUriString();
         
@@ -486,17 +487,17 @@ public class UsersAdminClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UsersGroup>> returnType = new ParameterizedTypeReference<List<UsersGroup>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;UserInfos&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAllUsers() throws RestClientException {
+    public List<UserInfos> getAllUsers() throws RestClientException {
         return getAllUsersWithHttpInfo().getBody();
     }
 
@@ -504,10 +505,10 @@ public class UsersAdminClusterControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UserInfos&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAllUsersWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<UserInfos>> getAllUsersWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/cluster/SecurityController/UsersAdmin/getAllUsers").build().toUriString();
         
@@ -524,7 +525,7 @@ public class UsersAdminClusterControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UserInfos>> returnType = new ParameterizedTypeReference<List<UserInfos>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GoogleSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -137,10 +137,10 @@ public class GoogleSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GGoogleSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGoogleSearchApiCredentials() throws RestClientException {
+    public List<GGoogleSearchApiCredentials> getGoogleSearchApiCredentials() throws RestClientException {
         return getGoogleSearchApiCredentialsWithHttpInfo().getBody();
     }
 
@@ -148,10 +148,10 @@ public class GoogleSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGoogleSearchApiCredentials&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGoogleSearchApiCredentialsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GGoogleSearchApiCredentials>> getGoogleSearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GoogleSearchConfigurationController/getGoogleSearchApiCredentials").build().toUriString();
         
@@ -168,7 +168,7 @@ public class GoogleSearchConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GGoogleSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GGoogleSearchApiCredentials>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -263,7 +263,7 @@ public class GoogleSearchConfigurationControllerApi {
      * @return GGoogleSearchApiCredentials
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GGoogleSearchApiCredentials searchGGoogleSearchApiCredentialsByCode(Object code) throws RestClientException {
+    public GGoogleSearchApiCredentials searchGGoogleSearchApiCredentialsByCode(String code) throws RestClientException {
         return searchGGoogleSearchApiCredentialsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -275,7 +275,7 @@ public class GoogleSearchConfigurationControllerApi {
      * @return ResponseEntity&lt;GGoogleSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GGoogleSearchApiCredentials> searchGGoogleSearchApiCredentialsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GGoogleSearchApiCredentials> searchGGoogleSearchApiCredentialsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

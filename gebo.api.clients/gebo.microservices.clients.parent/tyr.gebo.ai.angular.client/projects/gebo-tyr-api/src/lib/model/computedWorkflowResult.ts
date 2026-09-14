@@ -12,10 +12,10 @@
 import { ComputedWorkflowStatus } from './computedWorkflowStatus';
 
 export interface ComputedWorkflowResult { 
-    workflowType?: any;
-    workflowId?: any;
-    description?: any;
-    finished?: any;
-    hasErrors?: any;
+    workflowType?: string;
+    workflowId?: string;
+    description?: string;
+    finished?: boolean;
+    hasErrors?: boolean;
     rootStatus?: ComputedWorkflowStatus;
 }

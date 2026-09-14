@@ -9,26 +9,31 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AdditionalContent } from './additionalContent';
+import { CalledFunction } from './calledFunction';
 import { ChatModelRequestContextWindowStats } from './chatModelRequestContextWindowStats';
+import { GResponseDocumentRef } from './gResponseDocumentRef';
+import { GUserMessage } from './gUserMessage';
 import { GeboWorkingMemoryWindowOccupation } from './geboWorkingMemoryWindowOccupation';
+import { LLMGeneratedResource } from './lLMGeneratedResource';
 
 export interface GeboChatResponse { 
-    id?: any;
-    userChatContextCode?: any;
-    usedChatModelCode?: any;
-    usedChatModelProvider?: any;
-    queryResponse?: any;
+    id?: string;
+    userChatContextCode?: string;
+    usedChatModelCode?: string;
+    usedChatModelProvider?: string;
+    queryResponse?: string;
     windowOccupation?: GeboWorkingMemoryWindowOccupation;
-    query?: any;
-    thinkingOutputs?: any;
-    backendMessages?: any;
-    forcedDocumentsRef?: any;
-    documentsRef?: any;
-    calledFunctions?: any;
+    query?: string;
+    thinkingOutputs?: Array<string>;
+    backendMessages?: Array<GUserMessage>;
+    forcedDocumentsRef?: Array<GResponseDocumentRef>;
+    documentsRef?: Array<GResponseDocumentRef>;
+    calledFunctions?: Array<CalledFunction>;
     contextWindowStats?: ChatModelRequestContextWindowStats;
-    generatedResources?: any;
-    pipelineRouterDecisionCode?: any;
-    pipelineParams?: any;
-    deepSearchRequestId?: any;
-    additionalContents?: any;
+    generatedResources?: Array<LLMGeneratedResource>;
+    pipelineRouterDecisionCode?: string;
+    pipelineParams?: { [key: string]: any; };
+    deepSearchRequestId?: string;
+    additionalContents?: Array<AdditionalContent>;
 }

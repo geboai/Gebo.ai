@@ -11,19 +11,30 @@
  */
 
 export interface LLMUsageAggregationBucket { 
-    providerId?: any;
-    username?: any;
-    model?: any;
-    callerStack?: any;
-    modelType?: any;
-    year?: any;
-    month?: any;
-    day?: any;
-    inputToken?: any;
-    outputToken?: any;
-    totalToken?: any;
-    nrRequests?: any;
-    latencyMin?: any;
-    latencyMax?: any;
-    latencyAvg?: any;
+    providerId?: string;
+    username?: string;
+    model?: string;
+    callerStack?: string;
+    modelType?: LLMUsageAggregationBucket.ModelTypeEnum;
+    year?: number;
+    month?: number;
+    day?: number;
+    inputToken?: number;
+    outputToken?: number;
+    totalToken?: number;
+    nrRequests?: number;
+    latencyMin?: number;
+    latencyMax?: number;
+    latencyAvg?: number;
+}
+export namespace LLMUsageAggregationBucket {
+    export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';
+    export const ModelTypeEnum = {
+        CHAT: 'CHAT' as ModelTypeEnum,
+        EMBEDDING: 'EMBEDDING' as ModelTypeEnum,
+        IMAGE: 'IMAGE' as ModelTypeEnum,
+        RANKER: 'RANKER' as ModelTypeEnum,
+        TTS: 'TTS' as ModelTypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as ModelTypeEnum
+    };
 }

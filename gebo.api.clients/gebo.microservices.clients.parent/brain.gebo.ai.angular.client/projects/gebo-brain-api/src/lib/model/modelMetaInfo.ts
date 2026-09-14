@@ -11,15 +11,15 @@
  */
 
 export interface ModelMetaInfo { 
-    providerId?: any;
-    modelId?: any;
-    chatModel?: any;
-    embeddingModel?: any;
-    supportsStructuredOutput?: any;
-    supportsFunctionCalls?: any;
-    contextLength?: any;
-    tokenizingThreashold?: any;
-    maxOutputToken?: any;
-    description?: any;
-    informativeUrl?: any;
+    providerId?: string;
+    modelId?: string;
+    chatModel?: boolean;
+    embeddingModel?: boolean;
+    supportsStructuredOutput?: boolean;
+    supportsFunctionCalls?: boolean;
+    contextLength?: number;
+    tokenizingThreashold?: number;
+    maxOutputToken?: number;
+    description?: string;
+    informativeUrl?: string;
 }

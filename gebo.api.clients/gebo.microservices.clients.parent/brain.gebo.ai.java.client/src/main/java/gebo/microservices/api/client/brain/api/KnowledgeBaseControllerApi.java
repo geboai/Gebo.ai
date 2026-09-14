@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class KnowledgeBaseControllerApi {
     private ApiClient apiClient;
@@ -93,7 +93,7 @@ public class KnowledgeBaseControllerApi {
      * @return GKnowledgeBase
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GKnowledgeBase findKnowledgeBaseByCode(Object code) throws RestClientException {
+    public GKnowledgeBase findKnowledgeBaseByCode(String code) throws RestClientException {
         return findKnowledgeBaseByCodeWithHttpInfo(code).getBody();
     }
 
@@ -105,7 +105,7 @@ public class KnowledgeBaseControllerApi {
      * @return ResponseEntity&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GKnowledgeBase> findKnowledgeBaseByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GKnowledgeBase> findKnowledgeBaseByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -135,10 +135,10 @@ public class KnowledgeBaseControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findKnowledgeBasesByQbe(GKnowledgeBase body) throws RestClientException {
+    public List<GKnowledgeBase> findKnowledgeBasesByQbe(GKnowledgeBase body) throws RestClientException {
         return findKnowledgeBasesByQbeWithHttpInfo(body).getBody();
     }
 
@@ -147,10 +147,10 @@ public class KnowledgeBaseControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GKnowledgeBase&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findKnowledgeBasesByQbeWithHttpInfo(GKnowledgeBase body) throws RestClientException {
+    public ResponseEntity<List<GKnowledgeBase>> findKnowledgeBasesByQbeWithHttpInfo(GKnowledgeBase body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -173,7 +173,7 @@ public class KnowledgeBaseControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GKnowledgeBase>> returnType = new ParameterizedTypeReference<List<GKnowledgeBase>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -181,10 +181,10 @@ public class KnowledgeBaseControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param code  (required)
-     * @return Object
+     * @return List&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getChildKnowledgeBases(Object code) throws RestClientException {
+    public List<GKnowledgeBase> getChildKnowledgeBases(String code) throws RestClientException {
         return getChildKnowledgeBasesWithHttpInfo(code).getBody();
     }
 
@@ -193,10 +193,10 @@ public class KnowledgeBaseControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param code  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GKnowledgeBase&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getChildKnowledgeBasesWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<List<GKnowledgeBase>> getChildKnowledgeBasesWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -218,17 +218,17 @@ public class KnowledgeBaseControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GKnowledgeBase>> returnType = new ParameterizedTypeReference<List<GKnowledgeBase>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GKnowledgeBase&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getKnowledgeBases() throws RestClientException {
+    public List<GKnowledgeBase> getKnowledgeBases() throws RestClientException {
         return getKnowledgeBasesWithHttpInfo().getBody();
     }
 
@@ -236,10 +236,10 @@ public class KnowledgeBaseControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GKnowledgeBase&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getKnowledgeBasesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GKnowledgeBase>> getKnowledgeBasesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/KnowledgeBaseController/getKnowledgeBases").build().toUriString();
         
@@ -256,7 +256,7 @@ public class KnowledgeBaseControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GKnowledgeBase>> returnType = new ParameterizedTypeReference<List<GKnowledgeBase>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

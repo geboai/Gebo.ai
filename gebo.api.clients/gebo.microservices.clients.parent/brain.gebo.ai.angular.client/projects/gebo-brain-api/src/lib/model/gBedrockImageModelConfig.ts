@@ -12,20 +12,20 @@
 import { GBedrockImageModelChoice } from './gBedrockImageModelChoice';
 
 export interface GBedrockImageModelConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelTypeCode?: any;
-    defaultModel?: any;
-    apiSecretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
     choosedModel?: GBedrockImageModelChoice;
-    baseUrl?: any;
-    contextLength?: any;
-    height?: any;
-    width?: any;
-    cfgScale?: any;
-    seed?: any;
+    baseUrl?: string;
+    contextLength?: number;
+    height?: number;
+    width?: number;
+    cfgScale?: number;
+    seed?: number;
 }

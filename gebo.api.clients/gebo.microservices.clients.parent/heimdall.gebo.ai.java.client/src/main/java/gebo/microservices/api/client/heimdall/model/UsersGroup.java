@@ -18,26 +18,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * UsersGroup
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class UsersGroup {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userIds")
-  private Object userIds = null;
+  private List<String> userIds = null;
 
   @JsonProperty("extCode")
-  private Object extCode = null;
+  private String extCode = null;
 
-  public UsersGroup code(Object code) {
+  public UsersGroup code(String code) {
     this.code = code;
     return this;
   }
@@ -47,15 +49,15 @@ public class UsersGroup {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public UsersGroup description(Object description) {
+  public UsersGroup description(String description) {
     this.description = description;
     return this;
   }
@@ -65,16 +67,24 @@ public class UsersGroup {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public UsersGroup userIds(Object userIds) {
+  public UsersGroup userIds(List<String> userIds) {
     this.userIds = userIds;
+    return this;
+  }
+
+  public UsersGroup addUserIdsItem(String userIdsItem) {
+    if (this.userIds == null) {
+      this.userIds = new ArrayList<>();
+    }
+    this.userIds.add(userIdsItem);
     return this;
   }
 
@@ -83,15 +93,15 @@ public class UsersGroup {
    * @return userIds
   **/
   @Schema(description = "")
-  public Object getUserIds() {
+  public List<String> getUserIds() {
     return userIds;
   }
 
-  public void setUserIds(Object userIds) {
+  public void setUserIds(List<String> userIds) {
     this.userIds = userIds;
   }
 
-  public UsersGroup extCode(Object extCode) {
+  public UsersGroup extCode(String extCode) {
     this.extCode = extCode;
     return this;
   }
@@ -101,11 +111,11 @@ public class UsersGroup {
    * @return extCode
   **/
   @Schema(description = "")
-  public Object getExtCode() {
+  public String getExtCode() {
     return extCode;
   }
 
-  public void setExtCode(Object extCode) {
+  public void setExtCode(String extCode) {
     this.extCode = extCode;
   }
 

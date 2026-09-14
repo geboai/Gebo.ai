@@ -57,7 +57,7 @@ public class OpenAiChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findOpenAIChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GOpenAIChatModelConfig response = api.findOpenAIChatModelConfigByCode(code);
 
         // TODO: test validations

@@ -22,25 +22,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * WorkflowStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:20.180928852+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.835643861+02:00[Europe/Rome]")
 
 public class WorkflowStatus {
   @JsonProperty("completed")
-  private Object completed = null;
+  private Boolean completed = null;
 
   @JsonProperty("hasErrors")
-  private Object hasErrors = null;
+  private Boolean hasErrors = null;
 
   @JsonProperty("totalDocuments")
-  private Object totalDocuments = null;
+  private Long totalDocuments = null;
 
   @JsonProperty("totalDocumentsWithErrors")
-  private Object totalDocumentsWithErrors = null;
+  private Long totalDocumentsWithErrors = null;
 
   @JsonProperty("totalDocumentsSuccessfull")
-  private Object totalDocumentsSuccessfull = null;
+  private Long totalDocumentsSuccessfull = null;
 
-  public WorkflowStatus completed(Object completed) {
+  public WorkflowStatus completed(Boolean completed) {
     this.completed = completed;
     return this;
   }
@@ -50,15 +50,15 @@ public class WorkflowStatus {
    * @return completed
   **/
   @Schema(description = "")
-  public Object getCompleted() {
+  public Boolean isCompleted() {
     return completed;
   }
 
-  public void setCompleted(Object completed) {
+  public void setCompleted(Boolean completed) {
     this.completed = completed;
   }
 
-  public WorkflowStatus hasErrors(Object hasErrors) {
+  public WorkflowStatus hasErrors(Boolean hasErrors) {
     this.hasErrors = hasErrors;
     return this;
   }
@@ -68,15 +68,15 @@ public class WorkflowStatus {
    * @return hasErrors
   **/
   @Schema(description = "")
-  public Object getHasErrors() {
+  public Boolean isHasErrors() {
     return hasErrors;
   }
 
-  public void setHasErrors(Object hasErrors) {
+  public void setHasErrors(Boolean hasErrors) {
     this.hasErrors = hasErrors;
   }
 
-  public WorkflowStatus totalDocuments(Object totalDocuments) {
+  public WorkflowStatus totalDocuments(Long totalDocuments) {
     this.totalDocuments = totalDocuments;
     return this;
   }
@@ -86,15 +86,15 @@ public class WorkflowStatus {
    * @return totalDocuments
   **/
   @Schema(description = "")
-  public Object getTotalDocuments() {
+  public Long getTotalDocuments() {
     return totalDocuments;
   }
 
-  public void setTotalDocuments(Object totalDocuments) {
+  public void setTotalDocuments(Long totalDocuments) {
     this.totalDocuments = totalDocuments;
   }
 
-  public WorkflowStatus totalDocumentsWithErrors(Object totalDocumentsWithErrors) {
+  public WorkflowStatus totalDocumentsWithErrors(Long totalDocumentsWithErrors) {
     this.totalDocumentsWithErrors = totalDocumentsWithErrors;
     return this;
   }
@@ -104,15 +104,15 @@ public class WorkflowStatus {
    * @return totalDocumentsWithErrors
   **/
   @Schema(description = "")
-  public Object getTotalDocumentsWithErrors() {
+  public Long getTotalDocumentsWithErrors() {
     return totalDocumentsWithErrors;
   }
 
-  public void setTotalDocumentsWithErrors(Object totalDocumentsWithErrors) {
+  public void setTotalDocumentsWithErrors(Long totalDocumentsWithErrors) {
     this.totalDocumentsWithErrors = totalDocumentsWithErrors;
   }
 
-  public WorkflowStatus totalDocumentsSuccessfull(Object totalDocumentsSuccessfull) {
+  public WorkflowStatus totalDocumentsSuccessfull(Long totalDocumentsSuccessfull) {
     this.totalDocumentsSuccessfull = totalDocumentsSuccessfull;
     return this;
   }
@@ -122,11 +122,11 @@ public class WorkflowStatus {
    * @return totalDocumentsSuccessfull
   **/
   @Schema(description = "")
-  public Object getTotalDocumentsSuccessfull() {
+  public Long getTotalDocumentsSuccessfull() {
     return totalDocumentsSuccessfull;
   }
 
-  public void setTotalDocumentsSuccessfull(Object totalDocumentsSuccessfull) {
+  public void setTotalDocumentsSuccessfull(Long totalDocumentsSuccessfull) {
     this.totalDocumentsSuccessfull = totalDocumentsSuccessfull;
   }
 

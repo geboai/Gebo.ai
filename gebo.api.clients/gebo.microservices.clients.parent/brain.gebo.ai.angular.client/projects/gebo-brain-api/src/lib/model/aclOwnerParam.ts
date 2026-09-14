@@ -11,7 +11,20 @@
  */
 
 export interface AclOwnerParam { 
-    ownerType: any;
-    ownerCode: any;
-    grants: any;
+    ownerType: AclOwnerParam.OwnerTypeEnum;
+    ownerCode: string;
+    grants: Array<AclOwnerParam.GrantsEnum>;
+}
+export namespace AclOwnerParam {
+    export type OwnerTypeEnum = 'GROUP' | 'USER';
+    export const OwnerTypeEnum = {
+        GROUP: 'GROUP' as OwnerTypeEnum,
+        USER: 'USER' as OwnerTypeEnum
+    };
+    export type GrantsEnum = 'READ' | 'WRITE' | 'EXECUTE';
+    export const GrantsEnum = {
+        READ: 'READ' as GrantsEnum,
+        WRITE: 'WRITE' as GrantsEnum,
+        EXECUTE: 'EXECUTE' as GrantsEnum
+    };
 }

@@ -9,23 +9,33 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GAclEntry } from './gAclEntry';
+import { GObjectRef } from './gObjectRef';
 
 export interface GKnowledgeBase { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    knowledgeBaseReferences?: any;
-    projectsReferences?: any;
-    embeddingModelReferences?: any;
-    username?: any;
-    parentKnowledgebaseCode?: any;
-    objectSpaceType?: any;
-    acl?: any;
-    aclAliases?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    knowledgeBaseReferences?: Array<string>;
+    projectsReferences?: Array<string>;
+    embeddingModelReferences?: Array<GObjectRef>;
+    username?: string;
+    parentKnowledgebaseCode?: string;
+    objectSpaceType?: GKnowledgeBase.ObjectSpaceTypeEnum;
+    acl?: Array<GAclEntry>;
+    aclAliases?: Array<number>;
+    readonly?: boolean;
+}
+export namespace GKnowledgeBase {
+    export type ObjectSpaceTypeEnum = 'COMPANY' | 'USERSPACE';
+    export const ObjectSpaceTypeEnum = {
+        COMPANY: 'COMPANY' as ObjectSpaceTypeEnum,
+        USERSPACE: 'USERSPACE' as ObjectSpaceTypeEnum
+    };
 }

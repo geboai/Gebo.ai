@@ -14,8 +14,8 @@ import { GeboTemplatedChatResponse } from './geboTemplatedChatResponse';
 
 export interface ChatInteractions { 
     request?: GeboChatRequest;
-    requestNTokens?: any;
+    requestNTokens?: number;
     response?: GeboTemplatedChatResponse;
-    responseNTokens?: any;
-    tokensSize?: any;
+    responseNTokens?: number;
+    tokensSize?: number;
 }

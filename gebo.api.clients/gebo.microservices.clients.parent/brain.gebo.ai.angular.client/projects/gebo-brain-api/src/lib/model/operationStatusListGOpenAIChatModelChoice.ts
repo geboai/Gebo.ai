@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GOpenAIChatModelChoice } from './gOpenAIChatModelChoice';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusListGOpenAIChatModelChoice { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<GOpenAIChatModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -65,10 +65,10 @@ export class GeneratedUserApiKeyControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUserGeneratedApiKey(code: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteUserGeneratedApiKey(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteUserGeneratedApiKey(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteUserGeneratedApiKey(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteUserGeneratedApiKey(code: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteUserGeneratedApiKey(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteUserGeneratedApiKey(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteUserGeneratedApiKey(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling deleteUserGeneratedApiKey.');
@@ -204,9 +204,9 @@ export class GeneratedUserApiKeyControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isUserGeneratedApiKeyGenerationAllowed(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public isUserGeneratedApiKeyGenerationAllowed(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public isUserGeneratedApiKeyGenerationAllowed(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public isUserGeneratedApiKeyGenerationAllowed(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isUserGeneratedApiKeyGenerationAllowed(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isUserGeneratedApiKeyGenerationAllowed(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public isUserGeneratedApiKeyGenerationAllowed(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -224,7 +224,7 @@ export class GeneratedUserApiKeyControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed`,
+        return this.httpClient.request<boolean>('get',`${this.basePath}/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

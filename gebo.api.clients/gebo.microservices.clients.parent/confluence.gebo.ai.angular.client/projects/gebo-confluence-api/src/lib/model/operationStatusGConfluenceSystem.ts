@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GConfluenceSystem } from './gConfluenceSystem';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGConfluenceSystem { 
     result?: GConfluenceSystem;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

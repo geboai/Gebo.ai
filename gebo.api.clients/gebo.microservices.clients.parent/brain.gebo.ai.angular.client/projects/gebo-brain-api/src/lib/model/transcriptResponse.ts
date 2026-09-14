@@ -11,5 +11,5 @@
  */
 
 export interface TranscriptResponse { 
-    text?: any;
+    text?: string;
 }

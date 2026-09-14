@@ -3,6 +3,7 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIChatModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIChatModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIChatModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIChatModelChoice;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GenericOpenAiapiChatModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -99,7 +100,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
      * @return GenericOpenAIAPIChatModelConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GenericOpenAIAPIChatModelConfig findGenericOpenAIAPIChatModelConfigByCode(Object code) throws RestClientException {
+    public GenericOpenAIAPIChatModelConfig findGenericOpenAIAPIChatModelConfigByCode(String code) throws RestClientException {
         return findGenericOpenAIAPIChatModelConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -111,7 +112,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
      * @return ResponseEntity&lt;GenericOpenAIAPIChatModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GenericOpenAIAPIChatModelConfig> findGenericOpenAIAPIChatModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GenericOpenAIAPIChatModelConfig> findGenericOpenAIAPIChatModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -186,10 +187,10 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAIChatModelTypeConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAIChatModelTypes() throws RestClientException {
+    public List<GenericOpenAIChatModelTypeConfig> getGenericOpenAIChatModelTypes() throws RestClientException {
         return getGenericOpenAIChatModelTypesWithHttpInfo().getBody();
     }
 
@@ -197,10 +198,10 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAIChatModelTypeConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAIChatModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAIChatModelTypeConfig>> getGenericOpenAIChatModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIChatModelsConfigurationController/getGenericOpenAIChatModelTypes").build().toUriString();
         
@@ -217,7 +218,7 @@ public class GenericOpenAiapiChatModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAIChatModelTypeConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIChatModelTypeConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

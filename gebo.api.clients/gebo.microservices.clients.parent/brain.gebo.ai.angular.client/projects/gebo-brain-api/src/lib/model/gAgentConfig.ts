@@ -13,32 +13,52 @@ import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig
 import { GPromptTemplateConfig } from './gPromptTemplateConfig';
 
 export interface GAgentConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    agentType?: any;
-    adaptedAgentNetworkCode?: any;
-    agentNetworkServiceCode?: any;
-    agentServiceId: any;
-    mainLoopPromptUseCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    agentType?: GAgentConfig.AgentTypeEnum;
+    adaptedAgentNetworkCode?: string;
+    agentNetworkServiceCode?: string;
+    agentServiceId: string;
+    mainLoopPromptUseCode?: string;
     customLoopPrompt?: GPromptTemplateConfig;
-    subscribeAllTools?: any;
-    agentRoleCode: any;
-    useDefaultChatModel?: any;
-    useChatModelWithUse?: any;
+    subscribeAllTools?: boolean;
+    agentRoleCode: string;
+    useDefaultChatModel?: boolean;
+    useChatModelWithUse?: GAgentConfig.UseChatModelWithUseEnum;
     chatModelReference?: GObjectRefGBaseChatModelConfig;
-    maxLoopIterations: any;
-    aclAliases?: any;
-    defaultConfiguration?: any;
-    topP?: any;
-    temperature?: any;
-    thinking?: any;
-    readOnly?: any;
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    enabledFunctions?: any;
+    maxLoopIterations: number;
+    aclAliases?: Array<number>;
+    defaultConfiguration?: boolean;
+    topP?: number;
+    temperature?: number;
+    thinking?: GAgentConfig.ThinkingEnum;
+    readOnly?: boolean;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    enabledFunctions?: Array<string>;
+}
+export namespace GAgentConfig {
+    export type AgentTypeEnum = 'AGENT' | 'AGENTS_NETWORK';
+    export const AgentTypeEnum = {
+        AGENT: 'AGENT' as AgentTypeEnum,
+        AGENTSNETWORK: 'AGENTS_NETWORK' as AgentTypeEnum
+    };
+    export type UseChatModelWithUseEnum = 'CHAT' | 'INTERNAL_SERVICES';
+    export const UseChatModelWithUseEnum = {
+        CHAT: 'CHAT' as UseChatModelWithUseEnum,
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as UseChatModelWithUseEnum
+    };
+    export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const ThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as ThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as ThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
+        AUTO: 'AUTO' as ThinkingEnum
+    };
 }

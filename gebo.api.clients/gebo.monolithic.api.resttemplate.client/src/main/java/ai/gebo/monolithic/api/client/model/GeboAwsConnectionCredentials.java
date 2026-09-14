@@ -22,9 +22,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboAwsConnectionCredentials
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T09:01:39.494209200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GeboAwsConnectionCredentials {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("accessKeyId")
   private String accessKeyId = null;
 
@@ -116,6 +119,24 @@ public class GeboAwsConnectionCredentials {
   }  @JsonProperty("region")
   private RegionEnum region = null;
 
+  public GeboAwsConnectionCredentials readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
   public GeboAwsConnectionCredentials accessKeyId(String accessKeyId) {
     this.accessKeyId = accessKeyId;
     return this;
@@ -180,14 +201,15 @@ public class GeboAwsConnectionCredentials {
       return false;
     }
     GeboAwsConnectionCredentials geboAwsConnectionCredentials = (GeboAwsConnectionCredentials) o;
-    return Objects.equals(this.accessKeyId, geboAwsConnectionCredentials.accessKeyId) &&
+    return Objects.equals(this.readOnly, geboAwsConnectionCredentials.readOnly) &&
+        Objects.equals(this.accessKeyId, geboAwsConnectionCredentials.accessKeyId) &&
         Objects.equals(this.secretAccessKey, geboAwsConnectionCredentials.secretAccessKey) &&
         Objects.equals(this.region, geboAwsConnectionCredentials.region);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(accessKeyId, secretAccessKey, region);
+    return Objects.hash(readOnly, accessKeyId, secretAccessKey, region);
   }
 
 
@@ -196,6 +218,7 @@ public class GeboAwsConnectionCredentials {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboAwsConnectionCredentials {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    accessKeyId: ").append(toIndentedString(accessKeyId)).append("\n");
     sb.append("    secretAccessKey: ").append(toIndentedString(secretAccessKey)).append("\n");
     sb.append("    region: ").append(toIndentedString(region)).append("\n");

@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class BraveSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -137,10 +137,10 @@ public class BraveSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GBraveSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getBraveSearchApiCredentials() throws RestClientException {
+    public List<GBraveSearchApiCredentials> getBraveSearchApiCredentials() throws RestClientException {
         return getBraveSearchApiCredentialsWithHttpInfo().getBody();
     }
 
@@ -148,10 +148,10 @@ public class BraveSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBraveSearchApiCredentials&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getBraveSearchApiCredentialsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GBraveSearchApiCredentials>> getBraveSearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/BraveSearchConfigurationController/getBraveSearchApiCredentials").build().toUriString();
         
@@ -168,7 +168,7 @@ public class BraveSearchConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GBraveSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GBraveSearchApiCredentials>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -263,7 +263,7 @@ public class BraveSearchConfigurationControllerApi {
      * @return GBraveSearchApiCredentials
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GBraveSearchApiCredentials searchGBraveSearchApiCredentialsByCode(Object code) throws RestClientException {
+    public GBraveSearchApiCredentials searchGBraveSearchApiCredentialsByCode(String code) throws RestClientException {
         return searchGBraveSearchApiCredentialsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -275,7 +275,7 @@ public class BraveSearchConfigurationControllerApi {
      * @return ResponseEntity&lt;GBraveSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GBraveSearchApiCredentials> searchGBraveSearchApiCredentialsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GBraveSearchApiCredentials> searchGBraveSearchApiCredentialsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

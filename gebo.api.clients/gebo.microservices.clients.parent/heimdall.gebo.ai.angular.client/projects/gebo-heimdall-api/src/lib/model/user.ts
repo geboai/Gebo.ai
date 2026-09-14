@@ -11,13 +11,27 @@
  */
 
 export interface User { 
-    name?: any;
-    sourname?: any;
-    username?: any;
-    imageUrl?: any;
-    emailVerified?: any;
-    disabled?: any;
-    provider: any;
-    roles?: any;
-    langCode?: any;
+    name?: string;
+    sourname?: string;
+    username?: string;
+    imageUrl?: string;
+    emailVerified?: boolean;
+    disabled?: boolean;
+    provider: User.ProviderEnum;
+    roles?: Array<string>;
+    langCode?: string;
+}
+export namespace User {
+    export type ProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'aws_identity_center' | 'keycloak' | 'oauth2_generic' | 'ldap';
+    export const ProviderEnum = {
+        Local: 'local' as ProviderEnum,
+        Google: 'google' as ProviderEnum,
+        Microsoft: 'microsoft' as ProviderEnum,
+        MicrosoftMultitenant: 'microsoft_multitenant' as ProviderEnum,
+        AwsCognito: 'aws_cognito' as ProviderEnum,
+        AwsIdentityCenter: 'aws_identity_center' as ProviderEnum,
+        Keycloak: 'keycloak' as ProviderEnum,
+        Oauth2Generic: 'oauth2_generic' as ProviderEnum,
+        Ldap: 'ldap' as ProviderEnum
+    };
 }

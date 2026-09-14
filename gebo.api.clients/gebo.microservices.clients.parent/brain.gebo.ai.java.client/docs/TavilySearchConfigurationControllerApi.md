@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getTavilySearchApiCredentials"></a>
 # **getTavilySearchApiCredentials**
-> Object getTavilySearchApiCredentials()
+> List&lt;GTavilySearchApiCredentials&gt; getTavilySearchApiCredentials()
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 
 TavilySearchConfigurationControllerApi apiInstance = new TavilySearchConfigurationControllerApi();
 try {
-    Object result = apiInstance.getTavilySearchApiCredentials();
+    List<GTavilySearchApiCredentials> result = apiInstance.getTavilySearchApiCredentials();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling TavilySearchConfigurationControllerApi#getTavilySearchApiCredentials");
@@ -125,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GTavilySearchApiCredentials&gt;**](GTavilySearchApiCredentials.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ No authorization required
 
 
 TavilySearchConfigurationControllerApi apiInstance = new TavilySearchConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GTavilySearchApiCredentials result = apiInstance.searchGTavilySearchApiCredentialsByCode(code);
     System.out.println(result);
@@ -246,7 +246,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

@@ -9,22 +9,23 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AgentNetworkParticipant } from './agentNetworkParticipant';
 
 export interface GAgentsNetwork { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    maxLoopIteration?: any;
-    accessibleToAll?: any;
-    accessibleUsers?: any;
-    accessibleGroups?: any;
-    aclAliases?: any;
-    agentsNetworkServiceFactoryId: any;
-    scenarioDescription: any;
-    agents: any;
-    readOnly?: any;
-    defaultUserInteractionNetwork?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    maxLoopIteration?: number;
+    accessibleToAll?: boolean;
+    accessibleUsers?: Array<string>;
+    accessibleGroups?: Array<string>;
+    aclAliases?: Array<number>;
+    agentsNetworkServiceFactoryId: string;
+    scenarioDescription: string;
+    agents: Array<AgentNetworkParticipant>;
+    readOnly?: boolean;
+    defaultUserInteractionNetwork?: boolean;
 }

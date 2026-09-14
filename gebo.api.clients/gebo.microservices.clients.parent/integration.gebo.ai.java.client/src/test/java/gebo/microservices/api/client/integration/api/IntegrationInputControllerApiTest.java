@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.integration.api;
 
+import java.io.File;
 import gebo.microservices.api.client.integration.model.IntegrationDocumentEnvelop;
 import gebo.microservices.api.client.integration.model.JobTicket;
 import org.junit.Test;
@@ -40,8 +41,8 @@ public class IntegrationInputControllerApiTest {
      */
     @Test
     public void publishContentsTest() {
-        Object body = null;
-        Object endpointCode = null;
+        List<JobTicket> body = null;
+        String endpointCode = null;
         JobTicket response = api.publishContents(body, endpointCode);
 
         // TODO: test validations
@@ -56,7 +57,7 @@ public class IntegrationInputControllerApiTest {
      */
     @Test
     public void publishSyncTest() {
-        Object endpointCode = null;
+        String endpointCode = null;
         JobTicket response = api.publishSync(endpointCode);
 
         // TODO: test validations
@@ -72,8 +73,8 @@ public class IntegrationInputControllerApiTest {
     @Test
     public void spoolDocumentTest() {
         IntegrationDocumentEnvelop body = null;
-        Object endpointCode = null;
-        Object relativePath = null;
+        String endpointCode = null;
+        String relativePath = null;
         JobTicket response = api.spoolDocument(body, endpointCode, relativePath);
 
         // TODO: test validations
@@ -88,9 +89,9 @@ public class IntegrationInputControllerApiTest {
      */
     @Test
     public void spoolDocument1Test() {
-        Object file = null;
-        Object endpointCode = null;
-        Object relativePath = null;
+        File file = null;
+        String endpointCode = null;
+        String relativePath = null;
         JobTicket response = api.spoolDocument1(file, endpointCode, relativePath);
 
         // TODO: test validations

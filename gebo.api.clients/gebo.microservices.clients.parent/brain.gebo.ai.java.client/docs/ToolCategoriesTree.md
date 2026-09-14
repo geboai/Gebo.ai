@@ -4,4 +4,4 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **category** | [**ToolsCategory**](ToolsCategory.md) |  |  [optional]
-**toolsReference** | **Object** |  |  [optional]
+**toolsReference** | [**List&lt;ToolReference&gt;**](ToolReference.md) |  |  [optional]

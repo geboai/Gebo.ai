@@ -43,8 +43,8 @@ public class CompanySystemsControllerApiTest {
      */
     @Test
     public void getContentSystemTest() {
-        Object systemTypeCode = null;
-        Object systemCode = null;
+        String systemTypeCode = null;
+        String systemCode = null;
         GContentManagementSystem response = api.getContentSystem(systemTypeCode, systemCode);
 
         // TODO: test validations
@@ -59,7 +59,7 @@ public class CompanySystemsControllerApiTest {
      */
     @Test
     public void getContentSystemTypeTest() {
-        Object systemTypeCode = null;
+        String systemTypeCode = null;
         GContentManagementSystemType response = api.getContentSystemType(systemTypeCode);
 
         // TODO: test validations
@@ -74,7 +74,7 @@ public class CompanySystemsControllerApiTest {
      */
     @Test
     public void getContentSystemTypesTest() {
-        Object response = api.getContentSystemTypes();
+        List<GContentManagementSystemType> response = api.getContentSystemTypes();
 
         // TODO: test validations
     }
@@ -88,7 +88,7 @@ public class CompanySystemsControllerApiTest {
      */
     @Test
     public void getContentSystemsTest() {
-        Object response = api.getContentSystems();
+        List<GContentManagementSystem> response = api.getContentSystems();
 
         // TODO: test validations
     }
@@ -102,9 +102,9 @@ public class CompanySystemsControllerApiTest {
      */
     @Test
     public void getProjectEndpointTest() {
-        Object systemTypeCode = null;
-        Object systemCode = null;
-        Object projectEndpointCode = null;
+        String systemTypeCode = null;
+        String systemCode = null;
+        String projectEndpointCode = null;
         GProjectEndpoint response = api.getProjectEndpoint(systemTypeCode, systemCode, projectEndpointCode);
 
         // TODO: test validations

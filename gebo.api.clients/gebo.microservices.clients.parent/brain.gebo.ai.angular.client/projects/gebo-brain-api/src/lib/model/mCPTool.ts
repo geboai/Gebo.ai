@@ -11,13 +11,13 @@
  */
 
 export interface MCPTool { 
-    accessibleGroups?: any;
-    accessibleUsers?: any;
-    accessibleToAll?: any;
-    aclAliases?: any;
-    name?: any;
-    deletedOnMCPServer?: any;
-    addedOnMCPServer?: any;
-    description?: any;
-    inputSchema?: any;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
+    name?: string;
+    deletedOnMCPServer?: boolean;
+    addedOnMCPServer?: boolean;
+    description?: string;
+    inputSchema?: string;
 }

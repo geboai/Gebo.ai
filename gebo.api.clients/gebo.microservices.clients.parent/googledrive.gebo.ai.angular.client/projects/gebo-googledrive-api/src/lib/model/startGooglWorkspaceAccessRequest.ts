@@ -11,7 +11,7 @@
  */
 
 export interface StartGooglWorkspaceAccessRequest { 
-    user: any;
-    uiSuccessForward: any;
-    uiErrorForward: any;
+    user: string;
+    uiSuccessForward: string;
+    uiErrorForward: string;
 }

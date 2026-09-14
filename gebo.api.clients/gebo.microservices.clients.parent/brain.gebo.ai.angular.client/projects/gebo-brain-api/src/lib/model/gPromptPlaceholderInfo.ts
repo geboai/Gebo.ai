@@ -11,6 +11,6 @@
  */
 
 export interface GPromptPlaceholderInfo { 
-    placeholder?: any;
-    description?: any;
+    placeholder?: string;
+    description?: string;
 }

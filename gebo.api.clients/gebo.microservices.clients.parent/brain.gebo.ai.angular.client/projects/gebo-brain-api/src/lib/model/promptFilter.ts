@@ -11,8 +11,8 @@
  */
 
 export interface PromptFilter { 
-    modelUse?: any;
-    langCode?: any;
-    modelProvider?: any;
-    modelCode?: any;
+    modelUse?: string;
+    langCode?: string;
+    modelProvider?: string;
+    modelCode?: string;
 }

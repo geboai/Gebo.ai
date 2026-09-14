@@ -9,8 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ComponentMetaInfo } from './componentMetaInfo';
 
 export interface GModuleMetaInfo { 
-    messagingModuleId?: any;
-    components?: any;
+    messagingModuleId?: string;
+    components?: Array<ComponentMetaInfo>;
 }

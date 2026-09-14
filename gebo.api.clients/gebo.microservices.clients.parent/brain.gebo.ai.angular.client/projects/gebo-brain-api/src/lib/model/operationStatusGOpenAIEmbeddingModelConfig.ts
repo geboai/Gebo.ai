@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GOpenAIEmbeddingModelConfig } from './gOpenAIEmbeddingModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGOpenAIEmbeddingModelConfig { 
     result?: GOpenAIEmbeddingModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

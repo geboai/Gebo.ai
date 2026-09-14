@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="semanticSearch"></a>
 # **semanticSearch**
-> Object semanticSearch(body)
+> List&lt;String&gt; semanticSearch(body)
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 GeboUserKnowledgeBaseSemanticSearchControllerApi apiInstance = new GeboUserKnowledgeBaseSemanticSearchControllerApi();
 SemanticQueryParam body = new SemanticQueryParam(); // SemanticQueryParam | 
 try {
-    Object result = apiInstance.semanticSearch(body);
+    List<String> result = apiInstance.semanticSearch(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboUserKnowledgeBaseSemanticSearchControllerApi#semanticSearch");
@@ -38,7 +38,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+**List&lt;String&gt;**
 
 ### Authorization
 

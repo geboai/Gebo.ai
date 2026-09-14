@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * OptimizedThreashold
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class OptimizedThreashold {
   @JsonProperty("optimizedThreashold")
-  private Object optimizedThreashold = null;
+  private Double optimizedThreashold = null;
 
   @JsonProperty("firstHopOptimizedThreashold")
-  private Object firstHopOptimizedThreashold = null;
+  private Double firstHopOptimizedThreashold = null;
 
   @JsonProperty("secondHopOptimizedThreashold")
-  private Object secondHopOptimizedThreashold = null;
+  private Double secondHopOptimizedThreashold = null;
 
-  public OptimizedThreashold optimizedThreashold(Object optimizedThreashold) {
+  public OptimizedThreashold optimizedThreashold(Double optimizedThreashold) {
     this.optimizedThreashold = optimizedThreashold;
     return this;
   }
@@ -44,15 +44,15 @@ public class OptimizedThreashold {
    * @return optimizedThreashold
   **/
   @Schema(description = "")
-  public Object getOptimizedThreashold() {
+  public Double getOptimizedThreashold() {
     return optimizedThreashold;
   }
 
-  public void setOptimizedThreashold(Object optimizedThreashold) {
+  public void setOptimizedThreashold(Double optimizedThreashold) {
     this.optimizedThreashold = optimizedThreashold;
   }
 
-  public OptimizedThreashold firstHopOptimizedThreashold(Object firstHopOptimizedThreashold) {
+  public OptimizedThreashold firstHopOptimizedThreashold(Double firstHopOptimizedThreashold) {
     this.firstHopOptimizedThreashold = firstHopOptimizedThreashold;
     return this;
   }
@@ -62,15 +62,15 @@ public class OptimizedThreashold {
    * @return firstHopOptimizedThreashold
   **/
   @Schema(description = "")
-  public Object getFirstHopOptimizedThreashold() {
+  public Double getFirstHopOptimizedThreashold() {
     return firstHopOptimizedThreashold;
   }
 
-  public void setFirstHopOptimizedThreashold(Object firstHopOptimizedThreashold) {
+  public void setFirstHopOptimizedThreashold(Double firstHopOptimizedThreashold) {
     this.firstHopOptimizedThreashold = firstHopOptimizedThreashold;
   }
 
-  public OptimizedThreashold secondHopOptimizedThreashold(Object secondHopOptimizedThreashold) {
+  public OptimizedThreashold secondHopOptimizedThreashold(Double secondHopOptimizedThreashold) {
     this.secondHopOptimizedThreashold = secondHopOptimizedThreashold;
     return this;
   }
@@ -80,11 +80,11 @@ public class OptimizedThreashold {
    * @return secondHopOptimizedThreashold
   **/
   @Schema(description = "")
-  public Object getSecondHopOptimizedThreashold() {
+  public Double getSecondHopOptimizedThreashold() {
     return secondHopOptimizedThreashold;
   }
 
-  public void setSecondHopOptimizedThreashold(Object secondHopOptimizedThreashold) {
+  public void setSecondHopOptimizedThreashold(Double secondHopOptimizedThreashold) {
     this.secondHopOptimizedThreashold = secondHopOptimizedThreashold;
   }
 

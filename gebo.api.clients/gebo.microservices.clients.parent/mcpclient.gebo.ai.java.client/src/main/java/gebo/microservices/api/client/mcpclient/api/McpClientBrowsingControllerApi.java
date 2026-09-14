@@ -6,6 +6,7 @@ import gebo.microservices.api.client.mcpclient.model.BrowseParam;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.mcpclient.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.mcpclient.model.VFilesystemReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:50.381843566+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:36.887590537+02:00[Europe/Rome]")
 
 public class McpClientBrowsingControllerApi {
     private ApiClient apiClient;
@@ -54,7 +55,7 @@ public class McpClientBrowsingControllerApi {
      * @return OperationStatusListPathInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListPathInfo browseMCPClientPath(BrowseParam body, Object mcpClientConfigCode) throws RestClientException {
+    public OperationStatusListPathInfo browseMCPClientPath(BrowseParam body, String mcpClientConfigCode) throws RestClientException {
         return browseMCPClientPathWithHttpInfo(body, mcpClientConfigCode).getBody();
     }
 
@@ -67,7 +68,7 @@ public class McpClientBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListPathInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListPathInfo> browseMCPClientPathWithHttpInfo(BrowseParam body, Object mcpClientConfigCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListPathInfo> browseMCPClientPathWithHttpInfo(BrowseParam body, String mcpClientConfigCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -107,7 +108,7 @@ public class McpClientBrowsingControllerApi {
      * @return OperationStatusListVirtualFilesystemNavigationTreeStatus
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListVirtualFilesystemNavigationTreeStatus getMCPClientNavigationStatus(Object body, Object mcpClientConfigCode) throws RestClientException {
+    public OperationStatusListVirtualFilesystemNavigationTreeStatus getMCPClientNavigationStatus(List<VFilesystemReference> body, String mcpClientConfigCode) throws RestClientException {
         return getMCPClientNavigationStatusWithHttpInfo(body, mcpClientConfigCode).getBody();
     }
 
@@ -120,7 +121,7 @@ public class McpClientBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListVirtualFilesystemNavigationTreeStatus&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getMCPClientNavigationStatusWithHttpInfo(Object body, Object mcpClientConfigCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListVirtualFilesystemNavigationTreeStatus> getMCPClientNavigationStatusWithHttpInfo(List<VFilesystemReference> body, String mcpClientConfigCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -159,7 +160,7 @@ public class McpClientBrowsingControllerApi {
      * @return OperationStatusListGVirtualFilesystemRoot
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusListGVirtualFilesystemRoot getMCPClientRoots(Object mcpClientConfigCode) throws RestClientException {
+    public OperationStatusListGVirtualFilesystemRoot getMCPClientRoots(String mcpClientConfigCode) throws RestClientException {
         return getMCPClientRootsWithHttpInfo(mcpClientConfigCode).getBody();
     }
 
@@ -171,7 +172,7 @@ public class McpClientBrowsingControllerApi {
      * @return ResponseEntity&lt;OperationStatusListGVirtualFilesystemRoot&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getMCPClientRootsWithHttpInfo(Object mcpClientConfigCode) throws RestClientException {
+    public ResponseEntity<OperationStatusListGVirtualFilesystemRoot> getMCPClientRootsWithHttpInfo(String mcpClientConfigCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'mcpClientConfigCode' is set
         if (mcpClientConfigCode == null) {

@@ -206,10 +206,10 @@ export class ConfluenceSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findConfluenceEndpointsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GConfluenceProjectEndpoint>;
-    public findConfluenceEndpointsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GConfluenceProjectEndpoint>>;
-    public findConfluenceEndpointsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GConfluenceProjectEndpoint>>;
-    public findConfluenceEndpointsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findConfluenceEndpointsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GConfluenceProjectEndpoint>;
+    public findConfluenceEndpointsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GConfluenceProjectEndpoint>>;
+    public findConfluenceEndpointsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GConfluenceProjectEndpoint>>;
+    public findConfluenceEndpointsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findConfluenceEndpointsByCode.');
@@ -253,10 +253,10 @@ export class ConfluenceSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findConfluenceEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findConfluenceEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findConfluenceEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findConfluenceEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findConfluenceEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GConfluenceProjectEndpoint>>;
+    public findConfluenceEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GConfluenceProjectEndpoint>>>;
+    public findConfluenceEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GConfluenceProjectEndpoint>>>;
+    public findConfluenceEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findConfluenceEndpointsByProject.');
@@ -282,7 +282,7 @@ export class ConfluenceSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByProject`,
+        return this.httpClient.request<Array<GConfluenceProjectEndpoint>>('get',`${this.basePath}/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -300,9 +300,9 @@ export class ConfluenceSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findConfluenceEndpointsByQbe(body: GConfluenceProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findConfluenceEndpointsByQbe(body: GConfluenceProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findConfluenceEndpointsByQbe(body: GConfluenceProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findConfluenceEndpointsByQbe(body: GConfluenceProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GConfluenceProjectEndpoint>>;
+    public findConfluenceEndpointsByQbe(body: GConfluenceProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GConfluenceProjectEndpoint>>>;
+    public findConfluenceEndpointsByQbe(body: GConfluenceProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GConfluenceProjectEndpoint>>>;
     public findConfluenceEndpointsByQbe(body: GConfluenceProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -329,7 +329,7 @@ export class ConfluenceSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByQbe`,
+        return this.httpClient.request<Array<GConfluenceProjectEndpoint>>('post',`${this.basePath}/api/admin/ConfluenceSystemsController/findConfluenceEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -347,10 +347,10 @@ export class ConfluenceSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findConfluenceSystemByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GConfluenceSystem>;
-    public findConfluenceSystemByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GConfluenceSystem>>;
-    public findConfluenceSystemByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GConfluenceSystem>>;
-    public findConfluenceSystemByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findConfluenceSystemByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GConfluenceSystem>;
+    public findConfluenceSystemByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GConfluenceSystem>>;
+    public findConfluenceSystemByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GConfluenceSystem>>;
+    public findConfluenceSystemByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findConfluenceSystemByCode.');
@@ -429,9 +429,9 @@ export class ConfluenceSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getConfluenceSystems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getConfluenceSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getConfluenceSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getConfluenceSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<GConfluenceSystem>>;
+    public getConfluenceSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GConfluenceSystem>>>;
+    public getConfluenceSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GConfluenceSystem>>>;
     public getConfluenceSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -449,7 +449,7 @@ export class ConfluenceSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/ConfluenceSystemsController/getConfluenceSystems`,
+        return this.httpClient.request<Array<GConfluenceSystem>>('get',`${this.basePath}/api/admin/ConfluenceSystemsController/getConfluenceSystems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

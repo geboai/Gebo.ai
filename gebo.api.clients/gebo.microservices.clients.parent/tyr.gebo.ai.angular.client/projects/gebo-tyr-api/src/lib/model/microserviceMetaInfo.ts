@@ -9,8 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModuleMetaInfo } from './gModuleMetaInfo';
 
 export interface MicroserviceMetaInfo { 
-    microserviceId?: any;
-    modules?: any;
+    microserviceId?: string;
+    modules?: Array<GModuleMetaInfo>;
 }

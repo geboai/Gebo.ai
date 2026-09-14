@@ -18,23 +18,64 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * CreateUserIfNotExistsRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class CreateUserIfNotExistsRequest {
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("attributes")
-  private Object attributes = null;
+  private Map<String, Object> attributes = null;
 
-  @JsonProperty("authProvider")
-  private Object authProvider = null;
+  /**
+   * Gets or Sets authProvider
+   */
+  public enum AuthProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
 
-  public CreateUserIfNotExistsRequest username(Object username) {
+    private String value;
+
+    AuthProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthProviderEnum fromValue(String input) {
+      for (AuthProviderEnum b : AuthProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authProvider")
+  private AuthProviderEnum authProvider = null;
+
+  public CreateUserIfNotExistsRequest username(String username) {
     this.username = username;
     return this;
   }
@@ -44,16 +85,24 @@ public class CreateUserIfNotExistsRequest {
    * @return username
   **/
   @Schema(description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public CreateUserIfNotExistsRequest attributes(Object attributes) {
+  public CreateUserIfNotExistsRequest attributes(Map<String, Object> attributes) {
     this.attributes = attributes;
+    return this;
+  }
+
+  public CreateUserIfNotExistsRequest putAttributesItem(String key, Object attributesItem) {
+    if (this.attributes == null) {
+      this.attributes = new HashMap<>();
+    }
+    this.attributes.put(key, attributesItem);
     return this;
   }
 
@@ -62,15 +111,15 @@ public class CreateUserIfNotExistsRequest {
    * @return attributes
   **/
   @Schema(description = "")
-  public Object getAttributes() {
+  public Map<String, Object> getAttributes() {
     return attributes;
   }
 
-  public void setAttributes(Object attributes) {
+  public void setAttributes(Map<String, Object> attributes) {
     this.attributes = attributes;
   }
 
-  public CreateUserIfNotExistsRequest authProvider(Object authProvider) {
+  public CreateUserIfNotExistsRequest authProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
     return this;
   }
@@ -80,11 +129,11 @@ public class CreateUserIfNotExistsRequest {
    * @return authProvider
   **/
   @Schema(description = "")
-  public Object getAuthProvider() {
+  public AuthProviderEnum getAuthProvider() {
     return authProvider;
   }
 
-  public void setAuthProvider(Object authProvider) {
+  public void setAuthProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
   }
 

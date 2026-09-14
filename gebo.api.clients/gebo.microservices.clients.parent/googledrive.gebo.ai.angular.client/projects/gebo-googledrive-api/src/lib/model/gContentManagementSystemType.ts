@@ -11,11 +11,20 @@
  */
 
 export interface GContentManagementSystemType { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    capabilities?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    capabilities?: Array<GContentManagementSystemType.CapabilitiesEnum>;
+}
+export namespace GContentManagementSystemType {
+    export type CapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';
+    export const CapabilitiesEnum = {
+        TICKETSMANAGEMENT: 'TICKETS_MANAGEMENT' as CapabilitiesEnum,
+        DOCUMENTSMANAGEMENT: 'DOCUMENTS_MANAGEMENT' as CapabilitiesEnum,
+        SOURCEMANAGEMENT: 'SOURCE_MANAGEMENT' as CapabilitiesEnum,
+        ARTIFACTSREPOSITORYMANAGEMENT: 'ARTIFACTS_REPOSITORY_MANAGEMENT' as CapabilitiesEnum
+    };
 }

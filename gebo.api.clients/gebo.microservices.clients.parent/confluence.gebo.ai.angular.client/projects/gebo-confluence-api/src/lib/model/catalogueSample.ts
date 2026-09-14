@@ -11,6 +11,6 @@
  */
 
 export interface CatalogueSample { 
-    code: any;
-    description: any;
+    code: string;
+    description: string;
 }

@@ -11,6 +11,6 @@
  */
 
 export interface ChatUIOptions { 
-    enablePureModelChat?: any;
-    defaultUILanguage?: any;
+    enablePureModelChat?: boolean;
+    defaultUILanguage?: string;
 }

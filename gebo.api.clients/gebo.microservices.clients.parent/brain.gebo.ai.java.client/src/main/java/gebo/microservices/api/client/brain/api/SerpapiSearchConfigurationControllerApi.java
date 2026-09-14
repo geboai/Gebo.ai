@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class SerpapiSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -137,10 +137,10 @@ public class SerpapiSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GSerpapiSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getSerpapiSearchApiCredentials() throws RestClientException {
+    public List<GSerpapiSearchApiCredentials> getSerpapiSearchApiCredentials() throws RestClientException {
         return getSerpapiSearchApiCredentialsWithHttpInfo().getBody();
     }
 
@@ -148,10 +148,10 @@ public class SerpapiSearchConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GSerpapiSearchApiCredentials&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getSerpapiSearchApiCredentialsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GSerpapiSearchApiCredentials>> getSerpapiSearchApiCredentialsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/SerpapiSearchConfigurationController/getSerpapiSearchApiCredentials").build().toUriString();
         
@@ -168,7 +168,7 @@ public class SerpapiSearchConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GSerpapiSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GSerpapiSearchApiCredentials>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -263,7 +263,7 @@ public class SerpapiSearchConfigurationControllerApi {
      * @return GSerpapiSearchApiCredentials
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GSerpapiSearchApiCredentials searchGSerpapiSearchApiCredentialsByCode(Object code) throws RestClientException {
+    public GSerpapiSearchApiCredentials searchGSerpapiSearchApiCredentialsByCode(String code) throws RestClientException {
         return searchGSerpapiSearchApiCredentialsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -275,7 +275,7 @@ public class SerpapiSearchConfigurationControllerApi {
      * @return ResponseEntity&lt;GSerpapiSearchApiCredentials&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GSerpapiSearchApiCredentials> searchGSerpapiSearchApiCredentialsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GSerpapiSearchApiCredentials> searchGSerpapiSearchApiCredentialsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

@@ -17,20 +17,23 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.sharepoint.model.CatalogueSample;
 import gebo.microservices.api.client.sharepoint.model.SearchableSystemMetaData;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * CustomTemplateParamsRequestBody
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class CustomTemplateParamsRequestBody {
   @JsonProperty("searchableSystemMetaData")
   private SearchableSystemMetaData searchableSystemMetaData = null;
 
   @JsonProperty("cataloguesSample")
-  private Object cataloguesSample = null;
+  private List<CatalogueSample> cataloguesSample = null;
 
   public CustomTemplateParamsRequestBody searchableSystemMetaData(SearchableSystemMetaData searchableSystemMetaData) {
     this.searchableSystemMetaData = searchableSystemMetaData;
@@ -50,8 +53,16 @@ public class CustomTemplateParamsRequestBody {
     this.searchableSystemMetaData = searchableSystemMetaData;
   }
 
-  public CustomTemplateParamsRequestBody cataloguesSample(Object cataloguesSample) {
+  public CustomTemplateParamsRequestBody cataloguesSample(List<CatalogueSample> cataloguesSample) {
     this.cataloguesSample = cataloguesSample;
+    return this;
+  }
+
+  public CustomTemplateParamsRequestBody addCataloguesSampleItem(CatalogueSample cataloguesSampleItem) {
+    if (this.cataloguesSample == null) {
+      this.cataloguesSample = new ArrayList<>();
+    }
+    this.cataloguesSample.add(cataloguesSampleItem);
     return this;
   }
 
@@ -60,11 +71,11 @@ public class CustomTemplateParamsRequestBody {
    * @return cataloguesSample
   **/
   @Schema(description = "")
-  public Object getCataloguesSample() {
+  public List<CatalogueSample> getCataloguesSample() {
     return cataloguesSample;
   }
 
-  public void setCataloguesSample(Object cataloguesSample) {
+  public void setCataloguesSample(List<CatalogueSample> cataloguesSample) {
     this.cataloguesSample = cataloguesSample;
   }
 

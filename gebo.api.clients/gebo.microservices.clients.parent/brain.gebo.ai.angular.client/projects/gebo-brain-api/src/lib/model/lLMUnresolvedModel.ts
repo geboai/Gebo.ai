@@ -9,11 +9,28 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GBaseModelChoice } from './gBaseModelChoice';
 
 export interface LLMUnresolvedModel { 
-    type?: any;
-    uses?: any;
-    serviceHandler?: any;
-    requestedModelCode?: any;
-    availableChoices?: any;
+    type?: LLMUnresolvedModel.TypeEnum;
+    uses?: Array<LLMUnresolvedModel.UsesEnum>;
+    serviceHandler?: string;
+    requestedModelCode?: string;
+    availableChoices?: Array<GBaseModelChoice>;
+}
+export namespace LLMUnresolvedModel {
+    export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
+    export const TypeEnum = {
+        CHAT: 'CHAT' as TypeEnum,
+        EMBEDDING: 'EMBEDDING' as TypeEnum,
+        RANKING: 'RANKING' as TypeEnum,
+        IMAGESGEN: 'IMAGESGEN' as TypeEnum,
+        TTS: 'TTS' as TypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as TypeEnum
+    };
+    export type UsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
+    export const UsesEnum = {
+        CHAT: 'CHAT' as UsesEnum,
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as UsesEnum
+    };
 }

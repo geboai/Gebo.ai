@@ -11,10 +11,27 @@
  */
 
 export interface ConfluenceAdditionalSearchFilter { 
-    titleTerms?: any;
-    titleTermsMatchMode?: any;
-    textTerms?: any;
-    textTermsMatchMode?: any;
-    labels?: any;
-    labelsMatchMode?: any;
+    titleTerms?: Array<string>;
+    titleTermsMatchMode?: ConfluenceAdditionalSearchFilter.TitleTermsMatchModeEnum;
+    textTerms?: Array<string>;
+    textTermsMatchMode?: ConfluenceAdditionalSearchFilter.TextTermsMatchModeEnum;
+    labels?: Array<string>;
+    labelsMatchMode?: ConfluenceAdditionalSearchFilter.LabelsMatchModeEnum;
+}
+export namespace ConfluenceAdditionalSearchFilter {
+    export type TitleTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TitleTermsMatchModeEnum = {
+        ANY: 'ANY' as TitleTermsMatchModeEnum,
+        ALL: 'ALL' as TitleTermsMatchModeEnum
+    };
+    export type TextTermsMatchModeEnum = 'ANY' | 'ALL';
+    export const TextTermsMatchModeEnum = {
+        ANY: 'ANY' as TextTermsMatchModeEnum,
+        ALL: 'ALL' as TextTermsMatchModeEnum
+    };
+    export type LabelsMatchModeEnum = 'ANY' | 'ALL';
+    export const LabelsMatchModeEnum = {
+        ANY: 'ANY' as LabelsMatchModeEnum,
+        ALL: 'ALL' as LabelsMatchModeEnum
+    };
 }

@@ -57,7 +57,7 @@ public class BedrockEmbeddingModelsConfigurationControllerApiTest {
      */
     @Test
     public void findBedrockEmbeddingModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GBedrockEmbeddingModelConfig response = api.findBedrockEmbeddingModelConfigByCode(code);
 
         // TODO: test validations

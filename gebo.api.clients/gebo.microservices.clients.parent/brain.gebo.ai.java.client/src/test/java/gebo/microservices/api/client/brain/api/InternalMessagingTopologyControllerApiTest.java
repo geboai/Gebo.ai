@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.GModuleMetaInfo;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +39,7 @@ public class InternalMessagingTopologyControllerApiTest {
      */
     @Test
     public void getLocalTopologyTest() {
-        Object response = api.getLocalTopology();
+        List<GModuleMetaInfo> response = api.getLocalTopology();
 
         // TODO: test validations
     }

@@ -148,7 +148,7 @@ No authorization required
 
 <a name="findAwsS3EndpointsByProject"></a>
 # **findAwsS3EndpointsByProject**
-> Object findAwsS3EndpointsByProject(parentProjectCode)
+> List&lt;GAwsS3ProjectEndpoint&gt; findAwsS3EndpointsByProject(parentProjectCode)
 
 
 
@@ -160,9 +160,9 @@ No authorization required
 
 
 AwsS3SystemsControllerApi apiInstance = new AwsS3SystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findAwsS3EndpointsByProject(parentProjectCode);
+    List<GAwsS3ProjectEndpoint> result = apiInstance.findAwsS3EndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling AwsS3SystemsControllerApi#findAwsS3EndpointsByProject");
@@ -174,11 +174,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GAwsS3ProjectEndpoint&gt;**](GAwsS3ProjectEndpoint.md)
 
 ### Authorization
 
@@ -191,7 +191,7 @@ No authorization required
 
 <a name="findAwsS3EndpointsByQbe"></a>
 # **findAwsS3EndpointsByQbe**
-> Object findAwsS3EndpointsByQbe(body)
+> List&lt;GAwsS3ProjectEndpoint&gt; findAwsS3EndpointsByQbe(body)
 
 
 
@@ -205,7 +205,7 @@ No authorization required
 AwsS3SystemsControllerApi apiInstance = new AwsS3SystemsControllerApi();
 GAwsS3ProjectEndpoint body = new GAwsS3ProjectEndpoint(); // GAwsS3ProjectEndpoint | 
 try {
-    Object result = apiInstance.findAwsS3EndpointsByQbe(body);
+    List<GAwsS3ProjectEndpoint> result = apiInstance.findAwsS3EndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling AwsS3SystemsControllerApi#findAwsS3EndpointsByQbe");
@@ -221,7 +221,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GAwsS3ProjectEndpoint&gt;**](GAwsS3ProjectEndpoint.md)
 
 ### Authorization
 
@@ -246,7 +246,7 @@ No authorization required
 
 
 AwsS3SystemsControllerApi apiInstance = new AwsS3SystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GAwsS3ProjectEndpoint result = apiInstance.findAwsS3ProjectEndpointByCode(code);
     System.out.println(result);
@@ -260,7 +260,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -289,7 +289,7 @@ No authorization required
 
 
 AwsS3SystemsControllerApi apiInstance = new AwsS3SystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GAwsS3System result = apiInstance.findAwsS3SystemByCode(code);
     System.out.println(result);
@@ -303,7 +303,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -359,7 +359,7 @@ No authorization required
 
 <a name="getAwsS3Systems"></a>
 # **getAwsS3Systems**
-> Object getAwsS3Systems()
+> List&lt;GAwsS3System&gt; getAwsS3Systems()
 
 
 
@@ -372,7 +372,7 @@ No authorization required
 
 AwsS3SystemsControllerApi apiInstance = new AwsS3SystemsControllerApi();
 try {
-    Object result = apiInstance.getAwsS3Systems();
+    List<GAwsS3System> result = apiInstance.getAwsS3Systems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling AwsS3SystemsControllerApi#getAwsS3Systems");
@@ -385,7 +385,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GAwsS3System&gt;**](GAwsS3System.md)
 
 ### Authorization
 

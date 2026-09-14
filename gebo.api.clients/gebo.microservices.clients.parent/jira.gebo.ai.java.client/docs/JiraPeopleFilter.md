@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**assigneesList** | **Object** |  |  [optional]
-**reportersList** | **Object** |  |  [optional]
-**creatorsList** | **Object** |  |  [optional]
+**assigneesList** | **List&lt;String&gt;** |  |  [optional]
+**reportersList** | **List&lt;String&gt;** |  |  [optional]
+**creatorsList** | **List&lt;String&gt;** |  |  [optional]

@@ -13,5 +13,5 @@ import { IGComponentOriginatedDocument } from './iGComponentOriginatedDocument';
 
 export interface GetCachedChunkSetRequest { 
     document?: IGComponentOriginatedDocument;
-    chunkSessionId?: any;
+    chunkSessionId?: string;
 }

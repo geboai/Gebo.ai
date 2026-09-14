@@ -68,7 +68,7 @@ No authorization required
 
 
 GeboChatControllerApi apiInstance = new GeboChatControllerApi();
-Object modelCode = null; // Object | 
+String modelCode = "modelCode_example"; // String | 
 try {
     GBaseChatModelChoice result = apiInstance.getChatModelMetaInfos(modelCode);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  |
+ **modelCode** | **String**|  |
 
 ### Return type
 
@@ -111,7 +111,7 @@ No authorization required
 
 
 GeboChatControllerApi apiInstance = new GeboChatControllerApi();
-Object modelCode = null; // Object | 
+String modelCode = "modelCode_example"; // String | 
 try {
     GeboChatUserInfo result = apiInstance.getChatModelUserInfo(modelCode);
     System.out.println(result);
@@ -125,7 +125,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  |
+ **modelCode** | **String**|  |
 
 ### Return type
 
@@ -154,7 +154,7 @@ No authorization required
 
 
 GeboChatControllerApi apiInstance = new GeboChatControllerApi();
-Object modelCode = null; // Object | 
+String modelCode = "modelCode_example"; // String | 
 try {
     ModelProviderCapabilities result = apiInstance.getProviderCapabilities(modelCode);
     System.out.println(result);
@@ -168,7 +168,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelCode** | [**Object**](.md)|  |
+ **modelCode** | **String**|  |
 
 ### Return type
 
@@ -185,7 +185,7 @@ No authorization required
 
 <a name="getVisibleKnowledgeBases"></a>
 # **getVisibleKnowledgeBases**
-> Object getVisibleKnowledgeBases()
+> List&lt;GBaseObject&gt; getVisibleKnowledgeBases()
 
 
 
@@ -198,7 +198,7 @@ No authorization required
 
 GeboChatControllerApi apiInstance = new GeboChatControllerApi();
 try {
-    Object result = apiInstance.getVisibleKnowledgeBases();
+    List<GBaseObject> result = apiInstance.getVisibleKnowledgeBases();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatControllerApi#getVisibleKnowledgeBases");
@@ -211,7 +211,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -224,7 +224,7 @@ No authorization required
 
 <a name="streamResponse"></a>
 # **streamResponse**
-> Object streamResponse(body)
+> List&lt;ServerSentEventString&gt; streamResponse(body)
 
 
 
@@ -238,7 +238,7 @@ No authorization required
 GeboChatControllerApi apiInstance = new GeboChatControllerApi();
 GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
 try {
-    Object result = apiInstance.streamResponse(body);
+    List<ServerSentEventString> result = apiInstance.streamResponse(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatControllerApi#streamResponse");
@@ -254,7 +254,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;ServerSentEventString&gt;**](ServerSentEventString.md)
 
 ### Authorization
 

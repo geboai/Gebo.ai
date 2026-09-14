@@ -18,41 +18,42 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GeneratedApiKey
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeneratedApiKey {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("apiKey")
-  private Object apiKey = null;
+  private String apiKey = null;
 
   @JsonProperty("expiration")
-  private Object expiration = null;
+  private Date expiration = null;
 
   @JsonProperty("impersonatedUser")
-  private Object impersonatedUser = null;
+  private String impersonatedUser = null;
 
-  public GeneratedApiKey code(Object code) {
+  public GeneratedApiKey code(String code) {
     this.code = code;
     return this;
   }
@@ -62,15 +63,15 @@ public class GeneratedApiKey {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GeneratedApiKey description(Object description) {
+  public GeneratedApiKey description(String description) {
     this.description = description;
     return this;
   }
@@ -80,15 +81,15 @@ public class GeneratedApiKey {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GeneratedApiKey userModified(Object userModified) {
+  public GeneratedApiKey userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -98,15 +99,15 @@ public class GeneratedApiKey {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GeneratedApiKey userCreated(Object userCreated) {
+  public GeneratedApiKey userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -116,15 +117,15 @@ public class GeneratedApiKey {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GeneratedApiKey dateModified(Object dateModified) {
+  public GeneratedApiKey dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -134,15 +135,15 @@ public class GeneratedApiKey {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GeneratedApiKey dateCreated(Object dateCreated) {
+  public GeneratedApiKey dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -152,15 +153,15 @@ public class GeneratedApiKey {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GeneratedApiKey apiKey(Object apiKey) {
+  public GeneratedApiKey apiKey(String apiKey) {
     this.apiKey = apiKey;
     return this;
   }
@@ -170,15 +171,15 @@ public class GeneratedApiKey {
    * @return apiKey
   **/
   @Schema(required = true, description = "")
-  public Object getApiKey() {
+  public String getApiKey() {
     return apiKey;
   }
 
-  public void setApiKey(Object apiKey) {
+  public void setApiKey(String apiKey) {
     this.apiKey = apiKey;
   }
 
-  public GeneratedApiKey expiration(Object expiration) {
+  public GeneratedApiKey expiration(Date expiration) {
     this.expiration = expiration;
     return this;
   }
@@ -188,15 +189,15 @@ public class GeneratedApiKey {
    * @return expiration
   **/
   @Schema(required = true, description = "")
-  public Object getExpiration() {
+  public Date getExpiration() {
     return expiration;
   }
 
-  public void setExpiration(Object expiration) {
+  public void setExpiration(Date expiration) {
     this.expiration = expiration;
   }
 
-  public GeneratedApiKey impersonatedUser(Object impersonatedUser) {
+  public GeneratedApiKey impersonatedUser(String impersonatedUser) {
     this.impersonatedUser = impersonatedUser;
     return this;
   }
@@ -206,11 +207,11 @@ public class GeneratedApiKey {
    * @return impersonatedUser
   **/
   @Schema(required = true, description = "")
-  public Object getImpersonatedUser() {
+  public String getImpersonatedUser() {
     return impersonatedUser;
   }
 
-  public void setImpersonatedUser(Object impersonatedUser) {
+  public void setImpersonatedUser(String impersonatedUser) {
     this.impersonatedUser = impersonatedUser;
   }
 

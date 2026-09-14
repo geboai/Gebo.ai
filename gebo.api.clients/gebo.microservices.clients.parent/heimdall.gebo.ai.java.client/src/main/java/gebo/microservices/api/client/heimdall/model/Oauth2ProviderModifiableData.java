@@ -24,14 +24,52 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Oauth2ProviderModifiableData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class Oauth2ProviderModifiableData {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
-  @JsonProperty("authProvider")
-  private Object authProvider = null;
+  /**
+   * Gets or Sets authProvider
+   */
+  public enum AuthProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
+
+    private String value;
+
+    AuthProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthProviderEnum fromValue(String input) {
+      for (AuthProviderEnum b : AuthProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authProvider")
+  private AuthProviderEnum authProvider = null;
 
   @JsonProperty("providerConfiguration")
   private Oauth2ProviderConfig providerConfiguration = null;
@@ -39,22 +77,125 @@ public class Oauth2ProviderModifiableData {
   @JsonProperty("oauth2ClientContent")
   private GeboOauth2SecretContent oauth2ClientContent = null;
 
-  @JsonProperty("authClientMethod")
-  private Object authClientMethod = null;
+  /**
+   * Gets or Sets authClientMethod
+   */
+  public enum AuthClientMethodEnum {
+    CLIENT_SECRET_BASIC("CLIENT_SECRET_BASIC"),
+    CLIENT_SECRET_POST("CLIENT_SECRET_POST"),
+    CLIENT_SECRET_JWT("CLIENT_SECRET_JWT"),
+    PRIVATE_KEY_JWT("PRIVATE_KEY_JWT"),
+    NONE("NONE"),
+    TLS_CLIENT_AUTH("TLS_CLIENT_AUTH"),
+    SELF_SIGNED_TLS_CLIENT_AUTH("SELF_SIGNED_TLS_CLIENT_AUTH");
 
-  @JsonProperty("authGrantType")
-  private Object authGrantType = null;
+    private String value;
 
-  @JsonProperty("configurationType")
-  private Object configurationType = null;
+    AuthClientMethodEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthClientMethodEnum fromValue(String input) {
+      for (AuthClientMethodEnum b : AuthClientMethodEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authClientMethod")
+  private AuthClientMethodEnum authClientMethod = null;
+
+  /**
+   * Gets or Sets authGrantType
+   */
+  public enum AuthGrantTypeEnum {
+    AUTHORIZATION_CODE("AUTHORIZATION_CODE"),
+    REFRESH_TOKEN("REFRESH_TOKEN"),
+    CLIENT_CREDENTIALS("CLIENT_CREDENTIALS"),
+    PASSWORD("PASSWORD"),
+    JWT_BEARER("JWT_BEARER"),
+    DEVICE_CODE("DEVICE_CODE"),
+    TOKEN_EXCHANGE("TOKEN_EXCHANGE");
+
+    private String value;
+
+    AuthGrantTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthGrantTypeEnum fromValue(String input) {
+      for (AuthGrantTypeEnum b : AuthGrantTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authGrantType")
+  private AuthGrantTypeEnum authGrantType = null;
+
+  /**
+   * Gets or Sets configurationType
+   */
+  public enum ConfigurationTypeEnum {
+    AUTHENTICATION("AUTHENTICATION"),
+    INTEGRATION("INTEGRATION");
+
+    private String value;
+
+    ConfigurationTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ConfigurationTypeEnum fromValue(String input) {
+      for (ConfigurationTypeEnum b : ConfigurationTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("configurationType")
+  private ConfigurationTypeEnum configurationType = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("readOnly")
-  private Object readOnly = null;
+  private Boolean readOnly = null;
 
-  public Oauth2ProviderModifiableData code(Object code) {
+  public Oauth2ProviderModifiableData code(String code) {
     this.code = code;
     return this;
   }
@@ -64,15 +205,15 @@ public class Oauth2ProviderModifiableData {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public Oauth2ProviderModifiableData authProvider(Object authProvider) {
+  public Oauth2ProviderModifiableData authProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
     return this;
   }
@@ -82,11 +223,11 @@ public class Oauth2ProviderModifiableData {
    * @return authProvider
   **/
   @Schema(required = true, description = "")
-  public Object getAuthProvider() {
+  public AuthProviderEnum getAuthProvider() {
     return authProvider;
   }
 
-  public void setAuthProvider(Object authProvider) {
+  public void setAuthProvider(AuthProviderEnum authProvider) {
     this.authProvider = authProvider;
   }
 
@@ -126,7 +267,7 @@ public class Oauth2ProviderModifiableData {
     this.oauth2ClientContent = oauth2ClientContent;
   }
 
-  public Oauth2ProviderModifiableData authClientMethod(Object authClientMethod) {
+  public Oauth2ProviderModifiableData authClientMethod(AuthClientMethodEnum authClientMethod) {
     this.authClientMethod = authClientMethod;
     return this;
   }
@@ -136,15 +277,15 @@ public class Oauth2ProviderModifiableData {
    * @return authClientMethod
   **/
   @Schema(description = "")
-  public Object getAuthClientMethod() {
+  public AuthClientMethodEnum getAuthClientMethod() {
     return authClientMethod;
   }
 
-  public void setAuthClientMethod(Object authClientMethod) {
+  public void setAuthClientMethod(AuthClientMethodEnum authClientMethod) {
     this.authClientMethod = authClientMethod;
   }
 
-  public Oauth2ProviderModifiableData authGrantType(Object authGrantType) {
+  public Oauth2ProviderModifiableData authGrantType(AuthGrantTypeEnum authGrantType) {
     this.authGrantType = authGrantType;
     return this;
   }
@@ -154,15 +295,15 @@ public class Oauth2ProviderModifiableData {
    * @return authGrantType
   **/
   @Schema(description = "")
-  public Object getAuthGrantType() {
+  public AuthGrantTypeEnum getAuthGrantType() {
     return authGrantType;
   }
 
-  public void setAuthGrantType(Object authGrantType) {
+  public void setAuthGrantType(AuthGrantTypeEnum authGrantType) {
     this.authGrantType = authGrantType;
   }
 
-  public Oauth2ProviderModifiableData configurationType(Object configurationType) {
+  public Oauth2ProviderModifiableData configurationType(ConfigurationTypeEnum configurationType) {
     this.configurationType = configurationType;
     return this;
   }
@@ -172,15 +313,15 @@ public class Oauth2ProviderModifiableData {
    * @return configurationType
   **/
   @Schema(required = true, description = "")
-  public Object getConfigurationType() {
+  public ConfigurationTypeEnum getConfigurationType() {
     return configurationType;
   }
 
-  public void setConfigurationType(Object configurationType) {
+  public void setConfigurationType(ConfigurationTypeEnum configurationType) {
     this.configurationType = configurationType;
   }
 
-  public Oauth2ProviderModifiableData description(Object description) {
+  public Oauth2ProviderModifiableData description(String description) {
     this.description = description;
     return this;
   }
@@ -190,15 +331,15 @@ public class Oauth2ProviderModifiableData {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public Oauth2ProviderModifiableData readOnly(Object readOnly) {
+  public Oauth2ProviderModifiableData readOnly(Boolean readOnly) {
     this.readOnly = readOnly;
     return this;
   }
@@ -208,11 +349,11 @@ public class Oauth2ProviderModifiableData {
    * @return readOnly
   **/
   @Schema(required = true, description = "")
-  public Object getReadOnly() {
+  public Boolean isReadOnly() {
     return readOnly;
   }
 
-  public void setReadOnly(Object readOnly) {
+  public void setReadOnly(Boolean readOnly) {
     this.readOnly = readOnly;
   }
 

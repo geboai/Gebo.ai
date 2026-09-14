@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="isEnabled1"></a>
 # **isEnabled1**
-> Object isEnabled1()
+> Boolean isEnabled1()
 
 
 
@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 GeboTextToSpeechControllerApi apiInstance = new GeboTextToSpeechControllerApi();
 try {
-    Object result = apiInstance.isEnabled1();
+    Boolean result = apiInstance.isEnabled1();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboTextToSpeechControllerApi#isEnabled1");
@@ -35,7 +35,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 
@@ -48,7 +48,7 @@ No authorization required
 
 <a name="speechText"></a>
 # **speechText**
-> Object speechText(body)
+> File speechText(body)
 
 
 
@@ -62,7 +62,7 @@ No authorization required
 GeboTextToSpeechControllerApi apiInstance = new GeboTextToSpeechControllerApi();
 SpeechRequest body = new SpeechRequest(); // SpeechRequest | 
 try {
-    Object result = apiInstance.speechText(body);
+    File result = apiInstance.speechText(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboTextToSpeechControllerApi#speechText");
@@ -78,7 +78,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**File**](File.md)
 
 ### Authorization
 

@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**userUploadContent** | **Object** |  | 
+**userUploadContent** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md) |  | 
 **userSpaceTransferTo** | [**GObjectRefGUserspaceProjectEndpoint**](GObjectRefGUserspaceProjectEndpoint.md) |  |  [optional]
-**transferToUserDefaultSpace** | **Object** |  |  [optional]
+**transferToUserDefaultSpace** | **Boolean** |  |  [optional]

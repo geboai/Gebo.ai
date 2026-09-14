@@ -64,10 +64,10 @@ export class IntegrationInputControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public publishContents(body: any, endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public publishContents(body: any, endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public publishContents(body: any, endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public publishContents(body: any, endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public publishContents(body: Array<JobTicket>, endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public publishContents(body: Array<JobTicket>, endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public publishContents(body: Array<JobTicket>, endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public publishContents(body: Array<JobTicket>, endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling publishContents.');
@@ -121,10 +121,10 @@ export class IntegrationInputControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public publishSync(endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public publishSync(endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public publishSync(endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public publishSync(endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public publishSync(endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public publishSync(endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public publishSync(endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public publishSync(endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (endpointCode === null || endpointCode === undefined) {
             throw new Error('Required parameter endpointCode was null or undefined when calling publishSync.');
@@ -170,10 +170,10 @@ export class IntegrationInputControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: any, relativePath: any, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: any, relativePath: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: any, relativePath: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: any, relativePath: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public spoolDocument(body: IntegrationDocumentEnvelop, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling spoolDocument.');
@@ -236,10 +236,10 @@ export class IntegrationInputControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public spoolDocument1Form(file: any, endpointCode: any, relativePath: any, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
-    public spoolDocument1Form(file: any, endpointCode: any, relativePath: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
-    public spoolDocument1Form(file: any, endpointCode: any, relativePath: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
-    public spoolDocument1Form(file: any, endpointCode: any, relativePath: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'body', reportProgress?: boolean): Observable<JobTicket>;
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobTicket>>;
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobTicket>>;
+    public spoolDocument1Form(file: Blob, endpointCode: string, relativePath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (file === null || file === undefined) {
             throw new Error('Required parameter file was null or undefined when calling spoolDocument1.');
@@ -282,6 +282,9 @@ export class IntegrationInputControllerService {
         let formParams: { append(param: string, value: any): void; };
         let useForm = false;
         let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
         if (useForm) {
             formParams = new FormData();
         } else {

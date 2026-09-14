@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GOllamaEmbeddingModelChoice } from './gOllamaEmbeddingModelChoice';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusListGOllamaEmbeddingModelChoice { 
-    result?: any;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    result?: Array<GOllamaEmbeddingModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

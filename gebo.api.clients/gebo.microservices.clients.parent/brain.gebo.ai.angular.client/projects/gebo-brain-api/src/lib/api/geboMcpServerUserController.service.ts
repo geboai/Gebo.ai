@@ -62,10 +62,10 @@ export class GeboMcpServerUserControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAccessibleMcpServerByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<UserAccessibleMcpServerView>;
-    public findAccessibleMcpServerByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserAccessibleMcpServerView>>;
-    public findAccessibleMcpServerByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserAccessibleMcpServerView>>;
-    public findAccessibleMcpServerByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAccessibleMcpServerByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<UserAccessibleMcpServerView>;
+    public findAccessibleMcpServerByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserAccessibleMcpServerView>>;
+    public findAccessibleMcpServerByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserAccessibleMcpServerView>>;
+    public findAccessibleMcpServerByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findAccessibleMcpServerByCode.');
@@ -108,9 +108,9 @@ export class GeboMcpServerUserControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsersCanAccessMcpServersList(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getUsersCanAccessMcpServersList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getUsersCanAccessMcpServersList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getUsersCanAccessMcpServersList(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public getUsersCanAccessMcpServersList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public getUsersCanAccessMcpServersList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public getUsersCanAccessMcpServersList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -128,7 +128,7 @@ export class GeboMcpServerUserControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList`,
+        return this.httpClient.request<boolean>('get',`${this.basePath}/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -144,9 +144,9 @@ export class GeboMcpServerUserControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listAccessibleMcpServers(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public listAccessibleMcpServers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public listAccessibleMcpServers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public listAccessibleMcpServers(observe?: 'body', reportProgress?: boolean): Observable<Array<UserAccessibleMcpServerView>>;
+    public listAccessibleMcpServers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserAccessibleMcpServerView>>>;
+    public listAccessibleMcpServers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserAccessibleMcpServerView>>>;
     public listAccessibleMcpServers(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -164,7 +164,7 @@ export class GeboMcpServerUserControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/user/GeboMCPServerUserController/listAccessibleMcpServers`,
+        return this.httpClient.request<Array<UserAccessibleMcpServerView>>('get',`${this.basePath}/api/user/GeboMCPServerUserController/listAccessibleMcpServers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

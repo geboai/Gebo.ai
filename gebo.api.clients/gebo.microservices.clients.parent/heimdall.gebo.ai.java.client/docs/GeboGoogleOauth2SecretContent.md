@@ -3,8 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**uid** | **Object** |  |  [optional]
-**token** | **Object** |  |  [optional]
-**location** | **Object** |  |  [optional]
-**projectId** | **Object** |  |  [optional]
-**scopes** | **Object** |  |  [optional]
+**readOnly** | **Boolean** |  |  [optional]
+**uid** | **String** |  |  [optional]
+**token** | **String** |  |  [optional]
+**location** | **String** |  |  [optional]
+**projectId** | **String** |  |  [optional]
+**scopes** | **List&lt;String&gt;** |  |  [optional]

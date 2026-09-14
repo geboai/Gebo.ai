@@ -16,6 +16,7 @@ import gebo.microservices.api.client.webdav.model.BrowseParam;
 import gebo.microservices.api.client.webdav.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.webdav.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.webdav.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.webdav.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +44,7 @@ public class WebdavBrowsingControllerApiTest {
     @Test
     public void browseWebdavPathTest() {
         BrowseParam body = null;
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListPathInfo response = api.browseWebdavPath(body, systemCode);
 
         // TODO: test validations
@@ -58,8 +59,8 @@ public class WebdavBrowsingControllerApiTest {
      */
     @Test
     public void getWebdavNavigationStatusTest() {
-        Object body = null;
-        Object systemCode = null;
+        List<VFilesystemReference> body = null;
+        String systemCode = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getWebdavNavigationStatus(body, systemCode);
 
         // TODO: test validations
@@ -74,7 +75,7 @@ public class WebdavBrowsingControllerApiTest {
      */
     @Test
     public void getWebdavRootsTest() {
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getWebdavRoots(systemCode);
 
         // TODO: test validations

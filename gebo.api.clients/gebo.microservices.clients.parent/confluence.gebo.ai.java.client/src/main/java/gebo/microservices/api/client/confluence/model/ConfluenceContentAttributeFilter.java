@@ -18,45 +18,148 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ConfluenceContentAttributeFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class ConfluenceContentAttributeFilter {
   @JsonProperty("spaceKeys")
-  private Object spaceKeys = null;
+  private List<String> spaceKeys = null;
 
   @JsonProperty("contentTypes")
-  private Object contentTypes = null;
+  private List<String> contentTypes = null;
 
   @JsonProperty("contentIds")
-  private Object contentIds = null;
+  private List<Long> contentIds = null;
 
   @JsonProperty("titleTerms")
-  private Object titleTerms = null;
+  private List<String> titleTerms = null;
 
-  @JsonProperty("titleTermsMatchMode")
-  private Object titleTermsMatchMode = null;
+  /**
+   * Gets or Sets titleTermsMatchMode
+   */
+  public enum TitleTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    TitleTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TitleTermsMatchModeEnum fromValue(String input) {
+      for (TitleTermsMatchModeEnum b : TitleTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("titleTermsMatchMode")
+  private TitleTermsMatchModeEnum titleTermsMatchMode = null;
 
   @JsonProperty("textTerms")
-  private Object textTerms = null;
+  private List<String> textTerms = null;
 
-  @JsonProperty("textTermsMatchMode")
-  private Object textTermsMatchMode = null;
+  /**
+   * Gets or Sets textTermsMatchMode
+   */
+  public enum TextTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    TextTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TextTermsMatchModeEnum fromValue(String input) {
+      for (TextTermsMatchModeEnum b : TextTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("textTermsMatchMode")
+  private TextTermsMatchModeEnum textTermsMatchMode = null;
 
   @JsonProperty("labels")
-  private Object labels = null;
+  private List<String> labels = null;
 
-  @JsonProperty("labelsMatchMode")
-  private Object labelsMatchMode = null;
+  /**
+   * Gets or Sets labelsMatchMode
+   */
+  public enum LabelsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    LabelsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static LabelsMatchModeEnum fromValue(String input) {
+      for (LabelsMatchModeEnum b : LabelsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("labelsMatchMode")
+  private LabelsMatchModeEnum labelsMatchMode = null;
 
   @JsonProperty("ancestorIds")
-  private Object ancestorIds = null;
+  private List<Long> ancestorIds = null;
 
-  public ConfluenceContentAttributeFilter spaceKeys(Object spaceKeys) {
+  public ConfluenceContentAttributeFilter spaceKeys(List<String> spaceKeys) {
     this.spaceKeys = spaceKeys;
+    return this;
+  }
+
+  public ConfluenceContentAttributeFilter addSpaceKeysItem(String spaceKeysItem) {
+    if (this.spaceKeys == null) {
+      this.spaceKeys = new ArrayList<>();
+    }
+    this.spaceKeys.add(spaceKeysItem);
     return this;
   }
 
@@ -65,16 +168,24 @@ public class ConfluenceContentAttributeFilter {
    * @return spaceKeys
   **/
   @Schema(description = "")
-  public Object getSpaceKeys() {
+  public List<String> getSpaceKeys() {
     return spaceKeys;
   }
 
-  public void setSpaceKeys(Object spaceKeys) {
+  public void setSpaceKeys(List<String> spaceKeys) {
     this.spaceKeys = spaceKeys;
   }
 
-  public ConfluenceContentAttributeFilter contentTypes(Object contentTypes) {
+  public ConfluenceContentAttributeFilter contentTypes(List<String> contentTypes) {
     this.contentTypes = contentTypes;
+    return this;
+  }
+
+  public ConfluenceContentAttributeFilter addContentTypesItem(String contentTypesItem) {
+    if (this.contentTypes == null) {
+      this.contentTypes = new ArrayList<>();
+    }
+    this.contentTypes.add(contentTypesItem);
     return this;
   }
 
@@ -83,16 +194,24 @@ public class ConfluenceContentAttributeFilter {
    * @return contentTypes
   **/
   @Schema(description = "")
-  public Object getContentTypes() {
+  public List<String> getContentTypes() {
     return contentTypes;
   }
 
-  public void setContentTypes(Object contentTypes) {
+  public void setContentTypes(List<String> contentTypes) {
     this.contentTypes = contentTypes;
   }
 
-  public ConfluenceContentAttributeFilter contentIds(Object contentIds) {
+  public ConfluenceContentAttributeFilter contentIds(List<Long> contentIds) {
     this.contentIds = contentIds;
+    return this;
+  }
+
+  public ConfluenceContentAttributeFilter addContentIdsItem(Long contentIdsItem) {
+    if (this.contentIds == null) {
+      this.contentIds = new ArrayList<>();
+    }
+    this.contentIds.add(contentIdsItem);
     return this;
   }
 
@@ -101,16 +220,24 @@ public class ConfluenceContentAttributeFilter {
    * @return contentIds
   **/
   @Schema(description = "")
-  public Object getContentIds() {
+  public List<Long> getContentIds() {
     return contentIds;
   }
 
-  public void setContentIds(Object contentIds) {
+  public void setContentIds(List<Long> contentIds) {
     this.contentIds = contentIds;
   }
 
-  public ConfluenceContentAttributeFilter titleTerms(Object titleTerms) {
+  public ConfluenceContentAttributeFilter titleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
+    return this;
+  }
+
+  public ConfluenceContentAttributeFilter addTitleTermsItem(String titleTermsItem) {
+    if (this.titleTerms == null) {
+      this.titleTerms = new ArrayList<>();
+    }
+    this.titleTerms.add(titleTermsItem);
     return this;
   }
 
@@ -119,15 +246,15 @@ public class ConfluenceContentAttributeFilter {
    * @return titleTerms
   **/
   @Schema(description = "")
-  public Object getTitleTerms() {
+  public List<String> getTitleTerms() {
     return titleTerms;
   }
 
-  public void setTitleTerms(Object titleTerms) {
+  public void setTitleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
   }
 
-  public ConfluenceContentAttributeFilter titleTermsMatchMode(Object titleTermsMatchMode) {
+  public ConfluenceContentAttributeFilter titleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
     return this;
   }
@@ -137,16 +264,24 @@ public class ConfluenceContentAttributeFilter {
    * @return titleTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTitleTermsMatchMode() {
+  public TitleTermsMatchModeEnum getTitleTermsMatchMode() {
     return titleTermsMatchMode;
   }
 
-  public void setTitleTermsMatchMode(Object titleTermsMatchMode) {
+  public void setTitleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
   }
 
-  public ConfluenceContentAttributeFilter textTerms(Object textTerms) {
+  public ConfluenceContentAttributeFilter textTerms(List<String> textTerms) {
     this.textTerms = textTerms;
+    return this;
+  }
+
+  public ConfluenceContentAttributeFilter addTextTermsItem(String textTermsItem) {
+    if (this.textTerms == null) {
+      this.textTerms = new ArrayList<>();
+    }
+    this.textTerms.add(textTermsItem);
     return this;
   }
 
@@ -155,15 +290,15 @@ public class ConfluenceContentAttributeFilter {
    * @return textTerms
   **/
   @Schema(description = "")
-  public Object getTextTerms() {
+  public List<String> getTextTerms() {
     return textTerms;
   }
 
-  public void setTextTerms(Object textTerms) {
+  public void setTextTerms(List<String> textTerms) {
     this.textTerms = textTerms;
   }
 
-  public ConfluenceContentAttributeFilter textTermsMatchMode(Object textTermsMatchMode) {
+  public ConfluenceContentAttributeFilter textTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
     return this;
   }
@@ -173,16 +308,24 @@ public class ConfluenceContentAttributeFilter {
    * @return textTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTextTermsMatchMode() {
+  public TextTermsMatchModeEnum getTextTermsMatchMode() {
     return textTermsMatchMode;
   }
 
-  public void setTextTermsMatchMode(Object textTermsMatchMode) {
+  public void setTextTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
   }
 
-  public ConfluenceContentAttributeFilter labels(Object labels) {
+  public ConfluenceContentAttributeFilter labels(List<String> labels) {
     this.labels = labels;
+    return this;
+  }
+
+  public ConfluenceContentAttributeFilter addLabelsItem(String labelsItem) {
+    if (this.labels == null) {
+      this.labels = new ArrayList<>();
+    }
+    this.labels.add(labelsItem);
     return this;
   }
 
@@ -191,15 +334,15 @@ public class ConfluenceContentAttributeFilter {
    * @return labels
   **/
   @Schema(description = "")
-  public Object getLabels() {
+  public List<String> getLabels() {
     return labels;
   }
 
-  public void setLabels(Object labels) {
+  public void setLabels(List<String> labels) {
     this.labels = labels;
   }
 
-  public ConfluenceContentAttributeFilter labelsMatchMode(Object labelsMatchMode) {
+  public ConfluenceContentAttributeFilter labelsMatchMode(LabelsMatchModeEnum labelsMatchMode) {
     this.labelsMatchMode = labelsMatchMode;
     return this;
   }
@@ -209,16 +352,24 @@ public class ConfluenceContentAttributeFilter {
    * @return labelsMatchMode
   **/
   @Schema(description = "")
-  public Object getLabelsMatchMode() {
+  public LabelsMatchModeEnum getLabelsMatchMode() {
     return labelsMatchMode;
   }
 
-  public void setLabelsMatchMode(Object labelsMatchMode) {
+  public void setLabelsMatchMode(LabelsMatchModeEnum labelsMatchMode) {
     this.labelsMatchMode = labelsMatchMode;
   }
 
-  public ConfluenceContentAttributeFilter ancestorIds(Object ancestorIds) {
+  public ConfluenceContentAttributeFilter ancestorIds(List<Long> ancestorIds) {
     this.ancestorIds = ancestorIds;
+    return this;
+  }
+
+  public ConfluenceContentAttributeFilter addAncestorIdsItem(Long ancestorIdsItem) {
+    if (this.ancestorIds == null) {
+      this.ancestorIds = new ArrayList<>();
+    }
+    this.ancestorIds.add(ancestorIdsItem);
     return this;
   }
 
@@ -227,11 +378,11 @@ public class ConfluenceContentAttributeFilter {
    * @return ancestorIds
   **/
   @Schema(description = "")
-  public Object getAncestorIds() {
+  public List<Long> getAncestorIds() {
     return ancestorIds;
   }
 
-  public void setAncestorIds(Object ancestorIds) {
+  public void setAncestorIds(List<Long> ancestorIds) {
     this.ancestorIds = ancestorIds;
   }
 

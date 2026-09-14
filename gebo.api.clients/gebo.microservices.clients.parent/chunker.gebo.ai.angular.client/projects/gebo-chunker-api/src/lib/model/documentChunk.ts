@@ -11,15 +11,22 @@
  */
 
 export interface DocumentChunk { 
-    originalDocumentCode?: any;
-    id?: any;
-    mimeType?: any;
-    chunkType?: any;
-    chunkData?: any;
-    metaData?: any;
-    tokensSize?: any;
-    bytesSize?: any;
-    chunkPosition?: any;
-    chunksCount?: any;
-    chunkingSessionId?: any;
+    originalDocumentCode?: string;
+    id?: string;
+    mimeType?: string;
+    chunkType?: DocumentChunk.ChunkTypeEnum;
+    chunkData?: string;
+    metaData?: { [key: string]: any; };
+    tokensSize?: number;
+    bytesSize?: number;
+    chunkPosition?: number;
+    chunksCount?: number;
+    chunkingSessionId?: string;
+}
+export namespace DocumentChunk {
+    export type ChunkTypeEnum = 'TEXT' | 'IMAGE';
+    export const ChunkTypeEnum = {
+        TEXT: 'TEXT' as ChunkTypeEnum,
+        IMAGE: 'IMAGE' as ChunkTypeEnum
+    };
 }

@@ -2,7 +2,9 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.GeboChatMessageEnvelope;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
+import gebo.microservices.api.client.brain.model.PipelineChatMenu;
 import gebo.microservices.api.client.brain.model.PipelineRequestBody;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboChatPipelinesControllerApi {
     private ApiClient apiClient;
@@ -52,7 +54,7 @@ public class GeboChatPipelinesControllerApi {
      * @return GeboChatResponse
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboChatResponse executeChatPipeline(PipelineRequestBody body, Object pipelineCode) throws RestClientException {
+    public GeboChatResponse executeChatPipeline(PipelineRequestBody body, String pipelineCode) throws RestClientException {
         return executeChatPipelineWithHttpInfo(body, pipelineCode).getBody();
     }
 
@@ -65,7 +67,7 @@ public class GeboChatPipelinesControllerApi {
      * @return ResponseEntity&lt;GeboChatResponse&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboChatResponse> executeChatPipelineWithHttpInfo(PipelineRequestBody body, Object pipelineCode) throws RestClientException {
+    public ResponseEntity<GeboChatResponse> executeChatPipelineWithHttpInfo(PipelineRequestBody body, String pipelineCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -143,10 +145,10 @@ public class GeboChatPipelinesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
-     * @return Object
+     * @return List&lt;PipelineChatMenu&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getDefaultPersonalPipelinesChatMenu(Object chatProfileCode) throws RestClientException {
+    public List<PipelineChatMenu> getDefaultPersonalPipelinesChatMenu(String chatProfileCode) throws RestClientException {
         return getDefaultPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode).getBody();
     }
 
@@ -155,10 +157,10 @@ public class GeboChatPipelinesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;PipelineChatMenu&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getDefaultPersonalPipelinesChatMenuWithHttpInfo(Object chatProfileCode) throws RestClientException {
+    public ResponseEntity<List<PipelineChatMenu>> getDefaultPersonalPipelinesChatMenuWithHttpInfo(String chatProfileCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
@@ -180,7 +182,7 @@ public class GeboChatPipelinesControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<PipelineChatMenu>> returnType = new ParameterizedTypeReference<List<PipelineChatMenu>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -189,10 +191,10 @@ public class GeboChatPipelinesControllerApi {
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
      * @param pipelineCode  (optional)
-     * @return Object
+     * @return List&lt;PipelineChatMenu&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getPersonalPipelinesChatMenu(Object chatProfileCode, Object pipelineCode) throws RestClientException {
+    public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String chatProfileCode, String pipelineCode) throws RestClientException {
         return getPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode, pipelineCode).getBody();
     }
 
@@ -202,10 +204,10 @@ public class GeboChatPipelinesControllerApi {
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
      * @param pipelineCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;PipelineChatMenu&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getPersonalPipelinesChatMenuWithHttpInfo(Object chatProfileCode, Object pipelineCode) throws RestClientException {
+    public ResponseEntity<List<PipelineChatMenu>> getPersonalPipelinesChatMenuWithHttpInfo(String chatProfileCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
@@ -228,7 +230,7 @@ public class GeboChatPipelinesControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<PipelineChatMenu>> returnType = new ParameterizedTypeReference<List<PipelineChatMenu>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -238,7 +240,7 @@ public class GeboChatPipelinesControllerApi {
      * @param userChatContextCode  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void stopChatPipeline(Object userChatContextCode) throws RestClientException {
+    public void stopChatPipeline(String userChatContextCode) throws RestClientException {
         stopChatPipelineWithHttpInfo(userChatContextCode);
     }
 
@@ -250,7 +252,7 @@ public class GeboChatPipelinesControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> stopChatPipelineWithHttpInfo(Object userChatContextCode) throws RestClientException {
+    public ResponseEntity<Void> stopChatPipelineWithHttpInfo(String userChatContextCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'userChatContextCode' is set
         if (userChatContextCode == null) {
@@ -279,10 +281,10 @@ public class GeboChatPipelinesControllerApi {
      * <p><b>200</b> - OK
      * @param body  (required)
      * @param pipelineCode  (optional)
-     * @return Object
+     * @return List&lt;GeboChatMessageEnvelope&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamChatPipeline(PipelineRequestBody body, Object pipelineCode) throws RestClientException {
+    public List<GeboChatMessageEnvelope> streamChatPipeline(PipelineRequestBody body, String pipelineCode) throws RestClientException {
         return streamChatPipelineWithHttpInfo(body, pipelineCode).getBody();
     }
 
@@ -292,10 +294,10 @@ public class GeboChatPipelinesControllerApi {
      * <p><b>200</b> - OK
      * @param body  (required)
      * @param pipelineCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GeboChatMessageEnvelope&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamChatPipelineWithHttpInfo(PipelineRequestBody body, Object pipelineCode) throws RestClientException {
+    public ResponseEntity<List<GeboChatMessageEnvelope>> streamChatPipelineWithHttpInfo(PipelineRequestBody body, String pipelineCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -319,7 +321,7 @@ public class GeboChatPipelinesControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GeboChatMessageEnvelope>> returnType = new ParameterizedTypeReference<List<GeboChatMessageEnvelope>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -327,10 +329,10 @@ public class GeboChatPipelinesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GeboChatMessageEnvelope&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamDefaultChatPipeline(PipelineRequestBody body) throws RestClientException {
+    public List<GeboChatMessageEnvelope> streamDefaultChatPipeline(PipelineRequestBody body) throws RestClientException {
         return streamDefaultChatPipelineWithHttpInfo(body).getBody();
     }
 
@@ -339,10 +341,10 @@ public class GeboChatPipelinesControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GeboChatMessageEnvelope&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamDefaultChatPipelineWithHttpInfo(PipelineRequestBody body) throws RestClientException {
+    public ResponseEntity<List<GeboChatMessageEnvelope>> streamDefaultChatPipelineWithHttpInfo(PipelineRequestBody body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -365,7 +367,7 @@ public class GeboChatPipelinesControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GeboChatMessageEnvelope>> returnType = new ParameterizedTypeReference<List<GeboChatMessageEnvelope>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

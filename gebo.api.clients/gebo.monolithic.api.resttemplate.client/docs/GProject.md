@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **parentProjectCode** | **String** |  |  [optional]
+**readonly** | **Boolean** |  |  [optional]
 
 <a name="ObjectSpaceTypeEnum"></a>
 ## Enum: ObjectSpaceTypeEnum

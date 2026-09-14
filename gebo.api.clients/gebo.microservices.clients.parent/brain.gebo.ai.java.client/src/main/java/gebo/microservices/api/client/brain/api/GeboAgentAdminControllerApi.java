@@ -3,6 +3,8 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GAgentConfig;
+import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboAgentAdminControllerApi {
     private ApiClient apiClient;
@@ -93,7 +95,7 @@ public class GeboAgentAdminControllerApi {
      * @return GAgentConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GAgentConfig getAgentByCode(Object code) throws RestClientException {
+    public GAgentConfig getAgentByCode(String code) throws RestClientException {
         return getAgentByCodeWithHttpInfo(code).getBody();
     }
 
@@ -105,7 +107,7 @@ public class GeboAgentAdminControllerApi {
      * @return ResponseEntity&lt;GAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GAgentConfig> getAgentByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GAgentConfig> getAgentByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -134,10 +136,10 @@ public class GeboAgentAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GBaseObject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAgents() throws RestClientException {
+    public List<GBaseObject> getAgents() throws RestClientException {
         return getAgentsWithHttpInfo().getBody();
     }
 
@@ -145,10 +147,10 @@ public class GeboAgentAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBaseObject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAgentsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GBaseObject>> getAgentsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgents").build().toUriString();
         
@@ -165,17 +167,17 @@ public class GeboAgentAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GBaseObject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getAgentsChoices() throws RestClientException {
+    public List<GBaseObject> getAgentsChoices() throws RestClientException {
         return getAgentsChoicesWithHttpInfo().getBody();
     }
 
@@ -183,10 +185,10 @@ public class GeboAgentAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GBaseObject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getAgentsChoicesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GBaseObject>> getAgentsChoicesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgentsChoices").build().toUriString();
         
@@ -203,7 +205,7 @@ public class GeboAgentAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -211,10 +213,10 @@ public class GeboAgentAdminControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param agentId  (required)
-     * @return Object
+     * @return List&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getPromptTemplatesByAgentId(Object agentId) throws RestClientException {
+    public List<GPromptTemplateConfig> getPromptTemplatesByAgentId(String agentId) throws RestClientException {
         return getPromptTemplatesByAgentIdWithHttpInfo(agentId).getBody();
     }
 
@@ -223,10 +225,10 @@ public class GeboAgentAdminControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param agentId  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GPromptTemplateConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getPromptTemplatesByAgentIdWithHttpInfo(Object agentId) throws RestClientException {
+    public ResponseEntity<List<GPromptTemplateConfig>> getPromptTemplatesByAgentIdWithHttpInfo(String agentId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'agentId' is set
         if (agentId == null) {
@@ -248,7 +250,7 @@ public class GeboAgentAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GPromptTemplateConfig>> returnType = new ParameterizedTypeReference<List<GPromptTemplateConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

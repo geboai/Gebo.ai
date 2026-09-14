@@ -19,38 +19,39 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GObjectRefGProjectEndpoint;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * VDocumentInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class VDocumentInfo {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("parentFolderCode")
-  private Object parentFolderCode = null;
+  private String parentFolderCode = null;
 
   @JsonProperty("endpointRef")
   private GObjectRefGProjectEndpoint endpointRef = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
-  public VDocumentInfo code(Object code) {
+  public VDocumentInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -60,15 +61,15 @@ public class VDocumentInfo {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public VDocumentInfo name(Object name) {
+  public VDocumentInfo name(String name) {
     this.name = name;
     return this;
   }
@@ -78,15 +79,15 @@ public class VDocumentInfo {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public VDocumentInfo parentFolderCode(Object parentFolderCode) {
+  public VDocumentInfo parentFolderCode(String parentFolderCode) {
     this.parentFolderCode = parentFolderCode;
     return this;
   }
@@ -96,11 +97,11 @@ public class VDocumentInfo {
    * @return parentFolderCode
   **/
   @Schema(description = "")
-  public Object getParentFolderCode() {
+  public String getParentFolderCode() {
     return parentFolderCode;
   }
 
-  public void setParentFolderCode(Object parentFolderCode) {
+  public void setParentFolderCode(String parentFolderCode) {
     this.parentFolderCode = parentFolderCode;
   }
 
@@ -122,7 +123,7 @@ public class VDocumentInfo {
     this.endpointRef = endpointRef;
   }
 
-  public VDocumentInfo creationDate(Object creationDate) {
+  public VDocumentInfo creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -132,15 +133,15 @@ public class VDocumentInfo {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public VDocumentInfo modificationDate(Object modificationDate) {
+  public VDocumentInfo modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -150,15 +151,15 @@ public class VDocumentInfo {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public VDocumentInfo extension(Object extension) {
+  public VDocumentInfo extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -168,15 +169,15 @@ public class VDocumentInfo {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public VDocumentInfo contentType(Object contentType) {
+  public VDocumentInfo contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -186,11 +187,11 @@ public class VDocumentInfo {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 

@@ -11,11 +11,11 @@
  */
 
 export interface GoogleSearchResultItem { 
-    kind?: any;
-    title?: any;
-    htmlTitle?: any;
-    link?: any;
-    displayLink?: any;
-    snippet?: any;
-    htmlSnippet?: any;
+    kind?: string;
+    title?: string;
+    htmlTitle?: string;
+    link?: string;
+    displayLink?: string;
+    snippet?: string;
+    htmlSnippet?: string;
 }

@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GoogleVertexChatModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -99,7 +99,7 @@ public class GoogleVertexChatModelsConfigurationControllerApi {
      * @return GGoogleVertexChatModelConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GGoogleVertexChatModelConfig findGoogleVertexChatModelConfigByCode(Object code) throws RestClientException {
+    public GGoogleVertexChatModelConfig findGoogleVertexChatModelConfigByCode(String code) throws RestClientException {
         return findGoogleVertexChatModelConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -111,7 +111,7 @@ public class GoogleVertexChatModelsConfigurationControllerApi {
      * @return ResponseEntity&lt;GGoogleVertexChatModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GGoogleVertexChatModelConfig> findGoogleVertexChatModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GGoogleVertexChatModelConfig> findGoogleVertexChatModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

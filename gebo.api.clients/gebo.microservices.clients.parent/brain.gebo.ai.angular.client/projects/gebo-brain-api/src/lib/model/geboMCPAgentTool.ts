@@ -11,7 +11,7 @@
  */
 
 export interface GeboMCPAgentTool { 
-    agentConfigCode: any;
-    networkConfigCode: any;
-    toolName: any;
+    agentConfigCode: string;
+    networkConfigCode: string;
+    toolName: string;
 }

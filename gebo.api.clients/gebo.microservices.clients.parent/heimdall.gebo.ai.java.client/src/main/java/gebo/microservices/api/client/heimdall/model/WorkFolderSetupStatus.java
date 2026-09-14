@@ -23,16 +23,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * WorkFolderSetupStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class WorkFolderSetupStatus {
   @JsonProperty("isSetup")
-  private Object isSetup = null;
+  private Boolean isSetup = null;
 
   @JsonProperty("workDirectory")
   private VFilesystemReference workDirectory = null;
 
-  public WorkFolderSetupStatus isSetup(Object isSetup) {
+  public WorkFolderSetupStatus isSetup(Boolean isSetup) {
     this.isSetup = isSetup;
     return this;
   }
@@ -42,11 +42,11 @@ public class WorkFolderSetupStatus {
    * @return isSetup
   **/
   @Schema(description = "")
-  public Object getIsSetup() {
+  public Boolean isIsSetup() {
     return isSetup;
   }
 
-  public void setIsSetup(Object isSetup) {
+  public void setIsSetup(Boolean isSetup) {
     this.isSetup = isSetup;
   }
 

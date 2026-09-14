@@ -11,7 +11,7 @@
  */
 
 export interface AdditionalContent { 
-    contentType: any;
-    name: any;
-    content: any;
+    contentType: string;
+    name: string;
+    content: string;
 }

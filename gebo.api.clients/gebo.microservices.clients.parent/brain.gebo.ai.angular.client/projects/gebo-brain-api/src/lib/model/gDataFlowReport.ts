@@ -9,9 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GModuleMetaInfo } from './gModuleMetaInfo';
 
 export interface GDataFlowReport { 
-    nodeId?: any;
-    collectedAt?: any;
-    modules?: any;
+    nodeId?: string;
+    collectedAt?: Date;
+    modules?: Array<GModuleMetaInfo>;
 }

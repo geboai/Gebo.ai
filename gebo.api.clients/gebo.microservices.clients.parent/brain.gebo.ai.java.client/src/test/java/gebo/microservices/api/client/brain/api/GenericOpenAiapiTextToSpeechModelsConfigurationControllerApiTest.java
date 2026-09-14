@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPITextToSpeechModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAITextToSpeechModelType;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPITextToSpeechModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPITextToSpeechModelChoice;
@@ -57,7 +58,7 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGenericOpenAIAPITextToSpeechModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GenericOpenAIAPITextToSpeechModelConfig response = api.findGenericOpenAIAPITextToSpeechModelConfigByCode(code);
 
         // TODO: test validations
@@ -87,7 +88,7 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAITextToSpeechModelConfigsTest() {
-        Object response = api.getGenericOpenAITextToSpeechModelConfigs();
+        List<GenericOpenAIAPITextToSpeechModelConfig> response = api.getGenericOpenAITextToSpeechModelConfigs();
 
         // TODO: test validations
     }
@@ -101,7 +102,7 @@ public class GenericOpenAiapiTextToSpeechModelsConfigurationControllerApiTest {
      */
     @Test
     public void getGenericOpenAITextToSpeechModelTypesTest() {
-        Object response = api.getGenericOpenAITextToSpeechModelTypes();
+        List<GenericOpenAITextToSpeechModelType> response = api.getGenericOpenAITextToSpeechModelTypes();
 
         // TODO: test validations
     }

@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class ConfluenceSystemsControllerApi {
     private ApiClient apiClient;
@@ -187,7 +187,7 @@ public class ConfluenceSystemsControllerApi {
      * @return GConfluenceProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GConfluenceProjectEndpoint findConfluenceEndpointsByCode(Object code) throws RestClientException {
+    public GConfluenceProjectEndpoint findConfluenceEndpointsByCode(String code) throws RestClientException {
         return findConfluenceEndpointsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -199,7 +199,7 @@ public class ConfluenceSystemsControllerApi {
      * @return ResponseEntity&lt;GConfluenceProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GConfluenceProjectEndpoint> findConfluenceEndpointsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GConfluenceProjectEndpoint> findConfluenceEndpointsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -229,10 +229,10 @@ public class ConfluenceSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GConfluenceProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findConfluenceEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GConfluenceProjectEndpoint> findConfluenceEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findConfluenceEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -241,10 +241,10 @@ public class ConfluenceSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GConfluenceProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findConfluenceEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GConfluenceProjectEndpoint>> findConfluenceEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
@@ -266,7 +266,7 @@ public class ConfluenceSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GConfluenceProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GConfluenceProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -274,10 +274,10 @@ public class ConfluenceSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GConfluenceProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findConfluenceEndpointsByQbe(GConfluenceProjectEndpoint body) throws RestClientException {
+    public List<GConfluenceProjectEndpoint> findConfluenceEndpointsByQbe(GConfluenceProjectEndpoint body) throws RestClientException {
         return findConfluenceEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -286,10 +286,10 @@ public class ConfluenceSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GConfluenceProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findConfluenceEndpointsByQbeWithHttpInfo(GConfluenceProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GConfluenceProjectEndpoint>> findConfluenceEndpointsByQbeWithHttpInfo(GConfluenceProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -312,7 +312,7 @@ public class ConfluenceSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GConfluenceProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GConfluenceProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -323,7 +323,7 @@ public class ConfluenceSystemsControllerApi {
      * @return GConfluenceSystem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GConfluenceSystem findConfluenceSystemByCode(Object code) throws RestClientException {
+    public GConfluenceSystem findConfluenceSystemByCode(String code) throws RestClientException {
         return findConfluenceSystemByCodeWithHttpInfo(code).getBody();
     }
 
@@ -335,7 +335,7 @@ public class ConfluenceSystemsControllerApi {
      * @return ResponseEntity&lt;GConfluenceSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GConfluenceSystem> findConfluenceSystemByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GConfluenceSystem> findConfluenceSystemByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -402,10 +402,10 @@ public class ConfluenceSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GConfluenceSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getConfluenceSystems() throws RestClientException {
+    public List<GConfluenceSystem> getConfluenceSystems() throws RestClientException {
         return getConfluenceSystemsWithHttpInfo().getBody();
     }
 
@@ -413,10 +413,10 @@ public class ConfluenceSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GConfluenceSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getConfluenceSystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GConfluenceSystem>> getConfluenceSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ConfluenceSystemsController/getConfluenceSystems").build().toUriString();
         
@@ -433,7 +433,7 @@ public class ConfluenceSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GConfluenceSystem>> returnType = new ParameterizedTypeReference<List<GConfluenceSystem>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

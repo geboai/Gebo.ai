@@ -113,7 +113,7 @@ No authorization required
 
 
 FileSystemSharesSettingControllerApi apiInstance = new FileSystemSharesSettingControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GFileSystemShareReference result = apiInstance.getFileSystemShareReferenceByCode(code);
     System.out.println(result);
@@ -127,7 +127,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -199,7 +199,7 @@ No authorization required
 
 
 FileSystemSharesSettingControllerApi apiInstance = new FileSystemSharesSettingControllerApi();
-Object body = null; // Object | 
+List<VFilesystemReference> body = Arrays.asList(new VFilesystemReference()); // List<VFilesystemReference> | 
 try {
     OperationStatusListVirtualFilesystemNavigationTreeStatus result = apiInstance.getGFileSystemNodeNavigationStatus(body);
     System.out.println(result);
@@ -213,7 +213,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md)|  |
 
 ### Return type
 
@@ -308,7 +308,7 @@ No authorization required
 
 <a name="getUsedFilesystemShares"></a>
 # **getUsedFilesystemShares**
-> Object getUsedFilesystemShares(body)
+> List&lt;FSReference&gt; getUsedFilesystemShares(body)
 
 
 
@@ -320,9 +320,9 @@ No authorization required
 
 
 FileSystemSharesSettingControllerApi apiInstance = new FileSystemSharesSettingControllerApi();
-Object body = null; // Object | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
 try {
-    Object result = apiInstance.getUsedFilesystemShares(body);
+    List<FSReference> result = apiInstance.getUsedFilesystemShares(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling FileSystemSharesSettingControllerApi#getUsedFilesystemShares");
@@ -334,11 +334,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  |
 
 ### Return type
 
-**Object**
+[**List&lt;FSReference&gt;**](FSReference.md)
 
 ### Authorization
 

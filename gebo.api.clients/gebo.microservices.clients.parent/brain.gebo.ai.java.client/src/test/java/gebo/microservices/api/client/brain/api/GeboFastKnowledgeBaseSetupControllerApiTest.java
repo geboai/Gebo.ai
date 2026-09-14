@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.GeboContentProcessRow;
 import gebo.microservices.api.client.brain.model.GeboKnowledgeBaseSetupStatus;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -53,7 +54,7 @@ public class GeboFastKnowledgeBaseSetupControllerApiTest {
      */
     @Test
     public void getContentProcessRowsTest() {
-        Object response = api.getContentProcessRows();
+        List<GeboContentProcessRow> response = api.getContentProcessRows();
 
         // TODO: test validations
     }

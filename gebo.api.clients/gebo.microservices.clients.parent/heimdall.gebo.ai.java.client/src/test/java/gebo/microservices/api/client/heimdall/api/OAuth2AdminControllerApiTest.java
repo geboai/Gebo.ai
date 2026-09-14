@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.heimdall.api;
 
+import gebo.microservices.api.client.heimdall.model.AuthProviderDto;
 import gebo.microservices.api.client.heimdall.model.Oauth2ProviderModifiableData;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -54,7 +55,7 @@ public class OAuth2AdminControllerApiTest {
      */
     @Test
     public void findOauth2ProviderRegistrationByRegistrationIdTest() {
-        Object registrationId = null;
+        String registrationId = null;
         Oauth2ProviderModifiableData response = api.findOauth2ProviderRegistrationByRegistrationId(registrationId);
 
         // TODO: test validations
@@ -69,7 +70,7 @@ public class OAuth2AdminControllerApiTest {
      */
     @Test
     public void getProvidersTest() {
-        Object response = api.getProviders();
+        List<AuthProviderDto> response = api.getProviders();
 
         // TODO: test validations
     }

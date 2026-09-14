@@ -22,25 +22,59 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PathInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class PathInfo {
   @JsonProperty("absolutePath")
-  private Object absolutePath = null;
+  private String absolutePath = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("folder")
-  private Object folder = null;
+  private Boolean folder = null;
 
-  @JsonProperty("metaType")
-  private Object metaType = null;
+  /**
+   * Gets or Sets metaType
+   */
+  public enum MetaTypeEnum {
+    WEB_PAGE("WEB_PAGE"),
+    FILE("FILE"),
+    FOLDER("FOLDER"),
+    DEVICE("DEVICE"),
+    UNKNOWN("UNKNOWN");
+
+    private String value;
+
+    MetaTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static MetaTypeEnum fromValue(String input) {
+      for (MetaTypeEnum b : MetaTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("metaType")
+  private MetaTypeEnum metaType = null;
 
   @JsonProperty("iconKey")
-  private Object iconKey = null;
+  private String iconKey = null;
 
-  public PathInfo absolutePath(Object absolutePath) {
+  public PathInfo absolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
     return this;
   }
@@ -50,15 +84,15 @@ public class PathInfo {
    * @return absolutePath
   **/
   @Schema(description = "")
-  public Object getAbsolutePath() {
+  public String getAbsolutePath() {
     return absolutePath;
   }
 
-  public void setAbsolutePath(Object absolutePath) {
+  public void setAbsolutePath(String absolutePath) {
     this.absolutePath = absolutePath;
   }
 
-  public PathInfo name(Object name) {
+  public PathInfo name(String name) {
     this.name = name;
     return this;
   }
@@ -68,15 +102,15 @@ public class PathInfo {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public PathInfo folder(Object folder) {
+  public PathInfo folder(Boolean folder) {
     this.folder = folder;
     return this;
   }
@@ -86,15 +120,15 @@ public class PathInfo {
    * @return folder
   **/
   @Schema(description = "")
-  public Object getFolder() {
+  public Boolean isFolder() {
     return folder;
   }
 
-  public void setFolder(Object folder) {
+  public void setFolder(Boolean folder) {
     this.folder = folder;
   }
 
-  public PathInfo metaType(Object metaType) {
+  public PathInfo metaType(MetaTypeEnum metaType) {
     this.metaType = metaType;
     return this;
   }
@@ -104,15 +138,15 @@ public class PathInfo {
    * @return metaType
   **/
   @Schema(description = "")
-  public Object getMetaType() {
+  public MetaTypeEnum getMetaType() {
     return metaType;
   }
 
-  public void setMetaType(Object metaType) {
+  public void setMetaType(MetaTypeEnum metaType) {
     this.metaType = metaType;
   }
 
-  public PathInfo iconKey(Object iconKey) {
+  public PathInfo iconKey(String iconKey) {
     this.iconKey = iconKey;
     return this;
   }
@@ -122,11 +156,11 @@ public class PathInfo {
    * @return iconKey
   **/
   @Schema(description = "")
-  public Object getIconKey() {
+  public String getIconKey() {
     return iconKey;
   }
 
-  public void setIconKey(Object iconKey) {
+  public void setIconKey(String iconKey) {
     this.iconKey = iconKey;
   }
 

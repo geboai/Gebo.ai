@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**modelUse** | **Object** |  |  [optional]
-**langCode** | **Object** |  |  [optional]
-**modelProvider** | **Object** |  |  [optional]
-**modelCode** | **Object** |  |  [optional]
+**modelUse** | **String** |  |  [optional]
+**langCode** | **String** |  |  [optional]
+**modelProvider** | **String** |  |  [optional]
+**modelCode** | **String** |  |  [optional]

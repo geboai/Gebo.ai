@@ -22,25 +22,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastJiraSystemInsertRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:45.187682910+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:34.676208947+02:00[Europe/Rome]")
 
 public class FastJiraSystemInsertRequest {
   @JsonProperty("baseUri")
-  private Object baseUri = null;
+  private String baseUri = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("username")
-  private Object username = null;
+  private String username = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
   @JsonProperty("token")
-  private Object token = null;
+  private String token = null;
 
-  public FastJiraSystemInsertRequest baseUri(Object baseUri) {
+  public FastJiraSystemInsertRequest baseUri(String baseUri) {
     this.baseUri = baseUri;
     return this;
   }
@@ -50,15 +50,15 @@ public class FastJiraSystemInsertRequest {
    * @return baseUri
   **/
   @Schema(required = true, description = "")
-  public Object getBaseUri() {
+  public String getBaseUri() {
     return baseUri;
   }
 
-  public void setBaseUri(Object baseUri) {
+  public void setBaseUri(String baseUri) {
     this.baseUri = baseUri;
   }
 
-  public FastJiraSystemInsertRequest description(Object description) {
+  public FastJiraSystemInsertRequest description(String description) {
     this.description = description;
     return this;
   }
@@ -68,15 +68,15 @@ public class FastJiraSystemInsertRequest {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public FastJiraSystemInsertRequest username(Object username) {
+  public FastJiraSystemInsertRequest username(String username) {
     this.username = username;
     return this;
   }
@@ -86,15 +86,15 @@ public class FastJiraSystemInsertRequest {
    * @return username
   **/
   @Schema(required = true, description = "")
-  public Object getUsername() {
+  public String getUsername() {
     return username;
   }
 
-  public void setUsername(Object username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
-  public FastJiraSystemInsertRequest password(Object password) {
+  public FastJiraSystemInsertRequest password(String password) {
     this.password = password;
     return this;
   }
@@ -104,15 +104,15 @@ public class FastJiraSystemInsertRequest {
    * @return password
   **/
   @Schema(description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
-  public FastJiraSystemInsertRequest token(Object token) {
+  public FastJiraSystemInsertRequest token(String token) {
     this.token = token;
     return this;
   }
@@ -122,11 +122,11 @@ public class FastJiraSystemInsertRequest {
    * @return token
   **/
   @Schema(description = "")
-  public Object getToken() {
+  public String getToken() {
     return token;
   }
 
-  public void setToken(Object token) {
+  public void setToken(String token) {
     this.token = token;
   }
 

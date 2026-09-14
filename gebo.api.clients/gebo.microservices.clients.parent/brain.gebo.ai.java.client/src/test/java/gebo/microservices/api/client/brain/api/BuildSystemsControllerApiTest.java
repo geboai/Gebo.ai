@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.GBuildSystem;
+import gebo.microservices.api.client.brain.model.GBuildSystemType;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,8 +40,8 @@ public class BuildSystemsControllerApiTest {
      */
     @Test
     public void getBuildSystemConfigsTest() {
-        Object buildSystemTypeCode = null;
-        Object response = api.getBuildSystemConfigs(buildSystemTypeCode);
+        String buildSystemTypeCode = null;
+        List<GBuildSystem> response = api.getBuildSystemConfigs(buildSystemTypeCode);
 
         // TODO: test validations
     }
@@ -53,7 +55,7 @@ public class BuildSystemsControllerApiTest {
      */
     @Test
     public void getBuildSystemTypesTest() {
-        Object response = api.getBuildSystemTypes();
+        List<GBuildSystemType> response = api.getBuildSystemTypes();
 
         // TODO: test validations
     }

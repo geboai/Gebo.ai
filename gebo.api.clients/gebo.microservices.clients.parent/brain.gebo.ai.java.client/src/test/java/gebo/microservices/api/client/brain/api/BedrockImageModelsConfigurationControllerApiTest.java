@@ -57,7 +57,7 @@ public class BedrockImageModelsConfigurationControllerApiTest {
      */
     @Test
     public void findBedrockImageModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GBedrockImageModelConfig response = api.findBedrockImageModelConfigByCode(code);
 
         // TODO: test validations

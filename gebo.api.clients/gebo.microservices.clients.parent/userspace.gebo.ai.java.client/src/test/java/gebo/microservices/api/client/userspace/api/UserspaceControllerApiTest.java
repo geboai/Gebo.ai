@@ -17,6 +17,7 @@ import gebo.microservices.api.client.userspace.model.OperationStatusGJobStatus;
 import gebo.microservices.api.client.userspace.model.OperationStatusPublishingStatus;
 import gebo.microservices.api.client.userspace.model.PublishingStatus;
 import gebo.microservices.api.client.userspace.model.UserUploadToUserSpaceParam;
+import gebo.microservices.api.client.userspace.model.UserspaceFileDto;
 import gebo.microservices.api.client.userspace.model.UserspaceFolderDto;
 import gebo.microservices.api.client.userspace.model.UserspaceKnowledgebaseDto;
 import org.junit.Test;
@@ -60,7 +61,7 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void deleteUserspaceFilesTest() {
-        Object body = null;
+        List<UserspaceFileDto> body = null;
         api.deleteUserspaceFiles(body);
 
         // TODO: test validations
@@ -90,7 +91,7 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void findUserKnowledgebaseByCodeTest() {
-        Object code = null;
+        String code = null;
         UserspaceKnowledgebaseDto response = api.findUserKnowledgebaseByCode(code);
 
         // TODO: test validations
@@ -105,8 +106,8 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void findUserspaceFileByCodesTest() {
-        Object body = null;
-        Object response = api.findUserspaceFileByCodes(body);
+        List<String> body = null;
+        List<UserspaceFileDto> response = api.findUserspaceFileByCodes(body);
 
         // TODO: test validations
     }
@@ -120,7 +121,7 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void findUserspaceFolderByCodeTest() {
-        Object code = null;
+        String code = null;
         UserspaceFolderDto response = api.findUserspaceFolderByCode(code);
 
         // TODO: test validations
@@ -135,7 +136,7 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void getPersonalKnowledgebasesTest() {
-        Object response = api.getPersonalKnowledgebases();
+        List<UserspaceKnowledgebaseDto> response = api.getPersonalKnowledgebases();
 
         // TODO: test validations
     }
@@ -164,8 +165,8 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void listChildPersonalKnowledgebasesTest() {
-        Object body = null;
-        Object response = api.listChildPersonalKnowledgebases(body);
+        List<String> body = null;
+        List<UserspaceKnowledgebaseDto> response = api.listChildPersonalKnowledgebases(body);
 
         // TODO: test validations
     }
@@ -179,8 +180,8 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void listUserspaceFilesTest() {
-        Object userspaceUploadCode = null;
-        Object response = api.listUserspaceFiles(userspaceUploadCode);
+        String userspaceUploadCode = null;
+        List<UserspaceFileDto> response = api.listUserspaceFiles(userspaceUploadCode);
 
         // TODO: test validations
     }
@@ -194,8 +195,8 @@ public class UserspaceControllerApiTest {
      */
     @Test
     public void listUserspaceFoldersTest() {
-        Object userspaceKnowledgeBase = null;
-        Object response = api.listUserspaceFolders(userspaceKnowledgeBase);
+        String userspaceKnowledgeBase = null;
+        List<UserspaceFolderDto> response = api.listUserspaceFolders(userspaceKnowledgeBase);
 
         // TODO: test validations
     }

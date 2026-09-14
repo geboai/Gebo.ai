@@ -12,8 +12,8 @@
 import { SharepointAdditionalSearchFilter } from './sharepointAdditionalSearchFilter';
 
 export interface MicrosoftResultsExtractionData { 
-    extractedRelevantContent?: any;
-    contentIsRelevant?: any;
-    satisfactoryAnswer?: any;
+    extractedRelevantContent?: string;
+    contentIsRelevant?: boolean;
+    satisfactoryAnswer?: boolean;
     additionalSharepointSearchIdeas?: SharepointAdditionalSearchFilter;
 }

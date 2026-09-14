@@ -12,9 +12,9 @@
 import { DataTransformationMetaInfo } from './dataTransformationMetaInfo';
 
 export interface DataTransformationInfo { 
-    id: any;
-    description: any;
+    id: string;
+    description: string;
     transformationInfo: DataTransformationMetaInfo;
-    dataSourceId: any;
-    dataDestinationId: any;
+    dataSourceId: string;
+    dataDestinationId: string;
 }

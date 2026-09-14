@@ -57,7 +57,7 @@ public class GoogleVertexChatModelsConfigurationControllerApiTest {
      */
     @Test
     public void findGoogleVertexChatModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GGoogleVertexChatModelConfig response = api.findGoogleVertexChatModelConfigByCode(code);
 
         // TODO: test validations

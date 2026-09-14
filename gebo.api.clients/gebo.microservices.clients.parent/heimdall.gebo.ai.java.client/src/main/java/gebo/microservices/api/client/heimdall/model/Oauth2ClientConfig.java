@@ -22,28 +22,66 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Oauth2ClientConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class Oauth2ClientConfig {
   @JsonProperty("registrationId")
-  private Object registrationId = null;
+  private String registrationId = null;
 
   @JsonProperty("clientId")
-  private Object clientId = null;
+  private String clientId = null;
 
   @JsonProperty("issuer")
-  private Object issuer = null;
+  private String issuer = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("tokenUri")
-  private Object tokenUri = null;
+  private String tokenUri = null;
 
-  @JsonProperty("provider")
-  private Object provider = null;
+  /**
+   * Gets or Sets provider
+   */
+  public enum ProviderEnum {
+    LOCAL("local"),
+    GOOGLE("google"),
+    MICROSOFT("microsoft"),
+    MICROSOFT_MULTITENANT("microsoft_multitenant"),
+    AWS_COGNITO("aws_cognito"),
+    AWS_IDENTITY_CENTER("aws_identity_center"),
+    KEYCLOAK("keycloak"),
+    OAUTH2_GENERIC("oauth2_generic"),
+    LDAP("ldap");
 
-  public Oauth2ClientConfig registrationId(Object registrationId) {
+    private String value;
+
+    ProviderEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ProviderEnum fromValue(String input) {
+      for (ProviderEnum b : ProviderEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("provider")
+  private ProviderEnum provider = null;
+
+  public Oauth2ClientConfig registrationId(String registrationId) {
     this.registrationId = registrationId;
     return this;
   }
@@ -53,15 +91,15 @@ public class Oauth2ClientConfig {
    * @return registrationId
   **/
   @Schema(required = true, description = "")
-  public Object getRegistrationId() {
+  public String getRegistrationId() {
     return registrationId;
   }
 
-  public void setRegistrationId(Object registrationId) {
+  public void setRegistrationId(String registrationId) {
     this.registrationId = registrationId;
   }
 
-  public Oauth2ClientConfig clientId(Object clientId) {
+  public Oauth2ClientConfig clientId(String clientId) {
     this.clientId = clientId;
     return this;
   }
@@ -71,15 +109,15 @@ public class Oauth2ClientConfig {
    * @return clientId
   **/
   @Schema(required = true, description = "")
-  public Object getClientId() {
+  public String getClientId() {
     return clientId;
   }
 
-  public void setClientId(Object clientId) {
+  public void setClientId(String clientId) {
     this.clientId = clientId;
   }
 
-  public Oauth2ClientConfig issuer(Object issuer) {
+  public Oauth2ClientConfig issuer(String issuer) {
     this.issuer = issuer;
     return this;
   }
@@ -89,15 +127,15 @@ public class Oauth2ClientConfig {
    * @return issuer
   **/
   @Schema(required = true, description = "")
-  public Object getIssuer() {
+  public String getIssuer() {
     return issuer;
   }
 
-  public void setIssuer(Object issuer) {
+  public void setIssuer(String issuer) {
     this.issuer = issuer;
   }
 
-  public Oauth2ClientConfig description(Object description) {
+  public Oauth2ClientConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -107,15 +145,15 @@ public class Oauth2ClientConfig {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public Oauth2ClientConfig tokenUri(Object tokenUri) {
+  public Oauth2ClientConfig tokenUri(String tokenUri) {
     this.tokenUri = tokenUri;
     return this;
   }
@@ -125,15 +163,15 @@ public class Oauth2ClientConfig {
    * @return tokenUri
   **/
   @Schema(required = true, description = "")
-  public Object getTokenUri() {
+  public String getTokenUri() {
     return tokenUri;
   }
 
-  public void setTokenUri(Object tokenUri) {
+  public void setTokenUri(String tokenUri) {
     this.tokenUri = tokenUri;
   }
 
-  public Oauth2ClientConfig provider(Object provider) {
+  public Oauth2ClientConfig provider(ProviderEnum provider) {
     this.provider = provider;
     return this;
   }
@@ -143,11 +181,11 @@ public class Oauth2ClientConfig {
    * @return provider
   **/
   @Schema(required = true, description = "")
-  public Object getProvider() {
+  public ProviderEnum getProvider() {
     return provider;
   }
 
-  public void setProvider(Object provider) {
+  public void setProvider(ProviderEnum provider) {
     this.provider = provider;
   }
 

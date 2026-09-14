@@ -3,14 +3,22 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | **Object** |  |  [optional]
-**code** | **Object** |  |  [optional]
-**workflowId** | **Object** |  |  [optional]
-**workflowType** | **Object** |  |  [optional]
+**description** | **String** |  |  [optional]
+**code** | **String** |  |  [optional]
+**workflowId** | **String** |  |  [optional]
+**workflowType** | **String** |  |  [optional]
 **projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
-**startDateTime** | **Object** |  |  [optional]
-**error** | **Object** |  |  [optional]
-**processing** | **Object** |  |  [optional]
-**finished** | **Object** |  |  [optional]
-**jobType** | **Object** |  |  [optional]
-**endDateTime** | **Object** |  |  [optional]
+**startDateTime** | [**Date**](Date.md) |  |  [optional]
+**error** | **Boolean** |  |  [optional]
+**processing** | **Boolean** |  |  [optional]
+**finished** | **Boolean** |  |  [optional]
+**jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
+**endDateTime** | [**Date**](Date.md) |  |  [optional]
+
+<a name="JobTypeEnum"></a>
+## Enum: JobTypeEnum
+Name | Value
+---- | -----
+CONTENTS_READING | &quot;CONTENTS_READING&quot;
+VECTORIZING_CONTENTS | &quot;VECTORIZING_CONTENTS&quot;
+CONTENTS_READING_VECTORIZING | &quot;CONTENTS_READING_VECTORIZING&quot;

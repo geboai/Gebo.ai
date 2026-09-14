@@ -3,12 +3,12 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **Object** |  |  [optional]
-**absolutePath** | **Object** |  |  [optional]
-**extension** | **Object** |  |  [optional]
-**size** | **Object** |  |  [optional]
-**modificationTime** | **Object** |  |  [optional]
-**folder** | **Object** |  |  [optional]
-**ingested** | **Object** |  |  [optional]
-**documentCode** | **Object** |  |  [optional]
-**tracked** | **Object** |  |  [optional]
+**name** | **String** |  |  [optional]
+**absolutePath** | **String** |  |  [optional]
+**extension** | **String** |  |  [optional]
+**size** | **Long** |  |  [optional]
+**modificationTime** | [**Date**](Date.md) |  |  [optional]
+**folder** | **Boolean** |  |  [optional]
+**ingested** | **Boolean** |  |  [optional]
+**documentCode** | **String** |  |  [optional]
+**tracked** | **Boolean** |  |  [optional]

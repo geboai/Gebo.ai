@@ -17,24 +17,28 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.GModuleMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GDataFlowReport
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GDataFlowReport {
   @JsonProperty("nodeId")
-  private Object nodeId = null;
+  private String nodeId = null;
 
   @JsonProperty("collectedAt")
-  private Object collectedAt = null;
+  private Date collectedAt = null;
 
   @JsonProperty("modules")
-  private Object modules = null;
+  private List<GModuleMetaInfo> modules = null;
 
-  public GDataFlowReport nodeId(Object nodeId) {
+  public GDataFlowReport nodeId(String nodeId) {
     this.nodeId = nodeId;
     return this;
   }
@@ -44,15 +48,15 @@ public class GDataFlowReport {
    * @return nodeId
   **/
   @Schema(description = "")
-  public Object getNodeId() {
+  public String getNodeId() {
     return nodeId;
   }
 
-  public void setNodeId(Object nodeId) {
+  public void setNodeId(String nodeId) {
     this.nodeId = nodeId;
   }
 
-  public GDataFlowReport collectedAt(Object collectedAt) {
+  public GDataFlowReport collectedAt(Date collectedAt) {
     this.collectedAt = collectedAt;
     return this;
   }
@@ -62,16 +66,24 @@ public class GDataFlowReport {
    * @return collectedAt
   **/
   @Schema(description = "")
-  public Object getCollectedAt() {
+  public Date getCollectedAt() {
     return collectedAt;
   }
 
-  public void setCollectedAt(Object collectedAt) {
+  public void setCollectedAt(Date collectedAt) {
     this.collectedAt = collectedAt;
   }
 
-  public GDataFlowReport modules(Object modules) {
+  public GDataFlowReport modules(List<GModuleMetaInfo> modules) {
     this.modules = modules;
+    return this;
+  }
+
+  public GDataFlowReport addModulesItem(GModuleMetaInfo modulesItem) {
+    if (this.modules == null) {
+      this.modules = new ArrayList<>();
+    }
+    this.modules.add(modulesItem);
     return this;
   }
 
@@ -80,11 +92,11 @@ public class GDataFlowReport {
    * @return modules
   **/
   @Schema(description = "")
-  public Object getModules() {
+  public List<GModuleMetaInfo> getModules() {
     return modules;
   }
 
-  public void setModules(Object modules) {
+  public void setModules(List<GModuleMetaInfo> modules) {
     this.modules = modules;
   }
 

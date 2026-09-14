@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SortObject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class SortObject {
   @JsonProperty("sorted")
-  private Object sorted = null;
+  private Boolean sorted = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
   @JsonProperty("unsorted")
-  private Object unsorted = null;
+  private Boolean unsorted = null;
 
-  public SortObject sorted(Object sorted) {
+  public SortObject sorted(Boolean sorted) {
     this.sorted = sorted;
     return this;
   }
@@ -44,15 +44,15 @@ public class SortObject {
    * @return sorted
   **/
   @Schema(description = "")
-  public Object getSorted() {
+  public Boolean isSorted() {
     return sorted;
   }
 
-  public void setSorted(Object sorted) {
+  public void setSorted(Boolean sorted) {
     this.sorted = sorted;
   }
 
-  public SortObject empty(Object empty) {
+  public SortObject empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -62,15 +62,15 @@ public class SortObject {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 
-  public SortObject unsorted(Object unsorted) {
+  public SortObject unsorted(Boolean unsorted) {
     this.unsorted = unsorted;
     return this;
   }
@@ -80,11 +80,11 @@ public class SortObject {
    * @return unsorted
   **/
   @Schema(description = "")
-  public Object getUnsorted() {
+  public Boolean isUnsorted() {
     return unsorted;
   }
 
-  public void setUnsorted(Object unsorted) {
+  public void setUnsorted(Boolean unsorted) {
     this.unsorted = unsorted;
   }
 

@@ -22,16 +22,47 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * StartWorkflowData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class StartWorkflowData {
   @JsonProperty("email")
-  private Object email = null;
+  private String email = null;
 
-  @JsonProperty("type")
-  private Object type = null;
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    ACTIVATION("ACTIVATION"),
+    FORGOT_PASSWORD("FORGOT_PASSWORD");
 
-  public StartWorkflowData email(Object email) {
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypeEnum fromValue(String input) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("type")
+  private TypeEnum type = null;
+
+  public StartWorkflowData email(String email) {
     this.email = email;
     return this;
   }
@@ -41,15 +72,15 @@ public class StartWorkflowData {
    * @return email
   **/
   @Schema(required = true, description = "")
-  public Object getEmail() {
+  public String getEmail() {
     return email;
   }
 
-  public void setEmail(Object email) {
+  public void setEmail(String email) {
     this.email = email;
   }
 
-  public StartWorkflowData type(Object type) {
+  public StartWorkflowData type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -59,11 +90,11 @@ public class StartWorkflowData {
    * @return type
   **/
   @Schema(required = true, description = "")
-  public Object getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(Object type) {
+  public void setType(TypeEnum type) {
     this.type = type;
   }
 

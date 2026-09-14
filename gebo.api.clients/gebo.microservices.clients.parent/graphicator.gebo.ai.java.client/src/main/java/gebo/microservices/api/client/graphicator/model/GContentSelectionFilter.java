@@ -17,19 +17,30 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.graphicator.model.GContentSelectionFilterCriteria;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GContentSelectionFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:08:59.956635121+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:28.713838626+02:00[Europe/Rome]")
 
 public class GContentSelectionFilter {
   @JsonProperty("criterias")
-  private Object criterias = null;
+  private List<GContentSelectionFilterCriteria> criterias = null;
 
-  public GContentSelectionFilter criterias(Object criterias) {
+  public GContentSelectionFilter criterias(List<GContentSelectionFilterCriteria> criterias) {
     this.criterias = criterias;
+    return this;
+  }
+
+  public GContentSelectionFilter addCriteriasItem(GContentSelectionFilterCriteria criteriasItem) {
+    if (this.criterias == null) {
+      this.criterias = new ArrayList<>();
+    }
+    this.criterias.add(criteriasItem);
     return this;
   }
 
@@ -38,11 +49,11 @@ public class GContentSelectionFilter {
    * @return criterias
   **/
   @Schema(description = "")
-  public Object getCriterias() {
+  public List<GContentSelectionFilterCriteria> getCriterias() {
     return criterias;
   }
 
-  public void setCriterias(Object criterias) {
+  public void setCriterias(List<GContentSelectionFilterCriteria> criterias) {
     this.criterias = criterias;
   }
 

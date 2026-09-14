@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboAdminPromptUseInfoControllerApi {
     private ApiClient apiClient;
@@ -46,10 +46,10 @@ public class GeboAdminPromptUseInfoControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GPromptUseInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAll() throws RestClientException {
+    public List<GPromptUseInfo> findAll() throws RestClientException {
         return findAllWithHttpInfo().getBody();
     }
 
@@ -57,10 +57,10 @@ public class GeboAdminPromptUseInfoControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GPromptUseInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAllWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GPromptUseInfo>> findAllWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptUseController/findAll").build().toUriString();
         
@@ -77,7 +77,7 @@ public class GeboAdminPromptUseInfoControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GPromptUseInfo>> returnType = new ParameterizedTypeReference<List<GPromptUseInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -88,7 +88,7 @@ public class GeboAdminPromptUseInfoControllerApi {
      * @return GPromptUseInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptUseInfo findByCode(Object code) throws RestClientException {
+    public GPromptUseInfo findByCode(String code) throws RestClientException {
         return findByCodeWithHttpInfo(code).getBody();
     }
 
@@ -100,7 +100,7 @@ public class GeboAdminPromptUseInfoControllerApi {
      * @return ResponseEntity&lt;GPromptUseInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptUseInfo> findByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GPromptUseInfo> findByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -130,10 +130,10 @@ public class GeboAdminPromptUseInfoControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param module  (required)
-     * @return Object
+     * @return List&lt;GPromptUseInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findByModule(Object module) throws RestClientException {
+    public List<GPromptUseInfo> findByModule(String module) throws RestClientException {
         return findByModuleWithHttpInfo(module).getBody();
     }
 
@@ -142,10 +142,10 @@ public class GeboAdminPromptUseInfoControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param module  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GPromptUseInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findByModuleWithHttpInfo(Object module) throws RestClientException {
+    public ResponseEntity<List<GPromptUseInfo>> findByModuleWithHttpInfo(String module) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'module' is set
         if (module == null) {
@@ -167,7 +167,7 @@ public class GeboAdminPromptUseInfoControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GPromptUseInfo>> returnType = new ParameterizedTypeReference<List<GPromptUseInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

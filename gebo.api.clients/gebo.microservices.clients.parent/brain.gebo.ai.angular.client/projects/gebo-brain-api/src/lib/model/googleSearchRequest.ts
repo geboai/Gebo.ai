@@ -11,7 +11,7 @@
  */
 
 export interface GoogleSearchRequest { 
-    language?: any;
-    query?: any;
-    topN?: any;
+    language?: string;
+    query?: string;
+    topN?: number;
 }

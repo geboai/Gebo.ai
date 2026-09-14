@@ -22,22 +22,57 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMModelsLookupParameter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMModelsLookupParameter {
-  @JsonProperty("type")
-  private Object type = null;
+  /**
+   * Gets or Sets type
+   */
+  public enum TypeEnum {
+    CHAT("CHAT"),
+    EMBEDDING("EMBEDDING"),
+    RANKING("RANKING"),
+    IMAGESGEN("IMAGESGEN"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
+
+    private String value;
+
+    TypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TypeEnum fromValue(String input) {
+      for (TypeEnum b : TypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("type")
+  private TypeEnum type = null;
 
   @JsonProperty("serviceHandler")
-  private Object serviceHandler = null;
+  private String serviceHandler = null;
 
   @JsonProperty("secretId")
-  private Object secretId = null;
+  private String secretId = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
-  public LLMModelsLookupParameter type(Object type) {
+  public LLMModelsLookupParameter type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -47,15 +82,15 @@ public class LLMModelsLookupParameter {
    * @return type
   **/
   @Schema(required = true, description = "")
-  public Object getType() {
+  public TypeEnum getType() {
     return type;
   }
 
-  public void setType(Object type) {
+  public void setType(TypeEnum type) {
     this.type = type;
   }
 
-  public LLMModelsLookupParameter serviceHandler(Object serviceHandler) {
+  public LLMModelsLookupParameter serviceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
     return this;
   }
@@ -65,15 +100,15 @@ public class LLMModelsLookupParameter {
    * @return serviceHandler
   **/
   @Schema(required = true, description = "")
-  public Object getServiceHandler() {
+  public String getServiceHandler() {
     return serviceHandler;
   }
 
-  public void setServiceHandler(Object serviceHandler) {
+  public void setServiceHandler(String serviceHandler) {
     this.serviceHandler = serviceHandler;
   }
 
-  public LLMModelsLookupParameter secretId(Object secretId) {
+  public LLMModelsLookupParameter secretId(String secretId) {
     this.secretId = secretId;
     return this;
   }
@@ -83,15 +118,15 @@ public class LLMModelsLookupParameter {
    * @return secretId
   **/
   @Schema(description = "")
-  public Object getSecretId() {
+  public String getSecretId() {
     return secretId;
   }
 
-  public void setSecretId(Object secretId) {
+  public void setSecretId(String secretId) {
     this.secretId = secretId;
   }
 
-  public LLMModelsLookupParameter baseUrl(Object baseUrl) {
+  public LLMModelsLookupParameter baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -101,11 +136,11 @@ public class LLMModelsLookupParameter {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 

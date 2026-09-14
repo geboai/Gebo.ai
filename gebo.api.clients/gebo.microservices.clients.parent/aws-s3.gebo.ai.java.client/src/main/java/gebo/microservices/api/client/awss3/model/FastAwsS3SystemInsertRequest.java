@@ -23,19 +23,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastAwsS3SystemInsertRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:46.219289034+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:35.503809141+02:00[Europe/Rome]")
 
 public class FastAwsS3SystemInsertRequest {
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("awsEndpoint")
-  private Object awsEndpoint = null;
+  private String awsEndpoint = null;
 
   @JsonProperty("awsConnectionCredentials")
   private GeboAwsConnectionCredentials awsConnectionCredentials = null;
 
-  public FastAwsS3SystemInsertRequest description(Object description) {
+  public FastAwsS3SystemInsertRequest description(String description) {
     this.description = description;
     return this;
   }
@@ -45,15 +45,15 @@ public class FastAwsS3SystemInsertRequest {
    * @return description
   **/
   @Schema(required = true, description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public FastAwsS3SystemInsertRequest awsEndpoint(Object awsEndpoint) {
+  public FastAwsS3SystemInsertRequest awsEndpoint(String awsEndpoint) {
     this.awsEndpoint = awsEndpoint;
     return this;
   }
@@ -63,11 +63,11 @@ public class FastAwsS3SystemInsertRequest {
    * @return awsEndpoint
   **/
   @Schema(description = "")
-  public Object getAwsEndpoint() {
+  public String getAwsEndpoint() {
     return awsEndpoint;
   }
 
-  public void setAwsEndpoint(Object awsEndpoint) {
+  public void setAwsEndpoint(String awsEndpoint) {
     this.awsEndpoint = awsEndpoint;
   }
 

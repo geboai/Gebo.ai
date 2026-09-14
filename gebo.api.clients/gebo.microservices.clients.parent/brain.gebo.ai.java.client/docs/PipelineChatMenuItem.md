@@ -3,11 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**optionId** | **Object** |  | 
-**icon** | **Object** |  |  [optional]
-**description** | **Object** |  | 
-**defaultOption** | **Object** |  |  [optional]
-**routeOption** | **Object** |  |  [optional]
-**pipelineId** | **Object** |  |  [optional]
-**productId** | **Object** |  |  [optional]
-**parameters** | **Object** |  |  [optional]
+**optionId** | **String** |  | 
+**icon** | **String** |  |  [optional]
+**description** | **String** |  | 
+**defaultOption** | **Boolean** |  |  [optional]
+**routeOption** | **String** |  |  [optional]
+**pipelineId** | **String** |  |  [optional]
+**productId** | **String** |  |  [optional]
+**parameters** | [**List&lt;PipelineChatMenuItemParameter&gt;**](PipelineChatMenuItemParameter.md) |  |  [optional]

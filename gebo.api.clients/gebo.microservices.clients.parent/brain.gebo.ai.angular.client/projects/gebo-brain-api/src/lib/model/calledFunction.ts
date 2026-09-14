@@ -11,7 +11,7 @@
  */
 
 export interface CalledFunction { 
-    functionName?: any;
-    functionDescription?: any;
-    paramsDescription?: any;
+    functionName?: string;
+    functionDescription?: string;
+    paramsDescription?: Array<string>;
 }

@@ -10,11 +10,13 @@
  * Do not edit the class manually.
  */
 import { GBaseChatModelChoice } from './gBaseChatModelChoice';
+import { GBaseObject } from './gBaseObject';
+import { ToolCategoriesTree } from './toolCategoriesTree';
 
 export interface GeboChatUserInfo { 
-    ragChat?: any;
-    knowledgeBases?: any;
-    providerId?: any;
-    availableFunctions?: any;
+    ragChat?: boolean;
+    knowledgeBases?: Array<GBaseObject>;
+    providerId?: string;
+    availableFunctions?: Array<ToolCategoriesTree>;
     chatModelChoice?: GBaseChatModelChoice;
 }

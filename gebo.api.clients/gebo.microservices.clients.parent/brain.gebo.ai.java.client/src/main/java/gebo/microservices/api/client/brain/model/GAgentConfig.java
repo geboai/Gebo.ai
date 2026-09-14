@@ -20,98 +20,197 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GObjectRefGBaseChatModelConfig;
 import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
-  @JsonProperty("agentType")
-  private Object agentType = null;
+  /**
+   * Gets or Sets agentType
+   */
+  public enum AgentTypeEnum {
+    AGENT("AGENT"),
+    AGENTS_NETWORK("AGENTS_NETWORK");
+
+    private String value;
+
+    AgentTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AgentTypeEnum fromValue(String input) {
+      for (AgentTypeEnum b : AgentTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("agentType")
+  private AgentTypeEnum agentType = null;
 
   @JsonProperty("adaptedAgentNetworkCode")
-  private Object adaptedAgentNetworkCode = null;
+  private String adaptedAgentNetworkCode = null;
 
   @JsonProperty("agentNetworkServiceCode")
-  private Object agentNetworkServiceCode = null;
+  private String agentNetworkServiceCode = null;
 
   @JsonProperty("agentServiceId")
-  private Object agentServiceId = null;
+  private String agentServiceId = null;
 
   @JsonProperty("mainLoopPromptUseCode")
-  private Object mainLoopPromptUseCode = null;
+  private String mainLoopPromptUseCode = null;
 
   @JsonProperty("customLoopPrompt")
   private GPromptTemplateConfig customLoopPrompt = null;
 
   @JsonProperty("subscribeAllTools")
-  private Object subscribeAllTools = null;
+  private Boolean subscribeAllTools = null;
 
   @JsonProperty("agentRoleCode")
-  private Object agentRoleCode = null;
+  private String agentRoleCode = null;
 
   @JsonProperty("useDefaultChatModel")
-  private Object useDefaultChatModel = null;
+  private Boolean useDefaultChatModel = null;
 
-  @JsonProperty("useChatModelWithUse")
-  private Object useChatModelWithUse = null;
+  /**
+   * Gets or Sets useChatModelWithUse
+   */
+  public enum UseChatModelWithUseEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
+
+    private String value;
+
+    UseChatModelWithUseEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UseChatModelWithUseEnum fromValue(String input) {
+      for (UseChatModelWithUseEnum b : UseChatModelWithUseEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("useChatModelWithUse")
+  private UseChatModelWithUseEnum useChatModelWithUse = null;
 
   @JsonProperty("chatModelReference")
   private GObjectRefGBaseChatModelConfig chatModelReference = null;
 
   @JsonProperty("maxLoopIterations")
-  private Object maxLoopIterations = null;
+  private Integer maxLoopIterations = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("defaultConfiguration")
-  private Object defaultConfiguration = null;
+  private Boolean defaultConfiguration = null;
 
   @JsonProperty("topP")
-  private Object topP = null;
+  private Double topP = null;
 
   @JsonProperty("temperature")
-  private Object temperature = null;
+  private Double temperature = null;
 
-  @JsonProperty("thinking")
-  private Object thinking = null;
+  /**
+   * Gets or Sets thinking
+   */
+  public enum ThinkingEnum {
+    NO_THINKING("NO_THINKING"),
+    LOW_THINKING("LOW_THINKING"),
+    MEDIUM_THINKING("MEDIUM_THINKING"),
+    HIGH_THINKING("HIGH_THINKING"),
+    AUTO("AUTO");
+
+    private String value;
+
+    ThinkingEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ThinkingEnum fromValue(String input) {
+      for (ThinkingEnum b : ThinkingEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("thinking")
+  private ThinkingEnum thinking = null;
 
   @JsonProperty("readOnly")
-  private Object readOnly = null;
+  private Boolean readOnly = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("enabledFunctions")
-  private Object enabledFunctions = null;
+  private List<String> enabledFunctions = null;
 
-  public GAgentConfig code(Object code) {
+  public GAgentConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -121,15 +220,15 @@ public class GAgentConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GAgentConfig description(Object description) {
+  public GAgentConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -139,15 +238,15 @@ public class GAgentConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GAgentConfig userModified(Object userModified) {
+  public GAgentConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -157,15 +256,15 @@ public class GAgentConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GAgentConfig userCreated(Object userCreated) {
+  public GAgentConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -175,15 +274,15 @@ public class GAgentConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GAgentConfig dateModified(Object dateModified) {
+  public GAgentConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -193,15 +292,15 @@ public class GAgentConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GAgentConfig dateCreated(Object dateCreated) {
+  public GAgentConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -211,15 +310,15 @@ public class GAgentConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GAgentConfig agentType(Object agentType) {
+  public GAgentConfig agentType(AgentTypeEnum agentType) {
     this.agentType = agentType;
     return this;
   }
@@ -229,15 +328,15 @@ public class GAgentConfig {
    * @return agentType
   **/
   @Schema(description = "")
-  public Object getAgentType() {
+  public AgentTypeEnum getAgentType() {
     return agentType;
   }
 
-  public void setAgentType(Object agentType) {
+  public void setAgentType(AgentTypeEnum agentType) {
     this.agentType = agentType;
   }
 
-  public GAgentConfig adaptedAgentNetworkCode(Object adaptedAgentNetworkCode) {
+  public GAgentConfig adaptedAgentNetworkCode(String adaptedAgentNetworkCode) {
     this.adaptedAgentNetworkCode = adaptedAgentNetworkCode;
     return this;
   }
@@ -247,15 +346,15 @@ public class GAgentConfig {
    * @return adaptedAgentNetworkCode
   **/
   @Schema(description = "")
-  public Object getAdaptedAgentNetworkCode() {
+  public String getAdaptedAgentNetworkCode() {
     return adaptedAgentNetworkCode;
   }
 
-  public void setAdaptedAgentNetworkCode(Object adaptedAgentNetworkCode) {
+  public void setAdaptedAgentNetworkCode(String adaptedAgentNetworkCode) {
     this.adaptedAgentNetworkCode = adaptedAgentNetworkCode;
   }
 
-  public GAgentConfig agentNetworkServiceCode(Object agentNetworkServiceCode) {
+  public GAgentConfig agentNetworkServiceCode(String agentNetworkServiceCode) {
     this.agentNetworkServiceCode = agentNetworkServiceCode;
     return this;
   }
@@ -265,15 +364,15 @@ public class GAgentConfig {
    * @return agentNetworkServiceCode
   **/
   @Schema(description = "")
-  public Object getAgentNetworkServiceCode() {
+  public String getAgentNetworkServiceCode() {
     return agentNetworkServiceCode;
   }
 
-  public void setAgentNetworkServiceCode(Object agentNetworkServiceCode) {
+  public void setAgentNetworkServiceCode(String agentNetworkServiceCode) {
     this.agentNetworkServiceCode = agentNetworkServiceCode;
   }
 
-  public GAgentConfig agentServiceId(Object agentServiceId) {
+  public GAgentConfig agentServiceId(String agentServiceId) {
     this.agentServiceId = agentServiceId;
     return this;
   }
@@ -283,15 +382,15 @@ public class GAgentConfig {
    * @return agentServiceId
   **/
   @Schema(required = true, description = "")
-  public Object getAgentServiceId() {
+  public String getAgentServiceId() {
     return agentServiceId;
   }
 
-  public void setAgentServiceId(Object agentServiceId) {
+  public void setAgentServiceId(String agentServiceId) {
     this.agentServiceId = agentServiceId;
   }
 
-  public GAgentConfig mainLoopPromptUseCode(Object mainLoopPromptUseCode) {
+  public GAgentConfig mainLoopPromptUseCode(String mainLoopPromptUseCode) {
     this.mainLoopPromptUseCode = mainLoopPromptUseCode;
     return this;
   }
@@ -301,11 +400,11 @@ public class GAgentConfig {
    * @return mainLoopPromptUseCode
   **/
   @Schema(description = "")
-  public Object getMainLoopPromptUseCode() {
+  public String getMainLoopPromptUseCode() {
     return mainLoopPromptUseCode;
   }
 
-  public void setMainLoopPromptUseCode(Object mainLoopPromptUseCode) {
+  public void setMainLoopPromptUseCode(String mainLoopPromptUseCode) {
     this.mainLoopPromptUseCode = mainLoopPromptUseCode;
   }
 
@@ -327,7 +426,7 @@ public class GAgentConfig {
     this.customLoopPrompt = customLoopPrompt;
   }
 
-  public GAgentConfig subscribeAllTools(Object subscribeAllTools) {
+  public GAgentConfig subscribeAllTools(Boolean subscribeAllTools) {
     this.subscribeAllTools = subscribeAllTools;
     return this;
   }
@@ -337,15 +436,15 @@ public class GAgentConfig {
    * @return subscribeAllTools
   **/
   @Schema(description = "")
-  public Object getSubscribeAllTools() {
+  public Boolean isSubscribeAllTools() {
     return subscribeAllTools;
   }
 
-  public void setSubscribeAllTools(Object subscribeAllTools) {
+  public void setSubscribeAllTools(Boolean subscribeAllTools) {
     this.subscribeAllTools = subscribeAllTools;
   }
 
-  public GAgentConfig agentRoleCode(Object agentRoleCode) {
+  public GAgentConfig agentRoleCode(String agentRoleCode) {
     this.agentRoleCode = agentRoleCode;
     return this;
   }
@@ -355,15 +454,15 @@ public class GAgentConfig {
    * @return agentRoleCode
   **/
   @Schema(required = true, description = "")
-  public Object getAgentRoleCode() {
+  public String getAgentRoleCode() {
     return agentRoleCode;
   }
 
-  public void setAgentRoleCode(Object agentRoleCode) {
+  public void setAgentRoleCode(String agentRoleCode) {
     this.agentRoleCode = agentRoleCode;
   }
 
-  public GAgentConfig useDefaultChatModel(Object useDefaultChatModel) {
+  public GAgentConfig useDefaultChatModel(Boolean useDefaultChatModel) {
     this.useDefaultChatModel = useDefaultChatModel;
     return this;
   }
@@ -373,15 +472,15 @@ public class GAgentConfig {
    * @return useDefaultChatModel
   **/
   @Schema(description = "")
-  public Object getUseDefaultChatModel() {
+  public Boolean isUseDefaultChatModel() {
     return useDefaultChatModel;
   }
 
-  public void setUseDefaultChatModel(Object useDefaultChatModel) {
+  public void setUseDefaultChatModel(Boolean useDefaultChatModel) {
     this.useDefaultChatModel = useDefaultChatModel;
   }
 
-  public GAgentConfig useChatModelWithUse(Object useChatModelWithUse) {
+  public GAgentConfig useChatModelWithUse(UseChatModelWithUseEnum useChatModelWithUse) {
     this.useChatModelWithUse = useChatModelWithUse;
     return this;
   }
@@ -391,11 +490,11 @@ public class GAgentConfig {
    * @return useChatModelWithUse
   **/
   @Schema(description = "")
-  public Object getUseChatModelWithUse() {
+  public UseChatModelWithUseEnum getUseChatModelWithUse() {
     return useChatModelWithUse;
   }
 
-  public void setUseChatModelWithUse(Object useChatModelWithUse) {
+  public void setUseChatModelWithUse(UseChatModelWithUseEnum useChatModelWithUse) {
     this.useChatModelWithUse = useChatModelWithUse;
   }
 
@@ -417,7 +516,7 @@ public class GAgentConfig {
     this.chatModelReference = chatModelReference;
   }
 
-  public GAgentConfig maxLoopIterations(Object maxLoopIterations) {
+  public GAgentConfig maxLoopIterations(Integer maxLoopIterations) {
     this.maxLoopIterations = maxLoopIterations;
     return this;
   }
@@ -427,16 +526,24 @@ public class GAgentConfig {
    * @return maxLoopIterations
   **/
   @Schema(required = true, description = "")
-  public Object getMaxLoopIterations() {
+  public Integer getMaxLoopIterations() {
     return maxLoopIterations;
   }
 
-  public void setMaxLoopIterations(Object maxLoopIterations) {
+  public void setMaxLoopIterations(Integer maxLoopIterations) {
     this.maxLoopIterations = maxLoopIterations;
   }
 
-  public GAgentConfig aclAliases(Object aclAliases) {
+  public GAgentConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GAgentConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -445,15 +552,15 @@ public class GAgentConfig {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GAgentConfig defaultConfiguration(Object defaultConfiguration) {
+  public GAgentConfig defaultConfiguration(Boolean defaultConfiguration) {
     this.defaultConfiguration = defaultConfiguration;
     return this;
   }
@@ -463,15 +570,15 @@ public class GAgentConfig {
    * @return defaultConfiguration
   **/
   @Schema(description = "")
-  public Object getDefaultConfiguration() {
+  public Boolean isDefaultConfiguration() {
     return defaultConfiguration;
   }
 
-  public void setDefaultConfiguration(Object defaultConfiguration) {
+  public void setDefaultConfiguration(Boolean defaultConfiguration) {
     this.defaultConfiguration = defaultConfiguration;
   }
 
-  public GAgentConfig topP(Object topP) {
+  public GAgentConfig topP(Double topP) {
     this.topP = topP;
     return this;
   }
@@ -481,15 +588,15 @@ public class GAgentConfig {
    * @return topP
   **/
   @Schema(description = "")
-  public Object getTopP() {
+  public Double getTopP() {
     return topP;
   }
 
-  public void setTopP(Object topP) {
+  public void setTopP(Double topP) {
     this.topP = topP;
   }
 
-  public GAgentConfig temperature(Object temperature) {
+  public GAgentConfig temperature(Double temperature) {
     this.temperature = temperature;
     return this;
   }
@@ -499,15 +606,15 @@ public class GAgentConfig {
    * @return temperature
   **/
   @Schema(description = "")
-  public Object getTemperature() {
+  public Double getTemperature() {
     return temperature;
   }
 
-  public void setTemperature(Object temperature) {
+  public void setTemperature(Double temperature) {
     this.temperature = temperature;
   }
 
-  public GAgentConfig thinking(Object thinking) {
+  public GAgentConfig thinking(ThinkingEnum thinking) {
     this.thinking = thinking;
     return this;
   }
@@ -517,15 +624,15 @@ public class GAgentConfig {
    * @return thinking
   **/
   @Schema(description = "")
-  public Object getThinking() {
+  public ThinkingEnum getThinking() {
     return thinking;
   }
 
-  public void setThinking(Object thinking) {
+  public void setThinking(ThinkingEnum thinking) {
     this.thinking = thinking;
   }
 
-  public GAgentConfig readOnly(Object readOnly) {
+  public GAgentConfig readOnly(Boolean readOnly) {
     this.readOnly = readOnly;
     return this;
   }
@@ -535,16 +642,24 @@ public class GAgentConfig {
    * @return readOnly
   **/
   @Schema(description = "")
-  public Object getReadOnly() {
+  public Boolean isReadOnly() {
     return readOnly;
   }
 
-  public void setReadOnly(Object readOnly) {
+  public void setReadOnly(Boolean readOnly) {
     this.readOnly = readOnly;
   }
 
-  public GAgentConfig accessibleGroups(Object accessibleGroups) {
+  public GAgentConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GAgentConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -553,16 +668,24 @@ public class GAgentConfig {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public GAgentConfig accessibleUsers(Object accessibleUsers) {
+  public GAgentConfig accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GAgentConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -571,15 +694,15 @@ public class GAgentConfig {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public GAgentConfig accessibleToAll(Object accessibleToAll) {
+  public GAgentConfig accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -589,16 +712,24 @@ public class GAgentConfig {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GAgentConfig enabledFunctions(Object enabledFunctions) {
+  public GAgentConfig enabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
+    return this;
+  }
+
+  public GAgentConfig addEnabledFunctionsItem(String enabledFunctionsItem) {
+    if (this.enabledFunctions == null) {
+      this.enabledFunctions = new ArrayList<>();
+    }
+    this.enabledFunctions.add(enabledFunctionsItem);
     return this;
   }
 
@@ -607,11 +738,11 @@ public class GAgentConfig {
    * @return enabledFunctions
   **/
   @Schema(description = "")
-  public Object getEnabledFunctions() {
+  public List<String> getEnabledFunctions() {
     return enabledFunctions;
   }
 
-  public void setEnabledFunctions(Object enabledFunctions) {
+  public void setEnabledFunctions(List<String> enabledFunctions) {
     this.enabledFunctions = enabledFunctions;
   }
 

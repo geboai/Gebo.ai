@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GOpenAITextToSpeechModelConfig } from './gOpenAITextToSpeechModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGOpenAITextToSpeechModelConfig { 
     result?: GOpenAITextToSpeechModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

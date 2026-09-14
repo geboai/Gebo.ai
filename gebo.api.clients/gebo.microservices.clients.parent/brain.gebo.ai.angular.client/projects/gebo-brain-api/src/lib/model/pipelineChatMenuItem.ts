@@ -9,14 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { PipelineChatMenuItemParameter } from './pipelineChatMenuItemParameter';
 
 export interface PipelineChatMenuItem { 
-    optionId: any;
-    icon?: any;
-    description: any;
-    defaultOption?: any;
-    routeOption?: any;
-    pipelineId?: any;
-    productId?: any;
-    parameters?: any;
+    optionId: string;
+    icon?: string;
+    description: string;
+    defaultOption?: boolean;
+    routeOption?: string;
+    pipelineId?: string;
+    productId?: string;
+    parameters?: Array<PipelineChatMenuItemParameter>;
 }

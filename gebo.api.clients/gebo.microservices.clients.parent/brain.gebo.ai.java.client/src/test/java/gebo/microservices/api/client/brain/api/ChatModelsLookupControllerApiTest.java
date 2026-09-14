@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.GLookupEntry;
 import gebo.microservices.api.client.brain.model.GLookupEntryRefGBaseChatModelConfig;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -39,7 +40,7 @@ public class ChatModelsLookupControllerApiTest {
      */
     @Test
     public void getChatModelTypesLookupTest() {
-        Object response = api.getChatModelTypesLookup();
+        List<GLookupEntry> response = api.getChatModelTypesLookup();
 
         // TODO: test validations
     }
@@ -67,8 +68,8 @@ public class ChatModelsLookupControllerApiTest {
      */
     @Test
     public void getRuntimeConfiguredChatModelsLookupTest() {
-        Object modelTypeCode = null;
-        Object response = api.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
+        String modelTypeCode = null;
+        List<GLookupEntryRefGBaseChatModelConfig> response = api.getRuntimeConfiguredChatModelsLookup(modelTypeCode);
 
         // TODO: test validations
     }

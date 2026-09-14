@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**username** | **Object** |  | 
-**oldPassword** | **Object** |  | 
-**newPassword** | **Object** |  | 
-**newPassword1** | **Object** |  | 
+**username** | **String** |  | 
+**oldPassword** | **String** |  | 
+**newPassword** | **String** |  | 
+**newPassword1** | **String** |  | 

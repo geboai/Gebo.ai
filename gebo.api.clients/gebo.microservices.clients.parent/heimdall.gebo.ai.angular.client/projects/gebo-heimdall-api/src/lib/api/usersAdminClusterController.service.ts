@@ -25,6 +25,7 @@ import { GroupQbeRequest } from '../model/groupQbeRequest';
 import { InsertUserRequest } from '../model/insertUserRequest';
 import { PageResultUserInfos } from '../model/pageResultUserInfos';
 import { PageResultUsersGroup } from '../model/pageResultUsersGroup';
+import { UserInfos } from '../model/userInfos';
 import { UserQbeRequest } from '../model/userQbeRequest';
 import { UsersGroup } from '../model/usersGroup';
 
@@ -255,10 +256,10 @@ export class UsersAdminClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGroupByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
-    public findGroupByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
-    public findGroupByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
-    public findGroupByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGroupByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<UsersGroup>;
+    public findGroupByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersGroup>>;
+    public findGroupByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersGroup>>;
+    public findGroupByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGroupByCode.');
@@ -396,10 +397,10 @@ export class UsersAdminClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserByUsername1(email: any, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
-    public findUserByUsername1(email: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
-    public findUserByUsername1(email: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
-    public findUserByUsername1(email: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserByUsername1(email: string, observe?: 'body', reportProgress?: boolean): Observable<EditableUser>;
+    public findUserByUsername1(email: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EditableUser>>;
+    public findUserByUsername1(email: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EditableUser>>;
+    public findUserByUsername1(email: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (email === null || email === undefined) {
             throw new Error('Required parameter email was null or undefined when calling findUserByUsername1.');
@@ -489,9 +490,9 @@ export class UsersAdminClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllGroups(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllGroups(observe?: 'body', reportProgress?: boolean): Observable<Array<UsersGroup>>;
+    public getAllGroups(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UsersGroup>>>;
+    public getAllGroups(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UsersGroup>>>;
     public getAllGroups(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -509,7 +510,7 @@ export class UsersAdminClusterControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/cluster/SecurityController/UsersAdmin/getAllGroups`,
+        return this.httpClient.request<Array<UsersGroup>>('get',`${this.basePath}/api/cluster/SecurityController/UsersAdmin/getAllGroups`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -525,9 +526,9 @@ export class UsersAdminClusterControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllUsers(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getAllUsers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getAllUsers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getAllUsers(observe?: 'body', reportProgress?: boolean): Observable<Array<UserInfos>>;
+    public getAllUsers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserInfos>>>;
+    public getAllUsers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserInfos>>>;
     public getAllUsers(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -545,7 +546,7 @@ export class UsersAdminClusterControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/cluster/SecurityController/UsersAdmin/getAllUsers`,
+        return this.httpClient.request<Array<UserInfos>>('get',`${this.basePath}/api/cluster/SecurityController/UsersAdmin/getAllUsers`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -12,19 +12,19 @@
 import { GBedrockTranscriptModelChoice } from './gBedrockTranscriptModelChoice';
 
 export interface GBedrockTranscriptModelConfig { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    modelTypeCode?: any;
-    defaultModel?: any;
-    apiSecretCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
     choosedModel?: GBedrockTranscriptModelChoice;
-    baseUrl?: any;
-    contextLength?: any;
-    languageCode?: any;
-    sampleRateHertz?: any;
-    mediaEncoding?: any;
+    baseUrl?: string;
+    contextLength?: number;
+    languageCode?: string;
+    sampleRateHertz?: number;
+    mediaEncoding?: string;
 }

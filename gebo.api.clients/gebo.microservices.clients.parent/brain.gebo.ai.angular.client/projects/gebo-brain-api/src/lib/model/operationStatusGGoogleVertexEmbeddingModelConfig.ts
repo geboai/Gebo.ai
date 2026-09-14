@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GGoogleVertexEmbeddingModelConfig } from './gGoogleVertexEmbeddingModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGGoogleVertexEmbeddingModelConfig { 
     result?: GGoogleVertexEmbeddingModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

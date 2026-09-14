@@ -9,8 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GBaseModelConfig } from './gBaseModelConfig';
+import { LLMUnresolvedModel } from './lLMUnresolvedModel';
 
 export interface LLMSModelsCreationResult { 
-    created?: any;
-    unresolved?: any;
+    created?: Array<GBaseModelConfig>;
+    unresolved?: Array<LLMUnresolvedModel>;
 }

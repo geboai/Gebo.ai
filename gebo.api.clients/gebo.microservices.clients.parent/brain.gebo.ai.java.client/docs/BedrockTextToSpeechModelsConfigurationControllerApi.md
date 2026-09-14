@@ -67,7 +67,7 @@ No authorization required
 
 
 BedrockTextToSpeechModelsConfigurationControllerApi apiInstance = new BedrockTextToSpeechModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GBedrockTextToSpeechModelConfig result = apiInstance.findBedrockTextToSpeechModelConfigByCode(code);
     System.out.println(result);
@@ -81,7 +81,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 

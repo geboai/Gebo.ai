@@ -11,8 +11,18 @@
  */
 
 export interface ReindexTimeComponentMetaInfo { 
-    timeUnity?: any;
-    choosableOptions?: any;
-    maxValue?: any;
-    label?: any;
+    timeUnity?: ReindexTimeComponentMetaInfo.TimeUnityEnum;
+    choosableOptions?: Array<string>;
+    maxValue?: number;
+    label?: string;
+}
+export namespace ReindexTimeComponentMetaInfo {
+    export type TimeUnityEnum = 'HOUR' | 'MINUTES' | 'DAY_OF_WEEK' | 'WEEK_OF_MONTH' | 'DATE';
+    export const TimeUnityEnum = {
+        HOUR: 'HOUR' as TimeUnityEnum,
+        MINUTES: 'MINUTES' as TimeUnityEnum,
+        DAYOFWEEK: 'DAY_OF_WEEK' as TimeUnityEnum,
+        WEEKOFMONTH: 'WEEK_OF_MONTH' as TimeUnityEnum,
+        DATE: 'DATE' as TimeUnityEnum
+    };
 }

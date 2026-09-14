@@ -22,19 +22,40 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboCustomSecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class GeboCustomSecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("customContentDescription")
-  private Object customContentDescription = null;
+  private String customContentDescription = null;
 
   @JsonProperty("content")
-  private Object content = null;
+  private String content = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
-  public GeboCustomSecretContent customContentDescription(Object customContentDescription) {
+  public GeboCustomSecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
+  public GeboCustomSecretContent customContentDescription(String customContentDescription) {
     this.customContentDescription = customContentDescription;
     return this;
   }
@@ -44,15 +65,15 @@ public class GeboCustomSecretContent {
    * @return customContentDescription
   **/
   @Schema(description = "")
-  public Object getCustomContentDescription() {
+  public String getCustomContentDescription() {
     return customContentDescription;
   }
 
-  public void setCustomContentDescription(Object customContentDescription) {
+  public void setCustomContentDescription(String customContentDescription) {
     this.customContentDescription = customContentDescription;
   }
 
-  public GeboCustomSecretContent content(Object content) {
+  public GeboCustomSecretContent content(String content) {
     this.content = content;
     return this;
   }
@@ -62,15 +83,15 @@ public class GeboCustomSecretContent {
    * @return content
   **/
   @Schema(description = "")
-  public Object getContent() {
+  public String getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(String content) {
     this.content = content;
   }
 
-  public GeboCustomSecretContent contentType(Object contentType) {
+  public GeboCustomSecretContent contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -80,11 +101,11 @@ public class GeboCustomSecretContent {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
@@ -98,14 +119,15 @@ public class GeboCustomSecretContent {
       return false;
     }
     GeboCustomSecretContent geboCustomSecretContent = (GeboCustomSecretContent) o;
-    return Objects.equals(this.customContentDescription, geboCustomSecretContent.customContentDescription) &&
+    return Objects.equals(this.readOnly, geboCustomSecretContent.readOnly) &&
+        Objects.equals(this.customContentDescription, geboCustomSecretContent.customContentDescription) &&
         Objects.equals(this.content, geboCustomSecretContent.content) &&
         Objects.equals(this.contentType, geboCustomSecretContent.contentType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customContentDescription, content, contentType);
+    return Objects.hash(readOnly, customContentDescription, content, contentType);
   }
 
 
@@ -114,6 +136,7 @@ public class GeboCustomSecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboCustomSecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    customContentDescription: ").append(toIndentedString(customContentDescription)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");

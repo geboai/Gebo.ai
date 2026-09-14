@@ -11,9 +11,9 @@
  */
 
 export interface UserspaceKnowledgebaseDto { 
-    code?: any;
-    description: any;
-    owned?: any;
-    parentKnowledgebaseCode?: any;
-    accessibleGroups?: any;
+    code?: string;
+    description: string;
+    owned?: boolean;
+    parentKnowledgebaseCode?: string;
+    accessibleGroups?: Array<string>;
 }

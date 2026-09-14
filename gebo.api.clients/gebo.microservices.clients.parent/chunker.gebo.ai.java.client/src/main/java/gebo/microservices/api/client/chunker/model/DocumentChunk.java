@@ -18,47 +18,81 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * DocumentChunk
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class DocumentChunk {
   @JsonProperty("originalDocumentCode")
-  private Object originalDocumentCode = null;
+  private String originalDocumentCode = null;
 
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("mimeType")
-  private Object mimeType = null;
+  private String mimeType = null;
 
-  @JsonProperty("chunkType")
-  private Object chunkType = null;
+  /**
+   * Gets or Sets chunkType
+   */
+  public enum ChunkTypeEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE");
+
+    private String value;
+
+    ChunkTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ChunkTypeEnum fromValue(String input) {
+      for (ChunkTypeEnum b : ChunkTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("chunkType")
+  private ChunkTypeEnum chunkType = null;
 
   @JsonProperty("chunkData")
-  private Object chunkData = null;
+  private String chunkData = null;
 
   @JsonProperty("metaData")
-  private Object metaData = null;
+  private Map<String, Object> metaData = null;
 
   @JsonProperty("tokensSize")
-  private Object tokensSize = null;
+  private Long tokensSize = null;
 
   @JsonProperty("bytesSize")
-  private Object bytesSize = null;
+  private Long bytesSize = null;
 
   @JsonProperty("chunkPosition")
-  private Object chunkPosition = null;
+  private Long chunkPosition = null;
 
   @JsonProperty("chunksCount")
-  private Object chunksCount = null;
+  private Long chunksCount = null;
 
   @JsonProperty("chunkingSessionId")
-  private Object chunkingSessionId = null;
+  private String chunkingSessionId = null;
 
-  public DocumentChunk originalDocumentCode(Object originalDocumentCode) {
+  public DocumentChunk originalDocumentCode(String originalDocumentCode) {
     this.originalDocumentCode = originalDocumentCode;
     return this;
   }
@@ -68,15 +102,15 @@ public class DocumentChunk {
    * @return originalDocumentCode
   **/
   @Schema(description = "")
-  public Object getOriginalDocumentCode() {
+  public String getOriginalDocumentCode() {
     return originalDocumentCode;
   }
 
-  public void setOriginalDocumentCode(Object originalDocumentCode) {
+  public void setOriginalDocumentCode(String originalDocumentCode) {
     this.originalDocumentCode = originalDocumentCode;
   }
 
-  public DocumentChunk id(Object id) {
+  public DocumentChunk id(String id) {
     this.id = id;
     return this;
   }
@@ -86,15 +120,15 @@ public class DocumentChunk {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public DocumentChunk mimeType(Object mimeType) {
+  public DocumentChunk mimeType(String mimeType) {
     this.mimeType = mimeType;
     return this;
   }
@@ -104,15 +138,15 @@ public class DocumentChunk {
    * @return mimeType
   **/
   @Schema(description = "")
-  public Object getMimeType() {
+  public String getMimeType() {
     return mimeType;
   }
 
-  public void setMimeType(Object mimeType) {
+  public void setMimeType(String mimeType) {
     this.mimeType = mimeType;
   }
 
-  public DocumentChunk chunkType(Object chunkType) {
+  public DocumentChunk chunkType(ChunkTypeEnum chunkType) {
     this.chunkType = chunkType;
     return this;
   }
@@ -122,15 +156,15 @@ public class DocumentChunk {
    * @return chunkType
   **/
   @Schema(description = "")
-  public Object getChunkType() {
+  public ChunkTypeEnum getChunkType() {
     return chunkType;
   }
 
-  public void setChunkType(Object chunkType) {
+  public void setChunkType(ChunkTypeEnum chunkType) {
     this.chunkType = chunkType;
   }
 
-  public DocumentChunk chunkData(Object chunkData) {
+  public DocumentChunk chunkData(String chunkData) {
     this.chunkData = chunkData;
     return this;
   }
@@ -140,16 +174,24 @@ public class DocumentChunk {
    * @return chunkData
   **/
   @Schema(description = "")
-  public Object getChunkData() {
+  public String getChunkData() {
     return chunkData;
   }
 
-  public void setChunkData(Object chunkData) {
+  public void setChunkData(String chunkData) {
     this.chunkData = chunkData;
   }
 
-  public DocumentChunk metaData(Object metaData) {
+  public DocumentChunk metaData(Map<String, Object> metaData) {
     this.metaData = metaData;
+    return this;
+  }
+
+  public DocumentChunk putMetaDataItem(String key, Object metaDataItem) {
+    if (this.metaData == null) {
+      this.metaData = new HashMap<>();
+    }
+    this.metaData.put(key, metaDataItem);
     return this;
   }
 
@@ -158,15 +200,15 @@ public class DocumentChunk {
    * @return metaData
   **/
   @Schema(description = "")
-  public Object getMetaData() {
+  public Map<String, Object> getMetaData() {
     return metaData;
   }
 
-  public void setMetaData(Object metaData) {
+  public void setMetaData(Map<String, Object> metaData) {
     this.metaData = metaData;
   }
 
-  public DocumentChunk tokensSize(Object tokensSize) {
+  public DocumentChunk tokensSize(Long tokensSize) {
     this.tokensSize = tokensSize;
     return this;
   }
@@ -176,15 +218,15 @@ public class DocumentChunk {
    * @return tokensSize
   **/
   @Schema(description = "")
-  public Object getTokensSize() {
+  public Long getTokensSize() {
     return tokensSize;
   }
 
-  public void setTokensSize(Object tokensSize) {
+  public void setTokensSize(Long tokensSize) {
     this.tokensSize = tokensSize;
   }
 
-  public DocumentChunk bytesSize(Object bytesSize) {
+  public DocumentChunk bytesSize(Long bytesSize) {
     this.bytesSize = bytesSize;
     return this;
   }
@@ -194,15 +236,15 @@ public class DocumentChunk {
    * @return bytesSize
   **/
   @Schema(description = "")
-  public Object getBytesSize() {
+  public Long getBytesSize() {
     return bytesSize;
   }
 
-  public void setBytesSize(Object bytesSize) {
+  public void setBytesSize(Long bytesSize) {
     this.bytesSize = bytesSize;
   }
 
-  public DocumentChunk chunkPosition(Object chunkPosition) {
+  public DocumentChunk chunkPosition(Long chunkPosition) {
     this.chunkPosition = chunkPosition;
     return this;
   }
@@ -212,15 +254,15 @@ public class DocumentChunk {
    * @return chunkPosition
   **/
   @Schema(description = "")
-  public Object getChunkPosition() {
+  public Long getChunkPosition() {
     return chunkPosition;
   }
 
-  public void setChunkPosition(Object chunkPosition) {
+  public void setChunkPosition(Long chunkPosition) {
     this.chunkPosition = chunkPosition;
   }
 
-  public DocumentChunk chunksCount(Object chunksCount) {
+  public DocumentChunk chunksCount(Long chunksCount) {
     this.chunksCount = chunksCount;
     return this;
   }
@@ -230,15 +272,15 @@ public class DocumentChunk {
    * @return chunksCount
   **/
   @Schema(description = "")
-  public Object getChunksCount() {
+  public Long getChunksCount() {
     return chunksCount;
   }
 
-  public void setChunksCount(Object chunksCount) {
+  public void setChunksCount(Long chunksCount) {
     this.chunksCount = chunksCount;
   }
 
-  public DocumentChunk chunkingSessionId(Object chunkingSessionId) {
+  public DocumentChunk chunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
     return this;
   }
@@ -248,11 +290,11 @@ public class DocumentChunk {
    * @return chunkingSessionId
   **/
   @Schema(description = "")
-  public Object getChunkingSessionId() {
+  public String getChunkingSessionId() {
     return chunkingSessionId;
   }
 
-  public void setChunkingSessionId(Object chunkingSessionId) {
+  public void setChunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
   }
 

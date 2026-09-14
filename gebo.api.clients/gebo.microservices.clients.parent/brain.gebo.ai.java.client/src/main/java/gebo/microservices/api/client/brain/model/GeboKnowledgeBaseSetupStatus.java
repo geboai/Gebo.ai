@@ -22,28 +22,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboKnowledgeBaseSetupStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboKnowledgeBaseSetupStatus {
   @JsonProperty("isSetup")
-  private Object isSetup = null;
+  private Boolean isSetup = null;
 
   @JsonProperty("knowledgeBases")
-  private Object knowledgeBases = null;
+  private Long knowledgeBases = null;
 
   @JsonProperty("projects")
-  private Object projects = null;
+  private Long projects = null;
 
   @JsonProperty("endpoints")
-  private Object endpoints = null;
+  private Long endpoints = null;
 
   @JsonProperty("endpointsPublished")
-  private Object endpointsPublished = null;
+  private Long endpointsPublished = null;
 
   @JsonProperty("documentReferences")
-  private Object documentReferences = null;
+  private Long documentReferences = null;
 
-  public GeboKnowledgeBaseSetupStatus isSetup(Object isSetup) {
+  public GeboKnowledgeBaseSetupStatus isSetup(Boolean isSetup) {
     this.isSetup = isSetup;
     return this;
   }
@@ -53,15 +53,15 @@ public class GeboKnowledgeBaseSetupStatus {
    * @return isSetup
   **/
   @Schema(description = "")
-  public Object getIsSetup() {
+  public Boolean isIsSetup() {
     return isSetup;
   }
 
-  public void setIsSetup(Object isSetup) {
+  public void setIsSetup(Boolean isSetup) {
     this.isSetup = isSetup;
   }
 
-  public GeboKnowledgeBaseSetupStatus knowledgeBases(Object knowledgeBases) {
+  public GeboKnowledgeBaseSetupStatus knowledgeBases(Long knowledgeBases) {
     this.knowledgeBases = knowledgeBases;
     return this;
   }
@@ -71,15 +71,15 @@ public class GeboKnowledgeBaseSetupStatus {
    * @return knowledgeBases
   **/
   @Schema(description = "")
-  public Object getKnowledgeBases() {
+  public Long getKnowledgeBases() {
     return knowledgeBases;
   }
 
-  public void setKnowledgeBases(Object knowledgeBases) {
+  public void setKnowledgeBases(Long knowledgeBases) {
     this.knowledgeBases = knowledgeBases;
   }
 
-  public GeboKnowledgeBaseSetupStatus projects(Object projects) {
+  public GeboKnowledgeBaseSetupStatus projects(Long projects) {
     this.projects = projects;
     return this;
   }
@@ -89,15 +89,15 @@ public class GeboKnowledgeBaseSetupStatus {
    * @return projects
   **/
   @Schema(description = "")
-  public Object getProjects() {
+  public Long getProjects() {
     return projects;
   }
 
-  public void setProjects(Object projects) {
+  public void setProjects(Long projects) {
     this.projects = projects;
   }
 
-  public GeboKnowledgeBaseSetupStatus endpoints(Object endpoints) {
+  public GeboKnowledgeBaseSetupStatus endpoints(Long endpoints) {
     this.endpoints = endpoints;
     return this;
   }
@@ -107,15 +107,15 @@ public class GeboKnowledgeBaseSetupStatus {
    * @return endpoints
   **/
   @Schema(description = "")
-  public Object getEndpoints() {
+  public Long getEndpoints() {
     return endpoints;
   }
 
-  public void setEndpoints(Object endpoints) {
+  public void setEndpoints(Long endpoints) {
     this.endpoints = endpoints;
   }
 
-  public GeboKnowledgeBaseSetupStatus endpointsPublished(Object endpointsPublished) {
+  public GeboKnowledgeBaseSetupStatus endpointsPublished(Long endpointsPublished) {
     this.endpointsPublished = endpointsPublished;
     return this;
   }
@@ -125,15 +125,15 @@ public class GeboKnowledgeBaseSetupStatus {
    * @return endpointsPublished
   **/
   @Schema(description = "")
-  public Object getEndpointsPublished() {
+  public Long getEndpointsPublished() {
     return endpointsPublished;
   }
 
-  public void setEndpointsPublished(Object endpointsPublished) {
+  public void setEndpointsPublished(Long endpointsPublished) {
     this.endpointsPublished = endpointsPublished;
   }
 
-  public GeboKnowledgeBaseSetupStatus documentReferences(Object documentReferences) {
+  public GeboKnowledgeBaseSetupStatus documentReferences(Long documentReferences) {
     this.documentReferences = documentReferences;
     return this;
   }
@@ -143,11 +143,11 @@ public class GeboKnowledgeBaseSetupStatus {
    * @return documentReferences
   **/
   @Schema(description = "")
-  public Object getDocumentReferences() {
+  public Long getDocumentReferences() {
     return documentReferences;
   }
 
-  public void setDocumentReferences(Object documentReferences) {
+  public void setDocumentReferences(Long documentReferences) {
     this.documentReferences = documentReferences;
   }
 

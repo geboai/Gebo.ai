@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
 **acl** | [**List&lt;GAclEntry&gt;**](GAclEntry.md) |  |  [optional]
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
+**readonly** | **Boolean** |  |  [optional]
 
 <a name="ObjectSpaceTypeEnum"></a>
 ## Enum: ObjectSpaceTypeEnum

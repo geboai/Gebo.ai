@@ -4,4 +4,4 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **user** | [**EditableUser**](EditableUser.md) |  | 
-**password** | **Object** |  | 
+**password** | **String** |  | 

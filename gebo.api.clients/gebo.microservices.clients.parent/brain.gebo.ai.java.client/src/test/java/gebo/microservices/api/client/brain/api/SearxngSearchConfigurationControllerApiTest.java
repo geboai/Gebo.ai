@@ -71,7 +71,7 @@ public class SearxngSearchConfigurationControllerApiTest {
      */
     @Test
     public void getSearxngSearchApiCredentialsTest() {
-        Object response = api.getSearxngSearchApiCredentials();
+        List<GSearxngSearchApiCredentials> response = api.getSearxngSearchApiCredentials();
 
         // TODO: test validations
     }
@@ -114,7 +114,7 @@ public class SearxngSearchConfigurationControllerApiTest {
      */
     @Test
     public void searchGSearxngSearchApiCredentialsByCodeTest() {
-        Object code = null;
+        String code = null;
         GSearxngSearchApiCredentials response = api.searchGSearxngSearchApiCredentialsByCode(code);
 
         // TODO: test validations

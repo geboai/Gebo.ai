@@ -12,6 +12,6 @@
 import { VFilesystemReference } from './vFilesystemReference';
 
 export interface WorkFolderSetupStatus { 
-    isSetup?: any;
+    isSetup?: boolean;
     workDirectory?: VFilesystemReference;
 }

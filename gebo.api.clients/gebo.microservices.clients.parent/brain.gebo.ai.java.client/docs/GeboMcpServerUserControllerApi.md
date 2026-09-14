@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 
 GeboMcpServerUserControllerApi apiInstance = new GeboMcpServerUserControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     UserAccessibleMcpServerView result = apiInstance.findAccessibleMcpServerByCode(code);
     System.out.println(result);
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -53,7 +53,7 @@ No authorization required
 
 <a name="getUsersCanAccessMcpServersList"></a>
 # **getUsersCanAccessMcpServersList**
-> Object getUsersCanAccessMcpServersList()
+> Boolean getUsersCanAccessMcpServersList()
 
 
 
@@ -66,7 +66,7 @@ No authorization required
 
 GeboMcpServerUserControllerApi apiInstance = new GeboMcpServerUserControllerApi();
 try {
-    Object result = apiInstance.getUsersCanAccessMcpServersList();
+    Boolean result = apiInstance.getUsersCanAccessMcpServersList();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboMcpServerUserControllerApi#getUsersCanAccessMcpServersList");
@@ -79,7 +79,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+**Boolean**
 
 ### Authorization
 
@@ -92,7 +92,7 @@ No authorization required
 
 <a name="listAccessibleMcpServers"></a>
 # **listAccessibleMcpServers**
-> Object listAccessibleMcpServers()
+> List&lt;UserAccessibleMcpServerView&gt; listAccessibleMcpServers()
 
 
 
@@ -105,7 +105,7 @@ No authorization required
 
 GeboMcpServerUserControllerApi apiInstance = new GeboMcpServerUserControllerApi();
 try {
-    Object result = apiInstance.listAccessibleMcpServers();
+    List<UserAccessibleMcpServerView> result = apiInstance.listAccessibleMcpServers();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboMcpServerUserControllerApi#listAccessibleMcpServers");
@@ -118,7 +118,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UserAccessibleMcpServerView&gt;**](UserAccessibleMcpServerView.md)
 
 ### Authorization
 

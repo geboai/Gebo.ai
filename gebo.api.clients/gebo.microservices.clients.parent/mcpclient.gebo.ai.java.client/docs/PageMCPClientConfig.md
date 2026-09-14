@@ -3,14 +3,14 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalElements** | **Object** |  |  [optional]
-**totalPages** | **Object** |  |  [optional]
+**totalElements** | **Long** |  |  [optional]
+**totalPages** | **Integer** |  |  [optional]
 **pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
-**first** | **Object** |  |  [optional]
-**last** | **Object** |  |  [optional]
-**size** | **Object** |  |  [optional]
-**content** | **Object** |  |  [optional]
-**number** | **Object** |  |  [optional]
+**first** | **Boolean** |  |  [optional]
+**last** | **Boolean** |  |  [optional]
+**size** | **Integer** |  |  [optional]
+**content** | [**List&lt;MCPClientConfig&gt;**](MCPClientConfig.md) |  |  [optional]
+**number** | **Integer** |  |  [optional]
 **sort** | [**SortObject**](SortObject.md) |  |  [optional]
-**numberOfElements** | **Object** |  |  [optional]
-**empty** | **Object** |  |  [optional]
+**numberOfElements** | **Integer** |  |  [optional]
+**empty** | **Boolean** |  |  [optional]

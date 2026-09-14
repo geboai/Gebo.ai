@@ -17,36 +17,40 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.ChatInteractions;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * UserChatHistory
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class UserChatHistory {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("interactions")
-  private Object interactions = null;
+  private List<ChatInteractions> interactions = null;
 
-  public UserChatHistory code(Object code) {
+  public UserChatHistory code(String code) {
     this.code = code;
     return this;
   }
@@ -56,15 +60,15 @@ public class UserChatHistory {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public UserChatHistory description(Object description) {
+  public UserChatHistory description(String description) {
     this.description = description;
     return this;
   }
@@ -74,15 +78,15 @@ public class UserChatHistory {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public UserChatHistory userModified(Object userModified) {
+  public UserChatHistory userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -92,15 +96,15 @@ public class UserChatHistory {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public UserChatHistory userCreated(Object userCreated) {
+  public UserChatHistory userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -110,15 +114,15 @@ public class UserChatHistory {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public UserChatHistory dateModified(Object dateModified) {
+  public UserChatHistory dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -128,15 +132,15 @@ public class UserChatHistory {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public UserChatHistory dateCreated(Object dateCreated) {
+  public UserChatHistory dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -146,16 +150,24 @@ public class UserChatHistory {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public UserChatHistory interactions(Object interactions) {
+  public UserChatHistory interactions(List<ChatInteractions> interactions) {
     this.interactions = interactions;
+    return this;
+  }
+
+  public UserChatHistory addInteractionsItem(ChatInteractions interactionsItem) {
+    if (this.interactions == null) {
+      this.interactions = new ArrayList<>();
+    }
+    this.interactions.add(interactionsItem);
     return this;
   }
 
@@ -164,11 +176,11 @@ public class UserChatHistory {
    * @return interactions
   **/
   @Schema(description = "")
-  public Object getInteractions() {
+  public List<ChatInteractions> getInteractions() {
     return interactions;
   }
 
-  public void setInteractions(Object interactions) {
+  public void setInteractions(List<ChatInteractions> interactions) {
     this.interactions = interactions;
   }
 

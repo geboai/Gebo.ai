@@ -38,8 +38,8 @@ public class GeboLlmGeneratedResourceControllerApiTest {
      */
     @Test
     public void serveLLMGeneratedContentTest() {
-        Object userSessionCode = null;
-        Object generatedResourceCode = null;
+        String userSessionCode = null;
+        String generatedResourceCode = null;
         api.serveLLMGeneratedContent(userSessionCode, generatedResourceCode);
 
         // TODO: test validations

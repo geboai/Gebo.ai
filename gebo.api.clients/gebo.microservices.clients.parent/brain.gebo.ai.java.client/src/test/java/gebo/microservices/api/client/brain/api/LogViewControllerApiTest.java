@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GetJobMessagesParam;
+import gebo.microservices.api.client.brain.model.JobsEntriesFilter;
 import gebo.microservices.api.client.brain.model.JobsEntriesForClassNameFilter;
 import gebo.microservices.api.client.brain.model.JobsEntriesForJobType;
 import gebo.microservices.api.client.brain.model.JobsEntriesForProjectEndpointFilter;
@@ -44,7 +45,7 @@ public class LogViewControllerApiTest {
      */
     @Test
     public void deleteJobStatusTest() {
-        Object body = null;
+        List<String> body = null;
         api.deleteJobStatus(body);
 
         // TODO: test validations
@@ -61,6 +62,21 @@ public class LogViewControllerApiTest {
     public void getJobMessagesPagedTest() {
         GetJobMessagesParam body = null;
         PageGUserMessage response = api.getJobMessagesPaged(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getJobsEntriesTest() {
+        JobsEntriesFilter body = null;
+        PageGJobStatusItem response = api.getJobsEntries(body);
 
         // TODO: test validations
     }

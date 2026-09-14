@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 
 AuthProvidersControllerApi apiInstance = new AuthProvidersControllerApi();
-Object registrationId = null; // Object | 
+String registrationId = "registrationId_example"; // String | 
 try {
     Oauth2ClientConfig result = apiInstance.getProviderClientConfig(registrationId);
     System.out.println(result);
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **registrationId** | [**Object**](.md)|  |
+ **registrationId** | **String**|  |
 
 ### Return type
 
@@ -53,7 +53,7 @@ No authorization required
 
 <a name="listAuthProviders"></a>
 # **listAuthProviders**
-> Object listAuthProviders()
+> List&lt;AuthProviderDto&gt; listAuthProviders()
 
 
 
@@ -66,7 +66,7 @@ No authorization required
 
 AuthProvidersControllerApi apiInstance = new AuthProvidersControllerApi();
 try {
-    Object result = apiInstance.listAuthProviders();
+    List<AuthProviderDto> result = apiInstance.listAuthProviders();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling AuthProvidersControllerApi#listAuthProviders");
@@ -79,7 +79,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;AuthProviderDto&gt;**](AuthProviderDto.md)
 
 ### Authorization
 
@@ -92,7 +92,7 @@ No authorization required
 
 <a name="listAvailableProvidersConfig"></a>
 # **listAvailableProvidersConfig**
-> Object listAvailableProvidersConfig()
+> List&lt;Oauth2ClientAuthorizativeInfo&gt; listAvailableProvidersConfig()
 
 
 
@@ -105,7 +105,7 @@ No authorization required
 
 AuthProvidersControllerApi apiInstance = new AuthProvidersControllerApi();
 try {
-    Object result = apiInstance.listAvailableProvidersConfig();
+    List<Oauth2ClientAuthorizativeInfo> result = apiInstance.listAvailableProvidersConfig();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling AuthProvidersControllerApi#listAvailableProvidersConfig");
@@ -118,7 +118,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;Oauth2ClientAuthorizativeInfo&gt;**](Oauth2ClientAuthorizativeInfo.md)
 
 ### Authorization
 

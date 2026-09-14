@@ -18,10 +18,13 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GBaseChatModelChoice } from '../model/gBaseChatModelChoice';
+import { GBaseObject } from '../model/gBaseObject';
+import { GChatProfileConfiguration } from '../model/gChatProfileConfiguration';
 import { GeboChatRequest } from '../model/geboChatRequest';
 import { GeboChatResponse } from '../model/geboChatResponse';
 import { GeboChatUserInfo } from '../model/geboChatUserInfo';
 import { ModelProviderCapabilities } from '../model/modelProviderCapabilities';
+import { ServerSentEventString } from '../model/serverSentEventString';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,10 +69,10 @@ export class GeboRagChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: any, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling getChatModelUserInfoByChatProfileCode.');
@@ -113,10 +116,10 @@ export class GeboRagChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatProfileModelMetaInfos(chatProfileCode: any, observe?: 'body', reportProgress?: boolean): Observable<GBaseChatModelChoice>;
-    public getChatProfileModelMetaInfos(chatProfileCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GBaseChatModelChoice>>;
-    public getChatProfileModelMetaInfos(chatProfileCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GBaseChatModelChoice>>;
-    public getChatProfileModelMetaInfos(chatProfileCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatProfileModelMetaInfos(chatProfileCode: string, observe?: 'body', reportProgress?: boolean): Observable<GBaseChatModelChoice>;
+    public getChatProfileModelMetaInfos(chatProfileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GBaseChatModelChoice>>;
+    public getChatProfileModelMetaInfos(chatProfileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GBaseChatModelChoice>>;
+    public getChatProfileModelMetaInfos(chatProfileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling getChatProfileModelMetaInfos.');
@@ -159,9 +162,9 @@ export class GeboRagChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatProfiles(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getChatProfiles(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getChatProfiles(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getChatProfiles(observe?: 'body', reportProgress?: boolean): Observable<Array<GChatProfileConfiguration>>;
+    public getChatProfiles(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GChatProfileConfiguration>>>;
+    public getChatProfiles(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GChatProfileConfiguration>>>;
     public getChatProfiles(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -179,7 +182,7 @@ export class GeboRagChatControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboChatController/profiles`,
+        return this.httpClient.request<Array<GChatProfileConfiguration>>('get',`${this.basePath}/api/users/GeboChatController/profiles`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -196,10 +199,10 @@ export class GeboRagChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProfileProviderModelCapabilities(chatProfileCode: any, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
-    public getProfileProviderModelCapabilities(chatProfileCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
-    public getProfileProviderModelCapabilities(chatProfileCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
-    public getProfileProviderModelCapabilities(chatProfileCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getProfileProviderModelCapabilities(chatProfileCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
+    public getProfileProviderModelCapabilities(chatProfileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
+    public getProfileProviderModelCapabilities(chatProfileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
+    public getProfileProviderModelCapabilities(chatProfileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling getProfileProviderModelCapabilities.');
@@ -243,10 +246,10 @@ export class GeboRagChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getVisibleKnowledgeBasesByProfileCode(profileCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getVisibleKnowledgeBasesByProfileCode(profileCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getVisibleKnowledgeBasesByProfileCode(profileCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getVisibleKnowledgeBasesByProfileCode(profileCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getVisibleKnowledgeBasesByProfileCode(profileCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getVisibleKnowledgeBasesByProfileCode(profileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getVisibleKnowledgeBasesByProfileCode(profileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
+    public getVisibleKnowledgeBasesByProfileCode(profileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (profileCode === null || profileCode === undefined) {
             throw new Error('Required parameter profileCode was null or undefined when calling getVisibleKnowledgeBasesByProfileCode.');
@@ -272,7 +275,7 @@ export class GeboRagChatControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -337,9 +340,9 @@ export class GeboRagChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamRagResponse(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public streamRagResponse(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public streamRagResponse(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public streamRagResponse(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<ServerSentEventString>>;
+    public streamRagResponse(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServerSentEventString>>>;
+    public streamRagResponse(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServerSentEventString>>>;
     public streamRagResponse(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -366,7 +369,7 @@ export class GeboRagChatControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/GeboChatController/streamRagResponse`,
+        return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboChatController/streamRagResponse`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

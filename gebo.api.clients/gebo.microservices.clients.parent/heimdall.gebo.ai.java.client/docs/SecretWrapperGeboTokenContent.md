@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**contextCode** | **Object** |  | 
-**description** | **Object** |  | 
+**contextCode** | **String** |  | 
+**description** | **String** |  | 
 **secretContent** | [**GeboTokenContent**](GeboTokenContent.md) |  | 

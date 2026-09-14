@@ -161,7 +161,7 @@ No authorization required
 
 
 WebdavSystemsControllerApi apiInstance = new WebdavSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GWebdavProjectEndpoint result = apiInstance.findWebdavEndpointsByCode(code);
     System.out.println(result);
@@ -175,7 +175,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -192,7 +192,7 @@ No authorization required
 
 <a name="findWebdavEndpointsByProject"></a>
 # **findWebdavEndpointsByProject**
-> Object findWebdavEndpointsByProject(parentProjectCode)
+> List&lt;GWebdavProjectEndpoint&gt; findWebdavEndpointsByProject(parentProjectCode)
 
 
 
@@ -204,9 +204,9 @@ No authorization required
 
 
 WebdavSystemsControllerApi apiInstance = new WebdavSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findWebdavEndpointsByProject(parentProjectCode);
+    List<GWebdavProjectEndpoint> result = apiInstance.findWebdavEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling WebdavSystemsControllerApi#findWebdavEndpointsByProject");
@@ -218,11 +218,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GWebdavProjectEndpoint&gt;**](GWebdavProjectEndpoint.md)
 
 ### Authorization
 
@@ -235,7 +235,7 @@ No authorization required
 
 <a name="findWebdavEndpointsByQbe"></a>
 # **findWebdavEndpointsByQbe**
-> Object findWebdavEndpointsByQbe(body)
+> List&lt;GWebdavProjectEndpoint&gt; findWebdavEndpointsByQbe(body)
 
 
 
@@ -249,7 +249,7 @@ No authorization required
 WebdavSystemsControllerApi apiInstance = new WebdavSystemsControllerApi();
 GWebdavProjectEndpoint body = new GWebdavProjectEndpoint(); // GWebdavProjectEndpoint | 
 try {
-    Object result = apiInstance.findWebdavEndpointsByQbe(body);
+    List<GWebdavProjectEndpoint> result = apiInstance.findWebdavEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling WebdavSystemsControllerApi#findWebdavEndpointsByQbe");
@@ -265,7 +265,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GWebdavProjectEndpoint&gt;**](GWebdavProjectEndpoint.md)
 
 ### Authorization
 
@@ -290,7 +290,7 @@ No authorization required
 
 
 WebdavSystemsControllerApi apiInstance = new WebdavSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GWebdavContentManagementSystem result = apiInstance.findWebdavSystemByCode(code);
     System.out.println(result);
@@ -304,7 +304,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -360,7 +360,7 @@ No authorization required
 
 <a name="getWebdavSystems"></a>
 # **getWebdavSystems**
-> Object getWebdavSystems()
+> List&lt;GWebdavContentManagementSystem&gt; getWebdavSystems()
 
 
 
@@ -373,7 +373,7 @@ No authorization required
 
 WebdavSystemsControllerApi apiInstance = new WebdavSystemsControllerApi();
 try {
-    Object result = apiInstance.getWebdavSystems();
+    List<GWebdavContentManagementSystem> result = apiInstance.getWebdavSystems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling WebdavSystemsControllerApi#getWebdavSystems");
@@ -386,7 +386,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GWebdavContentManagementSystem&gt;**](GWebdavContentManagementSystem.md)
 
 ### Authorization
 

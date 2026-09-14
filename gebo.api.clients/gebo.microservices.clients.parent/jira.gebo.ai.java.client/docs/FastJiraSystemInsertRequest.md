@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**baseUri** | **Object** |  | 
-**description** | **Object** |  | 
-**username** | **Object** |  | 
-**password** | **Object** |  |  [optional]
-**token** | **Object** |  |  [optional]
+**baseUri** | **String** |  | 
+**description** | **String** |  | 
+**username** | **String** |  | 
+**password** | **String** |  |  [optional]
+**token** | **String** |  |  [optional]

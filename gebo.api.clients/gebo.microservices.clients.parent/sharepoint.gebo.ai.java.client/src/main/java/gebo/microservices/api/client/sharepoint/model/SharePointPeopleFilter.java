@@ -18,21 +18,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * SharePointPeopleFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class SharePointPeopleFilter {
   @JsonProperty("createdByList")
-  private Object createdByList = null;
+  private List<String> createdByList = null;
 
   @JsonProperty("lastModifiedByList")
-  private Object lastModifiedByList = null;
+  private List<String> lastModifiedByList = null;
 
-  public SharePointPeopleFilter createdByList(Object createdByList) {
+  public SharePointPeopleFilter createdByList(List<String> createdByList) {
     this.createdByList = createdByList;
+    return this;
+  }
+
+  public SharePointPeopleFilter addCreatedByListItem(String createdByListItem) {
+    if (this.createdByList == null) {
+      this.createdByList = new ArrayList<>();
+    }
+    this.createdByList.add(createdByListItem);
     return this;
   }
 
@@ -41,16 +51,24 @@ public class SharePointPeopleFilter {
    * @return createdByList
   **/
   @Schema(description = "")
-  public Object getCreatedByList() {
+  public List<String> getCreatedByList() {
     return createdByList;
   }
 
-  public void setCreatedByList(Object createdByList) {
+  public void setCreatedByList(List<String> createdByList) {
     this.createdByList = createdByList;
   }
 
-  public SharePointPeopleFilter lastModifiedByList(Object lastModifiedByList) {
+  public SharePointPeopleFilter lastModifiedByList(List<String> lastModifiedByList) {
     this.lastModifiedByList = lastModifiedByList;
+    return this;
+  }
+
+  public SharePointPeopleFilter addLastModifiedByListItem(String lastModifiedByListItem) {
+    if (this.lastModifiedByList == null) {
+      this.lastModifiedByList = new ArrayList<>();
+    }
+    this.lastModifiedByList.add(lastModifiedByListItem);
     return this;
   }
 
@@ -59,11 +77,11 @@ public class SharePointPeopleFilter {
    * @return lastModifiedByList
   **/
   @Schema(description = "")
-  public Object getLastModifiedByList() {
+  public List<String> getLastModifiedByList() {
     return lastModifiedByList;
   }
 
-  public void setLastModifiedByList(Object lastModifiedByList) {
+  public void setLastModifiedByList(List<String> lastModifiedByList) {
     this.lastModifiedByList = lastModifiedByList;
   }
 

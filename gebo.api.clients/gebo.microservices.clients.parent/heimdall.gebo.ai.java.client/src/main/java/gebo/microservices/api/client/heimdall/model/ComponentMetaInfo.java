@@ -23,28 +23,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class ComponentMetaInfo {
   @JsonProperty("messagingSystemId")
-  private Object messagingSystemId = null;
+  private String messagingSystemId = null;
 
   @JsonProperty("messagingModuleId")
-  private Object messagingModuleId = null;
+  private String messagingModuleId = null;
 
   @JsonProperty("receiver")
-  private Object receiver = null;
+  private Boolean receiver = null;
 
   @JsonProperty("emitter")
-  private Object emitter = null;
+  private Boolean emitter = null;
 
   @JsonProperty("localSystem")
-  private Object localSystem = null;
+  private Boolean localSystem = null;
 
   @JsonProperty("dataFlowMetaInfos")
   private GDataFlowMetaInfos dataFlowMetaInfos = null;
 
-  public ComponentMetaInfo messagingSystemId(Object messagingSystemId) {
+  public ComponentMetaInfo messagingSystemId(String messagingSystemId) {
     this.messagingSystemId = messagingSystemId;
     return this;
   }
@@ -54,15 +54,15 @@ public class ComponentMetaInfo {
    * @return messagingSystemId
   **/
   @Schema(description = "")
-  public Object getMessagingSystemId() {
+  public String getMessagingSystemId() {
     return messagingSystemId;
   }
 
-  public void setMessagingSystemId(Object messagingSystemId) {
+  public void setMessagingSystemId(String messagingSystemId) {
     this.messagingSystemId = messagingSystemId;
   }
 
-  public ComponentMetaInfo messagingModuleId(Object messagingModuleId) {
+  public ComponentMetaInfo messagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
     return this;
   }
@@ -72,15 +72,15 @@ public class ComponentMetaInfo {
    * @return messagingModuleId
   **/
   @Schema(description = "")
-  public Object getMessagingModuleId() {
+  public String getMessagingModuleId() {
     return messagingModuleId;
   }
 
-  public void setMessagingModuleId(Object messagingModuleId) {
+  public void setMessagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
   }
 
-  public ComponentMetaInfo receiver(Object receiver) {
+  public ComponentMetaInfo receiver(Boolean receiver) {
     this.receiver = receiver;
     return this;
   }
@@ -90,15 +90,15 @@ public class ComponentMetaInfo {
    * @return receiver
   **/
   @Schema(description = "")
-  public Object getReceiver() {
+  public Boolean isReceiver() {
     return receiver;
   }
 
-  public void setReceiver(Object receiver) {
+  public void setReceiver(Boolean receiver) {
     this.receiver = receiver;
   }
 
-  public ComponentMetaInfo emitter(Object emitter) {
+  public ComponentMetaInfo emitter(Boolean emitter) {
     this.emitter = emitter;
     return this;
   }
@@ -108,15 +108,15 @@ public class ComponentMetaInfo {
    * @return emitter
   **/
   @Schema(description = "")
-  public Object getEmitter() {
+  public Boolean isEmitter() {
     return emitter;
   }
 
-  public void setEmitter(Object emitter) {
+  public void setEmitter(Boolean emitter) {
     this.emitter = emitter;
   }
 
-  public ComponentMetaInfo localSystem(Object localSystem) {
+  public ComponentMetaInfo localSystem(Boolean localSystem) {
     this.localSystem = localSystem;
     return this;
   }
@@ -126,11 +126,11 @@ public class ComponentMetaInfo {
    * @return localSystem
   **/
   @Schema(description = "")
-  public Object getLocalSystem() {
+  public Boolean isLocalSystem() {
     return localSystem;
   }
 
-  public void setLocalSystem(Object localSystem) {
+  public void setLocalSystem(Boolean localSystem) {
     this.localSystem = localSystem;
   }
 

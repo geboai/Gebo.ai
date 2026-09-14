@@ -9,9 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ToolReference } from './toolReference';
 import { ToolsCategory } from './toolsCategory';
 
 export interface ToolCategoriesTree { 
     category?: ToolsCategory;
-    toolsReference?: any;
+    toolsReference?: Array<ToolReference>;
 }

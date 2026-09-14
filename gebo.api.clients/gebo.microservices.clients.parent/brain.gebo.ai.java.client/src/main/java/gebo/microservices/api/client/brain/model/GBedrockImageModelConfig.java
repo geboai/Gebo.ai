@@ -19,62 +19,63 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.GBedrockImageModelChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GBedrockImageModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GBedrockImageModelConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("modelTypeCode")
-  private Object modelTypeCode = null;
+  private String modelTypeCode = null;
 
   @JsonProperty("defaultModel")
-  private Object defaultModel = null;
+  private Boolean defaultModel = null;
 
   @JsonProperty("apiSecretCode")
-  private Object apiSecretCode = null;
+  private String apiSecretCode = null;
 
   @JsonProperty("choosedModel")
   private GBedrockImageModelChoice choosedModel = null;
 
   @JsonProperty("baseUrl")
-  private Object baseUrl = null;
+  private String baseUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("height")
-  private Object height = null;
+  private Integer height = null;
 
   @JsonProperty("width")
-  private Object width = null;
+  private Integer width = null;
 
   @JsonProperty("cfgScale")
-  private Object cfgScale = null;
+  private Double cfgScale = null;
 
   @JsonProperty("seed")
-  private Object seed = null;
+  private Long seed = null;
 
-  public GBedrockImageModelConfig code(Object code) {
+  public GBedrockImageModelConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -84,15 +85,15 @@ public class GBedrockImageModelConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GBedrockImageModelConfig description(Object description) {
+  public GBedrockImageModelConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -102,15 +103,15 @@ public class GBedrockImageModelConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GBedrockImageModelConfig userModified(Object userModified) {
+  public GBedrockImageModelConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -120,15 +121,15 @@ public class GBedrockImageModelConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GBedrockImageModelConfig userCreated(Object userCreated) {
+  public GBedrockImageModelConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -138,15 +139,15 @@ public class GBedrockImageModelConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GBedrockImageModelConfig dateModified(Object dateModified) {
+  public GBedrockImageModelConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -156,15 +157,15 @@ public class GBedrockImageModelConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GBedrockImageModelConfig dateCreated(Object dateCreated) {
+  public GBedrockImageModelConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -174,15 +175,15 @@ public class GBedrockImageModelConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GBedrockImageModelConfig modelTypeCode(Object modelTypeCode) {
+  public GBedrockImageModelConfig modelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
     return this;
   }
@@ -192,15 +193,15 @@ public class GBedrockImageModelConfig {
    * @return modelTypeCode
   **/
   @Schema(description = "")
-  public Object getModelTypeCode() {
+  public String getModelTypeCode() {
     return modelTypeCode;
   }
 
-  public void setModelTypeCode(Object modelTypeCode) {
+  public void setModelTypeCode(String modelTypeCode) {
     this.modelTypeCode = modelTypeCode;
   }
 
-  public GBedrockImageModelConfig defaultModel(Object defaultModel) {
+  public GBedrockImageModelConfig defaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
     return this;
   }
@@ -210,15 +211,15 @@ public class GBedrockImageModelConfig {
    * @return defaultModel
   **/
   @Schema(description = "")
-  public Object getDefaultModel() {
+  public Boolean isDefaultModel() {
     return defaultModel;
   }
 
-  public void setDefaultModel(Object defaultModel) {
+  public void setDefaultModel(Boolean defaultModel) {
     this.defaultModel = defaultModel;
   }
 
-  public GBedrockImageModelConfig apiSecretCode(Object apiSecretCode) {
+  public GBedrockImageModelConfig apiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
     return this;
   }
@@ -228,11 +229,11 @@ public class GBedrockImageModelConfig {
    * @return apiSecretCode
   **/
   @Schema(description = "")
-  public Object getApiSecretCode() {
+  public String getApiSecretCode() {
     return apiSecretCode;
   }
 
-  public void setApiSecretCode(Object apiSecretCode) {
+  public void setApiSecretCode(String apiSecretCode) {
     this.apiSecretCode = apiSecretCode;
   }
 
@@ -254,7 +255,7 @@ public class GBedrockImageModelConfig {
     this.choosedModel = choosedModel;
   }
 
-  public GBedrockImageModelConfig baseUrl(Object baseUrl) {
+  public GBedrockImageModelConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
     return this;
   }
@@ -264,15 +265,15 @@ public class GBedrockImageModelConfig {
    * @return baseUrl
   **/
   @Schema(description = "")
-  public Object getBaseUrl() {
+  public String getBaseUrl() {
     return baseUrl;
   }
 
-  public void setBaseUrl(Object baseUrl) {
+  public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
-  public GBedrockImageModelConfig contextLength(Object contextLength) {
+  public GBedrockImageModelConfig contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -282,15 +283,15 @@ public class GBedrockImageModelConfig {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
-  public GBedrockImageModelConfig height(Object height) {
+  public GBedrockImageModelConfig height(Integer height) {
     this.height = height;
     return this;
   }
@@ -300,15 +301,15 @@ public class GBedrockImageModelConfig {
    * @return height
   **/
   @Schema(description = "")
-  public Object getHeight() {
+  public Integer getHeight() {
     return height;
   }
 
-  public void setHeight(Object height) {
+  public void setHeight(Integer height) {
     this.height = height;
   }
 
-  public GBedrockImageModelConfig width(Object width) {
+  public GBedrockImageModelConfig width(Integer width) {
     this.width = width;
     return this;
   }
@@ -318,15 +319,15 @@ public class GBedrockImageModelConfig {
    * @return width
   **/
   @Schema(description = "")
-  public Object getWidth() {
+  public Integer getWidth() {
     return width;
   }
 
-  public void setWidth(Object width) {
+  public void setWidth(Integer width) {
     this.width = width;
   }
 
-  public GBedrockImageModelConfig cfgScale(Object cfgScale) {
+  public GBedrockImageModelConfig cfgScale(Double cfgScale) {
     this.cfgScale = cfgScale;
     return this;
   }
@@ -336,15 +337,15 @@ public class GBedrockImageModelConfig {
    * @return cfgScale
   **/
   @Schema(description = "")
-  public Object getCfgScale() {
+  public Double getCfgScale() {
     return cfgScale;
   }
 
-  public void setCfgScale(Object cfgScale) {
+  public void setCfgScale(Double cfgScale) {
     this.cfgScale = cfgScale;
   }
 
-  public GBedrockImageModelConfig seed(Object seed) {
+  public GBedrockImageModelConfig seed(Long seed) {
     this.seed = seed;
     return this;
   }
@@ -354,11 +355,11 @@ public class GBedrockImageModelConfig {
    * @return seed
   **/
   @Schema(description = "")
-  public Object getSeed() {
+  public Long getSeed() {
     return seed;
   }
 
-  public void setSeed(Object seed) {
+  public void setSeed(Long seed) {
     this.seed = seed;
   }
 

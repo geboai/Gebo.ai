@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**menuId** | **Object** |  | 
-**pipelineId** | **Object** |  |  [optional]
-**description** | **Object** |  | 
-**icon** | **Object** |  |  [optional]
-**items** | **Object** |  | 
-**order** | **Object** |  | 
+**menuId** | **String** |  | 
+**pipelineId** | **String** |  |  [optional]
+**description** | **String** |  | 
+**icon** | **String** |  |  [optional]
+**items** | [**List&lt;PipelineChatMenuItem&gt;**](PipelineChatMenuItem.md) |  | 
+**order** | **Integer** |  | 

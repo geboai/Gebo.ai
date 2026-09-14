@@ -9,28 +9,34 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CatalogingLabel } from './catalogingLabel';
+import { GeboAudioDocumentFragment } from './geboAudioDocumentFragment';
+import { GeboImageDocumentFragment } from './geboImageDocumentFragment';
+import { GeboMediaDocumentFragment } from './geboMediaDocumentFragment';
+import { GeboTextDocumentFragment } from './geboTextDocumentFragment';
+import { GeboVideoDocumentFragment } from './geboVideoDocumentFragment';
 import { VFilesystemReference } from './vFilesystemReference';
 
 export interface GeboDocument { 
-    id?: any;
-    parentPathId?: any;
-    url?: any;
-    name?: any;
-    extension?: any;
-    contentType?: any;
-    createdDate?: any;
-    firstProcessedDate?: any;
-    lastProcessedDate?: any;
-    size?: any;
+    id?: string;
+    parentPathId?: string;
+    url?: string;
+    name?: string;
+    extension?: string;
+    contentType?: string;
+    createdDate?: Date;
+    firstProcessedDate?: Date;
+    lastProcessedDate?: Date;
+    size?: number;
     virtualParentFolderReference?: VFilesystemReference;
     virtualFileReference?: VFilesystemReference;
-    originalContentModifiedDate?: any;
-    customMetaData?: any;
-    additionalAttributes?: any;
-    texts?: any;
-    images?: any;
-    audios?: any;
-    videos?: any;
-    media?: any;
-    catalogingLabel?: any;
+    originalContentModifiedDate?: Date;
+    customMetaData?: { [key: string]: any; };
+    additionalAttributes?: { [key: string]: any; };
+    texts?: Array<GeboTextDocumentFragment>;
+    images?: Array<GeboImageDocumentFragment>;
+    audios?: Array<GeboAudioDocumentFragment>;
+    videos?: Array<GeboVideoDocumentFragment>;
+    media?: Array<GeboMediaDocumentFragment>;
+    catalogingLabel?: Array<CatalogingLabel>;
 }

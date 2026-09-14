@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GModuleMetaInfo } from '../model/gModuleMetaInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +61,9 @@ export class InternalMessagingTopologyControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getLocalTopology(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getLocalTopology(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getLocalTopology(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getLocalTopology(observe?: 'body', reportProgress?: boolean): Observable<Array<GModuleMetaInfo>>;
+    public getLocalTopology(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GModuleMetaInfo>>>;
+    public getLocalTopology(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GModuleMetaInfo>>>;
     public getLocalTopology(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +81,7 @@ export class InternalMessagingTopologyControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/InternalMessagingTopologyController/getLocalTopology`,
+        return this.httpClient.request<Array<GModuleMetaInfo>>('get',`${this.basePath}/api/admin/InternalMessagingTopologyController/getLocalTopology`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

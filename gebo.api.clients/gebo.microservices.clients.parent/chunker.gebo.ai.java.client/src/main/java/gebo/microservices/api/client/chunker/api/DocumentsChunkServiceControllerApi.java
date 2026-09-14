@@ -6,6 +6,7 @@ import gebo.microservices.api.client.chunker.model.DocumentChunkingResponse;
 import gebo.microservices.api.client.chunker.model.GetCachedChunkSetRequest;
 import gebo.microservices.api.client.chunker.model.GetChunkSetRequest;
 import gebo.microservices.api.client.chunker.model.GetNextChunkSetRequest;
+import gebo.microservices.api.client.chunker.model.IDocumentChunkWithRef;
 import gebo.microservices.api.client.chunker.model.PrepareChunksRequest;
 import gebo.microservices.api.client.chunker.model.StreamChunksBatchRequest;
 import gebo.microservices.api.client.chunker.model.StreamChunksReactiveRequest;
@@ -29,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class DocumentsChunkServiceControllerApi {
     private ApiClient apiClient;
@@ -54,10 +55,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param reference  (required)
-     * @return Object
+     * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object createChunkingSession(Object reference) throws RestClientException {
+    public String createChunkingSession(String reference) throws RestClientException {
         return createChunkingSessionWithHttpInfo(reference).getBody();
     }
 
@@ -66,10 +67,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param reference  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> createChunkingSessionWithHttpInfo(Object reference) throws RestClientException {
+    public ResponseEntity<String> createChunkingSessionWithHttpInfo(String reference) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'reference' is set
         if (reference == null) {
@@ -91,7 +92,7 @@ public class DocumentsChunkServiceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -101,7 +102,7 @@ public class DocumentsChunkServiceControllerApi {
      * @param chunkSessionId  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void disposeChunkingSession(Object chunkSessionId) throws RestClientException {
+    public void disposeChunkingSession(String chunkSessionId) throws RestClientException {
         disposeChunkingSessionWithHttpInfo(chunkSessionId);
     }
 
@@ -113,7 +114,7 @@ public class DocumentsChunkServiceControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> disposeChunkingSessionWithHttpInfo(Object chunkSessionId) throws RestClientException {
+    public ResponseEntity<Void> disposeChunkingSessionWithHttpInfo(String chunkSessionId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chunkSessionId' is set
         if (chunkSessionId == null) {
@@ -325,10 +326,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param reference  (required)
-     * @return Object
+     * @return String
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object retrieveChunkingSession(Object reference) throws RestClientException {
+    public String retrieveChunkingSession(String reference) throws RestClientException {
         return retrieveChunkingSessionWithHttpInfo(reference).getBody();
     }
 
@@ -337,10 +338,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param reference  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> retrieveChunkingSessionWithHttpInfo(Object reference) throws RestClientException {
+    public ResponseEntity<String> retrieveChunkingSessionWithHttpInfo(String reference) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'reference' is set
         if (reference == null) {
@@ -362,7 +363,7 @@ public class DocumentsChunkServiceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -370,10 +371,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;IDocumentChunkWithRef&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamChunks(StreamChunksRequest body) throws RestClientException {
+    public List<IDocumentChunkWithRef> streamChunks(StreamChunksRequest body) throws RestClientException {
         return streamChunksWithHttpInfo(body).getBody();
     }
 
@@ -382,10 +383,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;IDocumentChunkWithRef&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamChunksWithHttpInfo(StreamChunksRequest body) throws RestClientException {
+    public ResponseEntity<List<IDocumentChunkWithRef>> streamChunksWithHttpInfo(StreamChunksRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -408,7 +409,7 @@ public class DocumentsChunkServiceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<IDocumentChunkWithRef>> returnType = new ParameterizedTypeReference<List<IDocumentChunkWithRef>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -416,10 +417,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;IDocumentChunkWithRef&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamChunksBatch(StreamChunksBatchRequest body) throws RestClientException {
+    public List<IDocumentChunkWithRef> streamChunksBatch(StreamChunksBatchRequest body) throws RestClientException {
         return streamChunksBatchWithHttpInfo(body).getBody();
     }
 
@@ -428,10 +429,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;IDocumentChunkWithRef&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamChunksBatchWithHttpInfo(StreamChunksBatchRequest body) throws RestClientException {
+    public ResponseEntity<List<IDocumentChunkWithRef>> streamChunksBatchWithHttpInfo(StreamChunksBatchRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -454,7 +455,7 @@ public class DocumentsChunkServiceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<IDocumentChunkWithRef>> returnType = new ParameterizedTypeReference<List<IDocumentChunkWithRef>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -462,10 +463,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;IDocumentChunkWithRef&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object streamChunksReactive(StreamChunksReactiveRequest body) throws RestClientException {
+    public List<IDocumentChunkWithRef> streamChunksReactive(StreamChunksReactiveRequest body) throws RestClientException {
         return streamChunksReactiveWithHttpInfo(body).getBody();
     }
 
@@ -474,10 +475,10 @@ public class DocumentsChunkServiceControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;IDocumentChunkWithRef&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> streamChunksReactiveWithHttpInfo(StreamChunksReactiveRequest body) throws RestClientException {
+    public ResponseEntity<List<IDocumentChunkWithRef>> streamChunksReactiveWithHttpInfo(StreamChunksReactiveRequest body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -500,7 +501,7 @@ public class DocumentsChunkServiceControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<IDocumentChunkWithRef>> returnType = new ParameterizedTypeReference<List<IDocumentChunkWithRef>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

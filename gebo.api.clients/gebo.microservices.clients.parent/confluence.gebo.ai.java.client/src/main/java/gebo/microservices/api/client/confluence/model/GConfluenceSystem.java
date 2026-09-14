@@ -18,62 +18,129 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * GConfluenceSystem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class GConfluenceSystem {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("version")
-  private Object version = null;
+  private String version = null;
 
   @JsonProperty("contentManagementSystemType")
-  private Object contentManagementSystemType = null;
+  private String contentManagementSystemType = null;
 
   @JsonProperty("readonly")
-  private Object readonly = null;
+  private Boolean readonly = null;
 
   @JsonProperty("baseUri")
-  private Object baseUri = null;
+  private String baseUri = null;
 
-  @JsonProperty("usedCapabilities")
-  private Object usedCapabilities = null;
+  /**
+   * Gets or Sets usedCapabilities
+   */
+  public enum UsedCapabilitiesEnum {
+    TICKETS_MANAGEMENT("TICKETS_MANAGEMENT"),
+    DOCUMENTS_MANAGEMENT("DOCUMENTS_MANAGEMENT"),
+    SOURCE_MANAGEMENT("SOURCE_MANAGEMENT"),
+    ARTIFACTS_REPOSITORY_MANAGEMENT("ARTIFACTS_REPOSITORY_MANAGEMENT");
+
+    private String value;
+
+    UsedCapabilitiesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UsedCapabilitiesEnum fromValue(String input) {
+      for (UsedCapabilitiesEnum b : UsedCapabilitiesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("usedCapabilities")
+  private List<UsedCapabilitiesEnum> usedCapabilities = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
-  @JsonProperty("confluenceVersion")
-  private Object confluenceVersion = null;
+  /**
+   * Gets or Sets confluenceVersion
+   */
+  public enum ConfluenceVersionEnum {
+    ONPREMISE7X("ONPREMISE7X"),
+    CLOUD("CLOUD");
+
+    private String value;
+
+    ConfluenceVersionEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ConfluenceVersionEnum fromValue(String input) {
+      for (ConfluenceVersionEnum b : ConfluenceVersionEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("confluenceVersion")
+  private ConfluenceVersionEnum confluenceVersion = null;
 
   @JsonProperty("secretCode")
-  private Object secretCode = null;
+  private String secretCode = null;
 
-  public GConfluenceSystem code(Object code) {
+  public GConfluenceSystem code(String code) {
     this.code = code;
     return this;
   }
@@ -83,15 +150,15 @@ public class GConfluenceSystem {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GConfluenceSystem description(Object description) {
+  public GConfluenceSystem description(String description) {
     this.description = description;
     return this;
   }
@@ -101,15 +168,15 @@ public class GConfluenceSystem {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GConfluenceSystem userModified(Object userModified) {
+  public GConfluenceSystem userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -119,15 +186,15 @@ public class GConfluenceSystem {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GConfluenceSystem userCreated(Object userCreated) {
+  public GConfluenceSystem userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -137,15 +204,15 @@ public class GConfluenceSystem {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GConfluenceSystem dateModified(Object dateModified) {
+  public GConfluenceSystem dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -155,15 +222,15 @@ public class GConfluenceSystem {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GConfluenceSystem dateCreated(Object dateCreated) {
+  public GConfluenceSystem dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -173,15 +240,15 @@ public class GConfluenceSystem {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GConfluenceSystem creationDate(Object creationDate) {
+  public GConfluenceSystem creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -191,15 +258,15 @@ public class GConfluenceSystem {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public GConfluenceSystem modificationDate(Object modificationDate) {
+  public GConfluenceSystem modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -209,15 +276,15 @@ public class GConfluenceSystem {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public GConfluenceSystem version(Object version) {
+  public GConfluenceSystem version(String version) {
     this.version = version;
     return this;
   }
@@ -227,15 +294,15 @@ public class GConfluenceSystem {
    * @return version
   **/
   @Schema(description = "")
-  public Object getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(Object version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
-  public GConfluenceSystem contentManagementSystemType(Object contentManagementSystemType) {
+  public GConfluenceSystem contentManagementSystemType(String contentManagementSystemType) {
     this.contentManagementSystemType = contentManagementSystemType;
     return this;
   }
@@ -245,15 +312,15 @@ public class GConfluenceSystem {
    * @return contentManagementSystemType
   **/
   @Schema(description = "")
-  public Object getContentManagementSystemType() {
+  public String getContentManagementSystemType() {
     return contentManagementSystemType;
   }
 
-  public void setContentManagementSystemType(Object contentManagementSystemType) {
+  public void setContentManagementSystemType(String contentManagementSystemType) {
     this.contentManagementSystemType = contentManagementSystemType;
   }
 
-  public GConfluenceSystem readonly(Object readonly) {
+  public GConfluenceSystem readonly(Boolean readonly) {
     this.readonly = readonly;
     return this;
   }
@@ -263,15 +330,15 @@ public class GConfluenceSystem {
    * @return readonly
   **/
   @Schema(description = "")
-  public Object getReadonly() {
+  public Boolean isReadonly() {
     return readonly;
   }
 
-  public void setReadonly(Object readonly) {
+  public void setReadonly(Boolean readonly) {
     this.readonly = readonly;
   }
 
-  public GConfluenceSystem baseUri(Object baseUri) {
+  public GConfluenceSystem baseUri(String baseUri) {
     this.baseUri = baseUri;
     return this;
   }
@@ -281,16 +348,24 @@ public class GConfluenceSystem {
    * @return baseUri
   **/
   @Schema(description = "")
-  public Object getBaseUri() {
+  public String getBaseUri() {
     return baseUri;
   }
 
-  public void setBaseUri(Object baseUri) {
+  public void setBaseUri(String baseUri) {
     this.baseUri = baseUri;
   }
 
-  public GConfluenceSystem usedCapabilities(Object usedCapabilities) {
+  public GConfluenceSystem usedCapabilities(List<UsedCapabilitiesEnum> usedCapabilities) {
     this.usedCapabilities = usedCapabilities;
+    return this;
+  }
+
+  public GConfluenceSystem addUsedCapabilitiesItem(UsedCapabilitiesEnum usedCapabilitiesItem) {
+    if (this.usedCapabilities == null) {
+      this.usedCapabilities = new ArrayList<>();
+    }
+    this.usedCapabilities.add(usedCapabilitiesItem);
     return this;
   }
 
@@ -299,16 +374,24 @@ public class GConfluenceSystem {
    * @return usedCapabilities
   **/
   @Schema(description = "")
-  public Object getUsedCapabilities() {
+  public List<UsedCapabilitiesEnum> getUsedCapabilities() {
     return usedCapabilities;
   }
 
-  public void setUsedCapabilities(Object usedCapabilities) {
+  public void setUsedCapabilities(List<UsedCapabilitiesEnum> usedCapabilities) {
     this.usedCapabilities = usedCapabilities;
   }
 
-  public GConfluenceSystem aclAliases(Object aclAliases) {
+  public GConfluenceSystem aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GConfluenceSystem addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -317,15 +400,15 @@ public class GConfluenceSystem {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 
-  public GConfluenceSystem confluenceVersion(Object confluenceVersion) {
+  public GConfluenceSystem confluenceVersion(ConfluenceVersionEnum confluenceVersion) {
     this.confluenceVersion = confluenceVersion;
     return this;
   }
@@ -335,15 +418,15 @@ public class GConfluenceSystem {
    * @return confluenceVersion
   **/
   @Schema(description = "")
-  public Object getConfluenceVersion() {
+  public ConfluenceVersionEnum getConfluenceVersion() {
     return confluenceVersion;
   }
 
-  public void setConfluenceVersion(Object confluenceVersion) {
+  public void setConfluenceVersion(ConfluenceVersionEnum confluenceVersion) {
     this.confluenceVersion = confluenceVersion;
   }
 
-  public GConfluenceSystem secretCode(Object secretCode) {
+  public GConfluenceSystem secretCode(String secretCode) {
     this.secretCode = secretCode;
     return this;
   }
@@ -353,11 +436,11 @@ public class GConfluenceSystem {
    * @return secretCode
   **/
   @Schema(description = "")
-  public Object getSecretCode() {
+  public String getSecretCode() {
     return secretCode;
   }
 
-  public void setSecretCode(Object secretCode) {
+  public void setSecretCode(String secretCode) {
     this.secretCode = secretCode;
   }
 

@@ -14,13 +14,16 @@
  * AI generated comments
  * 
  * This component is responsible for displaying logs within the Gebo.ai application.
- * It extends the AncestorPanelComponent and handles the loading of endpoint data
- * for displaying in a tabbed interface.
+ * It extends the AncestorPanelComponent and shows, in a single page, the job entries
+ * of the datasource types selected by the administrator.
  */
 import { Component, OnInit } from "@angular/core";
 import { FormGroupMetaInfo, GeboAngularFormGroupMetaInfoControllerService, JobLauncherControllerService, LogViewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
+
+/** Class category of the form groups describing the available datasource types */
+const PROJECT_ENDPOINT_CATEGORY = 'ai.gebo.knlowledgebase.model.projects.GProjectEndpoint';
 
 @Component({
     selector: "gebo-ai-logs-view-component",
@@ -34,7 +37,7 @@ export class GeboAiLogsViewComponent extends AncestorPanelComponent implements O
     /**
      * Overrides the parent method to reload viewed data.
      * Fetches form group meta information and filters for endpoint types,
-     * populating the endpoint tabs array with the retrieved data.
+     * populating the selectable datasource types with the retrieved data.
      * Sets loading state during the operation.
      */
     public override reloadViewedData(): void {
@@ -42,16 +45,17 @@ export class GeboAiLogsViewComponent extends AncestorPanelComponent implements O
         this.geboFormGroupControllerService.getFormGroupsMetaInfos().subscribe({
             next: (fGroups: FormGroupMetaInfo[]) => {
                 if (fGroups) {
-                    const tabs: { label: string, className: string }[] = [];
-                    const endPointTypes = fGroups.filter(x => x.classCategoryName === 'ai.gebo.knlowledgebase.model.projects.GProjectEndpoint');
+                    const types: { label: string, className: string }[] = [];
+                    const endPointTypes = fGroups.filter(x => x.classCategoryName === PROJECT_ENDPOINT_CATEGORY);
                     if (endPointTypes) {
                         endPointTypes.forEach(entry => {
                             if (entry.description && entry.className) {
-                                tabs.push({ label: entry.description, className: entry.className });
+                                types.push({ label: entry.description, className: entry.className });
                             }
                         });
                     }
-                    this.endpointTabs = tabs;
+                    this.endpointTypes = types;
+                    this.selectedClassNames = types.map(type => type.className);
                 }
             },
             complete: () => {
@@ -80,9 +84,15 @@ export class GeboAiLogsViewComponent extends AncestorPanelComponent implements O
     }
 
     /**
-     * Array to store endpoint tab information including display label and associated class name
+     * Selectable datasource types, each one with its display label and associated class name
      */
-    endpointTabs: { label: string, className: string }[] = [];
+    endpointTypes: { label: string, className: string }[] = [];
+
+    /**
+     * Class names of the datasource types whose logs are currently listed.
+     * An empty selection lists the logs of every datasource type.
+     */
+    selectedClassNames: string[] = [];
 
     /**
      * Lifecycle hook that is called after component initialization

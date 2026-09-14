@@ -11,9 +11,9 @@
  */
 
 export interface FastJiraSystemInsertRequest { 
-    baseUri: any;
-    description: any;
-    username: any;
-    password?: any;
-    token?: any;
+    baseUri: string;
+    description: string;
+    username: string;
+    password?: string;
+    token?: string;
 }

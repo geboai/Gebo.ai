@@ -156,9 +156,9 @@ export class TavilySearchConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTavilySearchApiCredentials(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getTavilySearchApiCredentials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getTavilySearchApiCredentials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getTavilySearchApiCredentials(observe?: 'body', reportProgress?: boolean): Observable<Array<GTavilySearchApiCredentials>>;
+    public getTavilySearchApiCredentials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GTavilySearchApiCredentials>>>;
+    public getTavilySearchApiCredentials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GTavilySearchApiCredentials>>>;
     public getTavilySearchApiCredentials(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -176,7 +176,7 @@ export class TavilySearchConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/TavilySearchConfigurationController/getTavilySearchApiCredentials`,
+        return this.httpClient.request<Array<GTavilySearchApiCredentials>>('get',`${this.basePath}/api/admin/TavilySearchConfigurationController/getTavilySearchApiCredentials`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -276,10 +276,10 @@ export class TavilySearchConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchGTavilySearchApiCredentialsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GTavilySearchApiCredentials>;
-    public searchGTavilySearchApiCredentialsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GTavilySearchApiCredentials>>;
-    public searchGTavilySearchApiCredentialsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GTavilySearchApiCredentials>>;
-    public searchGTavilySearchApiCredentialsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public searchGTavilySearchApiCredentialsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GTavilySearchApiCredentials>;
+    public searchGTavilySearchApiCredentialsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GTavilySearchApiCredentials>>;
+    public searchGTavilySearchApiCredentialsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GTavilySearchApiCredentials>>;
+    public searchGTavilySearchApiCredentialsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling searchGTavilySearchApiCredentialsByCode.');

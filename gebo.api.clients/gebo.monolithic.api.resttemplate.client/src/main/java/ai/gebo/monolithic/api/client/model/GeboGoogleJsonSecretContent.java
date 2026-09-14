@@ -22,14 +22,35 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboGoogleJsonSecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T09:01:39.494209200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GeboGoogleJsonSecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("jsonContent")
   private String jsonContent = null;
 
   @JsonProperty("delegatedUser")
   private String delegatedUser = null;
+
+  public GeboGoogleJsonSecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 
   public GeboGoogleJsonSecretContent jsonContent(String jsonContent) {
     this.jsonContent = jsonContent;
@@ -77,13 +98,14 @@ public class GeboGoogleJsonSecretContent {
       return false;
     }
     GeboGoogleJsonSecretContent geboGoogleJsonSecretContent = (GeboGoogleJsonSecretContent) o;
-    return Objects.equals(this.jsonContent, geboGoogleJsonSecretContent.jsonContent) &&
+    return Objects.equals(this.readOnly, geboGoogleJsonSecretContent.readOnly) &&
+        Objects.equals(this.jsonContent, geboGoogleJsonSecretContent.jsonContent) &&
         Objects.equals(this.delegatedUser, geboGoogleJsonSecretContent.delegatedUser);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(jsonContent, delegatedUser);
+    return Objects.hash(readOnly, jsonContent, delegatedUser);
   }
 
 
@@ -92,6 +114,7 @@ public class GeboGoogleJsonSecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboGoogleJsonSecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    jsonContent: ").append(toIndentedString(jsonContent)).append("\n");
     sb.append("    delegatedUser: ").append(toIndentedString(delegatedUser)).append("\n");
     sb.append("}");

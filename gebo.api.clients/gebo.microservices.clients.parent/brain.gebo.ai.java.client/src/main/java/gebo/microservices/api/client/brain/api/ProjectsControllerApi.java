@@ -6,6 +6,8 @@ import gebo.microservices.api.client.brain.model.ChildVirtualFSParam;
 import gebo.microservices.api.client.brain.model.GObjectRefGProjectEndpoint;
 import gebo.microservices.api.client.brain.model.GProject;
 import gebo.microservices.api.client.brain.model.ProjectsResearchFilter;
+import gebo.microservices.api.client.brain.model.VDocumentInfo;
+import gebo.microservices.api.client.brain.model.VFolderInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ProjectsControllerApi {
     private ApiClient apiClient;
@@ -94,10 +96,10 @@ public class ProjectsControllerApi {
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GProject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findChildProjects(Object knowledgeBaseCode, Object parentProjectCode) throws RestClientException {
+    public List<GProject> findChildProjects(String knowledgeBaseCode, String parentProjectCode) throws RestClientException {
         return findChildProjectsWithHttpInfo(knowledgeBaseCode, parentProjectCode).getBody();
     }
 
@@ -107,10 +109,10 @@ public class ProjectsControllerApi {
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GProject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findChildProjectsWithHttpInfo(Object knowledgeBaseCode, Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GProject>> findChildProjectsWithHttpInfo(String knowledgeBaseCode, String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'knowledgeBaseCode' is set
         if (knowledgeBaseCode == null) {
@@ -137,7 +139,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GProject>> returnType = new ParameterizedTypeReference<List<GProject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -146,10 +148,10 @@ public class ProjectsControllerApi {
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
      * @param actualSelectedProjects  (required)
-     * @return Object
+     * @return List&lt;GProject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findOtherKnowledgeBaseIncludableProjects(Object knowledgeBaseCode, Object actualSelectedProjects) throws RestClientException {
+    public List<GProject> findOtherKnowledgeBaseIncludableProjects(String knowledgeBaseCode, List<String> actualSelectedProjects) throws RestClientException {
         return findOtherKnowledgeBaseIncludableProjectsWithHttpInfo(knowledgeBaseCode, actualSelectedProjects).getBody();
     }
 
@@ -159,10 +161,10 @@ public class ProjectsControllerApi {
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
      * @param actualSelectedProjects  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GProject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findOtherKnowledgeBaseIncludableProjectsWithHttpInfo(Object knowledgeBaseCode, Object actualSelectedProjects) throws RestClientException {
+    public ResponseEntity<List<GProject>> findOtherKnowledgeBaseIncludableProjectsWithHttpInfo(String knowledgeBaseCode, List<String> actualSelectedProjects) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'knowledgeBaseCode' is set
         if (knowledgeBaseCode == null) {
@@ -178,7 +180,7 @@ public class ProjectsControllerApi {
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "knowledgeBaseCode", knowledgeBaseCode));
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "actualSelectedProjects", actualSelectedProjects));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(ApiClient.CollectionFormat.valueOf("multi".toUpperCase()), "actualSelectedProjects", actualSelectedProjects));
 
         final String[] accepts = { 
             "application/json"
@@ -189,7 +191,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GProject>> returnType = new ParameterizedTypeReference<List<GProject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -200,7 +202,7 @@ public class ProjectsControllerApi {
      * @return GProject
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GProject findProjectByCode(Object code) throws RestClientException {
+    public GProject findProjectByCode(String code) throws RestClientException {
         return findProjectByCodeWithHttpInfo(code).getBody();
     }
 
@@ -212,7 +214,7 @@ public class ProjectsControllerApi {
      * @return ResponseEntity&lt;GProject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GProject> findProjectByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GProject> findProjectByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -242,10 +244,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
-     * @return Object
+     * @return List&lt;GProject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findRootProjects(Object knowledgeBaseCode) throws RestClientException {
+    public List<GProject> findRootProjects(String knowledgeBaseCode) throws RestClientException {
         return findRootProjectsWithHttpInfo(knowledgeBaseCode).getBody();
     }
 
@@ -254,10 +256,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param knowledgeBaseCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GProject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findRootProjectsWithHttpInfo(Object knowledgeBaseCode) throws RestClientException {
+    public ResponseEntity<List<GProject>> findRootProjectsWithHttpInfo(String knowledgeBaseCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'knowledgeBaseCode' is set
         if (knowledgeBaseCode == null) {
@@ -279,7 +281,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GProject>> returnType = new ParameterizedTypeReference<List<GProject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -287,10 +289,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;VDocumentInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getChildDocuments(ChildVirtualFSParam body) throws RestClientException {
+    public List<VDocumentInfo> getChildDocuments(ChildVirtualFSParam body) throws RestClientException {
         return getChildDocumentsWithHttpInfo(body).getBody();
     }
 
@@ -299,10 +301,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;VDocumentInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getChildDocumentsWithHttpInfo(ChildVirtualFSParam body) throws RestClientException {
+    public ResponseEntity<List<VDocumentInfo>> getChildDocumentsWithHttpInfo(ChildVirtualFSParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -325,7 +327,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<VDocumentInfo>> returnType = new ParameterizedTypeReference<List<VDocumentInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -333,10 +335,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;VFolderInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getChildFolders(ChildVirtualFSParam body) throws RestClientException {
+    public List<VFolderInfo> getChildFolders(ChildVirtualFSParam body) throws RestClientException {
         return getChildFoldersWithHttpInfo(body).getBody();
     }
 
@@ -345,10 +347,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;VFolderInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getChildFoldersWithHttpInfo(ChildVirtualFSParam body) throws RestClientException {
+    public ResponseEntity<List<VFolderInfo>> getChildFoldersWithHttpInfo(ChildVirtualFSParam body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -371,17 +373,17 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<VFolderInfo>> returnType = new ParameterizedTypeReference<List<VFolderInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GProject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getProjects() throws RestClientException {
+    public List<GProject> getProjects() throws RestClientException {
         return getProjectsWithHttpInfo().getBody();
     }
 
@@ -389,10 +391,10 @@ public class ProjectsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GProject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getProjectsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GProject>> getProjectsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ProjectsController/getProjects").build().toUriString();
         
@@ -409,7 +411,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GProject>> returnType = new ParameterizedTypeReference<List<GProject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -417,10 +419,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;VDocumentInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRootDocuments(GObjectRefGProjectEndpoint body) throws RestClientException {
+    public List<VDocumentInfo> getRootDocuments(GObjectRefGProjectEndpoint body) throws RestClientException {
         return getRootDocumentsWithHttpInfo(body).getBody();
     }
 
@@ -429,10 +431,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;VDocumentInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRootDocumentsWithHttpInfo(GObjectRefGProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<VDocumentInfo>> getRootDocumentsWithHttpInfo(GObjectRefGProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -455,7 +457,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<VDocumentInfo>> returnType = new ParameterizedTypeReference<List<VDocumentInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -463,10 +465,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;VFolderInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getRootFolders(GObjectRefGProjectEndpoint body) throws RestClientException {
+    public List<VFolderInfo> getRootFolders(GObjectRefGProjectEndpoint body) throws RestClientException {
         return getRootFoldersWithHttpInfo(body).getBody();
     }
 
@@ -475,10 +477,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;VFolderInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getRootFoldersWithHttpInfo(GObjectRefGProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<VFolderInfo>> getRootFoldersWithHttpInfo(GObjectRefGProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -501,7 +503,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<VFolderInfo>> returnType = new ParameterizedTypeReference<List<VFolderInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -555,10 +557,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GProject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object searchProjects(ProjectsResearchFilter body) throws RestClientException {
+    public List<GProject> searchProjects(ProjectsResearchFilter body) throws RestClientException {
         return searchProjectsWithHttpInfo(body).getBody();
     }
 
@@ -567,10 +569,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GProject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> searchProjectsWithHttpInfo(ProjectsResearchFilter body) throws RestClientException {
+    public ResponseEntity<List<GProject>> searchProjectsWithHttpInfo(ProjectsResearchFilter body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -593,7 +595,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GProject>> returnType = new ParameterizedTypeReference<List<GProject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -601,10 +603,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GProject&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object searchProjectsByQbe(GProject body) throws RestClientException {
+    public List<GProject> searchProjectsByQbe(GProject body) throws RestClientException {
         return searchProjectsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -613,10 +615,10 @@ public class ProjectsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GProject&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> searchProjectsByQbeWithHttpInfo(GProject body) throws RestClientException {
+    public ResponseEntity<List<GProject>> searchProjectsByQbeWithHttpInfo(GProject body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -639,7 +641,7 @@ public class ProjectsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GProject>> returnType = new ParameterizedTypeReference<List<GProject>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GLookupEntry } from '../model/gLookupEntry';
 import { GLookupEntryRefGBaseChatModelConfig } from '../model/gLookupEntryRefGBaseChatModelConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -61,9 +62,9 @@ export class ChatModelsLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelTypesLookup(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getChatModelTypesLookup(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getChatModelTypesLookup(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getChatModelTypesLookup(observe?: 'body', reportProgress?: boolean): Observable<Array<GLookupEntry>>;
+    public getChatModelTypesLookup(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GLookupEntry>>>;
+    public getChatModelTypesLookup(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GLookupEntry>>>;
     public getChatModelTypesLookup(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -81,7 +82,7 @@ export class ChatModelsLookupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/ChatModelsLookupController/getChatModelTypesLookup`,
+        return this.httpClient.request<Array<GLookupEntry>>('get',`${this.basePath}/api/users/ChatModelsLookupController/getChatModelTypesLookup`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -134,10 +135,10 @@ export class ChatModelsLookupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GLookupEntryRefGBaseChatModelConfig>>;
+    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GLookupEntryRefGBaseChatModelConfig>>>;
+    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GLookupEntryRefGBaseChatModelConfig>>>;
+    public getRuntimeConfiguredChatModelsLookup(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -160,7 +161,7 @@ export class ChatModelsLookupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup`,
+        return this.httpClient.request<Array<GLookupEntryRefGBaseChatModelConfig>>('get',`${this.basePath}/api/users/ChatModelsLookupController/getRuntimeConfiguredChatModelsLookup`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

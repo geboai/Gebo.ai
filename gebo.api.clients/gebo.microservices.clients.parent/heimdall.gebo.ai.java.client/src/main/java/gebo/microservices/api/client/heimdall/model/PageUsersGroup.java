@@ -19,66 +19,51 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.heimdall.model.PageableObject;
 import gebo.microservices.api.client.heimdall.model.SortObject;
+import gebo.microservices.api.client.heimdall.model.UsersGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * PageUsersGroup
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class PageUsersGroup {
-  @JsonProperty("totalElements")
-  private Object totalElements = null;
-
   @JsonProperty("totalPages")
-  private Object totalPages = null;
+  private Integer totalPages = null;
+
+  @JsonProperty("totalElements")
+  private Long totalElements = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
   @JsonProperty("first")
-  private Object first = null;
+  private Boolean first = null;
 
   @JsonProperty("last")
-  private Object last = null;
+  private Boolean last = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Integer size = null;
 
   @JsonProperty("content")
-  private Object content = null;
+  private List<UsersGroup> content = null;
 
   @JsonProperty("number")
-  private Object number = null;
+  private Integer number = null;
 
   @JsonProperty("sort")
   private SortObject sort = null;
 
   @JsonProperty("numberOfElements")
-  private Object numberOfElements = null;
+  private Integer numberOfElements = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
-  public PageUsersGroup totalElements(Object totalElements) {
-    this.totalElements = totalElements;
-    return this;
-  }
-
-   /**
-   * Get totalElements
-   * @return totalElements
-  **/
-  @Schema(description = "")
-  public Object getTotalElements() {
-    return totalElements;
-  }
-
-  public void setTotalElements(Object totalElements) {
-    this.totalElements = totalElements;
-  }
-
-  public PageUsersGroup totalPages(Object totalPages) {
+  public PageUsersGroup totalPages(Integer totalPages) {
     this.totalPages = totalPages;
     return this;
   }
@@ -88,12 +73,30 @@ public class PageUsersGroup {
    * @return totalPages
   **/
   @Schema(description = "")
-  public Object getTotalPages() {
+  public Integer getTotalPages() {
     return totalPages;
   }
 
-  public void setTotalPages(Object totalPages) {
+  public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
+  }
+
+  public PageUsersGroup totalElements(Long totalElements) {
+    this.totalElements = totalElements;
+    return this;
+  }
+
+   /**
+   * Get totalElements
+   * @return totalElements
+  **/
+  @Schema(description = "")
+  public Long getTotalElements() {
+    return totalElements;
+  }
+
+  public void setTotalElements(Long totalElements) {
+    this.totalElements = totalElements;
   }
 
   public PageUsersGroup pageable(PageableObject pageable) {
@@ -114,7 +117,7 @@ public class PageUsersGroup {
     this.pageable = pageable;
   }
 
-  public PageUsersGroup first(Object first) {
+  public PageUsersGroup first(Boolean first) {
     this.first = first;
     return this;
   }
@@ -124,15 +127,15 @@ public class PageUsersGroup {
    * @return first
   **/
   @Schema(description = "")
-  public Object getFirst() {
+  public Boolean isFirst() {
     return first;
   }
 
-  public void setFirst(Object first) {
+  public void setFirst(Boolean first) {
     this.first = first;
   }
 
-  public PageUsersGroup last(Object last) {
+  public PageUsersGroup last(Boolean last) {
     this.last = last;
     return this;
   }
@@ -142,15 +145,15 @@ public class PageUsersGroup {
    * @return last
   **/
   @Schema(description = "")
-  public Object getLast() {
+  public Boolean isLast() {
     return last;
   }
 
-  public void setLast(Object last) {
+  public void setLast(Boolean last) {
     this.last = last;
   }
 
-  public PageUsersGroup size(Object size) {
+  public PageUsersGroup size(Integer size) {
     this.size = size;
     return this;
   }
@@ -160,16 +163,24 @@ public class PageUsersGroup {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Integer getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Integer size) {
     this.size = size;
   }
 
-  public PageUsersGroup content(Object content) {
+  public PageUsersGroup content(List<UsersGroup> content) {
     this.content = content;
+    return this;
+  }
+
+  public PageUsersGroup addContentItem(UsersGroup contentItem) {
+    if (this.content == null) {
+      this.content = new ArrayList<>();
+    }
+    this.content.add(contentItem);
     return this;
   }
 
@@ -178,15 +189,15 @@ public class PageUsersGroup {
    * @return content
   **/
   @Schema(description = "")
-  public Object getContent() {
+  public List<UsersGroup> getContent() {
     return content;
   }
 
-  public void setContent(Object content) {
+  public void setContent(List<UsersGroup> content) {
     this.content = content;
   }
 
-  public PageUsersGroup number(Object number) {
+  public PageUsersGroup number(Integer number) {
     this.number = number;
     return this;
   }
@@ -196,11 +207,11 @@ public class PageUsersGroup {
    * @return number
   **/
   @Schema(description = "")
-  public Object getNumber() {
+  public Integer getNumber() {
     return number;
   }
 
-  public void setNumber(Object number) {
+  public void setNumber(Integer number) {
     this.number = number;
   }
 
@@ -222,7 +233,7 @@ public class PageUsersGroup {
     this.sort = sort;
   }
 
-  public PageUsersGroup numberOfElements(Object numberOfElements) {
+  public PageUsersGroup numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
   }
@@ -232,15 +243,15 @@ public class PageUsersGroup {
    * @return numberOfElements
   **/
   @Schema(description = "")
-  public Object getNumberOfElements() {
+  public Integer getNumberOfElements() {
     return numberOfElements;
   }
 
-  public void setNumberOfElements(Object numberOfElements) {
+  public void setNumberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
   }
 
-  public PageUsersGroup empty(Object empty) {
+  public PageUsersGroup empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -250,11 +261,11 @@ public class PageUsersGroup {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 
@@ -268,8 +279,8 @@ public class PageUsersGroup {
       return false;
     }
     PageUsersGroup pageUsersGroup = (PageUsersGroup) o;
-    return Objects.equals(this.totalElements, pageUsersGroup.totalElements) &&
-        Objects.equals(this.totalPages, pageUsersGroup.totalPages) &&
+    return Objects.equals(this.totalPages, pageUsersGroup.totalPages) &&
+        Objects.equals(this.totalElements, pageUsersGroup.totalElements) &&
         Objects.equals(this.pageable, pageUsersGroup.pageable) &&
         Objects.equals(this.first, pageUsersGroup.first) &&
         Objects.equals(this.last, pageUsersGroup.last) &&
@@ -283,7 +294,7 @@ public class PageUsersGroup {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
   }
 
 
@@ -292,8 +303,8 @@ public class PageUsersGroup {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageUsersGroup {\n");
     
-    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
+    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");

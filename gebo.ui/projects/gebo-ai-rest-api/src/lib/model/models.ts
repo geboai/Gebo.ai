@@ -292,6 +292,7 @@ export * from './jobSummary';
 export * from './jobTicket';
 export * from './jobWorkflowStepSummary';
 export * from './jobWorkflowStepSummaryTimeSlotStats';
+export * from './jobsEntriesFilter';
 export * from './jobsEntriesForClassNameFilter';
 export * from './jobsEntriesForJobType';
 export * from './jobsEntriesForProjectEndpointFilter';

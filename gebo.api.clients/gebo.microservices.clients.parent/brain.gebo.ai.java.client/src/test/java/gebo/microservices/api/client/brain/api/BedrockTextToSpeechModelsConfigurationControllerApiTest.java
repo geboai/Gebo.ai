@@ -57,7 +57,7 @@ public class BedrockTextToSpeechModelsConfigurationControllerApiTest {
      */
     @Test
     public void findBedrockTextToSpeechModelConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GBedrockTextToSpeechModelConfig response = api.findBedrockTextToSpeechModelConfigByCode(code);
 
         // TODO: test validations

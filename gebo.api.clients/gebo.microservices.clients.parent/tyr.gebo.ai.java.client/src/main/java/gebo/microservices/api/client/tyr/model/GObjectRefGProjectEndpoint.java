@@ -22,19 +22,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GObjectRefGProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:00.771971924+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:39.074954287+02:00[Europe/Rome]")
 
 public class GObjectRefGProjectEndpoint {
   @JsonProperty("className")
-  private Object className = null;
+  private String className = null;
 
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  public GObjectRefGProjectEndpoint className(Object className) {
+  public GObjectRefGProjectEndpoint className(String className) {
     this.className = className;
     return this;
   }
@@ -44,15 +44,15 @@ public class GObjectRefGProjectEndpoint {
    * @return className
   **/
   @Schema(description = "")
-  public Object getClassName() {
+  public String getClassName() {
     return className;
   }
 
-  public void setClassName(Object className) {
+  public void setClassName(String className) {
     this.className = className;
   }
 
-  public GObjectRefGProjectEndpoint code(Object code) {
+  public GObjectRefGProjectEndpoint code(String code) {
     this.code = code;
     return this;
   }
@@ -62,15 +62,15 @@ public class GObjectRefGProjectEndpoint {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GObjectRefGProjectEndpoint description(Object description) {
+  public GObjectRefGProjectEndpoint description(String description) {
     this.description = description;
     return this;
   }
@@ -80,11 +80,11 @@ public class GObjectRefGProjectEndpoint {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 

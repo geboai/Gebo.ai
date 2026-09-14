@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseImageModelConfig;
+import gebo.microservices.api.client.brain.model.GImageModelType;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -38,7 +40,7 @@ public class ImageModelsControllerApiTest {
      */
     @Test
     public void getImageModelTypesTest() {
-        Object response = api.getImageModelTypes();
+        List<GImageModelType> response = api.getImageModelTypes();
 
         // TODO: test validations
     }
@@ -52,8 +54,8 @@ public class ImageModelsControllerApiTest {
      */
     @Test
     public void getRuntimeConfiguredImageModelsTest() {
-        Object modelTypeCode = null;
-        Object response = api.getRuntimeConfiguredImageModels(modelTypeCode);
+        String modelTypeCode = null;
+        List<ConfigurationEntryGBaseImageModelConfig> response = api.getRuntimeConfiguredImageModels(modelTypeCode);
 
         // TODO: test validations
     }

@@ -17,72 +17,144 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.A2ARemoteSkill;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 /**
  * A2ARemoteAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class A2ARemoteAgentConfig {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("agentCardUrl")
-  private Object agentCardUrl = null;
+  private String agentCardUrl = null;
 
   @JsonProperty("rpcEndpoint")
-  private Object rpcEndpoint = null;
+  private String rpcEndpoint = null;
 
-  @JsonProperty("transportType")
-  private Object transportType = null;
+  /**
+   * Gets or Sets transportType
+   */
+  public enum TransportTypeEnum {
+    JSONRPC("JSONRPC"),
+    REST("REST"),
+    GRPC("GRPC");
 
-  @JsonProperty("authMode")
-  private Object authMode = null;
+    private String value;
+
+    TransportTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TransportTypeEnum fromValue(String input) {
+      for (TransportTypeEnum b : TransportTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("transportType")
+  private TransportTypeEnum transportType = null;
+
+  /**
+   * Gets or Sets authMode
+   */
+  public enum AuthModeEnum {
+    NONE("NONE"),
+    API_KEY("API_KEY"),
+    STATIC_BEARER_TOKEN("STATIC_BEARER_TOKEN"),
+    OAUTH2_CLIENT_CREDENTIALS("OAUTH2_CLIENT_CREDENTIALS"),
+    OAUTH2_AUTHORIZATION_CODE_PER_USER("OAUTH2_AUTHORIZATION_CODE_PER_USER"),
+    USER_TOKEN_RELAY("USER_TOKEN_RELAY"),
+    TOKEN_EXCHANGE("TOKEN_EXCHANGE");
+
+    private String value;
+
+    AuthModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static AuthModeEnum fromValue(String input) {
+      for (AuthModeEnum b : AuthModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("authMode")
+  private AuthModeEnum authMode = null;
 
   @JsonProperty("secretCode")
-  private Object secretCode = null;
+  private String secretCode = null;
 
   @JsonProperty("oauth2AuthenticatorCode")
-  private Object oauth2AuthenticatorCode = null;
+  private String oauth2AuthenticatorCode = null;
 
   @JsonProperty("exportingPrefix")
-  private Object exportingPrefix = null;
+  private String exportingPrefix = null;
 
   @JsonProperty("enabled")
-  private Object enabled = null;
+  private Boolean enabled = null;
 
   @JsonProperty("skills")
-  private Object skills = null;
+  private List<A2ARemoteSkill> skills = null;
 
   @JsonProperty("accessibleGroups")
-  private Object accessibleGroups = null;
+  private List<String> accessibleGroups = null;
 
   @JsonProperty("accessibleUsers")
-  private Object accessibleUsers = null;
+  private List<String> accessibleUsers = null;
 
   @JsonProperty("accessibleToAll")
-  private Object accessibleToAll = null;
+  private Boolean accessibleToAll = null;
 
   @JsonProperty("aclAliases")
-  private Object aclAliases = null;
+  private List<Integer> aclAliases = null;
 
-  public A2ARemoteAgentConfig code(Object code) {
+  public A2ARemoteAgentConfig code(String code) {
     this.code = code;
     return this;
   }
@@ -92,15 +164,15 @@ public class A2ARemoteAgentConfig {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public A2ARemoteAgentConfig description(Object description) {
+  public A2ARemoteAgentConfig description(String description) {
     this.description = description;
     return this;
   }
@@ -110,15 +182,15 @@ public class A2ARemoteAgentConfig {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public A2ARemoteAgentConfig userModified(Object userModified) {
+  public A2ARemoteAgentConfig userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -128,15 +200,15 @@ public class A2ARemoteAgentConfig {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public A2ARemoteAgentConfig userCreated(Object userCreated) {
+  public A2ARemoteAgentConfig userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -146,15 +218,15 @@ public class A2ARemoteAgentConfig {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public A2ARemoteAgentConfig dateModified(Object dateModified) {
+  public A2ARemoteAgentConfig dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -164,15 +236,15 @@ public class A2ARemoteAgentConfig {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public A2ARemoteAgentConfig dateCreated(Object dateCreated) {
+  public A2ARemoteAgentConfig dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -182,15 +254,15 @@ public class A2ARemoteAgentConfig {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public A2ARemoteAgentConfig agentCardUrl(Object agentCardUrl) {
+  public A2ARemoteAgentConfig agentCardUrl(String agentCardUrl) {
     this.agentCardUrl = agentCardUrl;
     return this;
   }
@@ -200,15 +272,15 @@ public class A2ARemoteAgentConfig {
    * @return agentCardUrl
   **/
   @Schema(required = true, description = "")
-  public Object getAgentCardUrl() {
+  public String getAgentCardUrl() {
     return agentCardUrl;
   }
 
-  public void setAgentCardUrl(Object agentCardUrl) {
+  public void setAgentCardUrl(String agentCardUrl) {
     this.agentCardUrl = agentCardUrl;
   }
 
-  public A2ARemoteAgentConfig rpcEndpoint(Object rpcEndpoint) {
+  public A2ARemoteAgentConfig rpcEndpoint(String rpcEndpoint) {
     this.rpcEndpoint = rpcEndpoint;
     return this;
   }
@@ -218,15 +290,15 @@ public class A2ARemoteAgentConfig {
    * @return rpcEndpoint
   **/
   @Schema(description = "")
-  public Object getRpcEndpoint() {
+  public String getRpcEndpoint() {
     return rpcEndpoint;
   }
 
-  public void setRpcEndpoint(Object rpcEndpoint) {
+  public void setRpcEndpoint(String rpcEndpoint) {
     this.rpcEndpoint = rpcEndpoint;
   }
 
-  public A2ARemoteAgentConfig transportType(Object transportType) {
+  public A2ARemoteAgentConfig transportType(TransportTypeEnum transportType) {
     this.transportType = transportType;
     return this;
   }
@@ -236,15 +308,15 @@ public class A2ARemoteAgentConfig {
    * @return transportType
   **/
   @Schema(required = true, description = "")
-  public Object getTransportType() {
+  public TransportTypeEnum getTransportType() {
     return transportType;
   }
 
-  public void setTransportType(Object transportType) {
+  public void setTransportType(TransportTypeEnum transportType) {
     this.transportType = transportType;
   }
 
-  public A2ARemoteAgentConfig authMode(Object authMode) {
+  public A2ARemoteAgentConfig authMode(AuthModeEnum authMode) {
     this.authMode = authMode;
     return this;
   }
@@ -254,15 +326,15 @@ public class A2ARemoteAgentConfig {
    * @return authMode
   **/
   @Schema(required = true, description = "")
-  public Object getAuthMode() {
+  public AuthModeEnum getAuthMode() {
     return authMode;
   }
 
-  public void setAuthMode(Object authMode) {
+  public void setAuthMode(AuthModeEnum authMode) {
     this.authMode = authMode;
   }
 
-  public A2ARemoteAgentConfig secretCode(Object secretCode) {
+  public A2ARemoteAgentConfig secretCode(String secretCode) {
     this.secretCode = secretCode;
     return this;
   }
@@ -272,15 +344,15 @@ public class A2ARemoteAgentConfig {
    * @return secretCode
   **/
   @Schema(description = "")
-  public Object getSecretCode() {
+  public String getSecretCode() {
     return secretCode;
   }
 
-  public void setSecretCode(Object secretCode) {
+  public void setSecretCode(String secretCode) {
     this.secretCode = secretCode;
   }
 
-  public A2ARemoteAgentConfig oauth2AuthenticatorCode(Object oauth2AuthenticatorCode) {
+  public A2ARemoteAgentConfig oauth2AuthenticatorCode(String oauth2AuthenticatorCode) {
     this.oauth2AuthenticatorCode = oauth2AuthenticatorCode;
     return this;
   }
@@ -290,15 +362,15 @@ public class A2ARemoteAgentConfig {
    * @return oauth2AuthenticatorCode
   **/
   @Schema(description = "")
-  public Object getOauth2AuthenticatorCode() {
+  public String getOauth2AuthenticatorCode() {
     return oauth2AuthenticatorCode;
   }
 
-  public void setOauth2AuthenticatorCode(Object oauth2AuthenticatorCode) {
+  public void setOauth2AuthenticatorCode(String oauth2AuthenticatorCode) {
     this.oauth2AuthenticatorCode = oauth2AuthenticatorCode;
   }
 
-  public A2ARemoteAgentConfig exportingPrefix(Object exportingPrefix) {
+  public A2ARemoteAgentConfig exportingPrefix(String exportingPrefix) {
     this.exportingPrefix = exportingPrefix;
     return this;
   }
@@ -308,15 +380,15 @@ public class A2ARemoteAgentConfig {
    * @return exportingPrefix
   **/
   @Schema(required = true, description = "")
-  public Object getExportingPrefix() {
+  public String getExportingPrefix() {
     return exportingPrefix;
   }
 
-  public void setExportingPrefix(Object exportingPrefix) {
+  public void setExportingPrefix(String exportingPrefix) {
     this.exportingPrefix = exportingPrefix;
   }
 
-  public A2ARemoteAgentConfig enabled(Object enabled) {
+  public A2ARemoteAgentConfig enabled(Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -326,16 +398,24 @@ public class A2ARemoteAgentConfig {
    * @return enabled
   **/
   @Schema(description = "")
-  public Object getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Object enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 
-  public A2ARemoteAgentConfig skills(Object skills) {
+  public A2ARemoteAgentConfig skills(List<A2ARemoteSkill> skills) {
     this.skills = skills;
+    return this;
+  }
+
+  public A2ARemoteAgentConfig addSkillsItem(A2ARemoteSkill skillsItem) {
+    if (this.skills == null) {
+      this.skills = new ArrayList<>();
+    }
+    this.skills.add(skillsItem);
     return this;
   }
 
@@ -344,16 +424,24 @@ public class A2ARemoteAgentConfig {
    * @return skills
   **/
   @Schema(description = "")
-  public Object getSkills() {
+  public List<A2ARemoteSkill> getSkills() {
     return skills;
   }
 
-  public void setSkills(Object skills) {
+  public void setSkills(List<A2ARemoteSkill> skills) {
     this.skills = skills;
   }
 
-  public A2ARemoteAgentConfig accessibleGroups(Object accessibleGroups) {
+  public A2ARemoteAgentConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public A2ARemoteAgentConfig addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
     return this;
   }
 
@@ -362,16 +450,24 @@ public class A2ARemoteAgentConfig {
    * @return accessibleGroups
   **/
   @Schema(description = "")
-  public Object getAccessibleGroups() {
+  public List<String> getAccessibleGroups() {
     return accessibleGroups;
   }
 
-  public void setAccessibleGroups(Object accessibleGroups) {
+  public void setAccessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
   }
 
-  public A2ARemoteAgentConfig accessibleUsers(Object accessibleUsers) {
+  public A2ARemoteAgentConfig accessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public A2ARemoteAgentConfig addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
     return this;
   }
 
@@ -380,15 +476,15 @@ public class A2ARemoteAgentConfig {
    * @return accessibleUsers
   **/
   @Schema(description = "")
-  public Object getAccessibleUsers() {
+  public List<String> getAccessibleUsers() {
     return accessibleUsers;
   }
 
-  public void setAccessibleUsers(Object accessibleUsers) {
+  public void setAccessibleUsers(List<String> accessibleUsers) {
     this.accessibleUsers = accessibleUsers;
   }
 
-  public A2ARemoteAgentConfig accessibleToAll(Object accessibleToAll) {
+  public A2ARemoteAgentConfig accessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
     return this;
   }
@@ -398,16 +494,24 @@ public class A2ARemoteAgentConfig {
    * @return accessibleToAll
   **/
   @Schema(description = "")
-  public Object getAccessibleToAll() {
+  public Boolean isAccessibleToAll() {
     return accessibleToAll;
   }
 
-  public void setAccessibleToAll(Object accessibleToAll) {
+  public void setAccessibleToAll(Boolean accessibleToAll) {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public A2ARemoteAgentConfig aclAliases(Object aclAliases) {
+  public A2ARemoteAgentConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public A2ARemoteAgentConfig addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
     return this;
   }
 
@@ -416,11 +520,11 @@ public class A2ARemoteAgentConfig {
    * @return aclAliases
   **/
   @Schema(description = "")
-  public Object getAclAliases() {
+  public List<Integer> getAclAliases() {
     return aclAliases;
   }
 
-  public void setAclAliases(Object aclAliases) {
+  public void setAclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
   }
 

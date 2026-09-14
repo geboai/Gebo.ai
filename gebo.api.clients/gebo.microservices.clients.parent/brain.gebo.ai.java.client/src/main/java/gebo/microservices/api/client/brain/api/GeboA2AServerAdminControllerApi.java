@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboA2AServerAdminControllerApi {
     private ApiClient apiClient;
@@ -52,7 +52,7 @@ public class GeboA2AServerAdminControllerApi {
      * @return OperationStatusBoolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusBoolean delete(Object code) throws RestClientException {
+    public OperationStatusBoolean delete(String code) throws RestClientException {
         return deleteWithHttpInfo(code).getBody();
     }
 
@@ -64,7 +64,7 @@ public class GeboA2AServerAdminControllerApi {
      * @return ResponseEntity&lt;OperationStatusBoolean&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusBoolean> deleteWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<OperationStatusBoolean> deleteWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -93,10 +93,10 @@ public class GeboA2AServerAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;A2AServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findAll1() throws RestClientException {
+    public List<A2AServerConfig> findAll1() throws RestClientException {
         return findAll1WithHttpInfo().getBody();
     }
 
@@ -104,10 +104,10 @@ public class GeboA2AServerAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;A2AServerConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findAll1WithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<A2AServerConfig>> findAll1WithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboA2AServerAdminController/findAll").build().toUriString();
         
@@ -124,7 +124,7 @@ public class GeboA2AServerAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<A2AServerConfig>> returnType = new ParameterizedTypeReference<List<A2AServerConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -135,7 +135,7 @@ public class GeboA2AServerAdminControllerApi {
      * @return OperationStatusA2AServerConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusA2AServerConfig findByCode1(Object code) throws RestClientException {
+    public OperationStatusA2AServerConfig findByCode1(String code) throws RestClientException {
         return findByCode1WithHttpInfo(code).getBody();
     }
 
@@ -147,7 +147,7 @@ public class GeboA2AServerAdminControllerApi {
      * @return ResponseEntity&lt;OperationStatusA2AServerConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusA2AServerConfig> findByCode1WithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<OperationStatusA2AServerConfig> findByCode1WithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {

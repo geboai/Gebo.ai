@@ -11,26 +11,26 @@
  */
 
 export interface ComponentLLMSStatus { 
-    isSetup?: any;
-    chatModelSetup?: any;
-    internalServicesChatModelSetup?: any;
-    embeddedModelSetup?: any;
-    rankingModelSetup?: any;
-    imagesModelSetup?: any;
-    ttsModelSetup?: any;
-    transcriptModelSetup?: any;
-    chatModelCode?: any;
-    internalServicesChatModelCode?: any;
-    embeddedModelCode?: any;
-    rankingModelCode?: any;
-    imagesModelCode?: any;
-    ttsModelCode?: any;
-    transcriptModelCode?: any;
-    chatModelProviderId?: any;
-    internalServicesChatModelProviderId?: any;
-    embeddedModelProviderId?: any;
-    rankingModelProviderId?: any;
-    imagesModelProviderId?: any;
-    ttsModelProviderId?: any;
-    transcriptModelProviderId?: any;
+    isSetup?: boolean;
+    chatModelSetup?: boolean;
+    internalServicesChatModelSetup?: boolean;
+    embeddedModelSetup?: boolean;
+    rankingModelSetup?: boolean;
+    imagesModelSetup?: boolean;
+    ttsModelSetup?: boolean;
+    transcriptModelSetup?: boolean;
+    chatModelCode?: string;
+    internalServicesChatModelCode?: string;
+    embeddedModelCode?: string;
+    rankingModelCode?: string;
+    imagesModelCode?: string;
+    ttsModelCode?: string;
+    transcriptModelCode?: string;
+    chatModelProviderId?: string;
+    internalServicesChatModelProviderId?: string;
+    embeddedModelProviderId?: string;
+    rankingModelProviderId?: string;
+    imagesModelProviderId?: string;
+    ttsModelProviderId?: string;
+    transcriptModelProviderId?: string;
 }

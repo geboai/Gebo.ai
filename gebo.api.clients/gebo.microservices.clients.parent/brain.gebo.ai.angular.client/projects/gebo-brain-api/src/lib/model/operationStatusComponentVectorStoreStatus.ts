@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { ComponentVectorStoreStatus } from './componentVectorStoreStatus';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusComponentVectorStoreStatus { 
     result?: ComponentVectorStoreStatus;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

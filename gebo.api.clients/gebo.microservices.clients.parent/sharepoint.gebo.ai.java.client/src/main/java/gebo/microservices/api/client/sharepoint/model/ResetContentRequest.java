@@ -23,19 +23,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ResetContentRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:55.724251452+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:32.985688146+02:00[Europe/Rome]")
 
 public class ResetContentRequest {
   @JsonProperty("knowledgeBaseCode")
-  private Object knowledgeBaseCode = null;
+  private String knowledgeBaseCode = null;
 
   @JsonProperty("projectCode")
-  private Object projectCode = null;
+  private String projectCode = null;
 
   @JsonProperty("projectEndpoint")
   private GObjectRefGProjectEndpoint projectEndpoint = null;
 
-  public ResetContentRequest knowledgeBaseCode(Object knowledgeBaseCode) {
+  public ResetContentRequest knowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
     return this;
   }
@@ -45,15 +45,15 @@ public class ResetContentRequest {
    * @return knowledgeBaseCode
   **/
   @Schema(description = "")
-  public Object getKnowledgeBaseCode() {
+  public String getKnowledgeBaseCode() {
     return knowledgeBaseCode;
   }
 
-  public void setKnowledgeBaseCode(Object knowledgeBaseCode) {
+  public void setKnowledgeBaseCode(String knowledgeBaseCode) {
     this.knowledgeBaseCode = knowledgeBaseCode;
   }
 
-  public ResetContentRequest projectCode(Object projectCode) {
+  public ResetContentRequest projectCode(String projectCode) {
     this.projectCode = projectCode;
     return this;
   }
@@ -63,11 +63,11 @@ public class ResetContentRequest {
    * @return projectCode
   **/
   @Schema(description = "")
-  public Object getProjectCode() {
+  public String getProjectCode() {
     return projectCode;
   }
 
-  public void setProjectCode(Object projectCode) {
+  public void setProjectCode(String projectCode) {
     this.projectCode = projectCode;
   }
 

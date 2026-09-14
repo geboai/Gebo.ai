@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**oauth2UISetupEnabled** | **Object** |  |  [optional]
-**oauth2Enabled** | **Object** |  |  [optional]
+**oauth2UISetupEnabled** | **Boolean** |  |  [optional]
+**oauth2Enabled** | **Boolean** |  |  [optional]

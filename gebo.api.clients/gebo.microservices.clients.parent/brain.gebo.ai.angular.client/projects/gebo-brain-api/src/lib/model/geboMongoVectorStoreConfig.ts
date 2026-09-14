@@ -14,9 +14,18 @@ import { QdrantConfig } from './qdrantConfig';
 import { RedisConfig } from './redisConfig';
 
 export interface GeboMongoVectorStoreConfig { 
-    id?: any;
-    product: any;
+    id?: string;
+    product: GeboMongoVectorStoreConfig.ProductEnum;
     qdrantConfig?: QdrantConfig;
     mongoConfig?: MongoConfig;
     redisConfig?: RedisConfig;
+}
+export namespace GeboMongoVectorStoreConfig {
+    export type ProductEnum = 'MONGO' | 'QDRANT' | 'REDIS' | 'TEST';
+    export const ProductEnum = {
+        MONGO: 'MONGO' as ProductEnum,
+        QDRANT: 'QDRANT' as ProductEnum,
+        REDIS: 'REDIS' as ProductEnum,
+        TEST: 'TEST' as ProductEnum
+    };
 }

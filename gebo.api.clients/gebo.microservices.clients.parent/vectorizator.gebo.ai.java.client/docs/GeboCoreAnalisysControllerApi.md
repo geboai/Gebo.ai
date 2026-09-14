@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="coreDrillDown"></a>
 # **coreDrillDown**
-> Object coreDrillDown(body)
+> List&lt;GStatsHolder&gt; coreDrillDown(body)
 
 
 
@@ -23,7 +23,7 @@ Method | HTTP request | Description
 GeboCoreAnalisysControllerApi apiInstance = new GeboCoreAnalisysControllerApi();
 GStatsHolder body = new GStatsHolder(); // GStatsHolder | 
 try {
-    Object result = apiInstance.coreDrillDown(body);
+    List<GStatsHolder> result = apiInstance.coreDrillDown(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboCoreAnalisysControllerApi#coreDrillDown");
@@ -39,7 +39,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GStatsHolder&gt;**](GStatsHolder.md)
 
 ### Authorization
 

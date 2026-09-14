@@ -206,10 +206,10 @@ export class SharepointSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findSharepointEndpointsByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GSharepointProjectEndpoint>;
-    public findSharepointEndpointsByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GSharepointProjectEndpoint>>;
-    public findSharepointEndpointsByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GSharepointProjectEndpoint>>;
-    public findSharepointEndpointsByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findSharepointEndpointsByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GSharepointProjectEndpoint>;
+    public findSharepointEndpointsByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GSharepointProjectEndpoint>>;
+    public findSharepointEndpointsByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GSharepointProjectEndpoint>>;
+    public findSharepointEndpointsByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findSharepointEndpointsByCode.');
@@ -253,10 +253,10 @@ export class SharepointSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findSharepointEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findSharepointEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findSharepointEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findSharepointEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findSharepointEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GSharepointProjectEndpoint>>;
+    public findSharepointEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GSharepointProjectEndpoint>>>;
+    public findSharepointEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GSharepointProjectEndpoint>>>;
+    public findSharepointEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findSharepointEndpointsByProject.');
@@ -282,7 +282,7 @@ export class SharepointSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/SharepointSystemsController/findSharepointEndpointsByProject`,
+        return this.httpClient.request<Array<GSharepointProjectEndpoint>>('get',`${this.basePath}/api/admin/SharepointSystemsController/findSharepointEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -300,9 +300,9 @@ export class SharepointSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findSharepointEndpointsByQbe(body: GSharepointProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findSharepointEndpointsByQbe(body: GSharepointProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findSharepointEndpointsByQbe(body: GSharepointProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findSharepointEndpointsByQbe(body: GSharepointProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GSharepointProjectEndpoint>>;
+    public findSharepointEndpointsByQbe(body: GSharepointProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GSharepointProjectEndpoint>>>;
+    public findSharepointEndpointsByQbe(body: GSharepointProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GSharepointProjectEndpoint>>>;
     public findSharepointEndpointsByQbe(body: GSharepointProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -329,7 +329,7 @@ export class SharepointSystemsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/SharepointSystemsController/findSharepointEndpointsByQbe`,
+        return this.httpClient.request<Array<GSharepointProjectEndpoint>>('post',`${this.basePath}/api/admin/SharepointSystemsController/findSharepointEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -347,10 +347,10 @@ export class SharepointSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findSharepointSystemByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GSharepointContentManagementSystem>;
-    public findSharepointSystemByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GSharepointContentManagementSystem>>;
-    public findSharepointSystemByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GSharepointContentManagementSystem>>;
-    public findSharepointSystemByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findSharepointSystemByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GSharepointContentManagementSystem>;
+    public findSharepointSystemByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GSharepointContentManagementSystem>>;
+    public findSharepointSystemByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GSharepointContentManagementSystem>>;
+    public findSharepointSystemByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findSharepointSystemByCode.');
@@ -429,9 +429,9 @@ export class SharepointSystemsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSharepointSystems(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getSharepointSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getSharepointSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getSharepointSystems(observe?: 'body', reportProgress?: boolean): Observable<Array<GSharepointContentManagementSystem>>;
+    public getSharepointSystems(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GSharepointContentManagementSystem>>>;
+    public getSharepointSystems(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GSharepointContentManagementSystem>>>;
     public getSharepointSystems(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -449,7 +449,7 @@ export class SharepointSystemsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/SharepointSystemsController/getSharepointSystems`,
+        return this.httpClient.request<Array<GSharepointContentManagementSystem>>('get',`${this.basePath}/api/admin/SharepointSystemsController/getSharepointSystems`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

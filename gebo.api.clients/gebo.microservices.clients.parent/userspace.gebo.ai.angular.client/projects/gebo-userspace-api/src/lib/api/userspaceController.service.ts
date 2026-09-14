@@ -22,6 +22,7 @@ import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 import { OperationStatusPublishingStatus } from '../model/operationStatusPublishingStatus';
 import { PublishingStatus } from '../model/publishingStatus';
 import { UserUploadToUserSpaceParam } from '../model/userUploadToUserSpaceParam';
+import { UserspaceFileDto } from '../model/userspaceFileDto';
 import { UserspaceFolderDto } from '../model/userspaceFolderDto';
 import { UserspaceKnowledgebaseDto } from '../model/userspaceKnowledgebaseDto';
 
@@ -114,10 +115,10 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUserspaceFiles(body: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteUserspaceFiles(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteUserspaceFiles(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteUserspaceFiles(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteUserspaceFiles(body: Array<UserspaceFileDto>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteUserspaceFiles(body: Array<UserspaceFileDto>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteUserspaceFiles(body: Array<UserspaceFileDto>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteUserspaceFiles(body: Array<UserspaceFileDto>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling deleteUserspaceFiles.');
@@ -206,10 +207,10 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserKnowledgebaseByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<UserspaceKnowledgebaseDto>;
-    public findUserKnowledgebaseByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserspaceKnowledgebaseDto>>;
-    public findUserKnowledgebaseByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserspaceKnowledgebaseDto>>;
-    public findUserKnowledgebaseByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserKnowledgebaseByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<UserspaceKnowledgebaseDto>;
+    public findUserKnowledgebaseByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserspaceKnowledgebaseDto>>;
+    public findUserKnowledgebaseByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserspaceKnowledgebaseDto>>;
+    public findUserKnowledgebaseByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findUserKnowledgebaseByCode.');
@@ -253,10 +254,10 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserspaceFileByCodes(body: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findUserspaceFileByCodes(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findUserspaceFileByCodes(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findUserspaceFileByCodes(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserspaceFileByCodes(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<UserspaceFileDto>>;
+    public findUserspaceFileByCodes(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserspaceFileDto>>>;
+    public findUserspaceFileByCodes(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserspaceFileDto>>>;
+    public findUserspaceFileByCodes(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling findUserspaceFileByCodes.');
@@ -282,7 +283,7 @@ export class UserspaceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/user/UserspaceController/findUserspaceFileByCodes`,
+        return this.httpClient.request<Array<UserspaceFileDto>>('post',`${this.basePath}/api/user/UserspaceController/findUserspaceFileByCodes`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -300,10 +301,10 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUserspaceFolderByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<UserspaceFolderDto>;
-    public findUserspaceFolderByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserspaceFolderDto>>;
-    public findUserspaceFolderByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserspaceFolderDto>>;
-    public findUserspaceFolderByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUserspaceFolderByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<UserspaceFolderDto>;
+    public findUserspaceFolderByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserspaceFolderDto>>;
+    public findUserspaceFolderByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserspaceFolderDto>>;
+    public findUserspaceFolderByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findUserspaceFolderByCode.');
@@ -346,9 +347,9 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPersonalKnowledgebases(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getPersonalKnowledgebases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getPersonalKnowledgebases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getPersonalKnowledgebases(observe?: 'body', reportProgress?: boolean): Observable<Array<UserspaceKnowledgebaseDto>>;
+    public getPersonalKnowledgebases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserspaceKnowledgebaseDto>>>;
+    public getPersonalKnowledgebases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserspaceKnowledgebaseDto>>>;
     public getPersonalKnowledgebases(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -366,7 +367,7 @@ export class UserspaceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/user/UserspaceController/getPersonalKnowledgebases`,
+        return this.httpClient.request<Array<UserspaceKnowledgebaseDto>>('get',`${this.basePath}/api/user/UserspaceController/getPersonalKnowledgebases`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -430,10 +431,10 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listChildPersonalKnowledgebases(body: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public listChildPersonalKnowledgebases(body: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public listChildPersonalKnowledgebases(body: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public listChildPersonalKnowledgebases(body: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public listChildPersonalKnowledgebases(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<UserspaceKnowledgebaseDto>>;
+    public listChildPersonalKnowledgebases(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserspaceKnowledgebaseDto>>>;
+    public listChildPersonalKnowledgebases(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserspaceKnowledgebaseDto>>>;
+    public listChildPersonalKnowledgebases(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling listChildPersonalKnowledgebases.');
@@ -459,7 +460,7 @@ export class UserspaceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/user/UserspaceController/listChildPersonalKnowledgebases`,
+        return this.httpClient.request<Array<UserspaceKnowledgebaseDto>>('post',`${this.basePath}/api/user/UserspaceController/listChildPersonalKnowledgebases`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -477,10 +478,10 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listUserspaceFiles(userspaceUploadCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public listUserspaceFiles(userspaceUploadCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public listUserspaceFiles(userspaceUploadCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public listUserspaceFiles(userspaceUploadCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public listUserspaceFiles(userspaceUploadCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UserspaceFileDto>>;
+    public listUserspaceFiles(userspaceUploadCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserspaceFileDto>>>;
+    public listUserspaceFiles(userspaceUploadCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserspaceFileDto>>>;
+    public listUserspaceFiles(userspaceUploadCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userspaceUploadCode === null || userspaceUploadCode === undefined) {
             throw new Error('Required parameter userspaceUploadCode was null or undefined when calling listUserspaceFiles.');
@@ -506,7 +507,7 @@ export class UserspaceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/user/UserspaceController/listUserspaceFiles`,
+        return this.httpClient.request<Array<UserspaceFileDto>>('get',`${this.basePath}/api/user/UserspaceController/listUserspaceFiles`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -524,10 +525,10 @@ export class UserspaceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listUserspaceFolders(userspaceKnowledgeBase: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public listUserspaceFolders(userspaceKnowledgeBase: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public listUserspaceFolders(userspaceKnowledgeBase: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public listUserspaceFolders(userspaceKnowledgeBase: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public listUserspaceFolders(userspaceKnowledgeBase: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UserspaceFolderDto>>;
+    public listUserspaceFolders(userspaceKnowledgeBase: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserspaceFolderDto>>>;
+    public listUserspaceFolders(userspaceKnowledgeBase: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserspaceFolderDto>>>;
+    public listUserspaceFolders(userspaceKnowledgeBase: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userspaceKnowledgeBase === null || userspaceKnowledgeBase === undefined) {
             throw new Error('Required parameter userspaceKnowledgeBase was null or undefined when calling listUserspaceFolders.');
@@ -553,7 +554,7 @@ export class UserspaceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/user/UserspaceController/listUserspaceFolders`,
+        return this.httpClient.request<Array<UserspaceFolderDto>>('get',`${this.basePath}/api/user/UserspaceController/listUserspaceFolders`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

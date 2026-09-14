@@ -148,7 +148,7 @@ No authorization required
 
 <a name="findGoogleDriveEndpointsByProject"></a>
 # **findGoogleDriveEndpointsByProject**
-> Object findGoogleDriveEndpointsByProject(parentProjectCode)
+> List&lt;GGoogleDriveProjectEndpoint&gt; findGoogleDriveEndpointsByProject(parentProjectCode)
 
 
 
@@ -160,9 +160,9 @@ No authorization required
 
 
 GoogleDriveSystemsControllerApi apiInstance = new GoogleDriveSystemsControllerApi();
-Object parentProjectCode = null; // Object | 
+String parentProjectCode = "parentProjectCode_example"; // String | 
 try {
-    Object result = apiInstance.findGoogleDriveEndpointsByProject(parentProjectCode);
+    List<GGoogleDriveProjectEndpoint> result = apiInstance.findGoogleDriveEndpointsByProject(parentProjectCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GoogleDriveSystemsControllerApi#findGoogleDriveEndpointsByProject");
@@ -174,11 +174,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **parentProjectCode** | [**Object**](.md)|  |
+ **parentProjectCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GGoogleDriveProjectEndpoint&gt;**](GGoogleDriveProjectEndpoint.md)
 
 ### Authorization
 
@@ -191,7 +191,7 @@ No authorization required
 
 <a name="findGoogleDriveEndpointsByQbe"></a>
 # **findGoogleDriveEndpointsByQbe**
-> Object findGoogleDriveEndpointsByQbe(body)
+> List&lt;GGoogleDriveProjectEndpoint&gt; findGoogleDriveEndpointsByQbe(body)
 
 
 
@@ -205,7 +205,7 @@ No authorization required
 GoogleDriveSystemsControllerApi apiInstance = new GoogleDriveSystemsControllerApi();
 GGoogleDriveProjectEndpoint body = new GGoogleDriveProjectEndpoint(); // GGoogleDriveProjectEndpoint | 
 try {
-    Object result = apiInstance.findGoogleDriveEndpointsByQbe(body);
+    List<GGoogleDriveProjectEndpoint> result = apiInstance.findGoogleDriveEndpointsByQbe(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GoogleDriveSystemsControllerApi#findGoogleDriveEndpointsByQbe");
@@ -221,7 +221,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GGoogleDriveProjectEndpoint&gt;**](GGoogleDriveProjectEndpoint.md)
 
 ### Authorization
 
@@ -246,7 +246,7 @@ No authorization required
 
 
 GoogleDriveSystemsControllerApi apiInstance = new GoogleDriveSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GGoogleDriveProjectEndpoint result = apiInstance.findGoogleDriveProjectEndpointByCode(code);
     System.out.println(result);
@@ -260,7 +260,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -289,7 +289,7 @@ No authorization required
 
 
 GoogleDriveSystemsControllerApi apiInstance = new GoogleDriveSystemsControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GGoogleDriveSystem result = apiInstance.findGoogleDriveSystemByCode(code);
     System.out.println(result);
@@ -303,7 +303,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -359,7 +359,7 @@ No authorization required
 
 <a name="getGoogleDriveSystems"></a>
 # **getGoogleDriveSystems**
-> Object getGoogleDriveSystems()
+> List&lt;GGoogleDriveSystem&gt; getGoogleDriveSystems()
 
 
 
@@ -372,7 +372,7 @@ No authorization required
 
 GoogleDriveSystemsControllerApi apiInstance = new GoogleDriveSystemsControllerApi();
 try {
-    Object result = apiInstance.getGoogleDriveSystems();
+    List<GGoogleDriveSystem> result = apiInstance.getGoogleDriveSystems();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GoogleDriveSystemsControllerApi#getGoogleDriveSystems");
@@ -385,7 +385,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GGoogleDriveSystem&gt;**](GGoogleDriveSystem.md)
 
 ### Authorization
 

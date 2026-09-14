@@ -9,27 +9,35 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DocInternalRef } from './docInternalRef';
 import { SearchResult } from './searchResult';
 
 export interface GResponseDocumentRef { 
-    referenceType?: any;
-    uuid?: any;
-    documentCode?: any;
-    description?: any;
-    contentType?: any;
-    extension?: any;
-    knowledgeBaseCode?: any;
-    projectCode?: any;
-    geboTreatAs?: any;
-    geboFileTypeDescription?: any;
-    geboFileTypeId?: any;
-    name?: any;
-    knowledgeBaseDocument?: any;
+    referenceType?: GResponseDocumentRef.ReferenceTypeEnum;
+    uuid?: string;
+    documentCode?: string;
+    description?: string;
+    contentType?: string;
+    extension?: string;
+    knowledgeBaseCode?: string;
+    projectCode?: string;
+    geboTreatAs?: string;
+    geboFileTypeDescription?: string;
+    geboFileTypeId?: string;
+    name?: string;
+    knowledgeBaseDocument?: boolean;
     nestedSearchResult?: SearchResult;
-    loadPercentage?: any;
-    references?: any;
-    ntokensRelevant?: any;
-    ntotalContentTokens?: any;
-    nbytesRelevant?: any;
-    shortCode?: any;
+    loadPercentage?: number;
+    references?: Array<DocInternalRef>;
+    ntokensRelevant?: number;
+    ntotalContentTokens?: number;
+    nbytesRelevant?: number;
+    shortCode?: string;
+}
+export namespace GResponseDocumentRef {
+    export type ReferenceTypeEnum = 'FILE' | 'WEB';
+    export const ReferenceTypeEnum = {
+        FILE: 'FILE' as ReferenceTypeEnum,
+        WEB: 'WEB' as ReferenceTypeEnum
+    };
 }

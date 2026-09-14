@@ -3,14 +3,21 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**originalDocumentCode** | **Object** |  |  [optional]
-**id** | **Object** |  |  [optional]
-**mimeType** | **Object** |  |  [optional]
-**chunkType** | **Object** |  |  [optional]
-**chunkData** | **Object** |  |  [optional]
-**metaData** | **Object** |  |  [optional]
-**tokensSize** | **Object** |  |  [optional]
-**bytesSize** | **Object** |  |  [optional]
-**chunkPosition** | **Object** |  |  [optional]
-**chunksCount** | **Object** |  |  [optional]
-**chunkingSessionId** | **Object** |  |  [optional]
+**originalDocumentCode** | **String** |  |  [optional]
+**id** | **String** |  |  [optional]
+**mimeType** | **String** |  |  [optional]
+**chunkType** | [**ChunkTypeEnum**](#ChunkTypeEnum) |  |  [optional]
+**chunkData** | **String** |  |  [optional]
+**metaData** | **Map&lt;String, Object&gt;** |  |  [optional]
+**tokensSize** | **Long** |  |  [optional]
+**bytesSize** | **Long** |  |  [optional]
+**chunkPosition** | **Long** |  |  [optional]
+**chunksCount** | **Long** |  |  [optional]
+**chunkingSessionId** | **String** |  |  [optional]
+
+<a name="ChunkTypeEnum"></a>
+## Enum: ChunkTypeEnum
+Name | Value
+---- | -----
+TEXT | &quot;TEXT&quot;
+IMAGE | &quot;IMAGE&quot;

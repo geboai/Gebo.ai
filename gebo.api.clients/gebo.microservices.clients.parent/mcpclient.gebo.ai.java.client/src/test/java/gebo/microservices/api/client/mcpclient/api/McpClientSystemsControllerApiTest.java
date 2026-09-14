@@ -56,7 +56,7 @@ public class McpClientSystemsControllerApiTest {
      */
     @Test
     public void findMCPClientEndpointsByCodeTest() {
-        Object code = null;
+        String code = null;
         MCPClientProjectEndpoint response = api.findMCPClientEndpointsByCode(code);
 
         // TODO: test validations
@@ -71,8 +71,8 @@ public class McpClientSystemsControllerApiTest {
      */
     @Test
     public void findMCPClientEndpointsByProjectTest() {
-        Object parentProjectCode = null;
-        Object response = api.findMCPClientEndpointsByProject(parentProjectCode);
+        String parentProjectCode = null;
+        List<MCPClientProjectEndpoint> response = api.findMCPClientEndpointsByProject(parentProjectCode);
 
         // TODO: test validations
     }
@@ -87,7 +87,7 @@ public class McpClientSystemsControllerApiTest {
     @Test
     public void findMCPClientEndpointsByQbeTest() {
         MCPClientProjectEndpoint body = null;
-        Object response = api.findMCPClientEndpointsByQbe(body);
+        List<MCPClientProjectEndpoint> response = api.findMCPClientEndpointsByQbe(body);
 
         // TODO: test validations
     }

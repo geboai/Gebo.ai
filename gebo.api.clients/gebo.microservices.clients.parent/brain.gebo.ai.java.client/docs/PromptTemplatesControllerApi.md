@@ -22,7 +22,7 @@ Method | HTTP request | Description
 
 
 PromptTemplatesControllerApi apiInstance = new PromptTemplatesControllerApi();
-Object ragPrompt = null; // Object | 
+Boolean ragPrompt = true; // Boolean | 
 try {
     GPromptTemplateConfig result = apiInstance.getDefaultPrompt(ragPrompt);
     System.out.println(result);
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ragPrompt** | [**Object**](.md)|  |
+ **ragPrompt** | **Boolean**|  |
 
 ### Return type
 

@@ -11,7 +11,7 @@
  */
 
 export interface GeboComponentInfo { 
-    messagingModuleId: any;
-    messagingComponentId: any;
-    completeComponentId?: any;
+    messagingModuleId: string;
+    messagingComponentId: string;
+    completeComponentId?: string;
 }

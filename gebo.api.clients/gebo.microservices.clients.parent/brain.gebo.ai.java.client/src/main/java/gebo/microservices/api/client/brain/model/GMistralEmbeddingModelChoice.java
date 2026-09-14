@@ -20,59 +20,60 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.MistralBaseModelCard;
 import gebo.microservices.api.client.brain.model.ModelMetaInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * GMistralEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GMistralEmbeddingModelChoice {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("creationDate")
-  private Object creationDate = null;
+  private Date creationDate = null;
 
   @JsonProperty("modificationDate")
-  private Object modificationDate = null;
+  private Date modificationDate = null;
 
   @JsonProperty("version")
-  private Object version = null;
+  private String version = null;
 
   @JsonProperty("metaInfos")
   private ModelMetaInfo metaInfos = null;
 
   @JsonProperty("informativeUrl")
-  private Object informativeUrl = null;
+  private String informativeUrl = null;
 
   @JsonProperty("contextLength")
-  private Object contextLength = null;
+  private Integer contextLength = null;
 
   @JsonProperty("nativeModelMetaInfos")
   private Object nativeModelMetaInfos = null;
 
   @JsonProperty("optimalTokenizationParam")
-  private Object optimalTokenizationParam = null;
+  private Integer optimalTokenizationParam = null;
 
   @JsonProperty("modelCard")
   private MistralBaseModelCard modelCard = null;
 
-  public GMistralEmbeddingModelChoice code(Object code) {
+  public GMistralEmbeddingModelChoice code(String code) {
     this.code = code;
     return this;
   }
@@ -82,15 +83,15 @@ public class GMistralEmbeddingModelChoice {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public GMistralEmbeddingModelChoice description(Object description) {
+  public GMistralEmbeddingModelChoice description(String description) {
     this.description = description;
     return this;
   }
@@ -100,15 +101,15 @@ public class GMistralEmbeddingModelChoice {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public GMistralEmbeddingModelChoice userModified(Object userModified) {
+  public GMistralEmbeddingModelChoice userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -118,15 +119,15 @@ public class GMistralEmbeddingModelChoice {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public GMistralEmbeddingModelChoice userCreated(Object userCreated) {
+  public GMistralEmbeddingModelChoice userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -136,15 +137,15 @@ public class GMistralEmbeddingModelChoice {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public GMistralEmbeddingModelChoice dateModified(Object dateModified) {
+  public GMistralEmbeddingModelChoice dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -154,15 +155,15 @@ public class GMistralEmbeddingModelChoice {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public GMistralEmbeddingModelChoice dateCreated(Object dateCreated) {
+  public GMistralEmbeddingModelChoice dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -172,15 +173,15 @@ public class GMistralEmbeddingModelChoice {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public GMistralEmbeddingModelChoice creationDate(Object creationDate) {
+  public GMistralEmbeddingModelChoice creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -190,15 +191,15 @@ public class GMistralEmbeddingModelChoice {
    * @return creationDate
   **/
   @Schema(description = "")
-  public Object getCreationDate() {
+  public Date getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Object creationDate) {
+  public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
   }
 
-  public GMistralEmbeddingModelChoice modificationDate(Object modificationDate) {
+  public GMistralEmbeddingModelChoice modificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
     return this;
   }
@@ -208,15 +209,15 @@ public class GMistralEmbeddingModelChoice {
    * @return modificationDate
   **/
   @Schema(description = "")
-  public Object getModificationDate() {
+  public Date getModificationDate() {
     return modificationDate;
   }
 
-  public void setModificationDate(Object modificationDate) {
+  public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
   }
 
-  public GMistralEmbeddingModelChoice version(Object version) {
+  public GMistralEmbeddingModelChoice version(String version) {
     this.version = version;
     return this;
   }
@@ -226,11 +227,11 @@ public class GMistralEmbeddingModelChoice {
    * @return version
   **/
   @Schema(description = "")
-  public Object getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(Object version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
@@ -252,7 +253,7 @@ public class GMistralEmbeddingModelChoice {
     this.metaInfos = metaInfos;
   }
 
-  public GMistralEmbeddingModelChoice informativeUrl(Object informativeUrl) {
+  public GMistralEmbeddingModelChoice informativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
     return this;
   }
@@ -262,15 +263,15 @@ public class GMistralEmbeddingModelChoice {
    * @return informativeUrl
   **/
   @Schema(description = "")
-  public Object getInformativeUrl() {
+  public String getInformativeUrl() {
     return informativeUrl;
   }
 
-  public void setInformativeUrl(Object informativeUrl) {
+  public void setInformativeUrl(String informativeUrl) {
     this.informativeUrl = informativeUrl;
   }
 
-  public GMistralEmbeddingModelChoice contextLength(Object contextLength) {
+  public GMistralEmbeddingModelChoice contextLength(Integer contextLength) {
     this.contextLength = contextLength;
     return this;
   }
@@ -280,11 +281,11 @@ public class GMistralEmbeddingModelChoice {
    * @return contextLength
   **/
   @Schema(description = "")
-  public Object getContextLength() {
+  public Integer getContextLength() {
     return contextLength;
   }
 
-  public void setContextLength(Object contextLength) {
+  public void setContextLength(Integer contextLength) {
     this.contextLength = contextLength;
   }
 
@@ -306,7 +307,7 @@ public class GMistralEmbeddingModelChoice {
     this.nativeModelMetaInfos = nativeModelMetaInfos;
   }
 
-  public GMistralEmbeddingModelChoice optimalTokenizationParam(Object optimalTokenizationParam) {
+  public GMistralEmbeddingModelChoice optimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
     return this;
   }
@@ -316,11 +317,11 @@ public class GMistralEmbeddingModelChoice {
    * @return optimalTokenizationParam
   **/
   @Schema(description = "")
-  public Object getOptimalTokenizationParam() {
+  public Integer getOptimalTokenizationParam() {
     return optimalTokenizationParam;
   }
 
-  public void setOptimalTokenizationParam(Object optimalTokenizationParam) {
+  public void setOptimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
   }
 

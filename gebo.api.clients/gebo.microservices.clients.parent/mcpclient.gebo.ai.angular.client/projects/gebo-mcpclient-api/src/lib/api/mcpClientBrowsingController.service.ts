@@ -21,6 +21,7 @@ import { BrowseParam } from '../model/browseParam';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
+import { VFilesystemReference } from '../model/vFilesystemReference';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,10 +67,10 @@ export class McpClientBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
-    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
-    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
-    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListPathInfo>;
+    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListPathInfo>>;
+    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListPathInfo>>;
+    public browseMCPClientPath(body: BrowseParam, mcpClientConfigCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling browseMCPClientPath.');
@@ -124,10 +125,10 @@ export class McpClientBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMCPClientNavigationStatus(body: any, mcpClientConfigCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
-    public getMCPClientNavigationStatus(body: any, mcpClientConfigCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getMCPClientNavigationStatus(body: any, mcpClientConfigCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
-    public getMCPClientNavigationStatus(body: any, mcpClientConfigCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMCPClientNavigationStatus(body: Array<VFilesystemReference>, mcpClientConfigCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListVirtualFilesystemNavigationTreeStatus>;
+    public getMCPClientNavigationStatus(body: Array<VFilesystemReference>, mcpClientConfigCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getMCPClientNavigationStatus(body: Array<VFilesystemReference>, mcpClientConfigCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListVirtualFilesystemNavigationTreeStatus>>;
+    public getMCPClientNavigationStatus(body: Array<VFilesystemReference>, mcpClientConfigCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getMCPClientNavigationStatus.');
@@ -181,10 +182,10 @@ export class McpClientBrowsingControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMCPClientRoots(mcpClientConfigCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
-    public getMCPClientRoots(mcpClientConfigCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
-    public getMCPClientRoots(mcpClientConfigCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
-    public getMCPClientRoots(mcpClientConfigCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMCPClientRoots(mcpClientConfigCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGVirtualFilesystemRoot>;
+    public getMCPClientRoots(mcpClientConfigCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGVirtualFilesystemRoot>>;
+    public getMCPClientRoots(mcpClientConfigCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGVirtualFilesystemRoot>>;
+    public getMCPClientRoots(mcpClientConfigCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (mcpClientConfigCode === null || mcpClientConfigCode === undefined) {
             throw new Error('Required parameter mcpClientConfigCode was null or undefined when calling getMCPClientRoots.');

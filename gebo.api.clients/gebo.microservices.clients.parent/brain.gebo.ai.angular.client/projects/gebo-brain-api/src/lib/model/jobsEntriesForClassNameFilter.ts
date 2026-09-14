@@ -12,7 +12,15 @@
 import { DataPage } from './dataPage';
 
 export interface JobsEntriesForClassNameFilter { 
-    className?: any;
-    jobType?: any;
+    className?: string;
+    jobType?: JobsEntriesForClassNameFilter.JobTypeEnum;
     page?: DataPage;
+}
+export namespace JobsEntriesForClassNameFilter {
+    export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';
+    export const JobTypeEnum = {
+        CONTENTSREADING: 'CONTENTS_READING' as JobTypeEnum,
+        VECTORIZINGCONTENTS: 'VECTORIZING_CONTENTS' as JobTypeEnum,
+        CONTENTSREADINGVECTORIZING: 'CONTENTS_READING_VECTORIZING' as JobTypeEnum
+    };
 }

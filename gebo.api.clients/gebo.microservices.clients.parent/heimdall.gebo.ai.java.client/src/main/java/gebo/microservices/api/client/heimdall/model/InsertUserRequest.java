@@ -23,14 +23,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * InsertUserRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class InsertUserRequest {
   @JsonProperty("user")
   private EditableUser user = null;
 
   @JsonProperty("password")
-  private Object password = null;
+  private String password = null;
 
   public InsertUserRequest user(EditableUser user) {
     this.user = user;
@@ -50,7 +50,7 @@ public class InsertUserRequest {
     this.user = user;
   }
 
-  public InsertUserRequest password(Object password) {
+  public InsertUserRequest password(String password) {
     this.password = password;
     return this;
   }
@@ -60,11 +60,11 @@ public class InsertUserRequest {
    * @return password
   **/
   @Schema(description = "")
-  public Object getPassword() {
+  public String getPassword() {
     return password;
   }
 
-  public void setPassword(Object password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 

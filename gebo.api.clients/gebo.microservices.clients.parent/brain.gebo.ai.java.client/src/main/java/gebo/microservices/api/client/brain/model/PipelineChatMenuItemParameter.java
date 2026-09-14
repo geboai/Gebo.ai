@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PipelineChatMenuItemParameter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class PipelineChatMenuItemParameter {
   @JsonProperty("parameterName")
-  private Object parameterName = null;
+  private String parameterName = null;
 
   @JsonProperty("parameterValue")
   private Object parameterValue = null;
 
-  public PipelineChatMenuItemParameter parameterName(Object parameterName) {
+  public PipelineChatMenuItemParameter parameterName(String parameterName) {
     this.parameterName = parameterName;
     return this;
   }
@@ -41,11 +41,11 @@ public class PipelineChatMenuItemParameter {
    * @return parameterName
   **/
   @Schema(required = true, description = "")
-  public Object getParameterName() {
+  public String getParameterName() {
     return parameterName;
   }
 
-  public void setParameterName(Object parameterName) {
+  public void setParameterName(String parameterName) {
     this.parameterName = parameterName;
   }
 

@@ -23,16 +23,48 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * JobsEntriesForJobType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class JobsEntriesForJobType {
-  @JsonProperty("jobType")
-  private Object jobType = null;
+  /**
+   * Gets or Sets jobType
+   */
+  public enum JobTypeEnum {
+    CONTENTS_READING("CONTENTS_READING"),
+    VECTORIZING_CONTENTS("VECTORIZING_CONTENTS"),
+    CONTENTS_READING_VECTORIZING("CONTENTS_READING_VECTORIZING");
+
+    private String value;
+
+    JobTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static JobTypeEnum fromValue(String input) {
+      for (JobTypeEnum b : JobTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("jobType")
+  private JobTypeEnum jobType = null;
 
   @JsonProperty("page")
   private DataPage page = null;
 
-  public JobsEntriesForJobType jobType(Object jobType) {
+  public JobsEntriesForJobType jobType(JobTypeEnum jobType) {
     this.jobType = jobType;
     return this;
   }
@@ -42,11 +74,11 @@ public class JobsEntriesForJobType {
    * @return jobType
   **/
   @Schema(description = "")
-  public Object getJobType() {
+  public JobTypeEnum getJobType() {
     return jobType;
   }
 
-  public void setJobType(Object jobType) {
+  public void setJobType(JobTypeEnum jobType) {
     this.jobType = jobType;
   }
 

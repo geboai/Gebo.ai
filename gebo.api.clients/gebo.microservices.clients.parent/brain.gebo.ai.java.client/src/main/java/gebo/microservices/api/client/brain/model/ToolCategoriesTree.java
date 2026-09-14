@@ -17,20 +17,23 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.ToolReference;
 import gebo.microservices.api.client.brain.model.ToolsCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ToolCategoriesTree
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class ToolCategoriesTree {
   @JsonProperty("category")
   private ToolsCategory category = null;
 
   @JsonProperty("toolsReference")
-  private Object toolsReference = null;
+  private List<ToolReference> toolsReference = null;
 
   public ToolCategoriesTree category(ToolsCategory category) {
     this.category = category;
@@ -50,8 +53,16 @@ public class ToolCategoriesTree {
     this.category = category;
   }
 
-  public ToolCategoriesTree toolsReference(Object toolsReference) {
+  public ToolCategoriesTree toolsReference(List<ToolReference> toolsReference) {
     this.toolsReference = toolsReference;
+    return this;
+  }
+
+  public ToolCategoriesTree addToolsReferenceItem(ToolReference toolsReferenceItem) {
+    if (this.toolsReference == null) {
+      this.toolsReference = new ArrayList<>();
+    }
+    this.toolsReference.add(toolsReferenceItem);
     return this;
   }
 
@@ -60,11 +71,11 @@ public class ToolCategoriesTree {
    * @return toolsReference
   **/
   @Schema(description = "")
-  public Object getToolsReference() {
+  public List<ToolReference> getToolsReference() {
     return toolsReference;
   }
 
-  public void setToolsReference(Object toolsReference) {
+  public void setToolsReference(List<ToolReference> toolsReference) {
     this.toolsReference = toolsReference;
   }
 

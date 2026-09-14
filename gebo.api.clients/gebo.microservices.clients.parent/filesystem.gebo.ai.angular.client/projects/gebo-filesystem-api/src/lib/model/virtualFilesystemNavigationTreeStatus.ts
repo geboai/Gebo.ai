@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GVirtualFilesystemRoot } from './gVirtualFilesystemRoot';
+import { VirtualFilesystemNavigationNode } from './virtualFilesystemNavigationNode';
 
 export interface VirtualFilesystemNavigationTreeStatus { 
     root?: GVirtualFilesystemRoot;
-    selected?: any;
-    opened?: any;
-    childs?: any;
+    selected?: boolean;
+    opened?: boolean;
+    childs?: Array<VirtualFilesystemNavigationNode>;
 }

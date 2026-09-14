@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { GBedrockChatModelConfig } from './gBedrockChatModelConfig';
+import { GUserMessage } from './gUserMessage';
 
 export interface OperationStatusGBedrockChatModelConfig { 
     result?: GBedrockChatModelConfig;
-    messages?: any;
-    hasErrorMessages?: any;
-    hasWarnMessages?: any;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

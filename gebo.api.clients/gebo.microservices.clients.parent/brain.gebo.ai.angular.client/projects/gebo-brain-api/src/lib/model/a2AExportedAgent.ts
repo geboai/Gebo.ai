@@ -11,9 +11,16 @@
  */
 
 export interface A2AExportedAgent { 
-    kind?: any;
-    networkCode?: any;
-    agentConfigCode?: any;
-    skillName?: any;
-    exposeMemberCapabilities?: any;
+    kind?: A2AExportedAgent.KindEnum;
+    networkCode?: string;
+    agentConfigCode?: string;
+    skillName?: string;
+    exposeMemberCapabilities?: boolean;
+}
+export namespace A2AExportedAgent {
+    export type KindEnum = 'AGENT' | 'NETWORK';
+    export const KindEnum = {
+        AGENT: 'AGENT' as KindEnum,
+        NETWORK: 'NETWORK' as KindEnum
+    };
 }

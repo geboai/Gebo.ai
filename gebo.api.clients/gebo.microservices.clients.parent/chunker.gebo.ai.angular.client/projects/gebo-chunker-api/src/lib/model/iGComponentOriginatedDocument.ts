@@ -12,7 +12,7 @@
 import { GeboComponentInfo } from './geboComponentInfo';
 
 export interface IGComponentOriginatedDocument { 
-    code: any;
-    modificationDate?: any;
+    code: string;
+    modificationDate?: Date;
     originComponent: GeboComponentInfo;
 }

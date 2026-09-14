@@ -3,6 +3,7 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIRankerModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIRankerModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIRankerModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIRankerModelChoice;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GenericOpenAiRankerModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -99,7 +100,7 @@ public class GenericOpenAiRankerModelsConfigurationControllerApi {
      * @return GenericOpenAIAPIRankerModelConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GenericOpenAIAPIRankerModelConfig findGenericOpenAIAPIRankerModelConfigByCode(Object code) throws RestClientException {
+    public GenericOpenAIAPIRankerModelConfig findGenericOpenAIAPIRankerModelConfigByCode(String code) throws RestClientException {
         return findGenericOpenAIAPIRankerModelConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -111,7 +112,7 @@ public class GenericOpenAiRankerModelsConfigurationControllerApi {
      * @return ResponseEntity&lt;GenericOpenAIAPIRankerModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GenericOpenAIAPIRankerModelConfig> findGenericOpenAIAPIRankerModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GenericOpenAIAPIRankerModelConfig> findGenericOpenAIAPIRankerModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -186,10 +187,10 @@ public class GenericOpenAiRankerModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAIAPIRankerModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAIRankerModelConfigs() throws RestClientException {
+    public List<GenericOpenAIAPIRankerModelConfig> getGenericOpenAIRankerModelConfigs() throws RestClientException {
         return getGenericOpenAIRankerModelConfigsWithHttpInfo().getBody();
     }
 
@@ -197,10 +198,10 @@ public class GenericOpenAiRankerModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAIAPIRankerModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAIRankerModelConfigsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAIAPIRankerModelConfig>> getGenericOpenAIRankerModelConfigsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelConfigs").build().toUriString();
         
@@ -217,17 +218,17 @@ public class GenericOpenAiRankerModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAIAPIRankerModelConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIAPIRankerModelConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAIRankerModelTypeConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAIRankerModelTypes() throws RestClientException {
+    public List<GenericOpenAIRankerModelTypeConfig> getGenericOpenAIRankerModelTypes() throws RestClientException {
         return getGenericOpenAIRankerModelTypesWithHttpInfo().getBody();
     }
 
@@ -235,10 +236,10 @@ public class GenericOpenAiRankerModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAIRankerModelTypeConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAIRankerModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAIRankerModelTypeConfig>> getGenericOpenAIRankerModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelTypes").build().toUriString();
         
@@ -255,7 +256,7 @@ public class GenericOpenAiRankerModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAIRankerModelTypeConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIRankerModelTypeConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

@@ -2,6 +2,7 @@ package gebo.microservices.api.client.heimdall.api;
 
 import gebo.microservices.api.client.heimdall.invoker.ApiClient;
 
+import gebo.microservices.api.client.heimdall.model.AuthProviderDto;
 import gebo.microservices.api.client.heimdall.model.Oauth2ProviderModifiableData;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class OAuth2AdminControllerApi {
     private ApiClient apiClient;
@@ -93,7 +94,7 @@ public class OAuth2AdminControllerApi {
      * @return Oauth2ProviderModifiableData
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Oauth2ProviderModifiableData findOauth2ProviderRegistrationByRegistrationId(Object registrationId) throws RestClientException {
+    public Oauth2ProviderModifiableData findOauth2ProviderRegistrationByRegistrationId(String registrationId) throws RestClientException {
         return findOauth2ProviderRegistrationByRegistrationIdWithHttpInfo(registrationId).getBody();
     }
 
@@ -105,7 +106,7 @@ public class OAuth2AdminControllerApi {
      * @return ResponseEntity&lt;Oauth2ProviderModifiableData&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Oauth2ProviderModifiableData> findOauth2ProviderRegistrationByRegistrationIdWithHttpInfo(Object registrationId) throws RestClientException {
+    public ResponseEntity<Oauth2ProviderModifiableData> findOauth2ProviderRegistrationByRegistrationIdWithHttpInfo(String registrationId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'registrationId' is set
         if (registrationId == null) {
@@ -134,10 +135,10 @@ public class OAuth2AdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;AuthProviderDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getProviders() throws RestClientException {
+    public List<AuthProviderDto> getProviders() throws RestClientException {
         return getProvidersWithHttpInfo().getBody();
     }
 
@@ -145,10 +146,10 @@ public class OAuth2AdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;AuthProviderDto&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getProvidersWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<AuthProviderDto>> getProvidersWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/OAuth2AdminController/getProviders").build().toUriString();
         
@@ -165,7 +166,7 @@ public class OAuth2AdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<AuthProviderDto>> returnType = new ParameterizedTypeReference<List<AuthProviderDto>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

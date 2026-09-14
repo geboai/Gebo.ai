@@ -12,7 +12,7 @@
 import { User } from './user';
 
 export interface UserQbeRequest { 
-    page?: any;
-    size?: any;
+    page?: number;
+    size?: number;
     qbe?: User;
 }

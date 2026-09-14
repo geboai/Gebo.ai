@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { LLMUsageAggregationBucket } from './lLMUsageAggregationBucket';
 import { LLMUsageDrillDownLevelSubdimensions } from './lLMUsageDrillDownLevelSubdimensions';
 
 export interface LLMUsageDrillDownResult { 
-    monthly?: any;
+    monthly?: Array<LLMUsageAggregationBucket>;
     monthlySubdimensions?: LLMUsageDrillDownLevelSubdimensions;
-    currentMonthDaily?: any;
+    currentMonthDaily?: Array<LLMUsageAggregationBucket>;
     currentMonthDailySubdimensions?: LLMUsageDrillDownLevelSubdimensions;
 }

@@ -12,8 +12,8 @@
 import { UserspaceFolderDto } from './userspaceFolderDto';
 
 export interface PublishingStatus { 
-    underPubishingAlgorithm?: any;
-    hasBeenPublished?: any;
-    jobId?: any;
+    underPubishingAlgorithm?: boolean;
+    hasBeenPublished?: boolean;
+    jobId?: string;
     folder: UserspaceFolderDto;
 }

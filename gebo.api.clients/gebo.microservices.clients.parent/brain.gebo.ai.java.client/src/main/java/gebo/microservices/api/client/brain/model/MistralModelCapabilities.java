@@ -22,28 +22,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * MistralModelCapabilities
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class MistralModelCapabilities {
   @JsonProperty("completion_chat")
-  private Object completionChat = null;
+  private Boolean completionChat = null;
 
   @JsonProperty("completion_fim")
-  private Object completionFim = null;
+  private Boolean completionFim = null;
 
   @JsonProperty("function_calling")
-  private Object functionCalling = null;
+  private Boolean functionCalling = null;
 
   @JsonProperty("fine_tuning")
-  private Object fineTuning = null;
+  private Boolean fineTuning = null;
 
   @JsonProperty("vision")
-  private Object vision = null;
+  private Boolean vision = null;
 
   @JsonProperty("classification")
-  private Object classification = null;
+  private Boolean classification = null;
 
-  public MistralModelCapabilities completionChat(Object completionChat) {
+  public MistralModelCapabilities completionChat(Boolean completionChat) {
     this.completionChat = completionChat;
     return this;
   }
@@ -53,15 +53,15 @@ public class MistralModelCapabilities {
    * @return completionChat
   **/
   @Schema(description = "")
-  public Object getCompletionChat() {
+  public Boolean isCompletionChat() {
     return completionChat;
   }
 
-  public void setCompletionChat(Object completionChat) {
+  public void setCompletionChat(Boolean completionChat) {
     this.completionChat = completionChat;
   }
 
-  public MistralModelCapabilities completionFim(Object completionFim) {
+  public MistralModelCapabilities completionFim(Boolean completionFim) {
     this.completionFim = completionFim;
     return this;
   }
@@ -71,15 +71,15 @@ public class MistralModelCapabilities {
    * @return completionFim
   **/
   @Schema(description = "")
-  public Object getCompletionFim() {
+  public Boolean isCompletionFim() {
     return completionFim;
   }
 
-  public void setCompletionFim(Object completionFim) {
+  public void setCompletionFim(Boolean completionFim) {
     this.completionFim = completionFim;
   }
 
-  public MistralModelCapabilities functionCalling(Object functionCalling) {
+  public MistralModelCapabilities functionCalling(Boolean functionCalling) {
     this.functionCalling = functionCalling;
     return this;
   }
@@ -89,15 +89,15 @@ public class MistralModelCapabilities {
    * @return functionCalling
   **/
   @Schema(description = "")
-  public Object getFunctionCalling() {
+  public Boolean isFunctionCalling() {
     return functionCalling;
   }
 
-  public void setFunctionCalling(Object functionCalling) {
+  public void setFunctionCalling(Boolean functionCalling) {
     this.functionCalling = functionCalling;
   }
 
-  public MistralModelCapabilities fineTuning(Object fineTuning) {
+  public MistralModelCapabilities fineTuning(Boolean fineTuning) {
     this.fineTuning = fineTuning;
     return this;
   }
@@ -107,15 +107,15 @@ public class MistralModelCapabilities {
    * @return fineTuning
   **/
   @Schema(description = "")
-  public Object getFineTuning() {
+  public Boolean isFineTuning() {
     return fineTuning;
   }
 
-  public void setFineTuning(Object fineTuning) {
+  public void setFineTuning(Boolean fineTuning) {
     this.fineTuning = fineTuning;
   }
 
-  public MistralModelCapabilities vision(Object vision) {
+  public MistralModelCapabilities vision(Boolean vision) {
     this.vision = vision;
     return this;
   }
@@ -125,15 +125,15 @@ public class MistralModelCapabilities {
    * @return vision
   **/
   @Schema(description = "")
-  public Object getVision() {
+  public Boolean isVision() {
     return vision;
   }
 
-  public void setVision(Object vision) {
+  public void setVision(Boolean vision) {
     this.vision = vision;
   }
 
-  public MistralModelCapabilities classification(Object classification) {
+  public MistralModelCapabilities classification(Boolean classification) {
     this.classification = classification;
     return this;
   }
@@ -143,11 +143,11 @@ public class MistralModelCapabilities {
    * @return classification
   **/
   @Schema(description = "")
-  public Object getClassification() {
+  public Boolean isClassification() {
     return classification;
   }
 
-  public void setClassification(Object classification) {
+  public void setClassification(Boolean classification) {
     this.classification = classification;
   }
 

@@ -13,8 +13,17 @@ import { QdrantConfig } from './qdrantConfig';
 import { RedisConfig } from './redisConfig';
 
 export interface ComponentVectorStoreStatus { 
-    isSetup?: any;
-    product?: any;
+    isSetup?: boolean;
+    product?: ComponentVectorStoreStatus.ProductEnum;
     qdrantConfig?: QdrantConfig;
     redisConfig?: RedisConfig;
+}
+export namespace ComponentVectorStoreStatus {
+    export type ProductEnum = 'MONGO' | 'QDRANT' | 'REDIS' | 'TEST';
+    export const ProductEnum = {
+        MONGO: 'MONGO' as ProductEnum,
+        QDRANT: 'QDRANT' as ProductEnum,
+        REDIS: 'REDIS' as ProductEnum,
+        TEST: 'TEST' as ProductEnum
+    };
 }

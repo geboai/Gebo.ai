@@ -2,9 +2,12 @@ package gebo.microservices.api.client.uploads.api;
 
 import gebo.microservices.api.client.uploads.invoker.ApiClient;
 
+import gebo.microservices.api.client.uploads.model.GContentManagementSystemType;
+import gebo.microservices.api.client.uploads.model.GUploadsContentManagementSystem;
 import gebo.microservices.api.client.uploads.model.GUploadsProjectEndpoint;
 import gebo.microservices.api.client.uploads.model.OperationStatusGJobStatus;
 import gebo.microservices.api.client.uploads.model.OperationStatusGUploadsProjectEndpoint;
+import gebo.microservices.api.client.uploads.model.UploadedFileInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:05.518323320+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:31.380104145+02:00[Europe/Rome]")
 
 public class FileUploadsControllerApi {
     private ApiClient apiClient;
@@ -53,7 +56,7 @@ public class FileUploadsControllerApi {
      * @return OperationStatusGUploadsProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public OperationStatusGUploadsProjectEndpoint deleteUploadedFiles(Object body, Object endpointCode) throws RestClientException {
+    public OperationStatusGUploadsProjectEndpoint deleteUploadedFiles(List<String> body, String endpointCode) throws RestClientException {
         return deleteUploadedFilesWithHttpInfo(body, endpointCode).getBody();
     }
 
@@ -66,7 +69,7 @@ public class FileUploadsControllerApi {
      * @return ResponseEntity&lt;OperationStatusGUploadsProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<OperationStatusGUploadsProjectEndpoint> deleteUploadedFilesWithHttpInfo(Object body, Object endpointCode) throws RestClientException {
+    public ResponseEntity<OperationStatusGUploadsProjectEndpoint> deleteUploadedFilesWithHttpInfo(List<String> body, String endpointCode) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -145,10 +148,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GUploadsProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findUploadsEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GUploadsProjectEndpoint> findUploadsEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findUploadsEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -157,10 +160,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GUploadsProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findUploadsEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GUploadsProjectEndpoint>> findUploadsEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
@@ -182,7 +185,7 @@ public class FileUploadsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GUploadsProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GUploadsProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -190,10 +193,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GUploadsProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findUploadsEndpointsByQbe(GUploadsProjectEndpoint body) throws RestClientException {
+    public List<GUploadsProjectEndpoint> findUploadsEndpointsByQbe(GUploadsProjectEndpoint body) throws RestClientException {
         return findUploadsEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -202,10 +205,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GUploadsProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findUploadsEndpointsByQbeWithHttpInfo(GUploadsProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GUploadsProjectEndpoint>> findUploadsEndpointsByQbeWithHttpInfo(GUploadsProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -228,17 +231,17 @@ public class FileUploadsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GUploadsProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GUploadsProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GContentManagementSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getFileSystemSystemTypes() throws RestClientException {
+    public List<GContentManagementSystemType> getFileSystemSystemTypes() throws RestClientException {
         return getFileSystemSystemTypesWithHttpInfo().getBody();
     }
 
@@ -246,10 +249,10 @@ public class FileUploadsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GContentManagementSystemType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getFileSystemSystemTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GContentManagementSystemType>> getFileSystemSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getFileSystemSystemTypes").build().toUriString();
         
@@ -266,17 +269,17 @@ public class FileUploadsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GContentManagementSystemType>> returnType = new ParameterizedTypeReference<List<GContentManagementSystemType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;String&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getUploadableFilesExtensions() throws RestClientException {
+    public List<String> getUploadableFilesExtensions() throws RestClientException {
         return getUploadableFilesExtensionsWithHttpInfo().getBody();
     }
 
@@ -284,10 +287,10 @@ public class FileUploadsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;String&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getUploadableFilesExtensionsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<String>> getUploadableFilesExtensionsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getUploadableFilesExtensions").build().toUriString();
         
@@ -304,7 +307,7 @@ public class FileUploadsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -312,10 +315,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return Object
+     * @return List&lt;GUploadsContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getUploadsSystems(Object handlerCode) throws RestClientException {
+    public List<GUploadsContentManagementSystem> getUploadsSystems(String handlerCode) throws RestClientException {
         return getUploadsSystemsWithHttpInfo(handlerCode).getBody();
     }
 
@@ -324,10 +327,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GUploadsContentManagementSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getUploadsSystemsWithHttpInfo(Object handlerCode) throws RestClientException {
+    public ResponseEntity<List<GUploadsContentManagementSystem>> getUploadsSystemsWithHttpInfo(String handlerCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FileUploadsController/getUploadsSystems").build().toUriString();
         
@@ -345,7 +348,7 @@ public class FileUploadsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GUploadsContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GUploadsContentManagementSystem>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -399,10 +402,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param endpointCode  (required)
-     * @return Object
+     * @return List&lt;UploadedFileInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object listUploadedFiles(Object endpointCode) throws RestClientException {
+    public List<UploadedFileInfo> listUploadedFiles(String endpointCode) throws RestClientException {
         return listUploadedFilesWithHttpInfo(endpointCode).getBody();
     }
 
@@ -411,10 +414,10 @@ public class FileUploadsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param endpointCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;UploadedFileInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> listUploadedFilesWithHttpInfo(Object endpointCode) throws RestClientException {
+    public ResponseEntity<List<UploadedFileInfo>> listUploadedFilesWithHttpInfo(String endpointCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'endpointCode' is set
         if (endpointCode == null) {
@@ -436,7 +439,7 @@ public class FileUploadsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<UploadedFileInfo>> returnType = new ParameterizedTypeReference<List<UploadedFileInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

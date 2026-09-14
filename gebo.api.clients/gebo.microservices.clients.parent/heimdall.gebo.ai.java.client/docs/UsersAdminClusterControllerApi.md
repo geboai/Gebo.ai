@@ -202,7 +202,7 @@ No authorization required
 
 
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     UsersGroup result = apiInstance.findGroupByCode(code);
     System.out.println(result);
@@ -216,7 +216,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -331,7 +331,7 @@ No authorization required
 
 
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
-Object email = null; // Object | 
+String email = "email_example"; // String | 
 try {
     EditableUser result = apiInstance.findUserByUsername1(email);
     System.out.println(result);
@@ -345,7 +345,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **email** | [**Object**](.md)|  |
+ **email** | **String**|  |
 
 ### Return type
 
@@ -405,7 +405,7 @@ No authorization required
 
 <a name="getAllGroups"></a>
 # **getAllGroups**
-> Object getAllGroups()
+> List&lt;UsersGroup&gt; getAllGroups()
 
 
 
@@ -418,7 +418,7 @@ No authorization required
 
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 try {
-    Object result = apiInstance.getAllGroups();
+    List<UsersGroup> result = apiInstance.getAllGroups();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UsersAdminClusterControllerApi#getAllGroups");
@@ -431,7 +431,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UsersGroup&gt;**](UsersGroup.md)
 
 ### Authorization
 
@@ -444,7 +444,7 @@ No authorization required
 
 <a name="getAllUsers"></a>
 # **getAllUsers**
-> Object getAllUsers()
+> List&lt;UserInfos&gt; getAllUsers()
 
 
 
@@ -457,7 +457,7 @@ No authorization required
 
 UsersAdminClusterControllerApi apiInstance = new UsersAdminClusterControllerApi();
 try {
-    Object result = apiInstance.getAllUsers();
+    List<UserInfos> result = apiInstance.getAllUsers();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UsersAdminClusterControllerApi#getAllUsers");
@@ -470,7 +470,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;UserInfos&gt;**](UserInfos.md)
 
 ### Authorization
 

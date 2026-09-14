@@ -71,7 +71,7 @@ public class GoogleSearchConfigurationControllerApiTest {
      */
     @Test
     public void getGoogleSearchApiCredentialsTest() {
-        Object response = api.getGoogleSearchApiCredentials();
+        List<GGoogleSearchApiCredentials> response = api.getGoogleSearchApiCredentials();
 
         // TODO: test validations
     }
@@ -114,7 +114,7 @@ public class GoogleSearchConfigurationControllerApiTest {
      */
     @Test
     public void searchGGoogleSearchApiCredentialsByCodeTest() {
-        Object code = null;
+        String code = null;
         GGoogleSearchApiCredentials response = api.searchGGoogleSearchApiCredentialsByCode(code);
 
         // TODO: test validations

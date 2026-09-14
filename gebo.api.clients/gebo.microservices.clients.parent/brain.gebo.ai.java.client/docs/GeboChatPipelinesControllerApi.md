@@ -27,7 +27,7 @@ Method | HTTP request | Description
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
 PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
-Object pipelineCode = null; // Object | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
     GeboChatResponse result = apiInstance.executeChatPipeline(body, pipelineCode);
     System.out.println(result);
@@ -42,7 +42,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
- **pipelineCode** | [**Object**](.md)|  | [optional]
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -102,7 +102,7 @@ No authorization required
 
 <a name="getDefaultPersonalPipelinesChatMenu"></a>
 # **getDefaultPersonalPipelinesChatMenu**
-> Object getDefaultPersonalPipelinesChatMenu(chatProfileCode)
+> List&lt;PipelineChatMenu&gt; getDefaultPersonalPipelinesChatMenu(chatProfileCode)
 
 
 
@@ -114,9 +114,9 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
-Object chatProfileCode = null; // Object | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
 try {
-    Object result = apiInstance.getDefaultPersonalPipelinesChatMenu(chatProfileCode);
+    List<PipelineChatMenu> result = apiInstance.getDefaultPersonalPipelinesChatMenu(chatProfileCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatPipelinesControllerApi#getDefaultPersonalPipelinesChatMenu");
@@ -128,11 +128,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  |
+ **chatProfileCode** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;PipelineChatMenu&gt;**](PipelineChatMenu.md)
 
 ### Authorization
 
@@ -145,7 +145,7 @@ No authorization required
 
 <a name="getPersonalPipelinesChatMenu"></a>
 # **getPersonalPipelinesChatMenu**
-> Object getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode)
+> List&lt;PipelineChatMenu&gt; getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode)
 
 
 
@@ -157,10 +157,10 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
-Object chatProfileCode = null; // Object | 
-Object pipelineCode = null; // Object | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    Object result = apiInstance.getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode);
+    List<PipelineChatMenu> result = apiInstance.getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatPipelinesControllerApi#getPersonalPipelinesChatMenu");
@@ -172,12 +172,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **chatProfileCode** | [**Object**](.md)|  |
- **pipelineCode** | [**Object**](.md)|  | [optional]
+ **chatProfileCode** | **String**|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;PipelineChatMenu&gt;**](PipelineChatMenu.md)
 
 ### Authorization
 
@@ -202,7 +202,7 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
-Object userChatContextCode = null; // Object | 
+String userChatContextCode = "userChatContextCode_example"; // String | 
 try {
     apiInstance.stopChatPipeline(userChatContextCode);
 } catch (ApiException e) {
@@ -215,7 +215,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userChatContextCode** | [**Object**](.md)|  |
+ **userChatContextCode** | **String**|  |
 
 ### Return type
 
@@ -232,7 +232,7 @@ No authorization required
 
 <a name="streamChatPipeline"></a>
 # **streamChatPipeline**
-> Object streamChatPipeline(body, pipelineCode)
+> List&lt;GeboChatMessageEnvelope&gt; streamChatPipeline(body, pipelineCode)
 
 
 
@@ -245,9 +245,9 @@ No authorization required
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
 PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
-Object pipelineCode = null; // Object | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    Object result = apiInstance.streamChatPipeline(body, pipelineCode);
+    List<GeboChatMessageEnvelope> result = apiInstance.streamChatPipeline(body, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatPipelinesControllerApi#streamChatPipeline");
@@ -260,11 +260,11 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
- **pipelineCode** | [**Object**](.md)|  | [optional]
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;GeboChatMessageEnvelope&gt;**](GeboChatMessageEnvelope.md)
 
 ### Authorization
 
@@ -277,7 +277,7 @@ No authorization required
 
 <a name="streamDefaultChatPipeline"></a>
 # **streamDefaultChatPipeline**
-> Object streamDefaultChatPipeline(body)
+> List&lt;GeboChatMessageEnvelope&gt; streamDefaultChatPipeline(body)
 
 
 
@@ -291,7 +291,7 @@ No authorization required
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
 PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
 try {
-    Object result = apiInstance.streamDefaultChatPipeline(body);
+    List<GeboChatMessageEnvelope> result = apiInstance.streamDefaultChatPipeline(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatPipelinesControllerApi#streamDefaultChatPipeline");
@@ -307,7 +307,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Object**
+[**List&lt;GeboChatMessageEnvelope&gt;**](GeboChatMessageEnvelope.md)
 
 ### Authorization
 

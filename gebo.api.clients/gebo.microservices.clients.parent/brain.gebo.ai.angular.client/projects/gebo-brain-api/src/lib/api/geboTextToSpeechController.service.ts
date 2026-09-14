@@ -61,9 +61,9 @@ export class GeboTextToSpeechControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isEnabled1(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public isEnabled1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public isEnabled1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public isEnabled1(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isEnabled1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isEnabled1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
     public isEnabled1(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -81,7 +81,7 @@ export class GeboTextToSpeechControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboTextToSpeechController/isEnabled`,
+        return this.httpClient.request<boolean>('get',`${this.basePath}/api/users/GeboTextToSpeechController/isEnabled`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -98,9 +98,9 @@ export class GeboTextToSpeechControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public speechText(body: SpeechRequest, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public speechText(body: SpeechRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public speechText(body: SpeechRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public speechText(body: SpeechRequest, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public speechText(body: SpeechRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public speechText(body: SpeechRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
     public speechText(body: SpeechRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -127,9 +127,10 @@ export class GeboTextToSpeechControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/users/GeboTextToSpeechController/speechText`,
+        return this.httpClient.request('post',`${this.basePath}/api/users/GeboTextToSpeechController/speechText`,
             {
                 body: body,
+                responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

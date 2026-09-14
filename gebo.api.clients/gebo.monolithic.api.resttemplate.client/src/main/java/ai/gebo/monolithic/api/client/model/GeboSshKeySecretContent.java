@@ -22,9 +22,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboSshKeySecretContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T09:01:39.494209200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GeboSshKeySecretContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("email")
   private String email = null;
 
@@ -36,6 +39,24 @@ public class GeboSshKeySecretContent {
 
   @JsonProperty("passphrase")
   private String passphrase = null;
+
+  public GeboSshKeySecretContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 
   public GeboSshKeySecretContent email(String email) {
     this.email = email;
@@ -119,7 +140,8 @@ public class GeboSshKeySecretContent {
       return false;
     }
     GeboSshKeySecretContent geboSshKeySecretContent = (GeboSshKeySecretContent) o;
-    return Objects.equals(this.email, geboSshKeySecretContent.email) &&
+    return Objects.equals(this.readOnly, geboSshKeySecretContent.readOnly) &&
+        Objects.equals(this.email, geboSshKeySecretContent.email) &&
         Objects.equals(this.key, geboSshKeySecretContent.key) &&
         Objects.equals(this.pub, geboSshKeySecretContent.pub) &&
         Objects.equals(this.passphrase, geboSshKeySecretContent.passphrase);
@@ -127,7 +149,7 @@ public class GeboSshKeySecretContent {
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, key, pub, passphrase);
+    return Objects.hash(readOnly, email, key, pub, passphrase);
   }
 
 
@@ -136,6 +158,7 @@ public class GeboSshKeySecretContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboSshKeySecretContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    key: ").append(toIndentedString(key)).append("\n");
     sb.append("    pub: ").append(toIndentedString(pub)).append("\n");

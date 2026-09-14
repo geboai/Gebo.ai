@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class SecretsControllerApi {
     private ApiClient apiClient;
@@ -466,10 +466,10 @@ public class SecretsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param context  (required)
-     * @return Object
+     * @return List&lt;SecretInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getSecretsByContextCode(Object context) throws RestClientException {
+    public List<SecretInfo> getSecretsByContextCode(String context) throws RestClientException {
         return getSecretsByContextCodeWithHttpInfo(context).getBody();
     }
 
@@ -478,10 +478,10 @@ public class SecretsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param context  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;SecretInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getSecretsByContextCodeWithHttpInfo(Object context) throws RestClientException {
+    public ResponseEntity<List<SecretInfo>> getSecretsByContextCodeWithHttpInfo(String context) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'context' is set
         if (context == null) {
@@ -503,7 +503,7 @@ public class SecretsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<SecretInfo>> returnType = new ParameterizedTypeReference<List<SecretInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

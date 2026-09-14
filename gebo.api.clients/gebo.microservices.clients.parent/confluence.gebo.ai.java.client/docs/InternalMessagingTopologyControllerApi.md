@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="getLocalTopology"></a>
 # **getLocalTopology**
-> Object getLocalTopology()
+> List&lt;GModuleMetaInfo&gt; getLocalTopology()
 
 
 
@@ -21,7 +21,7 @@ Method | HTTP request | Description
 
 InternalMessagingTopologyControllerApi apiInstance = new InternalMessagingTopologyControllerApi();
 try {
-    Object result = apiInstance.getLocalTopology();
+    List<GModuleMetaInfo> result = apiInstance.getLocalTopology();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling InternalMessagingTopologyControllerApi#getLocalTopology");
@@ -34,7 +34,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GModuleMetaInfo&gt;**](GModuleMetaInfo.md)
 
 ### Authorization
 

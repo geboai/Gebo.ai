@@ -2,6 +2,8 @@ package gebo.microservices.api.client.heimdall.api;
 
 import gebo.microservices.api.client.heimdall.invoker.ApiClient;
 
+import gebo.microservices.api.client.heimdall.model.AuthProviderDto;
+import gebo.microservices.api.client.heimdall.model.Oauth2ClientAuthorizativeInfo;
 import gebo.microservices.api.client.heimdall.model.Oauth2ClientConfig;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class AuthProvidersControllerApi {
     private ApiClient apiClient;
@@ -50,7 +52,7 @@ public class AuthProvidersControllerApi {
      * @return Oauth2ClientConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Oauth2ClientConfig getProviderClientConfig(Object registrationId) throws RestClientException {
+    public Oauth2ClientConfig getProviderClientConfig(String registrationId) throws RestClientException {
         return getProviderClientConfigWithHttpInfo(registrationId).getBody();
     }
 
@@ -62,7 +64,7 @@ public class AuthProvidersControllerApi {
      * @return ResponseEntity&lt;Oauth2ClientConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Oauth2ClientConfig> getProviderClientConfigWithHttpInfo(Object registrationId) throws RestClientException {
+    public ResponseEntity<Oauth2ClientConfig> getProviderClientConfigWithHttpInfo(String registrationId) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'registrationId' is set
         if (registrationId == null) {
@@ -91,10 +93,10 @@ public class AuthProvidersControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;AuthProviderDto&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object listAuthProviders() throws RestClientException {
+    public List<AuthProviderDto> listAuthProviders() throws RestClientException {
         return listAuthProvidersWithHttpInfo().getBody();
     }
 
@@ -102,10 +104,10 @@ public class AuthProvidersControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;AuthProviderDto&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> listAuthProvidersWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<AuthProviderDto>> listAuthProvidersWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/public/AuthProvidersController/listAuthProviders").build().toUriString();
         
@@ -122,17 +124,17 @@ public class AuthProvidersControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<AuthProviderDto>> returnType = new ParameterizedTypeReference<List<AuthProviderDto>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;Oauth2ClientAuthorizativeInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object listAvailableProvidersConfig() throws RestClientException {
+    public List<Oauth2ClientAuthorizativeInfo> listAvailableProvidersConfig() throws RestClientException {
         return listAvailableProvidersConfigWithHttpInfo().getBody();
     }
 
@@ -140,10 +142,10 @@ public class AuthProvidersControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;Oauth2ClientAuthorizativeInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> listAvailableProvidersConfigWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<Oauth2ClientAuthorizativeInfo>> listAvailableProvidersConfigWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/public/AuthProvidersController/listAvailableProvidersConfig").build().toUriString();
         
@@ -160,7 +162,7 @@ public class AuthProvidersControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<Oauth2ClientAuthorizativeInfo>> returnType = new ParameterizedTypeReference<List<Oauth2ClientAuthorizativeInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -9,23 +9,24 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ChatInteractions } from './chatInteractions';
 import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig';
 
 export interface GUserChatSession { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    chatCreationDateTime?: any;
-    username?: any;
-    contextCode?: any;
-    chatProfileCode?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    chatCreationDateTime?: Date;
+    username?: string;
+    contextCode?: string;
+    chatProfileCode?: string;
     modelReference?: GObjectRefGBaseChatModelConfig;
-    ragChat?: any;
-    chatMemoryId?: any;
-    interactions?: any;
-    chatModelCode?: any;
-    choosedKnowledgeBases?: any;
+    ragChat?: boolean;
+    chatMemoryId?: string;
+    interactions?: Array<ChatInteractions>;
+    chatModelCode?: string;
+    choosedKnowledgeBases?: Array<string>;
 }

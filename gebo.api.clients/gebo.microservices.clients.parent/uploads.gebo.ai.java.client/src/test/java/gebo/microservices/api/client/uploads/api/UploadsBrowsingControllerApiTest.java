@@ -13,9 +13,11 @@
 package gebo.microservices.api.client.uploads.api;
 
 import gebo.microservices.api.client.uploads.model.BrowseParam;
+import java.io.File;
 import gebo.microservices.api.client.uploads.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.uploads.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.uploads.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.uploads.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +45,7 @@ public class UploadsBrowsingControllerApiTest {
     @Test
     public void browseUploadsEndpointPathTest() {
         BrowseParam body = null;
-        Object endpointCode = null;
+        String endpointCode = null;
         OperationStatusListPathInfo response = api.browseUploadsEndpointPath(body, endpointCode);
 
         // TODO: test validations
@@ -58,8 +60,8 @@ public class UploadsBrowsingControllerApiTest {
      */
     @Test
     public void getUploadsEndpointNavigationStatusTest() {
-        Object body = null;
-        Object endpointCode = null;
+        List<VFilesystemReference> body = null;
+        String endpointCode = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getUploadsEndpointNavigationStatus(body, endpointCode);
 
         // TODO: test validations
@@ -74,7 +76,7 @@ public class UploadsBrowsingControllerApiTest {
      */
     @Test
     public void getUploadsEndpointRootsTest() {
-        Object endpointCode = null;
+        String endpointCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getUploadsEndpointRoots(endpointCode);
 
         // TODO: test validations
@@ -89,9 +91,9 @@ public class UploadsBrowsingControllerApiTest {
      */
     @Test
     public void serveUploadsEndpointFileTest() {
-        Object endpointCode = null;
-        Object path = null;
-        Object response = api.serveUploadsEndpointFile(endpointCode, path);
+        String endpointCode = null;
+        String path = null;
+        File response = api.serveUploadsEndpointFile(endpointCode, path);
 
         // TODO: test validations
     }

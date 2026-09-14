@@ -2,6 +2,7 @@ package gebo.microservices.api.client.git.api;
 
 import gebo.microservices.api.client.git.invoker.ApiClient;
 
+import gebo.microservices.api.client.git.model.GContentManagementSystemType;
 import gebo.microservices.api.client.git.model.GGitContentManagementSystem;
 import gebo.microservices.api.client.git.model.GGitProjectEndpoint;
 import gebo.microservices.api.client.git.model.OperationStatusGGitProjectEndpoint;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:20.180928852+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.835643861+02:00[Europe/Rome]")
 
 public class GitSystemsControllerApi {
     private ApiClient apiClient;
@@ -137,10 +138,10 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GGitProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGitEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GGitProjectEndpoint> findGitEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findGitEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -149,10 +150,10 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGitProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGitEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GGitProjectEndpoint>> findGitEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
@@ -174,7 +175,7 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GGitProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GGitProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -182,10 +183,10 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GGitProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findGitEndpointsByQbe(GGitProjectEndpoint body) throws RestClientException {
+    public List<GGitProjectEndpoint> findGitEndpointsByQbe(GGitProjectEndpoint body) throws RestClientException {
         return findGitEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -194,10 +195,10 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGitProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findGitEndpointsByQbeWithHttpInfo(GGitProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GGitProjectEndpoint>> findGitEndpointsByQbeWithHttpInfo(GGitProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -220,7 +221,7 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GGitProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GGitProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -273,10 +274,10 @@ public class GitSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GContentManagementSystemType&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGitSystemTypes() throws RestClientException {
+    public List<GContentManagementSystemType> getGitSystemTypes() throws RestClientException {
         return getGitSystemTypesWithHttpInfo().getBody();
     }
 
@@ -284,10 +285,10 @@ public class GitSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GContentManagementSystemType&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGitSystemTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GContentManagementSystemType>> getGitSystemTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getGitSystemTypes").build().toUriString();
         
@@ -304,7 +305,7 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GContentManagementSystemType>> returnType = new ParameterizedTypeReference<List<GContentManagementSystemType>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -312,10 +313,10 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return Object
+     * @return List&lt;GGitContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGitSystems(Object handlerCode) throws RestClientException {
+    public List<GGitContentManagementSystem> getGitSystems(String handlerCode) throws RestClientException {
         return getGitSystemsWithHttpInfo(handlerCode).getBody();
     }
 
@@ -324,10 +325,10 @@ public class GitSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param handlerCode  (optional)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GGitContentManagementSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGitSystemsWithHttpInfo(Object handlerCode) throws RestClientException {
+    public ResponseEntity<List<GGitContentManagementSystem>> getGitSystemsWithHttpInfo(String handlerCode) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GITSystemsController/getGitSystems").build().toUriString();
         
@@ -345,7 +346,7 @@ public class GitSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GGitContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GGitContentManagementSystem>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

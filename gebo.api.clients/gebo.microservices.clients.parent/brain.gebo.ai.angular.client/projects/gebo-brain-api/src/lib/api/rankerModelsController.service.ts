@@ -17,6 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ConfigurationEntryGBaseRankerModelConfig } from '../model/configurationEntryGBaseRankerModelConfig';
+import { GRankerModelType } from '../model/gRankerModelType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -60,9 +62,9 @@ export class RankerModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRankerModelTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRankerModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRankerModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getRankerModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GRankerModelType>>;
+    public getRankerModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GRankerModelType>>>;
+    public getRankerModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GRankerModelType>>>;
     public getRankerModelTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -80,7 +82,7 @@ export class RankerModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/RankerModelsController/getRankerModelTypes`,
+        return this.httpClient.request<Array<GRankerModelType>>('get',`${this.basePath}/api/admin/RankerModelsController/getRankerModelTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -97,10 +99,10 @@ export class RankerModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRuntimeConfiguredRankerModels(modelTypeCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getRuntimeConfiguredRankerModels(modelTypeCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getRuntimeConfiguredRankerModels(modelTypeCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getRuntimeConfiguredRankerModels(modelTypeCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRuntimeConfiguredRankerModels(modelTypeCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ConfigurationEntryGBaseRankerModelConfig>>;
+    public getRuntimeConfiguredRankerModels(modelTypeCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConfigurationEntryGBaseRankerModelConfig>>>;
+    public getRuntimeConfiguredRankerModels(modelTypeCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConfigurationEntryGBaseRankerModelConfig>>>;
+    public getRuntimeConfiguredRankerModels(modelTypeCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -123,7 +125,7 @@ export class RankerModelsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels`,
+        return this.httpClient.request<Array<ConfigurationEntryGBaseRankerModelConfig>>('get',`${this.basePath}/api/admin/RankerModelsController/getRuntimeConfiguredRankerModels`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

@@ -17,9 +17,12 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GContentManagementSystemType } from '../model/gContentManagementSystemType';
+import { GUploadsContentManagementSystem } from '../model/gUploadsContentManagementSystem';
 import { GUploadsProjectEndpoint } from '../model/gUploadsProjectEndpoint';
 import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 import { OperationStatusGUploadsProjectEndpoint } from '../model/operationStatusGUploadsProjectEndpoint';
+import { UploadedFileInfo } from '../model/uploadedFileInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -65,10 +68,10 @@ export class FileUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUploadedFiles(body: any, endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGUploadsProjectEndpoint>;
-    public deleteUploadedFiles(body: any, endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGUploadsProjectEndpoint>>;
-    public deleteUploadedFiles(body: any, endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGUploadsProjectEndpoint>>;
-    public deleteUploadedFiles(body: any, endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteUploadedFiles(body: Array<string>, endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGUploadsProjectEndpoint>;
+    public deleteUploadedFiles(body: Array<string>, endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGUploadsProjectEndpoint>>;
+    public deleteUploadedFiles(body: Array<string>, endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGUploadsProjectEndpoint>>;
+    public deleteUploadedFiles(body: Array<string>, endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling deleteUploadedFiles.');
@@ -168,10 +171,10 @@ export class FileUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUploadsEndpointsByProject(parentProjectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findUploadsEndpointsByProject(parentProjectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findUploadsEndpointsByProject(parentProjectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findUploadsEndpointsByProject(parentProjectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findUploadsEndpointsByProject(parentProjectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GUploadsProjectEndpoint>>;
+    public findUploadsEndpointsByProject(parentProjectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GUploadsProjectEndpoint>>>;
+    public findUploadsEndpointsByProject(parentProjectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GUploadsProjectEndpoint>>>;
+    public findUploadsEndpointsByProject(parentProjectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (parentProjectCode === null || parentProjectCode === undefined) {
             throw new Error('Required parameter parentProjectCode was null or undefined when calling findUploadsEndpointsByProject.');
@@ -197,7 +200,7 @@ export class FileUploadsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileUploadsController/findUploadsEndpointsByProject`,
+        return this.httpClient.request<Array<GUploadsProjectEndpoint>>('get',`${this.basePath}/api/admin/FileUploadsController/findUploadsEndpointsByProject`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -215,9 +218,9 @@ export class FileUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findUploadsEndpointsByQbe(body: GUploadsProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findUploadsEndpointsByQbe(body: GUploadsProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findUploadsEndpointsByQbe(body: GUploadsProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findUploadsEndpointsByQbe(body: GUploadsProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GUploadsProjectEndpoint>>;
+    public findUploadsEndpointsByQbe(body: GUploadsProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GUploadsProjectEndpoint>>>;
+    public findUploadsEndpointsByQbe(body: GUploadsProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GUploadsProjectEndpoint>>>;
     public findUploadsEndpointsByQbe(body: GUploadsProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -244,7 +247,7 @@ export class FileUploadsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/FileUploadsController/findUploadsEndpointsByQbe`,
+        return this.httpClient.request<Array<GUploadsProjectEndpoint>>('post',`${this.basePath}/api/admin/FileUploadsController/findUploadsEndpointsByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -261,9 +264,9 @@ export class FileUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFileSystemSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getFileSystemSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getFileSystemSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getFileSystemSystemTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GContentManagementSystemType>>;
+    public getFileSystemSystemTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GContentManagementSystemType>>>;
+    public getFileSystemSystemTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GContentManagementSystemType>>>;
     public getFileSystemSystemTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -281,7 +284,7 @@ export class FileUploadsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileUploadsController/getFileSystemSystemTypes`,
+        return this.httpClient.request<Array<GContentManagementSystemType>>('get',`${this.basePath}/api/admin/FileUploadsController/getFileSystemSystemTypes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -297,9 +300,9 @@ export class FileUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUploadableFilesExtensions(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getUploadableFilesExtensions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getUploadableFilesExtensions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getUploadableFilesExtensions(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getUploadableFilesExtensions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getUploadableFilesExtensions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
     public getUploadableFilesExtensions(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -317,7 +320,7 @@ export class FileUploadsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileUploadsController/getUploadableFilesExtensions`,
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/admin/FileUploadsController/getUploadableFilesExtensions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -334,10 +337,10 @@ export class FileUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUploadsSystems(handlerCode?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getUploadsSystems(handlerCode?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getUploadsSystems(handlerCode?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getUploadsSystems(handlerCode?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUploadsSystems(handlerCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GUploadsContentManagementSystem>>;
+    public getUploadsSystems(handlerCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GUploadsContentManagementSystem>>>;
+    public getUploadsSystems(handlerCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GUploadsContentManagementSystem>>>;
+    public getUploadsSystems(handlerCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -360,7 +363,7 @@ export class FileUploadsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileUploadsController/getUploadsSystems`,
+        return this.httpClient.request<Array<GUploadsContentManagementSystem>>('get',`${this.basePath}/api/admin/FileUploadsController/getUploadsSystems`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -425,10 +428,10 @@ export class FileUploadsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listUploadedFiles(endpointCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public listUploadedFiles(endpointCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public listUploadedFiles(endpointCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public listUploadedFiles(endpointCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public listUploadedFiles(endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UploadedFileInfo>>;
+    public listUploadedFiles(endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UploadedFileInfo>>>;
+    public listUploadedFiles(endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UploadedFileInfo>>>;
+    public listUploadedFiles(endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (endpointCode === null || endpointCode === undefined) {
             throw new Error('Required parameter endpointCode was null or undefined when calling listUploadedFiles.');
@@ -454,7 +457,7 @@ export class FileUploadsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/FileUploadsController/listUploadedFiles`,
+        return this.httpClient.request<Array<UploadedFileInfo>>('get',`${this.basePath}/api/admin/FileUploadsController/listUploadedFiles`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

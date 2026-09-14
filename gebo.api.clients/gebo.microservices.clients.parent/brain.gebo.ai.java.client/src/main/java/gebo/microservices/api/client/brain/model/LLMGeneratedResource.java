@@ -18,50 +18,51 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 /**
  * LLMGeneratedResource
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class LLMGeneratedResource {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
   @JsonProperty("userModified")
-  private Object userModified = null;
+  private String userModified = null;
 
   @JsonProperty("userCreated")
-  private Object userCreated = null;
+  private String userCreated = null;
 
   @JsonProperty("dateModified")
-  private Object dateModified = null;
+  private Date dateModified = null;
 
   @JsonProperty("dateCreated")
-  private Object dateCreated = null;
+  private Date dateCreated = null;
 
   @JsonProperty("fileName")
-  private Object fileName = null;
+  private String fileName = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("fileSize")
-  private Object fileSize = null;
+  private Long fileSize = null;
 
   @JsonProperty("tokensCount")
-  private Object tokensCount = null;
+  private Long tokensCount = null;
 
   @JsonProperty("userContextCode")
-  private Object userContextCode = null;
+  private String userContextCode = null;
 
-  public LLMGeneratedResource code(Object code) {
+  public LLMGeneratedResource code(String code) {
     this.code = code;
     return this;
   }
@@ -71,15 +72,15 @@ public class LLMGeneratedResource {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public LLMGeneratedResource description(Object description) {
+  public LLMGeneratedResource description(String description) {
     this.description = description;
     return this;
   }
@@ -89,15 +90,15 @@ public class LLMGeneratedResource {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public LLMGeneratedResource userModified(Object userModified) {
+  public LLMGeneratedResource userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -107,15 +108,15 @@ public class LLMGeneratedResource {
    * @return userModified
   **/
   @Schema(description = "")
-  public Object getUserModified() {
+  public String getUserModified() {
     return userModified;
   }
 
-  public void setUserModified(Object userModified) {
+  public void setUserModified(String userModified) {
     this.userModified = userModified;
   }
 
-  public LLMGeneratedResource userCreated(Object userCreated) {
+  public LLMGeneratedResource userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -125,15 +126,15 @@ public class LLMGeneratedResource {
    * @return userCreated
   **/
   @Schema(description = "")
-  public Object getUserCreated() {
+  public String getUserCreated() {
     return userCreated;
   }
 
-  public void setUserCreated(Object userCreated) {
+  public void setUserCreated(String userCreated) {
     this.userCreated = userCreated;
   }
 
-  public LLMGeneratedResource dateModified(Object dateModified) {
+  public LLMGeneratedResource dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -143,15 +144,15 @@ public class LLMGeneratedResource {
    * @return dateModified
   **/
   @Schema(description = "")
-  public Object getDateModified() {
+  public Date getDateModified() {
     return dateModified;
   }
 
-  public void setDateModified(Object dateModified) {
+  public void setDateModified(Date dateModified) {
     this.dateModified = dateModified;
   }
 
-  public LLMGeneratedResource dateCreated(Object dateCreated) {
+  public LLMGeneratedResource dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -161,15 +162,15 @@ public class LLMGeneratedResource {
    * @return dateCreated
   **/
   @Schema(description = "")
-  public Object getDateCreated() {
+  public Date getDateCreated() {
     return dateCreated;
   }
 
-  public void setDateCreated(Object dateCreated) {
+  public void setDateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
   }
 
-  public LLMGeneratedResource fileName(Object fileName) {
+  public LLMGeneratedResource fileName(String fileName) {
     this.fileName = fileName;
     return this;
   }
@@ -179,15 +180,15 @@ public class LLMGeneratedResource {
    * @return fileName
   **/
   @Schema(required = true, description = "")
-  public Object getFileName() {
+  public String getFileName() {
     return fileName;
   }
 
-  public void setFileName(Object fileName) {
+  public void setFileName(String fileName) {
     this.fileName = fileName;
   }
 
-  public LLMGeneratedResource extension(Object extension) {
+  public LLMGeneratedResource extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -197,15 +198,15 @@ public class LLMGeneratedResource {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public LLMGeneratedResource contentType(Object contentType) {
+  public LLMGeneratedResource contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -215,15 +216,15 @@ public class LLMGeneratedResource {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public LLMGeneratedResource fileSize(Object fileSize) {
+  public LLMGeneratedResource fileSize(Long fileSize) {
     this.fileSize = fileSize;
     return this;
   }
@@ -233,15 +234,15 @@ public class LLMGeneratedResource {
    * @return fileSize
   **/
   @Schema(description = "")
-  public Object getFileSize() {
+  public Long getFileSize() {
     return fileSize;
   }
 
-  public void setFileSize(Object fileSize) {
+  public void setFileSize(Long fileSize) {
     this.fileSize = fileSize;
   }
 
-  public LLMGeneratedResource tokensCount(Object tokensCount) {
+  public LLMGeneratedResource tokensCount(Long tokensCount) {
     this.tokensCount = tokensCount;
     return this;
   }
@@ -251,15 +252,15 @@ public class LLMGeneratedResource {
    * @return tokensCount
   **/
   @Schema(description = "")
-  public Object getTokensCount() {
+  public Long getTokensCount() {
     return tokensCount;
   }
 
-  public void setTokensCount(Object tokensCount) {
+  public void setTokensCount(Long tokensCount) {
     this.tokensCount = tokensCount;
   }
 
-  public LLMGeneratedResource userContextCode(Object userContextCode) {
+  public LLMGeneratedResource userContextCode(String userContextCode) {
     this.userContextCode = userContextCode;
     return this;
   }
@@ -269,11 +270,11 @@ public class LLMGeneratedResource {
    * @return userContextCode
   **/
   @Schema(required = true, description = "")
-  public Object getUserContextCode() {
+  public String getUserContextCode() {
     return userContextCode;
   }
 
-  public void setUserContextCode(Object userContextCode) {
+  public void setUserContextCode(String userContextCode) {
     this.userContextCode = userContextCode;
   }
 

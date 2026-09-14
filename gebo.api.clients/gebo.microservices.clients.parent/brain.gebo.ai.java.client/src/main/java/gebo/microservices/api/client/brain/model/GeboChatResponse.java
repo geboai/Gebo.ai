@@ -17,71 +17,80 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.AdditionalContent;
+import gebo.microservices.api.client.brain.model.CalledFunction;
 import gebo.microservices.api.client.brain.model.ChatModelRequestContextWindowStats;
+import gebo.microservices.api.client.brain.model.GResponseDocumentRef;
+import gebo.microservices.api.client.brain.model.GUserMessage;
 import gebo.microservices.api.client.brain.model.GeboWorkingMemoryWindowOccupation;
+import gebo.microservices.api.client.brain.model.LLMGeneratedResource;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GeboChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GeboChatResponse {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("userChatContextCode")
-  private Object userChatContextCode = null;
+  private String userChatContextCode = null;
 
   @JsonProperty("usedChatModelCode")
-  private Object usedChatModelCode = null;
+  private String usedChatModelCode = null;
 
   @JsonProperty("usedChatModelProvider")
-  private Object usedChatModelProvider = null;
+  private String usedChatModelProvider = null;
 
   @JsonProperty("queryResponse")
-  private Object queryResponse = null;
+  private String queryResponse = null;
 
   @JsonProperty("windowOccupation")
   private GeboWorkingMemoryWindowOccupation windowOccupation = null;
 
   @JsonProperty("query")
-  private Object query = null;
+  private String query = null;
 
   @JsonProperty("thinkingOutputs")
-  private Object thinkingOutputs = null;
+  private List<String> thinkingOutputs = null;
 
   @JsonProperty("backendMessages")
-  private Object backendMessages = null;
+  private List<GUserMessage> backendMessages = null;
 
   @JsonProperty("forcedDocumentsRef")
-  private Object forcedDocumentsRef = null;
+  private List<GResponseDocumentRef> forcedDocumentsRef = null;
 
   @JsonProperty("documentsRef")
-  private Object documentsRef = null;
+  private List<GResponseDocumentRef> documentsRef = null;
 
   @JsonProperty("calledFunctions")
-  private Object calledFunctions = null;
+  private List<CalledFunction> calledFunctions = null;
 
   @JsonProperty("contextWindowStats")
   private ChatModelRequestContextWindowStats contextWindowStats = null;
 
   @JsonProperty("generatedResources")
-  private Object generatedResources = null;
+  private List<LLMGeneratedResource> generatedResources = null;
 
   @JsonProperty("pipelineRouterDecisionCode")
-  private Object pipelineRouterDecisionCode = null;
+  private String pipelineRouterDecisionCode = null;
 
   @JsonProperty("pipelineParams")
-  private Object pipelineParams = null;
+  private Map<String, Object> pipelineParams = null;
 
   @JsonProperty("deepSearchRequestId")
-  private Object deepSearchRequestId = null;
+  private String deepSearchRequestId = null;
 
   @JsonProperty("additionalContents")
-  private Object additionalContents = null;
+  private List<AdditionalContent> additionalContents = null;
 
-  public GeboChatResponse id(Object id) {
+  public GeboChatResponse id(String id) {
     this.id = id;
     return this;
   }
@@ -91,15 +100,15 @@ public class GeboChatResponse {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public GeboChatResponse userChatContextCode(Object userChatContextCode) {
+  public GeboChatResponse userChatContextCode(String userChatContextCode) {
     this.userChatContextCode = userChatContextCode;
     return this;
   }
@@ -109,15 +118,15 @@ public class GeboChatResponse {
    * @return userChatContextCode
   **/
   @Schema(description = "")
-  public Object getUserChatContextCode() {
+  public String getUserChatContextCode() {
     return userChatContextCode;
   }
 
-  public void setUserChatContextCode(Object userChatContextCode) {
+  public void setUserChatContextCode(String userChatContextCode) {
     this.userChatContextCode = userChatContextCode;
   }
 
-  public GeboChatResponse usedChatModelCode(Object usedChatModelCode) {
+  public GeboChatResponse usedChatModelCode(String usedChatModelCode) {
     this.usedChatModelCode = usedChatModelCode;
     return this;
   }
@@ -127,15 +136,15 @@ public class GeboChatResponse {
    * @return usedChatModelCode
   **/
   @Schema(description = "")
-  public Object getUsedChatModelCode() {
+  public String getUsedChatModelCode() {
     return usedChatModelCode;
   }
 
-  public void setUsedChatModelCode(Object usedChatModelCode) {
+  public void setUsedChatModelCode(String usedChatModelCode) {
     this.usedChatModelCode = usedChatModelCode;
   }
 
-  public GeboChatResponse usedChatModelProvider(Object usedChatModelProvider) {
+  public GeboChatResponse usedChatModelProvider(String usedChatModelProvider) {
     this.usedChatModelProvider = usedChatModelProvider;
     return this;
   }
@@ -145,15 +154,15 @@ public class GeboChatResponse {
    * @return usedChatModelProvider
   **/
   @Schema(description = "")
-  public Object getUsedChatModelProvider() {
+  public String getUsedChatModelProvider() {
     return usedChatModelProvider;
   }
 
-  public void setUsedChatModelProvider(Object usedChatModelProvider) {
+  public void setUsedChatModelProvider(String usedChatModelProvider) {
     this.usedChatModelProvider = usedChatModelProvider;
   }
 
-  public GeboChatResponse queryResponse(Object queryResponse) {
+  public GeboChatResponse queryResponse(String queryResponse) {
     this.queryResponse = queryResponse;
     return this;
   }
@@ -163,11 +172,11 @@ public class GeboChatResponse {
    * @return queryResponse
   **/
   @Schema(description = "")
-  public Object getQueryResponse() {
+  public String getQueryResponse() {
     return queryResponse;
   }
 
-  public void setQueryResponse(Object queryResponse) {
+  public void setQueryResponse(String queryResponse) {
     this.queryResponse = queryResponse;
   }
 
@@ -189,7 +198,7 @@ public class GeboChatResponse {
     this.windowOccupation = windowOccupation;
   }
 
-  public GeboChatResponse query(Object query) {
+  public GeboChatResponse query(String query) {
     this.query = query;
     return this;
   }
@@ -199,16 +208,24 @@ public class GeboChatResponse {
    * @return query
   **/
   @Schema(description = "")
-  public Object getQuery() {
+  public String getQuery() {
     return query;
   }
 
-  public void setQuery(Object query) {
+  public void setQuery(String query) {
     this.query = query;
   }
 
-  public GeboChatResponse thinkingOutputs(Object thinkingOutputs) {
+  public GeboChatResponse thinkingOutputs(List<String> thinkingOutputs) {
     this.thinkingOutputs = thinkingOutputs;
+    return this;
+  }
+
+  public GeboChatResponse addThinkingOutputsItem(String thinkingOutputsItem) {
+    if (this.thinkingOutputs == null) {
+      this.thinkingOutputs = new ArrayList<>();
+    }
+    this.thinkingOutputs.add(thinkingOutputsItem);
     return this;
   }
 
@@ -217,16 +234,24 @@ public class GeboChatResponse {
    * @return thinkingOutputs
   **/
   @Schema(description = "")
-  public Object getThinkingOutputs() {
+  public List<String> getThinkingOutputs() {
     return thinkingOutputs;
   }
 
-  public void setThinkingOutputs(Object thinkingOutputs) {
+  public void setThinkingOutputs(List<String> thinkingOutputs) {
     this.thinkingOutputs = thinkingOutputs;
   }
 
-  public GeboChatResponse backendMessages(Object backendMessages) {
+  public GeboChatResponse backendMessages(List<GUserMessage> backendMessages) {
     this.backendMessages = backendMessages;
+    return this;
+  }
+
+  public GeboChatResponse addBackendMessagesItem(GUserMessage backendMessagesItem) {
+    if (this.backendMessages == null) {
+      this.backendMessages = new ArrayList<>();
+    }
+    this.backendMessages.add(backendMessagesItem);
     return this;
   }
 
@@ -235,16 +260,24 @@ public class GeboChatResponse {
    * @return backendMessages
   **/
   @Schema(description = "")
-  public Object getBackendMessages() {
+  public List<GUserMessage> getBackendMessages() {
     return backendMessages;
   }
 
-  public void setBackendMessages(Object backendMessages) {
+  public void setBackendMessages(List<GUserMessage> backendMessages) {
     this.backendMessages = backendMessages;
   }
 
-  public GeboChatResponse forcedDocumentsRef(Object forcedDocumentsRef) {
+  public GeboChatResponse forcedDocumentsRef(List<GResponseDocumentRef> forcedDocumentsRef) {
     this.forcedDocumentsRef = forcedDocumentsRef;
+    return this;
+  }
+
+  public GeboChatResponse addForcedDocumentsRefItem(GResponseDocumentRef forcedDocumentsRefItem) {
+    if (this.forcedDocumentsRef == null) {
+      this.forcedDocumentsRef = new ArrayList<>();
+    }
+    this.forcedDocumentsRef.add(forcedDocumentsRefItem);
     return this;
   }
 
@@ -253,16 +286,24 @@ public class GeboChatResponse {
    * @return forcedDocumentsRef
   **/
   @Schema(description = "")
-  public Object getForcedDocumentsRef() {
+  public List<GResponseDocumentRef> getForcedDocumentsRef() {
     return forcedDocumentsRef;
   }
 
-  public void setForcedDocumentsRef(Object forcedDocumentsRef) {
+  public void setForcedDocumentsRef(List<GResponseDocumentRef> forcedDocumentsRef) {
     this.forcedDocumentsRef = forcedDocumentsRef;
   }
 
-  public GeboChatResponse documentsRef(Object documentsRef) {
+  public GeboChatResponse documentsRef(List<GResponseDocumentRef> documentsRef) {
     this.documentsRef = documentsRef;
+    return this;
+  }
+
+  public GeboChatResponse addDocumentsRefItem(GResponseDocumentRef documentsRefItem) {
+    if (this.documentsRef == null) {
+      this.documentsRef = new ArrayList<>();
+    }
+    this.documentsRef.add(documentsRefItem);
     return this;
   }
 
@@ -271,16 +312,24 @@ public class GeboChatResponse {
    * @return documentsRef
   **/
   @Schema(description = "")
-  public Object getDocumentsRef() {
+  public List<GResponseDocumentRef> getDocumentsRef() {
     return documentsRef;
   }
 
-  public void setDocumentsRef(Object documentsRef) {
+  public void setDocumentsRef(List<GResponseDocumentRef> documentsRef) {
     this.documentsRef = documentsRef;
   }
 
-  public GeboChatResponse calledFunctions(Object calledFunctions) {
+  public GeboChatResponse calledFunctions(List<CalledFunction> calledFunctions) {
     this.calledFunctions = calledFunctions;
+    return this;
+  }
+
+  public GeboChatResponse addCalledFunctionsItem(CalledFunction calledFunctionsItem) {
+    if (this.calledFunctions == null) {
+      this.calledFunctions = new ArrayList<>();
+    }
+    this.calledFunctions.add(calledFunctionsItem);
     return this;
   }
 
@@ -289,11 +338,11 @@ public class GeboChatResponse {
    * @return calledFunctions
   **/
   @Schema(description = "")
-  public Object getCalledFunctions() {
+  public List<CalledFunction> getCalledFunctions() {
     return calledFunctions;
   }
 
-  public void setCalledFunctions(Object calledFunctions) {
+  public void setCalledFunctions(List<CalledFunction> calledFunctions) {
     this.calledFunctions = calledFunctions;
   }
 
@@ -315,8 +364,16 @@ public class GeboChatResponse {
     this.contextWindowStats = contextWindowStats;
   }
 
-  public GeboChatResponse generatedResources(Object generatedResources) {
+  public GeboChatResponse generatedResources(List<LLMGeneratedResource> generatedResources) {
     this.generatedResources = generatedResources;
+    return this;
+  }
+
+  public GeboChatResponse addGeneratedResourcesItem(LLMGeneratedResource generatedResourcesItem) {
+    if (this.generatedResources == null) {
+      this.generatedResources = new ArrayList<>();
+    }
+    this.generatedResources.add(generatedResourcesItem);
     return this;
   }
 
@@ -325,15 +382,15 @@ public class GeboChatResponse {
    * @return generatedResources
   **/
   @Schema(description = "")
-  public Object getGeneratedResources() {
+  public List<LLMGeneratedResource> getGeneratedResources() {
     return generatedResources;
   }
 
-  public void setGeneratedResources(Object generatedResources) {
+  public void setGeneratedResources(List<LLMGeneratedResource> generatedResources) {
     this.generatedResources = generatedResources;
   }
 
-  public GeboChatResponse pipelineRouterDecisionCode(Object pipelineRouterDecisionCode) {
+  public GeboChatResponse pipelineRouterDecisionCode(String pipelineRouterDecisionCode) {
     this.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
     return this;
   }
@@ -343,16 +400,24 @@ public class GeboChatResponse {
    * @return pipelineRouterDecisionCode
   **/
   @Schema(description = "")
-  public Object getPipelineRouterDecisionCode() {
+  public String getPipelineRouterDecisionCode() {
     return pipelineRouterDecisionCode;
   }
 
-  public void setPipelineRouterDecisionCode(Object pipelineRouterDecisionCode) {
+  public void setPipelineRouterDecisionCode(String pipelineRouterDecisionCode) {
     this.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
   }
 
-  public GeboChatResponse pipelineParams(Object pipelineParams) {
+  public GeboChatResponse pipelineParams(Map<String, Object> pipelineParams) {
     this.pipelineParams = pipelineParams;
+    return this;
+  }
+
+  public GeboChatResponse putPipelineParamsItem(String key, Object pipelineParamsItem) {
+    if (this.pipelineParams == null) {
+      this.pipelineParams = new HashMap<>();
+    }
+    this.pipelineParams.put(key, pipelineParamsItem);
     return this;
   }
 
@@ -361,15 +426,15 @@ public class GeboChatResponse {
    * @return pipelineParams
   **/
   @Schema(description = "")
-  public Object getPipelineParams() {
+  public Map<String, Object> getPipelineParams() {
     return pipelineParams;
   }
 
-  public void setPipelineParams(Object pipelineParams) {
+  public void setPipelineParams(Map<String, Object> pipelineParams) {
     this.pipelineParams = pipelineParams;
   }
 
-  public GeboChatResponse deepSearchRequestId(Object deepSearchRequestId) {
+  public GeboChatResponse deepSearchRequestId(String deepSearchRequestId) {
     this.deepSearchRequestId = deepSearchRequestId;
     return this;
   }
@@ -379,16 +444,24 @@ public class GeboChatResponse {
    * @return deepSearchRequestId
   **/
   @Schema(description = "")
-  public Object getDeepSearchRequestId() {
+  public String getDeepSearchRequestId() {
     return deepSearchRequestId;
   }
 
-  public void setDeepSearchRequestId(Object deepSearchRequestId) {
+  public void setDeepSearchRequestId(String deepSearchRequestId) {
     this.deepSearchRequestId = deepSearchRequestId;
   }
 
-  public GeboChatResponse additionalContents(Object additionalContents) {
+  public GeboChatResponse additionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
+    return this;
+  }
+
+  public GeboChatResponse addAdditionalContentsItem(AdditionalContent additionalContentsItem) {
+    if (this.additionalContents == null) {
+      this.additionalContents = new ArrayList<>();
+    }
+    this.additionalContents.add(additionalContentsItem);
     return this;
   }
 
@@ -397,11 +470,11 @@ public class GeboChatResponse {
    * @return additionalContents
   **/
   @Schema(description = "")
-  public Object getAdditionalContents() {
+  public List<AdditionalContent> getAdditionalContents() {
     return additionalContents;
   }
 
-  public void setAdditionalContents(Object additionalContents) {
+  public void setAdditionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
   }
 

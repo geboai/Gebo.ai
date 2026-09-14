@@ -12,16 +12,39 @@
 import { GeboComponentInfo } from './geboComponentInfo';
 
 export interface DataEndpoint { 
-    id: any;
-    description: any;
-    product: any;
-    endpoint: any;
-    input?: any;
-    output?: any;
-    types: any;
-    locality?: any;
-    secretReference?: any;
-    personalData?: any;
-    retention?: any;
+    id: string;
+    description: string;
+    product: string;
+    endpoint: string;
+    input?: boolean;
+    output?: boolean;
+    types: Array<DataEndpoint.TypesEnum>;
+    locality?: DataEndpoint.LocalityEnum;
+    secretReference?: string;
+    personalData?: boolean;
+    retention?: string;
     disposer?: GeboComponentInfo;
+}
+export namespace DataEndpoint {
+    export type TypesEnum = 'DOCUMENTS' | 'DATABASE' | 'VECTORIAL_DATABASE' | 'GRAPH_DATABASE' | 'CHUNK' | 'FULLTEXT_INDEX' | 'LLM_ENDPOINT' | 'OBJECT_STORAGE' | 'MESSAGE_BROKER' | 'WEB_SEARCH' | 'LOCAL_FILESYSTEM' | 'CHAT_SESSION';
+    export const TypesEnum = {
+        DOCUMENTS: 'DOCUMENTS' as TypesEnum,
+        DATABASE: 'DATABASE' as TypesEnum,
+        VECTORIALDATABASE: 'VECTORIAL_DATABASE' as TypesEnum,
+        GRAPHDATABASE: 'GRAPH_DATABASE' as TypesEnum,
+        CHUNK: 'CHUNK' as TypesEnum,
+        FULLTEXTINDEX: 'FULLTEXT_INDEX' as TypesEnum,
+        LLMENDPOINT: 'LLM_ENDPOINT' as TypesEnum,
+        OBJECTSTORAGE: 'OBJECT_STORAGE' as TypesEnum,
+        MESSAGEBROKER: 'MESSAGE_BROKER' as TypesEnum,
+        WEBSEARCH: 'WEB_SEARCH' as TypesEnum,
+        LOCALFILESYSTEM: 'LOCAL_FILESYSTEM' as TypesEnum,
+        CHATSESSION: 'CHAT_SESSION' as TypesEnum
+    };
+    export type LocalityEnum = 'LOCAL_DEPLOYMENT' | 'SAME_NETWORK' | 'EXTERNAL_PROVIDER';
+    export const LocalityEnum = {
+        LOCALDEPLOYMENT: 'LOCAL_DEPLOYMENT' as LocalityEnum,
+        SAMENETWORK: 'SAME_NETWORK' as LocalityEnum,
+        EXTERNALPROVIDER: 'EXTERNAL_PROVIDER' as LocalityEnum
+    };
 }

@@ -13,7 +13,7 @@ import { IGComponentOriginatedDocument } from './iGComponentOriginatedDocument';
 
 export interface GetNextChunkSetRequest { 
     document?: IGComponentOriginatedDocument;
-    chunkRequestId?: any;
-    nextChunkId?: any;
-    chunkSessionId?: any;
+    chunkRequestId?: string;
+    nextChunkId?: string;
+    chunkSessionId?: string;
 }

@@ -55,7 +55,7 @@ public class GraphRagConfigurationControllerApiTest {
      */
     @Test
     public void findGraphRagExtractionConfigByCodeTest() {
-        Object code = null;
+        String code = null;
         GraphRagExtractionConfig response = api.findGraphRagExtractionConfigByCode(code);
 
         // TODO: test validations
@@ -70,8 +70,8 @@ public class GraphRagConfigurationControllerApiTest {
      */
     @Test
     public void findGraphRagExtractionConfigByKnowledgeBaseTest() {
-        Object knowledgeBaseCode = null;
-        Object response = api.findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode);
+        String knowledgeBaseCode = null;
+        List<GraphRagExtractionConfig> response = api.findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode);
 
         // TODO: test validations
     }
@@ -85,9 +85,9 @@ public class GraphRagConfigurationControllerApiTest {
      */
     @Test
     public void findGraphRagExtractionConfigByKnowledgeBaseAndProjectCodeTest() {
-        Object knowledgeBaseCode = null;
-        Object projectCode = null;
-        Object response = api.findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode, projectCode);
+        String knowledgeBaseCode = null;
+        String projectCode = null;
+        List<GraphRagExtractionConfig> response = api.findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode, projectCode);
 
         // TODO: test validations
     }
@@ -102,7 +102,7 @@ public class GraphRagConfigurationControllerApiTest {
     @Test
     public void findGraphRagExtractionConfigByProjectEndpointGObjectRefTest() {
         GObjectRefGProjectEndpoint body = null;
-        Object response = api.findGraphRagExtractionConfigByProjectEndpointGObjectRef(body);
+        List<GraphRagExtractionConfig> response = api.findGraphRagExtractionConfigByProjectEndpointGObjectRef(body);
 
         // TODO: test validations
     }
@@ -116,7 +116,7 @@ public class GraphRagConfigurationControllerApiTest {
      */
     @Test
     public void getDefaultGraphRagExtractionConfigTest() {
-        Object response = api.getDefaultGraphRagExtractionConfig();
+        List<GraphRagExtractionConfig> response = api.getDefaultGraphRagExtractionConfig();
 
         // TODO: test validations
     }
@@ -130,7 +130,7 @@ public class GraphRagConfigurationControllerApiTest {
      */
     @Test
     public void getSystemGraphRagExtractionConfigTest() {
-        Object format = null;
+        String format = null;
         GraphRagExtractionConfig response = api.getSystemGraphRagExtractionConfig(format);
 
         // TODO: test validations

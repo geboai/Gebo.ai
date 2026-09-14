@@ -22,14 +22,35 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboUsernamePasswordContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T09:01:39.494209200+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-13T23:13:37.296282143+02:00[Europe/Rome]")
 
 public class GeboUsernamePasswordContent {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
   @JsonProperty("username")
   private String username = null;
 
   @JsonProperty("password")
   private String password = null;
+
+  public GeboUsernamePasswordContent readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 
   public GeboUsernamePasswordContent username(String username) {
     this.username = username;
@@ -77,13 +98,14 @@ public class GeboUsernamePasswordContent {
       return false;
     }
     GeboUsernamePasswordContent geboUsernamePasswordContent = (GeboUsernamePasswordContent) o;
-    return Objects.equals(this.username, geboUsernamePasswordContent.username) &&
+    return Objects.equals(this.readOnly, geboUsernamePasswordContent.readOnly) &&
+        Objects.equals(this.username, geboUsernamePasswordContent.username) &&
         Objects.equals(this.password, geboUsernamePasswordContent.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, password);
+    return Objects.hash(readOnly, username, password);
   }
 
 
@@ -92,6 +114,7 @@ public class GeboUsernamePasswordContent {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboUsernamePasswordContent {\n");
     
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");

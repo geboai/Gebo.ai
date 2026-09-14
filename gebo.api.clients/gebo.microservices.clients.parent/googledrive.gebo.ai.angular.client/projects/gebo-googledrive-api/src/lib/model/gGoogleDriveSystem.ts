@@ -11,19 +11,28 @@
  */
 
 export interface GGoogleDriveSystem { 
-    code?: any;
-    description?: any;
-    userModified?: any;
-    userCreated?: any;
-    dateModified?: any;
-    dateCreated?: any;
-    creationDate?: any;
-    modificationDate?: any;
-    version?: any;
-    contentManagementSystemType?: any;
-    readonly?: any;
-    baseUri?: any;
-    usedCapabilities?: any;
-    aclAliases?: any;
-    driveAccessSecret?: any;
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    contentManagementSystemType?: string;
+    readonly?: boolean;
+    baseUri?: string;
+    usedCapabilities?: Array<GGoogleDriveSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
+    driveAccessSecret?: string;
+}
+export namespace GGoogleDriveSystem {
+    export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';
+    export const UsedCapabilitiesEnum = {
+        TICKETSMANAGEMENT: 'TICKETS_MANAGEMENT' as UsedCapabilitiesEnum,
+        DOCUMENTSMANAGEMENT: 'DOCUMENTS_MANAGEMENT' as UsedCapabilitiesEnum,
+        SOURCEMANAGEMENT: 'SOURCE_MANAGEMENT' as UsedCapabilitiesEnum,
+        ARTIFACTSREPOSITORYMANAGEMENT: 'ARTIFACTS_REPOSITORY_MANAGEMENT' as UsedCapabilitiesEnum
+    };
 }

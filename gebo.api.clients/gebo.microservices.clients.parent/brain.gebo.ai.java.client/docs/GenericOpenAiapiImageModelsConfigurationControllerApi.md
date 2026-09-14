@@ -69,7 +69,7 @@ No authorization required
 
 
 GenericOpenAiapiImageModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiImageModelsConfigurationControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GenericOpenAIAPIImageModelConfig result = apiInstance.findGenericOpenAIAPIImageModelConfigByCode(code);
     System.out.println(result);
@@ -83,7 +83,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -143,7 +143,7 @@ No authorization required
 
 <a name="getGenericOpenAIImageModelConfigs"></a>
 # **getGenericOpenAIImageModelConfigs**
-> Object getGenericOpenAIImageModelConfigs()
+> List&lt;GenericOpenAIAPIImageModelConfig&gt; getGenericOpenAIImageModelConfigs()
 
 
 
@@ -156,7 +156,7 @@ No authorization required
 
 GenericOpenAiapiImageModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiImageModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAIImageModelConfigs();
+    List<GenericOpenAIAPIImageModelConfig> result = apiInstance.getGenericOpenAIImageModelConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiImageModelsConfigurationControllerApi#getGenericOpenAIImageModelConfigs");
@@ -169,7 +169,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIAPIImageModelConfig&gt;**](GenericOpenAIAPIImageModelConfig.md)
 
 ### Authorization
 
@@ -182,7 +182,7 @@ No authorization required
 
 <a name="getGenericOpenAIImageModelTypes"></a>
 # **getGenericOpenAIImageModelTypes**
-> Object getGenericOpenAIImageModelTypes()
+> List&lt;GenericOpenAIImageModelTypeConfig&gt; getGenericOpenAIImageModelTypes()
 
 
 
@@ -195,7 +195,7 @@ No authorization required
 
 GenericOpenAiapiImageModelsConfigurationControllerApi apiInstance = new GenericOpenAiapiImageModelsConfigurationControllerApi();
 try {
-    Object result = apiInstance.getGenericOpenAIImageModelTypes();
+    List<GenericOpenAIImageModelTypeConfig> result = apiInstance.getGenericOpenAIImageModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GenericOpenAiapiImageModelsConfigurationControllerApi#getGenericOpenAIImageModelTypes");
@@ -208,7 +208,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GenericOpenAIImageModelTypeConfig&gt;**](GenericOpenAIImageModelTypeConfig.md)
 
 ### Authorization
 

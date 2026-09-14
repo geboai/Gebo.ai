@@ -11,5 +11,5 @@
  */
 
 export interface ComponentSetupStatus { 
-    isSetup?: any;
+    isSetup?: boolean;
 }

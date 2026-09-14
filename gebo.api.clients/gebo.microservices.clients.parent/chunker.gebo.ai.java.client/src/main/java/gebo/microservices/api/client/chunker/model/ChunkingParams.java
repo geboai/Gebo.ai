@@ -17,42 +17,77 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.chunker.model.AbstractChunkingSpecs;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ChunkingParams
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class ChunkingParams {
-  @JsonProperty("chunkingPolicy")
-  private Object chunkingPolicy = null;
+  /**
+   * Gets or Sets chunkingPolicy
+   */
+  public enum ChunkingPolicyEnum {
+    SPLIT_CHUNKS("SPLIT_CHUNKS"),
+    ONLY_MATCHING_CHUNKS("ONLY_MATCHING_CHUNKS"),
+    MATCHING_CHUNKS_AFTER_THREASHOLD("MATCHING_CHUNKS_AFTER_THREASHOLD");
+
+    private String value;
+
+    ChunkingPolicyEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ChunkingPolicyEnum fromValue(String input) {
+      for (ChunkingPolicyEnum b : ChunkingPolicyEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("chunkingPolicy")
+  private ChunkingPolicyEnum chunkingPolicy = null;
 
   @JsonProperty("tokensThreashold")
-  private Object tokensThreashold = null;
+  private Integer tokensThreashold = null;
 
   @JsonProperty("keywordHits")
-  private Object keywordHits = null;
+  private Integer keywordHits = null;
 
   @JsonProperty("matchingKeywords")
-  private Object matchingKeywords = null;
+  private List<String> matchingKeywords = null;
 
   @JsonProperty("chunkingSpecs")
-  private Object chunkingSpecs = null;
+  private List<AbstractChunkingSpecs> chunkingSpecs = null;
 
   @JsonProperty("enrichWithMetaData")
-  private Object enrichWithMetaData = null;
+  private Boolean enrichWithMetaData = null;
 
   @JsonProperty("tokensPerChunkSet")
-  private Object tokensPerChunkSet = null;
+  private Long tokensPerChunkSet = null;
 
   @JsonProperty("sampledTokens")
-  private Object sampledTokens = null;
+  private Long sampledTokens = null;
 
   @JsonProperty("samplingMode")
-  private Object samplingMode = null;
+  private Boolean samplingMode = null;
 
-  public ChunkingParams chunkingPolicy(Object chunkingPolicy) {
+  public ChunkingParams chunkingPolicy(ChunkingPolicyEnum chunkingPolicy) {
     this.chunkingPolicy = chunkingPolicy;
     return this;
   }
@@ -62,15 +97,15 @@ public class ChunkingParams {
    * @return chunkingPolicy
   **/
   @Schema(description = "")
-  public Object getChunkingPolicy() {
+  public ChunkingPolicyEnum getChunkingPolicy() {
     return chunkingPolicy;
   }
 
-  public void setChunkingPolicy(Object chunkingPolicy) {
+  public void setChunkingPolicy(ChunkingPolicyEnum chunkingPolicy) {
     this.chunkingPolicy = chunkingPolicy;
   }
 
-  public ChunkingParams tokensThreashold(Object tokensThreashold) {
+  public ChunkingParams tokensThreashold(Integer tokensThreashold) {
     this.tokensThreashold = tokensThreashold;
     return this;
   }
@@ -80,15 +115,15 @@ public class ChunkingParams {
    * @return tokensThreashold
   **/
   @Schema(description = "")
-  public Object getTokensThreashold() {
+  public Integer getTokensThreashold() {
     return tokensThreashold;
   }
 
-  public void setTokensThreashold(Object tokensThreashold) {
+  public void setTokensThreashold(Integer tokensThreashold) {
     this.tokensThreashold = tokensThreashold;
   }
 
-  public ChunkingParams keywordHits(Object keywordHits) {
+  public ChunkingParams keywordHits(Integer keywordHits) {
     this.keywordHits = keywordHits;
     return this;
   }
@@ -98,16 +133,24 @@ public class ChunkingParams {
    * @return keywordHits
   **/
   @Schema(description = "")
-  public Object getKeywordHits() {
+  public Integer getKeywordHits() {
     return keywordHits;
   }
 
-  public void setKeywordHits(Object keywordHits) {
+  public void setKeywordHits(Integer keywordHits) {
     this.keywordHits = keywordHits;
   }
 
-  public ChunkingParams matchingKeywords(Object matchingKeywords) {
+  public ChunkingParams matchingKeywords(List<String> matchingKeywords) {
     this.matchingKeywords = matchingKeywords;
+    return this;
+  }
+
+  public ChunkingParams addMatchingKeywordsItem(String matchingKeywordsItem) {
+    if (this.matchingKeywords == null) {
+      this.matchingKeywords = new ArrayList<>();
+    }
+    this.matchingKeywords.add(matchingKeywordsItem);
     return this;
   }
 
@@ -116,16 +159,24 @@ public class ChunkingParams {
    * @return matchingKeywords
   **/
   @Schema(description = "")
-  public Object getMatchingKeywords() {
+  public List<String> getMatchingKeywords() {
     return matchingKeywords;
   }
 
-  public void setMatchingKeywords(Object matchingKeywords) {
+  public void setMatchingKeywords(List<String> matchingKeywords) {
     this.matchingKeywords = matchingKeywords;
   }
 
-  public ChunkingParams chunkingSpecs(Object chunkingSpecs) {
+  public ChunkingParams chunkingSpecs(List<AbstractChunkingSpecs> chunkingSpecs) {
     this.chunkingSpecs = chunkingSpecs;
+    return this;
+  }
+
+  public ChunkingParams addChunkingSpecsItem(AbstractChunkingSpecs chunkingSpecsItem) {
+    if (this.chunkingSpecs == null) {
+      this.chunkingSpecs = new ArrayList<>();
+    }
+    this.chunkingSpecs.add(chunkingSpecsItem);
     return this;
   }
 
@@ -134,15 +185,15 @@ public class ChunkingParams {
    * @return chunkingSpecs
   **/
   @Schema(description = "")
-  public Object getChunkingSpecs() {
+  public List<AbstractChunkingSpecs> getChunkingSpecs() {
     return chunkingSpecs;
   }
 
-  public void setChunkingSpecs(Object chunkingSpecs) {
+  public void setChunkingSpecs(List<AbstractChunkingSpecs> chunkingSpecs) {
     this.chunkingSpecs = chunkingSpecs;
   }
 
-  public ChunkingParams enrichWithMetaData(Object enrichWithMetaData) {
+  public ChunkingParams enrichWithMetaData(Boolean enrichWithMetaData) {
     this.enrichWithMetaData = enrichWithMetaData;
     return this;
   }
@@ -152,15 +203,15 @@ public class ChunkingParams {
    * @return enrichWithMetaData
   **/
   @Schema(description = "")
-  public Object getEnrichWithMetaData() {
+  public Boolean isEnrichWithMetaData() {
     return enrichWithMetaData;
   }
 
-  public void setEnrichWithMetaData(Object enrichWithMetaData) {
+  public void setEnrichWithMetaData(Boolean enrichWithMetaData) {
     this.enrichWithMetaData = enrichWithMetaData;
   }
 
-  public ChunkingParams tokensPerChunkSet(Object tokensPerChunkSet) {
+  public ChunkingParams tokensPerChunkSet(Long tokensPerChunkSet) {
     this.tokensPerChunkSet = tokensPerChunkSet;
     return this;
   }
@@ -170,15 +221,15 @@ public class ChunkingParams {
    * @return tokensPerChunkSet
   **/
   @Schema(description = "")
-  public Object getTokensPerChunkSet() {
+  public Long getTokensPerChunkSet() {
     return tokensPerChunkSet;
   }
 
-  public void setTokensPerChunkSet(Object tokensPerChunkSet) {
+  public void setTokensPerChunkSet(Long tokensPerChunkSet) {
     this.tokensPerChunkSet = tokensPerChunkSet;
   }
 
-  public ChunkingParams sampledTokens(Object sampledTokens) {
+  public ChunkingParams sampledTokens(Long sampledTokens) {
     this.sampledTokens = sampledTokens;
     return this;
   }
@@ -188,15 +239,15 @@ public class ChunkingParams {
    * @return sampledTokens
   **/
   @Schema(description = "")
-  public Object getSampledTokens() {
+  public Long getSampledTokens() {
     return sampledTokens;
   }
 
-  public void setSampledTokens(Object sampledTokens) {
+  public void setSampledTokens(Long sampledTokens) {
     this.sampledTokens = sampledTokens;
   }
 
-  public ChunkingParams samplingMode(Object samplingMode) {
+  public ChunkingParams samplingMode(Boolean samplingMode) {
     this.samplingMode = samplingMode;
     return this;
   }
@@ -206,11 +257,11 @@ public class ChunkingParams {
    * @return samplingMode
   **/
   @Schema(description = "")
-  public Object getSamplingMode() {
+  public Boolean isSamplingMode() {
     return samplingMode;
   }
 
-  public void setSamplingMode(Object samplingMode) {
+  public void setSamplingMode(Boolean samplingMode) {
     this.samplingMode = samplingMode;
   }
 

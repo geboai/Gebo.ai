@@ -13,14 +13,14 @@ import { DocumentChunksSet } from './documentChunksSet';
 import { GUserMessage } from './gUserMessage';
 
 export interface DocumentChunkingResponse { 
-    id?: any;
-    totalBytesSize?: any;
-    totalTokensSize?: any;
-    totalChunksNumber?: any;
+    id?: string;
+    totalBytesSize?: number;
+    totalTokensSize?: number;
+    totalChunksNumber?: number;
     currentChunkSet?: DocumentChunksSet;
-    nextChunkSetId?: any;
-    chunkingSessionId?: any;
-    empty?: any;
-    error?: any;
+    nextChunkSetId?: string;
+    chunkingSessionId?: string;
+    empty?: boolean;
+    error?: boolean;
     errorMessage?: GUserMessage;
 }

@@ -11,6 +11,14 @@
  */
 
 export interface GAclEntry { 
-    aclGrantedUniqueId?: any;
-    grant?: any;
+    aclGrantedUniqueId?: string;
+    grant?: GAclEntry.GrantEnum;
+}
+export namespace GAclEntry {
+    export type GrantEnum = 'READ' | 'WRITE' | 'EXECUTE';
+    export const GrantEnum = {
+        READ: 'READ' as GrantEnum,
+        WRITE: 'WRITE' as GrantEnum,
+        EXECUTE: 'EXECUTE' as GrantEnum
+    };
 }

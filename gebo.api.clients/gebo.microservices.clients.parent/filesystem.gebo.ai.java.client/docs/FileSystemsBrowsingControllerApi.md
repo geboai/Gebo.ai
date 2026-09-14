@@ -65,7 +65,7 @@ No authorization required
 
 
 FileSystemsBrowsingControllerApi apiInstance = new FileSystemsBrowsingControllerApi();
-Object body = null; // Object | 
+List<VFilesystemReference> body = Arrays.asList(new VFilesystemReference()); // List<VFilesystemReference> | 
 try {
     OperationStatusListVirtualFilesystemNavigationTreeStatus result = apiInstance.getSharedFilesystemNavigationStatus(body);
     System.out.println(result);
@@ -79,7 +79,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md)|  |
 
 ### Return type
 

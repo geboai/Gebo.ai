@@ -12,6 +12,8 @@
 
 package gebo.microservices.api.client.heimdall.api;
 
+import gebo.microservices.api.client.heimdall.model.AuthProviderDto;
+import gebo.microservices.api.client.heimdall.model.Oauth2ClientAuthorizativeInfo;
 import gebo.microservices.api.client.heimdall.model.Oauth2ClientConfig;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -39,7 +41,7 @@ public class AuthProvidersControllerApiTest {
      */
     @Test
     public void getProviderClientConfigTest() {
-        Object registrationId = null;
+        String registrationId = null;
         Oauth2ClientConfig response = api.getProviderClientConfig(registrationId);
 
         // TODO: test validations
@@ -54,7 +56,7 @@ public class AuthProvidersControllerApiTest {
      */
     @Test
     public void listAuthProvidersTest() {
-        Object response = api.listAuthProviders();
+        List<AuthProviderDto> response = api.listAuthProviders();
 
         // TODO: test validations
     }
@@ -68,7 +70,7 @@ public class AuthProvidersControllerApiTest {
      */
     @Test
     public void listAvailableProvidersConfigTest() {
-        Object response = api.listAvailableProvidersConfig();
+        List<Oauth2ClientAuthorizativeInfo> response = api.listAvailableProvidersConfig();
 
         // TODO: test validations
     }

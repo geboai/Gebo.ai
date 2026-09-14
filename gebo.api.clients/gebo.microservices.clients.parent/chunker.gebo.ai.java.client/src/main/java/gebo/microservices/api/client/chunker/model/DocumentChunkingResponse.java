@@ -24,40 +24,40 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DocumentChunkingResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:40:58.690837818+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.177969988+02:00[Europe/Rome]")
 
 public class DocumentChunkingResponse {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("totalBytesSize")
-  private Object totalBytesSize = null;
+  private Long totalBytesSize = null;
 
   @JsonProperty("totalTokensSize")
-  private Object totalTokensSize = null;
+  private Long totalTokensSize = null;
 
   @JsonProperty("totalChunksNumber")
-  private Object totalChunksNumber = null;
+  private Integer totalChunksNumber = null;
 
   @JsonProperty("currentChunkSet")
   private DocumentChunksSet currentChunkSet = null;
 
   @JsonProperty("nextChunkSetId")
-  private Object nextChunkSetId = null;
+  private String nextChunkSetId = null;
 
   @JsonProperty("chunkingSessionId")
-  private Object chunkingSessionId = null;
+  private String chunkingSessionId = null;
 
   @JsonProperty("empty")
-  private Object empty = null;
+  private Boolean empty = null;
 
   @JsonProperty("error")
-  private Object error = null;
+  private Boolean error = null;
 
   @JsonProperty("errorMessage")
   private GUserMessage errorMessage = null;
 
-  public DocumentChunkingResponse id(Object id) {
+  public DocumentChunkingResponse id(String id) {
     this.id = id;
     return this;
   }
@@ -67,15 +67,15 @@ public class DocumentChunkingResponse {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public DocumentChunkingResponse totalBytesSize(Object totalBytesSize) {
+  public DocumentChunkingResponse totalBytesSize(Long totalBytesSize) {
     this.totalBytesSize = totalBytesSize;
     return this;
   }
@@ -85,15 +85,15 @@ public class DocumentChunkingResponse {
    * @return totalBytesSize
   **/
   @Schema(description = "")
-  public Object getTotalBytesSize() {
+  public Long getTotalBytesSize() {
     return totalBytesSize;
   }
 
-  public void setTotalBytesSize(Object totalBytesSize) {
+  public void setTotalBytesSize(Long totalBytesSize) {
     this.totalBytesSize = totalBytesSize;
   }
 
-  public DocumentChunkingResponse totalTokensSize(Object totalTokensSize) {
+  public DocumentChunkingResponse totalTokensSize(Long totalTokensSize) {
     this.totalTokensSize = totalTokensSize;
     return this;
   }
@@ -103,15 +103,15 @@ public class DocumentChunkingResponse {
    * @return totalTokensSize
   **/
   @Schema(description = "")
-  public Object getTotalTokensSize() {
+  public Long getTotalTokensSize() {
     return totalTokensSize;
   }
 
-  public void setTotalTokensSize(Object totalTokensSize) {
+  public void setTotalTokensSize(Long totalTokensSize) {
     this.totalTokensSize = totalTokensSize;
   }
 
-  public DocumentChunkingResponse totalChunksNumber(Object totalChunksNumber) {
+  public DocumentChunkingResponse totalChunksNumber(Integer totalChunksNumber) {
     this.totalChunksNumber = totalChunksNumber;
     return this;
   }
@@ -121,11 +121,11 @@ public class DocumentChunkingResponse {
    * @return totalChunksNumber
   **/
   @Schema(description = "")
-  public Object getTotalChunksNumber() {
+  public Integer getTotalChunksNumber() {
     return totalChunksNumber;
   }
 
-  public void setTotalChunksNumber(Object totalChunksNumber) {
+  public void setTotalChunksNumber(Integer totalChunksNumber) {
     this.totalChunksNumber = totalChunksNumber;
   }
 
@@ -147,7 +147,7 @@ public class DocumentChunkingResponse {
     this.currentChunkSet = currentChunkSet;
   }
 
-  public DocumentChunkingResponse nextChunkSetId(Object nextChunkSetId) {
+  public DocumentChunkingResponse nextChunkSetId(String nextChunkSetId) {
     this.nextChunkSetId = nextChunkSetId;
     return this;
   }
@@ -157,15 +157,15 @@ public class DocumentChunkingResponse {
    * @return nextChunkSetId
   **/
   @Schema(description = "")
-  public Object getNextChunkSetId() {
+  public String getNextChunkSetId() {
     return nextChunkSetId;
   }
 
-  public void setNextChunkSetId(Object nextChunkSetId) {
+  public void setNextChunkSetId(String nextChunkSetId) {
     this.nextChunkSetId = nextChunkSetId;
   }
 
-  public DocumentChunkingResponse chunkingSessionId(Object chunkingSessionId) {
+  public DocumentChunkingResponse chunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
     return this;
   }
@@ -175,15 +175,15 @@ public class DocumentChunkingResponse {
    * @return chunkingSessionId
   **/
   @Schema(description = "")
-  public Object getChunkingSessionId() {
+  public String getChunkingSessionId() {
     return chunkingSessionId;
   }
 
-  public void setChunkingSessionId(Object chunkingSessionId) {
+  public void setChunkingSessionId(String chunkingSessionId) {
     this.chunkingSessionId = chunkingSessionId;
   }
 
-  public DocumentChunkingResponse empty(Object empty) {
+  public DocumentChunkingResponse empty(Boolean empty) {
     this.empty = empty;
     return this;
   }
@@ -193,15 +193,15 @@ public class DocumentChunkingResponse {
    * @return empty
   **/
   @Schema(description = "")
-  public Object getEmpty() {
+  public Boolean isEmpty() {
     return empty;
   }
 
-  public void setEmpty(Object empty) {
+  public void setEmpty(Boolean empty) {
     this.empty = empty;
   }
 
-  public DocumentChunkingResponse error(Object error) {
+  public DocumentChunkingResponse error(Boolean error) {
     this.error = error;
     return this;
   }
@@ -211,11 +211,11 @@ public class DocumentChunkingResponse {
    * @return error
   **/
   @Schema(description = "")
-  public Object getError() {
+  public Boolean isError() {
     return error;
   }
 
-  public void setError(Object error) {
+  public void setError(Boolean error) {
     this.error = error;
   }
 

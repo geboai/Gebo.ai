@@ -16,6 +16,7 @@ import gebo.microservices.api.client.confluence.model.BrowseParam;
 import gebo.microservices.api.client.confluence.model.OperationStatusListGVirtualFilesystemRoot;
 import gebo.microservices.api.client.confluence.model.OperationStatusListPathInfo;
 import gebo.microservices.api.client.confluence.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
+import gebo.microservices.api.client.confluence.model.VFilesystemReference;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,7 +44,7 @@ public class ConfluenceBrowsingControllerApiTest {
     @Test
     public void browseConfluencePathTest() {
         BrowseParam body = null;
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListPathInfo response = api.browseConfluencePath(body, systemCode);
 
         // TODO: test validations
@@ -58,8 +59,8 @@ public class ConfluenceBrowsingControllerApiTest {
      */
     @Test
     public void getConfluenceNavigationStatusTest() {
-        Object body = null;
-        Object systemCode = null;
+        List<VFilesystemReference> body = null;
+        String systemCode = null;
         OperationStatusListVirtualFilesystemNavigationTreeStatus response = api.getConfluenceNavigationStatus(body, systemCode);
 
         // TODO: test validations
@@ -74,7 +75,7 @@ public class ConfluenceBrowsingControllerApiTest {
      */
     @Test
     public void getConfluenceRootsTest() {
-        Object systemCode = null;
+        String systemCode = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getConfluenceRoots(systemCode);
 
         // TODO: test validations

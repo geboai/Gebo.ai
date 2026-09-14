@@ -48,7 +48,7 @@ No authorization required
 
 <a name="getContentProcessRows"></a>
 # **getContentProcessRows**
-> Object getContentProcessRows()
+> List&lt;GeboContentProcessRow&gt; getContentProcessRows()
 
 
 
@@ -61,7 +61,7 @@ No authorization required
 
 GeboFastKnowledgeBaseSetupControllerApi apiInstance = new GeboFastKnowledgeBaseSetupControllerApi();
 try {
-    Object result = apiInstance.getContentProcessRows();
+    List<GeboContentProcessRow> result = apiInstance.getContentProcessRows();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboFastKnowledgeBaseSetupControllerApi#getContentProcessRows");
@@ -74,7 +74,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GeboContentProcessRow&gt;**](GeboContentProcessRow.md)
 
 ### Authorization
 

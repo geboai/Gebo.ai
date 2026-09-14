@@ -22,16 +22,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboServiceWebContextInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T14:51:27.378678764+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.314235033+02:00[Europe/Rome]")
 
 public class GeboServiceWebContextInfo {
   @JsonProperty("serviceId")
-  private Object serviceId = null;
+  private String serviceId = null;
 
   @JsonProperty("relativeContextUrl")
-  private Object relativeContextUrl = null;
+  private String relativeContextUrl = null;
 
-  public GeboServiceWebContextInfo serviceId(Object serviceId) {
+  public GeboServiceWebContextInfo serviceId(String serviceId) {
     this.serviceId = serviceId;
     return this;
   }
@@ -41,15 +41,15 @@ public class GeboServiceWebContextInfo {
    * @return serviceId
   **/
   @Schema(description = "")
-  public Object getServiceId() {
+  public String getServiceId() {
     return serviceId;
   }
 
-  public void setServiceId(Object serviceId) {
+  public void setServiceId(String serviceId) {
     this.serviceId = serviceId;
   }
 
-  public GeboServiceWebContextInfo relativeContextUrl(Object relativeContextUrl) {
+  public GeboServiceWebContextInfo relativeContextUrl(String relativeContextUrl) {
     this.relativeContextUrl = relativeContextUrl;
     return this;
   }
@@ -59,11 +59,11 @@ public class GeboServiceWebContextInfo {
    * @return relativeContextUrl
   **/
   @Schema(description = "")
-  public Object getRelativeContextUrl() {
+  public String getRelativeContextUrl() {
     return relativeContextUrl;
   }
 
-  public void setRelativeContextUrl(Object relativeContextUrl) {
+  public void setRelativeContextUrl(String relativeContextUrl) {
     this.relativeContextUrl = relativeContextUrl;
   }
 

@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**label** | **Object** |  |  [optional]
-**value** | **Object** |  |  [optional]
+**label** | **String** |  |  [optional]
+**value** | [**BigDecimal**](BigDecimal.md) |  |  [optional]

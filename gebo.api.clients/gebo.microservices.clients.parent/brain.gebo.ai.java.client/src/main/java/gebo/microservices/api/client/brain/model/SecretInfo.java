@@ -22,22 +22,63 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecretInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class SecretInfo {
   @JsonProperty("code")
-  private Object code = null;
+  private String code = null;
 
   @JsonProperty("description")
-  private Object description = null;
+  private String description = null;
 
-  @JsonProperty("secretType")
-  private Object secretType = null;
+  /**
+   * Gets or Sets secretType
+   */
+  public enum SecretTypeEnum {
+    USERNAME_PASSWORD("USERNAME_PASSWORD"),
+    TOKEN("TOKEN"),
+    SSH_KEY("SSH_KEY"),
+    CUSTOM_SECRET("CUSTOM_SECRET"),
+    OAUTH2_STANDARD("OAUTH2_STANDARD"),
+    OAUTH2_GOOGLE("OAUTH2_GOOGLE"),
+    GOOGLE_CLOUD_JSON_CREDENTIALS("GOOGLE_CLOUD_JSON_CREDENTIALS"),
+    OAUTH2_AUTHORIZED_CLIENT("OAUTH2_AUTHORIZED_CLIENT"),
+    AWS_CONNECTION("AWS_CONNECTION");
+
+    private String value;
+
+    SecretTypeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static SecretTypeEnum fromValue(String input) {
+      for (SecretTypeEnum b : SecretTypeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("secretType")
+  private SecretTypeEnum secretType = null;
 
   @JsonProperty("contextCode")
-  private Object contextCode = null;
+  private String contextCode = null;
 
-  public SecretInfo code(Object code) {
+  @JsonProperty("readOnly")
+  private Boolean readOnly = null;
+
+  public SecretInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -47,15 +88,15 @@ public class SecretInfo {
    * @return code
   **/
   @Schema(description = "")
-  public Object getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Object code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
-  public SecretInfo description(Object description) {
+  public SecretInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -65,15 +106,15 @@ public class SecretInfo {
    * @return description
   **/
   @Schema(description = "")
-  public Object getDescription() {
+  public String getDescription() {
     return description;
   }
 
-  public void setDescription(Object description) {
+  public void setDescription(String description) {
     this.description = description;
   }
 
-  public SecretInfo secretType(Object secretType) {
+  public SecretInfo secretType(SecretTypeEnum secretType) {
     this.secretType = secretType;
     return this;
   }
@@ -83,15 +124,15 @@ public class SecretInfo {
    * @return secretType
   **/
   @Schema(description = "")
-  public Object getSecretType() {
+  public SecretTypeEnum getSecretType() {
     return secretType;
   }
 
-  public void setSecretType(Object secretType) {
+  public void setSecretType(SecretTypeEnum secretType) {
     this.secretType = secretType;
   }
 
-  public SecretInfo contextCode(Object contextCode) {
+  public SecretInfo contextCode(String contextCode) {
     this.contextCode = contextCode;
     return this;
   }
@@ -101,12 +142,30 @@ public class SecretInfo {
    * @return contextCode
   **/
   @Schema(description = "")
-  public Object getContextCode() {
+  public String getContextCode() {
     return contextCode;
   }
 
-  public void setContextCode(Object contextCode) {
+  public void setContextCode(String contextCode) {
     this.contextCode = contextCode;
+  }
+
+  public SecretInfo readOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+    return this;
+  }
+
+   /**
+   * Get readOnly
+   * @return readOnly
+  **/
+  @Schema(description = "")
+  public Boolean isReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
   }
 
 
@@ -122,12 +181,13 @@ public class SecretInfo {
     return Objects.equals(this.code, secretInfo.code) &&
         Objects.equals(this.description, secretInfo.description) &&
         Objects.equals(this.secretType, secretInfo.secretType) &&
-        Objects.equals(this.contextCode, secretInfo.contextCode);
+        Objects.equals(this.contextCode, secretInfo.contextCode) &&
+        Objects.equals(this.readOnly, secretInfo.readOnly);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, secretType, contextCode);
+    return Objects.hash(code, description, secretType, contextCode, readOnly);
   }
 
 
@@ -140,6 +200,7 @@ public class SecretInfo {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    secretType: ").append(toIndentedString(secretType)).append("\n");
     sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
+    sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("}");
     return sb.toString();
   }

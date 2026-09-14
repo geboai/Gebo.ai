@@ -108,10 +108,10 @@ export class KnowledgeBaseControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findKnowledgeBaseByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GKnowledgeBase>;
-    public findKnowledgeBaseByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GKnowledgeBase>>;
-    public findKnowledgeBaseByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GKnowledgeBase>>;
-    public findKnowledgeBaseByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findKnowledgeBaseByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GKnowledgeBase>;
+    public findKnowledgeBaseByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GKnowledgeBase>>;
+    public findKnowledgeBaseByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GKnowledgeBase>>;
+    public findKnowledgeBaseByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findKnowledgeBaseByCode.');
@@ -155,9 +155,9 @@ export class KnowledgeBaseControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findKnowledgeBasesByQbe(body: GKnowledgeBase, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findKnowledgeBasesByQbe(body: GKnowledgeBase, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findKnowledgeBasesByQbe(body: GKnowledgeBase, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findKnowledgeBasesByQbe(body: GKnowledgeBase, observe?: 'body', reportProgress?: boolean): Observable<Array<GKnowledgeBase>>;
+    public findKnowledgeBasesByQbe(body: GKnowledgeBase, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GKnowledgeBase>>>;
+    public findKnowledgeBasesByQbe(body: GKnowledgeBase, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GKnowledgeBase>>>;
     public findKnowledgeBasesByQbe(body: GKnowledgeBase, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -184,7 +184,7 @@ export class KnowledgeBaseControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/KnowledgeBaseController/findKnowledgeBasesByQbe`,
+        return this.httpClient.request<Array<GKnowledgeBase>>('post',`${this.basePath}/api/admin/KnowledgeBaseController/findKnowledgeBasesByQbe`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -202,10 +202,10 @@ export class KnowledgeBaseControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChildKnowledgeBases(code: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getChildKnowledgeBases(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getChildKnowledgeBases(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getChildKnowledgeBases(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChildKnowledgeBases(code: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GKnowledgeBase>>;
+    public getChildKnowledgeBases(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GKnowledgeBase>>>;
+    public getChildKnowledgeBases(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GKnowledgeBase>>>;
+    public getChildKnowledgeBases(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling getChildKnowledgeBases.');
@@ -231,7 +231,7 @@ export class KnowledgeBaseControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/KnowledgeBaseController/getChildKnowledgeBases`,
+        return this.httpClient.request<Array<GKnowledgeBase>>('get',`${this.basePath}/api/admin/KnowledgeBaseController/getChildKnowledgeBases`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -248,9 +248,9 @@ export class KnowledgeBaseControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<Array<GKnowledgeBase>>;
+    public getKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GKnowledgeBase>>>;
+    public getKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GKnowledgeBase>>>;
     public getKnowledgeBases(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -268,7 +268,7 @@ export class KnowledgeBaseControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/KnowledgeBaseController/getKnowledgeBases`,
+        return this.httpClient.request<Array<GKnowledgeBase>>('get',`${this.basePath}/api/admin/KnowledgeBaseController/getKnowledgeBases`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

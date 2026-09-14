@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="findAll"></a>
 # **findAll**
-> Object findAll()
+> List&lt;GPromptUseInfo&gt; findAll()
 
 
 
@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 GeboAdminPromptUseInfoControllerApi apiInstance = new GeboAdminPromptUseInfoControllerApi();
 try {
-    Object result = apiInstance.findAll();
+    List<GPromptUseInfo> result = apiInstance.findAll();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminPromptUseInfoControllerApi#findAll");
@@ -36,7 +36,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GPromptUseInfo&gt;**](GPromptUseInfo.md)
 
 ### Authorization
 
@@ -61,7 +61,7 @@ No authorization required
 
 
 GeboAdminPromptUseInfoControllerApi apiInstance = new GeboAdminPromptUseInfoControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GPromptUseInfo result = apiInstance.findByCode(code);
     System.out.println(result);
@@ -75,7 +75,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -92,7 +92,7 @@ No authorization required
 
 <a name="findByModule"></a>
 # **findByModule**
-> Object findByModule(module)
+> List&lt;GPromptUseInfo&gt; findByModule(module)
 
 
 
@@ -104,9 +104,9 @@ No authorization required
 
 
 GeboAdminPromptUseInfoControllerApi apiInstance = new GeboAdminPromptUseInfoControllerApi();
-Object module = null; // Object | 
+String module = "module_example"; // String | 
 try {
-    Object result = apiInstance.findByModule(module);
+    List<GPromptUseInfo> result = apiInstance.findByModule(module);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminPromptUseInfoControllerApi#findByModule");
@@ -118,11 +118,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **module** | [**Object**](.md)|  |
+ **module** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GPromptUseInfo&gt;**](GPromptUseInfo.md)
 
 ### Authorization
 

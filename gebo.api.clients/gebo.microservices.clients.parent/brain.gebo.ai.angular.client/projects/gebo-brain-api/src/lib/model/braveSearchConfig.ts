@@ -11,6 +11,6 @@
  */
 
 export interface BraveSearchConfig { 
-    apiKey?: any;
-    enabled?: any;
+    apiKey?: string;
+    enabled?: boolean;
 }

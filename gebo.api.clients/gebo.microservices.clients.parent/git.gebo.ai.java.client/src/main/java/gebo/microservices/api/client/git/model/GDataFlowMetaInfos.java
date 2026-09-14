@@ -17,26 +17,31 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.git.model.DataEndpoint;
+import gebo.microservices.api.client.git.model.DataTransformationInfo;
+import gebo.microservices.api.client.git.model.DataTransformationMetaInfo;
 import gebo.microservices.api.client.git.model.GeboComponentInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * GDataFlowMetaInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:20.180928852+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:29.835643861+02:00[Europe/Rome]")
 
 public class GDataFlowMetaInfos {
   @JsonProperty("component")
   private GeboComponentInfo component = null;
 
   @JsonProperty("dataEndpoints")
-  private Object dataEndpoints = null;
+  private List<DataEndpoint> dataEndpoints = null;
 
   @JsonProperty("engines")
-  private Object engines = null;
+  private List<DataTransformationMetaInfo> engines = null;
 
   @JsonProperty("transformations")
-  private Object transformations = null;
+  private List<DataTransformationInfo> transformations = null;
 
   public GDataFlowMetaInfos component(GeboComponentInfo component) {
     this.component = component;
@@ -56,8 +61,16 @@ public class GDataFlowMetaInfos {
     this.component = component;
   }
 
-  public GDataFlowMetaInfos dataEndpoints(Object dataEndpoints) {
+  public GDataFlowMetaInfos dataEndpoints(List<DataEndpoint> dataEndpoints) {
     this.dataEndpoints = dataEndpoints;
+    return this;
+  }
+
+  public GDataFlowMetaInfos addDataEndpointsItem(DataEndpoint dataEndpointsItem) {
+    if (this.dataEndpoints == null) {
+      this.dataEndpoints = new ArrayList<>();
+    }
+    this.dataEndpoints.add(dataEndpointsItem);
     return this;
   }
 
@@ -66,16 +79,24 @@ public class GDataFlowMetaInfos {
    * @return dataEndpoints
   **/
   @Schema(description = "")
-  public Object getDataEndpoints() {
+  public List<DataEndpoint> getDataEndpoints() {
     return dataEndpoints;
   }
 
-  public void setDataEndpoints(Object dataEndpoints) {
+  public void setDataEndpoints(List<DataEndpoint> dataEndpoints) {
     this.dataEndpoints = dataEndpoints;
   }
 
-  public GDataFlowMetaInfos engines(Object engines) {
+  public GDataFlowMetaInfos engines(List<DataTransformationMetaInfo> engines) {
     this.engines = engines;
+    return this;
+  }
+
+  public GDataFlowMetaInfos addEnginesItem(DataTransformationMetaInfo enginesItem) {
+    if (this.engines == null) {
+      this.engines = new ArrayList<>();
+    }
+    this.engines.add(enginesItem);
     return this;
   }
 
@@ -84,16 +105,24 @@ public class GDataFlowMetaInfos {
    * @return engines
   **/
   @Schema(description = "")
-  public Object getEngines() {
+  public List<DataTransformationMetaInfo> getEngines() {
     return engines;
   }
 
-  public void setEngines(Object engines) {
+  public void setEngines(List<DataTransformationMetaInfo> engines) {
     this.engines = engines;
   }
 
-  public GDataFlowMetaInfos transformations(Object transformations) {
+  public GDataFlowMetaInfos transformations(List<DataTransformationInfo> transformations) {
     this.transformations = transformations;
+    return this;
+  }
+
+  public GDataFlowMetaInfos addTransformationsItem(DataTransformationInfo transformationsItem) {
+    if (this.transformations == null) {
+      this.transformations = new ArrayList<>();
+    }
+    this.transformations.add(transformationsItem);
     return this;
   }
 
@@ -102,11 +131,11 @@ public class GDataFlowMetaInfos {
    * @return transformations
   **/
   @Schema(description = "")
-  public Object getTransformations() {
+  public List<DataTransformationInfo> getTransformations() {
     return transformations;
   }
 
-  public void setTransformations(Object transformations) {
+  public void setTransformations(List<DataTransformationInfo> transformations) {
     this.transformations = transformations;
   }
 

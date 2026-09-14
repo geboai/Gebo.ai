@@ -23,19 +23,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * EditableUserQbeRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:34.383720772+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:19.729887762+02:00[Europe/Rome]")
 
 public class EditableUserQbeRequest {
   @JsonProperty("page")
-  private Object page = null;
+  private Integer page = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Integer size = null;
 
   @JsonProperty("qbe")
   private EditableUser qbe = null;
 
-  public EditableUserQbeRequest page(Object page) {
+  public EditableUserQbeRequest page(Integer page) {
     this.page = page;
     return this;
   }
@@ -45,15 +45,15 @@ public class EditableUserQbeRequest {
    * @return page
   **/
   @Schema(description = "")
-  public Object getPage() {
+  public Integer getPage() {
     return page;
   }
 
-  public void setPage(Object page) {
+  public void setPage(Integer page) {
     this.page = page;
   }
 
-  public EditableUserQbeRequest size(Object size) {
+  public EditableUserQbeRequest size(Integer size) {
     this.size = size;
     return this;
   }
@@ -63,11 +63,11 @@ public class EditableUserQbeRequest {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Integer getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Integer size) {
     this.size = size;
   }
 

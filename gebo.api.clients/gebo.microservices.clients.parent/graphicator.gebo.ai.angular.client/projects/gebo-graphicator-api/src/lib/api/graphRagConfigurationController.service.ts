@@ -109,10 +109,10 @@ export class GraphRagConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGraphRagExtractionConfigByCode(code: any, observe?: 'body', reportProgress?: boolean): Observable<GraphRagExtractionConfig>;
-    public findGraphRagExtractionConfigByCode(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GraphRagExtractionConfig>>;
-    public findGraphRagExtractionConfigByCode(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GraphRagExtractionConfig>>;
-    public findGraphRagExtractionConfigByCode(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGraphRagExtractionConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GraphRagExtractionConfig>;
+    public findGraphRagExtractionConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GraphRagExtractionConfig>>;
+    public findGraphRagExtractionConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GraphRagExtractionConfig>>;
+    public findGraphRagExtractionConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findGraphRagExtractionConfigByCode.');
@@ -156,10 +156,10 @@ export class GraphRagConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GraphRagExtractionConfig>>;
+    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GraphRagExtractionConfig>>>;
+    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GraphRagExtractionConfig>>>;
+    public findGraphRagExtractionConfigByKnowledgeBase(knowledgeBaseCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (knowledgeBaseCode === null || knowledgeBaseCode === undefined) {
             throw new Error('Required parameter knowledgeBaseCode was null or undefined when calling findGraphRagExtractionConfigByKnowledgeBase.');
@@ -185,7 +185,7 @@ export class GraphRagConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBase`,
+        return this.httpClient.request<Array<GraphRagExtractionConfig>>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBase`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -204,10 +204,10 @@ export class GraphRagConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: any, projectCode: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: any, projectCode: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: any, projectCode: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: any, projectCode: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: string, projectCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GraphRagExtractionConfig>>;
+    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: string, projectCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GraphRagExtractionConfig>>>;
+    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: string, projectCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GraphRagExtractionConfig>>>;
+    public findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode(knowledgeBaseCode: string, projectCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (knowledgeBaseCode === null || knowledgeBaseCode === undefined) {
             throw new Error('Required parameter knowledgeBaseCode was null or undefined when calling findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode.');
@@ -240,7 +240,7 @@ export class GraphRagConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode`,
+        return this.httpClient.request<Array<GraphRagExtractionConfig>>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -258,9 +258,9 @@ export class GraphRagConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GraphRagExtractionConfig>>;
+    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GraphRagExtractionConfig>>>;
+    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GraphRagExtractionConfig>>>;
     public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -287,7 +287,7 @@ export class GraphRagConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByProjectEndpointGObjectRef`,
+        return this.httpClient.request<Array<GraphRagExtractionConfig>>('post',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByProjectEndpointGObjectRef`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -304,9 +304,9 @@ export class GraphRagConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDefaultGraphRagExtractionConfig(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getDefaultGraphRagExtractionConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getDefaultGraphRagExtractionConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getDefaultGraphRagExtractionConfig(observe?: 'body', reportProgress?: boolean): Observable<Array<GraphRagExtractionConfig>>;
+    public getDefaultGraphRagExtractionConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GraphRagExtractionConfig>>>;
+    public getDefaultGraphRagExtractionConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GraphRagExtractionConfig>>>;
     public getDefaultGraphRagExtractionConfig(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -324,7 +324,7 @@ export class GraphRagConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/getDefaultGraphRagExtractionConfig`,
+        return this.httpClient.request<Array<GraphRagExtractionConfig>>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/getDefaultGraphRagExtractionConfig`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -341,10 +341,10 @@ export class GraphRagConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSystemGraphRagExtractionConfig(format: any, observe?: 'body', reportProgress?: boolean): Observable<GraphRagExtractionConfig>;
-    public getSystemGraphRagExtractionConfig(format: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GraphRagExtractionConfig>>;
-    public getSystemGraphRagExtractionConfig(format: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GraphRagExtractionConfig>>;
-    public getSystemGraphRagExtractionConfig(format: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSystemGraphRagExtractionConfig(format: string, observe?: 'body', reportProgress?: boolean): Observable<GraphRagExtractionConfig>;
+    public getSystemGraphRagExtractionConfig(format: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GraphRagExtractionConfig>>;
+    public getSystemGraphRagExtractionConfig(format: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GraphRagExtractionConfig>>;
+    public getSystemGraphRagExtractionConfig(format: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (format === null || format === undefined) {
             throw new Error('Required parameter format was null or undefined when calling getSystemGraphRagExtractionConfig.');

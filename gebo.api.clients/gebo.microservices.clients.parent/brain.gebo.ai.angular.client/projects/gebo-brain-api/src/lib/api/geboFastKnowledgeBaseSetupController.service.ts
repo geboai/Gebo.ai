@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GeboContentProcessRow } from '../model/geboContentProcessRow';
 import { GeboKnowledgeBaseSetupStatus } from '../model/geboKnowledgeBaseSetupStatus';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -97,9 +98,9 @@ export class GeboFastKnowledgeBaseSetupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContentProcessRows(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getContentProcessRows(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getContentProcessRows(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getContentProcessRows(observe?: 'body', reportProgress?: boolean): Observable<Array<GeboContentProcessRow>>;
+    public getContentProcessRows(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboContentProcessRow>>>;
+    public getContentProcessRows(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboContentProcessRow>>>;
     public getContentProcessRows(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -117,7 +118,7 @@ export class GeboFastKnowledgeBaseSetupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboFastKnowledgeBaseSetupController/getContentProcessRows`,
+        return this.httpClient.request<Array<GeboContentProcessRow>>('get',`${this.basePath}/api/admin/GeboFastKnowledgeBaseSetupController/getContentProcessRows`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -17,44 +17,55 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.integration.model.CatalogingLabel;
+import gebo.microservices.api.client.integration.model.GeboAudioDocumentFragment;
+import gebo.microservices.api.client.integration.model.GeboImageDocumentFragment;
+import gebo.microservices.api.client.integration.model.GeboMediaDocumentFragment;
+import gebo.microservices.api.client.integration.model.GeboTextDocumentFragment;
+import gebo.microservices.api.client.integration.model.GeboVideoDocumentFragment;
 import gebo.microservices.api.client.integration.model.VFilesystemReference;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * GeboDocument
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:40.120904804+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:38.304055491+02:00[Europe/Rome]")
 
 public class GeboDocument {
   @JsonProperty("id")
-  private Object id = null;
+  private String id = null;
 
   @JsonProperty("parentPathId")
-  private Object parentPathId = null;
+  private String parentPathId = null;
 
   @JsonProperty("url")
-  private Object url = null;
+  private String url = null;
 
   @JsonProperty("name")
-  private Object name = null;
+  private String name = null;
 
   @JsonProperty("extension")
-  private Object extension = null;
+  private String extension = null;
 
   @JsonProperty("contentType")
-  private Object contentType = null;
+  private String contentType = null;
 
   @JsonProperty("createdDate")
-  private Object createdDate = null;
+  private Date createdDate = null;
 
   @JsonProperty("firstProcessedDate")
-  private Object firstProcessedDate = null;
+  private Date firstProcessedDate = null;
 
   @JsonProperty("lastProcessedDate")
-  private Object lastProcessedDate = null;
+  private Date lastProcessedDate = null;
 
   @JsonProperty("size")
-  private Object size = null;
+  private Long size = null;
 
   @JsonProperty("virtualParentFolderReference")
   private VFilesystemReference virtualParentFolderReference = null;
@@ -63,33 +74,33 @@ public class GeboDocument {
   private VFilesystemReference virtualFileReference = null;
 
   @JsonProperty("originalContentModifiedDate")
-  private Object originalContentModifiedDate = null;
+  private Date originalContentModifiedDate = null;
 
   @JsonProperty("customMetaData")
-  private Object customMetaData = null;
+  private Map<String, Object> customMetaData = null;
 
   @JsonProperty("additionalAttributes")
-  private Object additionalAttributes = null;
+  private Map<String, Object> additionalAttributes = null;
 
   @JsonProperty("texts")
-  private Object texts = null;
+  private List<GeboTextDocumentFragment> texts = null;
 
   @JsonProperty("images")
-  private Object images = null;
+  private List<GeboImageDocumentFragment> images = null;
 
   @JsonProperty("audios")
-  private Object audios = null;
+  private List<GeboAudioDocumentFragment> audios = null;
 
   @JsonProperty("videos")
-  private Object videos = null;
+  private List<GeboVideoDocumentFragment> videos = null;
 
   @JsonProperty("media")
-  private Object media = null;
+  private List<GeboMediaDocumentFragment> media = null;
 
   @JsonProperty("catalogingLabel")
-  private Object catalogingLabel = null;
+  private List<CatalogingLabel> catalogingLabel = null;
 
-  public GeboDocument id(Object id) {
+  public GeboDocument id(String id) {
     this.id = id;
     return this;
   }
@@ -99,15 +110,15 @@ public class GeboDocument {
    * @return id
   **/
   @Schema(description = "")
-  public Object getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Object id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public GeboDocument parentPathId(Object parentPathId) {
+  public GeboDocument parentPathId(String parentPathId) {
     this.parentPathId = parentPathId;
     return this;
   }
@@ -117,15 +128,15 @@ public class GeboDocument {
    * @return parentPathId
   **/
   @Schema(description = "")
-  public Object getParentPathId() {
+  public String getParentPathId() {
     return parentPathId;
   }
 
-  public void setParentPathId(Object parentPathId) {
+  public void setParentPathId(String parentPathId) {
     this.parentPathId = parentPathId;
   }
 
-  public GeboDocument url(Object url) {
+  public GeboDocument url(String url) {
     this.url = url;
     return this;
   }
@@ -135,15 +146,15 @@ public class GeboDocument {
    * @return url
   **/
   @Schema(description = "")
-  public Object getUrl() {
+  public String getUrl() {
     return url;
   }
 
-  public void setUrl(Object url) {
+  public void setUrl(String url) {
     this.url = url;
   }
 
-  public GeboDocument name(Object name) {
+  public GeboDocument name(String name) {
     this.name = name;
     return this;
   }
@@ -153,15 +164,15 @@ public class GeboDocument {
    * @return name
   **/
   @Schema(description = "")
-  public Object getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(Object name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  public GeboDocument extension(Object extension) {
+  public GeboDocument extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -171,15 +182,15 @@ public class GeboDocument {
    * @return extension
   **/
   @Schema(description = "")
-  public Object getExtension() {
+  public String getExtension() {
     return extension;
   }
 
-  public void setExtension(Object extension) {
+  public void setExtension(String extension) {
     this.extension = extension;
   }
 
-  public GeboDocument contentType(Object contentType) {
+  public GeboDocument contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -189,15 +200,15 @@ public class GeboDocument {
    * @return contentType
   **/
   @Schema(description = "")
-  public Object getContentType() {
+  public String getContentType() {
     return contentType;
   }
 
-  public void setContentType(Object contentType) {
+  public void setContentType(String contentType) {
     this.contentType = contentType;
   }
 
-  public GeboDocument createdDate(Object createdDate) {
+  public GeboDocument createdDate(Date createdDate) {
     this.createdDate = createdDate;
     return this;
   }
@@ -207,15 +218,15 @@ public class GeboDocument {
    * @return createdDate
   **/
   @Schema(description = "")
-  public Object getCreatedDate() {
+  public Date getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(Object createdDate) {
+  public void setCreatedDate(Date createdDate) {
     this.createdDate = createdDate;
   }
 
-  public GeboDocument firstProcessedDate(Object firstProcessedDate) {
+  public GeboDocument firstProcessedDate(Date firstProcessedDate) {
     this.firstProcessedDate = firstProcessedDate;
     return this;
   }
@@ -225,15 +236,15 @@ public class GeboDocument {
    * @return firstProcessedDate
   **/
   @Schema(description = "")
-  public Object getFirstProcessedDate() {
+  public Date getFirstProcessedDate() {
     return firstProcessedDate;
   }
 
-  public void setFirstProcessedDate(Object firstProcessedDate) {
+  public void setFirstProcessedDate(Date firstProcessedDate) {
     this.firstProcessedDate = firstProcessedDate;
   }
 
-  public GeboDocument lastProcessedDate(Object lastProcessedDate) {
+  public GeboDocument lastProcessedDate(Date lastProcessedDate) {
     this.lastProcessedDate = lastProcessedDate;
     return this;
   }
@@ -243,15 +254,15 @@ public class GeboDocument {
    * @return lastProcessedDate
   **/
   @Schema(description = "")
-  public Object getLastProcessedDate() {
+  public Date getLastProcessedDate() {
     return lastProcessedDate;
   }
 
-  public void setLastProcessedDate(Object lastProcessedDate) {
+  public void setLastProcessedDate(Date lastProcessedDate) {
     this.lastProcessedDate = lastProcessedDate;
   }
 
-  public GeboDocument size(Object size) {
+  public GeboDocument size(Long size) {
     this.size = size;
     return this;
   }
@@ -261,11 +272,11 @@ public class GeboDocument {
    * @return size
   **/
   @Schema(description = "")
-  public Object getSize() {
+  public Long getSize() {
     return size;
   }
 
-  public void setSize(Object size) {
+  public void setSize(Long size) {
     this.size = size;
   }
 
@@ -305,7 +316,7 @@ public class GeboDocument {
     this.virtualFileReference = virtualFileReference;
   }
 
-  public GeboDocument originalContentModifiedDate(Object originalContentModifiedDate) {
+  public GeboDocument originalContentModifiedDate(Date originalContentModifiedDate) {
     this.originalContentModifiedDate = originalContentModifiedDate;
     return this;
   }
@@ -315,16 +326,24 @@ public class GeboDocument {
    * @return originalContentModifiedDate
   **/
   @Schema(description = "")
-  public Object getOriginalContentModifiedDate() {
+  public Date getOriginalContentModifiedDate() {
     return originalContentModifiedDate;
   }
 
-  public void setOriginalContentModifiedDate(Object originalContentModifiedDate) {
+  public void setOriginalContentModifiedDate(Date originalContentModifiedDate) {
     this.originalContentModifiedDate = originalContentModifiedDate;
   }
 
-  public GeboDocument customMetaData(Object customMetaData) {
+  public GeboDocument customMetaData(Map<String, Object> customMetaData) {
     this.customMetaData = customMetaData;
+    return this;
+  }
+
+  public GeboDocument putCustomMetaDataItem(String key, Object customMetaDataItem) {
+    if (this.customMetaData == null) {
+      this.customMetaData = new HashMap<>();
+    }
+    this.customMetaData.put(key, customMetaDataItem);
     return this;
   }
 
@@ -333,16 +352,24 @@ public class GeboDocument {
    * @return customMetaData
   **/
   @Schema(description = "")
-  public Object getCustomMetaData() {
+  public Map<String, Object> getCustomMetaData() {
     return customMetaData;
   }
 
-  public void setCustomMetaData(Object customMetaData) {
+  public void setCustomMetaData(Map<String, Object> customMetaData) {
     this.customMetaData = customMetaData;
   }
 
-  public GeboDocument additionalAttributes(Object additionalAttributes) {
+  public GeboDocument additionalAttributes(Map<String, Object> additionalAttributes) {
     this.additionalAttributes = additionalAttributes;
+    return this;
+  }
+
+  public GeboDocument putAdditionalAttributesItem(String key, Object additionalAttributesItem) {
+    if (this.additionalAttributes == null) {
+      this.additionalAttributes = new HashMap<>();
+    }
+    this.additionalAttributes.put(key, additionalAttributesItem);
     return this;
   }
 
@@ -351,16 +378,24 @@ public class GeboDocument {
    * @return additionalAttributes
   **/
   @Schema(description = "")
-  public Object getAdditionalAttributes() {
+  public Map<String, Object> getAdditionalAttributes() {
     return additionalAttributes;
   }
 
-  public void setAdditionalAttributes(Object additionalAttributes) {
+  public void setAdditionalAttributes(Map<String, Object> additionalAttributes) {
     this.additionalAttributes = additionalAttributes;
   }
 
-  public GeboDocument texts(Object texts) {
+  public GeboDocument texts(List<GeboTextDocumentFragment> texts) {
     this.texts = texts;
+    return this;
+  }
+
+  public GeboDocument addTextsItem(GeboTextDocumentFragment textsItem) {
+    if (this.texts == null) {
+      this.texts = new ArrayList<>();
+    }
+    this.texts.add(textsItem);
     return this;
   }
 
@@ -369,16 +404,24 @@ public class GeboDocument {
    * @return texts
   **/
   @Schema(description = "")
-  public Object getTexts() {
+  public List<GeboTextDocumentFragment> getTexts() {
     return texts;
   }
 
-  public void setTexts(Object texts) {
+  public void setTexts(List<GeboTextDocumentFragment> texts) {
     this.texts = texts;
   }
 
-  public GeboDocument images(Object images) {
+  public GeboDocument images(List<GeboImageDocumentFragment> images) {
     this.images = images;
+    return this;
+  }
+
+  public GeboDocument addImagesItem(GeboImageDocumentFragment imagesItem) {
+    if (this.images == null) {
+      this.images = new ArrayList<>();
+    }
+    this.images.add(imagesItem);
     return this;
   }
 
@@ -387,16 +430,24 @@ public class GeboDocument {
    * @return images
   **/
   @Schema(description = "")
-  public Object getImages() {
+  public List<GeboImageDocumentFragment> getImages() {
     return images;
   }
 
-  public void setImages(Object images) {
+  public void setImages(List<GeboImageDocumentFragment> images) {
     this.images = images;
   }
 
-  public GeboDocument audios(Object audios) {
+  public GeboDocument audios(List<GeboAudioDocumentFragment> audios) {
     this.audios = audios;
+    return this;
+  }
+
+  public GeboDocument addAudiosItem(GeboAudioDocumentFragment audiosItem) {
+    if (this.audios == null) {
+      this.audios = new ArrayList<>();
+    }
+    this.audios.add(audiosItem);
     return this;
   }
 
@@ -405,16 +456,24 @@ public class GeboDocument {
    * @return audios
   **/
   @Schema(description = "")
-  public Object getAudios() {
+  public List<GeboAudioDocumentFragment> getAudios() {
     return audios;
   }
 
-  public void setAudios(Object audios) {
+  public void setAudios(List<GeboAudioDocumentFragment> audios) {
     this.audios = audios;
   }
 
-  public GeboDocument videos(Object videos) {
+  public GeboDocument videos(List<GeboVideoDocumentFragment> videos) {
     this.videos = videos;
+    return this;
+  }
+
+  public GeboDocument addVideosItem(GeboVideoDocumentFragment videosItem) {
+    if (this.videos == null) {
+      this.videos = new ArrayList<>();
+    }
+    this.videos.add(videosItem);
     return this;
   }
 
@@ -423,16 +482,24 @@ public class GeboDocument {
    * @return videos
   **/
   @Schema(description = "")
-  public Object getVideos() {
+  public List<GeboVideoDocumentFragment> getVideos() {
     return videos;
   }
 
-  public void setVideos(Object videos) {
+  public void setVideos(List<GeboVideoDocumentFragment> videos) {
     this.videos = videos;
   }
 
-  public GeboDocument media(Object media) {
+  public GeboDocument media(List<GeboMediaDocumentFragment> media) {
     this.media = media;
+    return this;
+  }
+
+  public GeboDocument addMediaItem(GeboMediaDocumentFragment mediaItem) {
+    if (this.media == null) {
+      this.media = new ArrayList<>();
+    }
+    this.media.add(mediaItem);
     return this;
   }
 
@@ -441,16 +508,24 @@ public class GeboDocument {
    * @return media
   **/
   @Schema(description = "")
-  public Object getMedia() {
+  public List<GeboMediaDocumentFragment> getMedia() {
     return media;
   }
 
-  public void setMedia(Object media) {
+  public void setMedia(List<GeboMediaDocumentFragment> media) {
     this.media = media;
   }
 
-  public GeboDocument catalogingLabel(Object catalogingLabel) {
+  public GeboDocument catalogingLabel(List<CatalogingLabel> catalogingLabel) {
     this.catalogingLabel = catalogingLabel;
+    return this;
+  }
+
+  public GeboDocument addCatalogingLabelItem(CatalogingLabel catalogingLabelItem) {
+    if (this.catalogingLabel == null) {
+      this.catalogingLabel = new ArrayList<>();
+    }
+    this.catalogingLabel.add(catalogingLabelItem);
     return this;
   }
 
@@ -459,11 +534,11 @@ public class GeboDocument {
    * @return catalogingLabel
   **/
   @Schema(description = "")
-  public Object getCatalogingLabel() {
+  public List<CatalogingLabel> getCatalogingLabel() {
     return catalogingLabel;
   }
 
-  public void setCatalogingLabel(Object catalogingLabel) {
+  public void setCatalogingLabel(List<CatalogingLabel> catalogingLabel) {
     this.catalogingLabel = catalogingLabel;
   }
 

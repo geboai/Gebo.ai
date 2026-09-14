@@ -3,6 +3,6 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**optimizedThreashold** | **Object** |  |  [optional]
-**firstHopOptimizedThreashold** | **Object** |  |  [optional]
-**secondHopOptimizedThreashold** | **Object** |  |  [optional]
+**optimizedThreashold** | **Double** |  |  [optional]
+**firstHopOptimizedThreashold** | **Double** |  |  [optional]
+**secondHopOptimizedThreashold** | **Double** |  |  [optional]

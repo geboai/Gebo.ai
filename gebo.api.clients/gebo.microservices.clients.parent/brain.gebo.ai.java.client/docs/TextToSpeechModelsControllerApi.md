@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getRuntimeConfiguredTextToSpeechModels"></a>
 # **getRuntimeConfiguredTextToSpeechModels**
-> Object getRuntimeConfiguredTextToSpeechModels(modelTypeCode)
+> List&lt;ConfigurationEntryGBaseTextToSpeachModelConfig&gt; getRuntimeConfiguredTextToSpeechModels(modelTypeCode)
 
 
 
@@ -21,9 +21,9 @@ Method | HTTP request | Description
 
 
 TextToSpeechModelsControllerApi apiInstance = new TextToSpeechModelsControllerApi();
-Object modelTypeCode = null; // Object | 
+String modelTypeCode = "modelTypeCode_example"; // String | 
 try {
-    Object result = apiInstance.getRuntimeConfiguredTextToSpeechModels(modelTypeCode);
+    List<ConfigurationEntryGBaseTextToSpeachModelConfig> result = apiInstance.getRuntimeConfiguredTextToSpeechModels(modelTypeCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling TextToSpeechModelsControllerApi#getRuntimeConfiguredTextToSpeechModels");
@@ -35,11 +35,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **modelTypeCode** | [**Object**](.md)|  | [optional]
+ **modelTypeCode** | **String**|  | [optional]
 
 ### Return type
 
-**Object**
+[**List&lt;ConfigurationEntryGBaseTextToSpeachModelConfig&gt;**](ConfigurationEntryGBaseTextToSpeachModelConfig.md)
 
 ### Authorization
 
@@ -52,7 +52,7 @@ No authorization required
 
 <a name="getTextToSpeechModelTypes"></a>
 # **getTextToSpeechModelTypes**
-> Object getTextToSpeechModelTypes()
+> List&lt;GTextToSpeechModelType&gt; getTextToSpeechModelTypes()
 
 
 
@@ -65,7 +65,7 @@ No authorization required
 
 TextToSpeechModelsControllerApi apiInstance = new TextToSpeechModelsControllerApi();
 try {
-    Object result = apiInstance.getTextToSpeechModelTypes();
+    List<GTextToSpeechModelType> result = apiInstance.getTextToSpeechModelTypes();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling TextToSpeechModelsControllerApi#getTextToSpeechModelTypes");
@@ -78,7 +78,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GTextToSpeechModelType&gt;**](GTextToSpeechModelType.md)
 
 ### Authorization
 

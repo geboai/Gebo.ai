@@ -12,7 +12,7 @@
 import { UsersGroup } from './usersGroup';
 
 export interface GroupQbeRequest { 
-    page?: any;
-    size?: any;
+    page?: number;
+    size?: number;
     qbe?: UsersGroup;
 }

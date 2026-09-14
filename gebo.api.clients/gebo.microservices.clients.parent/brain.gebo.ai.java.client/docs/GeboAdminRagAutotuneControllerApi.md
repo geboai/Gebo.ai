@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 <a name="getLatestComputedVectorStores"></a>
 # **getLatestComputedVectorStores**
-> Object getLatestComputedVectorStores()
+> List&lt;AutotuneVectorStoreInfo&gt; getLatestComputedVectorStores()
 
 
 
@@ -21,7 +21,7 @@ Method | HTTP request | Description
 
 GeboAdminRagAutotuneControllerApi apiInstance = new GeboAdminRagAutotuneControllerApi();
 try {
-    Object result = apiInstance.getLatestComputedVectorStores();
+    List<AutotuneVectorStoreInfo> result = apiInstance.getLatestComputedVectorStores();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAdminRagAutotuneControllerApi#getLatestComputedVectorStores");
@@ -34,7 +34,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;AutotuneVectorStoreInfo&gt;**](AutotuneVectorStoreInfo.md)
 
 ### Authorization
 

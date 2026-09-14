@@ -64,10 +64,10 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public _delete(code: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
-    public _delete(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
-    public _delete(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
-    public _delete(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public _delete(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
+    public _delete(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
+    public _delete(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
+    public _delete(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling _delete.');
@@ -110,9 +110,9 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAll1(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public findAll1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public findAll1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public findAll1(observe?: 'body', reportProgress?: boolean): Observable<Array<A2AServerConfig>>;
+    public findAll1(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<A2AServerConfig>>>;
+    public findAll1(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<A2AServerConfig>>>;
     public findAll1(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -130,7 +130,7 @@ export class GeboA2AServerAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/admin/GeboA2AServerAdminController/findAll`,
+        return this.httpClient.request<Array<A2AServerConfig>>('get',`${this.basePath}/api/admin/GeboA2AServerAdminController/findAll`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -147,10 +147,10 @@ export class GeboA2AServerAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findByCode1(code: any, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
-    public findByCode1(code: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
-    public findByCode1(code: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
-    public findByCode1(code: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findByCode1(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusA2AServerConfig>;
+    public findByCode1(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusA2AServerConfig>>;
+    public findByCode1(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusA2AServerConfig>>;
+    public findByCode1(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling findByCode1.');

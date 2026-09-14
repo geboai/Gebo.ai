@@ -3,6 +3,7 @@ package gebo.microservices.api.client.brain.api;
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.GenericOpenAIAPIImageModelConfig;
+import gebo.microservices.api.client.brain.model.GenericOpenAIImageModelTypeConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
 import gebo.microservices.api.client.brain.model.OperationStatusGenericOpenAIAPIImageModelConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusListGenericOpenAIAPIImageModelChoice;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class GenericOpenAiapiImageModelsConfigurationControllerApi {
     private ApiClient apiClient;
@@ -99,7 +100,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
      * @return GenericOpenAIAPIImageModelConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GenericOpenAIAPIImageModelConfig findGenericOpenAIAPIImageModelConfigByCode(Object code) throws RestClientException {
+    public GenericOpenAIAPIImageModelConfig findGenericOpenAIAPIImageModelConfigByCode(String code) throws RestClientException {
         return findGenericOpenAIAPIImageModelConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -111,7 +112,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
      * @return ResponseEntity&lt;GenericOpenAIAPIImageModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GenericOpenAIAPIImageModelConfig> findGenericOpenAIAPIImageModelConfigByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GenericOpenAIAPIImageModelConfig> findGenericOpenAIAPIImageModelConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -186,10 +187,10 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAIAPIImageModelConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAIImageModelConfigs() throws RestClientException {
+    public List<GenericOpenAIAPIImageModelConfig> getGenericOpenAIImageModelConfigs() throws RestClientException {
         return getGenericOpenAIImageModelConfigsWithHttpInfo().getBody();
     }
 
@@ -197,10 +198,10 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAIAPIImageModelConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAIImageModelConfigsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAIAPIImageModelConfig>> getGenericOpenAIImageModelConfigsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelConfigs").build().toUriString();
         
@@ -217,17 +218,17 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAIAPIImageModelConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIAPIImageModelConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GenericOpenAIImageModelTypeConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getGenericOpenAIImageModelTypes() throws RestClientException {
+    public List<GenericOpenAIImageModelTypeConfig> getGenericOpenAIImageModelTypes() throws RestClientException {
         return getGenericOpenAIImageModelTypesWithHttpInfo().getBody();
     }
 
@@ -235,10 +236,10 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GenericOpenAIImageModelTypeConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getGenericOpenAIImageModelTypesWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GenericOpenAIImageModelTypeConfig>> getGenericOpenAIImageModelTypesWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GenericOpenAIAPIImageModelsConfigurationController/getGenericOpenAIImageModelTypes").build().toUriString();
         
@@ -255,7 +256,7 @@ public class GenericOpenAiapiImageModelsConfigurationControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GenericOpenAIImageModelTypeConfig>> returnType = new ParameterizedTypeReference<List<GenericOpenAIImageModelTypeConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

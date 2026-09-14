@@ -18,33 +18,136 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ConfluenceAdditionalSearchFilter
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:41:02.280767237+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:33.855652885+02:00[Europe/Rome]")
 
 public class ConfluenceAdditionalSearchFilter {
   @JsonProperty("titleTerms")
-  private Object titleTerms = null;
+  private List<String> titleTerms = null;
 
-  @JsonProperty("titleTermsMatchMode")
-  private Object titleTermsMatchMode = null;
+  /**
+   * Gets or Sets titleTermsMatchMode
+   */
+  public enum TitleTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    TitleTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TitleTermsMatchModeEnum fromValue(String input) {
+      for (TitleTermsMatchModeEnum b : TitleTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("titleTermsMatchMode")
+  private TitleTermsMatchModeEnum titleTermsMatchMode = null;
 
   @JsonProperty("textTerms")
-  private Object textTerms = null;
+  private List<String> textTerms = null;
 
-  @JsonProperty("textTermsMatchMode")
-  private Object textTermsMatchMode = null;
+  /**
+   * Gets or Sets textTermsMatchMode
+   */
+  public enum TextTermsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
+
+    private String value;
+
+    TextTermsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static TextTermsMatchModeEnum fromValue(String input) {
+      for (TextTermsMatchModeEnum b : TextTermsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("textTermsMatchMode")
+  private TextTermsMatchModeEnum textTermsMatchMode = null;
 
   @JsonProperty("labels")
-  private Object labels = null;
+  private List<String> labels = null;
 
-  @JsonProperty("labelsMatchMode")
-  private Object labelsMatchMode = null;
+  /**
+   * Gets or Sets labelsMatchMode
+   */
+  public enum LabelsMatchModeEnum {
+    ANY("ANY"),
+    ALL("ALL");
 
-  public ConfluenceAdditionalSearchFilter titleTerms(Object titleTerms) {
+    private String value;
+
+    LabelsMatchModeEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static LabelsMatchModeEnum fromValue(String input) {
+      for (LabelsMatchModeEnum b : LabelsMatchModeEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("labelsMatchMode")
+  private LabelsMatchModeEnum labelsMatchMode = null;
+
+  public ConfluenceAdditionalSearchFilter titleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
+    return this;
+  }
+
+  public ConfluenceAdditionalSearchFilter addTitleTermsItem(String titleTermsItem) {
+    if (this.titleTerms == null) {
+      this.titleTerms = new ArrayList<>();
+    }
+    this.titleTerms.add(titleTermsItem);
     return this;
   }
 
@@ -53,15 +156,15 @@ public class ConfluenceAdditionalSearchFilter {
    * @return titleTerms
   **/
   @Schema(description = "")
-  public Object getTitleTerms() {
+  public List<String> getTitleTerms() {
     return titleTerms;
   }
 
-  public void setTitleTerms(Object titleTerms) {
+  public void setTitleTerms(List<String> titleTerms) {
     this.titleTerms = titleTerms;
   }
 
-  public ConfluenceAdditionalSearchFilter titleTermsMatchMode(Object titleTermsMatchMode) {
+  public ConfluenceAdditionalSearchFilter titleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
     return this;
   }
@@ -71,16 +174,24 @@ public class ConfluenceAdditionalSearchFilter {
    * @return titleTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTitleTermsMatchMode() {
+  public TitleTermsMatchModeEnum getTitleTermsMatchMode() {
     return titleTermsMatchMode;
   }
 
-  public void setTitleTermsMatchMode(Object titleTermsMatchMode) {
+  public void setTitleTermsMatchMode(TitleTermsMatchModeEnum titleTermsMatchMode) {
     this.titleTermsMatchMode = titleTermsMatchMode;
   }
 
-  public ConfluenceAdditionalSearchFilter textTerms(Object textTerms) {
+  public ConfluenceAdditionalSearchFilter textTerms(List<String> textTerms) {
     this.textTerms = textTerms;
+    return this;
+  }
+
+  public ConfluenceAdditionalSearchFilter addTextTermsItem(String textTermsItem) {
+    if (this.textTerms == null) {
+      this.textTerms = new ArrayList<>();
+    }
+    this.textTerms.add(textTermsItem);
     return this;
   }
 
@@ -89,15 +200,15 @@ public class ConfluenceAdditionalSearchFilter {
    * @return textTerms
   **/
   @Schema(description = "")
-  public Object getTextTerms() {
+  public List<String> getTextTerms() {
     return textTerms;
   }
 
-  public void setTextTerms(Object textTerms) {
+  public void setTextTerms(List<String> textTerms) {
     this.textTerms = textTerms;
   }
 
-  public ConfluenceAdditionalSearchFilter textTermsMatchMode(Object textTermsMatchMode) {
+  public ConfluenceAdditionalSearchFilter textTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
     return this;
   }
@@ -107,16 +218,24 @@ public class ConfluenceAdditionalSearchFilter {
    * @return textTermsMatchMode
   **/
   @Schema(description = "")
-  public Object getTextTermsMatchMode() {
+  public TextTermsMatchModeEnum getTextTermsMatchMode() {
     return textTermsMatchMode;
   }
 
-  public void setTextTermsMatchMode(Object textTermsMatchMode) {
+  public void setTextTermsMatchMode(TextTermsMatchModeEnum textTermsMatchMode) {
     this.textTermsMatchMode = textTermsMatchMode;
   }
 
-  public ConfluenceAdditionalSearchFilter labels(Object labels) {
+  public ConfluenceAdditionalSearchFilter labels(List<String> labels) {
     this.labels = labels;
+    return this;
+  }
+
+  public ConfluenceAdditionalSearchFilter addLabelsItem(String labelsItem) {
+    if (this.labels == null) {
+      this.labels = new ArrayList<>();
+    }
+    this.labels.add(labelsItem);
     return this;
   }
 
@@ -125,15 +244,15 @@ public class ConfluenceAdditionalSearchFilter {
    * @return labels
   **/
   @Schema(description = "")
-  public Object getLabels() {
+  public List<String> getLabels() {
     return labels;
   }
 
-  public void setLabels(Object labels) {
+  public void setLabels(List<String> labels) {
     this.labels = labels;
   }
 
-  public ConfluenceAdditionalSearchFilter labelsMatchMode(Object labelsMatchMode) {
+  public ConfluenceAdditionalSearchFilter labelsMatchMode(LabelsMatchModeEnum labelsMatchMode) {
     this.labelsMatchMode = labelsMatchMode;
     return this;
   }
@@ -143,11 +262,11 @@ public class ConfluenceAdditionalSearchFilter {
    * @return labelsMatchMode
   **/
   @Schema(description = "")
-  public Object getLabelsMatchMode() {
+  public LabelsMatchModeEnum getLabelsMatchMode() {
     return labelsMatchMode;
   }
 
-  public void setLabelsMatchMode(Object labelsMatchMode) {
+  public void setLabelsMatchMode(LabelsMatchModeEnum labelsMatchMode) {
     this.labelsMatchMode = labelsMatchMode;
   }
 

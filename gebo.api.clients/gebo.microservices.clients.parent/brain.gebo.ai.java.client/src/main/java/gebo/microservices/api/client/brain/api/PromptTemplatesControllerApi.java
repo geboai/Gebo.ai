@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T16:06:09.933444750+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:21.820076417+02:00[Europe/Rome]")
 
 public class PromptTemplatesControllerApi {
     private ApiClient apiClient;
@@ -52,7 +52,7 @@ public class PromptTemplatesControllerApi {
      * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptTemplateConfig getDefaultPrompt(Object ragPrompt) throws RestClientException {
+    public GPromptTemplateConfig getDefaultPrompt(Boolean ragPrompt) throws RestClientException {
         return getDefaultPromptWithHttpInfo(ragPrompt).getBody();
     }
 
@@ -64,7 +64,7 @@ public class PromptTemplatesControllerApi {
      * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptTemplateConfig> getDefaultPromptWithHttpInfo(Object ragPrompt) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> getDefaultPromptWithHttpInfo(Boolean ragPrompt) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'ragPrompt' is set
         if (ragPrompt == null) {

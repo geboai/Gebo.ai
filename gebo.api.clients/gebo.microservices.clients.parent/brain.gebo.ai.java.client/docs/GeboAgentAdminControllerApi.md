@@ -68,7 +68,7 @@ No authorization required
 
 
 GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
-Object code = null; // Object | 
+String code = "code_example"; // String | 
 try {
     GAgentConfig result = apiInstance.getAgentByCode(code);
     System.out.println(result);
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **code** | [**Object**](.md)|  |
+ **code** | **String**|  |
 
 ### Return type
 
@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getAgents"></a>
 # **getAgents**
-> Object getAgents()
+> List&lt;GBaseObject&gt; getAgents()
 
 
 
@@ -112,7 +112,7 @@ No authorization required
 
 GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
 try {
-    Object result = apiInstance.getAgents();
+    List<GBaseObject> result = apiInstance.getAgents();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentAdminControllerApi#getAgents");
@@ -125,7 +125,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -138,7 +138,7 @@ No authorization required
 
 <a name="getAgentsChoices"></a>
 # **getAgentsChoices**
-> Object getAgentsChoices()
+> List&lt;GBaseObject&gt; getAgentsChoices()
 
 
 
@@ -151,7 +151,7 @@ No authorization required
 
 GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
 try {
-    Object result = apiInstance.getAgentsChoices();
+    List<GBaseObject> result = apiInstance.getAgentsChoices();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentAdminControllerApi#getAgentsChoices");
@@ -164,7 +164,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -177,7 +177,7 @@ No authorization required
 
 <a name="getPromptTemplatesByAgentId"></a>
 # **getPromptTemplatesByAgentId**
-> Object getPromptTemplatesByAgentId(agentId)
+> List&lt;GPromptTemplateConfig&gt; getPromptTemplatesByAgentId(agentId)
 
 
 
@@ -189,9 +189,9 @@ No authorization required
 
 
 GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
-Object agentId = null; // Object | 
+String agentId = "agentId_example"; // String | 
 try {
-    Object result = apiInstance.getPromptTemplatesByAgentId(agentId);
+    List<GPromptTemplateConfig> result = apiInstance.getPromptTemplatesByAgentId(agentId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentAdminControllerApi#getPromptTemplatesByAgentId");
@@ -203,11 +203,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **agentId** | [**Object**](.md)|  |
+ **agentId** | **String**|  |
 
 ### Return type
 
-**Object**
+[**List&lt;GPromptTemplateConfig&gt;**](GPromptTemplateConfig.md)
 
 ### Authorization
 

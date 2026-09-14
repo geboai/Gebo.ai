@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-10T12:42:19.127862733+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-09-14T07:00:37.654842713+02:00[Europe/Rome]")
 
 public class WebdavSystemsControllerApi {
     private ApiClient apiClient;
@@ -187,7 +187,7 @@ public class WebdavSystemsControllerApi {
      * @return GWebdavProjectEndpoint
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GWebdavProjectEndpoint findWebdavEndpointsByCode(Object code) throws RestClientException {
+    public GWebdavProjectEndpoint findWebdavEndpointsByCode(String code) throws RestClientException {
         return findWebdavEndpointsByCodeWithHttpInfo(code).getBody();
     }
 
@@ -199,7 +199,7 @@ public class WebdavSystemsControllerApi {
      * @return ResponseEntity&lt;GWebdavProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GWebdavProjectEndpoint> findWebdavEndpointsByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GWebdavProjectEndpoint> findWebdavEndpointsByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -229,10 +229,10 @@ public class WebdavSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return Object
+     * @return List&lt;GWebdavProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findWebdavEndpointsByProject(Object parentProjectCode) throws RestClientException {
+    public List<GWebdavProjectEndpoint> findWebdavEndpointsByProject(String parentProjectCode) throws RestClientException {
         return findWebdavEndpointsByProjectWithHttpInfo(parentProjectCode).getBody();
     }
 
@@ -241,10 +241,10 @@ public class WebdavSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param parentProjectCode  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GWebdavProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findWebdavEndpointsByProjectWithHttpInfo(Object parentProjectCode) throws RestClientException {
+    public ResponseEntity<List<GWebdavProjectEndpoint>> findWebdavEndpointsByProjectWithHttpInfo(String parentProjectCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'parentProjectCode' is set
         if (parentProjectCode == null) {
@@ -266,7 +266,7 @@ public class WebdavSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GWebdavProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GWebdavProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -274,10 +274,10 @@ public class WebdavSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return Object
+     * @return List&lt;GWebdavProjectEndpoint&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object findWebdavEndpointsByQbe(GWebdavProjectEndpoint body) throws RestClientException {
+    public List<GWebdavProjectEndpoint> findWebdavEndpointsByQbe(GWebdavProjectEndpoint body) throws RestClientException {
         return findWebdavEndpointsByQbeWithHttpInfo(body).getBody();
     }
 
@@ -286,10 +286,10 @@ public class WebdavSystemsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GWebdavProjectEndpoint&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> findWebdavEndpointsByQbeWithHttpInfo(GWebdavProjectEndpoint body) throws RestClientException {
+    public ResponseEntity<List<GWebdavProjectEndpoint>> findWebdavEndpointsByQbeWithHttpInfo(GWebdavProjectEndpoint body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -312,7 +312,7 @@ public class WebdavSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GWebdavProjectEndpoint>> returnType = new ParameterizedTypeReference<List<GWebdavProjectEndpoint>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -323,7 +323,7 @@ public class WebdavSystemsControllerApi {
      * @return GWebdavContentManagementSystem
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GWebdavContentManagementSystem findWebdavSystemByCode(Object code) throws RestClientException {
+    public GWebdavContentManagementSystem findWebdavSystemByCode(String code) throws RestClientException {
         return findWebdavSystemByCodeWithHttpInfo(code).getBody();
     }
 
@@ -335,7 +335,7 @@ public class WebdavSystemsControllerApi {
      * @return ResponseEntity&lt;GWebdavContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GWebdavContentManagementSystem> findWebdavSystemByCodeWithHttpInfo(Object code) throws RestClientException {
+    public ResponseEntity<GWebdavContentManagementSystem> findWebdavSystemByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -402,10 +402,10 @@ public class WebdavSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return Object
+     * @return List&lt;GWebdavContentManagementSystem&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Object getWebdavSystems() throws RestClientException {
+    public List<GWebdavContentManagementSystem> getWebdavSystems() throws RestClientException {
         return getWebdavSystemsWithHttpInfo().getBody();
     }
 
@@ -413,10 +413,10 @@ public class WebdavSystemsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;Object&gt;
+     * @return ResponseEntity&lt;List&lt;GWebdavContentManagementSystem&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Object> getWebdavSystemsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GWebdavContentManagementSystem>> getWebdavSystemsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WebdavSystemsController/getWebdavSystems").build().toUriString();
         
@@ -433,7 +433,7 @@ public class WebdavSystemsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<Object> returnType = new ParameterizedTypeReference<Object>() {};
+        ParameterizedTypeReference<List<GWebdavContentManagementSystem>> returnType = new ParameterizedTypeReference<List<GWebdavContentManagementSystem>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
