@@ -1,5 +1,5 @@
-<p-card class="web-viewer-card">
-  <p-blockUI [blocked]="loading">
+<p-card #webViewerCard class="web-viewer-card">
+  <p-blockUI [target]="webViewerCard" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
   <ng-template pTemplate="header">
