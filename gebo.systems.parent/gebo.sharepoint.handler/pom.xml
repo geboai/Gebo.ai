@@ -48,15 +48,21 @@
 			<artifactId>spring-boot-devtools</artifactId>
 
 		</dependency>
+		<!-- 6.62.0 resolved microsoft-graph-core 3.6.5, which asks for
+		     microsoft-kiota-abstractions 1.8.10 while the six sibling kiota artifacts
+		     arrived at 1.9.0 - a set that is meant to move together. 1.8.10 is affected
+		     by CVE-2026-44503 (RedirectHandler strips only Authorization on a cross-host
+		     redirect, leaking Cookie and Proxy-Authorization); 1.9.1 is the fix. 6.69.0
+		     brings graph-core 3.6.6 and the whole kiota set at 1.9.2. There is no kiota
+		     BOM published, so bumping the aggregator beats pinning seven artifacts.
+		     microsoft-graph-beta was declared here but never used: it carries the
+		     com.microsoft.graph.beta.* namespace, which no source file in the reactor
+		     imports, and it was the second path to the old kiota - as well as 102 MB of
+		     the assembled image. Re-add it if a beta-only API is ever needed. -->
 		<dependency>
 			<groupId>com.microsoft.graph</groupId>
 			<artifactId>microsoft-graph</artifactId>
-			<version>6.62.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.microsoft.graph</groupId>
-			<artifactId>microsoft-graph-beta</artifactId>
-			<version>6.55.0</version>
+			<version>6.69.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.azure</groupId>

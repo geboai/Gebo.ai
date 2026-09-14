@@ -293,6 +293,20 @@
 				<artifactId>bcjmail-jdk18on</artifactId>
 				<version>${bouncycastle.version}</version>
 			</dependency>
+			<!-- Three modules each hardcoded their own jsoup - 1.18.1 in
+			     gebo.architecture.search.abstraction.layer and gebo.llms.standard.functions,
+			     1.20.1 in gebo.system.ingestion - so nearest-wins mediation put the oldest,
+			     1.18.1, on the assembled app's runtime classpath. Those direct declarations
+			     also override the tika-bom imported above, which manages 1.22.2, so the
+			     module pins were actively holding jsoup down. 1.18.1 is affected by
+			     CVE-2026-71497 (Cleaner may emit active markup for custom Safelists that
+			     permit raw-text elements); 1.23.1 is the fix and 1.23.2 is current. Managing
+			     it here means the three consumers can only move together. -->
+			<dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>1.23.2</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>
