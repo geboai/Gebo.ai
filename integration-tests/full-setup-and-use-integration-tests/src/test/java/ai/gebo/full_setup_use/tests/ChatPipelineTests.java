@@ -51,7 +51,8 @@ public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 		List<GChatProfileConfiguration> profiles = ragChatControllerApi.getChatProfiles();
 
 		GeboUserChatsControllerApi userChatControllerApi = new GeboUserChatsControllerApi(apiClient);
-		GUserChatInfo chatInfo = userChatControllerApi.createCleanChatByChatProfileCode(profiles.get(0).getCode());
+		GUserChatInfo chatInfo = userChatControllerApi.createCleanChatByChatProfileCode(profiles.get(0).getCode(),
+				null);
 		renew(apiClient);
 		GeboChatPipelinesControllerApi chatPipelineControllerApi = new GeboChatPipelinesControllerApi(apiClient);
 		List<GeboChatRequest> requests = this.loadChatRequests("/chats-playbook/chat-playbook.json");
