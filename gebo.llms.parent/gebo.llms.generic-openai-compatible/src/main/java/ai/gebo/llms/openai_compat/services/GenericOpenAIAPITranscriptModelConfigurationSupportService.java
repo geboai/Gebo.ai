@@ -174,6 +174,7 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 			if (baseUrl != null) {
 				builder.baseUrl(baseUrl);
 			}
+			builder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())));
 			OpenAiAudioTranscriptionOptions options = builder.build();
 			OpenAiAudioTranscriptionModel model = OpenAiAudioTranscriptionModel.builder()
 					.options(options)

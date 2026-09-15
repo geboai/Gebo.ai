@@ -207,6 +207,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (user != null) {
 				builder = builder.user(user);
 			}
+			builder.timeout(OpenAiClientCustomizer.requestTimeout(clientsProvider));
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();

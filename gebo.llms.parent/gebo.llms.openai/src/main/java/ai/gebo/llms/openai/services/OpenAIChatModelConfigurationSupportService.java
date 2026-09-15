@@ -158,6 +158,7 @@ public class OpenAIChatModelConfigurationSupportService
 				builder = builder.user(user);
 			}
 
+			builder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(getCode())));
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();

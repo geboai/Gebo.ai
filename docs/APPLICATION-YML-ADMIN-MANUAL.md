@@ -593,6 +593,30 @@ this block.
 | `ai.gebo.userflows.mail-sender` | String | `no-reply@gebo.ai` | From-address for outbound mail. |
 | `ai.gebo.userflows.gebo-reachable-base-address` | String | `http://localhost:12999` | Public base URL embedded in activation/reset links — **must be set to your real external URL** in any non-localhost deployment. |
 
+## 20b. LLM client networking — timeouts and retries
+
+These govern every outbound call to an LLM provider (chat, embedding, image, ranker,
+speech, transcription). They are bound to `GeboDefaultLlmsServiceClientsProviderConfig`
+and apply to all vendors that route through `IGLlmsServiceClientsProvider` — that is
+every vendor except AWS Bedrock and Google Vertex, which currently run on their own SDK
+defaults. See [`LLMS-NETWORKING-PARAMS.md`](./LLMS-NETWORKING-PARAMS.md) for the
+per-service review.
+
+| Property | Type | Shipped default | Description |
+|---|---|---|---|
+| `ai.gebo.llms.default.clients.config.web-client-config.connect-timeout` | long (ms) | `30000` | Time allowed to establish the TCP/TLS connection to the provider. |
+| `ai.gebo.llms.default.clients.config.web-client-config.response-timeout` | long (ms) | `80000` | Time allowed for the provider to respond. Used as the read **and** write timeout, and as the request timeout of the OpenAI/Anthropic SDK clients. **Raise this if long generations are being cut off mid-stream** — a deep multi-cycle report can stream for well over a minute. |
+| `ai.gebo.llms.default.clients.config.retry-config.max-attempts` | int | `5` | Maximum transport-level attempts per call. |
+| `ai.gebo.llms.default.clients.config.retry-config.backoff-interval` | long (ms) | `5000` | Fixed delay between attempts. |
+| `ai.gebo.llms.default.clients.config.retry-config.retry-timeout` | long (ms) | `80000` | Overall budget for the retry template. |
+
+A dropped stream is **not** retried and cannot be: once tokens have been streamed to
+the client they cannot be replayed, so a response cut by `response-timeout` is
+delivered truncated. The agent network logs
+`Agent <name> failed; continuing network` when that happens.
+
+---
+
 ## 21. Miscellaneous
 
 | Property | Type | Shipped default | Description |

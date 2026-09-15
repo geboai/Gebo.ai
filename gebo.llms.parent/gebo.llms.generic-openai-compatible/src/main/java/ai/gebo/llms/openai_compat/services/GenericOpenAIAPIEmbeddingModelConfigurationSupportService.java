@@ -170,6 +170,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			if (user != null) {
 				builder = builder.user(user);
 			}
+			builder.timeout(OpenAiClientCustomizer.requestTimeout(clientsProvider));
 			OpenAiEmbeddingOptions options = builder.build();
 			OpenAiEmbeddingModel model = OpenAiEmbeddingModel.builder()
 					.options(options)

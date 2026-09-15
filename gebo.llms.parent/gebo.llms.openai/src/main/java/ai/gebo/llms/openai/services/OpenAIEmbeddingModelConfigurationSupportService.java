@@ -151,6 +151,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 			if (user != null) {
 				builder = builder.user(user);
 			}
+			builder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(getCode())));
 			OpenAiEmbeddingOptions options = builder.build();
 			OpenAiEmbeddingModel model = OpenAiEmbeddingModel.builder()
 					.options(options)

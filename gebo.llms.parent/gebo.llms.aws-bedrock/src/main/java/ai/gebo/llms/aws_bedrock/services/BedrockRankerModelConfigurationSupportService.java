@@ -15,6 +15,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.aws_bedrock.http.BedrockClientCustomizer;
 import ai.gebo.llms.abstraction.layer.model.GRankerModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
@@ -50,6 +52,12 @@ public class BedrockRankerModelConfigurationSupportService
 	static final String[] KNOWN_RERANK_MODELS = new String[] { "amazon.rerank-v1:0", "cohere.rerank-v3-5:0" };
 
 	final BedrockCredentialsResolver credentialsResolver;
+	/**
+	 * Supplies the configured connect/read timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}); the AWS SDK defaults are
+	 * tighter and are not otherwise overridable from configuration.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 
 	class BedrockConfigurableRankerModel implements IGConfigurableRankerModel<GBedrockRankerModelConfig> {
@@ -88,7 +96,9 @@ public class BedrockRankerModelConfigurationSupportService
 			this.config = config;
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
 			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
-			this.client = BedrockAgentRuntimeClient.builder().region(region).credentialsProvider(credentials).build();
+			this.client = BedrockAgentRuntimeClient.builder().region(region).credentialsProvider(credentials)
+					.overrideConfiguration(BedrockClientCustomizer.overrideConfiguration(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 			String modelArn = toModelArn(region.id(), config.getChoosedModel().getCode());
 			this.rankerModel = new BedrockRankerModel(client, modelArn);
 		}
