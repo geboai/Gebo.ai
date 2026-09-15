@@ -227,7 +227,10 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 						+ semanticQuota + " fullTextQuota:" + fullTextQuota + " semanticQueries:"
 						+ semanticSearchedQuery.size() + " fullTextQueries:" + fullTextSearchedQuery.size());
 			}
-			boolean endSearch = false;
+			// Every semantic (embedding model x query) probe, flattened so the leg can be
+			// suspended at its quota and RESUMED later to back fill whatever the optional
+			// legs did not deliver.
+			final List<SemanticProbe> semanticProbes = new ArrayList<SemanticProbe>();
 			if (!semanticSearchedQuery.isEmpty() && !embeddingModels.isEmpty()) {
 				for (IGConfigurableEmbeddingModel em : embeddingModels) {
 					double _threashold = threashold;
@@ -244,24 +247,18 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 						}
 					}
 					for (String query : semanticSearchedQuery) {
-						RagQueryOptions options = new RagQueryOptions(tokensBudget, CompletenessLevel.MAX_TOKENS);
-						options.setSimilarityThreashold(_threashold);
 						// _semanticRagTopK, not semanticRagTopK: the latter is the global chat
 						// default (15) and ignoring the Math.min above let a single semantic
 						// query overshoot the caller's budget and end the whole search.
-						options.setTopK(_semanticRagTopK);
-						AIDocumentsSet data = this.semanticSearchDao.multiHopSemanticSearch(query, semanticSearchMetaDataFilter,
-								options, em, _firstHopThreashold, _secondHopThreashold,
-								securityService.getCurrentUser());
-						out = AIDocumentsSet.join(data, out);
-						endSearch = ((out.countFragments() >= semanticQuota) || out.getTokensSize() >= tokensBudget);
-						if (endSearch)
-							break;
+						semanticProbes.add(new SemanticProbe(em, query, _threashold, _firstHopThreashold,
+								_secondHopThreashold, _semanticRagTopK));
 					}
-					if (endSearch)
-						break;
 				}
 			}
+			SemanticLegOutcome semanticLeg = runSemanticProbes(semanticProbes, 0, semanticQuota, out,
+					semanticSearchMetaDataFilter, tokensBudget);
+			out = semanticLeg.out();
+			boolean endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;
 			// The lexical leg runs whenever hybrid retrieval is on. Only when hybrid is
 			// disabled does it fall back to its historical role of filling the gap left
 			// by an under delivering semantic leg.
@@ -281,23 +278,54 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 							+ fullTextSearchedQuery.size() + " quer(ies), semantic leg contributed "
 							+ out.countFragments() + " fragment(s)");
 				}
-				AIDocumentsSet fullTextDocSet = fullTextSearch.search(fullTextSearchedQuery, fullTextTopK,
-						metaDataFilter);
-				if (fullTextDocSet != null) {
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Lexical leg contributed " + fullTextDocSet.countFragments() + " fragment(s)");
+				try {
+					AIDocumentsSet fullTextDocSet = fullTextSearch.search(fullTextSearchedQuery, fullTextTopK,
+							metaDataFilter);
+					if (fullTextDocSet != null) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Lexical leg contributed " + fullTextDocSet.countFragments() + " fragment(s)");
+						}
+						out = AIDocumentsSet.join(fullTextDocSet, out);
 					}
-					out = AIDocumentsSet.join(fullTextDocSet, out);
+				} catch (FullTextException | RuntimeException e) {
+					// A configured but unreachable or empty lexical index must not fail the
+					// whole retrieval: the semantic leg already produced usable evidence and
+					// the back fill below recovers the reserved quota.
+					LOGGER.warn("Lexical search leg failed, continuing with the other legs", e);
 				}
 				endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;
 			}
 			if (knowledgeGraphSearchService != null && !endSearch) {
-				List<KnowledgeGraphSearchResult> hits = knowledgeGraphSearchService.knowledgeGraphSearch(userQuery,
-						knowledgeBases, globalTopK - out.countFragments());
-				AIDocumentsSet graphRagDocSet = knowledgeGraphSearchService.toRagDocumentsCachedDaoResult(hits);
-				if (graphRagDocSet != null) {
-					out = AIDocumentsSet.join(graphRagDocSet, out);
+				try {
+					List<KnowledgeGraphSearchResult> hits = knowledgeGraphSearchService.knowledgeGraphSearch(userQuery,
+							knowledgeBases, globalTopK - out.countFragments());
+					AIDocumentsSet graphRagDocSet = knowledgeGraphSearchService.toRagDocumentsCachedDaoResult(hits);
+					if (graphRagDocSet != null) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Knowledge graph leg contributed " + graphRagDocSet.countFragments()
+									+ " fragment(s)");
+						}
+						out = AIDocumentsSet.join(graphRagDocSet, out);
+					}
+				} catch (RuntimeException e) {
+					LOGGER.warn("Knowledge graph search leg failed, continuing with the other legs", e);
 				}
+				endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;
+			}
+			// Back fill. The lexical and knowledge graph legs are optional: the beans are
+			// @Autowired(required = false), their index may be empty and the call may
+			// fail. Without this, reserving a share of globalTopK for a leg that then
+			// delivers nothing would return FEWER fragments than before hybrid retrieval
+			// existed. Whatever they left unused goes back to the semantic leg, which
+			// resumes from the probe it was suspended on rather than repeating itself.
+			if (!endSearch && semanticLeg.cursor() < semanticProbes.size()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Back filling from the semantic leg: " + out.countFragments() + " of " + globalTopK
+							+ " fragment(s) so far, resuming at probe " + semanticLeg.cursor() + " of "
+							+ semanticProbes.size());
+				}
+				out = runSemanticProbes(semanticProbes, semanticLeg.cursor(), globalTopK, out,
+						semanticSearchMetaDataFilter, tokensBudget).out();
 			}
 			out.recalculateSize();
 			for (AIDocumentReferenceItem doc : out.getDocumentItems()) {
@@ -311,6 +339,47 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		}
 		return out;
 
+	}
+
+	/**
+	 * One semantic retrieval probe: an embedding model paired with a query and the
+	 * thresholds/topK resolved for that model. Flattening the model x query matrix
+	 * lets the semantic leg stop at a quota and resume exactly where it left off.
+	 */
+	private record SemanticProbe(IGConfigurableEmbeddingModel model, String query, double threashold,
+			double firstHopThreashold, double secondHopThreashold, int topK) {
+	}
+
+	/**
+	 * What the semantic leg produced and the probe it stopped on, so a later pass
+	 * can resume without repeating queries already issued.
+	 */
+	private record SemanticLegOutcome(AIDocumentsSet out, int cursor) {
+	}
+
+	/**
+	 * Runs semantic probes from {@code from} until the accumulated set reaches
+	 * {@code quota} fragments or exhausts the token budget, and reports where it
+	 * stopped.
+	 */
+	private SemanticLegOutcome runSemanticProbes(List<SemanticProbe> probes, int from, int quota, AIDocumentsSet out,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, int tokensBudget) {
+		int cursor = from;
+		while (cursor < probes.size()) {
+			final SemanticProbe probe = probes.get(cursor);
+			cursor++;
+			RagQueryOptions options = new RagQueryOptions(tokensBudget, CompletenessLevel.MAX_TOKENS);
+			options.setSimilarityThreashold(probe.threashold());
+			options.setTopK(probe.topK());
+			AIDocumentsSet data = this.semanticSearchDao.multiHopSemanticSearch(probe.query(),
+					semanticSearchMetaDataFilter, options, probe.model(), probe.firstHopThreashold(),
+					probe.secondHopThreashold(), securityService.getCurrentUser());
+			out = AIDocumentsSet.join(data, out);
+			if (out.countFragments() >= quota || out.getTokensSize() >= tokensBudget) {
+				break;
+			}
+		}
+		return new SemanticLegOutcome(out, cursor);
 	}
 
 	private AIDocumentsSet toAIDocumentsSet(List<FullTextChunkSearchHit> fullTextResult) {
