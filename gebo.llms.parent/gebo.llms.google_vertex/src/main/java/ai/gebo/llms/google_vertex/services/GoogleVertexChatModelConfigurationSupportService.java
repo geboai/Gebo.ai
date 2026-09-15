@@ -23,6 +23,7 @@ import com.google.genai.Client;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
@@ -75,6 +76,11 @@ public class GoogleVertexChatModelConfigurationSupportService
 	 * Helper service to configure VertexAI instances
 	 */
 	final VertexAIConfigurator configurator;
+	/**
+	 * Supplies the configured retry budget for the model builder; the timeouts ride
+	 * on the GenAI client built by {@link VertexAIConfigurator}.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
@@ -134,6 +140,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 			GoogleGenAiChatOptions options = builder.build();
 			GoogleGenAiChatModel model = GoogleGenAiChatModel.builder()
 					.genAiClient(genAiClient)
+					.retryTemplate(serviceClientsProviderFactory.get(getType().getCode()).getCoreRetryTemplate())
 					.options(options)
 					.toolCallingManager(
 							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())

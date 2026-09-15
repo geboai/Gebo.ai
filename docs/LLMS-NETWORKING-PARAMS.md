@@ -47,8 +47,8 @@ its transport:
 | deepseek | Chat | Reactor Netty | ok | `RetryTemplate` |
 | mistral | Chat, Embedding | Reactor Netty | ok | `RetryTemplate` |
 | ollama | Chat, Embedding | Reactor Netty | ok | `RetryTemplate` |
-| google_vertex | Chat, Embedding | Google SDK | **not wired** (§5) | Embedding only |
-| aws-bedrock | Chat, Embedding, Image, Ranker, TextToSpeech, Transcript | AWS SDK | **not wired** (§5) | SDK default |
+| google_vertex | Chat, Embedding | Google GenAI SDK | **fixed** (§5) | **fixed** (§5) |
+| aws-bedrock | Chat, Embedding, Image, Ranker, TextToSpeech, Transcript | AWS SDK | **fixed** (§5) | **fixed** (§5) |
 | onxx-embeddings | Embedding | in-process | n/a | n/a |
 
 Before this review, **0 of 26** services set a timeout on their model *options*
@@ -90,8 +90,12 @@ OpenAIIoException: Stream failed
 
 The report writer then logged `Recording an empty interaction`, the network logged
 `Agent ReportWriterNetworkAgentService failed; continuing network` and kept `the
-already composed chat envelope` — so the user got a report truncated mid-sentence at
-15,120 streamed characters, with no visible error. Neither retry layer can help: an
+already composed chat envelope` — so the user got a report that stopped mid-sentence
+after 15,120 streamed characters, with no visible error. Nothing trims the answer: the
+`cumulated=` counter is only the running length logged per chunk, and the one truncation
+helper in the agents layer (`GAbstractGenericalAgentService.truncateToTokens`) applies to
+prompt inputs and appends a visible `...(truncated content)` marker, which this answer
+did not carry. The generation simply stopped where the cancelled stream left it. Neither retry layer can help: an
 OkHttp interceptor and Spring AI's `RetryTemplate` cannot replay an SSE stream whose
 tokens have already been delivered downstream.
 
@@ -102,6 +106,15 @@ carry the same value:
 ```java
 builder.timeout(OpenAiClientCustomizer.requestTimeout(clientsProvider));
 ```
+
+**Verified at runtime.** Launching with `response-timeout=15000` and repeating the
+request, the call died at **15.128 s** (`15:08:01,790` -> `15:08:16,918`) instead of the
+old fixed 60 s, i.e. the configured value now governs:
+
+| Configured | Actual cut | Governed by |
+| --- | --- | --- |
+| 80000 ms (before the fix) | 60.026 s | Spring AI's `DEFAULT_TIMEOUT` |
+| 15000 ms (after the fix) | 15.128 s | the configuration |
 
 **`maxRetries` is deliberately left at Spring AI's default of 3.** Retries are already
 applied at the transport level by `getOkHttpRetryInterceptor()` with
@@ -118,22 +131,59 @@ nothing to override `AnthropicClientCustomizer`'s value. Its OkHttp timeout stan
 
 ---
 
-## 5. Known gaps (not addressed here)
+## 5. AWS Bedrock and Google Vertex
 
-Both are larger than a timeout line and are left open deliberately.
+Neither family took an `IGLlmsServiceClientsProvider` at all, so
+`ai.gebo.llms.default.clients.config` never reached them and both ran on vendor SDK
+defaults. Both now receive the factory (all the services are `@Service`
+`@AllArgsConstructor`, so a `final` field is injected) and map the configuration onto
+the options each SDK actually exposes.
 
-1. **AWS Bedrock (6 services)** never touches `IGLlmsServiceClientsProvider`. It runs
-   on AWS SDK defaults, except `BedrockEmbeddingModelConfigurationSupportService`,
-   which hard-codes `API_TIMEOUT = Duration.ofMinutes(2)`, and
-   `BedrockTranscriptModelConfigurationSupportService`, which hard-codes
-   `TRANSCRIBE_TIMEOUT_SECONDS = 300`. Wiring these means mapping the gebo config onto
-   `ClientOverrideConfiguration` / `NettyNioAsyncHttpClient`.
-2. **Google Vertex (2 services)** likewise takes no provider. `GoogleVertexChatModel`
-   has no timeout or retry wiring of any kind; `GoogleVertexEmbeddingModel` uses a
-   `RetryTemplate` but no configured timeout.
+### 5.1 Bedrock
 
-Neither vendor is exercised by the default local stack, which is why the 60s cap
-surfaced first on the OpenAI-compatible path.
+`BedrockClientCustomizer` (new, in `ai.gebo.llms.aws_bedrock.http`) is the Bedrock
+analogue of `OpenAiClientCustomizer`.
+
+`BedrockProxyChatModel.Builder` exposes five durations, and its defaults were the
+problem — `asyncReadTimeout` and `socketTimeout` default to **30 seconds**, tighter even
+than the OpenAI 60s, and they bite exactly on long streamed generations:
+
+| Builder method | Default | Now |
+| --- | --- | --- |
+| `timeout` (api call) | 5 min | `response-timeout` |
+| `asyncReadTimeout` | **30 s** | `response-timeout` |
+| `socketTimeout` | **30 s** | `response-timeout` |
+| `connectionTimeout` | 5 s | `connect-timeout` |
+| `connectionAcquisitionTimeout` | 30 s | `connect-timeout` |
+
+The four plain AWS SDK clients — `BedrockRuntimeClient` (image),
+`BedrockAgentRuntimeClient` (ranker), `PollyClient` (text-to-speech) and
+`TranscribeStreamingAsyncClient` (transcript) — take
+`BedrockClientCustomizer.overrideConfiguration(..)`, which sets
+`apiCallAttemptTimeout` and a `retryStrategy` with the configured `maxAttempts`.
+`apiCallTimeout` is deliberately **not** set: making the overall budget equal to a
+single attempt would silently defeat the retry strategy.
+
+The embedding service's hard-coded `API_TIMEOUT = Duration.ofMinutes(2)` is replaced by
+the configured value on both the Cohere and the Titan API objects.
+
+### 5.2 Vertex
+
+`GoogleGenAiChatModel.Builder` accepts a Spring Core
+`retryTemplate(org.springframework.core.retry.RetryTemplate)` — exactly what
+`getCoreRetryTemplate()` already returns — and nothing was being passed, so no retry
+policy applied at all. It is now wired.
+
+Timeouts ride on the `com.google.genai.Client`, through `HttpOptions`.
+`VertexAIConfigurator` built `HttpOptions` **only** when a custom base URL was
+configured, and overwrote the whole object, so no timeout or retry option ever reached
+the client. A single `httpOptions(baseUrl)` helper now always sets
+`timeout(int millis)` and `retryOptions(HttpRetryOptions.attempts(..))`, adding the base
+URL when present.
+
+Neither vendor is exercised by the default local stack, so these are compile-verified
+and grounded in the shipped SDK APIs, but not runtime-verified the way the OpenAI path
+in §3 was.
 
 ---
 

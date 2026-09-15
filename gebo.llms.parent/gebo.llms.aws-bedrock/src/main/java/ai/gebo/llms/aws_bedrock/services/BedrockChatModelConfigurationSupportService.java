@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.aws_bedrock.http.BedrockClientCustomizer;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
@@ -56,6 +58,12 @@ public class BedrockChatModelConfigurationSupportService
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;
+	/**
+	 * Supplies the configured connect/read timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}); the AWS SDK defaults are
+	 * tighter and are not otherwise overridable from configuration.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final BedrockFoundationModelsLookupService modelsLookupService;
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;
 	final ModelRuntimeConfigureHandler configureHandler;
@@ -101,9 +109,17 @@ public class BedrockChatModelConfigurationSupportService
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();
 
+			// The builder defaults asyncReadTimeout and socketTimeout to 30s and
+			// connectionTimeout to 5s, which cut long streamed generations well before
+			// the configured response timeout.
 			return BedrockProxyChatModel.builder()
 					.credentialsProvider(credentials)
 					.region(region)
+					.timeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.asyncReadTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.socketTimeout(BedrockClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.connectionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
+					.connectionAcquisitionTimeout(BedrockClientCustomizer.connectTimeout(serviceClientsProviderFactory.get(type.getCode())))
 					.options(options)
 					.toolCallingManager(toolCallingManager)
 					.observationRegistry(observationRegistry)

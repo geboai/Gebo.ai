@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.aws_bedrock.http.BedrockClientCustomizer;
 import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
@@ -60,6 +62,12 @@ public class BedrockTextToSpeechModelConfigurationSupportService implements
 	}
 
 	final BedrockCredentialsResolver credentialsResolver;
+	/**
+	 * Supplies the configured connect/read timeouts and retry budget
+	 * ({@code ai.gebo.llms.default.clients.config}); the AWS SDK defaults are
+	 * tighter and are not otherwise overridable from configuration.
+	 */
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 
 	class BedrockPollyConfigurableTextToSpeechModel
@@ -99,7 +107,9 @@ public class BedrockTextToSpeechModelConfigurationSupportService implements
 			this.config = config;
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
 			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
-			this.pollyClient = PollyClient.builder().region(region).credentialsProvider(credentials).build();
+			this.pollyClient = PollyClient.builder().region(region).credentialsProvider(credentials)
+					.overrideConfiguration(BedrockClientCustomizer.overrideConfiguration(serviceClientsProviderFactory.get(type.getCode())))
+					.build();
 			String voice = config.getVoice();
 			if ((voice == null || voice.trim().length() == 0) && config.getChoosedModel() != null) {
 				voice = config.getChoosedModel().getCode();
@@ -157,7 +167,9 @@ public class BedrockTextToSpeechModelConfigurationSupportService implements
 		try {
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
 			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
-			try (PollyClient polly = PollyClient.builder().region(region).credentialsProvider(credentials).build()) {
+			try (PollyClient polly = PollyClient.builder().region(region).credentialsProvider(credentials)
+					.overrideConfiguration(BedrockClientCustomizer.overrideConfiguration(serviceClientsProviderFactory.get(type.getCode())))
+					.build()) {
 				DescribeVoicesResponse response = polly.describeVoices();
 				List<GBedrockTextToSpeechModelChoice> choices = new ArrayList<>();
 				for (Voice voice : response.voices()) {
