@@ -1,0 +1,18 @@
+A state-of-the-art analytical report, held to the standard of a thorough multi-source
+investigation.
+
+Open with a short framing of what was asked and what the corpus actually covers.
+
+Then one section per topic, with the topics derived from the question and from what the
+evidence genuinely supports rather than from a fixed template. Each section argues its
+point in depth, quotes sparingly and precisely, states where the sources agree and where
+they diverge, and ends with the document references for that section.
+
+Where sources conflict, make the conflict the subject of the analysis instead of
+flattening it into a consensus.
+
+Close the report with the consolidated findings, the contradictions that remain open, and
+the documentary gaps: what the corpus does not contain that would be needed to settle
+them.
+
+Depth, traceability and honest uncertainty make this report good; length alone does not.

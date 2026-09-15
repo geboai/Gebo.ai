@@ -1,5 +1,11 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.util.FileCopyUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -67,6 +73,9 @@ public class ReportWriterReactiveAgentServiceImpl
 		extends GAbstractReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatResponse>
 		implements IReportWriterReactiveAgentService {
 	private static final String REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM = "REQUIRED_AGENT_COMPLETENESS";
+	private static final String DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM = "DELIVERABLE_FORMATTING_RULES";
+	static final String DELIVERABLE_FORMATS_RESOURCE_PATH = "/agents-prompt-library/en/deliverable-formats/";
+	private static final Map<DeliverableIntent, String> DELIVERABLE_FORMATS_CACHE = new ConcurrentHashMap<>();
 	private static final String END_AGENT_LOOP = "END_AGENT-LOOP-";
 	private static final String TOOL_CALLED = "TOOL-CALLED-";
 	private static final String RESPONSE = "RESPONSE: ";
@@ -90,6 +99,66 @@ public class ReportWriterReactiveAgentServiceImpl
 				rendererFactory);
 
 	}
+	/**
+	 * Per-deliverable formatting rules, packaged as one .txt resource per
+	 * {@link DeliverableIntent} under {@value #DELIVERABLE_FORMATS_RESOURCE_PATH} and
+	 * assembled into the module jar, so the wording is maintained as prompt text rather
+	 * than as a Java string literal. Resolved by the enum constant name, read once and
+	 * cached.
+	 * <p>
+	 * When the resource for an intent cannot be read, the rules of
+	 * {@link DeliverableIntent#SUMMARY} are used: it is the balanced middle of the ladder
+	 * and it is already the intent this writer falls back to when the shared environment
+	 * carries no user intent at all, so an unresolvable rule degrades to the same shape
+	 * as an unresolvable intent rather than to no shape at all.
+	 */
+	private String deliverableFormattingRules(DeliverableIntent intent) {
+		return DELIVERABLE_FORMATS_CACHE.computeIfAbsent(intent, key -> {
+			String rules = readDeliverableFormatResource(key);
+			if (rules == null && key != DeliverableIntent.SUMMARY) {
+				LOGGER.warn("No usable formatting rules for deliverable " + key.name()
+						+ ", falling back to the " + DeliverableIntent.SUMMARY.name() + " ones");
+				rules = readDeliverableFormatResource(DeliverableIntent.SUMMARY);
+			}
+			if (rules == null) {
+				// Only reachable when the SUMMARY resource itself is missing from the jar.
+				LOGGER.warn("No formatting rules resource could be read at all: the writer prompt"
+						+ " keeps only its unconditional formatting rules");
+				return "";
+			}
+			return rules;
+		});
+	}
+
+	/**
+	 * Reads one deliverable formatting rules resource, or returns {@code null} when it is
+	 * absent or unreadable, so the caller can apply the fallback.
+	 */
+	private String readDeliverableFormatResource(DeliverableIntent intent) {
+		final String reference = DELIVERABLE_FORMATS_RESOURCE_PATH + intent.name() + ".txt";
+		try (InputStream is = ReportWriterReactiveAgentServiceImpl.class.getResourceAsStream(reference)) {
+			if (is == null) {
+				LOGGER.warn("No deliverable formatting rules resource at " + reference);
+				return null;
+			}
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			FileCopyUtils.copy(is, bos);
+			final String rules = bos.toString(StandardCharsets.UTF_8);
+			if (rules.isBlank()) {
+				LOGGER.warn("The deliverable formatting rules at " + reference + " are empty");
+				return null;
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Loaded deliverable formatting rules for " + intent.name() + " from " + reference
+						+ " (" + rules.length() + " chars)");
+			}
+			return rules;
+		} catch (IOException e) {
+			LOGGER.warn("Cannot read the deliverable formatting rules at " + reference, e);
+			return null;
+		}
+	}
+
 	@Override
 	protected <I, O> List<Map<String, Object>> createAgentTemplateParams(GPromptTemplateConfig prompt,
 			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
@@ -119,8 +188,13 @@ public class ReportWriterReactiveAgentServiceImpl
 			LOGGER.trace(completeness);
 			LOGGER.trace("</" + REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM + ">");
 		}
+		// Only the rule for THIS deliverable type reaches the prompt: the writer is never
+		// asked to select its own branch out of a catalogue of every type, and the prompt
+		// does not carry the branches it will not use.
+		final String formattingRules = deliverableFormattingRules(actualUserIntent);
 		for (Map<String, Object> window : output) {
 			window.put(REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM, completeness);
+			window.put(DELIVERABLE_FORMATTING_RULES_TEMPLATE_PARAM, formattingRules);
 		}
 		return output;
 	}

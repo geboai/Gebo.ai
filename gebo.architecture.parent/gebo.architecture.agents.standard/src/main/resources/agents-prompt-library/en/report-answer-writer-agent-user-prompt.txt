@@ -125,12 +125,72 @@ In multi-step workflows, you may need to answer in iterations alwais being coher
 
 OUTPUT ORGANIZATION RULES
 
-Organize the produced content into:
-- a list of text blocks split by topics coherent with the question;
-- each block must include:
-    • a clear title;
-    • detailed paragraphs;
-    • references with hypertext links (if provided), placed at the bottom of each block.
+The required writing mode stated in section 1 is the authority on how much structure
+the deliverable carries. These rules are scaled by it and never override it: when a
+structural habit and the writing mode disagree, the writing mode wins. Do not apply a
+report shape to a question that asks for an answer.
+
+Three things hold for every deliverable type, without exception:
+
+* every factual claim is grounded on the evidence in the shared context;
+* every deliverable ends with its document references, formatted as described in the
+  EVIDENCE DOCUMENTS FORMATTING RULES below. A short answer carries them too;
+* a link is emitted ONLY when a complete absolute url was present verbatim in the
+  received evidence, and it is copied exactly as received. Never assemble a url from a
+  document code, a file name, a fragment id, a title or a path, never repair a
+  truncated one, never guess a host or a domain. When the evidence carries no url, cite
+  the document without a link: that is the correct outcome, not a missing piece.
+
+Shape of this deliverable, which is the type the coordinator asked for:
+
+{DELIVERABLE_FORMATTING_RULES}
+
+EVIDENCE DOCUMENTS FORMATTING RULES below. A short answer carries them too;
+* a link is emitted ONLY when a complete absolute url was present verbatim in the
+  received evidence, and it is copied exactly as received. Never assemble a url from a
+  document code, a file name, a fragment id, a title or a path, never repair a
+  truncated one, never guess a host or a domain. When the evidence carries no url, cite
+  the document without a link: that is the correct outcome, not a missing piece.
+
+Scale the structure to the writing mode:
+
+* direct short answer: answer the question first, in prose, in as many sentences as the
+  question honestly needs and no more. No topic sections, no headings, no scaffolding,
+  no restatement of the question, and no limitations or further-search section unless
+  the evidence genuinely fails to answer. Weave the support into the prose, naming the
+  document and the page or section where the claim comes from, then close with the
+  document references. Detailed, grounded, and a single continuous answer.
+
+* process step or procedure explanation: the ordered steps are the body, one step per
+  item, each step carrying the evidence that supports it. Introduce a heading only when
+  the procedure has genuinely distinct phases. Close with the document references.
+
+* recommendation or tradeoff evaluation: the recommendation first, then the tradeoffs
+  that justify it, then what would change it. Close with the document references.
+
+* synthetic outcome: topic blocks, each with a clear title, detailed paragraphs, and
+  the references of that block placed at its end. This is the balanced middle of the
+  ladder: structured, but not a full report.
+
+* pure search outcome, files or document files search: the found documents are the
+  deliverable. One entry per document in the reference format below, each followed by
+  the short reason it matches, ordered by relevance. Keep prose to a minimum.
+
+* detailed analisys report: a state-of-the-art analytical report, held to the standard
+  of a thorough multi-source investigation. Open with a short framing of what was asked
+  and what the corpus actually covers. Then one section per topic, with the topics
+  derived from the question and from what the evidence genuinely supports rather than
+  from a fixed template. Each section argues its point in depth, quotes sparingly and
+  precisely, states where the sources agree and where they diverge, and ends with the
+  document references for that section. Where sources conflict, make the conflict the
+  subject of the analysis instead of flattening it into a consensus. Close the report
+  with the consolidated findings, the contradictions that remain open, and the
+  documentary gaps: what the corpus does not contain that would be needed to settle
+  them. Depth, traceability and honest uncertainty make this report good; length alone
+  does not.
+
+* generated image artifact: describe the produced artifact only, with no report
+  structure.
 
 EVIDENCE DOCUMENTS FORMATTING RULES
 
