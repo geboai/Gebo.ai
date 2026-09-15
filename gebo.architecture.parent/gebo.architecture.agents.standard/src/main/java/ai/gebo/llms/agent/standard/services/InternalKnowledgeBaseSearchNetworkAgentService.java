@@ -134,7 +134,14 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					chatRequestContext, params, List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());
-			if (LOGGER.isDebugEnabled()) {
+			if (semanticQueries.isEmpty() && fullTextQueries.isEmpty()) {
+				// Both legs then fall back to the raw command text. That is survivable but
+				// it is a degraded search on an instruction-shaped probe, and at DEBUG the
+				// planner call looked like any other successful one.
+				LOGGER.warn("Search planner returned no queries for command:"
+						+ (command != null ? command.getCommand() : null)
+						+ " - falling back to the raw command text for both legs");
+			} else if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Search planner produced " + semanticQueries.size() + " semantic and "
 						+ fullTextQueries.size() + " full-text quer(ies)");
 			}
