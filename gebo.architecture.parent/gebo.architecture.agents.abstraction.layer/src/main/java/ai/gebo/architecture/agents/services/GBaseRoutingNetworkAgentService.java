@@ -18,6 +18,8 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.model.TargetAgentEnvelope;
+import tools.jackson.core.JacksonException;
+
 import ai.gebo.architecture.agents.services.impl.ScheduleTargetAgentEnvelope;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -209,13 +211,20 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				TargetAgentEnvelope<?> agentEnvelope = null;
 				try {
 					agentEnvelope = (TargetAgentEnvelope<?>) objectMapper.convertValue(entry.getValue(), envelopeType);
-				} catch (IllegalArgumentException e) {
+				} catch (IllegalArgumentException | JacksonException e) {
+					// Jackson 2 wrapped binding failures in IllegalArgumentException; Jackson 3
+					// (tools.jackson) throws MismatchedInputException -> DatabindException ->
+					// JacksonException -> RuntimeException, which is NOT an
+					// IllegalArgumentException. Catching only the latter let a single malformed
+					// envelope escape this loop and abort the whole routing turn, leaving the
+					// network with no dispatched message and the user with a blank answer.
+					// Both are caught so one bad entry is skipped and the rest of the plan runs.
 					LOGGER.error(
 							"For agent:" + targetAgent + " the command could not be bound to " + envelopeType.getName(),
 							e);
 					continue;
 				}
-				if (agentEnvelope != null && agentEnvelope.getCommandData() != null) {
+				if (agentEnvelope != null && isCommandDataPresent(agentEnvelope.getCommandData())) {
 					if (checkTypesMap.containsKey(targetAgent) && checkTypesMap.get(targetAgent)
 							.isAssignableFrom(agentEnvelope.getCommandData().getClass())) {
 						agentEnvelope.setAgentId(targetAgent);
@@ -233,6 +242,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					} else {
 						LOGGER.error("For agent:" + targetAgent + " the wrong type has been generated");
 					}
+				} else if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agent:" + targetAgent
+							+ " carries no command and is skipped for this cycle (gather/finalize selection)");
 				}
 
 			}
@@ -409,6 +421,24 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	 * distinct session contribution turn, so the number of turns already recorded in
 	 * the agent's private memory is the count of completed cycles.
 	 */
+	/**
+	 * Tells whether a routing entry actually carries a command. The coordinator
+	 * prompt asks the model to leave {@code commandData} empty or null for the
+	 * agents it does not want to run in this cycle - that is how a GATHER cycle
+	 * withholds the writer/reporter. Testing only for {@code null} scheduled those
+	 * agents anyway with an empty instruction, so a blank text command counts as
+	 * absent here.
+	 */
+	protected boolean isCommandDataPresent(Object commandData) {
+		if (commandData == null) {
+			return false;
+		}
+		if (commandData instanceof CharSequence text) {
+			return !text.toString().isBlank();
+		}
+		return true;
+	}
+
 	protected int currentRoutingCycle(AgentPrivateSessionContext<?, ?> mySessionContext) {
 		final int cycle = mySessionContext.getContributionTurnNumbers().size() + 1;
 		if (LOGGER.isTraceEnabled()) {

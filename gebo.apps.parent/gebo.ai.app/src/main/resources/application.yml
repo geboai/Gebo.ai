@@ -431,6 +431,24 @@ ai.gebo.opensearch:
   password: dothesearch1973-Advanced
 
 ai.gebo.rag-threashold-autotune.config.enabled: false	
+# RAG retrieval tuning.
+ai.gebo.ragsearch.config:
+  # Hybrid retrieval: run the lexical (full text) leg beside the semantic one and
+  # split the requested topK between them, instead of querying the lexical index
+  # only when the semantic leg under delivers. With a populated vector store the
+  # semantic leg always filled the quota, so the lexical index was never reached
+  # and questions carrying rare literal terms (exact phrases, proper nouns, codes)
+  # could not be answered even when the lexical index ranked the right chunk first.
+  hybrid-search-enabled: true
+  # Half the budget to each leg. Lower it to favour semantic recall, raise it to
+  # favour literal matches.
+  hybrid-full-text-share: 0.5
+  # Minimum cosine similarity a fragment must reach to be retrieved. The 0.50
+  # default admitted essentially every neighbour: over a sample of 176 retrieved
+  # fragments on the reference corpus the WEAKEST scored 0.523, so nothing was ever
+  # filtered and bulky low-signal documents (indexes, catalogues) crowded the
+  # results. 0.60 keeps about 86% of that sample and drops the tail.
+  default-similarity-threshold: 0.60
 ai.gebo.agents.standard.enabled: true
 # Office assistant pipeline (requires ai.gebo.agents.standard.enabled=true; it reuses
 # the standard searcher/tool agents and the controller service).

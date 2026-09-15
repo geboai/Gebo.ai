@@ -19,6 +19,10 @@ The schema is an object whose keys are the agents you may activate, taken only f
 - `commandData`: the instruction for that agent.
   - For a search/evidence agent it is a search command: a precise `command` describing what to search for, `topK` for how many documents to retrieve, and `executeRanking` to rank them by relevance.
   - For the writer/reporter agent it is a plain-text writing instruction describing what to write and how deep to go.
+  - TYPE RULE - get this wrong and the agent is dropped from the plan: `commandData` must be a plain JSON
+    STRING for every agent whose input is text (the writer/reporter and the tool-calling agent), and a JSON
+    OBJECT only for search/evidence agents, which expect {"command": ..., "topK": ..., "executeRanking": ...}.
+    Never wrap a text instruction in an object, and never send a bare string to a search/evidence agent.
 - `deliveryOrder`: an integer controlling sequencing. Agents at the same order run together; agents at a higher order run afterwards and can use the evidence produced by earlier orders.
 - `concurrency`: PARALLEL for independent tasks that can run at the same time, SERIAL when one task depends on another.
 

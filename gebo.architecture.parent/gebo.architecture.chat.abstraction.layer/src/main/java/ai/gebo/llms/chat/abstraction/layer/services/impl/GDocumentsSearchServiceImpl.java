@@ -213,6 +213,20 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			if (fullTextSearches != null) {
 				fullTextSearchedQuery.addAll(fullTextSearches);
 			}
+			// Hybrid retrieval budget. The lexical leg gets a reserved share of globalTopK
+			// and the semantic leg is bounded by the remainder, so filling the semantic
+			// quota can no longer starve the lexical one. See GeboRagSearchConfig.
+			final boolean lexicalLegAvailable = fullTextSearch != null && !fullTextSearchedQuery.isEmpty();
+			final boolean hybrid = chatConfigs.isHybridSearchEnabled() && lexicalLegAvailable;
+			final int fullTextQuota = hybrid
+					? Math.max(1, (int) Math.ceil(globalTopK * chatConfigs.getHybridFullTextShare()))
+					: 0;
+			final int semanticQuota = Math.max(1, globalTopK - fullTextQuota);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Retrieval budget globalTopK:" + globalTopK + " hybrid:" + hybrid + " semanticQuota:"
+						+ semanticQuota + " fullTextQuota:" + fullTextQuota + " semanticQueries:"
+						+ semanticSearchedQuery.size() + " fullTextQueries:" + fullTextSearchedQuery.size());
+			}
 			boolean endSearch = false;
 			if (!semanticSearchedQuery.isEmpty() && !embeddingModels.isEmpty()) {
 				for (IGConfigurableEmbeddingModel em : embeddingModels) {
@@ -231,16 +245,16 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 					}
 					for (String query : semanticSearchedQuery) {
 						RagQueryOptions options = new RagQueryOptions(tokensBudget, CompletenessLevel.MAX_TOKENS);
-						options.setSimilarityThreashold(threashold);
-						options.setTopK(semanticRagTopK);
+						options.setSimilarityThreashold(_threashold);
+						// _semanticRagTopK, not semanticRagTopK: the latter is the global chat
+						// default (15) and ignoring the Math.min above let a single semantic
+						// query overshoot the caller's budget and end the whole search.
+						options.setTopK(_semanticRagTopK);
 						AIDocumentsSet data = this.semanticSearchDao.multiHopSemanticSearch(query, semanticSearchMetaDataFilter,
 								options, em, _firstHopThreashold, _secondHopThreashold,
 								securityService.getCurrentUser());
 						out = AIDocumentsSet.join(data, out);
-						endSearch = ((out.countFragments() >= globalTopK) || out.getTokensSize() >= tokensBudget);
-						if (!endSearch) {
-
-						}
+						endSearch = ((out.countFragments() >= semanticQuota) || out.getTokensSize() >= tokensBudget);
 						if (endSearch)
 							break;
 					}
@@ -248,15 +262,31 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 						break;
 				}
 			}
-			if (fullTextSearch != null && !endSearch && !fullTextSearchedQuery.isEmpty()) {
+			// The lexical leg runs whenever hybrid retrieval is on. Only when hybrid is
+			// disabled does it fall back to its historical role of filling the gap left
+			// by an under delivering semantic leg.
+			if (lexicalLegAvailable && (hybrid || !endSearch)) {
 				FullTextSearchMetaDataFilter metaDataFilter = new FullTextSearchMetaDataFilter();
 				metaDataFilter.setKnowledgebaseCodes(knowledgeBases);
 				boolean filterWithAcl = !securityService.isCurrentUserAdmin()
 						&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
 				metaDataFilter.setAclAliases(filterWithAcl ? aclAliases : null);
-				AIDocumentsSet fullTextDocSet = fullTextSearch.search(fullTextSearchedQuery,
-						globalTopK - out.countFragments(), metaDataFilter);
+				// With hybrid retrieval the lexical leg keeps its reserved quota even when
+				// the semantic leg already returned globalTopK fragments, otherwise the
+				// remainder would be zero or negative and the call would be pointless.
+				final int fullTextTopK = hybrid ? Math.max(fullTextQuota, globalTopK - out.countFragments())
+						: globalTopK - out.countFragments();
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Running the lexical leg with topK:" + fullTextTopK + " over "
+							+ fullTextSearchedQuery.size() + " quer(ies), semantic leg contributed "
+							+ out.countFragments() + " fragment(s)");
+				}
+				AIDocumentsSet fullTextDocSet = fullTextSearch.search(fullTextSearchedQuery, fullTextTopK,
+						metaDataFilter);
 				if (fullTextDocSet != null) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Lexical leg contributed " + fullTextDocSet.countFragments() + " fragment(s)");
+					}
 					out = AIDocumentsSet.join(fullTextDocSet, out);
 				}
 				endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;

@@ -321,8 +321,23 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	}
 
 	private ThreasholdAutotuneProcessResult internalFindByEmbeddingModelCode(String vectorStoreId) {
-		List<ThreasholdAutotuneProcessResult> results = this.resultRepo.findByEmbeddingModelCode(vectorStoreId);
-		return this.latest(results);
+		// Callers pass the configurable model CODE (e.g.
+		// "embedding-<provider>-<model config code>"), which is what the process stores
+		// in vectorStoreId. The embeddingModelCode column holds the provider's own
+		// model name (e.g. "Qwen3-Embedding-8B"), so querying that column with a code
+		// never matched and the autotuned thresholds were silently never applied.
+		// vectorStoreId is tried first and the old column kept as a fallback so records
+		// written before this fix, and callers that really pass a model name, still
+		// resolve.
+		List<ThreasholdAutotuneProcessResult> results = this.resultRepo.findByVectorStoreId(vectorStoreId);
+		ThreasholdAutotuneProcessResult latest = this.latest(results);
+		if (latest == null) {
+			latest = this.latest(this.resultRepo.findByEmbeddingModelCode(vectorStoreId));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Autotuned thresholds lookup for '" + vectorStoreId + "' resolved:" + (latest != null));
+		}
+		return latest;
 	}
 
 	private ThreasholdAutotuneProcessResult latest(List<ThreasholdAutotuneProcessResult> results) {
