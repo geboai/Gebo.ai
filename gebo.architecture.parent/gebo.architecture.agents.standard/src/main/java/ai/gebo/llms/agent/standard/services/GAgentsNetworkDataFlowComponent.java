@@ -11,6 +11,8 @@ package ai.gebo.llms.agent.standard.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,6 +56,7 @@ import ai.gebo.security.services.IdentityUtil;
  */
 @Component
 public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GAgentsNetworkDataFlowComponent.class);
 
 	public static final String AGENT_NETWORK_MODULE = "agent-network-module";
 	public static final String AGENTS_NETWORK_RESPONDER_COMPONENT = "agents-network-responder";
@@ -92,18 +95,31 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 
 	@Override
 	public GDataFlowMetaInfos getDataFlowMetaInfos() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getDataFlowMetaInfos() for the symbolic component:" + getMessagingSystemId());
+		}
 		IAgentsNetworkDao agentsNetworkDao = agentsNetworkDaoProvider.getIfAvailable();
 		if (agentsNetworkDao == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No agents network DAO available yet, the data flow register gets no agent network entry");
+			}
 			return null;
 		}
 		List<GAgentsNetwork> networks;
 		try {
 			networks = listNetworks(agentsNetworkDao);
 		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot enumerate the configured agents networks for the data flow register", e);
 			return null;
 		}
 		if (networks == null || networks.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No agents network configured, nothing to report in the data flow register");
+			}
 			return null;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reporting the data flow of " + networks.size() + " configured agents network(s)");
 		}
 
 		GDataFlowMetaInfos flow = new GDataFlowMetaInfos();
@@ -116,6 +132,10 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 				continue;
 			}
 			String code = network.getCode();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Reporting the query fan-out of network:" + code + " towards the internal knowledge base and "
+						+ webProviders.size() + " external web search provider(s)");
+			}
 
 			DataEndpoint query = new DataEndpoint();
 			query.setId("network-query-" + code);
@@ -146,12 +166,19 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			}
 		}
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getDataFlowMetaInfos() reporting " + flow.getDataEndpoints().size() + " endpoint(s) and "
+					+ flow.getTransformations().size() + " transformation(s)");
+		}
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
 	}
 
 	private List<ISearchService> enabledWebSearchProviders() {
 		ISearchServiceRepositoryPattern searchServices = searchServicesProvider.getIfAvailable();
 		if (searchServices == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No search service repository available, no external web search provider is reported");
+			}
 			return List.of();
 		}
 		try {
@@ -159,14 +186,20 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			if (all == null) {
 				return List.of();
 			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Filtering " + all.size() + " registered search service(s) down to the enabled ones");
+			}
 			return all.stream().filter(s -> {
 				try {
 					return s != null && s.isEnabled();
 				} catch (Exception e) {
+					LOGGER.warn("Cannot tell whether search service {} is enabled, excluding it from the register",
+							s != null ? s.getId() : null, e);
 					return false;
 				}
 			}).toList();
 		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot enumerate the registered search services for the data flow register", e);
 			return List.of();
 		}
 	}
@@ -200,6 +233,10 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			MetaEndpointType to, String sourceQualifiedId, String destQualifiedId) {
 		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(kind + "-" + key, description, list(from),
 				list(to));
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Data flow link " + kind + "-" + key + " : " + sourceQualifiedId + " -> " + destQualifiedId
+					+ " (" + from + " -> " + to + ")");
+		}
 		flow.getEngines().add(engine);
 		flow.getTransformations()
 				.add(DataTransformationInfo.of(kind + "-flow-" + key, description, engine, sourceQualifiedId,
@@ -246,7 +283,14 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 	private List<GAgentsNetwork> listNetworks(IAgentsNetworkDao agentsNetworkDao) {
 		IGeboSystemUserService systemUserService = systemUserServiceProvider.getIfAvailable();
 		if (systemUserService == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No system user service available, listing the networks without impersonation");
+			}
 			return agentsNetworkDao.getConfigurations();
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Listing the configured networks under the platform system identity:"
+					+ systemUserService.getUsername());
 		}
 		return IdentityUtil.create(systemUserService.getUsername(), systemUserService.getRoles())
 				.doRunAsWithReturn(() -> agentsNetworkDao.getConfigurations());

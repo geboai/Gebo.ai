@@ -52,6 +52,11 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		GAgentConfig config = agentConfigDao.findByCode(agent.getAgentConfigCode());
 		IGGenericAgentService service = agentServiceRuntimeDao.findByCode(config.getAgentServiceId());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createRuntimeAgentInfos(...) participant:" + agent.getNetworkAgentName()
+					+ " agentServiceId:" + config.getAgentServiceId() + " reactive:"
+					+ (service instanceof IGReactiveAgentService));
+		}
 		if (service instanceof IGReactiveAgentService reactiveService) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Wrapping reactive service id:" + reactiveService.getId() + " into a network adapter for"
@@ -67,6 +72,10 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 			AdapterWithFlux adapter = factory.create(reactiveService);
 			AdapterRuntimeAgentInfos agentInfos = new AdapterRuntimeAgentInfos(adapter.getAdapter(), config, agent, 0,
 					0, adapter);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End createRuntimeAgentInfos(...) participant:" + agent.getNetworkAgentName()
+						+ " wrapped by adapter factory:" + factory.getClass().getName());
+			}
 			return agentInfos;
 		} else
 			return super.createRuntimeAgentInfos(network, agent);
@@ -79,6 +88,10 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 		List<AdapterWithFlux> adapters = agentsCache.values().stream()
 				.filter(x -> x instanceof AdapterRuntimeAgentInfos)
 				.map(x -> ((AdapterRuntimeAgentInfos) x).getAdapterWithFlux()).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createAgentsNetworkService(...) found " + adapters.size()
+					+ " reactive output adapter(s) among " + agentsCache.size() + " runtime agent(s)");
+		}
 		if (adapters.isEmpty() || adapters.size() > 1)
 			throw new NetworkOfAgentsException(WRONG_REACTIVE_OUTPUTS_NR_EXCEPTION_TEXT);
 		return createAgentsNetworkService(network, notificationSink, inputType, outputType, runAs, agentsCache,

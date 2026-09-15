@@ -55,6 +55,9 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 */
 	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command) throws AgentException {
 		if (documents == null || documents.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Ranking skipped for agent id:" + getId() + " : nothing was retrieved");
+			}
 			return documents;
 		}
 		if (rankingRequested(command) && rankerService.isRankerConfigured()) {
@@ -63,10 +66,24 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 						+ command.getTopK());
 			}
 			try {
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("<RANKING_QUERY agent=" + getId() + ">");
+					LOGGER.trace(command.getCommand());
+					LOGGER.trace("</RANKING_QUERY>");
+				}
 				List<Document> ranked = rankerService.call(documents, command.getCommand(), command.getTopK());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Ranking produced " + (ranked != null ? ranked.size() : 0)
 							+ " document(s) for agent id:" + getId());
+				}
+				if (LOGGER.isTraceEnabled() && ranked != null) {
+					int position = 1;
+					for (Document document : ranked) {
+						LOGGER.trace("<RANKED_DOCUMENT position=" + position + " id=" + document.getId() + ">");
+						LOGGER.trace(document.getText());
+						LOGGER.trace("</RANKED_DOCUMENT>");
+						position++;
+					}
 				}
 				return ranked;
 			} catch (LLMConfigException e) {
@@ -86,7 +103,12 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 */
 	protected int retrievalTopK(SearchAgentCommand command) {
 		int topK = command != null ? command.getTopK() : 20;
-		return (rankingRequested(command) && rankerService.isRankerConfigured()) ? topK * 2 : topK;
+		final boolean widened = rankingRequested(command) && rankerService.isRankerConfigured();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("retrievalTopK(...) agent id:" + getId() + " requestedTopK:" + topK + " widenedForRanking:"
+					+ widened + " retrieving:" + (widened ? topK * 2 : topK));
+		}
+		return widened ? topK * 2 : topK;
 	}
 
 	protected boolean rankingRequested(SearchAgentCommand command) {
@@ -104,14 +126,25 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 */
 	protected void appendSearchableSystems(AgentCapabilities capabilities, ISearchService<?> searchService) {
 		if (capabilities == null || searchService == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("appendSearchableSystems(...) skipped for agent id:" + getId() + " capabilities:"
+						+ (capabilities != null) + " searchService:" + (searchService != null));
+			}
 			return;
 		}
 		try {
 			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("appendSearchableSystems(...) agent id:" + getId() + " advertises "
+						+ (systems != null ? systems.size() : 0) + " searchable system(s)");
+			}
 			if (systems != null) {
 				for (SearchableSystemMetaData system : systems) {
 					if (system == null) {
 						continue;
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("Searchable system: " + system.getCode() + " - " + system.getDescription());
 					}
 					capabilities.addResource(
 							AgentCapabilityResource.of(system.getCode(), system.getDescription(), null));
@@ -127,9 +160,16 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 			SearchableSystemMetaData system) {
 		try {
 			List<CatalogueSample> catalogues = searchService.getCachedCatalogues(system.getCode());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("System " + system.getCode() + " exposes " + (catalogues != null ? catalogues.size() : 0)
+						+ " cached catalogue(s) for agent id:" + getId());
+			}
 			if (catalogues != null) {
 				for (CatalogueSample catalogue : catalogues) {
 					if (catalogue != null) {
+						if (LOGGER.isTraceEnabled()) {
+							LOGGER.trace("Catalogue: " + catalogue.getCode() + " - " + catalogue.getDescription());
+						}
 						capabilities.addCatalog(AgentCapabilityResource.of(catalogue.getCode(), catalogue.getCode(),
 								catalogue.getDescription()));
 					}

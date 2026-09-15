@@ -33,8 +33,17 @@ public class AgentNetworkConfigDaoImpl extends GAbstractRuntimeConfigurationDao<
 
 	@Override
 	public GAgentsNetwork findByCode(String code) {
-
-		return dynamic.findByCode(code);
+		GAgentsNetwork network = dynamic.findByCode(code);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("findByCode(" + code + ") agents network found:" + (network != null) + " participants:"
+					+ (network != null && network.getAgents() != null ? network.getAgents().size() : 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENTS_NETWORK code=" + code + ">");
+			LOGGER.trace(String.valueOf(network));
+			LOGGER.trace("</AGENTS_NETWORK>");
+		}
+		return network;
 	}
 
 	private static IGDynamicConfigurationSource<GAgentsNetwork> compose(List<IDynamicAgentsNetworkDataSource> dataSources,
@@ -47,6 +56,10 @@ public class AgentNetworkConfigDaoImpl extends GAbstractRuntimeConfigurationDao<
 				if (dataSources != null) {
 					for (IDynamicAgentsNetworkDataSource ds : dataSources) {
 						List<GAgentsNetwork> cfgs = ds.getConfigurations();
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Dynamic agents network data source " + ds.getClass().getName() + " contributed "
+									+ (cfgs != null ? cfgs.size() : 0) + " read only network(s)");
+						}
 						for (GAgentsNetwork cfg : cfgs) {
 							GAgentsNetwork clone = cfg.jsonClone();
 							clone.setReadOnly(true);

@@ -59,7 +59,12 @@ public class GeboAgentsNetworkAdminController {
 	private final IGRuntimeBinder runtimeBinder;
 
 	private <T> T get(Class<T> t) {
-		return runtimeBinder.getImplementationOf(t);
+		T implementation = runtimeBinder.getImplementationOf(t);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Lazily resolved " + t.getName() + " to "
+					+ (implementation != null ? implementation.getClass().getName() : null));
+		}
+		return implementation;
 	}
 
 	// ---------------------------------------------------------------------
@@ -70,12 +75,24 @@ public class GeboAgentsNetworkAdminController {
 	public List<GBaseObject> getAgentsNetwork() {
 		IAgentsNetworkDao agentsNetworkDao = get(IAgentsNetworkDao.class);
 		List<GAgentsNetwork> configs = agentsNetworkDao.getConfigurations();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentsNetwork returned " + (configs != null ? configs.size() : 0) + " network(s)");
+		}
 		return configs.stream().map(x -> new GBaseObject(x)).toList();
 	}
 
 	@GetMapping(value = "getAgentsNetworkByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentsNetwork getAgentsNetworkByCode(@RequestParam("code") String code) {
-		return get(IAgentsNetworkDao.class).findByCode(code);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentsNetworkByCode code:" + code);
+		}
+		GAgentsNetwork network = get(IAgentsNetworkDao.class).findByCode(code);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENTS_NETWORK code=" + code + ">");
+			LOGGER.trace(String.valueOf(network));
+			LOGGER.trace("</AGENTS_NETWORK>");
+		}
+		return network;
 	}
 
 	// ---------------------------------------------------------------------
@@ -87,7 +104,18 @@ public class GeboAgentsNetworkAdminController {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST validateAgentsNetwork code:" + (network != null ? network.getCode() : null));
 		}
-		return networkCrudService.validate(network);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENTS_NETWORK_VALIDATE>");
+			LOGGER.trace(String.valueOf(network));
+			LOGGER.trace("</AGENTS_NETWORK_VALIDATE>");
+		}
+		OperationStatus<GAgentsNetwork> status = networkCrudService.validate(network);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST validateAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
+					+ (status != null && status.getResult() != null) + " message(s):"
+					+ (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
+		}
+		return status;
 	}
 
 	@PostMapping(value = "updateAgentsNetwork", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -95,7 +123,18 @@ public class GeboAgentsNetworkAdminController {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST updateAgentsNetwork code:" + (network != null ? network.getCode() : null));
 		}
-		return networkCrudService.update(network);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENTS_NETWORK_UPDATE>");
+			LOGGER.trace(String.valueOf(network));
+			LOGGER.trace("</AGENTS_NETWORK_UPDATE>");
+		}
+		OperationStatus<GAgentsNetwork> status = networkCrudService.update(network);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST updateAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
+					+ (status != null && status.getResult() != null) + " message(s):"
+					+ (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
+		}
+		return status;
 	}
 
 	@PostMapping(value = "insertAgentsNetwork", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -103,7 +142,18 @@ public class GeboAgentsNetworkAdminController {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST insertAgentsNetwork code:" + (network != null ? network.getCode() : null));
 		}
-		return networkCrudService.insert(network);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENTS_NETWORK_INSERT>");
+			LOGGER.trace(String.valueOf(network));
+			LOGGER.trace("</AGENTS_NETWORK_INSERT>");
+		}
+		OperationStatus<GAgentsNetwork> status = networkCrudService.insert(network);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST insertAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
+					+ (status != null && status.getResult() != null) + " message(s):"
+					+ (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
+		}
+		return status;
 	}
 
 	@PostMapping(value = "deleteAgentsNetwork", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -111,7 +161,18 @@ public class GeboAgentsNetworkAdminController {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST deleteAgentsNetwork code:" + (network != null ? network.getCode() : null));
 		}
-		return networkCrudService.delete(network);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENTS_NETWORK_DELETE>");
+			LOGGER.trace(String.valueOf(network));
+			LOGGER.trace("</AGENTS_NETWORK_DELETE>");
+		}
+		OperationStatus<GAgentsNetwork> status = networkCrudService.delete(network);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST deleteAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
+					+ (status != null && status.getResult() != null) + " message(s):"
+					+ (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
+		}
+		return status;
 	}
 
 	// ---------------------------------------------------------------------
@@ -124,7 +185,12 @@ public class GeboAgentsNetworkAdminController {
 	 */
 	@GetMapping(value = "getAgentConfigs", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getAgentConfigs() {
-		return get(IAgentConfigDao.class).getConfigurations().stream().map(x -> new GBaseObject(x)).toList();
+		List<GBaseObject> configs = get(IAgentConfigDao.class).getConfigurations().stream()
+				.map(x -> new GBaseObject(x)).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentConfigs returned " + configs.size() + " agent configuration(s)");
+		}
+		return configs;
 	}
 
 	/**
@@ -132,7 +198,12 @@ public class GeboAgentsNetworkAdminController {
 	 */
 	@GetMapping(value = "getAgentConfigsByServiceId", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GAgentConfig> getAgentConfigsByServiceId(@RequestParam("serviceId") String serviceId) {
-		return get(IAgentConfigDao.class).findByAgentServiceId(serviceId);
+		List<GAgentConfig> configs = get(IAgentConfigDao.class).findByAgentServiceId(serviceId);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentConfigsByServiceId serviceId:" + serviceId + " returned "
+					+ (configs != null ? configs.size() : 0) + " agent configuration(s)");
+		}
+		return configs;
 	}
 
 	/**
@@ -141,8 +212,17 @@ public class GeboAgentsNetworkAdminController {
 	 */
 	@GetMapping(value = "getAgentServices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AgentServiceDescriptor> getAgentServices() {
-		return get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
+		List<AgentServiceDescriptor> descriptors = get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
 				.filter(s -> s instanceof IGNetworkAgentService).map(AgentServiceDescriptor::of).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentServices returned " + descriptors.size() + " network agent service(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_SERVICE_DESCRIPTORS>");
+			LOGGER.trace(String.valueOf(descriptors));
+			LOGGER.trace("</AGENT_SERVICE_DESCRIPTORS>");
+		}
+		return descriptors;
 	}
 
 	/**
@@ -152,9 +232,13 @@ public class GeboAgentsNetworkAdminController {
 	 */
 	@GetMapping(value = "getNetworkAdapterServices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AgentServiceDescriptor> getNetworkAdapterServices() {
-		return get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
+		List<AgentServiceDescriptor> descriptors = get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
 				.filter(s -> s instanceof IGAgentsNetworkToNetworkAgentAdapterService).map(AgentServiceDescriptor::of)
 				.toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getNetworkAdapterServices returned " + descriptors.size() + " adapter service(s)");
+		}
+		return descriptors;
 	}
 
 	// ---------------------------------------------------------------------
@@ -170,14 +254,24 @@ public class GeboAgentsNetworkAdminController {
 	public List<AgentServiceDescriptor> getCompatibleNextServices(@RequestParam("serviceId") String serviceId) {
 		IGNetworkAgentService<?, ?> source = resolveNetworkService(serviceId);
 		if (source == null || source.getOutputType() == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("REST getCompatibleNextServices serviceId:" + serviceId
+						+ " cannot be catenated, resolved:" + (source != null) + " outputTypeKnown:"
+						+ (source != null && source.getOutputType() != null));
+			}
 			return List.of();
 		}
 		final Class<?> sourceOutput = source.getOutputType();
-		return get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
+		List<AgentServiceDescriptor> compatible = get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
 				.filter(s -> s instanceof IGNetworkAgentService).map(s -> (IGNetworkAgentService<?, ?>) s)
 				.filter(candidate -> candidate.getInputType() != null
 						&& candidate.getInputType().isAssignableFrom(sourceOutput))
 				.map(AgentServiceDescriptor::of).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getCompatibleNextServices serviceId:" + serviceId + " outputType:"
+					+ sourceOutput.getName() + " matched " + compatible.size() + " service(s)");
+		}
+		return compatible;
 	}
 
 	/**
@@ -189,18 +283,32 @@ public class GeboAgentsNetworkAdminController {
 	public List<AgentServiceDescriptor> getCompatiblePreviousServices(@RequestParam("serviceId") String serviceId) {
 		IGNetworkAgentService<?, ?> target = resolveNetworkService(serviceId);
 		if (target == null || target.getInputType() == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("REST getCompatiblePreviousServices serviceId:" + serviceId
+						+ " cannot be catenated, resolved:" + (target != null) + " inputTypeKnown:"
+						+ (target != null && target.getInputType() != null));
+			}
 			return List.of();
 		}
 		final Class<?> targetInput = target.getInputType();
-		return get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
+		List<AgentServiceDescriptor> compatible = get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
 				.filter(s -> s instanceof IGNetworkAgentService).map(s -> (IGNetworkAgentService<?, ?>) s)
 				.filter(candidate -> candidate.getOutputType() != null
 						&& targetInput.isAssignableFrom(candidate.getOutputType()))
 				.map(AgentServiceDescriptor::of).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getCompatiblePreviousServices serviceId:" + serviceId + " inputType:"
+					+ targetInput.getName() + " matched " + compatible.size() + " service(s)");
+		}
+		return compatible;
 	}
 
 	private IGNetworkAgentService<?, ?> resolveNetworkService(String serviceId) {
 		IGGenericAgentService service = get(IGAgentServiceRuntimeDao.class).findByCode(serviceId);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("resolveNetworkService(" + serviceId + ") found:" + (service != null) + " isNetworkAgent:"
+					+ (service instanceof IGNetworkAgentService));
+		}
 		return service instanceof IGNetworkAgentService<?, ?> networkService ? networkService : null;
 	}
 }

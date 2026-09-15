@@ -45,6 +45,23 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 
 	public GAgentsNetworkCrudServiceImpl(@Autowired IGRuntimeBinder runtimeBinder) {
 		this.runtimeBinder = runtimeBinder;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agents network CRUD service initialized, DAOs are resolved lazily through the runtime binder");
+		}
+	}
+
+	/**
+	 * Dumps the accumulated validation messages. Only the counts are reported at
+	 * DEBUG; the full message texts, which carry the network content, go to TRACE.
+	 */
+	private static void traceMessages(String operation, List<GUserMessage> messages) {
+		if (LOGGER.isTraceEnabled() && messages != null) {
+			LOGGER.trace("<VALIDATION_MESSAGES operation=" + operation + ">");
+			for (GUserMessage message : messages) {
+				LOGGER.trace(String.valueOf(message));
+			}
+			LOGGER.trace("</VALIDATION_MESSAGES>");
+		}
 	}
 
 	@Override
@@ -54,6 +71,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 		}
 		List<GUserMessage> messages = new ArrayList<>();
 		validateStructure(network, messages);
+		traceMessages("validate", messages);
 		if (hasErrors(messages)) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End validate(...) network code:" + (network != null ? network.getCode() : null)
@@ -82,6 +100,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			messages.add(GUserMessage.errorMessage("Network already exists",
 					"A network with code '" + network.getCode() + "' already exists; use update instead"));
 		}
+		traceMessages("insert", messages);
 		if (hasErrors(messages)) {
 			LOGGER.warn("Rejecting insert of agents network code:{} due to {} validation message(s)",
 					network != null ? network.getCode() : null, messages.size());
@@ -120,6 +139,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 						"The network '" + network.getCode() + "' is read-only and cannot be updated"));
 			}
 		}
+		traceMessages("update", messages);
 		if (hasErrors(messages)) {
 			LOGGER.warn("Rejecting update of agents network code:{} due to {} validation message(s)",
 					network != null ? network.getCode() : null, messages.size());
@@ -162,6 +182,10 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 					"The network '" + network.getCode() + "' is read-only and cannot be deleted"));
 			return reject(messages);
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("delete(...) network code:" + existing.getCode() + " readOnly:" + existing.getReadOnly()
+					+ " defaultUserInteractionNetwork:" + existing.getDefaultUserInteractionNetwork());
+		}
 		if (Boolean.TRUE.equals(existing.getDefaultUserInteractionNetwork())) {
 			messages.add(GUserMessage.warnMessage("Deleting the default chat network",
 					"Network '" + network.getCode() + "' is the default user-interaction network; deleting it may"
@@ -188,6 +212,16 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 	 * not be persisted.
 	 */
 	private void validateStructure(GAgentsNetwork network, List<GUserMessage> messages) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin validateStructure(...) network code:" + (network != null ? network.getCode() : null)
+					+ " participants:"
+					+ (network != null && network.getAgents() != null ? network.getAgents().size() : 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<VALIDATED_NETWORK>");
+			LOGGER.trace(String.valueOf(network));
+			LOGGER.trace("</VALIDATED_NETWORK>");
+		}
 		if (network == null) {
 			messages.add(GUserMessage.errorMessage("Network is null", "No agents network was provided"));
 			return;
@@ -230,6 +264,10 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 
 		long inputNodes = agents.stream().filter(p -> p != null && p.isInputNode()).count();
 		long outputNodes = agents.stream().filter(p -> p != null && p.isOutputNode()).count();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Network code:" + network.getCode() + " declares " + participantsByName.size()
+					+ " uniquely named participant(s), inputNodes:" + inputNodes + " outputNodes:" + outputNodes);
+		}
 		if (inputNodes == 0) {
 			messages.add(GUserMessage.errorMessage("No input node",
 					"The network must declare at least one input node"));
@@ -270,9 +308,18 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 								+ "' is not a network agent service and cannot take part in a network"));
 				continue;
 			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Participant:" + name + " resolved to network agent service:" + networkService.getId()
+						+ " inputType:" + typeName(networkService.getInputType()) + " outputType:"
+						+ typeName(networkService.getOutputType()));
+			}
 			servicesByName.put(name, networkService);
 		}
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End validateStructure(...) resolved " + servicesByName.size() + " of "
+					+ participantsByName.size() + " participant(s) to a concrete network agent service");
+		}
 		validateCommunicationEdges(participantsByName, servicesByName, messages);
 	}
 
@@ -297,6 +344,10 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			}
 			IGNetworkAgentService<?, ?> sourceService = servicesByName.get(sourceName);
 			boolean routingSource = sourceService instanceof IGRoutingNetworkAgentService;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Validating " + targets.size() + " communication edge(s) from participant:" + sourceName
+						+ " routingSource:" + routingSource);
+			}
 			for (String targetName : targets) {
 				if (!participantsByName.containsKey(targetName)) {
 					messages.add(GUserMessage.errorMessage("Unknown communication target",
@@ -313,6 +364,10 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 				Class<?> targetInput = targetService.getInputType();
 				boolean compatible = sourceOutput != null && targetInput != null
 						&& targetInput.isAssignableFrom(sourceOutput);
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("Edge " + sourceName + " -> " + targetName + " outputType:" + typeName(sourceOutput)
+							+ " inputType:" + typeName(targetInput) + " compatible:" + compatible);
+				}
 				if (compatible) {
 					continue;
 				}

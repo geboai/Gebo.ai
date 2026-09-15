@@ -18,6 +18,9 @@ public class ScheduleTargetAgentEnvelope {
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> result = new TreeMap<>();
 
 		if (envelopes == null || envelopes.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("normalizeDeliveryPlan(...) nothing to schedule: the envelope list is empty");
+			}
 			return result;
 		}
 
@@ -34,6 +37,10 @@ public class ScheduleTargetAgentEnvelope {
 	private static void insertEnvelope(TreeMap<Integer, List<TargetAgentEnvelope<?>>> result,
 			TargetAgentEnvelope<?> envelope) {
 		int targetOrder = envelope.getDeliveryOrder();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("insertEnvelope(...) agent:" + envelope.getAgentId() + " requestedDeliveryOrder:" + targetOrder
+					+ " concurrency:" + envelope.getConcurrency());
+		}
 
 		if (envelope.getConcurrency() == TargetAgentEnvelope.DeliveryConcurrency.PARALLEL) {
 			List<TargetAgentEnvelope<?>> sameLevel = result.computeIfAbsent(targetOrder, k -> new ArrayList<>());
@@ -42,6 +49,10 @@ public class ScheduleTargetAgentEnvelope {
 					.allMatch(e -> e.getConcurrency() == TargetAgentEnvelope.DeliveryConcurrency.PARALLEL);
 
 			if (levelContainsOnlyParallel) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agent:" + envelope.getAgentId() + " joins the parallel delivery level " + targetOrder
+							+ " that now holds " + (sameLevel.size() + 1) + " envelope(s)");
+				}
 				sameLevel.add(envelope);
 				return;
 			}
@@ -55,6 +66,10 @@ public class ScheduleTargetAgentEnvelope {
 			order++;
 		}
 
+		if (LOGGER.isDebugEnabled() && order != targetOrder) {
+			LOGGER.debug("Agent:" + envelope.getAgentId() + " moved from the busy delivery level " + targetOrder
+					+ " to the first free one: " + order);
+		}
 		envelope.setDeliveryOrder(order);
 		result.put(order, new ArrayList<>(List.of(envelope)));
 	}

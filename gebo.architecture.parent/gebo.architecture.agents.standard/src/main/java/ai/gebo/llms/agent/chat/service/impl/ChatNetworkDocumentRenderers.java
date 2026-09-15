@@ -1,5 +1,7 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
@@ -7,6 +9,8 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 
 public class ChatNetworkDocumentRenderers {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChatNetworkDocumentRenderers.class);
+
 	@Service
 	public static class GeboChatMessageEnvelopeRenderer implements IGDocumentContentRenderer<GeboChatMessageEnvelope> {
 
@@ -38,6 +42,16 @@ public class ChatNetworkDocumentRenderers {
 				content = response.getQueryResponse();
 			} else if (document.getContent() instanceof String response) {
 				content = response;
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(SERVICE_ID + " rendered a chat envelope, contentClass:"
+						+ (document.getContent() != null ? document.getContent().getClass().getName() : null)
+						+ " rendered " + (content != null ? content.length() : 0) + " character(s)");
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<RENDERED_CHAT_ENVELOPE>");
+				LOGGER.trace(content);
+				LOGGER.trace("</RENDERED_CHAT_ENVELOPE>");
 			}
 			return content != null ? content : "";
 		}
@@ -73,6 +87,15 @@ public class ChatNetworkDocumentRenderers {
 
 			content = response.getQueryResponse();
 
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(SERVICE_ID + " rendered a chat response of " + (content != null ? content.length() : 0)
+						+ " character(s)");
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<RENDERED_CHAT_RESPONSE>");
+				LOGGER.trace(content);
+				LOGGER.trace("</RENDERED_CHAT_RESPONSE>");
+			}
 			return content != null ? content : "";
 		}
 

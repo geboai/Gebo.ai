@@ -64,6 +64,10 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		} else {
 			copiedModel = chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Reactive agent id:" + getId() + " resolved base chat model:"
+					+ (copiedModel != null ? copiedModel.getCode() : null));
+		}
 		if (copiedModel == null) {
 			LOGGER.warn("Setting backup default chat model for actual Agent");
 			copiedModel = chatModelsDao.defaultHandler();
@@ -80,6 +84,16 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 				allFunctions = filterAutoMountedTools(
 						toolsList.stream().map(x -> x.getToolDefinition().name()).toList());
 			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Reactive agent id:" + getId() + " subscribes ALL tools, resolved "
+						+ (allFunctions != null ? allFunctions.size() : 0) + " function(s) after auto-mount exclusions");
+			}
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Reactive agent id:" + getId() + " enabled function names: " + allFunctions);
+			LOGGER.trace("<REACTIVE_AGENT_REQUEST agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(request));
+			LOGGER.trace("</REACTIVE_AGENT_REQUEST>");
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Reactive agent id:" + getId() + " resolved " + (allFunctions != null ? allFunctions.size() : 0)
@@ -103,7 +117,17 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 				agentPrompt, runAs, callBacksListener);
 		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))
 				.doOnSubscribe(s -> LOGGER.debug("Begin reactive agentic iteration subscription {} ", getId()))
-				.doOnComplete(() -> LOGGER.debug("End agentic iteration {} ", getId()))
+				.doOnNext(partial -> {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Reactive agent id:" + getId() + " emitted a partial operation, lastMessage:"
+								+ (partial != null && partial.isLastMessage()));
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<REACTIVE_AGENT_PARTIAL agent=" + getId() + ">");
+						LOGGER.trace(String.valueOf(partial != null ? partial.getData() : null));
+						LOGGER.trace("</REACTIVE_AGENT_PARTIAL>");
+					}
+				}).doOnComplete(() -> LOGGER.debug("End agentic iteration {} ", getId()))
 				.doOnError(th -> LOGGER.error("Error in reactive agentic iteration " + getId(), th));
 	}
 

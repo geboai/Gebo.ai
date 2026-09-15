@@ -154,6 +154,10 @@ public class StandardAgentsInitialization {
 			IGChatSessionLifeCycleService lifeCycleService) {
 		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Wiring the default streaming output pipeline step on network service factory:"
+					+ (factory != null ? factory.getId() : null));
+		}
 
 		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource,
 				lifeCycleService);
@@ -167,7 +171,10 @@ public class StandardAgentsInitialization {
 
 			@Override
 			public List<GAgentsNetwork> getConfigurations() {
-
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Assembling the default chat agents network, internalKnowledgeBaseSearcher available:"
+							+ (internalKnowledgebaseAgentConfigDataSource != null));
+				}
 				return List.of(createDefaultAgentsNetwork(internalKnowledgebaseAgentConfigDataSource));
 			}
 		};
@@ -192,6 +199,11 @@ public class StandardAgentsInitialization {
 		internalKnowledgeBaseAgentConfig.setUseChatModelWithUse(ChatModelsUses.INTERNAL_SERVICES);
 		internalKnowledgeBaseAgentConfig.setEnabledFunctions(List.of());
 		internalKnowledgeBaseAgentConfig.setSubscribeAllTools(false);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Prepared the default internal knowledge base search agent config code:"
+					+ INTERNAL_KNOWLEDGEBASE_AGENT_CODE + " on the runtime patched planner prompt use:"
+					+ InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE);
+		}
 		return new IGDynamicAgentConfigDataSource() {
 
 			@Override
@@ -217,6 +229,9 @@ public class StandardAgentsInitialization {
 
 	private GAgentsNetwork createDefaultAgentsNetwork(
 			IGDynamicAgentConfigDataSource internalKnowledgebaseAgentConfigDataSource) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createDefaultAgentsNetwork(...) code:" + DEFAULT_AGENTS_NETWORK);
+		}
 		GAgentConfig controller = defaultControllerAgentConfigDataSource().getConfigurations().get(0);
 		GAgentConfig reportWriter = defaultReportWriterConfigDataSource().getConfigurations().get(0);
 		GAgentConfig inputAdapter = defaultInputAdapterConfigDataSource().getConfigurations().get(0);
@@ -224,6 +239,10 @@ public class StandardAgentsInitialization {
 				inputAdapter.getCode(), controller.getCode(), reportWriter.getCode(),
 				internalKnowledgebaseAgentConfigDataSource);
 		network.setDefaultUserInteractionNetwork(true);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createDefaultAgentsNetwork(...) code:" + network.getCode()
+					+ " marked as the default user interaction network");
+		}
 		return network;
 	}
 
@@ -244,6 +263,11 @@ public class StandardAgentsInitialization {
 	public GAgentsNetwork createChatAgentsNetwork(String networkCode, String networkDescription,
 			String inputAdapterConfigCode, String controllerConfigCode, String reportWriterConfigCode,
 			IGDynamicAgentConfigDataSource internalKnowledgebaseAgentConfigDataSource) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createChatAgentsNetwork(...) code:" + networkCode + " inputAdapter:"
+					+ inputAdapterConfigCode + " controller:" + controllerConfigCode + " reportWriter:"
+					+ reportWriterConfigCode);
+		}
 		GAgentsNetwork network = new GAgentsNetwork();
 		network.setCode(networkCode);
 		network.setDescription(networkDescription);
@@ -257,6 +281,10 @@ public class StandardAgentsInitialization {
 		network.setMaxLoopIteration(60);
 		network.setScenarioDescription(DEFAULT_NETWORK_SCENARIO_DESCRIPTION);
 		List<GAgentConfig> dataSources = externalSourcesAgentConfigDataSource().getConfigurations();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Network code:" + networkCode + " gets " + dataSources.size()
+					+ " external search agent config(s)");
+		}
 		// Tool-calling agent: dynamically added to the network only when at least one
 		// tool is registered; otherwise it would have nothing to operate.
 		GAgentConfig toolCallingAgentConfig = hasToolsAvailable()
@@ -269,6 +297,10 @@ public class StandardAgentsInitialization {
 			if (!internalKBSearchAgentConfigs.isEmpty()) {
 				internalKnowledgeBaseConfig = internalKBSearchAgentConfigs.get(0);
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Network code:" + networkCode + " toolCallingAgent:" + (toolCallingAgentConfig != null)
+					+ " internalKnowledgeBaseSearcher:" + (internalKnowledgeBaseConfig != null));
 		}
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
 		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String
@@ -298,6 +330,9 @@ public class StandardAgentsInitialization {
 		List<AgentNetworkParticipant> workerParticipants = new ArrayList<>();
 		for (GAgentConfig searcher : searcherConfigs) {
 			AgentNetworkParticipant participant = new AgentNetworkParticipant();
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Adding searcher participant:" + searcher.getCode() + " - " + searcher.getDescription());
+			}
 			participant.setAgentConfigCode(searcher.getCode());
 			participant.setMaxConsecutiveInvocations(5);
 			participant.setMaxInvocations(10);
@@ -345,6 +380,14 @@ public class StandardAgentsInitialization {
 			LOGGER.debug("Assembled agents network code:" + network.getCode() + " with " + participants.size()
 					+ " participant(s); coordinated agents:" + coordinatedAgentNames);
 		}
+		if (LOGGER.isTraceEnabled()) {
+			for (AgentNetworkParticipant participant : participants) {
+				LOGGER.trace("Participant:" + participant.getNetworkAgentName() + " inputNode:"
+						+ participant.isInputNode() + " outputNode:" + participant.isOutputNode() + " maxInvocations:"
+						+ participant.getMaxInvocations() + " communicationList:"
+						+ participant.getCommunicationList());
+			}
+		}
 		return network;
 	}
 
@@ -356,6 +399,10 @@ public class StandardAgentsInitialization {
 			@Override
 			public List<GAgentConfig> getConfigurations() {
 				final List<ISearchService> implementations = searchServicesRepositoryPattern.getImplementations();
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Begin externalSourcesAgentConfigDataSource() scanning " + implementations.size()
+							+ " registered search service(s)");
+				}
 				final List<GAgentConfig> agentConfigs = new ArrayList<>();
 				for (ISearchService search : implementations) {
 					try {
@@ -427,6 +474,10 @@ public class StandardAgentsInitialization {
 			toolCallingConfig.setUseDefaultChatModel(true);
 			toolCallingConfig.setSubscribeAllTools(true);
 			toolCallingConfig.setEnabledFunctions(List.of());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Built the default tool calling agent configuration code:" + toolCallingConfig.getCode()
+						+ " subscribing ALL registered tools");
+			}
 		}
 		return IGDynamicAgentConfigDataSource.of(toolCallingConfig);
 	}
@@ -457,6 +508,10 @@ public class StandardAgentsInitialization {
 			inputAdapterConfig.setDescription(INPUT_ADAPTER_DESCRIPTION);
 			inputAdapterConfig.setAccessibleToAll(true);
 			inputAdapterConfig.setUseDefaultChatModel(false);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Built the default input adapter agent configuration code:"
+						+ inputAdapterConfig.getCode() + " (no LLM call)");
+			}
 		}
 		return IGDynamicAgentConfigDataSource.of(inputAdapterConfig);
 	}
@@ -472,6 +527,10 @@ public class StandardAgentsInitialization {
 			controllerConfig.setAccessibleToAll(true);
 			controllerConfig.setUseDefaultChatModel(true);
 			controllerConfig.setAgentRoleCode(SUPERVISOR_AGENT);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Built the default controller agent configuration code:" + controllerConfig.getCode()
+						+ " on prompt use:" + controllerConfig.getMainLoopPromptUseCode());
+			}
 		}
 		return IGDynamicAgentConfigDataSource.of(controllerConfig);
 	}
@@ -488,12 +547,20 @@ public class StandardAgentsInitialization {
 			reporterConfig.setAgentRoleCode(REPORT_WRITER_AGENT);
 			reporterConfig.setAccessibleToAll(true);
 			reporterConfig.setUseDefaultChatModel(true);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Built the default report writer agent configuration code:" + reporterConfig.getCode()
+						+ " on prompt use:" + reporterConfig.getMainLoopPromptUseCode());
+			}
 		}
 		return IGDynamicAgentConfigDataSource.of(reporterConfig);
 	}
 
 	private GPromptTemplateConfig processSearchPrompt(String searchPromptUseCode) {
 		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(searchPromptUseCode);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("processSearchPrompt(" + searchPromptUseCode + ") resolved:" + (prompt != null)
+					+ ", patching it with the agent network placeholders");
+		}
 		return SearchAgentPromptPatcher.withAgentPlaceholders(prompt);
 	}
 
@@ -505,6 +572,11 @@ public class StandardAgentsInitialization {
 			public List<IGGenericAgentService> get() {
 				List<IGGenericAgentService> outServices = new ArrayList<>();
 				final List<ISearchService> implementations = searchServicesRepositoryPattern.getImplementations();
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Begin externalSourcesAgentServicesSupplier() scanning " + implementations.size()
+							+ " registered search service(s), maxChunksPerDocument:"
+							+ standardAgentsConfig.getMaxChunksPerDocument());
+				}
 				for (ISearchService search : implementations) {
 					try {
 						if (!search.isEnabled())

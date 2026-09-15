@@ -25,7 +25,10 @@ public class TextProcessingTaskPerformerAgentService extends GBaseTaskPerformerN
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				String.class, String.class, TEXT_PROCESSING_AGENT_SERVICE,
 				GENERICAL_AGENT_THAT_RECEIVE_TEXT_MESSAGES_AND_RESPONDES_BACK_WITH_TEXT_MESSAGES, rendererFactory);
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Registered task performer agent service id:" + TEXT_PROCESSING_AGENT_SERVICE
+					+ " processing String to String");
+		}
 	}
 
 }

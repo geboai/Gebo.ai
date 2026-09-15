@@ -46,7 +46,13 @@ public abstract class AbstractSearchServiceWrapperTool {
 		ParallelFlux<SearchResultSample> out = stream.map(AbstractSearchServiceWrapperTool::toSample);
 		SearchResultSampleList sampleList = new SearchResultSampleList(out.sequential().buffer().blockLast());
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End loadSamples(...) for session:" + session);
+			LOGGER.debug("End loadSamples(...) for session:" + session + " produced "
+					+ sampleList.size() + " sample(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<SEARCH_RESULT_SAMPLES session=" + session + ">");
+			LOGGER.trace(String.valueOf(sampleList));
+			LOGGER.trace("</SEARCH_RESULT_SAMPLES>");
 		}
 		return sampleList;
 	}

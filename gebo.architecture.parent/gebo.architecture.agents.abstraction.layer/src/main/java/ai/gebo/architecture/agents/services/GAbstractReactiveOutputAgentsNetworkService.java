@@ -35,6 +35,10 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 	@Override
 	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input, Map<String, Object> environment)
 			throws AgentException, LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin executeNetwork(...) reactive output agents network service, inputType:"
+					+ (input != null ? input.getClass().getName() : null));
+		}
 		try {
 			return super.executeNetwork(chatRequestContext, input, environment);
 		} finally {
@@ -47,7 +51,9 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 
 	@Override
 	public Flux<OutputType> getFlux() {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Handing out the reactive output flux of the agents network");
+		}
 		return adapterWithFlux.getFlux();
 	}
 

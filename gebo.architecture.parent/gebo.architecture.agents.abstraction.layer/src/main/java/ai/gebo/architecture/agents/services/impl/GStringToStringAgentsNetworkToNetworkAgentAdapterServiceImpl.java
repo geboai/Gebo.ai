@@ -27,7 +27,9 @@ public class GStringToStringAgentsNetworkToNetworkAgentAdapterServiceImpl
 			IGAgentsNetworkServiceFactoryRepositoryPattern factoryRepository) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				rendererFactory, String.class, String.class, SERVICE_ID, SERVICE_DESCRIPTION, factoryRepository);
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Registered agent service id:" + SERVICE_ID + " adapting String to String");
+		}
 	}
 
 }

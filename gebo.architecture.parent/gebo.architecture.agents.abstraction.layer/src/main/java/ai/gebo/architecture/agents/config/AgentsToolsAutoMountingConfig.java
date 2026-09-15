@@ -3,6 +3,8 @@ package ai.gebo.architecture.agents.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -42,6 +44,7 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "ai.gebo.agents.tools.auto-mounting")
 @Data
 public class AgentsToolsAutoMountingConfig {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AgentsToolsAutoMountingConfig.class);
 
 	/**
 	 * Tool (function) names never auto-mounted onto an agent that enables tools auto
@@ -66,6 +69,10 @@ public class AgentsToolsAutoMountingConfig {
 	 *         is resolved by the agent service against the tool repository).
 	 */
 	public boolean isExcluded(String toolName) {
-		return toolName != null && excludedTools != null && excludedTools.contains(toolName);
+		final boolean excluded = toolName != null && excludedTools != null && excludedTools.contains(toolName);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("isExcluded(" + toolName + ") from automatic tool mounting -> " + excluded);
+		}
+		return excluded;
 	}
 }

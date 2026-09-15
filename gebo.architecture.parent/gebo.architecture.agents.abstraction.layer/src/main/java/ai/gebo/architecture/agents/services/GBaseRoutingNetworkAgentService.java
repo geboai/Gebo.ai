@@ -85,6 +85,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				"Analyse the user request together with the current shared context and decide which of the reachable agents must act");
 		capabilities.addCapability(
 				"Send each selected agent a tailored command and, when given an invocation budget, keep iterating over successive cycles until the gathered contributions are sufficient to produce the answer");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing agent id:" + getId() + " advertises the routing/coordination capabilities");
+		}
 		return capabilities;
 	}
 
@@ -128,9 +131,23 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		}
 		List<RuntimeAgentInfos> peers = new ArrayList<>();
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing agent id:" + getId() + " agentRole:" + (agentRole != null ? agentRole.getCode() : null)
+					+ " contextLength:" + agentModel.getContextLength() + " promptSize:" + prompt.getTokensSize()
+					+ " (tok) tokenBudget:" + tokenBudget + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ROUTING_AGENT_INPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</ROUTING_AGENT_INPUT>");
+		}
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		final boolean formatDeclared = isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing prompt declares the " + AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM
+					+ " placeholder:" + formatDeclared);
+		}
 		Map<String, Class<?>> checkTypesMap = new HashMap<>();
 		Map<String, Class<?>> typesMap = new HashMap<>();
 		for (String coordAgent : toCoordinate) {
@@ -139,6 +156,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			// A routed message is the peer's input (the command it consumes), so the
 			// envelope command data must be typed on the peer's input type.
 			Class<?> peerInputType = agentData.getService().getInputType();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Coordinated peer:" + coordAgent + " agent service id:" + agentData.getService().getId()
+						+ " inputType:" + peerInputType.getName());
+			}
 			checkTypesMap.put(coordAgent, peerInputType);
 			if (formatDeclared) {
 				TypeDescription.Generic generic = TypeDescription.Generic.Builder
@@ -153,8 +174,16 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		if (formatDeclared) {
 			params.put(AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Requesting the routing plan from the agent model, routable peers:" + typesMap.size());
+		}
 		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ROUTING_PLAN agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(populated));
+			LOGGER.trace("</ROUTING_PLAN>");
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing LLM produced " + (populated != null ? populated.size() : 0)
 					+ " target agent entr(ies): " + (populated != null ? populated.keySet() : null));
@@ -171,6 +200,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				// the assignability check below is meaningful.
 				Class<?> envelopeType = typesMap.get(targetAgent);
 				if (envelopeType == null || entry.getValue() == null) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Skipping routing entry for agent:" + targetAgent + " envelopeTypeKnown:"
+								+ (envelopeType != null) + " valuePresent:" + (entry.getValue() != null));
+					}
 					continue;
 				}
 				TargetAgentEnvelope<?> agentEnvelope = null;
@@ -190,6 +223,12 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Scheduling command for agent:" + targetAgent + " deliveryOrder:"
 									+ agentEnvelope.getDeliveryOrder());
+						}
+						if (LOGGER.isTraceEnabled()) {
+							LOGGER.trace("<ROUTED_COMMAND to=" + targetAgent + " deliveryOrder="
+									+ agentEnvelope.getDeliveryOrder() + ">");
+							LOGGER.trace(String.valueOf(agentEnvelope.getCommandData()));
+							LOGGER.trace("</ROUTED_COMMAND>");
 						}
 					} else {
 						LOGGER.error("For agent:" + targetAgent + " the wrong type has been generated");
@@ -242,6 +281,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				splitByBudget);
 		final int maxCycles = resolveMaxRoutingCycles(contextAgentPersona);
 		final int currentCycle = currentRoutingCycle(mySessionContext);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Exposing routing cycle signals to " + output.size() + " parameter window(s): cycle "
+					+ currentCycle + " of " + maxCycles);
+		}
 		for (Map<String, Object> window : output) {
 			window.put(CURRENT_CONTROLLER_CYCLE_TEMPLATE_PARAM, currentCycle);
 			window.put(MAX_CONTROLLER_CYCLES_TEMPLATE_PARAM, maxCycles);
@@ -282,13 +325,26 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		final int currentCycle = currentRoutingCycle(mySessionContext);
 		final boolean budgetRemains = currentCycle < maxCycles;
 		final int nextOrder = maxOrder + 1;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("applyRoutingIteration(...) self:" + selfName + " outputNode:" + outputNodeName
+					+ " dispatchedOutputNode:" + dispatchedOutputNode + " dispatchedWorker:" + dispatchedWorker
+					+ " cycle:" + currentCycle + "/" + maxCycles + " budgetRemains:" + budgetRemains + " nextOrder:"
+					+ nextOrder);
+		}
 		if (dispatchedOutputNode) {
 			// FINALIZE: the output node will produce the deliverable; stop iterating.
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing iteration FINALIZES: the output node has been dispatched");
+			}
 			return;
 		}
 		if (dispatchedWorker && budgetRemains) {
 			// GATHER: re-enter this routing agent after the dispatched work has landed in
 			// the shared context, so it can re-judge completeness and plan the next cycle.
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing iteration GATHERS: re-scheduling self:" + selfName + " at deliveryOrder:"
+						+ nextOrder);
+			}
 			out.add(new AgentsExchangeMessage(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT, selfName,
 					agentRole, selfName, msg.getPayload(), nextOrder));
 			notificationSink.next("Agent: " + selfName + " is gathering more evidence (cycle " + currentCycle + " of "
@@ -301,6 +357,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		// without an answer. Base default: nothing (legacy single-pass termination).
 		AgentsExchangeMessage<?> fallback = buildFinalizationFallback(session, contextAgentPersona, agentRole,
 				outputNodeName, msg, nextOrder);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing iteration ends without an output node dispatch, forced finalization fallback:"
+					+ (fallback != null));
+		}
 		if (fallback != null) {
 			out.add(fallback);
 		}
@@ -325,11 +385,21 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	 */
 	protected int resolveMaxRoutingCycles(AgentNetworkParticipant persona) {
 		if (persona != null && persona.getMaxInvocations() != null && persona.getMaxInvocations() > 0) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing cycle budget taken from maxInvocations:" + persona.getMaxInvocations());
+			}
 			return persona.getMaxInvocations();
 		}
 		if (persona != null && persona.getMaxConsecutiveInvocations() != null
 				&& persona.getMaxConsecutiveInvocations() > 0) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Routing cycle budget taken from maxConsecutiveInvocations:"
+						+ persona.getMaxConsecutiveInvocations());
+			}
 			return persona.getMaxConsecutiveInvocations();
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Routing cycle budget falls back to the single pass default:" + DEFAULT_MAX_ROUTING_CYCLES);
 		}
 		return DEFAULT_MAX_ROUTING_CYCLES;
 	}
@@ -340,7 +410,12 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	 * the agent's private memory is the count of completed cycles.
 	 */
 	protected int currentRoutingCycle(AgentPrivateSessionContext<?, ?> mySessionContext) {
-		return mySessionContext.getContributionTurnNumbers().size() + 1;
+		final int cycle = mySessionContext.getContributionTurnNumbers().size() + 1;
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Routing agent id:" + getId() + " is planning cycle " + cycle + ", recorded turns: "
+					+ mySessionContext.getContributionTurnNumbers());
+		}
+		return cycle;
 	}
 
 }

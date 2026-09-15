@@ -74,6 +74,17 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 		final IAgentsNetworkDao agentsNetworkDao = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class);
 		IGAgentsNetworkServiceFactory factory = this.factoryRepository.findByCode(config.getAgentNetworkServiceCode());
 		GAgentsNetwork adaptedNetwork = agentsNetworkDao.findByCode(config.getAdaptedAgentNetworkCode());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Network adapter id:" + getId() + " resolved factory:" + (factory != null)
+					+ " adaptedNetwork:" + (adaptedNetwork != null ? adaptedNetwork.getCode() : null) + " participants:"
+					+ (adaptedNetwork != null && adaptedNetwork.getAgents() != null ? adaptedNetwork.getAgents().size()
+							: 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<ADAPTED_NETWORK_INPUT adapter=" + getId() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</ADAPTED_NETWORK_INPUT>");
+		}
 		try {
 			IGAgentsNetworkService agentsNetworkService = factory.create(adaptedNetwork, notificationSink, inputType,
 					outputType, runAs);
@@ -85,6 +96,11 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 				}
 				OutputType output = (OutputType) agentsNetworkService.executeNetwork(chatRequestContext,
 						msg.getPayload(), session.getEnvironment());
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("<ADAPTED_NETWORK_OUTPUT adapter=" + getId() + ">");
+					LOGGER.trace(String.valueOf(output));
+					LOGGER.trace("</ADAPTED_NETWORK_OUTPUT>");
+				}
 				List<AgentsExchangeMessage<OutputType>> outputMessages = new ArrayList<AgentsExchangeMessage<OutputType>>();
 				List<String> targetAgents = contextAgentPersona.getCommunicationList();
 				for (String target : targetAgents) {

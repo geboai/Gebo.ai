@@ -69,6 +69,17 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Task performer agent id:" + getId() + " agentRole:"
+					+ (agentRole != null ? agentRole.getCode() : null) + " contextLength:"
+					+ agentModel.getContextLength() + " promptSize:" + prompt.getTokensSize() + " (tok) tokenBudget:"
+					+ tokenBudget + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<TASK_PERFORMER_INPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</TASK_PERFORMER_INPUT>");
+		}
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 
@@ -92,6 +103,11 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(
 					"End onMessage(...) task performer agent id:" + getId() + " produced output:" + (output != null));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<TASK_PERFORMER_OUTPUT agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(output));
+			LOGGER.trace("</TASK_PERFORMER_OUTPUT>");
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
 				MessageSemantic.RESPONSE,
