@@ -68,6 +68,18 @@ public class GeboRagSearchConfig {
 	// scored among the most relevant, so the top of the ranked list is protected from
 	// it. Set to 0 to let the filter judge the whole list.
 	private int rankerIrrelevanceFilterProtectedTopFragments = 2;
+	// Hybrid retrieval. When enabled the lexical (full text) leg ALWAYS runs beside
+	// the semantic one and the two share the requested topK, instead of the lexical
+	// leg running only as a fallback when the semantic one under delivers. With a
+	// populated vector store the semantic leg always filled the quota, so the
+	// lexical index was never queried and queries carrying rare literal terms - the
+	// ones lexical search is best at - could not be answered. Set to false to get
+	// the previous semantic-first/lexical-fallback behaviour back.
+	private boolean hybridSearchEnabled = true;
+	// Share of the requested topK reserved for the lexical leg when hybrid retrieval
+	// is enabled. The remainder goes to the semantic leg. 0.5 splits the budget
+	// evenly; lower it to favour semantic recall, raise it to favour literal matches.
+	private double hybridFullTextShare = 0.5;
 
 	public GeboRagSearchConfig(@Autowired IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
 			@Autowired IGSemanticSearchDocumentsCachedDao semanticSearchDao,
