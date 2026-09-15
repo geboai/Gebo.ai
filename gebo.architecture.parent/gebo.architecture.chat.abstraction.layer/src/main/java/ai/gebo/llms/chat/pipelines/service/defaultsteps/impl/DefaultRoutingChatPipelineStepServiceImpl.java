@@ -54,6 +54,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * Routing step of the default chat pipeline: decides which streaming output handler
+ * answers the request.
+ * <p>
+ * There are two mutually exclusive mechanisms, and they are documented in full in
+ * <code>docs/CHAT-PIPELINE-ROUTING-ARCHITECTURE.md</code>:
+ * <ol>
+ * <li>the chat menu picks the handler <b>directly</b> - a non blank
+ * <code>chatPipelineProcessId</code> is the literal name of a {@link RespondingWith}
+ * value and {@link #doHandleUserRequestedRouting} switches to it without any LLM;</li>
+ * <li>"Agentic chat" sends a blank <code>chatPipelineProcessId</code>, so
+ * {@link #doDecideRoute} runs: the default network of agents answers when it is
+ * enabled, otherwise the LLM router chooses among the delivering handlers.</li>
+ * </ol>
+ * The network versus router choice is owned by <code>ai.gebo.agents.standard.enabled</code>
+ * through the <code>DEFAULT_PIPELINE_SERVICE</code> bean. Do not add another
+ * configuration property to re-decide it here.
+ */
 @Component
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
