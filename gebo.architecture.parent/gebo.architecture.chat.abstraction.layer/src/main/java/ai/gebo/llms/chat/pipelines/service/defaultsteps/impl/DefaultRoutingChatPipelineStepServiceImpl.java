@@ -265,7 +265,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			environmentMap.putAll(params);
 			environmentMap.putAll(decisionMap);
 		} else {
-			// GO ON WITH INTELLIGENT ROUTER
+			// AGENTIC CHAT WITH THE AGENTS NETWORK ENABLED: SKIP THE ROUTER AND
+			// DELEGATE TO THE DEFAULT NETWORK OF AGENTS
 			decision = RespondingWith.DELEGATED_AGENT;
 		}
 		if (decision == RespondingWith.IMAGE_GENERATION_RESPONSE && !isImageGenerationAvailable()) {
