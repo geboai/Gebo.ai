@@ -47,8 +47,19 @@ import ai.gebo.officeplugin.pipeline.steps.OfficeAgentsNetworkStreamingStepServi
  * Requires the standard agents network to be enabled
  * ({@code ai.gebo.agents.standard.enabled=true}); the office network reuses its
  * searcher/tool config data sources and the shared controller agent service.
+ * That requirement is enforced by the condition below rather than left to bean
+ * resolution: every bean here belongs to the one office-network chain, and
+ * officeAgentsNetworkDataSource(..) needs a StandardAgentsInitialization to call
+ * createChatAgentsNetwork(..) on. Gating only on the office property meant that
+ * turning the standard agents off while leaving the office plugin at its default
+ * aborted startup with "Parameter 0 of method officeAgentsNetworkDataSource ...
+ * required a bean of type StandardAgentsInitialization", instead of simply
+ * skipping the office network. Listing both properties makes the configuration
+ * back off when either one is disabled; with matchIfMissing both absent still
+ * means enabled, so the shipped defaults are unchanged.
  */
-@ConditionalOnProperty(prefix = "ai.gebo.officeplugin", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = { "ai.gebo.officeplugin.enabled",
+		"ai.gebo.agents.standard.enabled" }, havingValue = "true", matchIfMissing = true)
 @Configuration
 public class OfficeAgentsInitialization {
 
