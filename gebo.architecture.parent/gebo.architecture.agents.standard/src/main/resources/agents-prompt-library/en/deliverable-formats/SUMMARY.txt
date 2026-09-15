@@ -1,0 +1,2 @@
+Topic blocks, each with a clear title, detailed paragraphs, and the references of that
+block placed at its end. Structured, but not a full report.

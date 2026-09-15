@@ -34,4 +34,5 @@ public class LLMUsageDetailPayload extends GBaseMessagePayload {
 	private long outputToken;
 	private long totalToken;
 	private long usageTimestamp;
+	private LLMCallOutcome outcome;
 }

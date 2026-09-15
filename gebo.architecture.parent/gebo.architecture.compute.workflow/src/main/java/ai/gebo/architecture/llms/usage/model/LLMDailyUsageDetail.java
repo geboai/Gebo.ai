@@ -1,5 +1,6 @@
 package ai.gebo.architecture.llms.usage.model;
 
+import ai.gebo.core.messages.LLMCallOutcome;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -18,6 +19,13 @@ public class LLMDailyUsageDetail {
 	private String model;
 	private String callerStack;
 	private ModelType modelType;
+	/**
+	 * Outcome of the calls aggregated here. Successes, errors and cancellations are
+	 * consolidated separately: a timed out call lands at exactly the configured
+	 * ceiling, so averaging it together with the successes would drag the mean
+	 * toward the timeout and hide it at the same time.
+	 */
+	private LLMCallOutcome outcome;
 	private int year;
 	private int month;
 	private int day;

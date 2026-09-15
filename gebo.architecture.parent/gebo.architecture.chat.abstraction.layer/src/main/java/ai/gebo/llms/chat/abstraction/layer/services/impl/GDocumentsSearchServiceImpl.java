@@ -213,6 +213,16 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			if (fullTextSearches != null) {
 				fullTextSearchedQuery.addAll(fullTextSearches);
 			}
+			// Symmetry with the semantic leg above, which always keeps userQuery as a net
+			// so that a planner returning nothing still searches. Without the same net
+			// here an empty full-text list silently drops lexicalLegAvailable to false and
+			// disables hybrid retrieval for the whole call: the semantic leg carries on
+			// while the lexical one is never even attempted. A single instruction-shaped
+			// query is a noisier BM25 probe than planned keywords, but it only ever claims
+			// the reserved lexical quota and it beats having no lexical leg at all.
+			if (fullTextSearchedQuery.isEmpty() && userQuery != null && !userQuery.isBlank()) {
+				fullTextSearchedQuery.add(userQuery);
+			}
 			// Hybrid retrieval budget. The lexical leg gets a reserved share of globalTopK
 			// and the semantic leg is bounded by the remainder, so filling the semantic
 			// quota can no longer starve the lexical one. See GeboRagSearchConfig.

@@ -432,6 +432,15 @@ ai.gebo.opensearch:
 
 ai.gebo.rag-threashold-autotune.config.enabled: false	
 # RAG retrieval tuning.
+# Outbound LLM client networking. The shipped default of 80000 ms was measured to be
+# too low for this workload: a SUMMARY deliverable was cut mid-stream at exactly
+# 80.008 s, and a dropped stream is never retried because the tokens already emitted
+# cannot be replayed - the answer simply ends where it was. Raised so that a multi
+# cycle report has room to finish. See docs/LLMS-NETWORKING-PARAMS.md.
+ai.gebo.llms.default.clients.config:
+  web-client-config:
+    response-timeout: 180000
+
 ai.gebo.ragsearch.config:
   # Hybrid retrieval: run the lexical (full text) leg beside the semantic one and
   # split the requested topK between them, instead of querying the lexical index
