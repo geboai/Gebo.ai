@@ -77,6 +77,7 @@ public class GenericOpenAIAPIImageModelConfigurationSupportService implements
 			if (config.getChoosedModel() != null) {
 				imageOptionsBuilder.model(config.getChoosedModel().getCode());
 			}
+			imageOptionsBuilder.timeout(OpenAiClientCustomizer.requestTimeout(clientsProvider));
 			OpenAiImageOptions options = imageOptionsBuilder.build();
 			OpenAiImageModel model = OpenAiImageModel.builder()
 					.options(options)

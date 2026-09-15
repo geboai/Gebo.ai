@@ -72,6 +72,7 @@ public class OpenAIImageModelConfigurationSupportService
 			if (config.getChoosedModel() != null) {
 				imageOptionsBuilder.model(config.getChoosedModel().getCode());
 			}
+			imageOptionsBuilder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(getCode())));
 			OpenAiImageOptions options = imageOptionsBuilder.build();
 			OpenAiImageModel model = OpenAiImageModel.builder()
 					.options(options)
