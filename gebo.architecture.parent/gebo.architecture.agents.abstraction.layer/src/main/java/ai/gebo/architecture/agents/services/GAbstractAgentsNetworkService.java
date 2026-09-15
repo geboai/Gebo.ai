@@ -70,6 +70,14 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
 		if (environment != null)
 			session.getEnvironment().putAll(environment);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<NETWORK_ENVIRONMENT network=" + (network != null ? network.getCode() : null) + ">");
+			LOGGER.trace(String.valueOf(environment));
+			LOGGER.trace("</NETWORK_ENVIRONMENT>");
+			LOGGER.trace("<NETWORK_INPUT node=" + inputNodeName + ">");
+			LOGGER.trace(String.valueOf(input));
+			LOGGER.trace("</NETWORK_INPUT>");
+		}
 		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 		final RuntimeAgentInfos inputRuntime = agentsDao.findAgentByCode(inputNodeName);
@@ -77,6 +85,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			throw new AgentException(NO_RUNTIME_ALLOCATED_FOR_INPUT_NODE + inputNodeName);
 		if (!inputRuntime.getService().getInputType().isAssignableFrom(input.getClass()))
 			throw new AgentException(NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE + input.getClass().getName());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Input node:" + inputNodeName + " bound to agent service id:"
+					+ inputRuntime.getService().getId() + " accepting inputType:"
+					+ inputRuntime.getService().getInputType().getName());
+		}
 
 		CallsResult<OutputType> iterationResult = null;
 		boolean dynamicExchange = false;
@@ -110,6 +123,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			throw new AgentException(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
 		}
 		final OutputType producedOutput = iterationResult != null ? iterationResult.getOutput() : null;
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<NETWORK_OUTPUT network=" + (network != null ? network.getCode() : null) + ">");
+			LOGGER.trace(String.valueOf(producedOutput));
+			LOGGER.trace("</NETWORK_OUTPUT>");
+		}
 		// If the network stopped without any dynamic message exchange between agents and
 		// produced no output, surface it with ERROR severity: the run terminated dead
 		// (e.g. the input node emitted nothing to route), which the user must be told.
@@ -126,14 +144,26 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	protected <OutputType> CallsResult<OutputType> join(CallsResult<OutputType> levelResult,
 			CallsResult<OutputType> rowResult) {
-		if (levelResult == null)
+		if (levelResult == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("join(...) no level result yet, keeping the row result as is");
+			}
 			return rowResult;
-		if (rowResult == null)
+		}
+		if (rowResult == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("join(...) no row result to merge, keeping the level result as is");
+			}
 			return levelResult;
+		}
 		TreeMap<Integer, List<AgentsExchangeMessage<?>>> mergedDeliveryOrder = new TreeMap<>();
 		mergeDeliveryOrder(mergedDeliveryOrder, levelResult.getDeliveryOrder());
 		mergeDeliveryOrder(mergedDeliveryOrder, rowResult.getDeliveryOrder());
 		OutputType composedOutput = compose(levelResult.getOutput(), rowResult.getOutput());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("join(...) merged delivery order into " + mergedDeliveryOrder.size()
+					+ " execution order slot(s), composed output:" + (composedOutput != null));
+		}
 		return new CallsResult<OutputType>(mergedDeliveryOrder, composedOutput);
 	}
 
@@ -160,6 +190,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			ReactiveIdentityUtil runAs)
 			throws LLMConfigException, AgentException, InterruptedException, ExecutionException {
 		OutputType output = null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin executeNetworkLoops(...) targetAgent:"
+					+ (inputRuntime != null ? inputRuntime.getService().getId() : null) + " messageSemantic:"
+					+ (inputMessage != null ? inputMessage.getMessageSemantic() : null));
+		}
 		final TreeMap<Integer, List<AgentsExchangeMessage<?>>> deliveryOrder = new TreeMap<>();
 		if (checkContinueLoop(network, agentsDao)) {
 			final int contributionNr = session.getAndIncrementContributionNr();
@@ -167,6 +202,12 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Dispatching message to agent:" + inputRuntime.getService().getId() + " contributionNr:"
 						+ contributionNr);
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<AGENT_INBOUND_MESSAGE to=" + inputMessage.getToAgent() + " semantic="
+						+ inputMessage.getMessageSemantic() + ">");
+				LOGGER.trace(String.valueOf(inputMessage.getPayload()));
+				LOGGER.trace("</AGENT_INBOUND_MESSAGE>");
 			}
 			final String participantName = inputRuntime.getNetworkParticipantConfig().getNetworkAgentName();
 			final boolean isInputNode = inputRuntime.getNetworkParticipantConfig().isInputNode();
@@ -202,13 +243,29 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						+ (messages != null ? messages.size() : 0) + " message(s)");
 			}
 			if (messages == null || messages.isEmpty()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agent:" + participantName + " produced no message, recording an empty turn");
+				}
 				addToEmptyReturn(inputMessage, contributionNr, inputRuntime.getAgentContext());
 			} else {
 				for (AgentsExchangeMessage<?> msg : messages) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Agent:" + participantName + " emitted message to:" + msg.getToAgent()
+								+ " semantic:" + msg.getMessageSemantic() + " executionOrder:" + msg.getExecutionOrder());
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<AGENT_OUTBOUND_MESSAGE from=" + participantName + " to=" + msg.getToAgent()
+								+ " semantic=" + msg.getMessageSemantic() + ">");
+						LOGGER.trace(String.valueOf(msg.getPayload()));
+						LOGGER.trace("</AGENT_OUTBOUND_MESSAGE>");
+					}
 					addTo(msg, contributionNr, session);
 					addTo(msg, inputMessage, contributionNr, inputRuntime.getAgentContext());
 					if (inputRuntime.getNetworkParticipantConfig().isOutputNode()
 							&& msg.getMessageSemantic() == MessageSemantic.RESPONSE) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Composing network output from output node:" + participantName);
+						}
 						output = compose(output, (OutputType) msg.getPayload());
 					}
 					MessageSemantic msgSemantic = msg.getMessageSemantic();
@@ -227,14 +284,24 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 				}
 			}
 
+		} else if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("executeNetworkLoops(...) skipped: the network loop budget is exhausted");
 		}
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End executeNetworkLoops(...) targetAgent:"
+					+ (inputRuntime != null ? inputRuntime.getService().getId() : null) + " deliveryOrder slots:"
+					+ deliveryOrder.size() + " output:" + (output != null));
+		}
 		return new CallsResult<OutputType>(deliveryOrder, output);
 
 	}
 
 	private void addToEmptyReturn(AgentsExchangeMessage<?> inputMessage, int contributionNr,
 			AgentPrivateSessionContext agentContext) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Recording an empty interaction for contributionNr:" + contributionNr);
+		}
 		agentContext.addInteraction(inputMessage, contributionNr, "");
 
 	}
@@ -258,8 +325,12 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			Class<OutputType> outputType, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException, InterruptedException, ExecutionException {
 		CallsResult<OutputType> out = null;
-		if (executionGroup.isEmpty())
+		if (executionGroup.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("executeNetworkLoopsGroup(...) skipped: the execution group is empty");
+			}
 			return null;
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetworkLoopsGroup(...) with " + executionGroup.size() + " message(s) (parallel:"
 					+ (executionGroup.size() > 1) + ")");
@@ -288,6 +359,10 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						return null;
 					}
 				};
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Scheduling parallel network loop for agent:" + msg.getToAgent() + " executionOrder:"
+							+ msg.getExecutionOrder());
+				}
 				Executor executor = threadManager.getExecutorService();
 				CompletableFuture<CallsResult<OutputType>> completable = CompletableFuture.supplyAsync(supplier,
 						executor);
@@ -297,6 +372,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 				CallsResult<OutputType> iterationOut = completableFuture.get();
 				out = join(out, iterationOut);
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End executeNetworkLoopsGroup(...) deliveryOrder slots:"
+					+ (out != null && out.getDeliveryOrder() != null ? out.getDeliveryOrder().size() : 0) + " output:"
+					+ (out != null && out.getOutput() != null));
 		}
 		return out;
 	}
@@ -309,6 +389,10 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private void addTo(AgentsExchangeMessage<?> msg, int contributionCounter,
 			AgentsCollaborationSessionContext session) {
 		if (msg.getMessageSemantic() == MessageSemantic.RESPONSE) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Adding a RESPONSE message to the shared session context, contributionNr:"
+						+ contributionCounter);
+			}
 			session.addContribution(msg, contributionCounter);
 		}
 	}
@@ -318,6 +402,10 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		int loopDone = Integer.MIN_VALUE;
 		for (AgentNetworkParticipant agent : network.getAgents()) {
 			RuntimeAgentInfos agentSituation = agentsDao.findAgentByCode(agent.getNetworkAgentName());
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Agent:" + agent.getNetworkAgentName() + " turnOfExecution:"
+						+ agentSituation.getTurnOfExecution());
+			}
 			loopDone = Math.max(agentSituation.getTurnOfExecution(), loopDone);
 		}
 		boolean continueLoop = loopDone < network.getMaxLoopIteration();

@@ -68,6 +68,10 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		this.agentsNetworkDataSource = agentsNetworkDataSource;
 		this.lifeCycleService = lifeCycleService;
 		this.stepId = stepId;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Registered reactive chat agents network pipeline step id:" + stepId + " over network factory:"
+					+ (factory != null ? factory.getId() : null));
+		}
 	}
 
 	@Override
@@ -92,6 +96,9 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 */
 	protected Map<String, Object> buildNetworkEnvironment(ChatPipelineExecutionRuntimeData runtimeData)
 			throws LLMConfigException, GeboChatSessionLifecycleException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin buildNetworkEnvironment(...) pipeline step:" + getStepId());
+		}
 		final Map<String, Object> environment = new HashMap<String, Object>();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 		List<GKnowledgeBase> knowledgeBases = lifeCycleService.getSessionAvailableKnowledgeBases(request);
@@ -99,6 +106,16 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
 		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
 				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
+					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);
+			LOGGER.trace("<USER_QUERY>");
+			LOGGER.trace(String.valueOf(request.getQuery()));
+			LOGGER.trace("</USER_QUERY>");
+		}
 		return environment;
 	}
 
@@ -121,6 +138,10 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			INotificationSink notificationSink = sinkUIEmitter;
 			final GeboChatResponse responseReference = runtimeData.getChatResponse();
 			List<GAgentsNetwork> ds = this.agentsNetworkDataSource.getConfigurations();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The agents network data source offers " + ds.size()
+						+ " network(s); the first one is used as the agentic chat network");
+			}
 			if (ds.isEmpty())
 				throw new ChatPipelineException("No agentic chat network set");
 			final Map<String, Object> environment = buildNetworkEnvironment(runtimeData);
@@ -132,6 +153,9 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					ChatPipelineExecutionRuntimeData.class, GeboChatMessageEnvelope.class, runAs);
 			Flux<GeboChatMessageEnvelope> flux = runtimeNetwork.getFlux();
 			Flux<GeboChatMessageEnvelope> trailingFlux = Flux.defer(() -> {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Emitting the trailing last-message envelope for pipeline step:" + getStepId());
+				}
 				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(responseReference);
 				envelope.setLastMessage(true);
 				return Flux.just(envelope);
@@ -153,6 +177,19 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				});
 			}).map(x -> {
 				if (x != null && x.getContent() instanceof GeboChatResponse response) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Merging a network chat response onto the pipeline response, responseLength:"
+								+ (response.getQueryResponse() != null ? response.getQueryResponse().length() : 0)
+								+ " calledFunctions:"
+								+ (response.getCalledFunctions() != null ? response.getCalledFunctions().size() : 0)
+								+ " documentRefs:"
+								+ (response.getDocumentsRef() != null ? response.getDocumentsRef().size() : 0));
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<NETWORK_CHAT_RESPONSE>");
+						LOGGER.trace(response.getQueryResponse());
+						LOGGER.trace("</NETWORK_CHAT_RESPONSE>");
+					}
 					responseReference.setQueryResponse(response.getQueryResponse());
 					responseReference.setCalledFunctions(response.getCalledFunctions());
 					responseReference.setDocumentsRef(response.getDocumentsRef());
@@ -176,6 +213,10 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				runtimeNetwork.dispose();
 			});
 			;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End execute(...) reactive chat agents network streaming pipeline step:" + getStepId()
+						+ ", the output flux is ready to be subscribed");
+			}
 			return flux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 		} catch (NetworkOfAgentsException e) {
 			LOGGER.error(EXCEPTION_CREATING_NETWORK_OF_AGENTS, e);

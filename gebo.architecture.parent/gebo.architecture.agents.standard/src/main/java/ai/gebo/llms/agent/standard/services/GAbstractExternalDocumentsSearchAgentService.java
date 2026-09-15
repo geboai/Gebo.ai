@@ -81,11 +81,17 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 	protected List<Document> chunkToDocuments(List<SearchResult> results, INotificationSink notificationSink,
 			IGConfigurableChatModel agentModel, SearchAgentCommand command, List<String> keywords) {
 		if (results == null || results.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("chunkToDocuments(...) agent id:" + getId() + " has no search result to chunk");
+			}
 			return new ArrayList<>();
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin chunkToDocuments(...) agent id:" + getId() + " searchResults:" + results.size()
 					+ " keywords:" + (keywords != null ? keywords.size() : 0));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Matching keywords derived for chunking: " + keywords);
 		}
 		final ChunkingParams params = buildSearchChunkingParams(agentModel, command, keywords);
 		final String chunkingSession = chunkingService.createChunkingSession("agent-search:" + UUID.randomUUID());
@@ -117,6 +123,11 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 						continue;
 					}
 					chunksPerDocument.put(sourceCode, kept + 1);
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<SEARCH_CHUNK document=" + sourceCode + " nr=" + (kept + 1) + ">");
+						LOGGER.trace(chunk.getChunkData());
+						LOGGER.trace("</SEARCH_CHUNK>");
+					}
 					documents.add(new Document(chunk.getChunkData(), chunk.getMetaData()));
 				}
 				if (LOGGER.isDebugEnabled() && cappedOut > 0) {
@@ -131,6 +142,9 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 			}
 			return documents;
 		} finally {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Disposing the chunking session:" + chunkingSession + " of agent id:" + getId());
+			}
 			chunkingService.disposeChunkingSession(chunkingSession);
 		}
 	}
@@ -171,6 +185,11 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 		} else {
 			params.setChunkingPolicy(ChunkingPolicy.SPLIT_CHUNKS);
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("buildSearchChunkingParams(...) agent id:" + getId() + " topK:" + topK + " perDocumentBudget:"
+					+ perDocumentBudget + " (tok) maxNumChunks:" + maxNumChunks + " policy:" + params.getChunkingPolicy()
+					+ " matchingKeywords:" + matchingKeywords.size());
+		}
 		return params;
 	}
 
@@ -180,9 +199,20 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 	 */
 	protected List<String> keywordsFromCommand(SearchAgentCommand command) {
 		if (command == null || command.getCommand() == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("keywordsFromCommand(...) agent id:" + getId() + " has no command text to derive from");
+			}
 			return List.of();
 		}
-		return Arrays.stream(command.getCommand().split("\\W+")).map(String::trim)
+		List<String> keywords = Arrays.stream(command.getCommand().split("\\W+")).map(String::trim)
 				.filter(word -> word.length() >= MIN_KEYWORD_LENGTH).distinct().toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("keywordsFromCommand(...) agent id:" + getId() + " derived " + keywords.size()
+					+ " matching keyword(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Derived keywords: " + keywords);
+		}
+		return keywords;
 	}
 }

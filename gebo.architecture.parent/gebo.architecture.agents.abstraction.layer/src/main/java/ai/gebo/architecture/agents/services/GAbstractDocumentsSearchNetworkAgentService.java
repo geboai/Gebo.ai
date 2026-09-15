@@ -47,6 +47,9 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
 		capabilities.addCapability(
 				"Search for and retrieve the document fragments most relevant to a given search command, optionally re-ranking them by relevance");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Documents search agent id:" + getId() + " advertises the document retrieval capability");
+		}
 		return capabilities;
 	}
 
@@ -81,6 +84,17 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Documents search agent id:" + getId() + " agentRole:"
+					+ (agentRole != null ? agentRole.getCode() : null) + " contextLength:"
+					+ agentModel.getContextLength() + " promptSize:" + prompt.getTokensSize() + " (tok) tokenBudget:"
+					+ tokenBudget + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<SEARCH_AGENT_COMMAND agent=" + getId() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</SEARCH_AGENT_COMMAND>");
+		}
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " is searching...",
@@ -92,6 +106,15 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End onMessage(...) documents search agent id:" + getId() + " retrieved "
 					+ (documents != null ? documents.size() : 0) + " document(s)");
+		}
+		if (LOGGER.isTraceEnabled() && documents != null) {
+			int index = 1;
+			for (Document document : documents) {
+				LOGGER.trace("<RETRIEVED_DOCUMENT nr=" + index + " id=" + document.getId() + ">");
+				LOGGER.trace(document.getText());
+				LOGGER.trace("</RETRIEVED_DOCUMENT>");
+				index++;
+			}
 		}
 		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,
 				MessageSemantic.RESPONSE);

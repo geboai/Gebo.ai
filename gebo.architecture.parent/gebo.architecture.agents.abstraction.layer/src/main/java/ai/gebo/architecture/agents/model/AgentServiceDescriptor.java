@@ -1,5 +1,8 @@
 package ai.gebo.architecture.agents.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.agents.services.IGAgentsNetworkToNetworkAgentAdapterService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
@@ -19,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AgentServiceDescriptor {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AgentServiceDescriptor.class);
 
 	private String serviceId;
 	private String description;
@@ -46,6 +50,12 @@ public class AgentServiceDescriptor {
 		}
 		descriptor.setRoutingAgent(service instanceof IGRoutingNetworkAgentService);
 		descriptor.setNetworkAdapter(service instanceof IGAgentsNetworkToNetworkAgentAdapterService);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Described agent service id:" + descriptor.getServiceId() + " networkAgent:"
+					+ descriptor.isNetworkAgent() + " routingAgent:" + descriptor.isRoutingAgent() + " networkAdapter:"
+					+ descriptor.isNetworkAdapter() + " inputType:" + descriptor.getInputType() + " outputType:"
+					+ descriptor.getOutputType());
+		}
 		return descriptor;
 	}
 }

@@ -1,5 +1,8 @@
 package ai.gebo.llms.agent.standard.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.GAbstractGenericalAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -33,6 +36,7 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
  * not injected, as the search prompts drive their own structured/field output.
  */
 public final class SearchAgentPromptPatcher {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SearchAgentPromptPatcher.class);
 
 	private static final String NEWLINE = "\r\n";
 
@@ -46,7 +50,14 @@ public final class SearchAgentPromptPatcher {
 	 */
 	public static GPromptTemplateConfig withAgentPlaceholders(GPromptTemplateConfig original) {
 		if (original == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("withAgentPlaceholders(...) skipped: no original prompt to patch");
+			}
 			return null;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin withAgentPlaceholders(...) patching prompt use:" + original.getPromptUse()
+					+ " with the agent network context section");
 		}
 		GPromptTemplateConfig patched = original.copy();
 		String userTemplate = patched.getUserPromptTemplate() != null ? patched.getUserPromptTemplate() : "";
@@ -64,6 +75,15 @@ public final class SearchAgentPromptPatcher {
 		appendBlock(buffer, "Current search command/input (highest priority)",
 				AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM);
 		patched.setUserPromptTemplate(buffer.toString());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End withAgentPlaceholders(...) prompt use:" + patched.getPromptUse()
+					+ " user template grew from " + userTemplate.length() + " to " + buffer.length() + " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<PATCHED_SEARCH_PROMPT use=" + patched.getPromptUse() + ">");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</PATCHED_SEARCH_PROMPT>");
+		}
 		return patched;
 	}
 

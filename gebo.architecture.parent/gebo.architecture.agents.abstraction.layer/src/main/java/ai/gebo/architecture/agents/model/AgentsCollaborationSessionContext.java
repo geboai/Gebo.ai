@@ -7,10 +7,14 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 public final class AgentsCollaborationSessionContext {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AgentsCollaborationSessionContext.class);
 	@Getter
 	@NotNull
 	private final String id = UUID.randomUUID().toString();
@@ -25,6 +29,15 @@ public final class AgentsCollaborationSessionContext {
 				msg.getFromAgent(), msg.getPayload());
 		contributions.computeIfAbsent(contributionNr, (c) -> new ArrayList<AgentProducedSessionContribution>());
 		contributions.get(contributionNr).add(contribution);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("addContribution(...) session:" + id + " contributionNr:" + contributionNr + " fromAgent:"
+					+ msg.getFromAgent() + " the shared context now spans " + contributions.size() + " turn(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<SHARED_CONTRIBUTION nr=" + contributionNr + " agent=" + msg.getFromAgent() + ">");
+			LOGGER.trace(String.valueOf(msg.getPayload()));
+			LOGGER.trace("</SHARED_CONTRIBUTION>");
+		}
 	}
 
 	public synchronized List<AgentProducedSessionContribution> getSampledContributions() {
@@ -36,7 +49,13 @@ public final class AgentsCollaborationSessionContext {
 	}
 
 	public List<AgentProducedSessionContribution> getSampledContributionsAfter(int index) {
-		return getSampledContributions().stream().filter(x -> x.getContributionUniqueNr() >= index).toList();
+		List<AgentProducedSessionContribution> sampled = getSampledContributions().stream()
+				.filter(x -> x.getContributionUniqueNr() >= index).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getSampledContributionsAfter(" + index + ") session:" + id + " returned " + sampled.size()
+					+ " contribution(s)");
+		}
+		return sampled;
 	}
 
 	public List<AgentProducedSessionContribution> getSampledContributionOf(String agentName) {
@@ -55,6 +74,10 @@ public final class AgentsCollaborationSessionContext {
 	}
 
 	public synchronized int getAndIncrementContributionNr() {
-		return contributionCounter++;
+		final int allocated = contributionCounter++;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getAndIncrementContributionNr() session:" + id + " allocated contributionNr:" + allocated);
+		}
+		return allocated;
 	}
 }

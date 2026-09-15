@@ -34,8 +34,13 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 
 	@Override
 	public boolean canHandle(Class<IGAgentsNetworkService> agentNetworkService) {
-
-		return agentNetworkService.isAssignableFrom(serviceType) && serviceType.isAssignableFrom(agentNetworkService);
+		final boolean handled = agentNetworkService.isAssignableFrom(serviceType)
+				&& serviceType.isAssignableFrom(agentNetworkService);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("canHandle(" + agentNetworkService.getName() + ") factory id:" + getId() + " serviceType:"
+					+ serviceType.getName() + " -> " + handled);
+		}
+		return handled;
 	}
 
 	@Override
@@ -58,6 +63,10 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 		for (AgentNetworkParticipant agent : network.getAgents()) {
 			RuntimeAgentInfos agentInfos = this.createRuntimeAgentInfos(network, agent);
 			agentsCache.put(agent.getNetworkAgentName(), agentInfos);
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Network participant:" + agent.getNetworkAgentName() + " inputNode:" + agent.isInputNode()
+						+ " outputNode:" + agent.isOutputNode() + " communicationList:" + agent.getCommunicationList());
+			}
 			if (agent.isInputNode()) {
 				inputNode.add(agentInfos);
 			}
@@ -78,6 +87,10 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 				.orElseThrow(() -> new NetworkOfAgentsException(
 						NO_OUTPUT_NODES_COHERENT_WITH_OUTPUT_TYPE + outputType.getName()));
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End create(...) network service factory id:" + getId() + " network code:" + network.getCode()
+					+ " input/output node types validated, building the network service");
+		}
 		return createAgentsNetworkService(network, notificationSink, inputType, outputType, runAs, agentsCache);
 	}
 

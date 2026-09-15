@@ -79,6 +79,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			+ NOTIFY_USER_TOOL
 			+ " to notify user regarding your actions and decision, be concise and do it from 1 to 4 times.";
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+	/**
+	 * Logger used by the {@code static} helpers of this class, which have no
+	 * instance and therefore cannot use the per-instance {@link #LOGGER}.
+	 */
+	protected static final Logger STATIC_LOGGER = LoggerFactory.getLogger(GAbstractGenericalAgentService.class);
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
 	protected final IGPromptConfigDao promptsDao;
@@ -89,9 +94,23 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 	@Override
 	public List<GAgentConfig> getAccessibleConfigurations() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getAccessibleConfigurations() agent service id:" + getId());
+		}
 		IAgentConfigDao configsDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		List<GAgentConfig> configs = configsDao.findByAgentServiceId(getId());
-		return securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
+		List<GAgentConfig> accessible = securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getAccessibleConfigurations() agent service id:" + getId() + " found:"
+					+ (configs != null ? configs.size() : 0) + " accessible:"
+					+ (accessible != null ? accessible.size() : 0));
+		}
+		if (LOGGER.isTraceEnabled() && accessible != null) {
+			for (GAgentConfig config : accessible) {
+				LOGGER.trace("Accessible agent configuration: " + (config != null ? config.getCode() : null));
+			}
+		}
+		return accessible;
 	}
 
 	/**
@@ -113,6 +132,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			LOGGER.debug("Base agent capabilities for service id:" + getId() + " advertise "
 					+ capabilities.getTools().size() + " tool(s)");
 		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_CAPABILITIES service=" + getId() + ">");
+			LOGGER.trace(renderAgentCapabilities(capabilities, true));
+			LOGGER.trace("</AGENT_CAPABILITIES>");
+		}
 		return capabilities;
 	}
 
@@ -125,7 +149,15 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 */
 	protected void appendConfiguredTools(AgentCapabilities capabilities, GAgentConfig agentConfig) {
 		if (agentConfig == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("appendConfiguredTools(...) skipped: no agent configuration");
+			}
 			return;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin appendConfiguredTools(...) agentConfig code:" + agentConfig.getCode()
+					+ " subscribeAllTools:" + agentConfig.getSubscribeAllTools() + " enabledFunctions:"
+					+ (agentConfig.getEnabledFunctions() != null ? agentConfig.getEnabledFunctions().size() : 0));
 		}
 		if (Boolean.TRUE.equals(agentConfig.getSubscribeAllTools())) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
@@ -140,6 +172,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 					if (excludedTools.contains(tool.getToolDefinition().name())) {
 						continue;
 					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("Auto mounted tool: " + tool.getToolDefinition().name() + " description: "
+								+ tool.getToolDefinition().description());
+					}
 					capabilities.addTool(AgentCapabilityResource.of(tool.getToolDefinition().name(),
 							tool.getToolDefinition().name(), tool.getToolDefinition().description()));
 				}
@@ -147,9 +183,16 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		} else if (agentConfig.getEnabledFunctions() != null) {
 			for (String functionName : agentConfig.getEnabledFunctions()) {
 				if (functionName != null && !functionName.isBlank()) {
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("Explicitly enabled tool: " + functionName);
+					}
 					capabilities.addTool(AgentCapabilityResource.of(functionName, functionName, null));
 				}
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End appendConfiguredTools(...) agentConfig code:" + agentConfig.getCode()
+					+ " advertised tools:" + capabilities.getTools().size());
 		}
 	}
 
@@ -176,6 +219,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (LOGGER.isDebugEnabled() && filtered.size() != toolNames.size()) {
 			LOGGER.debug("Auto tool mounting excluded " + (toolNames.size() - filtered.size())
 					+ " tool(s) for agent service id:" + getId());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Auto mounted tool names for agent service id:" + getId() + " : " + filtered);
 		}
 		return filtered;
 	}
@@ -204,6 +250,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (config.getExcludedTools() != null) {
 			excluded.addAll(config.getExcludedTools());
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Auto tool mounting configuration declares " + excluded.size()
+					+ " explicitly excluded tool(s) and "
+					+ (config.getExcludedToolSources() != null ? config.getExcludedToolSources().size() : 0)
+					+ " excluded tool source(s)");
+		}
 		List<String> excludedSources = config.getExcludedToolSources();
 		if (excludedSources != null && !excludedSources.isEmpty()) {
 			List<IGToolCallbackSource> sources = toolsRepositoryPattern.getImplementations();
@@ -228,6 +280,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				}
 			}
 		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Auto mount excluded tool names: " + excluded);
+		}
 		return excluded;
 	}
 
@@ -246,6 +301,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			copiedModel = chatModelsDao.findByUsesOrGetDefault(agentConfig.getUseChatModelWithUse());
 		} else if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
 			copiedModel = chatModelsDao.defaultHandler();
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Resolved base chat model for agent service id:" + getId() + " : "
+					+ (copiedModel != null ? copiedModel.getCode() : null));
 		}
 		if (copiedModel == null) {
 			LOGGER.warn("Setting backup default chat model for actual Agent");
@@ -281,6 +340,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 					+ (allFunctions != null ? allFunctions.size() : 0));
 		}
 
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Enabled function names for agent service id:" + getId() + " : " + allFunctions);
+		}
+
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
 				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs));
@@ -303,7 +366,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	protected ToolCallback createUserMessageTool(INotificationSink notificationSink) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createUserMessageTool(...) declaring tool:" + NOTIFY_USER_TOOL + " for agent service id:"
+					+ getId());
+		}
 		Consumer<UserMessageToolParam> activeConsumer = (param) -> {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Tool " + NOTIFY_USER_TOOL + " invoked by agent service id:" + getId()
+						+ " notificationType:" + (param != null ? param.getNotificationType() : null));
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<NOTIFY_USER_MESSAGE>");
+				LOGGER.trace(param != null ? param.getMessage() : null);
+				LOGGER.trace("</NOTIFY_USER_MESSAGE>");
+			}
 			NotificationObject state = new NotificationObject(UUID.randomUUID().toString(), param.getMessage(),
 					"pi pi-microchip-ai", param.getNotificationType());
 			notificationSink.next(state);
@@ -315,6 +391,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
 			List<String> allFunctions, List<ToolCallback> additionalTools, ReactiveIdentityUtil runAs) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createToolCallingManager(...) agent service id:" + getId() + " functions:"
+					+ (allFunctions != null ? allFunctions.size() : 0) + " additionalTools:"
+					+ (additionalTools != null ? additionalTools.size() : 0));
+		}
 		List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener, allFunctions,
 				toolsRepositoryPattern);
 		if (additionalTools != null && !additionalTools.isEmpty()) {
@@ -325,6 +406,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		final Map<String, ToolCallback> map = new HashMap<>();
 		for (ToolCallback toolCallback : wrapped) {
 			map.put(toolCallback.getToolDefinition().name(), toolCallback);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createToolCallingManager(...) agent service id:" + getId() + " wrapped tools:" + map.size());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Wrapped tool names for agent service id:" + getId() + " : " + map.keySet());
 		}
 		return new AgentToolCallingManagerFactory(callBacksListener, allFunctions, wrapped, map).create();
 	}
@@ -342,6 +429,15 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		AssistantMessage output = result.getOutput();
 
 		String text = output.getText();
+		if (STATIC_LOGGER.isDebugEnabled()) {
+			STATIC_LOGGER.debug("extractContent(...) extracted " + (text != null ? text.length() : 0)
+					+ " character(s) from the chat response");
+		}
+		if (STATIC_LOGGER.isTraceEnabled()) {
+			STATIC_LOGGER.trace("<CHAT_RESPONSE_CONTENT>");
+			STATIC_LOGGER.trace(text);
+			STATIC_LOGGER.trace("</CHAT_RESPONSE_CONTENT>");
+		}
 		return text != null ? text : "";
 	}
 
@@ -411,8 +507,16 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		List<AssistantMessage.ToolCall> toolCalls = output.getToolCalls();
 
 		if (!org.springframework.util.CollectionUtils.isEmpty(toolCalls)) {
+			if (STATIC_LOGGER.isDebugEnabled()) {
+				STATIC_LOGGER.debug(
+						"inspectToolCalls(...) collected " + toolCalls.size() + " tool call(s) from the chat response");
+			}
 			for (AssistantMessage.ToolCall toolCall : toolCalls) {
-
+				if (STATIC_LOGGER.isTraceEnabled()) {
+					STATIC_LOGGER.trace("<TOOL_CALL name=" + toolCall.name() + " id=" + toolCall.id() + ">");
+					STATIC_LOGGER.trace(toolCall.arguments());
+					STATIC_LOGGER.trace("</TOOL_CALL>");
+				}
 				rawToolCallsCumulator.add(toolCall);
 			}
 		}
@@ -423,8 +527,17 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			if (rawToolCalls == null) {
 				rawToolCalls = metadata.get("toolCalls");
 			}
-			if (rawToolCalls != null)
+			if (rawToolCalls != null) {
+				if (STATIC_LOGGER.isDebugEnabled()) {
+					STATIC_LOGGER.debug("inspectToolCalls(...) collected raw tool calls from the response metadata");
+				}
+				if (STATIC_LOGGER.isTraceEnabled()) {
+					STATIC_LOGGER.trace("<RAW_TOOL_CALLS>");
+					STATIC_LOGGER.trace(String.valueOf(rawToolCalls));
+					STATIC_LOGGER.trace("</RAW_TOOL_CALLS>");
+				}
 				rawToolCallsCumulator.add(rawToolCalls);
+			}
 
 		}
 	}
@@ -436,6 +549,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("resolvePrompt(...) inlinePromptProvided:" + (prompt != null) + " useCode:" + useCode
 					+ " nullable:" + nullable + " resolved:" + (resolved != null));
+		}
+		if (LOGGER.isTraceEnabled() && resolved != null) {
+			LOGGER.trace("<RESOLVED_PROMPT use=" + resolved.getPromptUse() + ">");
+			LOGGER.trace(String.valueOf(resolved.getSystemPromptTemplate()));
+			LOGGER.trace(String.valueOf(resolved.getUserPromptTemplate()));
+			LOGGER.trace("</RESOLVED_PROMPT>");
 		}
 		if (resolved == null && !nullable)
 			throw new AgentException("Mandatory prompt not present");
@@ -478,6 +597,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
 
 	protected String buildRootJsonSchema(Map<String, Class<?>> typesMap) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin buildRootJsonSchema(...) with " + (typesMap != null ? typesMap.size() : 0)
+					+ " root propert(ies)");
+		}
 		ObjectNode root = objectMapper.createObjectNode();
 
 		root.put("$schema", "https://json-schema.org/draft/2020-12/schema");
@@ -506,7 +629,16 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		}
 
 		try {
-			return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
+			String schema = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End buildRootJsonSchema(...) schema length:" + schema.length() + " character(s)");
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<ROOT_JSON_SCHEMA>");
+				LOGGER.trace(schema);
+				LOGGER.trace("</ROOT_JSON_SCHEMA>");
+			}
+			return schema;
 		} catch (Exception e) {
 			throw new IllegalStateException("Cannot serialize root JSON schema", e);
 		}
@@ -536,15 +668,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		final Map<String, Boolean> placeholders = prompt != null ? prompt.getPlaceholders() : Map.of();
 		int remainingBudget = tokenBudget;
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Prompt declares " + placeholders.size() + " placeholder(s): " + placeholders.keySet());
+		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM)) {
 			String networkScenary = nullToEmpty(createNetworkScenaryDescription(network));
 			constantParams.put(AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM, networkScenary);
 			remainingBudget -= ITokensCountable.stringsTokensSize(networkScenary);
+			tracePlaceholder(AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM, networkScenary, remainingBudget);
 		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM)) {
 			String agentIdentity = nullToEmpty(createAgentIdentityDescription(agentRole, contextAgentPersona));
 			constantParams.put(AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM, agentIdentity);
 			remainingBudget -= ITokensCountable.stringsTokensSize(agentIdentity);
+			tracePlaceholder(AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM, agentIdentity, remainingBudget);
 		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM)) {
 			String comunicationCapabilities = nullToEmpty(
@@ -552,6 +689,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			constantParams.put(AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
 					comunicationCapabilities);
 			remainingBudget -= ITokensCountable.stringsTokensSize(comunicationCapabilities);
+			tracePlaceholder(AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
+					comunicationCapabilities, remainingBudget);
 		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM)) {
 			String networkAgentsCapabilities = nullToEmpty(
@@ -559,16 +698,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			constantParams.put(AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
 					networkAgentsCapabilities);
 			remainingBudget -= ITokensCountable.stringsTokensSize(networkAgentsCapabilities);
+			tracePlaceholder(AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
+					networkAgentsCapabilities, remainingBudget);
 		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM)) {
 			String renderedInput = nullToEmpty(renderContributionData(input));
 			constantParams.put(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput);
 			remainingBudget -= ITokensCountable.stringsTokensSize(renderedInput);
+			tracePlaceholder(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput, remainingBudget);
 		}
 
 		if (placeholders.containsKey(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM)) {
-			constantParams.put(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM,
-					nullToEmpty(render(mySessionContext, actualContributionNr, remainingBudget)));
+			String privateContext = nullToEmpty(render(mySessionContext, actualContributionNr, remainingBudget));
+			constantParams.put(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM, privateContext);
+			tracePlaceholder(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM, privateContext, remainingBudget);
 		}
 		final int fixedBudget = remainingBudget;
 		if (placeholders.containsKey(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)) {
@@ -588,12 +731,22 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 						renderedCache);
 				String sharedContext = nullToEmpty(iterationValue.getContext());
 				params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Shared context window " + (vectorized.size() + 1) + " covers contributions ["
+							+ iterationValue.getStartContribution() + ".." + iterationValue.getLastContribution()
+							+ "] finished:" + iterationValue.isFinishedContributions() + " size:"
+							+ ITokensCountable.stringsTokensSize(sharedContext) + " (tok)");
+				}
+				tracePlaceholder(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext, fixedBudget);
 				// Past the last rendered contribution, not onto it: getSampledContributionsAfter
 				// filters on >= , so reusing lastContribution as-is makes every window repeat
 				// the previous window's final contribution and waste that much budget.
 				startedContribution = iterationValue.getLastContribution() + 1;
 				vectorized.add(params);
 				if (splitByBudget && sharedContext.isBlank()) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Shared context windowing stopped: an empty window cannot advance the cursor");
+					}
 					// Defensive: a window carrying no contribution cannot advance the cursor,
 					// so continuing would loop. renderBatchedContributions(...) always inserts
 					// at least one contribution, so this is only reachable if that changes.
@@ -615,6 +768,23 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
+	 * Dumps a resolved prompt placeholder. The size of the rendered value is
+	 * reported at DEBUG, the value itself only at TRACE: a placeholder such as the
+	 * shared context routinely carries tens of thousands of characters.
+	 */
+	private void tracePlaceholder(String placeholder, String value, int remainingBudget) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Resolved prompt placeholder:" + placeholder + " size:"
+					+ ITokensCountable.stringsTokensSize(value) + " (tok) remainingBudget:" + remainingBudget + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<" + placeholder + ">");
+			LOGGER.trace(value);
+			LOGGER.trace("</" + placeholder + ">");
+		}
+	}
+
+	/**
 	 * Backup rendering strategy for a parameter that has no dedicated
 	 * {@link IGDocumentContentRenderer}: falls back to {@link Object#toString()}.
 	 * If the actual runtime class of the parameter does not directly implement
@@ -625,6 +795,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			return "";
 		}
 		Class<?> actualClass = object.getClass();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("genericRender(...) falling back to toString() for class:" + actualClass.getName());
+		}
 		if (!directlyImplementsToString(actualClass)) {
 			LOGGER.warn("The class {} does not directy implement the toString() method", actualClass.getName());
 		}
@@ -650,10 +823,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	protected String createAgentCommunicationCapabilityDescription(GAgentRole agentRole,
 			AgentNetworkParticipant contextAgentPersona, GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao) {
 		if (contextAgentPersona == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("createAgentCommunicationCapabilityDescription(...) skipped: no agent persona in context");
+			}
 			return "";
 		}
 		StringBuffer buffer = new StringBuffer();
 		List<String> peers = contextAgentPersona.getCommunicationList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createAgentCommunicationCapabilityDescription(...) persona:"
+					+ contextAgentPersona.getAgentContextualName() + " reachablePeers:"
+					+ (peers != null ? peers.size() : 0) + " canCallTools:" + contextAgentPersona.isCanCallTools()
+					+ " canCallOtherAgents:" + contextAgentPersona.isCanCallOtherAgents() + " canNotifyUser:"
+					+ contextAgentPersona.isAllowedToNotifyUser());
+		}
 		if (peers != null && !peers.isEmpty()) {
 			buffer.append(CAN_COMMUNICATE_WITH_AGENTS);
 			buffer.append(NEWLINE);
@@ -688,15 +871,31 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		buffer.append(NEWLINE);
 		buffer.append(contextAgentPersona.isCanCallOtherAgents() ? ALLOWED_TO_DELEGATE : NOT_ALLOWED_TO_DELEGATE);
 		buffer.append(NEWLINE);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createAgentCommunicationCapabilityDescription(...) rendered " + buffer.length()
+					+ " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_COMMUNICATION_CAPABILITIES>");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</AGENT_COMMUNICATION_CAPABILITIES>");
+		}
 		return buffer.toString();
 	}
 
 	private RuntimeAgentInfos resolvePeer(String peerCode, IGAgentsNetworkRuntimeDao agentsDao) {
 		if (agentsDao == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("resolvePeer(" + peerCode + ") skipped: no runtime agents DAO available");
+			}
 			return null;
 		}
 		try {
-			return agentsDao.findAgentByCode(peerCode);
+			RuntimeAgentInfos peer = agentsDao.findAgentByCode(peerCode);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("resolvePeer(" + peerCode + ") resolved:" + (peer != null));
+			}
+			return peer;
 		} catch (AgentException e) {
 			LOGGER.warn("Cannot resolve peer agent '{}' while building communication capability description", peerCode,
 					e);
@@ -738,7 +937,15 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 */
 	protected String renderAgentCapabilities(AgentCapabilities capabilities, boolean includeSummary) {
 		if (capabilities == null || capabilities.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("renderAgentCapabilities(...) skipped: no capability to render");
+			}
 			return "";
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin renderAgentCapabilities(...) includeSummary:" + includeSummary + " capabilities:"
+					+ capabilities.getCapabilities().size() + " catalogs:" + capabilities.getCatalogs().size()
+					+ " resources:" + capabilities.getResources().size() + " tools:" + capabilities.getTools().size());
 		}
 		// The body is rendered first so a capabilities block that ends up carrying no
 		// renderable content (e.g. only a suppressed summary) is dropped entirely
@@ -757,12 +964,18 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		appendCapabilityResourceList(body, capabilities.getResources(), RESOURCES_LABEL);
 		appendCapabilityResourceList(body, capabilities.getTools(), TOOLS_LABEL);
 		if (body.length() == 0) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End renderAgentCapabilities(...) dropped: the capability block carries no content");
+			}
 			return "";
 		}
 		StringBuffer buffer = new StringBuffer();
 		appendCapabilityLine(buffer, 1, CAPABILITIES_BLOCK_BEGIN);
 		buffer.append(body);
 		appendCapabilityLine(buffer, 1, CAPABILITIES_BLOCK_END);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End renderAgentCapabilities(...) rendered " + buffer.length() + " character(s)");
+		}
 		return buffer.toString();
 	}
 
@@ -801,6 +1014,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	protected String createAgentIdentityDescription(GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createAgentIdentityDescription(...) agentRole:"
+					+ (agentRole != null ? agentRole.getCode() : null) + " persona:"
+					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null));
+		}
 		StringBuffer buffer = new StringBuffer();
 		if (contextAgentPersona != null && contextAgentPersona.getAgentContextualName() != null
 				&& !contextAgentPersona.getAgentContextualName().isBlank()) {
@@ -822,14 +1040,32 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				buffer.append(NEWLINE);
 			}
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createAgentIdentityDescription(...) rendered " + buffer.length() + " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_IDENTITY>");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</AGENT_IDENTITY>");
+		}
 		return buffer.toString();
 	}
 
 	protected String createNetworkScenaryDescription(GAgentsNetwork network) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("createNetworkScenaryDescription(...) network:" + (network != null ? network.getCode() : null)
+					+ " scenarioDescriptionProvided:"
+					+ (network != null && network.getScenarioDescription() != null));
+		}
 		StringBuffer buffer = new StringBuffer();
 		if (network.getScenarioDescription() != null) {
 			buffer.append(THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS + network.getScenarioDescription());
 			buffer.append(NEWLINE);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<NETWORK_SCENARIO>");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</NETWORK_SCENARIO>");
 		}
 		return buffer.toString();
 	}
@@ -846,7 +1082,16 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	protected String createNetworkAgentsCapabilitiesDescription(GAgentsNetwork network,
 			IGAgentsNetworkRuntimeDao agentsDao) {
 		if (network == null || network.getAgents() == null || agentsDao == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("createNetworkAgentsCapabilitiesDescription(...) skipped: network:" + (network != null)
+						+ " participants:" + (network != null && network.getAgents() != null) + " runtimeDao:"
+						+ (agentsDao != null));
+			}
 			return "";
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createNetworkAgentsCapabilitiesDescription(...) network:" + network.getCode()
+					+ " participants:" + network.getAgents().size());
 		}
 		StringBuffer buffer = new StringBuffer();
 		for (AgentNetworkParticipant participant : network.getAgents()) {
@@ -869,6 +1114,15 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			if (!capabilities.isEmpty()) {
 				buffer.append(capabilities);
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createNetworkAgentsCapabilitiesDescription(...) rendered " + buffer.length()
+					+ " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<NETWORK_AGENTS_CAPABILITIES>");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</NETWORK_AGENTS_CAPABILITIES>");
 		}
 		return buffer.toString();
 	}
@@ -910,14 +1164,25 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			int actualContributionNr, int remainingBudget, boolean split,
 			Map<Integer, RenderedContribution> renderedCache) {
 		final int lastKnowledge = lastTurn == null ? 0 : lastTurn;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin render(sharedContext) after contribution:" + lastKnowledge + " actualContributionNr:"
+					+ actualContributionNr + " remainingBudget:" + remainingBudget + " (tok) split:" + split);
+		}
 		List<AgentProducedSessionContribution> newGeneratedKnowledge = session
 				.getSampledContributionsAfter(lastKnowledge);
 		if (newGeneratedKnowledge.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End render(sharedContext): no new contribution after " + lastKnowledge);
+			}
 			return new RenderedRange(0, 0, "", true);
 		}
 		// Group by agent, preserving first-appearance (chronological) order.
 		List<AgentProducedSessionContribution> remainingContributions = session
 				.getSampledContributionsAfter(lastKnowledge);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Rendering " + remainingContributions.size() + " shared context contribution(s) in "
+					+ (split ? "budget batched" : "single block") + " mode");
+		}
 		if (split) {
 			return renderBatchedContributions(remainingContributions, remainingBudget, renderedCache);
 		} else {
@@ -936,6 +1201,17 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			inner.append(contributionAsString);
 			inner.append(END_AGENT_CONTEXT_CONTRIBUTION);
 			inner.append(NEWLINE);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("renderContribution(...) contributionNr:"
+					+ agentProducedSessionContribution.getContributionUniqueNr() + " agent:"
+					+ agentProducedSessionContribution.getAgentName() + " rendered " + inner.length() + " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_CONTRIBUTION nr=" + agentProducedSessionContribution.getContributionUniqueNr()
+					+ " agent=" + agentProducedSessionContribution.getAgentName() + ">");
+			LOGGER.trace(inner.toString());
+			LOGGER.trace("</AGENT_CONTRIBUTION>");
 		}
 		return inner.toString();
 	}
@@ -957,6 +1233,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			buffer.append(END_SHARED_CONTEXT_DELTA);
 			buffer.append(NEWLINE);
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("renderAllContributions(...) rendered " + remainingContributions.size()
+					+ " contribution(s) in range [" + minContribution + ".." + maxContribution + "] size:"
+					+ ITokensCountable.stringsTokensSize(buffer.toString()) + " (tok)");
+		}
 		return new RenderedRange(minContribution, maxContribution, buffer.toString(), true);
 	}
 
@@ -973,6 +1254,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 	protected RenderedRange renderBatchedContributions(List<AgentProducedSessionContribution> remainingContributions,
 			int remainingBudget, Map<Integer, RenderedContribution> renderedCache) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin renderBatchedContributions(...) candidates:"
+					+ (remainingContributions != null ? remainingContributions.size() : 0) + " budget:" + remainingBudget
+					+ " (tok)");
+		}
 		StringBuffer inner = new StringBuffer();
 		int minContribution = Integer.MAX_VALUE;
 		int maxContribution = 0;
@@ -988,6 +1274,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			// (TokensBudgetFluxCoordinator.emitQueueWhenPredicateTrue), which likewise
 			// never drops an oversized element - it just lets it travel on its own.
 			if (insertedSlots > 0 && renderedTokens > remainingBudget) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Window closed at contribution:"
+							+ agentProducedSessionContribution.getContributionUniqueNr() + " size:" + renderedTokens
+							+ " (tok) exceeds the remaining budget:" + remainingBudget + " (tok)");
+				}
 				// Stop at the first contribution that does not fit rather than scanning on:
 				// the cursor below is the LAST included contribution, so the window has to
 				// stay a contiguous range or the skipped ones would never be rendered.
@@ -1007,6 +1298,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			buffer.append(END_SHARED_CONTEXT_DELTA);
 			buffer.append(NEWLINE);
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End renderBatchedContributions(...) inserted:" + insertedSlots + " of "
+					+ remainingContributions.size() + " contribution(s) range [" + minContribution + ".."
+					+ maxContribution + "] leftBudget:" + remainingBudget + " (tok)");
+		}
 		return new RenderedRange(minContribution, maxContribution, buffer.toString(),
 				insertedSlots >= remainingContributions.size());
 	}
@@ -1016,7 +1312,17 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			return "";
 		}
 		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(data);
-		return renderer == null ? genericRender(data) : renderer.render(data);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("renderContributionData(...) dataClass:" + data.getClass().getName() + " dedicatedRenderer:"
+					+ (renderer != null));
+		}
+		String rendered = renderer == null ? genericRender(data) : renderer.render(data);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<CONTRIBUTION_DATA class=" + data.getClass().getName() + ">");
+			LOGGER.trace(rendered);
+			LOGGER.trace("</CONTRIBUTION_DATA>");
+		}
+		return rendered;
 	}
 
 	protected <InputType, OutputType> String render(AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
@@ -1024,7 +1330,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		Vector<AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction> interactions = mySessionContext
 				.getInteractions();
 		if (interactions == null || interactions.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("render(privateContext) skipped: the private session context holds no interaction");
+			}
 			return "";
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin render(privateContext) turns:" + interactions.size() + " actualContributionNr:"
+					+ actualContributionNr + " remainingBudget:" + remainingBudget + " (tok)");
 		}
 		// Render the input and output of every turn, then share the budget
 		// proportionally
@@ -1058,6 +1371,15 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		}
 		buffer.append(END_ACTUAL_AGENT_CALL_HISTORY);
 		buffer.append(NEWLINE);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End render(privateContext) rendered " + interactions.size() + " turn(s) size:"
+					+ ITokensCountable.stringsTokensSize(buffer.toString()) + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_PRIVATE_CONTEXT>");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</AGENT_PRIVATE_CONTEXT>");
+		}
 		return buffer.toString();
 	}
 
@@ -1066,7 +1388,17 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			return "";
 		}
 		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(output);
-		return renderer == null ? genericRender(output) : renderer.render(output);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("renderOutput(...) outputClass:" + output.getClass().getName() + " dedicatedRenderer:"
+					+ (renderer != null));
+		}
+		String rendered = renderer == null ? genericRender(output) : renderer.render(output);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_OUTPUT class=" + output.getClass().getName() + ">");
+			LOGGER.trace(rendered);
+			LOGGER.trace("</AGENT_OUTPUT>");
+		}
+		return rendered;
 	}
 
 	protected <InputType> String renderHandlingTruncate(AgentsExchangeMessage<InputType> input) {
@@ -1112,6 +1444,10 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		}
 		int approximatedIndex = (int) (((double) allowanceTokens) * 4.2);
 		int maxIndex = Math.min(approximatedIndex, text.length());
+		if (STATIC_LOGGER.isDebugEnabled()) {
+			STATIC_LOGGER.debug("truncateToTokens(...) truncating from " + howManyTokens + " (tok) to the allowance of "
+					+ allowanceTokens + " (tok)");
+		}
 		return text.substring(0, maxIndex) + TRUNCATED_CONTENT_SUFFIX;
 	}
 
@@ -1121,10 +1457,19 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			return "";
 		String inputAsString = null;
 		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(payload);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("render(exchangeMessage) payloadClass:" + payload.getClass().getName() + " dedicatedRenderer:"
+					+ (renderer != null));
+		}
 		if (renderer == null) {
 			inputAsString = genericRender(payload);
 		} else {
 			inputAsString = renderer.render(payload);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_EXCHANGE_MESSAGE class=" + payload.getClass().getName() + ">");
+			LOGGER.trace(inputAsString);
+			LOGGER.trace("</AGENT_EXCHANGE_MESSAGE>");
 		}
 		return inputAsString;
 	}

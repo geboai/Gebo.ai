@@ -25,6 +25,15 @@ public class SearchServiceWrapperTool extends AbstractSearchServiceWrapperTool {
 		
 	}
 	SearchResultSampleList search(SearchQueryParam param) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Search tool for product:" + wrapped.getProductId() + " invoked, topK:"
+					+ (param != null ? param.getTopK() : null));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<SEARCH_TOOL_PARAM product=" + wrapped.getProductId() + ">");
+			LOGGER.trace(String.valueOf(param));
+			LOGGER.trace("</SEARCH_TOOL_PARAM>");
+		}
 		return new SearchResultSampleList();
 	}
 
@@ -33,6 +42,10 @@ public class SearchServiceWrapperTool extends AbstractSearchServiceWrapperTool {
 		final BiFunction<SearchQueryParam, ToolContext, SearchResultSampleList> toolCall = (p, ctx) -> search(p);
 		final String toolName = wrapped.getProductId() + SEARCH;
 		final String toolDescription = wrapped.getProductId() + SEARCH_TOOL_DESCRIPTION;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Declaring search tool:" + toolName + " wrapping the search service of product:"
+					+ wrapped.getProductId());
+		}
 		ToolCallback tool = ToolCallbackDeclarationUtil.declare(toolCall, toolName, toolDescription,
 				SearchQueryParam.class, SearchResultSampleList.class);
 		return tool;

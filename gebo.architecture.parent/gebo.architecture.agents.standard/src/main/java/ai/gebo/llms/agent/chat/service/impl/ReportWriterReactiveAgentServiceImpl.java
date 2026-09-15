@@ -102,9 +102,23 @@ public class ReportWriterReactiveAgentServiceImpl
 				splitByBudget);
 		DeliverableIntent actualUserIntent = (DeliverableIntent) session.getEnvironment()
 				.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT);
-		if (actualUserIntent == null)
+		if (actualUserIntent == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No " + StandardAgentsNetworkEnvironmentEntries.USER_INTENT
+						+ " in the shared environment, defaulting to SUMMARY");
+			}
 			actualUserIntent = DeliverableIntent.SUMMARY;
+		}
 		final String completeness = actualUserIntent.name() + ": " + actualUserIntent.getAgentDeliverableCompleteness();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Report writer required deliverable completeness:" + actualUserIntent.name()
+					+ " applied to " + output.size() + " parameter window(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<" + REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM + ">");
+			LOGGER.trace(completeness);
+			LOGGER.trace("</" + REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM + ">");
+		}
 		for (Map<String, Object> window : output) {
 			window.put(REQUIRED_AGENT_COMPLETENESS_TEMPLATE_PARAM, completeness);
 		}
@@ -127,6 +141,9 @@ public class ReportWriterReactiveAgentServiceImpl
 		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
 		capabilities.addCapability(
 				"Read the user question and the evidence gathered by the other agents and write the final, user-facing answer/report");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Report writer agent id:" + getId() + " advertises the report writing capability");
+		}
 		return capabilities;
 	}
 
@@ -144,6 +161,15 @@ public class ReportWriterReactiveAgentServiceImpl
 		}
 		final GeboChatResponse response = new GeboChatResponse();
 		final int tokenBudget = (agentModel.getContextLength() - agentPrompt.getTokensSize()) * 2 / 3;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Report writer agent id:" + getId() + " contextLength:" + agentModel.getContextLength()
+					+ " promptSize:" + agentPrompt.getTokensSize() + " (tok) tokenBudget:" + tokenBudget + " (tok)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<REPORT_WRITER_REQUEST agent=" + getId() + ">");
+			LOGGER.trace(request);
+			LOGGER.trace("</REPORT_WRITER_REQUEST>");
+		}
 		// The routed query (the coordinator's writing command) is the agent input that
 		// feeds the {INPUT} placeholder; pass the raw payload as the other agents do,
 		// so
@@ -191,8 +217,17 @@ public class ReportWriterReactiveAgentServiceImpl
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			ToolCallsListener callBacksListener) {
 		final StringBuffer cumulatedContent = new StringBuffer();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin renderOutputStream(...) report writer agent id:" + getId() + " persona:"
+					+ (contextAgentPersona != null ? contextAgentPersona.getNetworkAgentName() : null));
+		}
 		Flux<IGPartialOperation<GeboChatMessageEnvelope>> bodyStream = textStream.map(content -> {
 			cumulatedContent.append(content);
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<REPORT_WRITER_CHUNK cumulated=" + cumulatedContent.length() + ">");
+				LOGGER.trace(content);
+				LOGGER.trace("</REPORT_WRITER_CHUNK>");
+			}
 			return IGPartialOperation.of(new GeboChatMessageEnvelope(content), false);
 		});
 		Flux<IGPartialOperation<GeboChatMessageEnvelope>> lastItem = Flux.defer(() -> {
@@ -209,6 +244,11 @@ public class ReportWriterReactiveAgentServiceImpl
 				LOGGER.debug("End createResponse(...) report writer agent id:" + getId() + " final response length:"
 						+ queryResponse.length() + " calledFunctions:"
 						+ (response.getCalledFunctions() != null ? response.getCalledFunctions().size() : 0));
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<REPORT_WRITER_FINAL_TEXT>");
+				LOGGER.trace(queryResponse);
+				LOGGER.trace("</REPORT_WRITER_FINAL_TEXT>");
 			}
 			return Flux.just(IGPartialOperation.of(envelope, lastMessage));
 		});
@@ -236,6 +276,10 @@ public class ReportWriterReactiveAgentServiceImpl
 				}
 			}
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("extractDocumentsList(...) collected " + documentRef.size()
+					+ " document(s) out of the shared session contributions");
+		}
 		TreeMap<String, Document> forDocCode = new TreeMap<String, Document>();
 		for (Document document : documentRef) {
 			if (document.getMetadata() != null && document.getMetadata().containsKey(DocumentMetaInfos.CONTENT_CODE)
@@ -243,12 +287,22 @@ public class ReportWriterReactiveAgentServiceImpl
 				forDocCode.put(code, document);
 			}
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("extractDocumentsList(...) deduplicated to " + forDocCode.size() + " referenced document(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Referenced document codes: " + forDocCode.keySet());
+		}
 		return forDocCode.values().stream().map(x -> new GResponseDocumentRef(x)).toList();
 	}
 
 	protected Flux<String> streamWithTokenBudgetCoordinator(IGConfigurableChatModel agentModel,
 			GPromptTemplateConfig agentPrompt, IChatRequestContext chatRequestContext, List<Map<String, Object>> params,
 			ReactiveIdentityUtil runAs, INotificationSink notificationSink) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin streamWithTokenBudgetCoordinator(...) over " + params.size()
+					+ " shared context window(s)");
+		}
 		final Map<String, Object> cleanedParams = params.get(0);
 		cleanedParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
 		cleanedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
@@ -256,12 +310,23 @@ public class ReportWriterReactiveAgentServiceImpl
 		GenerativeFunction<Map<String, Object>, String> intermediateProcess = (initialValue, ignoredEmitter,
 				documentsBatch) -> runAs.doRunAsWithReturnAndException(() -> {
 					Map<String, Object> iterationParams = documentsBatch.get(0);
-
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Consolidating one shared context window through the agent model");
+					}
 					return agentModel.textResponse(agentPrompt, iterationParams, chatRequestContext);
 				});
 		LastWork<String, String> finalWork = (consolidations, ignoredEmitter) -> runAs
 				.doRunAsWithReturnAndException(() -> {
 					Map<String, Object> finalParams = new HashMap<>(cleanedParams);
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Writing the final report from " + (consolidations != null ? consolidations.size() : 0)
+								+ " consolidated window(s)");
+					}
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<CONSOLIDATED_WINDOWS>");
+						LOGGER.trace(String.join("\r\n", consolidations));
+						LOGGER.trace("</CONSOLIDATED_WINDOWS>");
+					}
 					finalParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM,
 							String.join("\r\n", consolidations));
 					finalParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
@@ -278,6 +343,10 @@ public class ReportWriterReactiveAgentServiceImpl
 		Consumer<Map<String, Object>> unprocessedCumulator = (document) -> {
 		};
 		ISinkUIEmitter emitter = notificationSink instanceof ISinkUIEmitter em ? em : toSinkUIEmitter(notificationSink);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End streamWithTokenBudgetCoordinator(...) handing the windows to the coordinator, "
+					+ "notificationSink is a native UI emitter:" + (notificationSink instanceof ISinkUIEmitter));
+		}
 		return TokensBudgetFluxCoordinator.tokenBudgetCoordinateAlreadySplitted(inputFlux, emitter, isValidDocument,
 				intermediateProcess, finalWork, "", LLM_PROCESSING_ERROR, isOutOfBand, LLM_PROCESSING_ERROR,
 				isOutOfBand, noEndCondition, identityCleaning, REPORT_STRING_STREAMER, runAs, 4, unprocessedCumulator);
@@ -344,6 +413,10 @@ public class ReportWriterReactiveAgentServiceImpl
 				.getInteractions()) {
 			pastResponses.add((GeboChatResponse) interaction.getOutput().getContent());
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin createCycleHistoryVariable(...) rendering " + pastResponses.size()
+					+ " past agent loop(s)");
+		}
 		StringBuffer buffer = new StringBuffer();
 		int index = 0;
 		for (GeboChatResponse geboChatResponse : pastResponses) {
@@ -365,11 +438,29 @@ public class ReportWriterReactiveAgentServiceImpl
 			buffer.append(NEWLINE);
 			index++;
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End createCycleHistoryVariable(...) rendered " + buffer.length() + " character(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<" + AGENT_SESSION_STORY_PROMPT_PARAM + ">");
+			LOGGER.trace(buffer.toString());
+			LOGGER.trace("</" + AGENT_SESSION_STORY_PROMPT_PARAM + ">");
+		}
 		return buffer.toString();
 	}
 
 	protected List<CalledFunction> renderFunctions(List<ToolCallExecuted> calls) {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("renderFunctions(...) rendering " + (calls != null ? calls.size() : 0)
+					+ " executed tool call(s)");
+		}
+		if (LOGGER.isTraceEnabled() && calls != null) {
+			for (ToolCallExecuted call : calls) {
+				LOGGER.trace("<EXECUTED_TOOL_CALL name=" + call.getName() + ">");
+				LOGGER.trace(String.valueOf(call.getToolInput()));
+				LOGGER.trace("</EXECUTED_TOOL_CALL>");
+			}
+		}
 		return calls != null ? calls.stream().map(x -> new CalledFunction(x.getName(), x.getToolDescription(),
 				List.of(), x.getToolInput() != null ? List.of(x.getToolInput()) : List.of())).toList() : List.of();
 	}

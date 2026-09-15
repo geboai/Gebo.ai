@@ -32,8 +32,17 @@ public class AgentConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GAgentC
 
 	@Override
 	public GAgentConfig findByCode(String code) {
-
-		return dynamic.findByCode(code);
+		GAgentConfig config = dynamic.findByCode(code);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("findByCode(" + code + ") agent config found:" + (config != null) + " readOnly:"
+					+ (config != null ? config.getReadOnly() : null));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_CONFIG code=" + code + ">");
+			LOGGER.trace(String.valueOf(config));
+			LOGGER.trace("</AGENT_CONFIG>");
+		}
+		return config;
 	}
 
 	private static IGDynamicConfigurationSource<GAgentConfig> compose(List<IGDynamicAgentConfigDataSource> dataSources,
@@ -46,6 +55,10 @@ public class AgentConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GAgentC
 				if (dataSources != null) {
 					for (IGDynamicAgentConfigDataSource ds : dataSources) {
 						List<GAgentConfig> cfgs = ds.getConfigurations();
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Dynamic agent config data source " + ds.getClass().getName() + " contributed "
+									+ (cfgs != null ? cfgs.size() : 0) + " read only configuration(s)");
+						}
 						for (GAgentConfig cfg : cfgs) {
 							GAgentConfig clone = cfg.jsonClone();
 							clone.setReadOnly(true);
@@ -69,9 +82,13 @@ public class AgentConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GAgentC
 
 	@Override
 	public List<GAgentConfig> findByAgentServiceId(String id) {
-
-		return findListByPredicate(
+		List<GAgentConfig> configs = findListByPredicate(
 				x -> x.getAgentServiceId() != null && id != null && x.getAgentServiceId().equals(id));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("findByAgentServiceId(" + id + ") matched " + (configs != null ? configs.size() : 0)
+					+ " agent configuration(s)");
+		}
+		return configs;
 	}
 
 	@Override

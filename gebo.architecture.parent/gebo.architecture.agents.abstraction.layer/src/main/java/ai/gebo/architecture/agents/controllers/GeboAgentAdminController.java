@@ -38,14 +38,33 @@ public class GeboAgentAdminController {
 
 	@GetMapping(value = "getPromptTemplateByAgentId", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GPromptTemplateConfig> getPromptTemplatesByAgentId(@RequestParam("agentId") String agentId) {
-		return promptsDao.findListByPredicate(x -> x.getAgentPrompt() != null && x.getAgentPrompt()
-				&& x.getAgentId() != null && x.getAgentId().equals(agentId));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getPromptTemplatesByAgentId agentId:" + agentId);
+		}
+		List<GPromptTemplateConfig> prompts = promptsDao.findListByPredicate(x -> x.getAgentPrompt() != null
+				&& x.getAgentPrompt() && x.getAgentId() != null && x.getAgentId().equals(agentId));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getPromptTemplatesByAgentId agentId:" + agentId + " returned "
+					+ (prompts != null ? prompts.size() : 0) + " prompt template(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_PROMPT_TEMPLATES agentId=" + agentId + ">");
+			LOGGER.trace(String.valueOf(prompts));
+			LOGGER.trace("</AGENT_PROMPT_TEMPLATES>");
+		}
+		return prompts;
 	}
 
 	@GetMapping(value = "getAgentsChoices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getAgentsChoices() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentsChoices");
+		}
 		IGAgentServiceRuntimeDao dao=runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class);
 		return dao.getConfigurations().stream().map(x -> {
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Agent service choice: " + x.getId() + " - " + x.getDescription());
+			}
 			GBaseObject object = new GBaseObject();
 			object.setCode(x.getId());
 			object.setDescription(x.getDescription());
@@ -55,13 +74,27 @@ public class GeboAgentAdminController {
 
 	@GetMapping(value = "getAgentByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentConfig getAgentByCode(@RequestParam("code") String code) throws GeboPersistenceException {
-		return this.agentsConfigDao.findByCode(code);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentByCode code:" + code);
+		}
+		GAgentConfig config = this.agentsConfigDao.findByCode(code);
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_CONFIG code=" + code + ">");
+			LOGGER.trace(String.valueOf(config));
+			LOGGER.trace("</AGENT_CONFIG>");
+		}
+		return config;
 	}
 
 	@PostMapping(value = "updateAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentConfig updateAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST updateAgent code:" + (config != null ? config.getCode() : null));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_CONFIG_UPDATE>");
+			LOGGER.trace(String.valueOf(config));
+			LOGGER.trace("</AGENT_CONFIG_UPDATE>");
 		}
 		return this.agentsConfigDao.update(config);
 	}
@@ -70,6 +103,11 @@ public class GeboAgentAdminController {
 	public GAgentConfig insertAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST insertAgent code:" + (config != null ? config.getCode() : null));
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_CONFIG_INSERT>");
+			LOGGER.trace(String.valueOf(config));
+			LOGGER.trace("</AGENT_CONFIG_INSERT>");
 		}
 		return this.agentsConfigDao.insert(config);
 	}
@@ -85,6 +123,9 @@ public class GeboAgentAdminController {
 	@GetMapping(value = "getAgents", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getAgents() throws GeboPersistenceException {
 		List<GAgentConfig> list = agentsConfigDao.getConfigurations();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgents returned " + (list != null ? list.size() : 0) + " agent configuration(s)");
+		}
 		return list.stream().map(x -> new GBaseObject(x)).toList();
 	}
 
