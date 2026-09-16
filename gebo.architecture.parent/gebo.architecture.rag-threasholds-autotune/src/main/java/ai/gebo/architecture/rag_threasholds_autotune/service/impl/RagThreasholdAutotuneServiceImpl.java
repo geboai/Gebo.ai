@@ -609,63 +609,109 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		return this.latest(results);
 	}
 
+	/**
+	 * Upper bound on narrowing rounds. Each one cuts the bracket to two thirds, so a
+	 * bracket of any width reaches the increment long before this; it exists so a rounding
+	 * quirk can never turn the search into a non terminating loop.
+	 */
+	private static final int MAX_NARROWING_STEPS = 40;
+
+	/**
+	 * Finds the best rated threshold in a bracket, by trisection.
+	 * <p>
+	 * The previous narrowing moved away from the peak. It evaluated the two ends and the
+	 * midpoint, and when the midpoint was the best of the three - the ordinary case for a
+	 * single humped curve - <em>both</em> branches fired, each recursing into a sub
+	 * interval that excluded the midpoint's own neighbourhood
+	 * ({@code [left + inc, mid - inc]} and {@code [mid + inc, right - inc]}), and the
+	 * second assignment discarded whatever the first had returned. When an endpoint was
+	 * the best instead, only the test on the opposite side could fire, so the search
+	 * recursed into the half running away from the peak. Observed on a live run: 0.35
+	 * rated 0.63, 0.55 rated 4.05 and 0.75 rated 0.00 were evaluated, and the bracket
+	 * chosen next was 0.375 to 0.525 - which cannot contain 0.55.
+	 * <p>
+	 * This is the textbook ternary search instead: two interior probes at a third and two
+	 * thirds of the bracket, and the side beyond the weaker probe is dropped. On a single
+	 * humped curve the peak provably survives every step, the bracket shrinks to two
+	 * thirds each round, and only one bracket is ever live, so nothing can be overwritten.
+	 * <p>
+	 * Both ends are measured before any narrowing. They are part of the curve, and the
+	 * coverage floor {@link #selectResult} applies is relative to the best coverage seen
+	 * anywhere - the loose end is where coverage is highest, so leaving it unmeasured
+	 * would compute the floor from a biased sample of the curve.
+	 * <p>
+	 * The narrowing follows the rating alone and deliberately ignores that floor, even
+	 * though the floor is what finally decides. Rating rises as the threshold tightens
+	 * while coverage falls, so the best <em>selectable</em> threshold sits exactly on the
+	 * coverage boundary: a search climbing toward the rating peak has to cross that
+	 * boundary and therefore probes right where the answer is. Steering the search by the
+	 * floor as well turns it back early and starves that region - on the measured curve it
+	 * ended at 0.599 rated 19.8 where the plain search reaches 0.612 rated 32.8.
+	 * <p>
+	 * None of this ever made the final answer wrong, because {@code selectResult} ranks
+	 * every threshold ever evaluated rather than the last bracket, so the peak stayed
+	 * eligible even when the search walked past it. What it cost was LLM calls spent
+	 * refining the wrong part of the curve.
+	 */
 	private AutoTuneRatedThreashold maximizeInTreeSequence(double lowerBound, double upperBound, double fineIncrement,
 			VectorStore vectorStore, IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions,
-			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds,
-			Map<String, Double> cache, int topK) throws LLMConfigException {
-		boolean isInRange = Math.abs(upperBound - lowerBound) < fineIncrement;
-		lowerBound = round3decimal(lowerBound);
-		upperBound = round3decimal(upperBound);
-		double midStep = round3decimal((lowerBound + upperBound) / 2.0);
-		if (isInRange) {
-			AutoTuneRatedThreashold evaluateThreasholdMid = evaluateThreashold(midStep, vectorStore, defaultChatModel,
+			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds, Map<String, Double> cache,
+			int topK) throws LLMConfigException {
+		double lower = round3decimal(lowerBound);
+		double upper = round3decimal(upperBound);
+		evaluateAndRecord(lower, vectorStore, defaultChatModel, questions, cache, topK,
+				rateOrderedOptimizationThreasholds);
+		evaluateAndRecord(upper, vectorStore, defaultChatModel, questions, cache, topK,
+				rateOrderedOptimizationThreasholds);
+		int remainingSteps = MAX_NARROWING_STEPS;
+		while ((upper - lower) > 2.0 * fineIncrement && remainingSteps-- > 0) {
+			final double lowerProbe = round3decimal(lower + (upper - lower) / 3.0);
+			final double upperProbe = round3decimal(upper - (upper - lower) / 3.0);
+			if (lowerProbe >= upperProbe) {
+				// rounding has collapsed the two probes onto each other: nothing left to split
+				break;
+			}
+			LOGGER.info("maximizeInTreeSequence scanning between: " + lower + "," + lowerProbe + "," + upperProbe + ","
+					+ upper);
+			final AutoTuneRatedThreashold atLowerProbe = evaluateAndRecord(lowerProbe, vectorStore, defaultChatModel,
 					questions, cache, topK, rateOrderedOptimizationThreasholds);
-			if (!rateOrderedOptimizationThreasholds.containsKey(evaluateThreasholdMid.rating)) {
-				rateOrderedOptimizationThreasholds.put(evaluateThreasholdMid.rating, new ArrayList());
+			final AutoTuneRatedThreashold atUpperProbe = evaluateAndRecord(upperProbe, vectorStore, defaultChatModel,
+					questions, cache, topK, rateOrderedOptimizationThreasholds);
+			if (atLowerProbe.rating < atUpperProbe.rating) {
+				lower = lowerProbe;
+			} else {
+				upper = upperProbe;
 			}
-			rateOrderedOptimizationThreasholds.get(evaluateThreasholdMid.rating).add(evaluateThreasholdMid);
-			return this.selectResult(rateOrderedOptimizationThreasholds);
 		}
-		LOGGER.info("maximizeInTreeSequence scanning between: " + lowerBound + "," + midStep + "," + upperBound);
+		// One last look at the middle of what survived: the loop stops while the bracket is
+		// still an increment or two wide, and its centre has not necessarily been measured.
+		evaluateAndRecord(round3decimal((lower + upper) / 2.0), vectorStore, defaultChatModel, questions, cache, topK,
+				rateOrderedOptimizationThreasholds);
+		return selectResult(rateOrderedOptimizationThreasholds);
+	}
 
-		AutoTuneRatedThreashold evaluateThresholdLeft = evaluateThreashold(lowerBound, vectorStore, defaultChatModel,
-				questions, cache, topK, rateOrderedOptimizationThreasholds);
-		AutoTuneRatedThreashold evaluateThreasholdRight = evaluateThreashold(upperBound, vectorStore, defaultChatModel,
-				questions, cache, topK, rateOrderedOptimizationThreasholds);
-		AutoTuneRatedThreashold evaluateThreasholdMid = evaluateThreashold(midStep, vectorStore, defaultChatModel,
-				questions, cache, topK, rateOrderedOptimizationThreasholds);
-		if (!rateOrderedOptimizationThreasholds.containsKey(evaluateThresholdLeft.rating)) {
-			rateOrderedOptimizationThreasholds.put(evaluateThresholdLeft.rating, new ArrayList());
+	/**
+	 * Evaluates one threshold and files it under its rating, once.
+	 * <p>
+	 * {@code evaluateThreashold} already returns the earlier result when the same
+	 * threshold comes round again, but the caller used to file that returned object a
+	 * second time, so a threshold kept as a bracket bound accumulated a duplicate at every
+	 * level of the search. The duplicates never changed the outcome - a maximum does not
+	 * care how many times it appears - but they made the recorded curve unreadable, and
+	 * trisection keeps its bounds far longer than the old recursion did.
+	 */
+	private AutoTuneRatedThreashold evaluateAndRecord(double threashold, VectorStore vectorStore,
+			IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions, Map<String, Double> cache,
+			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds)
+			throws LLMConfigException {
+		final AutoTuneRatedThreashold rated = evaluateThreashold(threashold, vectorStore, defaultChatModel, questions,
+				cache, topK, rateOrderedOptimizationThreasholds);
+		final List<AutoTuneRatedThreashold> sameRating = rateOrderedOptimizationThreasholds.computeIfAbsent(rated.rating,
+				k -> new ArrayList<AutoTuneRatedThreashold>());
+		if (sameRating.stream().noneMatch(x -> x.threashold == rated.threashold)) {
+			sameRating.add(rated);
 		}
-		if (!rateOrderedOptimizationThreasholds.containsKey(evaluateThreasholdRight.rating)) {
-			rateOrderedOptimizationThreasholds.put(evaluateThreasholdRight.rating, new ArrayList());
-		}
-		if (!rateOrderedOptimizationThreasholds.containsKey(evaluateThreasholdMid.rating)) {
-			rateOrderedOptimizationThreasholds.put(evaluateThreasholdMid.rating, new ArrayList());
-		}
-		rateOrderedOptimizationThreasholds.get(evaluateThresholdLeft.rating).add(evaluateThresholdLeft);
-		rateOrderedOptimizationThreasholds.get(evaluateThreasholdRight.rating).add(evaluateThreasholdRight);
-		rateOrderedOptimizationThreasholds.get(evaluateThreasholdMid.rating).add(evaluateThreasholdMid);
-		AutoTuneRatedThreashold maxevaluation = null;
-		if ((midStep - lowerBound) <= fineIncrement || (upperBound - midStep) <= fineIncrement) {
-			maxevaluation = this.selectResult(rateOrderedOptimizationThreasholds);
-
-		} else {
-			if (evaluateThresholdLeft.rating < evaluateThreasholdMid.rating) {
-				maxevaluation = maximizeInTreeSequence(evaluateThresholdLeft.threashold + fineIncrement,
-						evaluateThreasholdMid.threashold - fineIncrement, fineIncrement, vectorStore, defaultChatModel,
-						questions, rateOrderedOptimizationThreasholds, cache, topK);
-			}
-			if (evaluateThreasholdRight.rating < evaluateThreasholdMid.rating) {
-				maxevaluation = maximizeInTreeSequence(evaluateThreasholdMid.threashold + fineIncrement,
-						evaluateThreasholdRight.threashold - fineIncrement, fineIncrement, vectorStore,
-						defaultChatModel, questions, rateOrderedOptimizationThreasholds, cache, topK);
-			}
-		}
-		if (maxevaluation == null) {
-			maxevaluation = selectResult(rateOrderedOptimizationThreasholds);
-		}
-		return maxevaluation;
+		return rated;
 	}
 
 	private AutoTuneRatedThreashold selectResult(
