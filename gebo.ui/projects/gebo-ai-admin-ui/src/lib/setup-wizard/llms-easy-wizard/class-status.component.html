@@ -1,0 +1,30 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+@if (configured) {
+  <span class="pi pi-check-circle gebo-easy-status-icon gebo-easy-status-icon--ok"></span>
+  @if (currentCode) {
+    <span class="gebo-status-title">{{currentCode}}</span>
+    @if (currentProvider) {
+      <span class="gebo-status-meta"> &nbsp;({{currentProvider}})</span>
+    }
+  }
+} @else {
+  <span class="pi pi-times-circle gebo-easy-status-icon"
+    [style.color]="required ? 'var(--gebo-danger, #dc2626)' : 'var(--gebo-text-strong, #111827)'"></span>
+  <span id="ClassStatusNotConfigured" class="gebo-status-meta" gebo-ai-text>Not configured yet</span>
+  @if (providers.length) {
+    <div class="gebo-easy-supported">
+      <span id="ClassStatusSupportedBy" class="gebo-easy-supported__label" gebo-ai-text>Supported by providers:</span>
+      <span class="gebo-easy-supported__names">{{providers.join(', ')}}</span>
+    </div>
+  }
+}
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

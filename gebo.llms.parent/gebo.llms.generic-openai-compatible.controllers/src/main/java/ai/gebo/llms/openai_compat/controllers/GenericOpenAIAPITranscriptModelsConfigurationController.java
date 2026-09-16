@@ -64,11 +64,12 @@ public class GenericOpenAIAPITranscriptModelsConfigurationController extends
 	protected OperationStatus<List<GenericOpenAIAPITranscriptModelChoice>> getModelChoices(
 			GenericOpenAIAPITranscriptModelConfig cfg) {
 		if (cfg.getModelTypeCode() == null)
-			throw new RuntimeException("modelTypeCode cannot be null");
+			return OperationStatus.ofError("Model type required",
+					"No transcript model type was selected, so its models cannot be listed.");
 		IGTranscriptModelConfigurationSupportService handler = supportServiceRepoPattern
 				.findByCode(cfg.getModelTypeCode());
 		if (handler == null)
-			throw new RuntimeException(
+			return OperationStatus.ofError("Unknown model provider",
 					"modelTypeCode=>" + cfg.getModelTypeCode() + " with no corresponding model provider");
 
 		return handler.getModelChoices(cfg);

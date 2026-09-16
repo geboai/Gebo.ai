@@ -116,7 +116,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected resolutions: IModelResolution[] = [];
     protected subscription?: Subscription;
     protected doBackendCredentialsValidation: (credentials: SecretInfo) => Observable<IOperationStatus<any>> = (credentials: SecretInfo) => {
-        const baseUrl = this.secretFormGroup.controls["baseUrl"].value?.baseUrl;
+        const baseUrl = this.secretFormGroup.controls["baseUrl"].value;
         if (this.vendorConfiguration && credentials.code) {
             const data: LLMCredentialsVerificationData = {
                 baseUrl: baseUrl,
@@ -142,7 +142,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         this.secretFormGroup.controls["selectedSecret"].valueChanges.subscribe({
             next: (secretId) => {
                 if (secretId) {
-                    const baseUrl = this.secretFormGroup.controls["baseUrl"].value?.baseUrl;
+                    const baseUrl = this.secretFormGroup.controls["baseUrl"].value;
                     if (secretId !== this.oldCredentialId || baseUrl !== this.oldBaseUrl) {
 
                         this.loadModels(secretId, baseUrl);

@@ -71,14 +71,14 @@
             </gebo-ai-field>
           }
           @if (preset.type==='TRANSCRIPT') {
-            <gebo-ai-field id="ImagesModel" label="Default transcript model"
+            <gebo-ai-field id="TranscriptModel" label="Default transcript model"
               help="This model will be responsable of transcript service">
               <geboai-editable-listbox-component formControlName="transcriptModel" [data]="preset.modelChoices"
               gebo-ai-field-element></geboai-editable-listbox-component>
             </gebo-ai-field>
           }
           @if (preset.type==='TTS') {
-            <gebo-ai-field id="ImagesModel" label="Default text to speech model"
+            <gebo-ai-field id="TtsModel" label="Default text to speech model"
               help="This model will be responsable of doing text to speech conversion">
               <geboai-editable-listbox-component formControlName="ttsModel" [data]="preset.modelChoices"
               gebo-ai-field-element></geboai-editable-listbox-component>

@@ -1,0 +1,100 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<p-blockUI id="BlockUi" [target]="instModeUI" [blocked]="loading || lookupsRunning>0">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+
+<p-panel id="MainEasyLLMSPanelTitle" gebo-ai-label #instModeUI header="Guided large language models setup">
+  <div class="grid">
+    <div class="col-12">
+      <p-steps [model]="steps" [readonly]="true" [activeIndex]="activeIndex" />
+    </div>
+
+    <div class="col-12">
+      @switch (activeStep) {
+        @case (Step.INTRO) {
+          <gebo-ai-llms-easy-intro-step [status]="status" [configuration]="actualConfiguration">
+          </gebo-ai-llms-easy-intro-step>
+        }
+        @case (Step.PROVIDER) {
+          <gebo-ai-llms-easy-provider-step [configuration]="actualConfiguration"
+            [selectedVendor]="selectedVendor" (providerChanged)="onProviderChanged($event)"
+            (credentialsChanged)="onCredentialsChanged($event)">
+          </gebo-ai-llms-easy-provider-step>
+        }
+        @case (Step.MODELS) {
+          <gebo-ai-llms-easy-models-step [decisions]="decisions" [lookupsRunning]="lookupsRunning">
+          </gebo-ai-llms-easy-models-step>
+          <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+          @if (resolutions.length>0) {
+            <p-fieldset id="ResolutionsSection" gebo-ai-label legend="Choose a replacement model">
+              <div class="grid">
+                @for (resolution of resolutions; track $index) {
+                  <div class="col-12">
+                    <gebo-ai-field id="ResolutionField" label="Model no longer offered"
+                      help="The chosen model is not offered by the provider anymore, please select a replacement">
+                      <div gebo-ai-field-element>
+                        <div class="gebo-status-meta">{{resolution.requestedModelCode}}</div>
+                        <geboai-editable-listbox-component [data]="resolution.availableChoices"
+                          [(ngModel)]="resolution.chosenCode" [ngModelOptions]="{standalone:true}">
+                        </geboai-editable-listbox-component>
+                      </div>
+                    </gebo-ai-field>
+                  </div>
+                }
+                <div class="col-3">
+                  <p-button id="ResolveBtn" gebo-ai-label [outlined]="true" label="Apply replacements"
+                    (onClick)="resolveAndApply()" [disabled]="!canResolve" icon="pi pi-save"
+                    severity="success" styleClass="w-full"></p-button>
+                </div>
+              </div>
+            </p-fieldset>
+          }
+        }
+        @case (Step.SUMMARY) {
+          <gebo-ai-llms-easy-summary-step [status]="status" [configuration]="actualConfiguration">
+          </gebo-ai-llms-easy-summary-step>
+        }
+      }
+    </div>
+
+    <div class="col-12">
+      <div class="geboButtonsBar">
+        <div>
+          @if (activeStep>Step.INTRO && activeStep!==Step.SUMMARY) {
+            <p-button id="BackBtn" gebo-ai-label [outlined]="true" label="Back" icon="pi pi-arrow-left"
+              iconPos="left" severity="secondary" (onClick)="goBack()"></p-button>
+          }
+        </div>
+        <div>
+          @switch (activeStep) {
+            @case (Step.MODELS) {
+              <p-button id="ApplyBtn" gebo-ai-label [outlined]="true" label="Apply and continue"
+                icon="pi pi-save" iconPos="right" severity="success" (onClick)="goForward()"
+                [disabled]="!canGoForward"></p-button>
+            }
+            @case (Step.SUMMARY) {
+              <p-button id="FinishBtn" gebo-ai-label [outlined]="true" label="Finish"
+                icon="pi pi-check" iconPos="right" severity="success" (onClick)="goForward()"
+                [disabled]="!canGoForward"></p-button>
+            }
+            @default {
+              <p-button id="NextBtn" gebo-ai-label [outlined]="true" label="Next"
+                icon="pi pi-arrow-right" iconPos="right" severity="success" (onClick)="goForward()"
+                [disabled]="!canGoForward"></p-button>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

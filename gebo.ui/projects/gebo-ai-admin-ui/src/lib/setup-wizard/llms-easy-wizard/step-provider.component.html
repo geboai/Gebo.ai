@@ -1,0 +1,60 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="grid" [formGroup]="formGroup">
+  <div class="col-12 md:col-6">
+    <gebo-ai-field id="ProviderChoice" label="Choose your large language model provider" [required]="true"
+      help="Choose the provider whose models you want to configure in this run">
+      <p-select [options]="vendors" formControlName="vendorId" optionLabel="parentModel.name"
+        optionValue="parentModel.vendorId" [filter]="true" filterBy="parentModel.name"
+        placeholder="Select a provider" gebo-ai-field-element styleClass="w-full"></p-select>
+    </gebo-ai-field>
+  </div>
+
+  @if (vendor) {
+    <div class="col-12 md:col-3">
+      <gebo-ai-field id="ProviderWebSite" label="Provider web site"
+        help="Click here for general provider information.">
+        <a [href]="vendor.parentModel.webSite" target="_blank" gebo-ai-field-element>{{vendor.parentModel.webSite}}</a>
+      </gebo-ai-field>
+    </div>
+    <div class="col-12 md:col-3">
+      <gebo-ai-field id="ProviderAcquireKey" label="Purchase provider's credit"
+        help="Click here to buy credit for your api key(s).">
+        <a [href]="vendor.parentModel.acquireKeyUrl" target="_blank" gebo-ai-field-element>{{vendor.parentModel.acquireKeyUrl}}</a>
+      </gebo-ai-field>
+    </div>
+
+    @if (vendor.parentModel.requiresCustomUrl===true) {
+      <div class="col-12 md:col-9">
+        <gebo-ai-field id="ProviderBaseUrl" label="Base api url" help="Provider base url for the api services"
+          [required]="true">
+          <input pInputText type="text" gebo-ai-field-element formControlName="baseUrl">
+        </gebo-ai-field>
+      </div>
+    }
+    @if (vendor.parentModel.requiresApiKey!==true) {
+      <div class="col-12 md:col-3">
+        <gebo-ai-field id="ProviderRequireKey" label="The provider requires credentials"
+          help="The provider/server is configured for authenticated access via api key or other credentials">
+          <p-checkbox formControlName="requireApiKeyAniway" [binary]="true" gebo-ai-field-element
+            [trueValue]="true" [falseValue]="false"></p-checkbox>
+        </gebo-ai-field>
+      </div>
+    }
+
+    <div class="col-12">
+      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext"
+        [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials"
+        [backendValidationOnChange]="true"></gebo-ai-api-key-component>
+    </div>
+  }
+</div>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

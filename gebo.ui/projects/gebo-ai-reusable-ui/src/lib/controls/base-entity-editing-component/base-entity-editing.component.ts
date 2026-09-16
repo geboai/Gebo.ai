@@ -1025,6 +1025,23 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
             this.updateObjectReference();
             this.periodicBackendProcessingCheck();
             this.formGroup.updateValueAndValidity();
+          } else {
+            // The record was opened from a list row but the backend no longer has it
+            // (findByCode returned nothing). Do not keep showing the stale row data as if it
+            // were still editable: blank the form, drop the in-memory entity, disable save and
+            // delete, and tell the user the record is gone instead of leaving a half-broken
+            // editor (a delete button stuck disabled, a save that would recreate it).
+            this.entity = undefined;
+            this.formGroup.reset();
+            this.entityDataLoaded = false;
+            this.canSave = false;
+            this.canDelete = false;
+            this.userMessages = [{
+              id: "ENTITY-NOT-FOUND",
+              severity: "warn",
+              summary: "No longer available",
+              detail: "This data does no longer exist on the server. It may be removed elsewhere; close this window"
+            }];
           }
         },
         error: (error) => { },
