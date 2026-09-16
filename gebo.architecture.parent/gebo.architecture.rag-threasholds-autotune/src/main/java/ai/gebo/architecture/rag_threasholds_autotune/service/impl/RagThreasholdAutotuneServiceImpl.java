@@ -209,20 +209,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			final List<Document> sampled = new ArrayList<Document>();
 			if (config.getAutotuneSamples() != null && config.getAutotuneSamples().getPhrases() != null
 					&& !config.getAutotuneSamples().getPhrases().isEmpty()) {
-				for (String query : config.getAutotuneSamples().getPhrases()) {
-					LOGGER.info("Autoune with sample: \"" + query + "\" threashold:"
-							+ config.getAutotuneSamples().getDefaultThreashold());
-					Builder builder = SearchRequest.builder();
-					builder.filterExpression(
-							DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
-					builder.topK(budgetTotal / config.getAutotuneSamples().getPhrases().size());
-					builder.similarityThreshold(config.getAutotuneSamples().getDefaultThreashold());
-					builder.query(query);
-					SearchRequest request = builder.build();
-					List<Document> documents = vectorStore.similaritySearch(request);
-					LOGGER.info("Found "+documents.size()+" docs on this sample");
-					sampled.addAll(documents);
-				}
+				sampled.addAll(sampleFromConfiguredPhrases(vectorStore, budgetTotal));
 			} else {
 				// Draw a wider pool than needed, then keep the fragments that actually
 				// represent the corpus rather than the first ones the store happened to return.
@@ -495,6 +482,76 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	 * file can monopolise the sample, and the query is the document's own name rather than
 	 * a meaningless string, so the fragments returned are the ones characteristic of it.
 	 */
+	/**
+	 * Draws the fragments from the phrases configured under
+	 * {@code ai.gebo.rag-threashold-autotune.config.autotune-samples}, when an operator has
+	 * said which subjects the tuning should be measured on.
+	 * <p>
+	 * The corpus sampling in {@link #sampleAcrossCorpus} is deliberately not applied here:
+	 * choosing the phrases is choosing what to probe, and re-selecting among them by how
+	 * much of the corpus they reach would override exactly the intent that configuring them
+	 * expressed. What this shares with that path is the handling of the ways sampling can
+	 * come back empty, which used to be silent on this side.
+	 * <p>
+	 * The budget was split by integer division alone, so configuring more phrases than the
+	 * budget gave every phrase {@code 0}. Spring AI accepts that - its assertion is
+	 * {@code topK >= 0}, not {@code > 0} - so every search returned nothing, the sample was
+	 * empty, and the tuning failed several steps later with a message about the model
+	 * having generated no questions. Every phrase now gets at least one fragment and the
+	 * remainder is spread over the first few instead of being dropped; configuring more
+	 * phrases than the budget therefore samples slightly more than the budget, which is the
+	 * lesser evil against sampling nothing.
+	 */
+	private List<Document> sampleFromConfiguredPhrases(VectorStore vectorStore, int budgetTotal) {
+		final RagThreasholdAutotuneConfig.InitialAutotunePhrases samples = config.getAutotuneSamples();
+		final List<String> phrases = samples.getPhrases();
+		final int perPhrase = Math.max(1, budgetTotal / phrases.size());
+		int remainder = Math.max(0, budgetTotal - perPhrase * phrases.size());
+		// Keyed by fragment id: two phrases on the same subject retrieve the same fragments,
+		// and a duplicate is a chunk the question generator reads twice and a topK inflated
+		// by work already counted.
+		final Map<String, Document> sampled = new LinkedHashMap<String, Document>();
+		for (String query : phrases) {
+			int wanted = perPhrase;
+			if (remainder > 0) {
+				wanted++;
+				remainder--;
+			}
+			LOGGER.info("Autoune with sample: \"" + query + "\" threashold:" + samples.getDefaultThreashold());
+			try {
+				Builder builder = SearchRequest.builder();
+				builder.filterExpression(
+						DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
+				builder.topK(wanted);
+				builder.similarityThreshold(samples.getDefaultThreashold());
+				builder.query(query);
+				final List<Document> documents = vectorStore.similaritySearch(builder.build());
+				LOGGER.info("Found " + documents.size() + " docs on this sample");
+				for (Document document : documents) {
+					sampled.putIfAbsent(document.getId(), document);
+				}
+			} catch (RuntimeException e) {
+				// One unusable phrase must not cost the whole sample, as one unparseable
+				// document code does not cost it on the corpus side.
+				LOGGER.warn("Cannot sample fragments for the configured phrase \"" + query + "\", skipping it", e);
+			}
+		}
+		if (sampled.isEmpty()) {
+			// Naming the three settings that can cause this is the whole point: the failure
+			// otherwise surfaces much later as the model having answered nothing, which sends
+			// the reader to the wrong place entirely.
+			LOGGER.warn("None of the " + phrases.size() + " configured autotune phrase(s) matched any fragment of "
+					+ vectorStore.getClass().getSimpleName() + " at threashold " + samples.getDefaultThreashold()
+					+ " with a minimum token length of " + config.getSampleFragmentsMinTokenLength()
+					+ ": the tuning has nothing to generate questions from. Lower the threashold, lower the minimum"
+					+ " token length, or remove the phrases to sample across the corpus instead");
+		} else {
+			LOGGER.info("Autotune sampled " + sampled.size() + " fragment(s) from " + phrases.size()
+					+ " configured phrase(s)");
+		}
+		return new ArrayList<Document>(sampled.values());
+	}
+
 	private List<Document> sampleAcrossCorpus(String vectorStoreId, VectorStore vectorStore, int budgetTotal) {
 		final List<GVectorizedContent> corpus = new ArrayList<GVectorizedContent>();
 		try (Stream<GVectorizedContent> stream = vectorizedContentsRepository.findByIdVectorStoreId(vectorStoreId)) {
