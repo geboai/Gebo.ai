@@ -28,12 +28,10 @@
           <div class="col-12 md:col-6">
             <gebo-ai-field [id]="row.descriptor.fieldId" [label]="row.label">
               <div gebo-ai-field-element>
-                @if (row.configured) {
-                  <span class="gebo-status-title">{{row.currentCode}}</span>
-                  <span class="gebo-status-meta"> &nbsp;({{row.currentProvider}})</span>
-                } @else {
-                  <span [id]="row.descriptor.fieldId + 'SummaryNone'" class="gebo-status-meta" gebo-ai-text>Not configured</span>
-                }
+                <gebo-ai-llms-easy-class-status [configured]="row.configured"
+                  [required]="row.descriptor.required" [currentCode]="row.currentCode"
+                  [currentProvider]="row.currentProvider" [providers]="row.providers">
+                </gebo-ai-llms-easy-class-status>
               </div>
             </gebo-ai-field>
           </div>

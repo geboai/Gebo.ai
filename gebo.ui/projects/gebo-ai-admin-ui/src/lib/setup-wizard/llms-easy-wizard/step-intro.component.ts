@@ -24,6 +24,8 @@ interface ClassRow {
     configured: boolean;
     currentCode?: string;
     currentProvider?: string;
+    /** Names of the providers whose library offers this model kind (for an unconfigured class). */
+    providers: string[];
 }
 
 @Component({
@@ -37,8 +39,9 @@ interface ClassRow {
 })
 export class LLMSEasyIntroStepComponent {
     private _status?: ComponentLLMSStatus;
+    private _configuration?: LLMSSetupConfigurationData;
     @Input() set status(value: ComponentLLMSStatus | undefined) { this._status = value; this.rebuild(); }
-    @Input() configuration?: LLMSSetupConfigurationData;
+    @Input() set configuration(value: LLMSSetupConfigurationData | undefined) { this._configuration = value; this.rebuild(); }
 
     protected readonly CLASS_TEXT = CLASS_TEXT;
     protected requiredRows: ClassRow[] = [];
@@ -53,10 +56,20 @@ export class LLMSEasyIntroStepComponent {
                 description: CLASS_TEXT[descriptor.id].description,
                 configured,
                 currentCode: descriptor.statusCode(this._status),
-                currentProvider: descriptor.statusProvider(this._status)
+                currentProvider: descriptor.statusProvider(this._status),
+                // Which providers offer this kind, so an unconfigured class shows where it can come from.
+                providers: configured ? [] : this.providersFor(descriptor)
             } as ClassRow;
         });
         this.requiredRows = rows.filter(r => r.descriptor.required);
         this.suggestedRows = rows.filter(r => !r.descriptor.required);
+    }
+
+    /** Names of the vendors whose library declares a preset of this model kind. */
+    private providersFor(descriptor: ModelClassDescriptor): string[] {
+        return (this._configuration?.configurations ?? [])
+            .filter(c => (c.libraryModel ?? []).some(preset => (preset.type as string) === (descriptor.type as string)))
+            .map(c => c.parentModel?.name)
+            .filter((name): name is string => !!name);
     }
 }

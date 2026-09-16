@@ -209,10 +209,19 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
                 modifying: false,
                 chosenCode: preselect,
                 choices: this.libraryChoices(descriptor),
-                enableAllFunctions: false
+                enableAllFunctions: false,
+                providers: this.providersFor(descriptor)
             };
             return decision;
         });
+    }
+
+    /** Names of every vendor whose library offers this model kind (across the whole catalogue). */
+    private providersFor(descriptor: ModelClassDescriptor): string[] {
+        return (this.actualConfiguration?.configurations ?? [])
+            .filter(c => (c.libraryModel ?? []).some(preset => (preset.type as string) === (descriptor.type as string)))
+            .map(c => c.parentModel?.name)
+            .filter((name): name is string => !!name);
     }
 
     /** The preset code preselected for a class: the INTERNAL_SERVICES choice for the service slot, the defaultChoice otherwise. */

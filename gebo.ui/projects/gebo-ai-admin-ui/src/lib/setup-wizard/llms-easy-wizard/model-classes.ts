@@ -151,4 +151,6 @@ export interface ModelClassDecision {
     choices: ModelChoiceOption[];
     /** The chat "enable all function calls" toggle only applies to the default chat slot. */
     enableAllFunctions?: boolean;
+    /** Names of every provider whose library offers this kind; shown when this provider does not. */
+    providers: string[];
 }

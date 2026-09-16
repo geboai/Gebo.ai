@@ -3858,6 +3858,9 @@
             "ClassImages": {
                 "label": "Image generation model",
                 "help": "Generates images from text prompts."
+            },
+            "SupportedByLabel": {
+                "label": "Supported by providers:"
             }
         },
         "LLMSEasyProviderStepComponent": {
@@ -4032,6 +4035,14 @@
             },
             "ClassImagesSummaryNone": {
                 "label": "Not configured"
+            }
+        },
+        "LLMSEasyClassStatusComponent": {
+            "ClassStatusNotConfigured": {
+                "label": "Not configured yet"
+            },
+            "ClassStatusSupportedBy": {
+                "label": "Supported by providers:"
             }
         }
     },

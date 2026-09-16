@@ -20,33 +20,34 @@
         [help]="CLASS_TEXT[decision.descriptor.id].description" [required]="decision.descriptor.required">
         <div gebo-ai-field-element>
 
-          @if (!decision.offered) {
-            <span [id]="decision.descriptor.fieldId + 'NotOffered'" class="gebo-status-meta" gebo-ai-text>
-              The provider does not offer this model type
-            </span>
-          } @else if (decision.alreadyConfigured) {
-            <div class="gebo-status-title">{{decision.currentCode}}
-              <span class="gebo-status-meta">({{decision.currentProvider}})</span>
-            </div>
-            <div class="flex align-items-center gap-2 mt-2">
-              <p-checkbox [(ngModel)]="decision.modifying" [ngModelOptions]="{standalone:true}" [binary]="true"
-                (onChange)="onModifyToggled(decision)"></p-checkbox>
-              <span [id]="decision.descriptor.fieldId + 'Modify'" gebo-ai-text>Change this model</span>
-            </div>
-            @if (decision.modifying) {
-              <geboai-editable-listbox-component [data]="decision.choices"
-                [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
-              </geboai-editable-listbox-component>
-            }
-          } @else {
-            <div class="flex align-items-center gap-2">
-              <p-checkbox [(ngModel)]="decision.enabled" [ngModelOptions]="{standalone:true}" [binary]="true"></p-checkbox>
-              <span [id]="decision.descriptor.fieldId + 'Enable'" gebo-ai-text>Configure this model</span>
-            </div>
-            @if (decision.enabled) {
-              <geboai-editable-listbox-component [data]="decision.choices"
-                [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
-              </geboai-editable-listbox-component>
+          <gebo-ai-llms-easy-class-status [configured]="decision.alreadyConfigured"
+            [required]="decision.descriptor.required" [currentCode]="decision.currentCode"
+            [currentProvider]="decision.currentProvider"
+            [providers]="decision.offered ? [] : decision.providers">
+          </gebo-ai-llms-easy-class-status>
+
+          @if (decision.offered) {
+            @if (decision.alreadyConfigured) {
+              <div class="flex align-items-center gap-2 mt-2">
+                <p-checkbox [(ngModel)]="decision.modifying" [ngModelOptions]="{standalone:true}" [binary]="true"
+                  (onChange)="onModifyToggled(decision)"></p-checkbox>
+                <span [id]="decision.descriptor.fieldId + 'Modify'" gebo-ai-text>Change this model</span>
+              </div>
+              @if (decision.modifying) {
+                <geboai-editable-listbox-component [data]="decision.choices"
+                  [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
+                </geboai-editable-listbox-component>
+              }
+            } @else {
+              <div class="flex align-items-center gap-2 mt-2">
+                <p-checkbox [(ngModel)]="decision.enabled" [ngModelOptions]="{standalone:true}" [binary]="true"></p-checkbox>
+                <span [id]="decision.descriptor.fieldId + 'Enable'" gebo-ai-text>Configure this model</span>
+              </div>
+              @if (decision.enabled) {
+                <geboai-editable-listbox-component [data]="decision.choices"
+                  [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
+                </geboai-editable-listbox-component>
+              }
             }
           }
 

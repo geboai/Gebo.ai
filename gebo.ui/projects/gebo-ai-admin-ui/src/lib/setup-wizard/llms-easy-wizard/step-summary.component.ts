@@ -22,6 +22,8 @@ interface SummaryRow {
     configured: boolean;
     currentCode?: string;
     currentProvider?: string;
+    /** Providers that support this kind, shown when the class is still missing. */
+    providers: string[];
 }
 
 @Component({
@@ -35,19 +37,32 @@ interface SummaryRow {
 })
 export class LLMSEasySummaryStepComponent {
     private _status?: ComponentLLMSStatus;
+    private _configuration?: LLMSSetupConfigurationData;
     @Input() set status(value: ComponentLLMSStatus | undefined) { this._status = value; this.rebuild(); }
-    @Input() configuration?: LLMSSetupConfigurationData;
+    @Input() set configuration(value: LLMSSetupConfigurationData | undefined) { this._configuration = value; this.rebuild(); }
 
     protected rows: SummaryRow[] = [];
     protected get setupComplete(): boolean { return this._status?.isSetup === true; }
 
     private rebuild(): void {
-        this.rows = MODEL_CLASSES.map(descriptor => ({
-            descriptor,
-            label: CLASS_TEXT[descriptor.id].label,
-            configured: descriptor.statusSetup(this._status) === true,
-            currentCode: descriptor.statusCode(this._status),
-            currentProvider: descriptor.statusProvider(this._status)
-        }));
+        this.rows = MODEL_CLASSES.map(descriptor => {
+            const configured = descriptor.statusSetup(this._status) === true;
+            return {
+                descriptor,
+                label: CLASS_TEXT[descriptor.id].label,
+                configured,
+                currentCode: descriptor.statusCode(this._status),
+                currentProvider: descriptor.statusProvider(this._status),
+                providers: configured ? [] : this.providersFor(descriptor)
+            } as SummaryRow;
+        });
+    }
+
+    /** Names of the vendors whose library declares a preset of this model kind. */
+    private providersFor(descriptor: ModelClassDescriptor): string[] {
+        return (this._configuration?.configurations ?? [])
+            .filter(c => (c.libraryModel ?? []).some(preset => (preset.type as string) === (descriptor.type as string)))
+            .map(c => c.parentModel?.name)
+            .filter((name): name is string => !!name);
     }
 }
