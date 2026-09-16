@@ -1,5 +1,7 @@
 package ai.gebo.architecture.rag_threasholds_autotune.service.impl;
 
+import ai.gebo.security.services.IGeboSystemUserService;
+import ai.gebo.security.services.IdentityUtil;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -21,6 +23,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.document.DocumentMetadata;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SearchRequest.Builder;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -66,6 +69,15 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	private final VectorizedContentRepository vectorizedContentsRepository;
 	private final RagThreasholdAutotuneConfig config;
 	private final IGPromptConfigDao promptsDao;
+	/**
+	 * The platform's own identity. The tuning runs on a scheduler thread, which carries
+	 * no SecurityContext at all, and the first thing it does is call an LLM to generate
+	 * the sample questions - a path that reaches isCurrentUserAdmin(..) and threw
+	 * "Not authenticated", leaving the question list empty. The bound discovery then
+	 * probed 41 thresholds against zero questions, found zero results at every one of
+	 * them, walked below zero and aborted with "Threashold is -0.025 seriusly wrong!".
+	 */
+	private final IGeboSystemUserService systemUserService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RagThreasholdAutotuneServiceImpl.class);
 	private static boolean runningTuning = false;
 
@@ -73,12 +85,13 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsConfigDao,
 			ThreasholdAutotuneProcessResultRepository resultRepo,
 			VectorizedContentRepository vectorizedContentsRepository, RagThreasholdAutotuneConfig config,
-			IGPromptConfigDao promptsDao) {
+			IGPromptConfigDao promptsDao, IGeboSystemUserService systemUserService) {
 		super(chatModelsConfigDao, embeddingModelsConfigDao);
 		this.resultRepo = resultRepo;
 		this.vectorizedContentsRepository = vectorizedContentsRepository;
 		this.config = config;
 		this.promptsDao = promptsDao;
+		this.systemUserService = systemUserService;
 	}
 
 	@Override
@@ -123,15 +136,22 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			synchronized (this) {
 				runningTuning = true;
 			}
-			List<String> vectorStoreIds = embeddingModelsRuntimeDao.getConfigurations().stream().map(x -> x.getCode())
-					.toList();
-			for (String vectorStoreId : vectorStoreIds) {
-				try {
-					processAutotune(vectorStoreId);
-				} catch (LLMConfigException e) {
-					LOGGER.error("Error in processAutotune(" + vectorStoreId + ")", e);
+			// No user asked for this work, so it runs as the platform itself rather than on
+			// an empty SecurityContext. Everything the tuning touches - reading the model
+			// configurations, searching the vector store, calling the LLM to generate and
+			// rate the questions - goes through the normal authorization path under this
+			// identity instead of failing at the first isCurrentUserAdmin(..).
+			IdentityUtil.create(systemUserService.getUsername(), systemUserService.getRoles()).doAs(() -> {
+				List<String> vectorStoreIds = embeddingModelsRuntimeDao.getConfigurations().stream()
+						.map(x -> x.getCode()).toList();
+				for (String vectorStoreId : vectorStoreIds) {
+					try {
+						processAutotune(vectorStoreId);
+					} catch (LLMConfigException e) {
+						LOGGER.error("Error in processAutotune(" + vectorStoreId + ")", e);
+					}
 				}
-			}
+			});
 		} finally {
 			synchronized (this) {
 				runningTuning = false;
@@ -225,6 +245,14 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			List<AutoTuneQuestion> questions = parseQuestions(csvResult);
 			while (questions.size() > MAXQUESTIONS) {
 				questions.remove(questions.size() - 1);
+			}
+			if (questions.isEmpty()) {
+				// Without questions every threshold returns nothing, so the bound discovery
+				// below would walk the threshold past zero and abort on a message that
+				// describes the symptom rather than the cause.
+				LOGGER.warn("No autotune question could be generated for " + vectorStoreId
+						+ ": skipping the tuning instead of probing an empty question set");
+				return;
 			}
 			double startingSearch = 1.0;
 			final double increment = 0.025;
@@ -471,7 +499,11 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			final List<AutoTuneMatchWithRate> matchWithRate = retrieved.stream().map(x -> {
 				AutoTuneMatchWithRate mr = new AutoTuneMatchWithRate();
 				mr.document = x;
-				Object distance = x.getMetadata().get("distance");
+				// Spring AI writes the similarity distance under its own metadata key rather
+				// than a convention of ours: every store normalises it to 1 - similarity, so
+				// lower is closer. Read it through the framework constant so a rename in
+				// Spring AI breaks the build instead of silently returning null here.
+				Object distance = x.getMetadata().get(DocumentMetadata.DISTANCE.value());
 				if (distance != null) {
 					if (distance instanceof Number d) {
 						mr.distance = d.doubleValue();
