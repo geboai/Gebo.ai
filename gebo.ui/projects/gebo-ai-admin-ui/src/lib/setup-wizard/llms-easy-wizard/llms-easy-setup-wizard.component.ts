@@ -45,6 +45,22 @@ enum WizardStep { INTRO = 0, PROVIDER = 1, MODELS = 2, SUMMARY = 3 }
     selector: "gebo-ai-llms-easy-setup-wizard",
     templateUrl: "llms-easy-setup-wizard.component.html",
     standalone: false,
+    // Give each gebo-ai-field label the weight of a section header, so every model class in the
+    // guided wizard reads as its own separated block. Scoped with :host so it only affects the
+    // fields rendered inside this wizard (and its step components), never gebo-ai-field elsewhere.
+    styles: [`
+        :host ::ng-deep gebo-ai-field > div > label {
+            display: block;
+            width: 100%;
+            margin-top: var(--gebo-space-2, 0.5rem);
+            padding-bottom: var(--gebo-space-1, 0.35rem);
+            border-bottom: 2px solid var(--gebo-primary-500, #3b82f6);
+            color: var(--gebo-text-strong, #111827);
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+    `],
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSEasySetupWizardComponent") }]
 })
 export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
