@@ -3775,6 +3775,264 @@
             "ExtendedSetupTab": {
                 "label": "Extended infrastructure/suppliers choices"
             }
+        },
+        "LLMSEasySetupWizardComponent": {
+            "IntroStep": {
+                "label": "Model classes"
+            },
+            "ProviderStep": {
+                "label": "Provider"
+            },
+            "ModelsStep": {
+                "label": "Models"
+            },
+            "SummaryStep": {
+                "label": "Summary"
+            },
+            "MainEasyLLMSPanelTitle": {
+                "label": "Guided large language models setup"
+            },
+            "ResolutionsSection": {
+                "label": "Choose a replacement model"
+            },
+            "ResolutionField": {
+                "label": "Model no longer offered",
+                "help": "The chosen model is not offered by the provider anymore, please select a replacement"
+            },
+            "ResolveBtn": {
+                "label": "Apply replacements"
+            },
+            "BackBtn": {
+                "label": "Back"
+            },
+            "NextBtn": {
+                "label": "Next"
+            },
+            "ApplyBtn": {
+                "label": "Apply and continue"
+            },
+            "FinishBtn": {
+                "label": "Finish"
+            }
+        },
+        "LLMSEasyIntroStepComponent": {
+            "IntroExplanation": {
+                "label": "Gebo.ai uses several classes of language models. Two are required for the system to work, the others are suggested and enable extra capabilities. The wizard will help you configure them from a single provider; you can always add or change models later from the LLMs admin screens."
+            },
+            "RequiredClassesSection": {
+                "label": "Required models"
+            },
+            "SuggestedClassesSection": {
+                "label": "Suggested models"
+            },
+            "NotConfiguredRequired": {
+                "label": "Not configured yet"
+            },
+            "NotConfiguredSuggested": {
+                "label": "Not configured yet"
+            },
+            "ClassChat": {
+                "label": "Default chat model",
+                "help": "Answers users and runs the workflows that have no model of their own. It should be capable and reliable, with a good balance of cost, speed and quality."
+            },
+            "ClassEmbedding": {
+                "label": "Embedding model",
+                "help": "Turns your documents and questions into vectors for semantic indexing and retrieval. Required for the software to work."
+            },
+            "ClassService": {
+                "label": "Internal services chat model",
+                "help": "A fast and cheap chat model used for internal work: extracting, summarizing and running internal steps. Suggested to keep the main chat model free for users."
+            },
+            "ClassRanking": {
+                "label": "Ranker model",
+                "help": "Re-ranks retrieved fragments and keeps the ones most relevant to the question. Improves answer quality."
+            },
+            "ClassTranscript": {
+                "label": "Transcription model",
+                "help": "Converts speech to text for the transcription service."
+            },
+            "ClassTts": {
+                "label": "Text to speech model",
+                "help": "Converts text into spoken audio."
+            },
+            "ClassImages": {
+                "label": "Image generation model",
+                "help": "Generates images from text prompts."
+            }
+        },
+        "LLMSEasyProviderStepComponent": {
+            "ProviderChoice": {
+                "label": "Choose your large language model provider",
+                "help": "Choose the provider whose models you want to configure in this run"
+            },
+            "ProviderWebSite": {
+                "label": "Provider web site",
+                "help": "Click here for general provider information."
+            },
+            "ProviderAcquireKey": {
+                "label": "Purchase provider's credit",
+                "help": "Click here to buy credit for your api key(s)."
+            },
+            "ProviderBaseUrl": {
+                "label": "Base api url",
+                "help": "Provider base url for the api services"
+            },
+            "ProviderRequireKey": {
+                "label": "The provider requires credentials",
+                "help": "The provider/server is configured for authenticated access via api key or other credentials"
+            }
+        },
+        "LLMSEasyModelsStepComponent": {
+            "LoadingCatalogues": {
+                "label": "Downloading the models the provider offers…"
+            },
+            "ClassChat": {
+                "label": "Default chat model",
+                "help": "Answers users and runs the workflows that have no model of their own. It should be capable and reliable, with a good balance of cost, speed and quality."
+            },
+            "ClassEmbedding": {
+                "label": "Embedding model",
+                "help": "Turns your documents and questions into vectors for semantic indexing and retrieval. Required for the software to work."
+            },
+            "ClassService": {
+                "label": "Internal services chat model",
+                "help": "A fast and cheap chat model used for internal work: extracting, summarizing and running internal steps. Suggested to keep the main chat model free for users."
+            },
+            "ClassRanking": {
+                "label": "Ranker model",
+                "help": "Re-ranks retrieved fragments and keeps the ones most relevant to the question. Improves answer quality."
+            },
+            "ClassTranscript": {
+                "label": "Transcription model",
+                "help": "Converts speech to text for the transcription service."
+            },
+            "ClassTts": {
+                "label": "Text to speech model",
+                "help": "Converts text into spoken audio."
+            },
+            "ClassImages": {
+                "label": "Image generation model",
+                "help": "Generates images from text prompts."
+            },
+            "ClassChatNotOffered": {
+                "label": "The provider does not offer this model type"
+            },
+            "ClassChatModify": {
+                "label": "Change this model"
+            },
+            "ClassChatEnable": {
+                "label": "Configure this model"
+            },
+            "ClassEmbeddingNotOffered": {
+                "label": "The provider does not offer this model type"
+            },
+            "ClassEmbeddingModify": {
+                "label": "Change this model"
+            },
+            "ClassEmbeddingEnable": {
+                "label": "Configure this model"
+            },
+            "ClassServiceNotOffered": {
+                "label": "The provider does not offer this model type"
+            },
+            "ClassServiceModify": {
+                "label": "Change this model"
+            },
+            "ClassServiceEnable": {
+                "label": "Configure this model"
+            },
+            "ClassRankingNotOffered": {
+                "label": "The provider does not offer this model type"
+            },
+            "ClassRankingModify": {
+                "label": "Change this model"
+            },
+            "ClassRankingEnable": {
+                "label": "Configure this model"
+            },
+            "ClassTranscriptNotOffered": {
+                "label": "The provider does not offer this model type"
+            },
+            "ClassTranscriptModify": {
+                "label": "Change this model"
+            },
+            "ClassTranscriptEnable": {
+                "label": "Configure this model"
+            },
+            "ClassTtsNotOffered": {
+                "label": "The provider does not offer this model type"
+            },
+            "ClassTtsModify": {
+                "label": "Change this model"
+            },
+            "ClassTtsEnable": {
+                "label": "Configure this model"
+            },
+            "ClassImagesNotOffered": {
+                "label": "The provider does not offer this model type"
+            },
+            "ClassImagesModify": {
+                "label": "Change this model"
+            },
+            "ClassImagesEnable": {
+                "label": "Configure this model"
+            },
+            "ChatEnableFunctions": {
+                "label": "Enable all function calls for this chat model"
+            }
+        },
+        "LLMSEasySummaryStepComponent": {
+            "SummaryComplete": {
+                "label": "The required models are configured. The system is ready to work."
+            },
+            "SummaryIncomplete": {
+                "label": "A default chat model and an embedding model are still required for the system to work."
+            },
+            "ActiveConfigSection": {
+                "label": "Active configuration"
+            },
+            "ClassChat": {
+                "label": "Default chat model"
+            },
+            "ClassChatSummaryNone": {
+                "label": "Not configured"
+            },
+            "ClassEmbedding": {
+                "label": "Embedding model"
+            },
+            "ClassEmbeddingSummaryNone": {
+                "label": "Not configured"
+            },
+            "ClassService": {
+                "label": "Internal services chat model"
+            },
+            "ClassServiceSummaryNone": {
+                "label": "Not configured"
+            },
+            "ClassRanking": {
+                "label": "Ranker model"
+            },
+            "ClassRankingSummaryNone": {
+                "label": "Not configured"
+            },
+            "ClassTranscript": {
+                "label": "Transcription model"
+            },
+            "ClassTranscriptSummaryNone": {
+                "label": "Not configured"
+            },
+            "ClassTts": {
+                "label": "Text to speech model"
+            },
+            "ClassTtsSummaryNone": {
+                "label": "Not configured"
+            },
+            "ClassImages": {
+                "label": "Image generation model"
+            },
+            "ClassImagesSummaryNone": {
+                "label": "Not configured"
+            }
         }
     },
     "BackendMSGSModule": {

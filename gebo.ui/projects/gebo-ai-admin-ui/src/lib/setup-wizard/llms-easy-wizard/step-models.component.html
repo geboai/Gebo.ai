@@ -1,0 +1,64 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="grid">
+  @if (lookupsRunning>0) {
+    <div class="col-12">
+      <span id="LoadingCatalogues" class="gebo-status-meta" gebo-ai-text>Downloading the models the provider offers…</span>
+    </div>
+  }
+  @for (decision of decisions; track decision.descriptor.id) {
+    <div class="col-12 md:col-6">
+      <gebo-ai-field [id]="decision.descriptor.fieldId" [label]="CLASS_TEXT[decision.descriptor.id].label"
+        [help]="CLASS_TEXT[decision.descriptor.id].description" [required]="decision.descriptor.required">
+        <div gebo-ai-field-element>
+
+          @if (!decision.offered) {
+            <span [id]="decision.descriptor.fieldId + 'NotOffered'" class="gebo-status-meta" gebo-ai-text>
+              The provider does not offer this model type
+            </span>
+          } @else if (decision.alreadyConfigured) {
+            <div class="gebo-status-title">{{decision.currentCode}}
+              <span class="gebo-status-meta">({{decision.currentProvider}})</span>
+            </div>
+            <div class="flex align-items-center gap-2 mt-2">
+              <p-checkbox [(ngModel)]="decision.modifying" [ngModelOptions]="{standalone:true}" [binary]="true"
+                (onChange)="onModifyToggled(decision)"></p-checkbox>
+              <span [id]="decision.descriptor.fieldId + 'Modify'" gebo-ai-text>Change this model</span>
+            </div>
+            @if (decision.modifying) {
+              <geboai-editable-listbox-component [data]="decision.choices"
+                [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
+              </geboai-editable-listbox-component>
+            }
+          } @else {
+            <div class="flex align-items-center gap-2">
+              <p-checkbox [(ngModel)]="decision.enabled" [ngModelOptions]="{standalone:true}" [binary]="true"></p-checkbox>
+              <span [id]="decision.descriptor.fieldId + 'Enable'" gebo-ai-text>Configure this model</span>
+            </div>
+            @if (decision.enabled) {
+              <geboai-editable-listbox-component [data]="decision.choices"
+                [(ngModel)]="decision.chosenCode" [ngModelOptions]="{standalone:true}" class="mt-2">
+              </geboai-editable-listbox-component>
+            }
+          }
+
+          @if (decision.descriptor.id==='CHAT' && decision.offered && (decision.enabled || decision.modifying)) {
+            <div class="flex align-items-center gap-2 mt-2">
+              <p-checkbox [(ngModel)]="decision.enableAllFunctions" [ngModelOptions]="{standalone:true}" [binary]="true"></p-checkbox>
+              <span id="ChatEnableFunctions" gebo-ai-text>Enable all function calls for this chat model</span>
+            </div>
+          }
+        </div>
+      </gebo-ai-field>
+    </div>
+  }
+</div>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
