@@ -117,7 +117,11 @@ public class GTranscriptModelRuntimeConfigurationDaoimpl
 	 */
 	@Override
 	public void deleteByCode(String code) throws LLMConfigException {
-		// Method implementation pending
+		IGConfigurableTranscriptModel item = this.findByCode(code);
+		if (item != null) {
+			staticConfigs.remove(item);
+			item.delete();
+		}
 	}
 
 	/**

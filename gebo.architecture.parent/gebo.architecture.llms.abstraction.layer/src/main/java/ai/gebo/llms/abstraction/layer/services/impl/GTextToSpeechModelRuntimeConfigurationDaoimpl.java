@@ -118,7 +118,11 @@ public class GTextToSpeechModelRuntimeConfigurationDaoimpl
      */
 	@Override
 	public void deleteByCode(String code) throws LLMConfigException {
-		// Implementation needed for deleting by code
+		IGConfigurableTextToSpeechModel item = this.findByCode(code);
+		if (item != null) {
+			staticConfigs.remove(item);
+			item.delete();
+		}
 	}
 
 	/** 
