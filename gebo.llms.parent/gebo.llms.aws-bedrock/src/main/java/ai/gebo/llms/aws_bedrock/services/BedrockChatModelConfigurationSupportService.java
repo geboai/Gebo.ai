@@ -11,6 +11,8 @@ package ai.gebo.llms.aws_bedrock.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.bedrock.converse.BedrockChatOptions;
 import org.springframework.ai.bedrock.converse.BedrockProxyChatModel;
 import org.springframework.ai.model.tool.ToolCallingManager;
@@ -49,6 +51,8 @@ import software.amazon.awssdk.services.bedrock.model.ModelModality;
 @AllArgsConstructor
 public class BedrockChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GBedrockChatModelChoice, GBedrockChatModelConfig> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BedrockChatModelConfigurationSupportService.class);
 
 	static final GChatModelType type = new GChatModelType();
 	static {
@@ -102,7 +106,19 @@ public class BedrockChatModelConfigurationSupportService
 			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools(config.getEnabledFunctions());
-				builder.toolCallbacks(functions);
+				// The condition above tests the tool names that were REQUESTED. getTools filters
+				// the callbacks actually available by those names, so it can return fewer - or
+				// none at all, when the source that exports them failed. Configuring the model
+				// from the request rather than from what resolved leaves it declaring tools it
+				// will never send.
+				if (functions != null && !functions.isEmpty()) {
+					builder.toolCallbacks(functions);
+				} else {
+					LOGGER.warn("Chat model " + config.getCode() + " enables "
+							+ config.getEnabledFunctions().size()
+							+ " tool(s) but none of them resolved to a callback, so it is configured"
+							+ " without tools: " + config.getEnabledFunctions());
+				}
 			}
 			BedrockChatOptions options = builder.build();
 

@@ -18,6 +18,8 @@ package ai.gebo.llms.openai_compat.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.model.tool.ToolCallingManager;
@@ -57,6 +59,8 @@ import io.micrometer.observation.ObservationRegistry;
 
 public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		IGChatModelConfigurationSupportService<GenericOpenAIAPIChatModelChoice, GenericOpenAIAPIChatModelConfig> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GenericOpenAIAPIChatModelConfigurationSupportService.class);
 	/**
 	 * Configuration for the OpenAI-compatible model type
 	 */
@@ -201,8 +205,27 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			// Configure tool callbacks (functions)
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-				builder = builder.toolCallbacks(functions);
-				builder.parallelToolCalls(true);
+				// The condition above tests the tool names that were REQUESTED. getTools filters
+				// the callbacks actually available by those names, so it can return fewer - or
+				// none at all, when the source that exports them failed. Configuring the model
+				// from the request rather than from what resolved leaves it declaring tools it
+				// will never send.
+				// On the OpenAI wire format that combination is not merely useless, it is
+				// rejected: parallel_tool_calls without tools returns
+				//   400 Invalid value for 'parallel_tool_calls': 'parallel_tool_calls' is only
+				//   allowed when 'tools' are specified.
+				// which failed every routing agent call, a routing plan being a structured
+				// response that carries no tools of its own. Compatible endpoints tolerated it,
+				// so it only surfaced once a model was pointed at api.openai.com.
+				if (functions != null && !functions.isEmpty()) {
+					builder = builder.toolCallbacks(functions);
+					builder.parallelToolCalls(true);
+				} else {
+					LOGGER.warn("Chat model " + config.getCode() + " enables "
+							+ config.getEnabledFunctions().size()
+							+ " tool(s) but none of them resolved to a callback, so it is configured"
+							+ " without tools: " + config.getEnabledFunctions());
+				}
 			}
 			if (user != null) {
 				builder = builder.user(user);

@@ -12,6 +12,8 @@ package ai.gebo.llms.anthropic.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.anthropic.AnthropicChatOptions.Builder;
@@ -55,6 +57,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AnthropicChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GAnthropicChatModelChoice, GAnthropicChatModelConfig> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnthropicChatModelConfigurationSupportService.class);
 
 	/**
 	 * Static definition of the Anthropic model type
@@ -157,7 +161,19 @@ public class AnthropicChatModelConfigurationSupportService
 			List<ToolCallback> functions = new ArrayList<ToolCallback>();
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				functions = functionsRepo.getTools((config.getEnabledFunctions()));
-				builder = builder.toolCallbacks(functions);
+				// The condition above tests the tool names that were REQUESTED. getTools filters
+				// the callbacks actually available by those names, so it can return fewer - or
+				// none at all, when the source that exports them failed. Configuring the model
+				// from the request rather than from what resolved leaves it declaring tools it
+				// will never send.
+				if (functions != null && !functions.isEmpty()) {
+					builder = builder.toolCallbacks(functions);
+				} else {
+					LOGGER.warn("Chat model " + config.getCode() + " enables "
+							+ config.getEnabledFunctions().size()
+							+ " tool(s) but none of them resolved to a callback, so it is configured"
+							+ " without tools: " + config.getEnabledFunctions());
+				}
 			}
 			AnthropicChatOptions anthropicChatOptions = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
