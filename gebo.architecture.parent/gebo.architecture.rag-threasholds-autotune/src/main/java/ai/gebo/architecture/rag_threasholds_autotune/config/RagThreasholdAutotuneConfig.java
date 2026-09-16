@@ -16,6 +16,11 @@ public class RagThreasholdAutotuneConfig {
 	private double documentsCardinalityAddedPercentTrigger = 5.0;
 	private int dayElapsedWithoutTuning = 3;
 	private int sampleFragmentsMinTokenLength = 100;
+	/**
+	 * Fragments the tuning questions are generated from. Raising it widens the sample and
+	 * costs proportionally more question generation and rating calls.
+	 */
+	private int autotuneSampleFragments = 30;
 	private int autotuneMaxGeneratedQuestions = 12;
 	/**
 	 * Share of the answerable questions that a threshold must still answer to be

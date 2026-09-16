@@ -115,8 +115,11 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	@Override
 	public OptimizedThreashold findByKnowledgeBase(String knowledgeBaseCode) {
-		List<ThreasholdAutotuneProcessResult> data = resultRepo.findByRootKnowledgeBase(knowledgeBaseCode);
-		return data.isEmpty() ? null : data.get(0).getThreasholds();
+		// Newest, not whichever the store happened to return first. A run appends a result
+		// rather than replacing one, so an unordered get(0) reads an arbitrary point in the
+		// history - the same defect the vector store lookup above was already fixed for.
+		return resultRepo.findFirstByRootKnowledgeBaseOrderByProcessedDateTimeDesc(knowledgeBaseCode)
+				.map(ThreasholdAutotuneProcessResult::getThreasholds).orElse(null);
 	}
 
 	private String inExpression(String field, List<String> ids) {
@@ -169,11 +172,19 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		final int MAXQUESTIONS = this.config.getAutotuneMaxGeneratedQuestions();
 
 		ThreasholdAutotuneProcessResult lastEntry = internalFindByVectorStoreId(vectorStoreId);
-		long count = vectorizedContentsRepository.countByIdVectorStoreId(vectorStoreId);
-		if (count == 0l) {
+		// Documents first, because it is a cheap count and an empty store needs nothing
+		// more than that to be ruled out.
+		if (vectorizedContentsRepository.countByIdVectorStoreId(vectorStoreId) == 0l) {
 			LOGGER.info("No found vectorized entries in " + vectorStoreId + " exiting autotune process");
 			return;
 		}
+		// The growth trigger then measures chunks, which is what actually changes what the
+		// retrieval sees. countByIdVectorStoreId counts documents: on the store this was
+		// developed against that is 11 against 6,085 chunks, so adding a twelfth document
+		// read as 9% growth and fired, while re-ingesting every existing document with a
+		// different chunk size read as 0% and never did - the case where re-tuning matters
+		// most, because the embedding of every fragment has changed.
+		final long count = countVectorisedChunks(vectorStoreId);
 		long lastCardinality = lastEntry != null && lastEntry.getVectorStoreVectorizedCount() != null
 				? lastEntry.getVectorStoreVectorizedCount()
 				: 0l;
@@ -205,7 +216,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		if (runOptimization) {
 			IGConfigurableEmbeddingModel embeddingModel = embeddingModelsRuntimeDao.findByCode(vectorStoreId);
 			VectorStore vectorStore = embeddingModel.getVectorStore();
-			final int budgetTotal = 30;
+			final int budgetTotal = Math.max(1, config.getAutotuneSampleFragments());
 			final List<Document> sampled = new ArrayList<Document>();
 			if (config.getAutotuneSamples() != null && config.getAutotuneSamples().getPhrases() != null
 					&& !config.getAutotuneSamples().getPhrases().isEmpty()) {
@@ -483,6 +494,28 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	 * a meaningless string, so the fragments returned are the ones characteristic of it.
 	 */
 	/**
+	 * Counts the chunks a vector store actually holds, by summing the vectors registered
+	 * against each of its documents.
+	 * <p>
+	 * There is no cheap count for this: the chunk ids live in a list on each document, so
+	 * the documents have to be walked. That is affordable here because it runs on the
+	 * scheduler once per tuning decision, never on a search, and only after the cheap
+	 * document count has already ruled out an empty store.
+	 */
+	private long countVectorisedChunks(String vectorStoreId) {
+		long chunks = 0L;
+		try (Stream<GVectorizedContent> stream = vectorizedContentsRepository.findByIdVectorStoreId(vectorStoreId)) {
+			for (Iterator<GVectorizedContent> it = stream.iterator(); it.hasNext();) {
+				final GVectorizedContent content = it.next();
+				if (content.getVectorsId() != null) {
+					chunks += content.getVectorsId().size();
+				}
+			}
+		}
+		return chunks;
+	}
+
+	/**
 	 * Draws the fragments from the phrases configured under
 	 * {@code ai.gebo.rag-threashold-autotune.config.autotune-samples}, when an operator has
 	 * said which subjects the tuning should be measured on.
@@ -640,10 +673,15 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		// vectorStoreId is tried first and the old column kept as a fallback so records
 		// written before this fix, and callers that really pass a model name, still
 		// resolve.
-		List<ThreasholdAutotuneProcessResult> results = this.resultRepo.findByVectorStoreId(vectorStoreId);
-		ThreasholdAutotuneProcessResult latest = this.latest(results);
+		// Resolved newest first by the store rather than by loading the history and sorting
+		// it here: this runs inside the per embedding model loop of every semantic search,
+		// and a run appends a result that nothing prunes, so the in memory sort turned each
+		// search into a scan of every tuning ever performed.
+		ThreasholdAutotuneProcessResult latest = this.resultRepo
+				.findFirstByVectorStoreIdOrderByProcessedDateTimeDesc(vectorStoreId).orElse(null);
 		if (latest == null) {
-			latest = this.latest(this.resultRepo.findByEmbeddingModelCode(vectorStoreId));
+			latest = this.resultRepo.findFirstByEmbeddingModelCodeOrderByProcessedDateTimeDesc(vectorStoreId)
+					.orElse(null);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Autotuned thresholds lookup for '" + vectorStoreId + "' resolved:" + (latest != null));
@@ -651,19 +689,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		return latest;
 	}
 
-	private ThreasholdAutotuneProcessResult latest(List<ThreasholdAutotuneProcessResult> results) {
-
-		TreeMap<Date, ThreasholdAutotuneProcessResult> ordered = new TreeMap<>();
-		if (results != null)
-			for (ThreasholdAutotuneProcessResult r : results) {
-				ordered.put(r.getProcessedDateTime(), r);
-			}
-		return !ordered.isEmpty() ? ordered.lastEntry().getValue() : null;
-	}
 
 	private ThreasholdAutotuneProcessResult internalFindByVectorStoreId(String vectorStoreId) {
-		List<ThreasholdAutotuneProcessResult> results = this.resultRepo.findByVectorStoreId(vectorStoreId);
-		return this.latest(results);
+		return this.resultRepo.findFirstByVectorStoreIdOrderByProcessedDateTimeDesc(vectorStoreId).orElse(null);
 	}
 
 	/**
