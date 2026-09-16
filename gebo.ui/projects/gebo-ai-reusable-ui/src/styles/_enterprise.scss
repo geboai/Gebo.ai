@@ -338,7 +338,6 @@ textarea.p-inputtextarea:read-only {
   min-height: 2.75rem;
   padding: 0.625rem var(--gebo-space-4);
   border: 0;
-  border-bottom: 1px solid var(--gebo-border-subtle);
   border-radius: 0;
   background: var(--gebo-white);
   color: var(--gebo-text-strong);
@@ -504,6 +503,118 @@ textarea.p-inputtextarea:read-only {
 .p-datatable-tbody > tr.p-highlight { background: var(--gebo-surface-selected); color: var(--gebo-text-strong); }
 .p-datatable-sort-icon { width: 0.75rem; height: 0.75rem; color: var(--gebo-text-subtle); }
 .p-datatable-emptymessage > td { padding: var(--gebo-space-8); color: var(--gebo-text-subtle); text-align: center; }
+
+/* Dense administration surfaces
+   Keep this as an explicit modifier instead of shrinking every form and table.
+   Data-heavy screens can opt into the tighter rhythm while ordinary forms retain
+   the more relaxed default spacing. */
+.gebo-llms-admin__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gebo-space-2);
+}
+
+.gebo-llms-admin__create {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.gebo-llms-admin__create-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--gebo-space-2);
+}
+
+.gebo-llms-admin__create-option,
+.gebo-llms-admin__section {
+  min-width: 0;
+}
+
+.gebo-llms-admin__create-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gebo-space-1);
+}
+
+.gebo-llms-admin__create-option gebo-ai-field {
+  display: block;
+  width: 100%;
+}
+
+.gebo-llms-admin__create-option gebo-ai-field > .flex {
+  gap: var(--gebo-space-1) !important;
+}
+
+.gebo-llms-admin__create-option small {
+  line-height: var(--gebo-line-height-tight);
+}
+
+.gebo-llms-admin__create-option p-button {
+  display: inline-flex;
+  margin-top: auto;
+}
+
+.gebo-llms-admin__section .p-panel {
+  height: 100%;
+  margin-bottom: 0;
+}
+
+.gebo-llms-admin__section .p-panel .p-panel-header {
+  min-height: 2.25rem;
+  padding: 0.375rem var(--gebo-space-3);
+}
+
+.gebo-llms-admin__section .p-panel .p-panel-content {
+  padding: var(--gebo-space-2);
+}
+
+.gebo-llms-admin__section .p-datatable-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(1) { width: 30%; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(2) { width: 27%; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(3) { width: 15%; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(4) { width: 12%; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(5),
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(6) { width: 8%; }
+
+.gebo-llms-admin__section .p-datatable-tbody > tr > td {
+  overflow-wrap: anywhere;
+}
+
+.gebo-llms-admin__section .p-datatable-tbody > tr > td:nth-child(n + 5) {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+.gebo-llms-admin__section .p-datatable-thead > tr > th {
+  padding: 0.4375rem var(--gebo-space-2);
+}
+
+.gebo-llms-admin__section .p-datatable-tbody > tr > td {
+  padding: 0.375rem var(--gebo-space-2);
+}
+
+@media (max-width: 120rem) {
+  .gebo-llms-admin__create-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 96rem) {
+  .gebo-llms-admin__create-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 48rem) {
+  .gebo-llms-admin__create-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 
 .p-paginator {
   min-height: 2.75rem;

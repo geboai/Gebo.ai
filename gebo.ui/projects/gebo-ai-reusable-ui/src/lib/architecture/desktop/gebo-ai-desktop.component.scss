@@ -19,9 +19,6 @@
 }
 
 .gebo-app-header {
-    position: sticky;
-    top: 0;
-    z-index: var(--gebo-z-sticky, 20);
     display: grid;
     grid-template-columns: 12.5rem minmax(0, 1fr) auto;
     align-items: center;
@@ -101,7 +98,6 @@
 
 @media (max-width: 48rem) {
     .gebo-app-header {
-        position: static;
         grid-template-columns: 1fr auto;
         gap: 0.5rem;
         padding-block: 0.75rem;
