@@ -12,6 +12,8 @@ package ai.gebo.llms.deepseek.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.deepseek.DeepSeekChatModel;
 import org.springframework.ai.deepseek.DeepSeekChatOptions;
 import org.springframework.ai.deepseek.api.DeepSeekApi;
@@ -52,6 +54,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DeepseekChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GDeepseekChatModelChoice, GDeepseekChatModelConfig> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeepseekChatModelConfigurationSupportService.class);
 
 	/**
 	 * Static model type definition for DeepSeek chat models
@@ -166,7 +170,19 @@ public class DeepseekChatModelConfigurationSupportService
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				// Get tools based on enabled functions
 				functions = functionsRepo.getTools((config.getEnabledFunctions()));
-				builder = builder.toolCallbacks(functions);
+				// The condition above tests the tool names that were REQUESTED. getTools filters
+				// the callbacks actually available by those names, so it can return fewer - or
+				// none at all, when the source that exports them failed. Configuring the model
+				// from the request rather than from what resolved leaves it declaring tools it
+				// will never send.
+				if (functions != null && !functions.isEmpty()) {
+					builder = builder.toolCallbacks(functions);
+				} else {
+					LOGGER.warn("Chat model " + config.getCode() + " enables "
+							+ config.getEnabledFunctions().size()
+							+ " tool(s) but none of them resolved to a callback, so it is configured"
+							+ " without tools: " + config.getEnabledFunctions());
+				}
 			}
 
 			DeepSeekChatOptions deepseekChatOptions = builder.build();

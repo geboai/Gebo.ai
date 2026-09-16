@@ -32,6 +32,20 @@ public interface INotificationSink {
 
 	}
 
+	/**
+	 * Reports a failure together with what caused it.
+	 * <p>
+	 * NotificationObject carries only a message, so a sink receiving one has no way back
+	 * to the exception - the provider's own complaint, which is the part that says whether
+	 * a request was malformed, refused or timed out, is discarded at the call site. Sinks
+	 * that can render more than a line of text override this to keep it.
+	 * <p>
+	 * The default keeps the previous behaviour for the sinks that only show text.
+	 */
+	public default void notifyFailure(String message, Throwable failure) {
+		next(message, NotificationType.ERROR);
+	}
+
 	public void next(NotificationObject state);
 
 	public default void next(String message, NotificationType type) {

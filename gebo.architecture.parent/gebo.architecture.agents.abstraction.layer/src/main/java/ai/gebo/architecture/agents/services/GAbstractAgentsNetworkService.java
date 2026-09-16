@@ -227,12 +227,19 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					LOGGER.error("Input node agent " + participantName + " failed; stopping network", failure);
 					throw new AgentException("Input node agent failed: " + participantName, failure);
 				}
-				// A downstream agent failure is isolated so the network stays resilient: notify
-				// (debug), record an empty turn so the private session context stays consistent,
-				// and let the rest of the network proceed. The failing agent's turn has already
-				// been advanced above, so loop termination still progresses.
-				notificationSink.next("Agent: " + participantName + " failed, skipped: " + rootCauseMessage(failure),
-						NotificationType.DEBUG);
+				// A downstream agent failure is isolated so the network stays resilient: notify,
+				// record an empty turn so the private session context stays consistent, and let
+				// the rest of the network proceed. The failing agent's turn has already been
+				// advanced above, so loop termination still progresses.
+				//
+				// Reported as ERROR, not DEBUG. Resilient does not mean silent: the caller still
+				// gets an answer built without whatever this agent was supposed to contribute,
+				// and when the agent that failed is the router that answer is empty. Sending it
+				// at DEBUG put the one account of the failure in the same channel as "is
+				// coordinating...", so a provider rejecting every request looked exactly like a
+				// model with nothing to say.
+				notificationSink.notifyFailure("Agent: " + participantName + " failed, skipped: "
+						+ rootCauseMessage(failure), failure);
 				LOGGER.error("Agent " + participantName + " failed; continuing network", failure);
 				addToEmptyReturn(inputMessage, contributionNr, inputRuntime.getAgentContext());
 				return new CallsResult<OutputType>(new TreeMap<>(), output);
