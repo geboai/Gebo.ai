@@ -193,7 +193,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					index++;
 				}
 			}
-			return maybeRank(documents, command);
+			return maybeRank(documents, command, notificationSink);
 		} catch (LLMConfigException | FullTextException e) {
 			throw new AgentException("Error executing internal knowledge base search agent", e);
 		}
