@@ -1,5 +1,8 @@
 package ai.gebo.architecture.rag_threasholds_autotune.service.impl;
 
+import java.util.Set;
+import java.util.HashSet;
+import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.security.services.IGeboSystemUserService;
 import ai.gebo.security.services.IdentityUtil;
 import java.io.BufferedReader;
@@ -11,6 +14,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -219,15 +224,11 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 					sampled.addAll(documents);
 				}
 			} else {
-				Builder builder = SearchRequest.builder();
-				builder.filterExpression(
-						DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
-				builder.topK(budgetTotal);
-				builder.similarityThresholdAll();
-				builder.query("Meaningless query");
-				SearchRequest request = builder.build();
-				List<Document> documents = vectorStore.similaritySearch(request);
-				sampled.addAll(documents);
+				// Draw a wider pool than needed, then keep the fragments that actually
+				// represent the corpus rather than the first ones the store happened to return.
+				final List<Document> candidates = sampleAcrossCorpus(vectorStoreId, vectorStore,
+						budgetTotal * Math.max(1, config.getSampleCandidatesPerFragment()));
+				sampled.addAll(selectRepresentative(vectorStore, candidates, budgetTotal));
 			}
 			final int topK = sampled.size();
 			IGConfigurableChatModel serviceChatModel = chatModelsConfigDao
@@ -249,9 +250,15 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			if (questions.isEmpty()) {
 				// Without questions every threshold returns nothing, so the bound discovery
 				// below would walk the threshold past zero and abort on a message that
-				// describes the symptom rather than the cause.
+				// describes the symptom rather than the cause. What the model actually
+				// answered is the only thing that tells an empty completion apart from a
+				// completion the CSV parser could not read, so it goes in the log.
 				LOGGER.warn("No autotune question could be generated for " + vectorStoreId
-						+ ": skipping the tuning instead of probing an empty question set");
+						+ " by " + serviceChatModel.getCode() + ": skipping the tuning instead of probing an"
+						+ " empty question set. The model answered: "
+						+ (csvResult == null ? "<null>"
+								: csvResult.length() > 2000 ? csvResult.substring(0, 2000) + "... (truncated)"
+										: "\"" + csvResult + "\""));
 				return;
 			}
 			double startingSearch = 1.0;
@@ -346,6 +353,234 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			LOGGER.info("New threashold=> " + foundThreashold);
 			LOGGER.info("All threasholds data=> " + rateOrderedOptimizationThreasholds);
 		}
+	}
+
+	/**
+	 * A candidate fragment and how much of the corpus it reaches.
+	 */
+	private static record RepresentativeSample(Document document, int similarDocuments, int similarFragments) {
+	}
+
+	/**
+	 * Keeps the candidates that best represent the corpus, by using each one as a query and
+	 * counting what it finds.
+	 * <p>
+	 * A fragment whose neighbours span several documents sits on a subject the corpus
+	 * actually covers, so a question generated from it has somewhere to be answered from
+	 * and a threshold tuned on it means something. A fragment that finds nothing but itself
+	 * is an isolate - a licence page, a colophon, a table of numbers - and tuning on it
+	 * measures the corpus at its least representative point.
+	 * <p>
+	 * The candidate always retrieves itself first, so that hit is skipped by document id:
+	 * counting it would score every fragment alike. Ranking is by how many distinct
+	 * documents are reached, with the raw fragment count breaking ties, and the number kept
+	 * is the sample budget the caller asked for.
+	 * <p>
+	 * When no candidate reaches anything at all the measure has nothing to say - a corpus
+	 * of unrelated one-off documents, or an embedding that separates everything - so the
+	 * proportional selection made across the documents is kept instead of imposing an order
+	 * that would be arbitrary.
+	 */
+	private List<Document> selectRepresentative(VectorStore vectorStore, List<Document> candidates, int wanted) {
+		if (candidates.size() <= wanted) {
+			return candidates;
+		}
+		final int probeTopK = Math.max(2, config.getSampleRepresentativenessProbeTopK());
+		final List<RepresentativeSample> scored = new ArrayList<RepresentativeSample>();
+		for (Document candidate : candidates) {
+			if (candidate.getText() == null || candidate.getText().isBlank()) {
+				continue;
+			}
+			try {
+				Builder builder = SearchRequest.builder();
+				builder.query(candidate.getText());
+				builder.topK(probeTopK);
+				builder.similarityThresholdAll();
+				final List<Document> neighbours = vectorStore.similaritySearch(builder.build());
+				final Set<String> reachedDocuments = new HashSet<String>();
+				int reachedFragments = 0;
+				for (Document neighbour : neighbours) {
+					if (candidate.getId() != null && candidate.getId().equals(neighbour.getId())) {
+						// the candidate is always its own nearest neighbour
+						continue;
+					}
+					reachedFragments++;
+					final Object code = neighbour.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
+					if (code != null) {
+						reachedDocuments.add(String.valueOf(code));
+					}
+				}
+				scored.add(new RepresentativeSample(candidate, reachedDocuments.size(), reachedFragments));
+			} catch (RuntimeException e) {
+				LOGGER.warn("Cannot probe the representativeness of a sampled fragment, keeping it unscored", e);
+				scored.add(new RepresentativeSample(candidate, 0, 0));
+			}
+		}
+		if (scored.isEmpty()) {
+			return spreadAcrossDocuments(candidates, wanted);
+		}
+		if (scored.stream().allMatch(x -> x.similarFragments() == 0)) {
+			LOGGER.warn("No sampled fragment reaches any other fragment in the store: falling back to an even"
+					+ " spread across the documents instead of ranking by representativeness");
+			return spreadAcrossDocuments(candidates, wanted);
+		}
+		final List<Document> selected = scored.stream()
+				.sorted(Comparator.comparingInt(RepresentativeSample::similarDocuments).reversed()
+						.thenComparing(Comparator.comparingInt(RepresentativeSample::similarFragments).reversed()))
+				.limit(wanted).map(RepresentativeSample::document).toList();
+		if (LOGGER.isInfoEnabled()) {
+			final RepresentativeSample best = scored.stream()
+					.max(Comparator.comparingInt(RepresentativeSample::similarDocuments)).orElse(null);
+			// Ranking by reach can in principle pull the whole budget into the handful of
+			// documents that happen to be the best connected, undoing the spread the
+			// sampling just paid for, so how many documents survive it is worth seeing.
+			final Set<String> keptDocuments = new HashSet<String>();
+			for (Document kept : selected) {
+				final Object code = kept.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
+				if (code != null) {
+					keptDocuments.add(String.valueOf(code));
+				}
+			}
+			LOGGER.info("Kept " + selected.size() + " representative fragment(s) of " + scored.size()
+					+ " candidate(s) spanning " + keptDocuments.size() + " document(s); the best reaches "
+					+ (best != null ? best.similarDocuments() : 0) + " document(s)");
+		}
+		return selected;
+	}
+
+	/**
+	 * The fallback when representativeness cannot be measured: take the candidates one
+	 * per document in rotation until the budget is met.
+	 * <p>
+	 * Truncating the candidate list instead would hand the whole budget to whichever
+	 * documents the repository happened to enumerate first - the candidates are drawn
+	 * document by document, so the first few files would fill every slot and the spread
+	 * the sampling just paid for would be thrown away at the last step.
+	 */
+	private List<Document> spreadAcrossDocuments(List<Document> candidates, int wanted) {
+		final Map<String, List<Document>> byDocument = new LinkedHashMap<String, List<Document>>();
+		for (Document candidate : candidates) {
+			final Object code = candidate.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
+			byDocument.computeIfAbsent(code == null ? "" : String.valueOf(code),
+					k -> new ArrayList<Document>()).add(candidate);
+		}
+		final List<Document> out = new ArrayList<Document>();
+		int round = 0;
+		while (out.size() < wanted) {
+			boolean tookAny = false;
+			for (List<Document> ofDocument : byDocument.values()) {
+				if (round < ofDocument.size()) {
+					out.add(ofDocument.get(round));
+					tookAny = true;
+					if (out.size() >= wanted) {
+						break;
+					}
+				}
+			}
+			if (!tookAny) {
+				break;
+			}
+			round++;
+		}
+		return out;
+	}
+
+	/**
+	 * Draws the fragments the tuning questions are generated from, spread across the
+	 * documents actually present in the vector store.
+	 * <p>
+	 * The previous sampling ran one similarity search for the literal text
+	 * "Meaningless query" with no threshold and took the top fragments. "Most similar to
+	 * nonsense" is arbitrary and, worse, systematically favours generic prose: on a real
+	 * corpus it returned Project Gutenberg licence boilerplate - tax identification
+	 * numbers and mailing addresses - from which no in-topic question could be generated,
+	 * so the whole tuning silently produced nothing. Three consecutive runs over the same
+	 * unchanged corpus yielded 6 questions, then 0, then 0.
+	 * <p>
+	 * The documents are enumerated from the repository rather than guessed at, each one
+	 * gets a share of the budget proportional to how many chunks it actually contributed,
+	 * and each search is scoped to that document by CONTENT_CODE - the payload field that
+	 * holds exactly the {@code docReferenceCode} the repository is keyed by. No single
+	 * file can monopolise the sample, and the query is the document's own name rather than
+	 * a meaningless string, so the fragments returned are the ones characteristic of it.
+	 */
+	private List<Document> sampleAcrossCorpus(String vectorStoreId, VectorStore vectorStore, int budgetTotal) {
+		final List<GVectorizedContent> corpus = new ArrayList<GVectorizedContent>();
+		try (Stream<GVectorizedContent> stream = vectorizedContentsRepository.findByIdVectorStoreId(vectorStoreId)) {
+			stream.forEach(corpus::add);
+		}
+		// A registered document holding no vector is not vectorised: it cannot contribute a
+		// fragment, and it is worth saying so - it is the signature of an ingestion that
+		// reported success while producing nothing.
+		final List<GVectorizedContent> vectorised = corpus.stream()
+				.filter(x -> x.getVectorsId() != null && !x.getVectorsId().isEmpty()).toList();
+		if (vectorised.size() < corpus.size()) {
+			LOGGER.warn((corpus.size() - vectorised.size()) + " of " + corpus.size() + " document(s) in "
+					+ vectorStoreId + " carry no vector and are excluded from the autotune sample");
+		}
+		if (vectorised.isEmpty()) {
+			LOGGER.warn("No vectorised document found in " + vectorStoreId + ": nothing to sample");
+			return List.of();
+		}
+		final long totalChunks = vectorised.stream().mapToLong(x -> x.getVectorsId().size()).sum();
+		final List<Document> sampled = new ArrayList<Document>();
+		for (GVectorizedContent content : vectorised) {
+			final String docCode = content.getId().getDocReferenceCode();
+			// Proportional to the document's real weight in the store, so a book of hundreds
+			// of chunks is not represented like a one page note, but never zero.
+			final int perDocument = Math.max(1,
+					(int) Math.round(budgetTotal * (content.getVectorsId().size() / (double) totalChunks)));
+			// The document is addressed by its file name rather than by the full
+			// docReferenceCode: the code is a path carrying slashes, spaces and hyphens,
+			// and the filter grammar has to accept all of them inside the quoted literal.
+			// The name is the last segment of that same code, so it needs no extra lookup.
+			final String fileName = fileNameOf(docCode);
+			try {
+				Builder builder = SearchRequest.builder();
+				builder.filterExpression(DocumentMetaInfos.GEBO_FILE_NAME + " == '" + fileName + "' && "
+						+ DocumentMetaInfos.GEBO_TOKEN_LENGTH + " > " + config.getSampleFragmentsMinTokenLength());
+				builder.topK(perDocument);
+				builder.similarityThresholdAll();
+				builder.query(fileName);
+				final List<Document> documents = vectorStore.similaritySearch(builder.build());
+				// The file name scopes the search, the reference code confirms it. Two
+				// documents can share a name in different folders, and the name is all the
+				// filter could carry safely; CONTENT_CODE holds the full docReferenceCode,
+				// so anything that came back from a namesake is dropped here rather than
+				// being attributed to this document.
+				final List<Document> confirmed = documents.stream()
+						.filter(x -> docCode.equals(x.getMetadata().get(DocumentMetaInfos.CONTENT_CODE))).toList();
+				if (confirmed.size() < documents.size()) {
+					LOGGER.warn((documents.size() - confirmed.size()) + " fragment(s) named " + fileName
+							+ " belong to another document than " + docCode + " and were discarded");
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Sampled " + confirmed.size() + " of " + perDocument + " requested fragment(s) from "
+							+ docCode + " (" + content.getVectorsId().size() + " chunk(s) in store)");
+				}
+				sampled.addAll(confirmed);
+			} catch (RuntimeException e) {
+				// One unparseable document code must not lose the whole sample: the codes are
+				// paths and can carry characters the filter grammar rejects.
+				LOGGER.warn("Cannot sample fragments of " + docCode + ", skipping it", e);
+			}
+		}
+		LOGGER.info("Autotune sampled " + sampled.size() + " fragment(s) across " + vectorised.size()
+				+ " document(s) of " + vectorStoreId);
+		return sampled;
+	}
+
+	/**
+	 * The document's file name: the last segment of its reference code. Used both to
+	 * scope the search to that document and as the query, so the fragments returned are
+	 * the ones characteristic of it rather than whatever sits nearest an arbitrary
+	 * embedding. Two documents sharing a name in different folders would be sampled
+	 * together, which costs a little spread and no correctness.
+	 */
+	private String fileNameOf(String docReferenceCode) {
+		final int slash = docReferenceCode.lastIndexOf('/');
+		final String name = slash >= 0 ? docReferenceCode.substring(slash + 1) : docReferenceCode;
+		return name.isBlank() ? docReferenceCode : name;
 	}
 
 	private ThreasholdAutotuneProcessResult internalFindByEmbeddingModelCode(String vectorStoreId) {
@@ -446,19 +681,41 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds) {
 		if (rateOrderedOptimizationThreasholds.isEmpty())
 			return null;
-		TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>> byquestionAnswered = new TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>>();
-		for (List<AutoTuneRatedThreashold> items : rateOrderedOptimizationThreasholds.values()) {
-			for (AutoTuneRatedThreashold item : items) {
-				if (byquestionAnswered.get(item.answeredQuestions) == null) {
-					byquestionAnswered.put(item.answeredQuestions, new TreeMap<Double, AutoTuneRatedThreashold>());
-				}
-				byquestionAnswered.get(item.answeredQuestions).put(item.averageDistance, item);
-			}
+		final List<AutoTuneRatedThreashold> all = new ArrayList<AutoTuneRatedThreashold>();
+		rateOrderedOptimizationThreasholds.values().forEach(all::addAll);
+		if (all.isEmpty())
+			return null;
+		// Coverage is a constraint, not the goal. Taking the most answered questions first
+		// pinned the choice to the loosest end of the bracket, because answeredQuestions
+		// only ever grows as the threshold falls: one question that matches far down forced
+		// every other question to be flooded with marginal fragments, and the rating - the
+		// whole point of the LLM work in evaluateThreashold - never entered the decision at
+		// all. On the first recorded run that chose a threshold rated 12.03 while one rated
+		// 103.66 sat in the same result set, returning 40 fragments for 6 questions where
+		// the better rated one returned 7.
+		final double bestAnswered = all.stream().mapToDouble(x -> x.answeredQuestions).max().orElse(0.0);
+		final double minimumAnswered = Math.ceil(bestAnswered * config.getMinimumAnsweredQuestionsShare());
+		List<AutoTuneRatedThreashold> eligible = all.stream().filter(x -> x.answeredQuestions >= minimumAnswered)
+				.toList();
+		if (eligible.isEmpty()) {
+			// The floor is relative to what was actually achievable, so this is unreachable in
+			// practice; keep every candidate rather than returning nothing.
+			LOGGER.warn("No threashold answered " + minimumAnswered
+					+ " question(s), selecting among every evaluated one instead");
+			eligible = all;
 		}
-		// I Take the configuration returning the most high number of answered questions
-		// but with the lower average distance
-		return byquestionAnswered.lastEntry().getValue().firstEntry().getValue();
-
+		// Highest rated among those that still cover enough questions. Ties go to the tighter
+		// threshold: the same rating with fewer, closer fragments is the better configuration.
+		final AutoTuneRatedThreashold selected = eligible.stream()
+				.max(Comparator.comparingDouble((AutoTuneRatedThreashold x) -> x.rating)
+						.thenComparingDouble(x -> x.threashold))
+				.orElse(null);
+		if (selected != null && LOGGER.isInfoEnabled()) {
+			LOGGER.info("Selected threashold " + selected.threashold + " rated " + selected.rating + " answering "
+					+ selected.answeredQuestions + " of " + bestAnswered + " question(s), among " + eligible.size()
+					+ " of " + all.size() + " evaluated threashold(s) meeting the coverage floor");
+		}
+		return selected;
 	}
 
 	private AutoTuneRatedThreashold evaluateThreashold(double threashold, VectorStore vectorStore,
@@ -677,7 +934,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 				q.text = tokenizer.nextToken();
 				if (tokenizer.hasMoreTokens()) {
 					try {
-						q.hardness = AutoTuneQueryHardness.valueOf(tokenizer.nextToken());
+						// The enum constants are upper case and models answer in whatever case the
+						// prompt suggested, so normalise rather than silently dropping the value.
+						q.hardness = AutoTuneQueryHardness.valueOf(tokenizer.nextToken().trim().toUpperCase());
 					} catch (Throwable th) {
 					}
 					if (tokenizer.hasMoreTokens()) {
