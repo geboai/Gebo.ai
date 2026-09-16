@@ -3702,6 +3702,12 @@
             "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
                 "summary": "OK!",
                 "detail": "Operation done successfully"
+            },
+            "SuggestedModelsTab": {
+                "label": "Suggested models selection"
+            },
+            "AdvancedModelsTab": {
+                "label": "Advanced models selection"
             }
         },
         "GeboAIEasyVendorConfigurationComponent": {
@@ -3741,6 +3747,33 @@
             "EmbeddingModel": {
                 "label": "Default embedding model",
                 "help": "This model will be responsable of doing semantic indexing (embedding) and retrieve of your data and documents"
+            },
+            "RankingModel": {
+                "label": "Default ranker model",
+                "help": "This model will be responsable of doing reranking on your documents and score most fitting for your questions"
+            },
+            "TranscriptModel": {
+                "label": "Default transcript model",
+                "help": "This model will be responsable of transcript service"
+            },
+            "TtsModel": {
+                "label": "Default text to speech model",
+                "help": "This model will be responsable of doing text to speech conversion"
+            },
+            "ImagesModel": {
+                "label": "Default image generation model",
+                "help": "This model will be responsable of doing image generation"
+            }
+        },
+        "LLMSetupWizardComponent": {
+            "MainLLMSPanelTitle": {
+                "label": "Setup Large language models"
+            },
+            "EasySetupTab": {
+                "label": "Easy initial setup/configuration fix"
+            },
+            "ExtendedSetupTab": {
+                "label": "Extended infrastructure/suppliers choices"
             }
         }
     },

@@ -21,6 +21,7 @@ import { LLMSSetupConfiguration, LLMSSetupConfigurationData, UserControllerServi
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { forkJoin, Observable } from "rxjs";
+import { ToastMessageOptions } from "primeng/api";
 
 /**
  * Interface defining the structure of LLM entries displayed in the component.
@@ -52,6 +53,8 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
     protected actualProvidersConfiguration?: LLMSSetupConfigurationData;
     protected currentIndex:number=0;
     protected autoSettingsConfigurations?:LLMSSetupConfiguration[]=[];
+    // Messages produced by the easy setup, carried across the reload it triggers.
+    private pendingUserMessages: ToastMessageOptions[] = [];
     /**
      * Constructor initializes services required for LLM setup functionality.
      */
@@ -81,6 +84,13 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
                 } else {
                     this.userMessages = [{ severity: "error", summary: "Large language models setup not yet done", detail: "At least a default chat bot model and a default embedding model both correctly configured are required" }];
                 }
+                // What the easy setup reported about its own run (a model the provider refused,
+                // a kind that could not be created) is kept next to the status banner instead of
+                // being overwritten by the reload that follows it.
+                if (this.pendingUserMessages.length) {
+                    this.userMessages = [...this.userMessages, ...this.pendingUserMessages];
+                    this.pendingUserMessages = [];
+                }
                 this.actualProvidersConfiguration = value[2];
                 this.autoSettingsConfigurations=this.actualProvidersConfiguration?.canRunAutoconfigure===true?this.actualProvidersConfiguration.configurations?.filter(x=>x.parentModel.supportsAutoconfig===true):[];
             },
@@ -94,6 +104,15 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
     }
     onAutomaticSetupDone():void {
         this.closeWizard();
+    }
+    /**
+     * The easy setup ran but did not fully succeed: keep the wizard open, show what the
+     * backend reported and reload, so the kinds that were created disappear from the form
+     * and only the ones still missing are offered for a retry.
+     */
+    onAutomaticSetupMessages(messages: ToastMessageOptions[]): void {
+        this.pendingUserMessages = messages ?? [];
+        this.reloadData();
     }
     /**
      * Submits the LLM setup form data to the backend service.
