@@ -15,7 +15,7 @@
   </div>
 </p-blockUI>
 
-<p-panel #llmUsagePanel id="llmUsageDashboardPanel">
+<p-panel #llmUsagePanel id="llmUsageDashboardPanel" styleClass="gebo-stats-dashboard">
   @if (hasNoStats) {
     <div class="flex flex-column align-items-center justify-content-center p-6 text-500 text-center">
       <i class="pi pi-info-circle text-5xl mb-3" style="color: var(--text-color-secondary)"></i>
@@ -37,7 +37,7 @@
         <!-- Tab 2: Monthly usage -->
         <p-tabpanel value="0">
           <!-- Filters panel -->
-          <div class="filter-panel card p-4 mb-4 surface-card border-round">
+          <div class="filter-panel card surface-card border-round">
             <div class="text-lg font-medium text-800 mb-3 flex align-items-center">
               <i class="pi pi-filter mr-2 text-primary"></i> Filter Drill Down
             </div>
@@ -108,8 +108,8 @@
           </div>
           <!-- Histograms grid -->
           <div class="grid">
-            <div class="col-12 mb-4">
-              <div class="card p-4 surface-card border-round h-full">
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
                 <div
                   class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
                   <span>Tokens Consumed</span>
@@ -118,7 +118,7 @@
                 @if (tokenChartDataTab2?.labels?.length) {
                   <div>
                     <p-chart type="bar" [data]="tokenChartDataTab2" [options]="chartOptions"
-                    height="350px"></p-chart>
+                    height="300px"></p-chart>
                   </div>
                 } @else {
                   <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
@@ -128,8 +128,8 @@
                 }
               </div>
             </div>
-            <div class="col-12 mb-4">
-              <div class="card p-4 surface-card border-round h-full">
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
                 <div
                   class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
                   <span>Latency</span>
@@ -138,7 +138,7 @@
                 @if (latencyChartDataTab2?.labels?.length) {
                   <div>
                     <p-chart type="bar" [data]="latencyChartDataTab2" [options]="chartOptions"
-                    height="350px"></p-chart>
+                    height="300px"></p-chart>
                   </div>
                 } @else {
                   <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
@@ -153,7 +153,7 @@
         <!-- Tab 1: This month usage -->
         <p-tabpanel value="1">
           <!-- Filters panel -->
-          <div class="filter-panel card p-4 mb-4 surface-card border-round">
+          <div class="filter-panel card surface-card border-round">
             <div class="text-lg font-medium text-800 mb-3 flex align-items-center">
               <i class="pi pi-filter mr-2 text-primary"></i> Filter Drill Down
             </div>
@@ -224,8 +224,8 @@
           </div>
           <!-- Histograms grid -->
           <div class="grid">
-            <div class="col-12 mb-4">
-              <div class="card p-4 surface-card border-round h-full">
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
                 <div
                   class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
                   <span>Tokens Consumed</span>
@@ -234,7 +234,7 @@
                 @if (tokenChartDataTab1?.labels?.length) {
                   <div>
                     <p-chart type="bar" [data]="tokenChartDataTab1" [options]="chartOptions"
-                    height="350px"></p-chart>
+                    height="300px"></p-chart>
                   </div>
                 } @else {
                   <div class="flex flex-column align-items-center justify-content-center p-5 text-500">
@@ -244,8 +244,8 @@
                 }
               </div>
             </div>
-            <div class="col-12 mb-4">
-              <div class="card p-4 surface-card border-round h-full">
+            <div class="col-12 lg:col-6">
+              <div class="card surface-card border-round h-full">
                 <div
                   class="text-xl font-medium mb-3 text-800 flex justify-content-between align-items-center">
                   <span>Latency</span>
@@ -254,7 +254,7 @@
                 @if (latencyChartDataTab1?.labels?.length) {
                   <div>
                     <p-chart type="bar" [data]="latencyChartDataTab1" [options]="chartOptions"
-                    height="350px"></p-chart>
+                    height="300px"></p-chart>
                   </div>
                 } @else {
                   <div class="flex flex-column align-items-center justify-content-center p-5 text-500">

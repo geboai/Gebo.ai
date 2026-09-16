@@ -1,4 +1,4 @@
-import { afterNextRender, Component, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
+import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType } from "@Gebo.ai/reusable-ui";
@@ -48,18 +48,21 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     protected diagramModel: any;
     private lastLayoutNodes: { id: string; position: { x: number; y: number } }[] = [];
     @ViewChild("diagramHost", { read: ElementRef }) private diagramHostRef?: ElementRef<HTMLElement>;
+    private observedDiagramHost?: HTMLElement;
+    private diagramResizeObserver?: ResizeObserver;
+    private resizeFitTimer?: ReturnType<typeof setTimeout>;
     protected nodeTemplateMap = new NgDiagramNodeTemplateMap([
         ["agent", AgentNodeComponent]
     ]);
     protected diagramConfig: NgDiagramConfig = {
         viewportPanningEnabled: true,
         edgeRouting: { defaultRouting: "bezier" },
+        // The graph tab is hidden while the diagram is initialized. Letting
+        // ng-diagram fit at that point caches a zero-size viewport and can leave
+        // every node outside the visible area. Fit from rendered DOM dimensions
+        // after the tab becomes visible, as the compliance data-flow graph does.
         zoom: {
-            max: 3,
-            zoomToFit: {
-                onInit: true,
-                padding: 40
-            }
+            max: 3
         }
     };
 
@@ -99,7 +102,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         outputForwardingService: GeboUIOutputForwardingService,
         private service: GeboAgentsNetworkAdminControllerService,
         private agentsService: GeboAgentAdminControllerService,
-        private viewportService: NgDiagramViewportService
+        private viewportService: NgDiagramViewportService,
+        destroyRef: DestroyRef
     ) {
         super(injector, geboFormGroupsService, myConfirmationService, actionsRouter, outputForwardingService);
         this.myInjector = injector;
@@ -118,6 +122,12 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                     this.formGroup.get("defaultUserInteractionNetwork")?.enable({ emitEvent: false });
                 }
                 this.rebuildChart();
+            }
+        });
+        destroyRef.onDestroy(() => {
+            this.diagramResizeObserver?.disconnect();
+            if (this.resizeFitTimer) {
+                clearTimeout(this.resizeFitTimer);
             }
         });
     }
@@ -306,7 +316,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     }
 
     protected onTabChange(value: string | number | undefined): void {
-        if (value === 1 && this.diagramModel) {
+        if (Number(value) === 1 && this.diagramModel) {
             afterNextRender(() => {
                 this.fitDiagramToViewport();
             }, { injector: this.myInjector });
@@ -314,11 +324,23 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     }
 
     private fitDiagramToViewport(): void {
+        // Node templates and their containing tab settle asynchronously. Repeating
+        // the idempotent fit guarantees that the final pass uses measured node
+        // sizes and the real visible viewport rather than placeholder dimensions.
+        for (const delay of [120, 350, 700]) {
+            setTimeout(() => this.applyFit(), delay);
+        }
+    }
+
+    private applyFit(): void {
         const hostEl = this.diagramHostRef?.nativeElement;
-        if (!hostEl || this.lastLayoutNodes.length === 0) {
+        if (!hostEl) {
             return;
         }
-        const padding = 40;
+        this.observeDiagramHost(hostEl);
+        if (hostEl.clientWidth <= 0 || hostEl.clientHeight <= 0 || this.lastLayoutNodes.length === 0) {
+            return;
+        }
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
         for (const node of this.lastLayoutNodes) {
             const nodeEl = hostEl.querySelector<HTMLElement>(`[data-node-id="${node.id}"]`);
@@ -331,22 +353,37 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         }
         const boundsWidth = maxX - minX;
         const boundsHeight = maxY - minY;
-        const viewportWidth = hostEl.clientWidth;
-        const viewportHeight = hostEl.clientHeight;
-        if (boundsWidth <= 0 || boundsHeight <= 0 || viewportWidth <= 0 || viewportHeight <= 0) {
+        if (boundsWidth <= 0 || boundsHeight <= 0) {
             return;
         }
-        const scale = Math.min(
-            (viewportWidth - 2 * padding) / boundsWidth,
-            (viewportHeight - 2 * padding) / boundsHeight,
-            1
+        const padding = 60;
+        const scale = Math.max(Math.min(
+            (hostEl.clientWidth - 2 * padding) / boundsWidth,
+            (hostEl.clientHeight - 2 * padding) / boundsHeight,
+            1.5
+        ), 0.1);
+        const centreX = (minX + maxX) / 2;
+        const centreY = (minY + maxY) / 2;
+        this.viewportService.setViewport(
+            hostEl.clientWidth / 2 - centreX * scale,
+            -hostEl.clientHeight / 2 - centreY * scale,
+            scale
         );
-        const x = (viewportWidth - boundsWidth * scale) / 2 - minX * scale;
-        // ng-diagram-canvas is positioned with its own vertical origin one full
-        // viewport-height below the host element (verified empirically), so the
-        // Y translate has to compensate for that fixed offset; X has no such offset.
-        const y = (viewportHeight - boundsHeight * scale) / 2 - minY * scale - viewportHeight;
-        this.viewportService.setViewport(x, y, scale);
+    }
+
+    private observeDiagramHost(hostEl: HTMLElement): void {
+        if (this.observedDiagramHost === hostEl || typeof ResizeObserver === "undefined") {
+            return;
+        }
+        this.diagramResizeObserver?.disconnect();
+        this.observedDiagramHost = hostEl;
+        this.diagramResizeObserver = new ResizeObserver(() => {
+            if (this.resizeFitTimer) {
+                clearTimeout(this.resizeFitTimer);
+            }
+            this.resizeFitTimer = setTimeout(() => this.applyFit(), 100);
+        });
+        this.diagramResizeObserver.observe(hostEl);
     }
 
     public editAgentConfig(code: string | null | undefined): void {
