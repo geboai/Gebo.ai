@@ -241,24 +241,15 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			}
 			final GPromptTemplateConfig inTopicPrompt = promptsDao
 					.findByPromptUse(RagThreasholdAutotunePromptConfig.RAG_IN_TOPIC_QUERY_GENERATOR_PROMPT);
-			String csvResult = callLLMWithDocuments(serviceChatModel, inTopicPrompt,
-					IChatRequestContext.of("Sampling queries"), Map.of(), sampled);
-			List<AutoTuneQuestion> questions = parseQuestions(csvResult);
-			while (questions.size() > MAXQUESTIONS) {
-				questions.remove(questions.size() - 1);
-			}
+			final List<AutoTuneQuestion> questions = generateQuestions(serviceChatModel, inTopicPrompt, sampled,
+					MAXQUESTIONS);
 			if (questions.isEmpty()) {
 				// Without questions every threshold returns nothing, so the bound discovery
 				// below would walk the threshold past zero and abort on a message that
-				// describes the symptom rather than the cause. What the model actually
-				// answered is the only thing that tells an empty completion apart from a
-				// completion the CSV parser could not read, so it goes in the log.
-				LOGGER.warn("No autotune question could be generated for " + vectorStoreId
-						+ " by " + serviceChatModel.getCode() + ": skipping the tuning instead of probing an"
-						+ " empty question set. The model answered: "
-						+ (csvResult == null ? "<null>"
-								: csvResult.length() > 2000 ? csvResult.substring(0, 2000) + "... (truncated)"
-										: "\"" + csvResult + "\""));
+				// describes the symptom rather than the cause.
+				LOGGER.warn("No autotune question could be generated for " + vectorStoreId + " by "
+						+ serviceChatModel.getCode() + ": skipping the tuning instead of probing an empty"
+						+ " question set");
 				return;
 			}
 			double startingSearch = 1.0;
@@ -898,6 +889,59 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		SearchRequest request = builder.build();
 		qr.relatedDocuments = vectorStore.similaritySearch(request);
 		return qr;
+	}
+
+	/**
+	 * Generates the tuning questions, a few sampled fragments per call.
+	 * <p>
+	 * Sending every sampled fragment in one prompt is what the code used to do, and on a
+	 * reasoning model it returns nothing at all: the recorded call carried 15,592 input
+	 * tokens, spent all 4,000 of its output allowance - exactly the ceiling - reasoning
+	 * about thirty fragments at once, and was cut off before writing a single CSV line.
+	 * The completion came back as the empty string with the call reported successful, so
+	 * the tuning saw no questions and stopped, with nothing anywhere saying why.
+	 * <p>
+	 * Batching is therefore sized by the answer the model has to write rather than by how
+	 * much prompt fits in the context window - which is why
+	 * {@code callLLMConcatenateText}, that splits on the input budget alone, does not help
+	 * here. Generation also stops as soon as enough questions exist: the tuning keeps at
+	 * most {@code maxQuestions} of them, so the remaining calls would be paid for and
+	 * discarded.
+	 * <p>
+	 * A batch that yields nothing is logged with what the model answered - the only thing
+	 * that separates an empty completion from one the CSV parser could not read - and the
+	 * remaining batches still run, so one bad answer no longer costs the whole tuning.
+	 */
+	private List<AutoTuneQuestion> generateQuestions(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			List<Document> sampled, int maxQuestions) throws LLMConfigException {
+		final int perCall = Math.max(1, config.getAutotuneQuestionChunksPerCall());
+		final List<AutoTuneQuestion> out = new ArrayList<AutoTuneQuestion>();
+		final Map<String, Boolean> alreadyAsked = new HashMap<String, Boolean>();
+		for (int from = 0; from < sampled.size() && out.size() < maxQuestions; from += perCall) {
+			final int to = Math.min(from + perCall, sampled.size());
+			final String csvResult = callLLMWithDocuments(chatModel, prompt,
+					IChatRequestContext.of("Sampling queries"), Map.of(), sampled.subList(from, to));
+			final List<AutoTuneQuestion> parsed = parseQuestions(csvResult);
+			if (parsed.isEmpty()) {
+				LOGGER.warn("Fragments [" + from + "," + to + ") produced no autotune question. " + chatModel.getCode()
+						+ " answered: " + (csvResult == null ? "<null>"
+								: csvResult.length() > 1000 ? csvResult.substring(0, 1000) + "... (truncated)"
+										: "\"" + csvResult + "\""));
+				continue;
+			}
+			for (AutoTuneQuestion question : parsed) {
+				if (out.size() >= maxQuestions) {
+					break;
+				}
+				// parseQuestions only dedupes inside one answer; the batches do not see
+				// each other, and neighbouring fragments do produce the same question.
+				if (alreadyAsked.put(question.text, Boolean.TRUE) == null) {
+					out.add(question);
+				}
+			}
+		}
+		LOGGER.info("Generated " + out.size() + " autotune question(s) from " + sampled.size() + " sampled fragment(s)");
+		return out;
 	}
 
 	private List<AutoTuneQuestion> parseQuestions(String csvResult) {

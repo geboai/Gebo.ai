@@ -31,6 +31,15 @@ public class RagThreasholdAutotuneConfig {
 	 */
 	private int sampleCandidatesPerFragment = 3;
 	/**
+	 * Sampled fragments sent to the model in one question generation call.
+	 * <p>
+	 * Sized by the answer the model has to write, not by how much prompt fits: a
+	 * reasoning model spends output tokens thinking before it emits anything, so a
+	 * prompt carrying every sampled fragment at once exhausts the output ceiling during
+	 * the reasoning and the completion comes back empty.
+	 */
+	private int autotuneQuestionChunksPerCall = 5;
+	/**
 	 * Fragments retrieved when probing how well one candidate represents the corpus.
 	 */
 	private int sampleRepresentativenessProbeTopK = 20;
