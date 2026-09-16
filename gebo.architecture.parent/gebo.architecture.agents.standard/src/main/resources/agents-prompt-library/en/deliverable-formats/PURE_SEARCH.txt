@@ -1,0 +1,3 @@
+The found documents are the deliverable. One entry per document in the reference format,
+each followed by the short reason it matches, ordered by relevance. Keep prose to a
+minimum.

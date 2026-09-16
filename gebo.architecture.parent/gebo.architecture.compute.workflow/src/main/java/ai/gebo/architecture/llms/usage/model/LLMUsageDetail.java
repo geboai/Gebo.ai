@@ -1,5 +1,6 @@
 package ai.gebo.architecture.llms.usage.model;
 
+import ai.gebo.core.messages.LLMCallOutcome;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -24,6 +25,8 @@ public class LLMUsageDetail {
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
+	/** How the call ended; null on records written before this field existed. */
+	private LLMCallOutcome outcome;
 	@HashIndexed
 	private long timestamp = System.currentTimeMillis();
 }

@@ -1,5 +1,6 @@
 package ai.gebo.llms.abstraction.layer.dto;
 
+import ai.gebo.core.messages.LLMCallOutcome;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
@@ -29,6 +30,7 @@ public class LLMUsageDetailDto {
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
+	private LLMCallOutcome outcome;
 
 	public static LLMUsageDetailDto of(GBaseModelConfig config) {
 		LLMUsageDetailDto detail = new LLMUsageDetailDto();
