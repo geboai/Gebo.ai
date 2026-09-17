@@ -471,7 +471,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     public openEditParticipant(participant: AgentNetworkParticipant): void {
         this.isNewParticipant = false;
-        this.dialogHeader = `Edit Agent Participant: ${participant.networkAgentName}`;
+        this.dialogHeader = `${this.readonly ? "View" : "Edit"} Agent Participant: ${participant.networkAgentName}`;
         this.editingParticipant = participant;
         this.parentParticipant = null;
         this.participantFormGroup.patchValue({
