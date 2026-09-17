@@ -11,8 +11,11 @@ import { AgentNetworkParticipant } from "@Gebo.ai/gebo-ai-rest-api";
     imports: [ButtonModule, NgDiagramNodeSelectedDirective, NgDiagramPortComponent],
     hostDirectives: [{ directive: NgDiagramNodeSelectedDirective, inputs: ["node"] }],
     template: `
-        <div class="node-card p-3 border-round shadow-2 bg-paper flex flex-column gap-2 text-left relative"
-          style="min-width: 220px; border-top: 4px solid var(--primary-color); background-color: var(--surface-card, #ffffff);">
+        <div class="node-card p-3 border-round shadow-2 bg-paper flex flex-column gap-2 text-left relative cursor-pointer"
+          style="min-width: 220px; border-top: 4px solid var(--primary-color); background-color: var(--surface-card, #ffffff);"
+          [title]="parent.readonly ? 'Click to view this agent' : 'Click to edit this agent'"
+          (pointerdown)="onPointerDown($event)"
+          (pointerup)="onPointerUp($event)">
         
           <!-- Left Input Port -->
           <ng-diagram-port [side]="'left'" [type]="'target'" [id]="'port-left'"
@@ -81,5 +84,30 @@ import { AgentNetworkParticipant } from "@Gebo.ai/gebo-ai-rest-api";
 export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkParticipant, SimpleNode<AgentNetworkParticipant>> {
     node = input.required<SimpleNode<AgentNetworkParticipant>>();
 
+    private pointerDownPos: { x: number; y: number } | null = null;
+
     constructor(@Inject(forwardRef(() => GeboAIAgentsNetworkAdminComponent)) protected parent: GeboAIAgentsNetworkAdminComponent) {}
+
+    protected onPointerDown(event: PointerEvent): void {
+        this.pointerDownPos = this.isInteractiveTarget(event.target) ? null : { x: event.clientX, y: event.clientY };
+    }
+
+    // Open the participant editor only on a genuine click, not at the end of a
+    // drag that repositions the node (nodes are draggable while editable) and
+    // not when the interaction started on an inner button or connection port.
+    protected onPointerUp(event: PointerEvent): void {
+        const start = this.pointerDownPos;
+        this.pointerDownPos = null;
+        if (!start || this.isInteractiveTarget(event.target)) {
+            return;
+        }
+        const moved = Math.abs(event.clientX - start.x) + Math.abs(event.clientY - start.y);
+        if (moved <= 4) {
+            this.parent.openEditParticipant(this.node().data);
+        }
+    }
+
+    private isInteractiveTarget(target: EventTarget | null): boolean {
+        return target instanceof Element && !!target.closest("button, ng-diagram-port");
+    }
 }

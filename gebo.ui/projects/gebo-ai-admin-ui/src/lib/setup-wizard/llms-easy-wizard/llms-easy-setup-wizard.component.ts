@@ -58,6 +58,19 @@ enum WizardStep { INTRO = 0, PROVIDER = 1, MODELS = 2, SUMMARY = 3 }
             font-weight: var(--gebo-font-weight-semibold, 600);
             line-height: var(--gebo-line-height-tight, 1.25);
         }
+        /* Always claim the full available viewport height so a short step (the
+           provider choice, whose select overlay needs room to open downwards)
+           still reserves the vertical space the dropdown renders into. */
+        :host { display: block; }
+        :host ::ng-deep #MainEasyLLMSPanelTitle {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 9rem);
+        }
+        :host ::ng-deep #MainEasyLLMSPanelTitle .p-panel-content-container,
+        :host ::ng-deep #MainEasyLLMSPanelTitle .p-panel-content {
+            flex: 1 1 auto;
+        }
     `],
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSEasySetupWizardComponent") }]
 })
@@ -127,6 +140,9 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
     }
 
     protected get activeIndex(): number { return this.activeStep; }
+
+    /** The current step's (translated) label, shown as the step title above its content. */
+    protected get activeStepLabel(): string { return this.steps[this.activeStep]?.label ?? ""; }
 
     // ---- navigation ---------------------------------------------------------
 

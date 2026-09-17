@@ -12,10 +12,69 @@
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
-<p-panel id="MainEasyLLMSPanelTitle" gebo-ai-label #instModeUI header="Guided large language models setup">
+<p-panel id="MainEasyLLMSPanelTitle" #instModeUI [showHeader]="false">
   <div class="grid">
     <div class="col-12">
       <p-steps [model]="steps" [readonly]="true" [activeIndex]="activeIndex" />
+    </div>
+
+    <div class="col-12">
+      <div class="geboButtonsBar">
+        <div>
+          @if (activeStep>Step.INTRO && activeStep!==Step.SUMMARY) {
+            <p-button id="BackBtn" gebo-ai-label [outlined]="true" label="Back" icon="pi pi-arrow-left"
+              iconPos="left" severity="secondary" (onClick)="goBack()"></p-button>
+          }
+        </div>
+        <div>
+          @switch (activeStep) {
+            @case (Step.MODELS) {
+              <p-button id="ApplyBtn" gebo-ai-label [outlined]="true" label="Apply and continue"
+                icon="pi pi-save" iconPos="right" severity="success" (onClick)="goForward()"
+                [disabled]="!canGoForward"></p-button>
+            }
+            @case (Step.SUMMARY) {
+              <p-button id="FinishBtn" gebo-ai-label [outlined]="true" label="Finish"
+                icon="pi pi-check" iconPos="right" severity="success" (onClick)="goForward()"
+                [disabled]="!canGoForward"></p-button>
+            }
+            @default {
+              <p-button id="NextBtn" gebo-ai-label [outlined]="true" label="Next"
+                icon="pi pi-arrow-right" iconPos="right" severity="success" (onClick)="goForward()"
+                [disabled]="!canGoForward"></p-button>
+            }
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <h2 class="m-0 mb-1 font-semibold text-2xl">{{activeStepLabel}}</h2>
+      @switch (activeStep) {
+        @case (Step.INTRO) {
+          <p id="IntroExplanation" class="mt-0 text-muted-color" gebo-ai-text>
+            Gebo.ai uses several classes of language models. Two are required for the system to work,
+            the others are suggested and enable extra capabilities. The wizard will help you configure
+            them from a single provider; you can always add or change models later from the LLMs admin
+            screens.
+          </p>
+        }
+        @case (Step.PROVIDER) {
+          <p id="ProviderExplanation" class="mt-0 text-muted-color" gebo-ai-text>
+            Select the provider you want to choose models from
+          </p>
+        }
+        @case (Step.MODELS) {
+          <p id="ModelsExplanation" class="mt-0 text-muted-color" gebo-ai-text>
+            Choose new models and/or modify existing
+          </p>
+        }
+        @case (Step.SUMMARY) {
+          <p id="SummaryExplanation" class="mt-0 text-muted-color" gebo-ai-text>
+            Actual configured models overview
+          </p>
+        }
+      }
     </div>
 
     <div class="col-12">
@@ -64,36 +123,6 @@
           </gebo-ai-llms-easy-summary-step>
         }
       }
-    </div>
-
-    <div class="col-12">
-      <div class="geboButtonsBar">
-        <div>
-          @if (activeStep>Step.INTRO && activeStep!==Step.SUMMARY) {
-            <p-button id="BackBtn" gebo-ai-label [outlined]="true" label="Back" icon="pi pi-arrow-left"
-              iconPos="left" severity="secondary" (onClick)="goBack()"></p-button>
-          }
-        </div>
-        <div>
-          @switch (activeStep) {
-            @case (Step.MODELS) {
-              <p-button id="ApplyBtn" gebo-ai-label [outlined]="true" label="Apply and continue"
-                icon="pi pi-save" iconPos="right" severity="success" (onClick)="goForward()"
-                [disabled]="!canGoForward"></p-button>
-            }
-            @case (Step.SUMMARY) {
-              <p-button id="FinishBtn" gebo-ai-label [outlined]="true" label="Finish"
-                icon="pi pi-check" iconPos="right" severity="success" (onClick)="goForward()"
-                [disabled]="!canGoForward"></p-button>
-            }
-            @default {
-              <p-button id="NextBtn" gebo-ai-label [outlined]="true" label="Next"
-                icon="pi pi-arrow-right" iconPos="right" severity="success" (onClick)="goForward()"
-                [disabled]="!canGoForward"></p-button>
-            }
-          }
-        </div>
-      </div>
     </div>
   </div>
 </p-panel>

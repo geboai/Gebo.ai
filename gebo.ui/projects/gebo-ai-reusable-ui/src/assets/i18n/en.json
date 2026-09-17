@@ -3778,19 +3778,31 @@
         },
         "LLMSEasySetupWizardComponent": {
             "IntroStep": {
-                "label": "Model classes"
+                "label": "Actual configuration"
             },
             "ProviderStep": {
-                "label": "Provider"
+                "label": "Provider choice"
             },
             "ModelsStep": {
-                "label": "Models"
+                "label": "Model choices"
             },
             "SummaryStep": {
                 "label": "Summary"
             },
             "MainEasyLLMSPanelTitle": {
                 "label": "Guided large language models setup"
+            },
+            "IntroExplanation": {
+                "label": "Gebo.ai uses several classes of language models. Two are required for the system to work, the others are suggested and enable extra capabilities. The wizard will help you configure them from a single provider; you can always add or change models later from the LLMs admin screens."
+            },
+            "ProviderExplanation": {
+                "label": "Select the provider you want to choose models from"
+            },
+            "ModelsExplanation": {
+                "label": "Choose new models and/or modify existing"
+            },
+            "SummaryExplanation": {
+                "label": "Actual configured models overview"
             },
             "ResolutionsSection": {
                 "label": "Choose a replacement model"
