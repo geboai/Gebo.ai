@@ -137,6 +137,7 @@
 </p-panel>
 
 <p-dialog id="DataFlowRegisterDialog" [(visible)]="showDataFlowDialog" (onShow)="onDialogShow()"
+  (onHide)="onDialogHide()"
   [modal]="true" [maximizable]="true" [draggable]="false" styleClass="gebo-entity-dialog"
   [contentStyle]="{ overflow: 'hidden' }">
 
@@ -185,10 +186,15 @@
       </div>
     } @else {
       <div style="flex: 1 1 auto; min-height: 0; width: 100%;">
-        <ng-diagram #dataFlowDiagramHost [model]="diagramModel" [config]="diagramConfig"
-          [nodeTemplateMap]="nodeTemplateMap" style="width: 100%; height: 100%; display: block;">
-          <ng-diagram-background></ng-diagram-background>
-        </ng-diagram>
+        <!-- Mounted only once the dialog reports itself shown: the diagram measures
+             its nodes from the DOM, so it must be created inside a container that
+             already has its final size. -->
+        @if (diagramMounted) {
+          <ng-diagram #dataFlowDiagramHost [model]="diagramModel" [config]="diagramConfig"
+            [nodeTemplateMap]="nodeTemplateMap" style="width: 100%; height: 100%; display: block;">
+            <ng-diagram-background></ng-diagram-background>
+          </ng-diagram>
+        }
       </div>
     }
   </div>

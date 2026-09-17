@@ -49,6 +49,20 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
     /** Modal visibility for the data-flow register. */
     protected showDataFlowDialog: boolean = false;
 
+    /**
+     * Gates the <ng-diagram> mount on the dialog being rendered.
+     *
+     * ng-diagram measures each node from the DOM through a batched
+     * ResizeObserver, and its UpdatePortsService logs
+     * "Node measurement failed: Node element not found" for every node whose
+     * element is gone by the time that batch flushes. Mounting only once
+     * PrimeNG reports the dialog shown means the nodes are created inside a
+     * container that already has its final size, instead of one that is still
+     * animating - so a measurement pass cannot observe a node that is about to
+     * be re-created. Cleared on hide so the next open is a clean mount.
+     */
+    protected diagramMounted: boolean = false;
+
     protected endpoints: DataFlowEndpointNode[] = [];
     protected transformations: DataFlowTransformationNode[] = [];
     protected summary: DataFlowSummary = {
@@ -490,7 +504,12 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
     }
 
     protected onDialogShow(): void {
+        this.diagramMounted = true;
         this.fitDiagramToViewport();
+    }
+
+    protected onDialogHide(): void {
+        this.diagramMounted = false;
     }
 
     protected refreshFromDialog(): void {
