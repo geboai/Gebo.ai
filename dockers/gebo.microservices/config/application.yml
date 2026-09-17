@@ -112,6 +112,13 @@ ai.gebo.opensearch:
   username: admin
   password: dothesearch1973-Advanced
 
+# Semantic retrieval threshold (used by the RAG search service). Autotune off so
+# the static threshold below is authoritative.
+ai.gebo.rag-threashold-autotune.config.enabled: false
+ai.gebo.ragsearch.config:
+  # Minimum cosine similarity a fragment must reach to be retrieved.
+  default-similarity-threshold: 0.57
+
 # LLM providers - supply real API keys via the shared config or per-service env.
 ai.gebo.llms.config:
   openAIEnabled: true

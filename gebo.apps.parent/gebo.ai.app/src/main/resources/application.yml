@@ -456,8 +456,9 @@ ai.gebo.ragsearch.config:
   # default admitted essentially every neighbour: over a sample of 176 retrieved
   # fragments on the reference corpus the WEAKEST scored 0.523, so nothing was ever
   # filtered and bulky low-signal documents (indexes, catalogues) crowded the
-  # results. 0.60 keeps about 86% of that sample and drops the tail.
-  default-similarity-threshold: 0.60
+  # results. 0.57 keeps a bit more of the tail than 0.60 while still dropping the
+  # weakest neighbours.
+  default-similarity-threshold: 0.57
 ai.gebo.agents.standard.enabled: true
 # Office assistant pipeline (requires ai.gebo.agents.standard.enabled=true; it reuses
 # the standard searcher/tool agents and the controller service).
