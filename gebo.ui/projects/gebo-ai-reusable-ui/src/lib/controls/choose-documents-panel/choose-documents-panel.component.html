@@ -12,7 +12,7 @@
 
 
 
-<div class="grid" #chooseDocsPanel>
+<div class="grid" #chooseDocsPanel="geboBlockableContainer" geboBlockableContainer>
   <!-- [target] scopes the mask to this panel; without it PrimeNG masks the whole
        document (and locks body scroll), which left a stuck page-wide lock. -->
   <p-blockUI [blocked]="loading" [target]="chooseDocsPanel">

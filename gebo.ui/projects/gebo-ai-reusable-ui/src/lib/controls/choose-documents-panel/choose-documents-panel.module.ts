@@ -31,6 +31,7 @@ import { VFilesystemSelectorModule } from "../vfilesystem-selector/vfilesystem-s
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboBlockableContainerDirective } from "../../directives/blockable-container/blockable-container.directive";
 /**
  * AI generated comments
  * 
@@ -65,7 +66,8 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
         PickListModule,
         DragDropModule,
         GeboAIUserspaceFilesModule,
-        GeboAIFieldTranslationContainerModule
+        GeboAIFieldTranslationContainerModule,
+        GeboBlockableContainerDirective
     ],
     declarations: [GeboAIChooseDocumentsPanelComponent, GeboAISearchDocumentsComponent, GeboAIDocumentsListPanelComponent],
     exports: [GeboAIChooseDocumentsPanelComponent, GeboAISearchDocumentsComponent, GeboAIDocumentsListPanelComponent],
