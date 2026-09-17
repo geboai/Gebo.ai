@@ -62,7 +62,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
 					+ " contributionNr:" + actualContributionNr + " outputType:" + getOutputType().getName());
 		}
-		final ToolCallsListener callBacksListener = new ToolCallsListener();
+		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());

@@ -72,6 +72,13 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 */
 	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command,
 			INotificationSink notificationSink) throws AgentException {
+		if (notificationSink != null && documents != null && !documents.isEmpty() && rankingRequested(command)
+				&& rankerService.isRankerConfigured()) {
+			// Ranking is an LLM call over the whole candidate set, so it is a distinct wait
+			// worth naming rather than folding into the single "is searching" beat.
+			notificationSink.next("Agent: " + getId() + " is ranking " + documents.size() + " candidate(s)",
+					INotificationSink.NotificationObject.NotificationType.INFO);
+		}
 		final List<Document> outcome = rankDocuments(documents, command);
 		notifyFoundDocuments(outcome, notificationSink);
 		return outcome;

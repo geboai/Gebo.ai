@@ -103,7 +103,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		// framework-controlled tool-execution loop; the model is cloned with the tool
 		// catalog enabled by the configuration (and the notifyUser tool when the
 		// persona may notify the user).
-		final ToolCallsListener callBacksListener = new ToolCallsListener();
+		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 

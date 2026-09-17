@@ -126,6 +126,10 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					+ (command != null ? command.getExecuteRanking() : null));
 		}
 		try {
+			if (notificationSink != null) {
+				notificationSink.next("Agent: " + getId() + " is planning the search queries",
+						INotificationSink.NotificationObject.NotificationType.INFO);
+			}
 			// LLM planner: rewrite the command into semantic and full-text search queries.
 			// `prompt` is the runtime-patched planner prompt (agent network placeholders
 			// injected at config time), so it is used directly instead of re-fetching the
