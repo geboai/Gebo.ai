@@ -10,15 +10,6 @@
 -->
 <div class="grid">
   <div class="col-12">
-    <p id="IntroExplanation" gebo-ai-text>
-      Gebo.ai uses several classes of language models. Two are required for the system to work,
-      the others are suggested and enable extra capabilities. The wizard will help you configure
-      them from a single provider; you can always add or change models later from the LLMs admin
-      screens.
-    </p>
-  </div>
-
-  <div class="col-12">
     <p-fieldset id="RequiredClassesSection" gebo-ai-label legend="Required models">
       <div class="grid">
         @for (row of requiredRows; track row.descriptor.id) {
