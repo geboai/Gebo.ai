@@ -1,5 +1,6 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
+import java.util.concurrent.atomic.AtomicReference;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
@@ -161,12 +163,24 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				return Flux.just(envelope);
 
 			});
+			// The network runs on its own worker rather than inside the doOnSubscribe
+			// callback. Reactor invokes that callback BEFORE handing the subscription to the
+			// downstream subscriber, so running the network there finished the whole thing -
+			// every agent, every LLM call - before anyone could request a single element. The
+			// sink behind this flux is unicast().onBackpressureBuffer(), so everything the
+			// agents produced accumulated there and was delivered in one burst at the end.
+			//
+			// Measured on a report of 2,264 chunks: the browser saw nothing for 55 seconds and
+			// then the entire answer at once. That defeats both halves of the streaming design
+			// - the writer emitting its text chunk by chunk, and the network replacing one
+			// self contained cycle output with the next as the report is refined.
+			final AtomicReference<Disposable> networkExecution = new AtomicReference<Disposable>();
 			flux = flux.doOnSubscribe((subscription) -> {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Subscription received, launching executeNetwork(...) for network code:"
 							+ network.getCode());
 				}
-				runAs.doAs(() -> {
+				networkExecution.set(Schedulers.boundedElastic().schedule(() -> runAs.doAs(() -> {
 					try {
 
 						runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(),
@@ -174,7 +188,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					} catch (AgentException | LLMConfigException e) {
 						LOGGER.error(EXCEPTION_RUNNING_NETWORK_OF_AGENTS, e);
 					}
-				});
+				})));
 			}).map(x -> {
 				if (x != null && x.getContent() instanceof GeboChatResponse response) {
 					if (LOGGER.isDebugEnabled()) {
@@ -204,12 +218,17 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Reactive chat agents network flux cancelled, disposing runtime network");
 				}
+				// The network now outlives the subscribe call, so a cancelled flux has to stop
+				// it explicitly: without this the agents would keep calling models and paying
+				// for answers nobody is listening to any more.
+				disposeNetworkExecution(networkExecution);
 				runtimeNetwork.dispose();
 			}).doFinally(signalType -> {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Reactive chat agents network flux terminated with signal:" + signalType
 							+ ", disposing runtime network");
 				}
+				disposeNetworkExecution(networkExecution);
 				runtimeNetwork.dispose();
 			});
 			;
@@ -225,4 +244,16 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 
 	}
 
+	/**
+	 * Stops the worker running the network, if it is still running.
+	 * <p>
+	 * Disposing a task that has already finished is a no-op, and the reference is null
+	 * when the flux terminated before anything subscribed.
+	 */
+	private void disposeNetworkExecution(AtomicReference<Disposable> networkExecution) {
+		Disposable execution = networkExecution.getAndSet(null);
+		if (execution != null && !execution.isDisposed()) {
+			execution.dispose();
+		}
+	}
 }

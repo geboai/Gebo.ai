@@ -120,6 +120,39 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 * subscribes to all of them). Concrete agents call {@code super} and enrich the
 	 * returned descriptor with their specific capabilities and catalogs.
 	 */
+	/**
+	 * A tool-call listener that reports each executed tool to the user as it happens.
+	 * <p>
+	 * The framework records tool calls after they return, so the notification is
+	 * necessarily past tense ("used tool: X") rather than "calling..."; there is no
+	 * pre-call seam to hook. The {@code notifyUser} tool is skipped: it is the model
+	 * talking to the user directly, and announcing "used tool: notifyUser" around that
+	 * would be noise about the notification mechanism itself. When the persona may not
+	 * notify, or there is no sink, the listener is the plain collecting one.
+	 */
+	protected ToolCallsListener notifyingToolCallsListener(AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink) {
+		if (notificationSink == null || contextAgentPersona == null || !contextAgentPersona.isAllowedToNotifyUser()) {
+			return new ToolCallsListener();
+		}
+		final String agentName = contextAgentPersona.getNetworkAgentName();
+		return new ToolCallsListener(executed -> {
+			if (executed == null || GAbstractGenericalAgentService.NOTIFY_USER_TOOL.equals(executed.getName())) {
+				return;
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Notifying tool use to the user: agent:" + agentName + " tool:" + executed.getName());
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("<TOOL_USE agent=" + agentName + " tool=" + executed.getName() + ">");
+				LOGGER.trace("input:" + executed.getToolInput());
+				LOGGER.trace("</TOOL_USE>");
+			}
+			notificationSink.next("Agent: " + agentName + " used tool: " + executed.getName(),
+					INotificationSink.NotificationObject.NotificationType.INFO);
+		});
+	}
+
 	@Override
 	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
 		if (LOGGER.isDebugEnabled()) {

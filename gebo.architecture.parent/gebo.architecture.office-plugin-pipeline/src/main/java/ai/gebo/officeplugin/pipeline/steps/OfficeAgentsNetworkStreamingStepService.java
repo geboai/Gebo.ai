@@ -23,6 +23,7 @@ import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -33,6 +34,7 @@ import ai.gebo.officeplugin.pipeline.OfficeAssistantConstants;
 import ai.gebo.officeplugin.pipeline.agents.OfficeFragments;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.SignalType;
 import reactor.core.scheduler.Schedulers;
 
 /**
@@ -76,17 +78,59 @@ public class OfficeAgentsNetworkStreamingStepService
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 		Flux<GeboChatMessageEnvelope> outFlux = super.execute(runtimeData, sinkUIEmitter, chatModel, serviceModel);
-		return outFlux.publishOn(runAs.wrap(Schedulers.boundedElastic())).doOnComplete(() -> runAs.doAs(() -> {
-			try {
-				lifeCycleService.endRequest(request, runtimeData.getChatResponse());
-			} catch (Throwable e) {
-				LOGGER.error("Error ending office assistant request", e);
+		// doFinally, not doOnComplete: this office terminal step owns its own session
+		// finalisation (every terminal streaming step does - the office router reaches this
+		// step directly, exactly as the default router reaches the pure-search and
+		// image-generation steps). doOnComplete fires ONLY on normal completion, so a
+		// network that errored mid-cycle, or a user who closed the editor mid-stream, would
+		// never run endRequest / chatRequestCompleted and the interaction would go
+		// unpersisted - and a multi-cycle run, being long, is exactly where an error or
+		// cancel is most likely to land. doFinally runs exactly once on whichever terminal
+		// signal ends the stream, so the outcome is recorded rather than silently dropped.
+		return outFlux.publishOn(runAs.wrap(Schedulers.boundedElastic())).doFinally(signalType -> {
+			// doFinally reports which terminal signal ended the stream, so the three cases
+			// are handled distinctly rather than lumped together:
+			//   ON_COMPLETE - the network finished normally;
+			//   ON_ERROR    - it failed mid-run (the failure itself is surfaced elsewhere);
+			//   CANCEL      - the user abandoned the stream, e.g. closed the editor.
+			// The gap this replaces was a plain doOnComplete, which fired on ON_COMPLETE
+			// alone and left an errored or cancelled request unpersisted.
+			final boolean cancelled = signalType == SignalType.CANCEL;
+			final GeboChatResponse chatResponse = runtimeData.getChatResponse();
+			final boolean hasContent = chatResponse != null && chatResponse.getQueryResponse() != null
+					&& !chatResponse.getQueryResponse().isBlank();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Finalising office assistant request on terminal signal:" + signalType + " cancelled:"
+						+ cancelled + " hasContent:" + hasContent);
 			}
-			try {
-				lifeCycleService.chatRequestCompleted(request, chatModel);
-			} catch (Throwable e) {
-				LOGGER.error("Error completing office assistant request", e);
+			// A cancel that happened before any text was produced has no interaction worth
+			// recording: persisting it would leave an empty turn in the session history.
+			// Every other outcome - normal completion, an error, or a cancel that already
+			// produced partial text the user saw - is persisted so the interaction is not
+			// silently lost.
+			if (cancelled && !hasContent) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Office assistant request cancelled before producing any content: nothing to persist");
+				}
+				return;
 			}
-		}));
+			runAs.doAs(() -> {
+				try {
+					lifeCycleService.endRequest(request, chatResponse);
+				} catch (Throwable e) {
+					LOGGER.error("Error ending office assistant request", e);
+				}
+				// Session maintenance (the shrink check) is a completion concern; a cancelled
+				// turn has not added a full round-trip worth compacting for, so it is skipped
+				// while the partial interaction is still recorded above.
+				if (!cancelled) {
+					try {
+						lifeCycleService.chatRequestCompleted(request, chatModel);
+					} catch (Throwable e) {
+						LOGGER.error("Error completing office assistant request", e);
+					}
+				}
+			});
+		});
 	}
 }

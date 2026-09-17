@@ -574,8 +574,13 @@ textarea.p-inputtextarea:read-only {
   table-layout: fixed;
 }
 
-.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(1) { width: 30%; }
-.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(2) { width: 27%; }
+/* The code column is truncated to 20 chars in the cell, so it no longer needs a
+   third of the table - at high resolutions 30% made it ~467px and forced a
+   horizontal scrollbar under every table. Its room goes to the description. The
+   percentages sum to 99% on purpose: at 100% the fixed table plus cell borders
+   spilled a few pixels past the container and kept the scrollbar alive. */
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(1) { width: 15%; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(2) { width: 41%; }
 .gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(3) { width: 15%; }
 .gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(4) { width: 12%; }
 .gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(5),

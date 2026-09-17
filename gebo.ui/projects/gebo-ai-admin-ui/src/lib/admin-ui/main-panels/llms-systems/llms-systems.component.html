@@ -13,6 +13,9 @@
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #llmSystems styleClass="gebo-llms-admin">
+  <p-popover #codePopover>
+    <div class="gebo-code-cell__full" gebo-ai-text>{{ selectedCode }}</div>
+  </p-popover>
 
   <div class="gebo-llms-admin__layout">
     <div class="gebo-llms-admin__create">
@@ -104,7 +107,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-model>
               <tr>
-                <td>{{ model.configuration?.code }}</td>
+                <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                 <td>{{ model.configuration?.description }}</td>
                 <td>{{ model.configuration?.modelTypeCode }}</td>
                 <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -140,7 +143,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-model>
                 <tr>
-                  <td>{{ model.configuration?.code }}</td>
+                  <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                   <td>{{ model.configuration?.description }}</td>
                   <td>{{ model.configuration?.modelTypeCode }}</td>
                   <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -172,7 +175,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-model>
                   <tr>
-                    <td>{{ model.configuration?.code }}</td>
+                    <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                     <td>{{ model.configuration?.description }}</td>
                     <td>{{ model.configuration?.modelTypeCode }}</td>
                     <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -204,7 +207,7 @@
                   </ng-template>
                   <ng-template pTemplate="body" let-model>
                     <tr>
-                      <td>{{ model.configuration?.code }}</td>
+                      <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                       <td>{{ model.configuration?.description }}</td>
                       <td>{{ model.configuration?.modelTypeCode }}</td>
                       <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -235,7 +238,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-model>
                       <tr>
-                        <td>{{ model.configuration?.code }}</td>
+                        <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                         <td>{{ model.configuration?.description }}</td>
                         <td>{{ model.configuration?.modelTypeCode }}</td>
                         <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -266,7 +269,7 @@
                       </ng-template>
                       <ng-template pTemplate="body" let-model>
                         <tr>
-                          <td>{{ model.configuration?.code }}</td>
+                          <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                           <td>{{ model.configuration?.description }}</td>
                           <td>{{ model.configuration?.modelTypeCode }}</td>
                           <td>{{ model.configuration?.choosedModel?.code }}</td>
