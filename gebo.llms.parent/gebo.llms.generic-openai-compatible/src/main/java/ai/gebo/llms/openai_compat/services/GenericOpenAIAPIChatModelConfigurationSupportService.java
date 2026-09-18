@@ -201,6 +201,42 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder.maxTokens(config.getMaxGeneratedTokens());
 			}
+			// The thinking level chosen on the model (or carried per request by an agent
+			// through cloneWithOptions) is delivered here as reasoning_effort, the parameter
+			// every OpenAI compatible gateway that exposes reasoning agrees on - regolo.ai,
+			// for one, lists it in the supported_openai_params of its chat models. Until
+			// this was applied the setting was persisted and then silently dropped, so a
+			// model configured for maximum thinking answered exactly like one that was not.
+			// AUTO deliberately sends nothing: it means "leave the provider default alone".
+			// NO_THINKING has no portable spelling across these gateways (the values that
+			// disable reasoning differ per backend and an unknown one is answered with a
+			// 400), so it is logged rather than guessed.
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case LOW_THINKING: {
+					builder.reasoningEffort("low");
+				}
+					break;
+				case MEDIUM_THINKING: {
+					builder.reasoningEffort("medium");
+				}
+					break;
+				case HIGH_THINKING: {
+					builder.reasoningEffort("high");
+				}
+					break;
+				case NO_THINKING:
+				default:
+					break;
+				}
+				// Debug and not warn although NO_THINKING cannot be honoured: configureModel
+				// runs again on every cloneWithOptions, so an agent passing a thinking level
+				// per request would turn a warning into one line per call.
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model {} on {} configured with thinking {}", config.getCode(), type.getCode(),
+							config.getThinking());
+				}
+			}
 
 			// Configure tool callbacks (functions)
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
