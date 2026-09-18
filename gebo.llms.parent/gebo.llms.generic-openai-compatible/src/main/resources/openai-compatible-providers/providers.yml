@@ -62,10 +62,9 @@ ai.gebo.llms.generic.config:
       baseUrl: https://openrouter.ai/api/v1/
       modelsListProvider: openrouter-ai-models-list
 
-    - code: embedding-groq
-      providerId: groq
-      description: Groq embedding model
-      baseUrl: https://api.groq.com/openai
+    # Groq has no embedding provider on purpose: embeddings are not part of its
+    # documented api surface and its models list carries no embedding model, so the
+    # handler could only ever offer an empty list.
 
     - code: embedding-xai
       providerId: xai
@@ -127,6 +126,17 @@ ai.gebo.llms.generic.config:
       # audio/transcriptions.
       baseUrl: https://openrouter.ai/api/v1/
       modelsListProvider: openrouter-ai-models-list
+
+    - code: transcript-groq
+      providerId: groq
+      description: Groq transcript model
+      # Versioned, unlike the groq chat url above: the chat client appends
+      # v1/chat/completions itself, while the transcription one appends only
+      # audio/transcriptions - and groq answers the unversioned path with a 404.
+      # No modelsListProvider: only the chat client reads groq's models endpoint, so the
+      # transcript choices come from the setup library preset, which declares
+      # doModelsLookup=false for that reason.
+      baseUrl: https://api.groq.com/openai/v1/
 
   rankerModelProviders:
     - code: ranker-regolo.ai

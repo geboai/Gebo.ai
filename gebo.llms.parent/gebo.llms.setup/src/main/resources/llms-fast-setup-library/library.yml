@@ -23,9 +23,14 @@ ai.gebo.llms.vendors.setup.config:
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
-            - code: Llama-3.3-70B-Instruct
-              description: Meta LLama 3.3 70b instruct
+            # Replaces Llama-3.3-70B-Instruct, which regolo.ai no longer serves.
+            - code: glm5.2
+              description: Z.ai GLM 5.2
               uses: CHAT
+            # NO_THINKING states the intent - an internal services model should not spend
+            # tokens reasoning - but an openai compatible provider has no portable way to
+            # ask for it, so this one is not sent: see the thinking handling in
+            # GenericOpenAIAPIChatModelConfigurationSupportService.
             - code: gpt-oss-20b
               description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
@@ -59,6 +64,14 @@ ai.gebo.llms.vendors.setup.config:
             - code: faster-whisper-large-v3
               description: Faster Whisper Large v3 (speech to text)
               defaultChoice: true
+        # Regolo documents /audio/speech (OpenAI createSpeech parameters), but its model
+        # catalog publishes no model with mode=audio_speech yet, so there is no code to
+        # preset here: the choices are left to the lookup, which RegoloAIModelsListProviderService
+        # already resolves by that mode. Add a defaultChoice once Regolo lists a voice
+        # model - a code guessed now would only be reported back as unresolved.
+        - type: TTS
+          serviceHandler: tts-regolo.ai
+          doModelsLookup: true
 
     - vendorInfo:
         vendorId: openai
@@ -398,18 +411,49 @@ ai.gebo.llms.vendors.setup.config:
         vendorId: groq
         name: Groq
         description: Groq AI provider
-        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        acquireKeyUrl: https://console.groq.com/keys
         requiresApiKey: true
         requiresCustomUrl: false
         webSite: https://groq.com/
         apiKeySecretContext: groq
+        minContextWindow: 131072
       presets:
+        # No EMBEDDING preset: groq does not document an embeddings endpoint and its
+        # models list carries no embedding model, so the type can only ever offer an
+        # empty choice list. The embedding-groq handler was removed with it.
         - type: CHAT
           serviceHandler: chatmodel-groq
           doModelsLookup: true
-        - type: EMBEDDING
-          serviceHandler: embedding-groq
-          doModelsLookup: true
+          choices:
+            - code: llama-3.3-70b-versatile
+              description: Meta Llama 3.3 70b versatile
+              contextWindow: 131072
+              uses: CHAT
+              defaultChoice: true
+            - code: openai/gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              contextWindow: 131072
+              uses: CHAT
+            - code: groq/compound
+              description: Groq Compound (agentic system with built in tools)
+              contextWindow: 131072
+              uses: CHAT
+            - code: llama-3.1-8b-instant
+              description: Meta Llama 3.1 8b instant
+              contextWindow: 131072
+              uses: INTERNAL_SERVICES
+        # doModelsLookup=false: the transcript handler has no models list for groq, so
+        # its lookup would answer with the OpenAI whisper-1 suggestion and every code
+        # below would be rejected as unavailable. The preset codes are trusted instead.
+        - type: TRANSCRIPT
+          serviceHandler: transcript-groq
+          doModelsLookup: false
+          choices:
+            - code: whisper-large-v3-turbo
+              description: Whisper Large v3 Turbo (fast speech to text)
+              defaultChoice: true
+            - code: whisper-large-v3
+              description: Whisper Large v3 (speech to text)
     - vendorInfo:
         vendorId: openrouter.ai
         name: OpenRouter.ai
